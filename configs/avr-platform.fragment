@@ -1,0 +1,6 @@
+# Initial Qualcomm firmware dependencies for the Alor pinctrl port.
+# This fragment is not complete avr device support.
+CONFIG_QCOM_SCM=m
+CONFIG_QCOM_PAS=m
+CONFIG_QCOM_TZMEM=m
+CONFIG_QCOM_TZMEM_MODE_GENERIC=y

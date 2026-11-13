@@ -14,7 +14,7 @@ Candidate only: no runtime validation. Compare compilation diagnostics with
 ## Compilation result
 
 Both pinctrl-alor.o and pinctrl-msm.o compiled against Android 7.3 on the
-avr arm64 host. This is object compilation only, not module linking or loading.
+avr arm64 host. Subsequently, pinctrl-msm.ko and pinctrl-alor.ko linked successfully after enabling the upstream SCM/PAS/TZMEM dependencies. Neither has been loaded on hardware.
 
 Changes are in compat-7.3.patch: PIN_CONFIG_LEVEL naming, GPIO set return value,
 valid-line query API, syscore registration API, and exported debug prototypes.

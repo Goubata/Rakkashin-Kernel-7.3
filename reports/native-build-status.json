@@ -1,5 +1,5 @@
 {
-  "stage": "baseline Image and modules build completed",
+  "stage": "baseline and initial Qualcomm firmware build completed",
   "target": "Image modules",
   "source": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
   "host": "Ubuntu 26.04 arm64 on avr",
@@ -31,6 +31,8 @@
   "image_sha256": "55b897c7748e915caea0f279495ea5a2ac456b4438242417badf6c06563192c1",
   "build_exit_code": 0,
   "baseline_module_count": 128,
-  "pinctrl_module_link": "blocked on qcom_scm_io_readl and qcom_scm_io_writel; QCOM_SCM disabled in generic baseline",
-  "boot_test": "not performed"
+  "pinctrl_module_link": "passed: pinctrl-msm.ko and pinctrl-alor.ko built with SCM dependencies",
+  "boot_test": "not performed",
+  "platform_build_exit_code": 0,
+  "firmware_stage_artifacts": "artifacts/android73-firmware-stage1"
 }

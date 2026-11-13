@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-現在は移植準備段階です。7.3でのビルド・起動・常用動作は未確認です。
+この実機で7.3本体・付属モジュールと、初期のQualcomm依存モジュール／Alor pinctrlモジュールをビルドできました。端末全体の移植は未完了で、起動・常用動作は未確認です。
 
 ## 固定した入力
 
@@ -57,4 +57,13 @@ chrootのproc、dev、work/avr-src、work/avr-portにはbind mountを使用し�
 
 これは未改変Android 7.3の土台です。avr用移植コードはまだImageに組み込んでいません。実機起動・常用動作は未確認で、端末対応boot.imgではありません。
 
-Alor pinctrlの2オブジェクト、状態保持処理を移植したCCFのオブジェクト、Alor GCCのオブジェクトがコンパイルできました。pinctrlのモジュールリンクはqcom_scm_io_readl/writelの不足で停止しています。汎用GKI設定はCONFIG_QCOM_SCMを無効にしているため、次の統合作業ではSCM/PAS/TZMEMの依存関係を有効な構成でビルドする必要があります。未解決シンボルを無視する設定は使用していません。
+Alor pinctrlの2オブジェクト、状態保持処理を移植したCCFのオブジェクト、Alor GCCのオブジェクトがコンパイルできました。pinctrlのモジュールリンクで判明したqcom_scm_io_readl/writel不足は、SCM/PAS/TZMEMを設定に追加して再ビルドすることで解消しました。pinctrl-msm.koとpinctrl-alor.koのリンクも終了コード0で完了しています。未解決シンボルを無視する設定は使用していません。
+
+
+## 初期のQualcomm依存関係とpinctrlのビルド
+
+```sh
+python scripts/build_native.py --platform --pinctrl
+```
+
+`configs/avr-platform.fragment` をGKI設定へマージし、SCM/PAS/TZMEMをビルドしてからpinctrlの2モジュールをリンクします。現在の成果物は `artifacts/android73-firmware-stage1/`。5モジュールすべてのvermagicが7.3.0-4kであることを確認しています。CCF移植パッチとAlor GCCはまだこのImageに統合していません。現時点で実行中のビルドはありません。

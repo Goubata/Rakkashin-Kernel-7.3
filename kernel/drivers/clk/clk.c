@@ -1665,6 +1665,9 @@ static void clk_unprepare_disable_dev_subtree(struct clk_core *core,
 	if (core->dev != dev || !core->need_sync)
 		return;
 
+	/* Drop only the reference acquired by boot-state retention, once. */
+	core->need_sync = false;
+	core->boot_enabled = false;
 	clk_core_disable_unprepare(core);
 }
 
@@ -4208,7 +4211,9 @@ static int __clk_core_init(struct clk_core *core)
 		rate = 0;
 	core->rate = core->req_rate = rate;
 
-	core->boot_enabled = clk_core_is_enabled(core);
+	core->boot_enabled = clk_dev_has_sync_state(core->dev) &&
+		!(core->flags & CLK_DONT_HOLD_STATE) &&
+		clk_core_is_enabled(core);
 
 	/*
 	 * Enable CLK_IS_CRITICAL clocks so newly added critical clocks

@@ -16,6 +16,19 @@ enum qcom_scm_convention {
 
 extern enum qcom_scm_convention qcom_scm_convention;
 
+/* Vendor GPU/DCVS firmware commands. */
+#define QCOM_SCM_CP_LPAC_APERTURE_REG	0x1
+#define QCOM_SCM_DCVS_INIT			0x09
+#define QCOM_SCM_DCVS_INIT_CA_V2		0x0c
+#define QCOM_SCM_DCVS_INIT_V2			0x0b
+#define QCOM_SCM_DCVS_RESET			0x07
+#define QCOM_SCM_DCVS_TUNING			0x0e
+#define QCOM_SCM_DCVS_UPDATE			0x08
+#define QCOM_SCM_DCVS_UPDATE_CA_V2		0x0d
+#define QCOM_SCM_DCVS_UPDATE_V2			0x0a
+#define QCOM_SCM_IO_RESET			0x03
+#define QCOM_SCM_SVC_DCVS			0x0D
+
 #define MAX_QCOM_SCM_ARGS 10
 #define MAX_QCOM_SCM_RETS 3
 

@@ -163,6 +163,20 @@ bool qcom_scm_lmh_dcvsh_available(void);
 
 int qcom_scm_gpu_init_regs(u32 gpu_req);
 
+/* Motorola GPU/DCVS firmware services. */
+int qcom_scm_io_reset(void);
+bool qcom_scm_dcvs_core_available(void);
+bool qcom_scm_dcvs_ca_available(void);
+int qcom_scm_dcvs_reset(void);
+int qcom_scm_dcvs_init_v2(phys_addr_t addr, size_t size, int *version);
+int qcom_scm_dcvs_init_ca_v2(phys_addr_t addr, size_t size);
+int qcom_scm_dcvs_update(int level, s64 total_time, s64 busy_time);
+int qcom_scm_dcvs_update_v2(int level, s64 total_time, s64 busy_time);
+int qcom_scm_dcvs_update_ca_v2(int level, s64 total_time, s64 busy_time,
+			       int context_count);
+int qcom_scm_kgsl_dcvs_tuning(u32 mingap, u32 penalty, u32 numbusy);
+int qcom_scm_kgsl_set_smmu_lpac_aperture(unsigned int num_context_bank);
+
 int qcom_scm_shm_bridge_create(u64 pfn_and_ns_perm_flags,
 			       u64 ipfn_and_s_perm_flags, u64 size_and_flags,
 			       u64 ns_vmids, u64 *handle);

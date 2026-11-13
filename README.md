@@ -1,69 +1,56 @@
 # avr: Android 7.3 kernel port
 
-この実機で7.3本体・付属モジュールと、初期のQualcomm依存モジュール／Alor pinctrlモジュールをビルドできました。端末全体の移植は未完了で、起動・常用動作は未確認です。
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・OnePlus連携の36モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
-## 固定した入力
+## 固定入力
 
-- Android common `android18-7.3`: `4dd306a07b2f456fd70ddaa28f4f65640374f202`
-- Motorola SoC `android-16-release-w3wwl36.65-11-18`: `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`
-- Rakkashin参照: `7e0d0a6daa4959e047f650513a0a243d3e2565aa`
-- 公式manifest: `75faf58baa4a84e46094af70ab882590fad58fa7`
+| 入力 | コミット等 |
+|---|---|
+| Android common android18-7.3 | 4dd306a07b2f456fd70ddaa28f4f65640374f202 |
+| Motorola SoC W3WWL36.65-11-18 | 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1 |
+| Motorola common | 479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4 |
+| Rakkashin参照 | 7e0d0a6daa4959e047f650513a0a243d3e2565aa |
+| OxygenOSポートの連携モジュール | a7142e82df011d607010b439b9c1cfd7828c076c |
+| Motorola graphics | 61a6d039282d94bd2ea2f908cef580e0d1006686 |
+| ユーザーのKGSL ZIP SHA256 | 0b65d98f38556912f5fd486535f455b580287c178197fd07cc22b0448c656e1f |
 
-`manifests/android-7.3-pinned.xml` は公式manifestの60プロジェクトを個別コミットに固定したものです。元の構成を保持しているため、取得には大きな空き容量と通信量が必要です。`reports/aosp-source-lock.json` に対応するSHAを記録しています。再生成スクリプトはその時点の依存ブランチ先端を解決するため、実行すると固定値が更新されます。
+公式manifestの個別SHAは manifests/android-7.3-pinned.xml、32件のファームウェア一致リポジトリは reports/vendor-source-refs.json を参照。vantageのカメラソースは候補であり、avrとの一致は未検証です。OnePlusの製品プロパティは物理端末識別に使いません。
 
-## 最初のビルド
+## 現在の成果
 
-Linux x86_64ホストにgit、Python 3、Android repoを用意して実行します。Clang・Rust等は公式manifestのprebuiltを使用します。
+- 7.3本体にCCFの起動時クロック保持、IRQ/SCMの必要な公開APIを移植。
+- clock core / 21 controllers / RPMh / command-db / IRQ / Alor pinctrl と SCM/PAS/TZMEM をビルド・リンク。
+- avr_oplus_sync の7.3化とフェンスが残っている間のモジュール寿命管理を実装。元ROMのioctl配置を維持。
+- CCFの登録時に不要なMMIOを読まない修正と、保持解除を繰り返しても利用者のクロックを落とさない修正を追加。
+- 元の7.3 Imageでも再現したRCU TasksのSMP起動停止を調査。proxy donorが待機中でも実行キューに残る場合を、タスク・runqueueのロック下で判定する修正を追加。
+- RAMのみのQEMUで、proxy executionを有効にした2コア・4コアの29テストが通過。実行中のタスクをRCUが早く解放しないことも確認。
+- avr_oplus_sync は修正後の4コアQEMUで1,283チェック通過。ROMサービス・SELinuxとの実機検証は別途必要。
+- ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。7.3向けのAPI移行を進めているが、共有メモリ・温度制御・依存ドライバ対応が残り、msm_kgsl.ko は未完成。
 
-```sh
-bash scripts/build_baseline.sh /absolute/path/to/new-build-directory
-```
+成果物は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
-これは未改変の7.3 GKIのビルドを検証する段階です。生成物にはavr用ドライバーを含まず、端末へ書き込む段階ではありません。スクリプトはまだビルドホストで実行していません。
+## ネイティブビルド
 
-## 移植の順序
-
-1. 未改変Android 7.3のビルドを通す。
-2. avr純正ファームウェアのmodules.load、modules.dep、全ko、DTB/DTBO、設定とソースの対応を固定する。
-3. Qualcomm SoCモジュールを7.3向けにビルドし、hook/API/構造体変更を解決する。
-4. 起動必須のクロック、電源、interconnect、SMMU、UFS、暗号化経路を通す。
-5. 表示、タッチ、GPU、通信、音声、カメラ等を順に検証する。
-6. 充電・温度・スリープ復帰・待機電力・長時間負荷を検証する。
-7. Rakkashin独自機能を依存関係ごとに移植する。
-
-`reports/port-inventory.json` の125個はQualcomm canoeの候補リストで、実機avrの使用モジュール一覧ではありません。同名ソースパスの有無だけで機能の有無や互換性は判断しません。
-
-6.18の移植画像は参考情報として扱い、未公開の移植パッチや機能動作は前提にしません。
-
-## この実機でのネイティブビルド（2026-11-13）
-
-ユーザーの許可を受け、既存のUbuntu 26.04 arm64 rootfsにClang 21.1.8、make 4.4.1、Rust 1.93.1／rust-src、bindgen 0.72.1、pahole 1.31、libdw-dev等を導入しました。既存の未完了dpkg処理と不足依存関係も修復しています。
+Ubuntu 26.04 arm64 rootfs、Clang 21.1.8、Rust 1.93.1、bindgen 0.72.1、pahole 1.31を使用。公式Kleaf指定ツールチェーンとは異なり、GKI認証や公式バイナリとの同一性を示しません。
 
 ```sh
-python scripts/build_native.py
+python scripts/build_native.py --boot-core
 ```
 
-この経路はLinux arm64ネイティブのmakeビルドです。公式Kleaf指定のClang r596125／Rust 1.96.0とは異なるため、公式GKI認証や同一バイナリの再現を意味しません。Rustを有効にしたgki_defconfigとrustavailableは成功しました。ビルド結果はreportsのログを参照してください。
+coreパッチの適用済み状態を確認し、依存順でモジュールをビルドします。KGSLは未完成のためこの成功経路には含めません。パッチの新旧が混在していれば検査で停止します。
 
-chrootのproc、dev、work/avr-src、work/avr-portにはbind mountを使用しています。Androidのboot/vendor_boot/dtboへの書き込みは行っていません。
-
-実機はDevice Tree上avr/alorで、ユーザー作成のOnePlusポートROMを使用中です。ro.product等の製品名は実機識別に使いません。
-
-`device-baseline/` に現在の設定、稼働DTB、ロード済みモジュール一覧、vendor 323モジュール、system 104モジュールと起動イメージの読み取りダンプを保存しています。候補リストとは別に、これを実機基準とします。boot_aはheader v4、ramdiskなしでした。
-
-## 完了した最初のビルド
-
-7.3.0-4kのImage（46,488,064 bytes）と付属モジュール128個をこの実機上でビルドし、makeの終了コード0を確認しました。arm64 Imageのmagicも検証しています。成果物とSHA-256は `artifacts/android73-baseline/` に保存しています。
-
-これは未改変Android 7.3の土台です。avr用移植コードはまだImageに組み込んでいません。実機起動・常用動作は未確認で、端末対応boot.imgではありません。
-
-Alor pinctrlの2オブジェクト、状態保持処理を移植したCCFのオブジェクト、Alor GCCのオブジェクトがコンパイルできました。pinctrlのモジュールリンクで判明したqcom_scm_io_readl/writel不足は、SCM/PAS/TZMEMを設定に追加して再ビルドすることで解消しました。pinctrl-msm.koとpinctrl-alor.koのリンクも終了コード0で完了しています。未解決シンボルを無視する設定は使用していません。
-
-
-## 初期のQualcomm依存関係とpinctrlのビルド
+隔離テスト用の構成・外部テストも作る場合:
 
 ```sh
-python scripts/build_native.py --platform --pinctrl
+python scripts/build_native.py --qemu-tests
+python scripts/run_qemu.py --test clock --cpus 4 --log reports/clock-test.log
+python scripts/run_qemu.py --test oplus --cpus 4 --log reports/oplus-test.log
 ```
 
-`configs/avr-platform.fragment` をGKI設定へマージし、SCM/PAS/TZMEMをビルドしてからpinctrlの2モジュールをリンクします。現在の成果物は `artifacts/android73-firmware-stage1/`。5モジュールすべてのvermagicが7.3.0-4kであることを確認しています。CCF移植パッチとAlor GCCはまだこのImageに統合していません。現時点で実行中のビルドはありません。
+QEMUの終了コードだけでは合格にせず、成功マーカー・KTAP・警告・panic・RCU停止を検査します。QEMUには端末のディスクやネットワークを接続しません。上記の統合ビルド用スクリプトは各段階で実行した手順をまとめたもので、クリーンな入力からの一括再実行はまだ未検証です。
+
+## 次の作業
+
+KGSLの共有メモリ・温度制御APIと実際の依存ドライバ、UFS/ICE/PHY、電源・interconnect/SMMU、表示・通信等を移植します。GPUの追加Boost処理には熱上限変更時の再検査や並行処理の見直しも必要です。性能・電力の優劣は実機測定するまで判定しません。
+
+現在の許可範囲は端末内ビルド、読み取りダンプ、イメージファイル作成です。boot/vendor_boot/dtbo等のパーティション書き込み、実機への7.3モジュール読み込み、再起動は実施していません。実機起動操作が必要になった時点で、具体的な成果物と復旧手順を準備して確認します。

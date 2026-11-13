@@ -1,0 +1,25 @@
+{
+  "official_commit": "61a6d039282d94bd2ea2f908cef580e0d1006686",
+  "identical_count": 220,
+  "changed": [
+    "Kbuild",
+    "adreno.c",
+    "config/bengal_perf_gpuconf",
+    "config/canoe_perf_gpuconf",
+    "config/lahaina_perf_gpuconf",
+    "config/monaco_perf_gpuconf",
+    "config/parrot_perf_gpuconf",
+    "config/pineapple_perf_gpuconf",
+    "config/pitti_gki_gpuconf",
+    "config/sun_perf_gpuconf",
+    "config/vienna-le_debug-defconfig_gpuconf",
+    "config/vienna_perf_gpuconf",
+    "kgsl_gmu_core.c",
+    "kgsl_pwrctrl.c",
+    "kgsl_pwrctrl.h"
+  ],
+  "added": [
+    ".gitignore"
+  ],
+  "absent_from_archive": []
+}

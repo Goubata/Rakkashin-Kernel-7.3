@@ -111,6 +111,10 @@ struct msm_pinctrl {
 	struct msm_gpio_regs *gpio_regs;
 	struct msm_tile *msm_tile_regs;
 	bool hibernation;
+#ifdef CONFIG_HIBERNATION
+	struct syscore syscore;
+	struct notifier_block pm_notifier;
+#endif
 };
 
 static struct msm_pinctrl *msm_pinctrl_data;
@@ -1857,7 +1861,7 @@ static int msm_gpio_init(struct msm_pinctrl *pctrl)
 	girq->handler = handle_bad_irq;
 	girq->parents[0] = pctrl->irq;
 
-	ret = gpiochip_add_data(&pctrl->chip, pctrl);
+	ret = devm_gpiochip_add_data(pctrl->dev, &pctrl->chip, pctrl);
 	if (ret) {
 		dev_err(pctrl->dev, "Failed register gpiochip\n");
 		return ret;
@@ -1878,7 +1882,6 @@ static int msm_gpio_init(struct msm_pinctrl *pctrl)
 			dev_name(pctrl->dev), 0, 0, chip->ngpio);
 		if (ret) {
 			dev_err(pctrl->dev, "Failed to add pin range\n");
-			gpiochip_remove(&pctrl->chip);
 			return ret;
 		}
 	}
@@ -1955,7 +1958,7 @@ static void msm_pinctrl_setup_pm_reset(struct msm_pinctrl *pctrl)
 static int pinctrl_hibernation_notifier(struct notifier_block *nb,
 								unsigned long event, void *dummy)
 {
-	struct msm_pinctrl *pctrl = msm_pinctrl_data;
+	struct msm_pinctrl *pctrl = container_of(nb, struct msm_pinctrl, pm_notifier);
 	const struct msm_pinctrl_soc_data *soc = pctrl->soc;
 
 	if ((event == PM_HIBERNATION_PREPARE) || ((event == PM_SUSPEND_PREPARE)
@@ -1963,13 +1966,14 @@ static int pinctrl_hibernation_notifier(struct notifier_block *nb,
 		pctrl->gpio_regs = kcalloc(soc->ngroups,
 			sizeof(*pctrl->gpio_regs), GFP_KERNEL);
 		if (pctrl->gpio_regs == NULL)
-			return -ENOMEM;
+			return notifier_from_errno(-ENOMEM);
 		if (soc->ntiles) {
 			pctrl->msm_tile_regs = kcalloc(soc->ntiles,
 				sizeof(*pctrl->msm_tile_regs), GFP_KERNEL);
 			if (pctrl->msm_tile_regs == NULL) {
 				kfree(pctrl->gpio_regs);
-				return -ENOMEM;
+				pctrl->gpio_regs = NULL;
+				return notifier_from_errno(-ENOMEM);
 			}
 		}
 		pctrl->hibernation = true;
@@ -1984,14 +1988,10 @@ static int pinctrl_hibernation_notifier(struct notifier_block *nb,
 	return NOTIFY_OK;
 }
 
-static struct notifier_block pinctrl_notif_block = {
-	.notifier_call = pinctrl_hibernation_notifier,
-};
-
 static int msm_pinctrl_hibernation_suspend(void *data)
 {
 	const struct msm_pingroup *pgroup;
-	struct msm_pinctrl *pctrl = msm_pinctrl_data;
+	struct msm_pinctrl *pctrl = data;
 	const struct msm_pinctrl_soc_data *soc = pctrl->soc;
 	struct gpio_chip *chip = &pctrl->chip;
 	void __iomem *tile_addr = NULL;
@@ -2034,8 +2034,7 @@ static int msm_pinctrl_hibernation_suspend(void *data)
 	}
 
 	for ( ; i < soc->ngroups; i++) {
-		if (!gpiochip_line_is_valid(chip, i))
-			continue;
+		/* Non-GPIO pin groups are outside the gpiochip valid-mask range. */
 
 		pgroup = &soc->groups[i];
 		if (pgroup->ctl_reg)
@@ -2052,12 +2051,13 @@ static void msm_pinctrl_hibernation_resume(void *data)
 {
 	u32 i, j;
 	const struct msm_pingroup *pgroup;
-	struct msm_pinctrl *pctrl = msm_pinctrl_data;
+	struct msm_pinctrl *pctrl = data;
 	const struct msm_pinctrl_soc_data *soc = pctrl->soc;
 	struct gpio_chip *chip = &pctrl->chip;
 	void __iomem *tile_addr = NULL;
 
-	if (likely(!pctrl->hibernation) || !pctrl->gpio_regs || !pctrl->msm_tile_regs)
+	if (likely(!pctrl->hibernation) || !pctrl->gpio_regs ||
+	    (soc->ntiles && !pctrl->msm_tile_regs))
 		return;
 
 	for (i = 0; i < soc->ntiles; i++) {
@@ -2088,8 +2088,7 @@ static void msm_pinctrl_hibernation_resume(void *data)
 	}
 
 	for ( ; i < soc->ngroups; i++) {
-		if (!gpiochip_line_is_valid(chip, i))
-			continue;
+		/* Non-GPIO pin groups are outside the gpiochip valid-mask range. */
 
 		pgroup = &soc->groups[i];
 		if (pgroup->ctl_reg)
@@ -2106,9 +2105,18 @@ static const struct syscore_ops msm_pinctrl_pm_ops = {
 	.resume = msm_pinctrl_hibernation_resume,
 };
 
-static struct syscore msm_pinctrl_syscore = {
-	.ops = &msm_pinctrl_pm_ops,
-};
+static void msm_pinctrl_hibernation_cleanup(void *data)
+{
+	struct msm_pinctrl *pctrl = data;
+
+	unregister_syscore(&pctrl->syscore);
+	unregister_pm_notifier(&pctrl->pm_notifier);
+	kfree(pctrl->gpio_regs);
+	kfree(pctrl->msm_tile_regs);
+	pctrl->gpio_regs = NULL;
+	pctrl->msm_tile_regs = NULL;
+	pctrl->hibernation = false;
+}
 #endif
 
 static __maybe_unused int msm_pinctrl_suspend(struct device *dev)
@@ -2364,7 +2372,6 @@ int msm_pinctrl_probe(struct platform_device *pdev,
 		pctrl->phys_base[0] = res->start;
 	}
 
-	msm_pinctrl_setup_pm_reset(pctrl);
 
 	pctrl->irq = platform_get_irq(pdev, 0);
 	if (pctrl->irq < 0)
@@ -2409,11 +2416,20 @@ int msm_pinctrl_probe(struct platform_device *pdev,
 	platform_set_drvdata(pdev, pctrl);
 
 #ifdef CONFIG_HIBERNATION
-	register_syscore(&msm_pinctrl_syscore);
-	ret = register_pm_notifier(&pinctrl_notif_block);
+	pctrl->syscore.ops = &msm_pinctrl_pm_ops;
+	pctrl->syscore.data = pctrl;
+	pctrl->pm_notifier.notifier_call = pinctrl_hibernation_notifier;
+	ret = register_pm_notifier(&pctrl->pm_notifier);
+	if (ret)
+		return ret;
+	register_syscore(&pctrl->syscore);
+	ret = devm_add_action_or_reset(&pdev->dev,
+			msm_pinctrl_hibernation_cleanup, pctrl);
 	if (ret)
 		return ret;
 #endif
+
+	msm_pinctrl_setup_pm_reset(pctrl);
 
 	dev_dbg(&pdev->dev, "Probed Qualcomm pinctrl driver\n");
 
@@ -2425,7 +2441,6 @@ void msm_pinctrl_remove(struct platform_device *pdev)
 {
 	struct msm_pinctrl *pctrl = platform_get_drvdata(pdev);
 
-	gpiochip_remove(&pctrl->chip);
 
 	unregister_restart_handler(&pctrl->restart_nb);
 }

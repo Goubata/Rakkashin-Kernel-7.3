@@ -1,0 +1,8 @@
+{
+  "scope": "ELF symbol names only; not a hardware runtime or CRC compatibility test",
+  "module_count": 36,
+  "vermagic": [
+    "7.3.0-4k SMP preempt mod_unload modversions aarch64"
+  ],
+  "unresolved_names": {}
+}

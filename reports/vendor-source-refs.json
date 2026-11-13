@@ -1,0 +1,489 @@
+[
+  {
+    "repository": "kernel-msm",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-msm.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-prima",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-qcacld-2.0",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-omap",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-mtk",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-qcacld-3.0",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-wlan-qcacld-3.0.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "a10145024cfe60ef29750f94f320123d5a3d22de"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-fw-api",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-wlan-fw-api.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "ca7f50df18f7b606f7ba4a9747be0d533d6c671b"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-qca-wifi-host-cmn",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-wlan-qca-wifi-host-cmn.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "e4b194cc7e0449bcf435fd991860df6d8d2c0fb0"
+  },
+  {
+    "repository": "motorola-kernel-modules",
+    "url": "https://github.com/MotorolaMobilityLLC/motorola-kernel-modules.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "a24357771fe451d829a2f78f8986ecd53522085e"
+  },
+  {
+    "repository": "kernel-slsi",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-audio-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-audio-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "012f5b151f4e84d752b4e274fbfd130675903d0a"
+  },
+  {
+    "repository": "vendor-qcom-opensource-data-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-techpack-video",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-techpack-display",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-techpack-camera",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "82d6411232808183ce951d87a277781cbfb5d6a2"
+  },
+  {
+    "repository": "kernel-camera-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-camera-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "61996ea046dc3cf03bcad3e2a23ca8fe08761370"
+  },
+  {
+    "repository": "kernel-display-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-display-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a"
+  },
+  {
+    "repository": "kernel-msm-techpack-audio",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-datarmnet",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-datarmnet.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "03d3aaa3c97a3c9be5d7461ccabec5a45958fb68"
+  },
+  {
+    "repository": "vendor-qcom-opensource-datarmnet-ext",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-datarmnet-ext.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "a3cf383a5e94ae804098c97431afde885d650569"
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-camera",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-audio",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-video",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-display",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-msm-5.4-techpack-display.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "fa008c43c070ff20faa33853649f5dfd4c427e99"
+  },
+  {
+    "repository": "kernel-msm-techpack-dataipa",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-msm-techpack-dataipa.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "554dc964bd762d679308288d89c86256a107b2e1"
+  },
+  {
+    "repository": "kernel-sprd",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-modules-wcn",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-camera-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-eva-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-eva-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "0036a2f103404e277731b38b71c12ae4c427b724"
+  },
+  {
+    "repository": "vendor-qcom-opensource-mmrm-driver",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-audio-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-audio-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "0b013232e692a8449b6dee5323808033bac8032c"
+  },
+  {
+    "repository": "kernel-mmrm-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-video-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-video-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "b51ce5b64a981b139f947fe5c81d956dd18838e4"
+  },
+  {
+    "repository": "vendor-qcom-opensource-display-drivers",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-cvp-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-video-driver",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-video-driver.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "04327f0da669b089060c897b074ee53c07e86a1f"
+  },
+  {
+    "repository": "kernel-common",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-common.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4"
+  },
+  {
+    "repository": "vendor-qcom-opensource-bt-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-bt-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "1aac3eefb3bb686aa317f8f303e36548b094e17c"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-platform",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-wlan-platform.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "e45e8de63590db821652d7f1c8e212411a76a64a"
+  },
+  {
+    "repository": "kernel-bt-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-bt-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "7847b6be9053b9b6092b9986a4157414b9d307c7"
+  },
+  {
+    "repository": "kernel-data-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-data-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "6f7e7db6dfc15cbfe512adaacbda65646ea74321"
+  },
+  {
+    "repository": "kernel-eva-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-graphics-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-graphics-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "ab52c0171559859836390781aed0ea1a45a3e9d4"
+  },
+  {
+    "repository": "kernel-mm-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-mm-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "d9bef192aacf06214542281b931fdcb694c24876"
+  },
+  {
+    "repository": "kernel-wlan-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-wlan-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "9f2ade9a4759d28ab9728aec2c3ba08eef767add"
+  },
+  {
+    "repository": "vendor-qcom-opensource-camera-kernel-legacy",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-ecosw",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-securemsm-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-securemsm-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "43e5f439ce6f2b4a97278096ed4f04a84aacf502"
+  },
+  {
+    "repository": "kernel-camera-devicetree-legacy",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-external-dtc",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-nfc-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-nfc-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "2a0e6b96467928581ee6133281bec0aa148e5ef2"
+  },
+  {
+    "repository": "kernel-eSE-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-eSE-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "7af5a92e508a4cf22665ae14b18435832f7e7a05"
+  },
+  {
+    "repository": "vendor-qcom-opensource-graphics-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-graphics-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "61a6d039282d94bd2ea2f908cef580e0d1006686"
+  },
+  {
+    "repository": "kernel-synx-devicetree",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel-synx-devicetree.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "55b6a18a2a48ac12a258a80e85ea40daccd7ca62"
+  },
+  {
+    "repository": "kernel-mm-sys-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-dsp-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-biometrics-fingerprint-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-synx-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-mm-sys-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-mm-drivers",
+    "url": "https://github.com/MotorolaMobilityLLC/vendor-qcom-opensource-mm-drivers.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "6ac06dd09262b3bbe28c6d8105f18a42f8650832"
+  },
+  {
+    "repository": "vendor-qcom-opensource-dsp-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-external-stardoc",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-external-bazel-skylib",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-external-python-absl-py",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-camera-legacy",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-build-bazel_mgk_rules",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-build-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-kernel_device_modules-6.1",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-prebuilts-kernel-build-tools",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-cvp-devicetree",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-spu-kernel",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-kernel_device_modules-6.6",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-mmrm-driver-test",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "vendor-qcom-opensource-fingerprint",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-build-kernel",
+    "url": "https://github.com/MotorolaMobilityLLC/kernel_platform-build-kernel.git",
+    "branch": "android-16-release-w3wwl36.65-11-18",
+    "commit": "e6cb4d0924766aa00fecddc9aedf136aa7ac4c74"
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-bazel-central-registry",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-rules_license",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-rules_python",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-pigz",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-zopfli",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazel-contrib-bazel_features",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-build-bazel_common_rules",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-rules_cc",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-platforms",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-rules_pkg",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-lz4",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-bazelbuild-rules_shell",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-toybox",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel_platform-external-zlib",
+    "status": "no matching ref",
+    "detail": ""
+  },
+  {
+    "repository": "kernel-kernel_device_modules-6.12",
+    "status": "no matching ref",
+    "detail": ""
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "source": "qcom-soc 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "headers": [
+    "dt-bindings/soc/qcom,ipcc.h",
+    "linux/gunyah/gh_rm_drv.h",
+    "linux/mailbox/qmp.h",
+    "linux/mem-buf.h",
+    "linux/msm_sysstats.h",
+    "linux/qcom-io-pgtable.h",
+    "linux/qcom-iommu-util.h",
+    "linux/qtee_shmbridge.h",
+    "linux/soc/qcom/msm_adreno_devfreq.h",
+    "soc/qcom/dcvs.h",
+    "soc/qcom/minidump.h",
+    "soc/qcom/msm_performance.h",
+    "soc/qcom/of_common.h",
+    "soc/qcom/secure_buffer.h",
+    "soc/qcom/socinfo.h",
+    "uapi/linux/mem-buf.h",
+    "uapi/linux/msm_sysstats.h"
+  ]
+}

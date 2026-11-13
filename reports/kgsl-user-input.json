@@ -1,0 +1,6 @@
+{
+  "archive": "/data/data/com.termux/files/home/kgsl-avr-1.0-source.zip",
+  "sha256": "0b65d98f38556912f5fd486535f455b580287c178197fd07cc22b0448c656e1f",
+  "uncompressed_bytes": 5764226,
+  "extracted_to": "/data/data/com.termux/files/home/avr-upstream-audit/kgsl-avr-1.0"
+}

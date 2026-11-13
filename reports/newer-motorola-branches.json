@@ -1,0 +1,26 @@
+[
+  {
+    "branch": "android-17-release-a171uvh.42-20",
+    "version": "6.1.157"
+  },
+  {
+    "branch": "android-17-release-a171waah.31-9-4",
+    "version": "6.6.118"
+  },
+  {
+    "branch": "android-17-release-a171weh.36-18",
+    "version": "6.1.157"
+  },
+  {
+    "branch": "android-17-release-a171wlh.38-19-5",
+    "version": "6.6.118"
+  },
+  {
+    "branch": "android-17-release-a171wrh.35-10",
+    "version": "6.6.118"
+  },
+  {
+    "branch": "android-17-release-a171wvh.21-16-16",
+    "error": "HTTP Error 404: Not Found"
+  }
+]

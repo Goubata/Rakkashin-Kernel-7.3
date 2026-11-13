@@ -12,3 +12,6 @@ modules.order
 /reports/module-imports.json
 *.o.d
 /artifacts/
+
+/tests/qemu/*.cpio.gz
+/tests/oplus-sync/oplus-sync-test

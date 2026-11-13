@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Snapshot the partial port; this never creates or flashes a boot.img."""
+from pathlib import Path
+import hashlib
+import json
+import shutil
+import subprocess
+
+ROOT=Path(__file__).resolve().parents[1]
+out=ROOT/'out/native-gki'
+dst=ROOT/'artifacts/android73-boot-core-stage2'
+dst.mkdir(parents=True,exist_ok=True)
+for path,name in [(out/'arch/arm64/boot/Image','Image'),(out/'.config','config'),(out/'Module.symvers','Module.symvers'),(out/'System.map','System.map')]:
+    shutil.copyfile(path,dst/name)
+modules=[]
+for name in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync']:
+    modules += [(p,'modules/'+name+'/'+p.name) for p in (ROOT/'ports'/name).glob('*.ko')]
+for name in ['qcom-scm','qcom_pas','qcom_tzmem']:
+    p=out/'drivers/firmware/qcom'/(name+'.ko')
+    modules.append((p,'modules/firmware/'+p.name))
+for source,name in modules:
+    target=dst/name
+    target.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copyfile(source,target)
+report={
+    'source_commit':subprocess.check_output(['git','-C',str(ROOT.parent/'avr-upstream-audit/android-7.3'),'rev-parse','HEAD'],text=True).strip(),
+    'description':'Partial port, no physical boot; KGSL not yet linked; not a flashable boot image',
+    'module_count':len(modules),'modules':sorted(name for _,name in modules),
+    'image_sha256':hashlib.sha256((dst/'Image').read_bytes()).hexdigest(),
+}
+(dst/'metadata.json').write_text(json.dumps(report,indent=2)+'\n')
+files=sorted(p for p in dst.rglob('*') if p.is_file() and p.name!='SHA256SUMS')
+(dst/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(dst).as_posix()+'\n' for p in files))
+(ROOT/'reports/boot-core-stage2.json').write_text(json.dumps(report,indent=2)+'\n')
+print('Staged',len(modules),'modules; Image',report['image_sha256'])

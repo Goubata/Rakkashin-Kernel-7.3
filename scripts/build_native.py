@@ -18,7 +18,21 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--platform", action="store_true", help="Enable initial SCM/PAS/TZMEM dependencies; not complete avr support")
     parser.add_argument("--pinctrl", action="store_true", help="Also link the staged Alor pinctrl modules; requires --platform")
+    parser.add_argument("--boot-core", action="store_true", help="Apply core patches and build clock/RPMh/IRQ/pinctrl and OxygenOS sync modules")
+    parser.add_argument("--qemu-tests", action="store_true", help="Build boot-core plus isolated clock/RCU and fence test fixtures")
     args = parser.parse_args()
+    if args.qemu_tests:
+        args.boot_core = True
+    if args.boot_core:
+        args.platform = True
+        args.pinctrl = True
+        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch']:
+            command=['git','-C',str(SOURCE),'apply']
+            if subprocess.run(command+['--reverse','--check',str(patch)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0:
+                continue
+            subprocess.run(command+['--check',str(patch)],check=True)
+            subprocess.run(command+[str(patch)],check=True)
+
     if args.pinctrl and not args.platform:
         parser.error("--pinctrl requires --platform")
     if not (SOURCE / 'Makefile').is_file() or not (ROOTFS / 'usr/bin/make').is_file():
@@ -44,9 +58,28 @@ def main():
                   '/work/avr-port/out/native-gki/.config',
                   '/work/avr-port/configs/avr-platform.fragment'])
         root_run(base + ['olddefconfig'])
+    if args.qemu_tests:
+        root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                  'PATH=/usr/sbin:/usr/bin:/sbin:/bin', '/bin/bash',
+                  '/work/avr-src/scripts/kconfig/merge_config.sh', '-m',
+                  '-O', '/work/avr-port/out/native-gki',
+                  '/work/avr-port/out/native-gki/.config',
+                  '/work/avr-port/configs/avr-qemu-tests.fragment'])
+        root_run(base + ['olddefconfig'])
     root_run(base + ['-j' + os.environ.get('BUILD_JOBS', '4'), 'Image', 'modules'])
+    if args.boot_core:
+        for name in ['qcom-clock-core', 'qcom-rpmh', 'qcom-clock-controllers', 'qcom-irq', 'avr-oplus-sync']:
+            root_run(base + ["M=/work/avr-port/ports/"+name, "-j"+os.environ.get('BUILD_JOBS','4'), "modules"])
     if args.pinctrl:
         root_run(base + ["M=/work/avr-port/ports/pinctrl-alor-vendor-core", "-j2", "modules"])
+
+    if args.qemu_tests:
+        root_run(base + ["M=/work/avr-port/tests/clock", "-j2", "modules"])
+        root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                  'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',
+                  '-Wall', '-Wextra', '-Werror',
+                  '/work/avr-port/tests/oplus-sync/oplus-sync-test.c',
+                  '-o', '/work/avr-port/tests/oplus-sync/oplus-sync-test'])
 
 if __name__ == '__main__':
     main()

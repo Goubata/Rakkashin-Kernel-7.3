@@ -2,6 +2,7 @@
 """Stage the Motorola clock hold-state extension without editing active GKI."""
 from pathlib import Path
 import difflib
+import subprocess
 
 HERE = Path(__file__).resolve().parent
 HOME_DIR = HERE.parents[2]
@@ -24,7 +25,7 @@ def once(source, old, new):
     return source.replace(old, new, 1)
 
 def main():
-    original = (ACK/'drivers/clk/clk.c').read_text()
+    original = subprocess.check_output(['git', '-C', str(ACK), 'show', '4dd306a07b2f456fd70ddaa28f4f65640374f202:drivers/clk/clk.c'], text=True)
     vendor = VENDOR.read_text()
     s = once(original, '\tbool\t\t\trpm_enabled;\n',
              '\tbool\t\t\trpm_enabled;\n\tbool\t\t\tneed_sync;\n\tbool\t\t\tboot_enabled;\n')
@@ -35,6 +36,8 @@ def main():
         s = once(s, body, once(body, old, new))
     release = function(vendor, 'static void clk_unprepare_disable_dev_subtree(')
     release += '\n' + function(vendor, 'void clk_sync_state(') + 'EXPORT_SYMBOL_GPL(clk_sync_state);\n\n'
+    release = once(release, '\tclk_core_disable_unprepare(core);',
+                   '\t/* Drop only the reference acquired by boot-state retention, once. */\n\tcore->need_sync = false;\n\tcore->boot_enabled = false;\n\tclk_core_disable_unprepare(core);')
     anchor = 'static int clk_core_determine_round_nolock('
     s = once(s, anchor, release + anchor)
     hold = function(vendor, 'static void clk_core_hold_state(')
@@ -53,11 +56,13 @@ def main():
                       'static inline bool dev_has_sync_state(')
     helper = helper.replace('dev_has_sync_state', 'clk_dev_has_sync_state')
     s = s.replace('dev_has_sync_state(', 'clk_dev_has_sync_state(')
+    s = s.replace('core->boot_enabled = clk_core_is_enabled(core);',\
+                  'core->boot_enabled = clk_dev_has_sync_state(core->dev) &&\n\t\t!(core->flags & CLK_DONT_HOLD_STATE) &&\n\t\tclk_core_is_enabled(core);')
     s = once(s, '#include <linux/device.h>\n',
              '#include <linux/device.h>\n#include <linux/device/bus.h>\n#include <linux/device/driver.h>\n')
     s = once(s, 'static DEFINE_SPINLOCK(enable_lock);',
              helper + '\nstatic DEFINE_SPINLOCK(enable_lock);')
-    header = (ACK/'include/linux/clk-provider.h').read_text()
+    header = subprocess.check_output(['git', '-C', str(ACK), 'show', '4dd306a07b2f456fd70ddaa28f4f65640374f202:include/linux/clk-provider.h'], text=True)
     modified = once(header, '#define CLK_DUTY_CYCLE_PARENT\tBIT(13)\n',
                     '#define CLK_DUTY_CYCLE_PARENT\tBIT(13)\n#define CLK_DONT_HOLD_STATE\tBIT(14) /* Do not hold boot state until sync_state */\n\nvoid clk_sync_state(struct device *dev);\n')
     patch = ''

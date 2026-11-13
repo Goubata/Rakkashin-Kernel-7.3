@@ -1,0 +1,58 @@
+{
+  "scope": "isolated RAM-only QEMU; no phone hardware verified",
+  "checks": [
+    {
+      "log": "avr-kernel-7.3/reports/qemu-clock-hold-after-fix-up.log",
+      "test": "clock",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        27,
+        0,
+        0,
+        27
+      ],
+      "log_sha256": "98717f4a3e3e8119b87e1e5e1fdaae3714462d89cb9c2137ae3e1a45dd918c28"
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-rcu-proxy-full-tests.log",
+      "test": "clock",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        29,
+        0,
+        0,
+        29
+      ],
+      "log_sha256": "f613b456fe4c786def0ac3b681c6480da38fa3838f6da254642aa2ad9d5abd98"
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-rcu-proxy-full-tests-smp4.log",
+      "test": "clock",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        29,
+        0,
+        0,
+        29
+      ],
+      "log_sha256": "2f85ec4d0f2fbe1cc4ea91664c6df9fd62cc333fe5cd9da9620d0328d8929989"
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-oplus-sync-rcu-fixed-smp4.log",
+      "test": "oplus",
+      "passed": true,
+      "failures": [],
+      "checks": 1283,
+      "log_sha256": "d38f4d7c981f441cd8d2183f1fd12d6e538a5c5398ad33ffde320aa06b6c4d81"
+    }
+  ],
+  "known_failure_evidence": [
+    "qemu-clock-tests-attempt2.log",
+    "qemu-clock-hold-before-fix-up.log",
+    "qemu-baseline-smp-diagnostic.log"
+  ],
+  "physical_boot": false
+}

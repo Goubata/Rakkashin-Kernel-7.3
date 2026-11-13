@@ -1,0 +1,193 @@
+[
+  {
+    "repository": "kernel-msm",
+    "path": "../avr-upstream-audit/qcom-soc",
+    "status": "existing SoC reference"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-qcacld-3.0",
+    "commit": "a10145024cfe60ef29750f94f320123d5a3d22de",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-wlan-qcacld-3.0",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-fw-api",
+    "commit": "ca7f50df18f7b606f7ba4a9747be0d533d6c671b",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-wlan-fw-api",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-qca-wifi-host-cmn",
+    "commit": "e4b194cc7e0449bcf435fd991860df6d8d2c0fb0",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-wlan-qca-wifi-host-cmn",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "motorola-kernel-modules",
+    "commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/motorola-kernel-modules",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-audio-kernel",
+    "commit": "012f5b151f4e84d752b4e274fbfd130675903d0a",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-audio-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-devicetree",
+    "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-camera-devicetree",
+    "commit": "61996ea046dc3cf03bcad3e2a23ca8fe08761370",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-camera-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-display-devicetree",
+    "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-display-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-datarmnet",
+    "commit": "03d3aaa3c97a3c9be5d7461ccabec5a45958fb68",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-datarmnet",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-datarmnet-ext",
+    "commit": "a3cf383a5e94ae804098c97431afde885d650569",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-datarmnet-ext",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-msm-5.4-techpack-display",
+    "commit": "fa008c43c070ff20faa33853649f5dfd4c427e99",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-msm-5.4-techpack-display",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-msm-techpack-dataipa",
+    "commit": "554dc964bd762d679308288d89c86256a107b2e1",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-msm-techpack-dataipa",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-eva-kernel",
+    "commit": "0036a2f103404e277731b38b71c12ae4c427b724",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-eva-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-audio-devicetree",
+    "commit": "0b013232e692a8449b6dee5323808033bac8032c",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-audio-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-video-devicetree",
+    "commit": "b51ce5b64a981b139f947fe5c81d956dd18838e4",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-video-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-video-driver",
+    "commit": "04327f0da669b089060c897b074ee53c07e86a1f",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-video-driver",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-common",
+    "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-common",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-bt-kernel",
+    "commit": "1aac3eefb3bb686aa317f8f303e36548b094e17c",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-bt-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-wlan-platform",
+    "commit": "e45e8de63590db821652d7f1c8e212411a76a64a",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-wlan-platform",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-bt-devicetree",
+    "commit": "7847b6be9053b9b6092b9986a4157414b9d307c7",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-bt-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-data-devicetree",
+    "commit": "6f7e7db6dfc15cbfe512adaacbda65646ea74321",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-data-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-graphics-devicetree",
+    "commit": "ab52c0171559859836390781aed0ea1a45a3e9d4",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-graphics-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-mm-devicetree",
+    "commit": "d9bef192aacf06214542281b931fdcb694c24876",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-mm-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-wlan-devicetree",
+    "commit": "9f2ade9a4759d28ab9728aec2c3ba08eef767add",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-wlan-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-securemsm-kernel",
+    "commit": "43e5f439ce6f2b4a97278096ed4f04a84aacf502",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-securemsm-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-nfc-devicetree",
+    "commit": "2a0e6b96467928581ee6133281bec0aa148e5ef2",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-nfc-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-eSE-devicetree",
+    "commit": "7af5a92e508a4cf22665ae14b18435832f7e7a05",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-eSE-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-graphics-kernel",
+    "commit": "61a6d039282d94bd2ea2f908cef580e0d1006686",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-graphics-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel-synx-devicetree",
+    "commit": "55b6a18a2a48ac12a258a80e85ea40daccd7ca62",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel-synx-devicetree",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "vendor-qcom-opensource-mm-drivers",
+    "commit": "6ac06dd09262b3bbe28c6d8105f18a42f8650832",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/vendor-qcom-opensource-mm-drivers",
+    "status": "metadata fetched; no working checkout yet"
+  },
+  {
+    "repository": "kernel_platform-build-kernel",
+    "commit": "e6cb4d0924766aa00fecddc9aedf136aa7ac4c74",
+    "path": "/data/data/com.termux/files/home/avr-upstream-audit/vendor-repos/kernel_platform-build-kernel",
+    "status": "metadata fetched; no working checkout yet"
+  }
+]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Snapshot the partial port; this never creates or flashes a boot.img."""
 from pathlib import Path
+import argparse
 import hashlib
 import json
 import shutil
@@ -8,7 +9,11 @@ import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
 out=ROOT/'out/native-gki'
-dst=ROOT/'artifacts/android73-boot-core-stage2'
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--name',default='android73-boot-core-stage2')
+args=parser.parse_args()
+if not args.name.replace('-','').replace('_','').isalnum():parser.error('invalid snapshot name')
+dst=ROOT/'artifacts'/args.name
 dst.mkdir(parents=True,exist_ok=True)
 for path,name in [(out/'arch/arm64/boot/Image','Image'),(out/'.config','config'),(out/'Module.symvers','Module.symvers'),(out/'System.map','System.map')]:
     shutil.copyfile(path,dst/name)
@@ -31,5 +36,5 @@ report={
 (dst/'metadata.json').write_text(json.dumps(report,indent=2)+'\n')
 files=sorted(p for p in dst.rglob('*') if p.is_file() and p.name!='SHA256SUMS')
 (dst/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(dst).as_posix()+'\n' for p in files))
-(ROOT/'reports/boot-core-stage2.json').write_text(json.dumps(report,indent=2)+'\n')
+(ROOT/'reports'/(args.name+'.json')).write_text(json.dumps(report,indent=2)+'\n')
 print('Staged',len(modules),'modules; Image',report['image_sha256'])

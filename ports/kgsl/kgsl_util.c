@@ -5,6 +5,7 @@
  */
 
 
+#include "avr-scm-gpu.h"
 #include <linux/clk.h>
 #include <linux/clk-provider.h>
 #include <linux/delay.h>
@@ -86,7 +87,7 @@ int kgsl_scm_gpu_init_regs(struct device *dev, u32 gpu_req)
 	if (!gpu_req)
 		return -EOPNOTSUPP;
 
-	ret = qcom_scm_kgsl_init_regs(gpu_req);
+	ret = qcom_scm_gpu_init_regs(gpu_req);
 	if (ret)
 		dev_err(dev, "Scm call for requests:0x%x failed with ret:: %d\n",
 									gpu_req, ret);

@@ -1,39 +1,61 @@
 # Rakkashin KGSL 7.3 port in progress
 
 Input: kgsl-avr-1.0-source.zip, SHA256 0b65d98f38556912f5fd486535f455b580287c178197fd07cc22b0448c656e1f.
-Official reference: Motorola graphics-kernel 61a6d039282d94bd2ea2f908cef580e0d1006686, matching W3WWL36.65-11-18.
-Source comparison: reports/kgsl-source-comparison.json. Preserve busy_update_ms, adrenoboost and adrenoboost_stats ABI for the supplied app.
+Official graphics reference: 61a6d039282d94bd2ea2f908cef580e0d1006686, W3WWL36.65-11-18.
+Vendor-only headers: SoC 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1;
+Gunyah core headers and PERF_MODE tag: Motorola common 479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4.
 
-Use only GPU-local configuration in avr-config.h, compile against actual 7.3 headers and link against real 7.3 dependency Module.symvers. The supplied old full vendor_autoconf.h and stock CRC reconstruction scripts are reference inputs, not used for this port. No installer is run.
+The ZIP's busy_update_ms, adrenoboost and adrenoboost_stats ABI and tuning app
+remain present. The original ZIP and patches remain intact.
 
-Status: staged, API migration and dependency builds pending; not yet a usable 7.3 GPU driver. Thermal cap, concurrency and suspend behavior still need review and hardware measurements.
+## Build status
 
-## API migration status
+All GPU C files compiled and msm_kgsl.o linked (kgsl-attempt20.log). This is a
+relocatable object, not a usable msm_kgsl.ko. Modpost fails with 40 actual missing
+provider symbols: reports/kgsl-link-dependencies.json. No unresolved-symbol
+suppression or stock CRC reconstruction is used.
 
-The staged source retains the original custom busy_update_ms / Adreno Boost
-implementation and its UAPI. Older timer and DMA coherence accessors, unmapped
-area API, fence locking, sequence initialization and removed fence debug methods
-have been adapted. These changes do not yet produce a linked module.
+Only GPU-local configuration and actual functional dependency choices are used,
+not the ZIP's whole 6.12 vendor_autoconf.h. Secure-buffer, LLCC and DCVS are
+explicitly enabled to prevent disabled header fallbacks from quietly omitting
+protected memory and cache/frequency control. Their real providers must be ported.
 
-Blocking areas from kgsl-attempt12.log:
-- Restore the hybrid shmem allocation path using a real 7.3 hook/context design;
-  shmem_inode_info.android_vendor_data1 and android_rvh_shmem_get_folio were removed.
-  Do not disable shmem/reclaim to obtain a superficial successful build.
-- Convert shmem_file_setup to the target vma_flags_t API.
-- Register the correct cooling-device ID with the new thermal API.
-- Port the actual vendor SMMU / io-pgtable, ICC performance tags, mem-buf,
-  Gunyah, sysstats and SCM GPU tuning providers, then link with their real symbols.
-- Shared vendor SMMU extension now has its own avr_adreno_smmu_priv name; the
-  future vendor SMMU provider must use precisely the same definition. It is
-  incompatible with the upstream drm/msm private structure and must not be cast
-  to a generic upstream provider.
+## Migrated interfaces
 
-GPU policy review still required: in the supplied high-load branch, retaining
-an older boost floor after computing the thermal cap can choose a faster floor
-than a newly lowered cap. The worker must revalidate limits when applying a
-request and handle failed GMU requests; delayed expiry and concurrent state
-access also require review. These are open correctness issues, not measured
-performance improvements. The input archive and original patch remain intact.
+- Timer callbacks, private functions, DMA coherence flags, unmapped-area API,
+  scatterlist page iteration, const bin_attribute callbacks and Coresight path API.
+- Fence locks, 64-bit initialization, sequence comparison, array constructor and
+  local diagnostics replacing removed value_str callbacks. Fence lifecycle and
+  concurrent access still need deeper review and hardware stress tests.
+- shmem_file_setup uses vma_flags_t. The hybrid allocation/reclaim path stays on.
+- A new sleepable shmem folio provider uses SRCU. Unregister drains callbacks;
+  registration failures propagate and KGSL tears it down before freeing pools.
+  Nonblocking GFP requests use normal shmem, and the driver preserves NOIO/NOFS.
+  Driver-owned inode data is zeroed by core inode initialization. Returned folios
+  still pass through core memcg charging, page-cache and LRU accounting.
+- Reclaim walks folios with references, isolates batches and uses the 7.3
+  reclaimer. The old RCU-only xarray walk did not meet folio_isolate_lru's reference
+  contract. CPU mappings use exported zap_special_vma_range; all KGSL mapping
+  ops set PFNMAP or MIXEDMAP. Reclaimed large-folio reads use the actual file index.
+- Cooling registration uses ID 0; the actual avr GPU node has #cooling-cells=2,
+  so the 7.3 legacy thermal mapping format applies. Thermal handling stays active.
+- GPU register initialization and ordinary SMMU aperture calls use matching
+  existing 7.3 SCM APIs. LPAC/tuning and shutdown retry providers remain unresolved.
 
-Header provenance: vendor-only additions come from SoC 037aa1c6c; Gunyah core
-headers and the PERF_MODE tag originate in Motorola common 479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4.
+## Evidence and remaining work
+
+RAM-only QEMU SMP4 passed 35 clock/RCU/memory cases. The six memory cases cover
+provider supply/accounting, fallback, unrelated inode isolation, unregister,
+in-flight sleeping callback drain, and actual shmem swap-out to guest zram plus
+data read-back. This tests the core memory path, not KGSL GPU DMA on avr.
+
+Still required: real SoC info, LLCC/DCVS, secure-buffer/mem-buf and SCM backend,
+SMMU/io-pgtable, devfreq governors, SYNX and sysstats providers. The vendor SMMU
+must use the same avr_adreno_smmu_priv extension as KGSL; it cannot be cast to the
+upstream drm/msm private layout. The secure firmware backend (including the
+vendor SMCI/PIL path) requires review against the device firmware.
+
+The original Boost code still needs thermal-cap revalidation, successful-GMU-call
+tracking, delayed expiry and concurrency review. Reusing an old boost floor can
+currently outrun a newly lowered cap. No physical boot, GPU reset/suspend test,
+protected-content check or efficiency measurement has passed yet.

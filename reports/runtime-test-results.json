@@ -47,6 +47,21 @@
       "failures": [],
       "checks": 1283,
       "log_sha256": "d38f4d7c981f441cd8d2183f1fd12d6e538a5c5398ad33ffde320aa06b6c4d81"
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-shmem-reclaim-zram-tests.log",
+      "test": "clock",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        35,
+        0,
+        0,
+        35
+      ],
+      "log_sha256": "ad7c5d31725aaf0dfd70554c7af9b95ea9eabef4fe07d75e381770fc3e7daea1",
+      "guest_cpus": 4,
+      "zram_swap_bytes": 67108864
     }
   ],
   "known_failure_evidence": [

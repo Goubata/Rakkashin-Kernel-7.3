@@ -6,7 +6,7 @@
 
 #include <linux/kthread.h>
 #include <linux/notifier.h>
-#include <linux/pagevec.h>
+#include <linux/folio_batch.h>
 #include <linux/shmem_fs.h>
 #include <linux/swap.h>
 #include <linux/version.h>
@@ -78,7 +78,7 @@ static void kgsl_memdesc_clear_unevictable(struct kgsl_process_private *process,
 		memdesc->pages[i] = NULL;
 		atomic_inc(&process->unpinned_page_count);
 		spin_unlock(&memdesc->lock);
-		if (folio_batch_count(&fbatch) == PAGEVEC_SIZE) {
+		if (folio_batch_count(&fbatch) == FOLIO_BATCH_SIZE) {
 			check_move_unevictable_folios(&fbatch);
 			__folio_batch_release(&fbatch);
 		}
@@ -96,7 +96,7 @@ static int kgsl_read_mapping(struct kgsl_memdesc *memdesc, struct page **page, i
 						   i, kgsl_gfp_mask(0));
 
 	if (!IS_ERR(folio)) {
-		*page = folio_page(folio, 0);
+		*page = folio_file_page(folio, i);
 		return 0;
 	}
 
@@ -128,7 +128,7 @@ static void kgsl_memdesc_clear_unevictable(struct kgsl_process_private *process,
 		memdesc->pages[i] = NULL;
 		atomic_inc(&process->unpinned_page_count);
 		spin_unlock(&memdesc->lock);
-		if (pagevec_count(&pvec) == PAGEVEC_SIZE) {
+		if (pagevec_count(&pvec) == FOLIO_BATCH_SIZE) {
 			check_move_unevictable_pages(&pvec);
 			__pagevec_release(&pvec);
 		}
@@ -318,8 +318,8 @@ static u32 kgsl_shmem_mem_entry_migrate(struct mm_struct *mm, struct kgsl_mem_en
 	 * vma_idr is protected by the mmap lock
 	 */
 	idr_for_each_entry(&memdesc->vma_idr, vma, vidx) {
-		zap_page_range_single(vma, vma->vm_start,
-			vma->vm_end - vma->vm_start, NULL);
+		zap_special_vma_range(vma, vma->vm_start,
+			vma->vm_end - vma->vm_start);
 	}
 
 	for (i = 0; i < memdesc->page_count; ) {
@@ -374,7 +374,7 @@ cleanup_shmem:
 		put_page(pages[i]);
 
 	kgsl_memdesc_pagelist_cleanup(shmem_filp, memdesc);
-	SHMEM_I(shmem_filp->f_mapping->host)->android_vendor_data1 = 0;
+	SHMEM_I(shmem_filp->f_mapping->host)->folio_provider_data = NULL;
 	fput(shmem_filp);
 
 cleanup_pages:

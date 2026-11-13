@@ -5364,6 +5364,7 @@ void kgsl_device_platform_remove(struct kgsl_device *device)
 
 void kgsl_core_exit(void)
 {
+	kgsl_unregister_shmem_callback();
 	kgsl_exit_page_pools();
 	kgsl_eventlog_exit();
 
@@ -5485,7 +5486,9 @@ int __init kgsl_core_init(void)
 	/* Initialize the memory pools */
 	kgsl_probe_page_pools();
 
-	kgsl_register_shmem_callback();
+	result = kgsl_register_shmem_callback();
+	if (result)
+		goto err;
 
 	INIT_LIST_HEAD(&kgsl_driver.process_list);
 

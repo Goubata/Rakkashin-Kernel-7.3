@@ -8,7 +8,7 @@ from pathlib import Path
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('log',type=Path)
 p.add_argument('--test',choices=['smoke','clock','oplus'],required=True)
-p.add_argument("--clock-count",type=int,default=29)
+p.add_argument("--clock-count",type=int,default=35)
 a=p.parse_args()
 s=a.log.read_text(errors='replace')
 markers={'smoke':'AVR_QEMU_SMOKE_PASS','clock':'AVR_QEMU_KUNIT_MODULES_LOADED','oplus':'AVR_OPLUS_SYNC_PASS'}

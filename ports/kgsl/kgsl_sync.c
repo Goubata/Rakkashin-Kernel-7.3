@@ -184,7 +184,7 @@ bool kgsl_hw_fence_tx_slot_available(struct kgsl_device *device, u32 pending_hw_
 	return false;
 }
 
-void _hw_fence_destroy(struct kgsl_sync_fence *kfence)
+static void _hw_fence_destroy(struct kgsl_sync_fence *kfence)
 {
 	synx_release(kgsl_synx.handle, kfence->hw_fence_index);
 
@@ -333,7 +333,7 @@ bool kgsl_hw_fence_tx_slot_available(struct kgsl_device *device, u32 pending_hw_
 	return false;
 }
 
-void _hw_fence_destroy(struct kgsl_sync_fence *kfence)
+static void _hw_fence_destroy(struct kgsl_sync_fence *kfence)
 {
 	msm_hw_fence_destroy(kgsl_msm_hw_fence.handle, &kfence->fence);
 }
@@ -864,10 +864,14 @@ void kgsl_get_fence_value(struct dma_fence *f, char *value, u32 size)
 
 void kgsl_get_fence_name(struct dma_fence *f, char *name, u32 size)
 {
+    const char __rcu *driver, *timeline;
+
     rcu_read_lock();
+    driver = dma_fence_driver_name(f);
+    timeline = dma_fence_timeline_name(f);
     scnprintf(name, size, "%s %s: %llu",
-        rcu_dereference(dma_fence_driver_name(f)),
-        rcu_dereference(dma_fence_timeline_name(f)), f->seqno);
+        rcu_dereference(driver),
+        rcu_dereference(timeline), f->seqno);
     rcu_read_unlock();
 }
 void kgsl_get_fence_info(struct kgsl_drawobj_sync_event *event)

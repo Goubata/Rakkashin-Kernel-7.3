@@ -37,10 +37,14 @@ void kgsl_get_fence_value(struct dma_fence *f, char *value, u32 size)
 
 void kgsl_get_fence_name(struct dma_fence *f, char *name, u32 size)
 {
+    const char __rcu *driver, *timeline;
+
     rcu_read_lock();
+    driver = dma_fence_driver_name(f);
+    timeline = dma_fence_timeline_name(f);
     scnprintf(name, size, "%s %s: %llu",
-        rcu_dereference(dma_fence_driver_name(f)),
-        rcu_dereference(dma_fence_timeline_name(f)), f->seqno);
+        rcu_dereference(driver),
+        rcu_dereference(timeline), f->seqno);
     rcu_read_unlock();
 }
 ''' + s[end:]

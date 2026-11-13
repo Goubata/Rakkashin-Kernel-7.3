@@ -48,11 +48,21 @@ echo AVR_QEMU_SMOKE_PASS
                  (ROOT/'out/native-gki/drivers/clk/clk_kunit_helpers.ko','clk_kunit_helpers.ko')]
         modules += [(ROOT/'tests/clock'/n,n) for n in
                     ['clk-divider_test.ko','clk-gate_test.ko','avr-rate-compat-test.ko','avr-clock-hold-test.ko','avr-rcu-proxy-test.ko']]
+        modules += [(ROOT/'out/native-gki/mm/zsmalloc.ko','zsmalloc.ko'),
+                    (ROOT/'out/native-gki/drivers/block/zram/zram.ko','zram.ko')]
+        modules += [(ROOT/"tests/memory/avr-shmem-pool-test.ko","avr-shmem-pool-test.ko")]
         commands=[]
         for source,name in modules:
             add('modules/'+name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if name=='kunit.ko' else ''
             commands.append(f'/bin/busybox insmod /modules/{name}{params} || {{ echo AVR_QEMU_KUNIT_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+            if name=='zram.ko':
+                commands.append("""echo lz4 > /sys/block/zram0/comp_algorithm &&
+echo 67108864 > /sys/block/zram0/disksize &&
+devno=$(/bin/busybox cat /sys/block/zram0/dev) &&
+/bin/busybox mknod /dev/zram0 b ${devno%:*} ${devno#*:} &&
+/bin/busybox mkswap /dev/zram0 &&
+/bin/busybox swapon /dev/zram0 || { echo AVR_QEMU_SWAP_FAIL; /bin/busybox poweroff -f; }""")
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS', ('\n'.join(commands)+'\necho AVR_QEMU_KUNIT_MODULES_LOADED').encode())
     if args.oplus_tests:
         add('modules/avr_oplus_sync.ko',stat.S_IFREG|0o644,

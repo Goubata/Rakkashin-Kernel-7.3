@@ -79,7 +79,7 @@ struct dma_fence *kgsl_timelines_to_fence_array(struct kgsl_device *device,
 	}
 
 	array = dma_fence_array_create(count, fences,
-		dma_fence_context_alloc(1), 0, any);
+		dma_fence_context_alloc(1), any);
 
 	if (array)
 		return &array->base;

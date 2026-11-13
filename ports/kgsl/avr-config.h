@@ -17,3 +17,10 @@
 #define CONFIG_QCOM_SOCINFO_MODULE 1
 #define CONFIG_QCOM_MEM_BUF_MODULE 1
 #define CONFIG_MSM_SYSSTATS_MODULE 1
+/* The matching vendor SMMU must be built, not its disabled fallback. */
+#define CONFIG_ARM_SMMU_MODULE 1
+/* Functional dependencies from Motorola canoe perf. Require real providers;
+ * disabled header fallbacks would silently lose secure memory and cache/DCVS. */
+#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
+#define CONFIG_QCOM_LLCC_MODULE 1
+#define CONFIG_QCOM_DCVS_MODULE 1

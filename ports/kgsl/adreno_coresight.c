@@ -223,7 +223,8 @@ static int adreno_coresight_enable(struct coresight_device *csdev,
 }
 #else
 static int adreno_coresight_enable(struct coresight_device *csdev,
-				struct perf_event *event, enum cs_mode mode)
+				struct perf_event *event, enum cs_mode mode,
+				struct coresight_path *path)
 {
 	return _adreno_coresight_enable(csdev, event, mode);
 }

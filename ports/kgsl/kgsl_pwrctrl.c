@@ -5,6 +5,7 @@
  */
 
 #include <linux/clk/qcom.h>
+#include "../qcom-clock-core/qcom-vendor-clock.h"
 #include <linux/interconnect.h>
 #include <linux/iopoll.h>
 #include <linux/of_device.h>
@@ -1536,7 +1537,7 @@ static int kgsl_genpd_disable_wait(struct device *dev, u32 timeout)
 	}
 }
 
-int kgsl_regulator_disable_wait(struct regulator *reg, u32 timeout)
+static int kgsl_regulator_disable_wait(struct regulator *reg, u32 timeout)
 {
 	ktime_t tout = ktime_add_us(ktime_get(), timeout * USEC_PER_MSEC);
 	int ret;
@@ -2108,7 +2109,7 @@ static int register_thermal_cooling_device(struct kgsl_device *device, struct de
 	if (ret)
 		goto err;
 
-	pwr->cooling_dev = thermal_of_cooling_device_register(np, name, device,
+	pwr->cooling_dev = thermal_of_cooling_device_register(np, 0, name, device,
 			&kgsl_cooling_ops);
 	if (IS_ERR(pwr->cooling_dev)) {
 		dev_pm_qos_remove_request(&pwr->pmqos_max_freq);

@@ -40,9 +40,12 @@ The current 6.12 environment is the reference for behavior, not a 7.3 test.
   evidence, not a substitute for RCU torture/stress or real-device testing.
 - OxygenOS sync module passed 1,283 checks on SMP4 with the current Image.
 - Evidence hashes and results: reports/runtime-test-results.json.
-- KGSL user ZIP staged with source provenance and custom interfaces retained;
-  its 7.3 build is still failing in shmem and thermal API paths. Dependency
-  migration and boost cap/concurrency review are outstanding. See
+- KGSL user ZIP staged with custom interfaces retained; all C sources now
+  compile into msm_kgsl.o. Final module linking still lacks 40 real dependency
+  symbols. The shmem and thermal API migrations compile. Six memory cases
+  (35 total with clock/RCU) passed on SMP4, including guest-zram swap and data
+  read-back. This does not prove GPU DMA or protected-content behavior.
+  Dependency migration and boost cap/concurrency review are outstanding. See
   ports/kgsl/PORTING.md; do not install this unfinished source build.
 - 32 firmware-matched official repository refs found. A vantage camera source
   with canoe configuration is a candidate; exact avr compatibility is unproven.

@@ -40,3 +40,6 @@ msm_kgsl-y := \
 	adreno_coresight.o adreno_a5xx_coresight.o adreno_a6xx_coresight.o \
 	adreno_gen7_coresight.o adreno_gen8_coresight.o \
 	kgsl_pool.o kgsl_reclaim.o kgsl_sync.o
+
+ccflags-y += -I$(src)/../qcom-clock-core/include
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-clock-core/Module.symvers

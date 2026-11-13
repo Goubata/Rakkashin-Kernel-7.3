@@ -1050,11 +1050,14 @@ static u32 kgsl_get_alloc_page_size(size_t size, unsigned int align)
 	return PAGE_SIZE;
 }
 
-static int _kgsl_shmem_alloc_page(struct kgsl_memdesc *memdesc, u32 order)
+static int _kgsl_shmem_alloc_page(struct kgsl_memdesc *memdesc, u32 order, gfp_t gfp)
 {
 	int pcount;
 	struct page *page;
 	gfp_t gfp_mask = kgsl_gfp_mask(order);
+
+	/* Preserve the shmem caller's NOIO/NOFS restrictions. */
+	gfp_mask &= ~((__GFP_IO | __GFP_FS) & ~gfp);
 
 	if (fatal_signal_pending(current))
 		return -EINTR;
@@ -1088,7 +1091,7 @@ static int _kgsl_shmem_alloc_page(struct kgsl_memdesc *memdesc, u32 order)
 	return pcount;
 }
 
-static int kgsl_shmem_alloc_pages(struct kgsl_memdesc *memdesc)
+static int kgsl_shmem_alloc_pages(struct kgsl_memdesc *memdesc, gfp_t gfp)
 {
 	int ret, count = 0;
 	u32 size, align, order;
@@ -1105,7 +1108,7 @@ static int kgsl_shmem_alloc_pages(struct kgsl_memdesc *memdesc)
 	order = get_order(size);
 
 	while (len) {
-		ret = _kgsl_shmem_alloc_page(memdesc, order);
+		ret = _kgsl_shmem_alloc_page(memdesc, order, gfp);
 
 		if (ret == -EAGAIN) {
 			size = PAGE_SIZE << --order;
@@ -1125,50 +1128,45 @@ static int kgsl_shmem_alloc_pages(struct kgsl_memdesc *memdesc)
 	return count;
 }
 
-#if ((KERNEL_VERSION(6, 12, 18) <= LINUX_VERSION_CODE) && \
-	(KERNEL_VERSION(6, 13, 0) > LINUX_VERSION_CODE))
-static void kgsl_shmem_fill_page(void *ptr,
-	struct shmem_inode_info *inode, struct folio **folio, int order)
+static struct folio *kgsl_shmem_fill_page(gfp_t gfp, int order,
+		struct shmem_inode_info *inode, pgoff_t index)
 {
-	struct kgsl_memdesc *memdesc = (struct kgsl_memdesc *)inode->android_vendor_data1;
+	struct kgsl_memdesc *memdesc = READ_ONCE(inode->folio_provider_data);
+	struct folio *folio;
 
-	if (IS_ERR_OR_NULL(memdesc) || order)
-		return;
-
+	if (!memdesc || order)
+		return NULL;
 	if (list_empty(&memdesc->shmem_page_list)) {
-		int ret = kgsl_shmem_alloc_pages(memdesc);
+		int ret = kgsl_shmem_alloc_pages(memdesc, gfp);
 
 		if (ret <= 0)
-			return;
+			return NULL;
 	}
-
-	*folio = list_first_entry(&memdesc->shmem_page_list, struct folio, lru);
-	list_del(&(*folio)->lru);
+	folio = list_first_entry(&memdesc->shmem_page_list, struct folio, lru);
+	list_del(&folio->lru);
+	return folio;
 }
-#else
-static void kgsl_shmem_fill_page(void *ptr,
-	struct shmem_inode_info *inode, struct folio **folio)
-{
-	struct kgsl_memdesc *memdesc = (struct kgsl_memdesc *)inode->android_vendor_data1;
 
-	if (IS_ERR_OR_NULL(memdesc))
+static const struct shmem_folio_provider kgsl_shmem_provider = {
+	.alloc = kgsl_shmem_fill_page,
+};
+static bool shmem_callback_registered;
+
+int kgsl_register_shmem_callback(void)
+{
+	int ret = shmem_register_folio_provider(&kgsl_shmem_provider);
+
+	if (!ret)
+		shmem_callback_registered = true;
+	return ret;
+}
+
+void kgsl_unregister_shmem_callback(void)
+{
+	if (!shmem_callback_registered)
 		return;
-
-	if (list_empty(&memdesc->shmem_page_list)) {
-		int ret = kgsl_shmem_alloc_pages(memdesc);
-
-		if (ret <= 0)
-			return;
-	}
-
-	*folio = list_first_entry(&memdesc->shmem_page_list, struct folio, lru);
-	list_del(&(*folio)->lru);
-}
-#endif
-
-void kgsl_register_shmem_callback(void)
-{
-	register_trace_android_rvh_shmem_get_folio(kgsl_shmem_fill_page, NULL);
+	shmem_unregister_folio_provider(&kgsl_shmem_provider);
+	shmem_callback_registered = false;
 }
 
 #ifdef CONFIG_QCOM_KGSL_POOL
@@ -1269,13 +1267,13 @@ struct file *kgsl_memdesc_file_setup(struct kgsl_memdesc *memdesc)
 		return 0;
 
 	shmem_filp = shmem_file_setup("kgsl-3d0", memdesc->size,
-			VM_NORESERVE);
+			mk_vma_flags(VMA_NORESERVE_BIT));
 	if (IS_ERR(shmem_filp))
 		return shmem_filp;
 
 	memdesc->shmem_pages = 0;
 	INIT_LIST_HEAD(&memdesc->shmem_page_list);
-	SHMEM_I(shmem_filp->f_mapping->host)->android_vendor_data1 = (u64)memdesc;
+	SHMEM_I(shmem_filp->f_mapping->host)->folio_provider_data = memdesc;
 	mapping_set_unevictable(shmem_filp->f_mapping);
 
 	return shmem_filp;
@@ -1338,11 +1336,16 @@ static void kgsl_shmem_free_pages(struct kgsl_memdesc *memdesc)
 	WARN(!list_empty(&memdesc->shmem_page_list),
 	     "KGSL shmem page list is not empty\n");
 
-	SHMEM_I(memdesc->shmem_filp->f_mapping->host)->android_vendor_data1 = 0;
+	SHMEM_I(memdesc->shmem_filp->f_mapping->host)->folio_provider_data = NULL;
 	fput(memdesc->shmem_filp);
 }
 #else
-void kgsl_register_shmem_callback(void)
+int kgsl_register_shmem_callback(void)
+{
+	return 0;
+}
+
+void kgsl_unregister_shmem_callback(void)
 {
 }
 

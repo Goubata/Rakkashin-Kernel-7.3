@@ -26,7 +26,7 @@ def main():
     if args.boot_core:
         args.platform = True
         args.pinctrl = True
-        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch']:
+        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch']:
             command=['git','-C',str(SOURCE),'apply']
             if subprocess.run(command+['--reverse','--check',str(patch)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0:
                 continue
@@ -74,7 +74,8 @@ def main():
         root_run(base + ["M=/work/avr-port/ports/pinctrl-alor-vendor-core", "-j2", "modules"])
 
     if args.qemu_tests:
-        root_run(base + ["M=/work/avr-port/tests/clock", "-j2", "modules"])
+        for suite in ["clock", "memory"]:
+            root_run(base + ["M=/work/avr-port/tests/"+suite, "-j2", "modules"])
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
                   'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',
                   '-Wall', '-Wextra', '-Werror',

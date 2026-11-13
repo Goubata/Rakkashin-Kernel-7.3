@@ -712,7 +712,8 @@ static inline void kgsl_sharedmem_put_bind_op(struct kgsl_sharedmem_bind_op *op)
  * kgsl_register_shmem_callback - Register vendor hook callback with SHMEM
  * driver
  */
-void kgsl_register_shmem_callback(void);
+int kgsl_register_shmem_callback(void);
+void kgsl_unregister_shmem_callback(void);
 
 /**
  * kgsl_memdesc_file_setup - Setup the shmem file for the memdesc

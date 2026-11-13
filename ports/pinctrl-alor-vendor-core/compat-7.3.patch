@@ -1,0 +1,136 @@
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -395,7 +395,7 @@
+ 		*bit = g->drv_bit;
+ 		*mask = 7;
+ 		break;
+-	case PIN_CONFIG_OUTPUT:
++	case PIN_CONFIG_LEVEL:
+ 	case PIN_CONFIG_INPUT_ENABLE:
+ 	case PIN_CONFIG_OUTPUT_ENABLE:
+ 		*bit = g->oe_bit;
+@@ -494,7 +494,7 @@
+ 	case PIN_CONFIG_DRIVE_STRENGTH:
+ 		arg = msm_regval_to_drive(arg);
+ 		break;
+-	case PIN_CONFIG_OUTPUT:
++	case PIN_CONFIG_LEVEL:
+ 		/* Pin is not output */
+ 		if (!arg)
+ 			return -EINVAL;
+@@ -591,7 +591,7 @@
+ 			else
+ 				arg = (arg / 2) - 1;
+ 			break;
+-		case PIN_CONFIG_OUTPUT:
++		case PIN_CONFIG_LEVEL:
+ 			/* set output value */
+ 			raw_spin_lock_irqsave(&pctrl->lock, flags);
+ 			val = msm_readl_io(pctrl, g);
+@@ -768,7 +768,7 @@
+ 	return !!(val & BIT(g->in_bit));
+ }
+ 
+-static void msm_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
++static int msm_gpio_set(struct gpio_chip *chip, unsigned offset, int value)
+ {
+ 	const struct msm_pingroup *g;
+ 	struct msm_pinctrl *pctrl = gpiochip_get_data(chip);
+@@ -787,6 +787,8 @@
+ 	msm_writel_io(val, pctrl, g);
+ 
+ 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
++
++	return 0;
+ }
+ 
+ static void msm_gpio_pin_status_get(struct msm_pinctrl *pctrl, const struct msm_pingroup *g,
+@@ -1986,7 +1988,7 @@
+ 	.notifier_call = pinctrl_hibernation_notifier,
+ };
+ 
+-static int msm_pinctrl_hibernation_suspend(void)
++static int msm_pinctrl_hibernation_suspend(void *data)
+ {
+ 	const struct msm_pingroup *pgroup;
+ 	struct msm_pinctrl *pctrl = msm_pinctrl_data;
+@@ -2014,7 +2016,7 @@
+ 
+ 	/* All normal gpios will have common registers, first save them */
+ 	for (i = 0; i < soc->ngpios; i++) {
+-		if (!test_bit(i, chip->valid_mask))
++		if (!gpiochip_line_is_valid(chip, i))
+ 			continue;
+ 
+ 		pgroup = &soc->groups[i];
+@@ -2032,7 +2034,7 @@
+ 	}
+ 
+ 	for ( ; i < soc->ngroups; i++) {
+-		if (!test_bit(i, chip->valid_mask))
++		if (!gpiochip_line_is_valid(chip, i))
+ 			continue;
+ 
+ 		pgroup = &soc->groups[i];
+@@ -2046,7 +2048,7 @@
+ 	return 0;
+ }
+ 
+-static void msm_pinctrl_hibernation_resume(void)
++static void msm_pinctrl_hibernation_resume(void *data)
+ {
+ 	u32 i, j;
+ 	const struct msm_pingroup *pgroup;
+@@ -2071,7 +2073,7 @@
+ 
+     /* Restore normal gpios */
+ 	for (i = 0; i < soc->ngpios; i++) {
+-		if (!test_bit(i, chip->valid_mask))
++		if (!gpiochip_line_is_valid(chip, i))
+ 			continue;
+ 
+ 		pgroup = &soc->groups[i];
+@@ -2086,7 +2088,7 @@
+ 	}
+ 
+ 	for ( ; i < soc->ngroups; i++) {
+-		if (!test_bit(i, chip->valid_mask))
++		if (!gpiochip_line_is_valid(chip, i))
+ 			continue;
+ 
+ 		pgroup = &soc->groups[i];
+@@ -2099,9 +2101,13 @@
+ 	}
+ }
+ 
+-static struct syscore_ops msm_pinctrl_pm_ops = {
++static const struct syscore_ops msm_pinctrl_pm_ops = {
+ 	.suspend = msm_pinctrl_hibernation_suspend,
+ 	.resume = msm_pinctrl_hibernation_resume,
++};
++
++static struct syscore msm_pinctrl_syscore = {
++	.ops = &msm_pinctrl_pm_ops,
+ };
+ #endif
+ 
+@@ -2403,7 +2409,7 @@
+ 	platform_set_drvdata(pdev, pctrl);
+ 
+ #ifdef CONFIG_HIBERNATION
+-	register_syscore_ops(&msm_pinctrl_pm_ops);
++	register_syscore(&msm_pinctrl_syscore);
+ 	ret = register_pm_notifier(&pinctrl_notif_block);
+ 	if (ret)
+ 		return ret;
+--- a/include/linux/pinctrl/qcom-pinctrl.h
++++ b/include/linux/pinctrl/qcom-pinctrl.h
+@@ -22,5 +22,8 @@
+ int msm_spare_write(int spare_reg, u32 val);
+ int msm_spare_read(int spare_reg);
+ 
++void debug_pintctrl_msm_enable(void);
++void debug_pintctrl_msm_disable(void);
++
+ #endif /* __LINUX_PINCTRL_MSM_H__ */
+ 

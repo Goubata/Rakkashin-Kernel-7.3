@@ -1,0 +1,24 @@
+{
+  "stage": "baseline compile running",
+  "target": "Image modules",
+  "source": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "host": "Ubuntu 26.04 arm64 on avr",
+  "clang": "21.1.8",
+  "rustc": "1.93.1",
+  "bindgen": "0.72.1",
+  "pahole": "1.31",
+  "rustavailable": "passed",
+  "gki_defconfig": "passed",
+  "vendor_driver_port": "Alor pinctrl and matching vendor core objects compiled; linking/runtime pending",
+  "flash_performed": false,
+  "archived_module_unique_names": 544,
+  "loaded_module_names": 531,
+  "loaded_names_without_saved_file": [
+    "avr_oplus_sync"
+  ],
+  "distinct_imported_symbols": 5713,
+  "vendor_boot_modules_extracted": 333,
+  "first_build_failure": "Missing dwarf.h; resolved by installing libdw-dev",
+  "current_log": "native-build-attempt2.log",
+  "pinctrl_candidates": "ports/pinctrl-alor and ports/pinctrl-alor-vendor-core"
+}

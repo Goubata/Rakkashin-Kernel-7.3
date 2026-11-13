@@ -1,0 +1,13 @@
+/out/
+/device-baseline/
+__pycache__/
+*.o
+*.ko
+*.mod
+*.mod.c
+*.cmd
+Module.symvers
+modules.order
+/reports/*.log
+/reports/module-imports.json
+*.o.d

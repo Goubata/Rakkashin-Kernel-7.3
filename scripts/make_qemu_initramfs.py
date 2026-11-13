@@ -21,6 +21,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--secure-tests", action="store_true")
     group.add_argument("--clock-tests", action="store_true")
     group.add_argument("--oplus-tests", action="store_true")
     group.add_argument("--modules-tests", action="store_true")
@@ -88,7 +89,9 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                      'qcom-dcvs/dcvs_fp.ko','qcom-dcvs/qcom-dcvs.ko',
                      'governor-adreno-ro/governor_msm_adreno_ro.ko',
                      'governor-gpubw/governor_gpubw_mon.ko',
-                     'governor-adreno-tz/governor_msm_adreno_tz.ko']]
+                     'governor-adreno-tz/governor_msm_adreno_tz.ko',
+                     'qcom-iommu-util/qcom_iommu_util.ko','secure-buffer/secure_buffer.ko',
+                     'iommu-logger/iommu_logger.ko','arm-smmu-vendor/arm_smmu.ko']]
         commands=[]
         for source in modules:
             name=source.name
@@ -98,14 +101,15 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             commands.append(f'test -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
         # Core firmware/RPMh providers are intentionally permanent. Preserve
         # their CRM dependency; unload only drivers with real exit callbacks.
-        for source in reversed(modules[6:]):
+        permanent=modules[:6]+[ROOT/'ports/qcom-iommu-util/qcom_iommu_util.ko']
+        for source in reversed([m for m in modules if m not in permanent]):
             module=source.stem.replace('-','_')
             commands.append(f'/bin/busybox rmmod {module} || {{ echo AVR_VENDOR_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
             commands.append(f'test ! -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
-        for source in modules[:6]:
+        for source in permanent:
             module=source.stem.replace('-','_')
             commands.append(f'test -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
-        commands.append('echo AVR_VENDOR_MODULES_PASS count=15 unloaded=9 retained=6')
+        commands.append('echo AVR_VENDOR_MODULES_PASS count=19 unloaded=12 retained=7')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.iommu_tests:
         modules=[(ROOT/'out/native-gki/lib/kunit/kunit.ko',' enable=1')]
@@ -119,9 +123,18 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_IOMMU_LOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands.append('echo AVR_IOMMU_TESTS_LOADED')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.secure_tests:
+        modules=[(ROOT/'out/native-gki/lib/kunit/kunit.ko',' enable=1'),
+                 (ROOT/'tests/secure-buffer/avr-secure-buffer-test.ko','')]
+        commands=[]
+        for source,params in modules:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_SECURE_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_SECURE_TESTS_LOADED')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

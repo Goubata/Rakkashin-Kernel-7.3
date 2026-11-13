@@ -69,7 +69,31 @@ requires a concrete restoration plan and authorization for that operation.
   for absent Qualcomm hardware.
 - Three actual software page-table cases passed for FAST, LPAE and a contiguous
   group with a partial unmap/remap. Hardware DMA/TLB/cache behavior remains open.
-- The physical ARM SMMU driver is not ported yet. A resolved helper name does
-  not prove a domain is registered or usable by GPU or other devices.
+- The physical ARM SMMU driver now compiles/links and loads in a guest without
+  Qualcomm hardware. Actual controller probe, domain attachment and DMA remain
+  pending; symbol resolution does not prove hardware operation.
 - SoCinfo firmware offsets/bounds and publication lifetime need a broader audit;
   the vendor LLCC EDAC/perfmon consumers need its explicitly named private layout.
+
+## Stage5 SMMU and secure-buffer evidence
+
+- Core patch `patches/scm-memory-batch-7.3.patch` uses target TZMEM to marshal
+  wire descriptors for one atomic firmware batch command. It also fixes the
+  native assignment ownership mask for VMIDs 32..63. Actual firmware behavior
+  and the SMCI/PIL transport remain unverified.
+- ARM SMMU uses the 7.3 attach callback, per-device page-size masks and a flags
+  allocator preserving the vendor stage-2 nesting-parent path. Unsupported
+  flags/user data are rejected; no nested-child allocator is advertised.
+- Logger registrations hold device/group references until unregister. Secure
+  descriptors remain CPU-owned until copied to TZMEM; obsolete DMA mappings
+  of those descriptors were removed. Driver readiness is cleared on remove.
+- Secure-buffer rollback now uses the destination array's actual element count,
+  the exact completed region prefix and bounded batches. First-call failure
+  no longer divides by zero. Only the assigned prefix gets ownership flags.
+- Five actual-code tests passed in SMP4 RAM-only QEMU, mocking only SCM:
+  `reports/qemu-secure-buffer-final.log`. Guest SCM ownership is never changed.
+- `reports/qemu-smmu-stage5-modules.log`: 19 module loads, 12 unloads, seven
+  permanent dependencies retained, with no warnings/panic/stall detected.
+- `artifacts/android73-smmu-memory-stage5/`: Image + 49 modules. All 1,912 import
+  CRCs and snapshot SHA256 values verified. KGSL remains an object, with ten
+  unresolved imports; there is no final GPU .ko or flashable boot image.

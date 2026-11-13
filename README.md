@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携の46モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携の49モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -25,10 +25,10 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - 元の7.3 Imageでも再現したRCU TasksのSMP起動停止を調査。proxy donorが待機中でも実行キューに残る場合を、タスク・runqueueのロック下で判定する修正を追加。
 - RAMのみのQEMUで、proxy executionを有効にした2コア・4コアの29テストが通過。実行中のタスクをRCUが早く解放しないことも確認。
 - avr_oplus_sync は修正後の4コアQEMUで1,283チェック通過。ROMサービス・SELinuxとの実機検証は別途必要。
-- ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。最終.koは11個の依存シンボル不足で未完成。
+- ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。最終.koは10個の依存シンボル不足で未完成。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新のGPU支援モジュールを含む成果物は artifacts/android73-gpu-dependencies-stage4/（46モジュール、1,686インポートCRC一致）。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-smmu-memory-stage5/（49モジュール、1,912インポートCRC一致）。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -62,6 +62,12 @@ SMEM/SoCinfo、hwspinlock、LLCC、DCVS、3種のgovernor、IOMMU支援モジュ
 
 ## 次の作業
 
-KGSLの残る依存処理（保護メモリ、SYNX、sysstats、シャットダウン経路）と、実際のARM SMMU制御ドライバ、UFS/ICE/PHY、電源・interconnect/SMMU、表示・通信等を移植します。GPUの追加Boost処理には熱上限変更時の再検査や並行処理の見直しも必要です。性能・電力の優劣は実機測定するまで判定しません。
+KGSLの残る依存処理（SYNX、sysstats、シャットダウン経路）と、保護メモリ・SMCI/PILの実機ファームウェア経路、UFS/ICE/PHY、電源・interconnect、表示・通信等を移植・検証します。GPUの追加Boost処理には熱上限変更時の再検査や並行処理の見直しも必要です。性能・電力の優劣は実機測定するまで判定しません。
 
 現在の許可範囲は端末内ビルド、読み取りダンプ、イメージファイル作成です。boot/vendor_boot/dtbo等のパーティション書き込み、実機への7.3モジュール読み込み、再起動は実施していません。実機起動操作が必要になった時点で、具体的な成果物と復旧手順を準備して確認します。
+
+## ARM SMMU・保護メモリの追加移植
+
+MotorolaのARM SMMUコントローラ、IOMMU logger、secure-bufferの3モジュールが7.3でビルド・リンクしました。ページサイズはデバイスごとに管理し、接続APIとnesting親の割当APIを7.3に合わせています。nesting子ドメインや実機SMMU動作は未検証です。
+
+SCMの複数領域の権限変更は、単一のファームウェア命令を維持し、記述子を7.3のTZMEM経由で渡します。元コードのロールバック件数、対象領域数、ゼロ除算を修正。実コードでファームウェア呼出しだけを置き換えた5件のKUnitがSMP4 QEMUで成功し、19支援モジュールのロードと12個のアンロード（常駐7個は維持）も成功しました。これは実機のメモリ権限変更を実行した証明ではありません。

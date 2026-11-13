@@ -7,20 +7,20 @@ from pathlib import Path
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('log',type=Path)
-p.add_argument('--test',choices=['smoke','clock','oplus','modules','iommu'],required=True)
+p.add_argument('--test',choices=['smoke','clock','oplus','modules','iommu','secure'],required=True)
 p.add_argument("--clock-count",type=int,default=35)
-p.add_argument("--module-count",type=int,default=15)
+p.add_argument("--module-count",type=int,default=19)
 a=p.parse_args()
 s=a.log.read_text(errors='replace')
-markers={'smoke':'AVR_QEMU_SMOKE_PASS','clock':'AVR_QEMU_KUNIT_MODULES_LOADED','oplus':'AVR_OPLUS_SYNC_PASS','modules':f'AVR_VENDOR_MODULES_PASS count={a.module_count} ','iommu':'AVR_IOMMU_TESTS_LOADED'}
+markers={'smoke':'AVR_QEMU_SMOKE_PASS','clock':'AVR_QEMU_KUNIT_MODULES_LOADED','oplus':'AVR_OPLUS_SYNC_PASS','modules':f'AVR_VENDOR_MODULES_PASS count={a.module_count} ','iommu':'AVR_IOMMU_TESTS_LOADED','secure':'AVR_SECURE_TESTS_LOADED'}
 failures=[]
 for pattern in [r'Kernel panic',r'BUG:',r'WARNING:',r'\bnot ok\b',r'AVR_\w*FAIL',r'rcu: .*stall',r'rcu: .*detected stalls']:
     if re.search(pattern,s):failures.append(pattern)
 if markers[a.test] not in s:failures.append('missing success marker')
 if 'reboot: Power down' not in s:failures.append('guest did not shut down')
 result={'log':str(a.log),'test':a.test,'passed':not failures,'failures':failures}
-if a.test in ('clock','iommu'):
-    expected=a.clock_count if a.test=='clock' else 3
+if a.test in ('clock','iommu','secure'):
+    expected=a.clock_count if a.test=='clock' else 5 if a.test=='secure' else 3
     # KUnit omits Totals lines for single-case suites; count leaf KTAP
     # assertions at one indentation level, excluding suite result lines.
     passes=len(re.findall(r'\] {5}ok \d+ ',s))

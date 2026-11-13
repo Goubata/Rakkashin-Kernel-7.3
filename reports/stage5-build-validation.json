@@ -1,0 +1,13 @@
+{
+  "source_commit": "838e344ee",
+  "command": "python scripts/build_native.py --gpu-deps --qemu-tests",
+  "exit_code": 0,
+  "scope": "incremental consolidated build and test fixtures; not a fresh clean checkout or official Kleaf build",
+  "runtime": [
+    "qemu-secure-buffer-final.log: 5/5",
+    "qemu-smmu-stage5-modules.log: 19 loads, 12 unloads, 7 retained"
+  ],
+  "module_count": 49,
+  "import_crcs_matched": 1912,
+  "physical_boot": false
+}

@@ -1,9 +1,8 @@
 {
   "scope": "object import name coverage only; final .ko and hardware operation not proved",
   "import_count": 550,
-  "unresolved_count": 11,
+  "unresolved_count": 10,
   "unresolved": [
-    "hyp_assign_table",
     "qcom_scm_pas_shutdown_retry",
     "synx_create",
     "synx_enable_resources",
@@ -22,7 +21,8 @@
     "ports/qcom-llcc/Module.symvers",
     "ports/qcom-dcvs/Module.symvers",
     "ports/governor-adreno-tz/Module.symvers",
-    "ports/qcom-iommu-util/Module.symvers"
+    "ports/qcom-iommu-util/Module.symvers",
+    "ports/secure-buffer/Module.symvers"
   ],
   "excluded_module_loader_symbols": [
     "__this_module"

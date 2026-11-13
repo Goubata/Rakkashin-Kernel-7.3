@@ -53,9 +53,9 @@ data read-back. This tests the core memory path, not KGSL GPU DMA on avr.
 Ported support providers: SoC info, SMEM, hwspinlock, LLCC/DCVS, three external
 devfreq governors, and qcom_iommu_util (FAST and LPAE). Actual external governors
 are selected using firmware configuration and MODULE_SOFTDEP, preserving their
-registration-before-GPU order. Missing symbols now belong to secure-buffer,
-shutdown retry, SYNX and sysstats; the public SMMU helper exports exist, but the
-physical ARM SMMU controller driver still needs porting.
+registration-before-GPU order. Ten missing symbols now belong to shutdown retry, SYNX and sysstats.
+The actual vendor ARM SMMU, logger and secure-buffer drivers now link on 7.3;
+no physical controller probe or secure assignment has been verified.
 
 The three software page-table cases passed in SMP4 QEMU: FAST mapping/partial
 unmap/remap, LPAE equivalent, and partial unmap of a 16-page contiguous group.
@@ -64,8 +64,8 @@ they do not verify device DMA, cache coherency or physical TLB maintenance.
 Fifteen support modules loaded in QEMU; nine exit-capable drivers unloaded and
 six permanent firmware/RPMh dependencies remained as designed.
 
-Still required: secure-buffer/mem-buf and the complete firmware backend,
-physical SMMU, SYNX and sysstats, plus broader driver lifecycle/bounds review. The vendor SMMU
+Still required: mem-buf and the complete secure firmware backend, physical
+SMMU validation, SYNX and sysstats, plus broader driver lifecycle/bounds review. The vendor SMMU
 must use the same avr_adreno_smmu_priv extension as KGSL; it cannot be cast to the
 upstream drm/msm private layout. The secure firmware backend (including the
 vendor SMCI/PIL path) requires review against the device firmware.
@@ -74,3 +74,10 @@ The original Boost code still needs thermal-cap revalidation, successful-GMU-cal
 tracking, delayed expiry and concurrency review. Reusing an old boost floor can
 currently outrun a newly lowered cap. No physical boot, GPU reset/suspend test,
 protected-content check or efficiency measurement has passed yet.
+
+Stage5 adds ARM SMMU, IOMMU logger and secure-buffer: 49 built modules with
+1,912 matching import CRCs. The SMP4 module smoke test loaded 19, unloaded 12
+and retained seven permanent providers. Five secure-buffer KUnit cases execute
+the production batching and rollback code with a mocked SCM transport: invalid
+input, first-call failure, multi-destination rollback, bounded-prefix ownership
+flags and full batches. No actual page ownership is transferred by these tests.

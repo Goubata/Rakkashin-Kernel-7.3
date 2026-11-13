@@ -12,6 +12,22 @@
 #include <linux/userfaultfd_k.h>
 #include <linux/bits.h>
 
+/* Optional provider for a driver-owned shmem inode. The callback may sleep;
+ * nonblocking GFP requests always use the ordinary allocator.
+ * Return NULL to use the ordinary shmem allocator. A returned folio must be
+ * unlocked, uncharged, unmapped, and have the requested order; its initial
+ * allocation reference is transferred to shmem. Do not register/unregister
+ * providers from a callback. Unregister drains all in-flight callbacks.
+ * The inode owner must serialize its private data and file lifetime.
+ */
+struct shmem_inode_info;
+struct shmem_folio_provider {
+	struct folio *(*alloc)(gfp_t gfp, int order,
+			      struct shmem_inode_info *info, pgoff_t index);
+};
+int shmem_register_folio_provider(const struct shmem_folio_provider *provider);
+int shmem_unregister_folio_provider(const struct shmem_folio_provider *provider);
+
 /* inode in-kernel data */
 
 #ifdef CONFIG_TMPFS_QUOTA
@@ -55,6 +71,8 @@ struct shmem_inode_info {
 #ifdef CONFIG_TMPFS_QUOTA
 	struct dquot __rcu	*i_dquot[MAXQUOTAS];
 #endif
+	/* Vendor allocator context, zeroed by shmem_get_inode(). */
+	void *folio_provider_data;
 	struct inode		vfs_inode;
 };
 
@@ -103,6 +121,8 @@ static inline struct shmem_inode_info *SHMEM_I(struct inode *inode)
 extern const struct fs_parameter_spec shmem_fs_parameters[];
 extern void shmem_init(void);
 extern int shmem_init_fs_context(struct fs_context *fc);
+int reclaim_shmem_address_space(struct address_space *mapping);
+
 struct file *shmem_file_setup(const char *name, loff_t size, vma_flags_t flags);
 struct file *shmem_kernel_file_setup(const char *name, loff_t size, vma_flags_t vma_flags);
 extern struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt,

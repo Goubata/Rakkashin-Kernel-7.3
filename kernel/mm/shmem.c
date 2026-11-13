@@ -34,6 +34,7 @@
 #include <linux/sched/signal.h>
 #include <linux/export.h>
 #include <linux/shmem_fs.h>
+#include <linux/srcu.h>
 #include <linux/swap.h>
 #include <linux/uio.h>
 #include <linux/hugetlb.h>
@@ -1089,6 +1090,40 @@ void shmem_unlock_mapping(struct address_space *mapping)
 	}
 }
 
+/* Reclaim a driver-owned shmem mapping after its CPU/GPU pins are dropped.
+ * Borrow page-cache references with the folio API: an RCU xarray walk alone
+ * does not hold the reference required by folio_isolate_lru(). Large folios
+ * must be visited once, not once for every tail page.
+ */
+int reclaim_shmem_address_space(struct address_space *mapping)
+{
+	struct folio_batch fbatch;
+	pgoff_t index = 0;
+	unsigned long reclaimed = 0;
+
+	if (!mapping || !shmem_mapping(mapping))
+		return -EINVAL;
+	lru_add_drain();
+	folio_batch_init(&fbatch);
+	while (filemap_get_folios(mapping, &index, ULONG_MAX, &fbatch)) {
+		LIST_HEAD(isolated);
+		unsigned int i;
+
+		for (i = 0; i < folio_batch_count(&fbatch); i++) {
+			struct folio *folio = fbatch.folios[i];
+
+			if (folio_isolate_lru(folio))
+				list_add_tail(&folio->lru, &isolated);
+		}
+		/* Drop the lookup references before the reclaimer checks pins. */
+		folio_batch_release(&fbatch);
+		reclaimed += reclaim_pages(&isolated);
+		cond_resched();
+	}
+	return min_t(unsigned long, reclaimed, INT_MAX);
+}
+EXPORT_SYMBOL_GPL(reclaim_shmem_address_space);
+
 static struct folio *shmem_get_partial_folio(struct inode *inode, pgoff_t index)
 {
 	struct folio *folio;
@@ -1929,6 +1964,61 @@ static unsigned long shmem_suitable_orders(struct inode *inode, struct vm_fault 
 }
 #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
 
+static DEFINE_MUTEX(shmem_folio_provider_mutex);
+DEFINE_STATIC_SRCU(shmem_folio_provider_srcu);
+static const struct shmem_folio_provider __rcu *shmem_folio_provider;
+
+int shmem_register_folio_provider(const struct shmem_folio_provider *provider)
+{
+	int ret = 0;
+
+	if (!provider || !provider->alloc)
+		return -EINVAL;
+	mutex_lock(&shmem_folio_provider_mutex);
+	if (rcu_access_pointer(shmem_folio_provider))
+		ret = -EBUSY;
+	else
+		rcu_assign_pointer(shmem_folio_provider, provider);
+	mutex_unlock(&shmem_folio_provider_mutex);
+	return ret;
+}
+EXPORT_SYMBOL_GPL(shmem_register_folio_provider);
+
+int shmem_unregister_folio_provider(const struct shmem_folio_provider *provider)
+{
+	int ret = 0;
+
+	mutex_lock(&shmem_folio_provider_mutex);
+	if (!provider || rcu_access_pointer(shmem_folio_provider) != provider) {
+		ret = -ENOENT;
+	} else {
+		rcu_assign_pointer(shmem_folio_provider, NULL);
+		synchronize_srcu(&shmem_folio_provider_srcu);
+	}
+	mutex_unlock(&shmem_folio_provider_mutex);
+	return ret;
+}
+EXPORT_SYMBOL_GPL(shmem_unregister_folio_provider);
+
+static struct folio *shmem_alloc_provider_folio(gfp_t gfp, int order,
+		struct shmem_inode_info *info, pgoff_t index)
+{
+	const struct shmem_folio_provider *provider;
+	struct folio *folio = NULL;
+	int idx;
+
+	if (!gfpflags_allow_blocking(gfp) ||
+	    !READ_ONCE(info->folio_provider_data) ||
+	    !rcu_access_pointer(shmem_folio_provider))
+		return NULL;
+	idx = srcu_read_lock(&shmem_folio_provider_srcu);
+	provider = srcu_dereference(shmem_folio_provider, &shmem_folio_provider_srcu);
+	if (provider)
+		folio = provider->alloc(gfp, order, info, index);
+	srcu_read_unlock(&shmem_folio_provider_srcu, idx);
+	return folio;
+}
+
 static struct folio *shmem_alloc_folio(gfp_t gfp, int order,
 		struct shmem_inode_info *info, pgoff_t index)
 {
@@ -1937,7 +2027,9 @@ static struct folio *shmem_alloc_folio(gfp_t gfp, int order,
 	struct folio *folio;
 
 	mpol = shmem_get_pgoff_policy(info, index, order, &ilx);
-	folio = folio_alloc_mpol(gfp, order, mpol, ilx, numa_node_id());
+	folio = shmem_alloc_provider_folio(gfp, order, info, index);
+	if (!folio)
+		folio = folio_alloc_mpol(gfp, order, mpol, ilx, numa_node_id());
 	mpol_cond_put(mpol);
 
 	return folio;

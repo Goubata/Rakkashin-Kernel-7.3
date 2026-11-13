@@ -16,3 +16,10 @@ clock hold/sync-state behavior in drivers/clk/clk.c. Both the provider flag and
 its common-core behavior must be ported together. No zero-valued compatibility
 macro or feature removal has been used. Only headers actually used in this
 probe are retained here.
+
+## Subsequent probe
+
+After staging the actual hold-state implementation in ../ccf-hold-state,
+gcc-alor.o compiled successfully against Android 7.3. The compile-time header
+is tied to that implementation. This still requires porting the matching
+Qualcomm clock support library and applying the CCF patch before integration.

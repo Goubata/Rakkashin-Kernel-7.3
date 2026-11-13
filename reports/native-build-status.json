@@ -20,5 +20,9 @@
   "vendor_boot_modules_extracted": 333,
   "first_build_failure": "Missing dwarf.h; resolved by installing libdw-dev",
   "current_log": "native-build-attempt2.log",
-  "pinctrl_candidates": "ports/pinctrl-alor and ports/pinctrl-alor-vendor-core"
+  "pinctrl_candidates": "ports/pinctrl-alor and ports/pinctrl-alor-vendor-core",
+  "additional_compiled_objects": [
+    "Alor gcc-alor.o (vendor clock support library still pending)",
+    "7.3 CCF clk.o with staged Motorola hold-state extension"
+  ]
 }

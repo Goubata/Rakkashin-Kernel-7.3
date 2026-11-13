@@ -117,3 +117,17 @@ requires a concrete restoration plan and authorization for that operation.
 - Stage6 artifact: 50 modules, 1,980 matching import CRCs, SHA256 verified.
   GPU modpost still reports eight unresolved symbols (SYNX and PAS retry).
   No final KGSL module, flashable boot.img or physical boot is claimed.
+
+## Unfinished SYNX and hardware-fence provider chain
+
+- All target C sources for synx-driver, ipclite and msm_hw_fence compile into
+  aggregate objects. Final modpost fails on eight remoteproc/Gunyah names;
+  none is counted in the 50 linked support modules or staged artifacts.
+- Exact hardware-fence source is pinned to the firmware's mm-drivers commit;
+  SYNX source comes from the user's archive and still needs firmware ABI review.
+- Five fence compatibility cases passed in RAM-only SMP4 QEMU, covering ALL/ANY
+  before and after callback enabling and repeated-signal error handling:
+  reports/qemu-fence-compat-tests.log. This does not test hardware fences or IPC.
+- reports/qti-fence-dependencies.json inventories aggregate exports using both
+  old __ksymtab and current __export_symbol metadata. Its eight missing names
+  agree with actual modpost. There are no synthesized successful providers.

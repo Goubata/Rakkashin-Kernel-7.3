@@ -1,0 +1,43 @@
+{
+  "scope": "object import name coverage; final modules and hardware not verified",
+  "objects": {
+    "synx-driver.o": {
+      "import_count": 123,
+      "unresolved": [
+        "qcom_register_ssr_notifier"
+      ]
+    },
+    "ipclite.o": {
+      "import_count": 53,
+      "unresolved": []
+    },
+    "msm_hw_fence.o": {
+      "import_count": 150,
+      "unresolved": [
+        "gh_dbl_read_and_clean",
+        "gh_dbl_rx_register",
+        "gh_rm_register_notifier",
+        "ghd_rm_get_vmid",
+        "ghd_rm_mem_share",
+        "qcom_register_ssr_notifier",
+        "qcom_unregister_ssr_notifier",
+        "rproc_set_state"
+      ]
+    }
+  },
+  "unresolved": [
+    "gh_dbl_read_and_clean",
+    "gh_dbl_rx_register",
+    "gh_rm_register_notifier",
+    "ghd_rm_get_vmid",
+    "ghd_rm_mem_share",
+    "qcom_register_ssr_notifier",
+    "qcom_unregister_ssr_notifier",
+    "rproc_set_state"
+  ],
+  "required_providers": [
+    "qcom remoteproc SSR notifications",
+    "vendor SOCCP power votes",
+    "Gunyah resource manager and doorbell"
+  ]
+}

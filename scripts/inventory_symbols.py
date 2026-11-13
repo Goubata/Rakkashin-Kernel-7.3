@@ -36,6 +36,8 @@ def inspect(data):
                 imports.add(name)
             if idx != 0 and name.startswith('__ksymtab_'):
                 exports.add(name[len('__ksymtab_'):])
+            if idx != 0 and name.startswith('__export_symbol_'):
+                exports.add(name[len('__export_symbol_'):])
     return {'imports': sorted(imports), 'exports': sorted(exports),
             'vermagic': next((m[9:] for m in metadata if m.startswith('vermagic=')), None)}
 

@@ -84,7 +84,7 @@ def main():
     if args.qemu_tests:
         if args.gpu_deps:
             root_run(base + ["M=/work/avr-port/tests/iommu", "-j2", "modules"])
-        for suite in ["clock", "memory", "secure-buffer", "sysstats"]:
+        for suite in ["clock", "memory", "secure-buffer", "sysstats", "fence-compat"]:
             root_run(base + ["M=/work/avr-port/tests/"+suite, "-j2", "modules"])
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
                   'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',

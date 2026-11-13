@@ -75,3 +75,7 @@ SCMの複数領域の権限変更は、単一のファームウェア命令を�
 ## GPU統計連携
 
 msm_sysstatsも実装を移植しました。GPUコールバックの解除をSRCUで同期し、swap・vmalloc統計は実カウンタから取得します。4件のKUnitと、実際のNetlinkによるメモリ・プロセス情報取得および不正要求の拒否をQEMUで確認しました。要求属性の扱いで検出したゲスト内クラッシュは修正し、失敗ログも保持しています。20個のロード、13個のアンロード、常駐7個の維持が成功しました。実ROMと実GPUの統計連携は未確認です。
+
+## SYNXの移植中
+
+SYNX・IPCLite・Qualcommハードウェアフェンスの全対象Cソースがコンパイルを通過しました。最終リンクには、remoteprocの通知・SOCCP電源制御・Gunyahの8依存が残っています。これらは成功済み50モジュールには含めていません。ALL/ANYの待機と重複通知のエラー動作を保つ互換処理は5件のKUnitに成功しました。ports/qti-fence/README.md と reports/qti-fence-dependencies.json に残作業を記録しています。

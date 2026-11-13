@@ -21,6 +21,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--fence-tests", action="store_true")
     group.add_argument("--sysstats-tests", action="store_true")
     group.add_argument("--secure-tests", action="store_true")
     group.add_argument("--clock-tests", action="store_true")
@@ -128,9 +129,9 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_IOMMU_LOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands.append('echo AVR_IOMMU_TESTS_LOADED')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
-    if args.secure_tests or args.sysstats_tests:
-        fixture='sysstats/avr-sysstats-test.ko' if args.sysstats_tests else 'secure-buffer/avr-secure-buffer-test.ko'
-        marker='AVR_SYSSTATS_TESTS_LOADED' if args.sysstats_tests else 'AVR_SECURE_TESTS_LOADED'
+    if args.secure_tests or args.sysstats_tests or args.fence_tests:
+        fixture='fence-compat/avr-fence-compat-test.ko' if args.fence_tests else 'sysstats/avr-sysstats-test.ko' if args.sysstats_tests else 'secure-buffer/avr-secure-buffer-test.ko'
+        marker='AVR_FENCE_TESTS_LOADED' if args.fence_tests else 'AVR_SYSSTATS_TESTS_LOADED' if args.sysstats_tests else 'AVR_SECURE_TESTS_LOADED'
         modules=[(ROOT/'out/native-gki/lib/kunit/kunit.ko',' enable=1'),
                  (ROOT/'tests'/fixture,'')]
         commands=[]
@@ -141,7 +142,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

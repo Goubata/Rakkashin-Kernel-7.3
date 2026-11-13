@@ -5,6 +5,7 @@
 #ifndef __QCOM_SCM_H
 #define __QCOM_SCM_H
 
+#include <asm/byteorder.h>
 #include <linux/err.h>
 #include <linux/types.h>
 #include <linux/cpumask.h>
@@ -25,6 +26,45 @@ struct qcom_scm_vmperm {
 	int vmid;
 	int perm;
 };
+
+/* Wire descriptors shared with the secure-buffer provider. */
+struct qcom_scm_current_perm_info {
+	__le32 vmid;
+	__le32 perm;
+	__le64 ctx;
+	__le32 ctx_size;
+	__le32 unused;
+};
+
+struct qcom_scm_mem_map_info {
+	__le64 mem_addr;
+	__le64 mem_size;
+};
+
+static inline void qcom_scm_populate_vmperm_info(
+		struct qcom_scm_current_perm_info *dest, int vmid, int perm)
+{
+	if (!dest)
+		return;
+	dest->vmid = cpu_to_le32(vmid);
+	dest->perm = cpu_to_le32(perm);
+	dest->ctx = 0;
+	dest->ctx_size = 0;
+	dest->unused = 0;
+}
+
+static inline void qcom_scm_populate_mem_map_info(
+		struct qcom_scm_mem_map_info *region, phys_addr_t addr, size_t size)
+{
+	if (!region)
+		return;
+	region->mem_addr = cpu_to_le64(addr);
+	region->mem_size = cpu_to_le64(size);
+}
+
+int qcom_scm_assign_mem_regions(struct qcom_scm_mem_map_info *regions,
+		size_t regions_size, u32 *srcvms, size_t src_size,
+		struct qcom_scm_current_perm_info *destvms, size_t dest_size);
 
 enum qcom_scm_ocmem_client {
 	QCOM_SCM_OCMEM_UNUSED_ID = 0x0,

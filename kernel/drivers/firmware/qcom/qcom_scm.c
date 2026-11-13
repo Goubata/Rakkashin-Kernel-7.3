@@ -21,6 +21,7 @@
 #include <linux/interrupt.h>
 #include <linux/kstrtox.h>
 #include <linux/module.h>
+#include <linux/overflow.h>
 #include <linux/of.h>
 #include <linux/of_address.h>
 #include <linux/of_irq.h>
@@ -63,19 +64,6 @@ struct qcom_scm {
 
 	struct qcom_tzmem_pool *mempool;
 	unsigned int wq_cnt;
-};
-
-struct qcom_scm_current_perm_info {
-	__le32 vmid;
-	__le32 perm;
-	__le64 ctx;
-	__le32 ctx_size;
-	__le32 unused;
-};
-
-struct qcom_scm_mem_map_info {
-	__le64 mem_addr;
-	__le64 mem_size;
 };
 
 /**
@@ -1349,6 +1337,46 @@ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
 	return ret ? : res.result[0];
 }
 
+/* Preserve the vendor's single-command batch assignment, but marshal through
+ * the target TZMEM pool so the transport also works with registered bridges.
+ * Caller buffers are wire-format arrays; their memory is never reassigned.
+ */
+int qcom_scm_assign_mem_regions(struct qcom_scm_mem_map_info *regions,
+		size_t regions_size, u32 *srcvms, size_t src_size,
+		struct qcom_scm_current_perm_info *destvms, size_t dest_size)
+{
+	size_t src_offset, dest_offset, total;
+	phys_addr_t phys;
+
+	if (!regions || !srcvms || !destvms || !regions_size || !src_size ||
+	    !dest_size || regions_size % sizeof(*regions) ||
+	    src_size % sizeof(*srcvms) || dest_size % sizeof(*destvms))
+		return -EINVAL;
+	if (regions_size > SIZE_MAX - (SZ_64 - 1) ||
+	    src_size > SIZE_MAX - (SZ_64 - 1) ||
+	    dest_size > SIZE_MAX - (SZ_64 - 1))
+		return -EOVERFLOW;
+	src_offset = ALIGN(regions_size, SZ_64);
+	if (check_add_overflow(src_offset, ALIGN(src_size, SZ_64), &dest_offset) ||
+	    check_add_overflow(dest_offset, ALIGN(dest_size, SZ_64), &total))
+		return -EOVERFLOW;
+	if (!__scm || !__scm->mempool)
+		return -EPROBE_DEFER;
+
+	void *buffer __free(qcom_tzmem) = qcom_tzmem_alloc(__scm->mempool,
+							total, GFP_KERNEL);
+	if (!buffer)
+		return -ENOMEM;
+	memset(buffer, 0, total);
+	memcpy(buffer, regions, regions_size);
+	memcpy(buffer + src_offset, srcvms, src_size);
+	memcpy(buffer + dest_offset, destvms, dest_size);
+	phys = qcom_tzmem_to_phys(buffer);
+	return __qcom_scm_assign_mem(__scm->dev, phys, regions_size,
+		phys + src_offset, src_size, phys + dest_offset, dest_size);
+}
+EXPORT_SYMBOL(qcom_scm_assign_mem_regions);
+
 /**
  * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
  * @mem_addr: mem region whose ownership need to be reassigned
@@ -1375,10 +1403,19 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
 	size_t dest_sz;
 	size_t src_sz;
 	size_t ptr_sz;
-	int next_vm;
+	u64 next_vm;
 	__le32 *src;
 	int ret, i, b;
-	u64 srcvm_bits = *srcvm;
+	u64 srcvm_bits;
+
+	if (!srcvm || !newvm || !dest_cnt || dest_cnt > 64)
+		return -EINVAL;
+	for (i = 0; i < dest_cnt; i++)
+		if (newvm[i].vmid < 0 || newvm[i].vmid >= 64)
+			return -EINVAL;
+	if (!__scm || !__scm->mempool)
+		return -EPROBE_DEFER;
+	srcvm_bits = *srcvm;
 
 	src_sz = hweight64(srcvm_bits) * sizeof(*src);
 	mem_to_map_sz = sizeof(*mem_to_map);
@@ -1416,7 +1453,7 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
 		destvm->perm = cpu_to_le32(newvm->perm);
 		destvm->ctx = 0;
 		destvm->ctx_size = 0;
-		next_vm |= BIT(newvm->vmid);
+		next_vm |= BIT_ULL(newvm->vmid);
 	}
 
 	ret = __qcom_scm_assign_mem(__scm->dev, mem_to_map_phys, mem_to_map_sz,

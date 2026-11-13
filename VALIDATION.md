@@ -97,3 +97,23 @@ requires a concrete restoration plan and authorization for that operation.
 - `artifacts/android73-smmu-memory-stage5/`: Image + 49 modules. All 1,912 import
   CRCs and snapshot SHA256 values verified. KGSL remains an object, with ten
   unresolved imports; there is no final GPU .ko or flashable boot image.
+
+## Stage6 system statistics evidence
+
+- The full Motorola sysstats implementation builds without the original
+  NONEXPORTED_SYMBOLS zero-statistics option. Native DMA-buffer identification,
+  si_swapinfo and NR_VMALLOC provide real accounting. The UAPI is retained.
+- GPU callback registration/replacement/unregister now drains SRCU readers.
+  Four actual-code KUnit cases cover values, NULL fallback, live memory usage
+  and sleeping-reader teardown: reports/qemu-sysstats-final-tests.log.
+- The first userspace Netlink test crashed the guest because a family without
+  a policy receives NULL info->attrs on 7.3. Setting the family policy and
+  validating PID presence fixes it. The failed log is preserved as
+  reports/qemu-sysstats-stage6-modules.log; the successful rerun is
+  reports/qemu-sysstats-stage6-modules-fixed.log.
+- The successful run loads 20 modules, performs four ABI checks (resolve family,
+  memory counters, own PID stats, missing-PID rejection), unloads 13 modules
+  and retains seven permanent providers. No phone module or partition changed.
+- Stage6 artifact: 50 modules, 1,980 matching import CRCs, SHA256 verified.
+  GPU modpost still reports eight unresolved symbols (SYNX and PAS retry).
+  No final KGSL module, flashable boot.img or physical boot is claimed.

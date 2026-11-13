@@ -79,13 +79,18 @@ def main():
     if args.gpu_deps:
         for name in ['qcom-hwspinlock', 'qcom-smem', 'qcom-socinfo', 'qcom-llcc',
                      'qcom-dcvs', 'governor-adreno-ro', 'governor-gpubw',
-                     'governor-adreno-tz', 'qcom-iommu-util', 'secure-buffer', 'iommu-logger', 'arm-smmu-vendor']:
+                     'governor-adreno-tz', 'qcom-iommu-util', 'secure-buffer', 'iommu-logger', 'arm-smmu-vendor','msm-sysstats']:
             root_run(base + ["M=/work/avr-port/ports/"+name, "-j"+os.environ.get('BUILD_JOBS','4'), "modules"])
     if args.qemu_tests:
         if args.gpu_deps:
             root_run(base + ["M=/work/avr-port/tests/iommu", "-j2", "modules"])
-        for suite in ["clock", "memory", "secure-buffer"]:
+        for suite in ["clock", "memory", "secure-buffer", "sysstats"]:
             root_run(base + ["M=/work/avr-port/tests/"+suite, "-j2", "modules"])
+        root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                  'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',
+                  '-Wall', '-Wextra', '-Werror',
+                  '/work/avr-port/tests/sysstats/sysstats-netlink-test.c',
+                  '-o', '/work/avr-port/tests/sysstats/sysstats-netlink-test'])
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
                   'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',
                   '-Wall', '-Wextra', '-Werror',

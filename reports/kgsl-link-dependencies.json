@@ -1,7 +1,7 @@
 {
   "scope": "object import name coverage only; final .ko and hardware operation not proved",
   "import_count": 550,
-  "unresolved_count": 10,
+  "unresolved_count": 8,
   "unresolved": [
     "qcom_scm_pas_shutdown_retry",
     "synx_create",
@@ -10,9 +10,7 @@
     "synx_initialize",
     "synx_release",
     "synx_signal",
-    "synx_uninitialize",
-    "sysstats_register_kgsl_stats_cb",
-    "sysstats_unregister_kgsl_stats_cb"
+    "synx_uninitialize"
   ],
   "provider_tables": [
     "out/native-gki/Module.symvers",
@@ -22,7 +20,8 @@
     "ports/qcom-dcvs/Module.symvers",
     "ports/governor-adreno-tz/Module.symvers",
     "ports/qcom-iommu-util/Module.symvers",
-    "ports/secure-buffer/Module.symvers"
+    "ports/secure-buffer/Module.symvers",
+    "ports/msm-sysstats/Module.symvers"
   ],
   "excluded_module_loader_symbols": [
     "__this_module"

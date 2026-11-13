@@ -1,0 +1,16 @@
+{
+  "source_commit": "838e344ee",
+  "consolidated_command": "python scripts/build_native.py --gpu-deps --qemu-tests",
+  "consolidated_exit_code": 0,
+  "final_fix": "sysstats family attribute policy and missing-PID validation rebuilt after consolidated run",
+  "scope": "incremental native build; not clean checkout or official Kleaf certification",
+  "module_count": 50,
+  "matching_import_crcs": 1980,
+  "physical_boot": false,
+  "gpu_unresolved_symbols": 8,
+  "runtime_reports": [
+    "qemu-sysstats-final-tests.log",
+    "qemu-sysstats-stage6-modules-fixed.log"
+  ],
+  "preserved_failure": "qemu-sysstats-stage6-modules.log"
+}

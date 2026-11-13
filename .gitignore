@@ -15,3 +15,7 @@ modules.order
 
 /tests/qemu/*.cpio.gz
 /tests/oplus-sync/oplus-sync-test
+
+/tests/sysstats/sysstats-netlink-test
+
+.tmp_*/

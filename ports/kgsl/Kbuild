@@ -49,3 +49,5 @@ KBUILD_EXTRA_SYMBOLS += $(src)/../governor-adreno-tz/Module.symvers
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-iommu-util/Module.symvers
 
 KBUILD_EXTRA_SYMBOLS += $(src)/../secure-buffer/Module.symvers
+
+KBUILD_EXTRA_SYMBOLS += $(src)/../msm-sysstats/Module.symvers

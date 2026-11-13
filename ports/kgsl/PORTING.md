@@ -53,7 +53,7 @@ data read-back. This tests the core memory path, not KGSL GPU DMA on avr.
 Ported support providers: SoC info, SMEM, hwspinlock, LLCC/DCVS, three external
 devfreq governors, and qcom_iommu_util (FAST and LPAE). Actual external governors
 are selected using firmware configuration and MODULE_SOFTDEP, preserving their
-registration-before-GPU order. Ten missing symbols now belong to shutdown retry, SYNX and sysstats.
+registration-before-GPU order. Eight missing symbols now belong to shutdown retry and SYNX.
 The actual vendor ARM SMMU, logger and secure-buffer drivers now link on 7.3;
 no physical controller probe or secure assignment has been verified.
 
@@ -65,7 +65,7 @@ Fifteen support modules loaded in QEMU; nine exit-capable drivers unloaded and
 six permanent firmware/RPMh dependencies remained as designed.
 
 Still required: mem-buf and the complete secure firmware backend, physical
-SMMU validation, SYNX and sysstats, plus broader driver lifecycle/bounds review. The vendor SMMU
+SMMU validation and SYNX, plus broader driver lifecycle/bounds review. The vendor SMMU
 must use the same avr_adreno_smmu_priv extension as KGSL; it cannot be cast to the
 upstream drm/msm private layout. The secure firmware backend (including the
 vendor SMCI/PIL path) requires review against the device firmware.
@@ -81,3 +81,10 @@ and retained seven permanent providers. Five secure-buffer KUnit cases execute
 the production batching and rollback code with a mocked SCM transport: invalid
 input, first-call failure, multi-destination rollback, bounded-prefix ownership
 flags and full batches. No actual page ownership is transferred by these tests.
+
+Stage6 adds actual msm_sysstats with SRCU callback draining and live memory
+counters: 50 modules, all 1,980 import CRCs match. Four KUnit cases and real
+userspace Netlink memory/task/invalid-request checks pass in a diskless SMP4
+guest. The initial Netlink crash from absent family policy is fixed and its
+failure log retained. Twenty module loads, thirteen unloads, seven permanent
+providers retained. Physical GPU/ROM statistics remain unverified.

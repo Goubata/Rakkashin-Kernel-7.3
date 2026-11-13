@@ -4373,3 +4373,5 @@ MODULE_IMPORT_NS("DMA_BUF");
 #elif (KERNEL_VERSION(5, 18, 0) <= LINUX_VERSION_CODE)
 MODULE_IMPORT_NS(DMA_BUF);
 #endif
+
+MODULE_SOFTDEP("pre: governor_msm_adreno_tz governor_gpubw_mon governor_msm_adreno_ro");

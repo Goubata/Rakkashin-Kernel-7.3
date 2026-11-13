@@ -43,3 +43,7 @@ msm_kgsl-y := \
 
 ccflags-y += -I$(src)/../qcom-clock-core/include
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-clock-core/Module.symvers
+
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-llcc/Module.symvers $(src)/../qcom-dcvs/Module.symvers
+KBUILD_EXTRA_SYMBOLS += $(src)/../governor-adreno-tz/Module.symvers
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-iommu-util/Module.symvers

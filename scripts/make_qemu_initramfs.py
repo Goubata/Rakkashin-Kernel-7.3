@@ -23,6 +23,8 @@ def main():
     group=parser.add_mutually_exclusive_group()
     group.add_argument("--clock-tests", action="store_true")
     group.add_argument("--oplus-tests", action="store_true")
+    group.add_argument("--modules-tests", action="store_true")
+    group.add_argument("--iommu-tests", action="store_true")
     args=parser.parse_args()
     data=b'';ino=1
     def add(name,mode,body=b'',major=0,minor=0):
@@ -74,9 +76,52 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
 /bin/busybox mknod /dev/oplus_sync c ${devno%:*} ${devno#*:}
 /bin/oplus-sync-test || { echo AVR_OPLUS_TEST_FAIL; /bin/busybox poweroff -f; }"""
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS',commands.encode())
+    if args.modules_tests:
+        relative=['qcom-clock-core/crm-v2.ko','qcom-rpmh/cmd-db.ko',
+                  'qcom-rpmh/qcom_rpmh.ko']
+        modules=[ROOT/'ports'/name for name in relative]
+        modules += [ROOT/'out/native-gki/drivers/firmware/qcom'/name for name in
+                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules += [ROOT/'ports'/name for name in
+                    ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko',
+                     'qcom-socinfo/socinfo.ko','qcom-llcc/llcc-qcom.ko',
+                     'qcom-dcvs/dcvs_fp.ko','qcom-dcvs/qcom-dcvs.ko',
+                     'governor-adreno-ro/governor_msm_adreno_ro.ko',
+                     'governor-gpubw/governor_gpubw_mon.ko',
+                     'governor-adreno-tz/governor_msm_adreno_tz.ko']]
+        commands=[]
+        for source in modules:
+            name=source.name
+            add('modules/'+name,stat.S_IFREG|0o644,source.read_bytes())
+            module=source.stem.replace('-','_')
+            commands.append(f'/bin/busybox insmod /modules/{name} || {{ echo AVR_VENDOR_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+            commands.append(f'test -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
+        # Core firmware/RPMh providers are intentionally permanent. Preserve
+        # their CRM dependency; unload only drivers with real exit callbacks.
+        for source in reversed(modules[6:]):
+            module=source.stem.replace('-','_')
+            commands.append(f'/bin/busybox rmmod {module} || {{ echo AVR_VENDOR_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
+            commands.append(f'test ! -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
+        for source in modules[:6]:
+            module=source.stem.replace('-','_')
+            commands.append(f'test -d /sys/module/{module} || {{ echo AVR_VENDOR_STATE_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_VENDOR_MODULES_PASS count=15 unloaded=9 retained=6')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.iommu_tests:
+        modules=[(ROOT/'out/native-gki/lib/kunit/kunit.ko',' enable=1')]
+        modules += [(ROOT/'out/native-gki/drivers/firmware/qcom'/name,'') for name in
+                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules += [(ROOT/'ports/qcom-iommu-util/qcom_iommu_util.ko',''),
+                    (ROOT/'tests/iommu/avr-io-pgtable-test.ko','')]
+        commands=[]
+        for source,params in modules:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_IOMMU_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_IOMMU_TESTS_LOADED')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

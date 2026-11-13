@@ -1,0 +1,8 @@
+[
+  "linux/dma-mapping-fast.h",
+  "linux/io-pgtable-fast.h",
+  "linux/qcom-dma-mapping.h",
+  "linux/qcom-io-pgtable.h",
+  "linux/qcom-iommu-util.h",
+  "soc/qcom/secure_buffer.h"
+]

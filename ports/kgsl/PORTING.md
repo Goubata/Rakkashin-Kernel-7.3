@@ -10,8 +10,8 @@ remain present. The original ZIP and patches remain intact.
 
 ## Build status
 
-All GPU C files compiled and msm_kgsl.o linked (kgsl-attempt20.log). This is a
-relocatable object, not a usable msm_kgsl.ko. Modpost fails with 40 actual missing
+All GPU C files compiled and msm_kgsl.o linked (kgsl-attempt23.log). This is a
+relocatable object, not a usable msm_kgsl.ko. Modpost fails with 11 actual missing
 provider symbols: reports/kgsl-link-dependencies.json. No unresolved-symbol
 suppression or stock CRC reconstruction is used.
 
@@ -40,7 +40,8 @@ protected memory and cache/frequency control. Their real providers must be porte
 - Cooling registration uses ID 0; the actual avr GPU node has #cooling-cells=2,
   so the 7.3 legacy thermal mapping format applies. Thermal handling stays active.
 - GPU register initialization and ordinary SMMU aperture calls use matching
-  existing 7.3 SCM APIs. LPAC/tuning and shutdown retry providers remain unresolved.
+  existing 7.3 SCM APIs. LPAC/tuning and nine legacy DCVS methods now have actual vendor SCM implementations
+  in the firmware module. Shutdown retry/secure backend integration remains unresolved.
 
 ## Evidence and remaining work
 
@@ -49,8 +50,22 @@ provider supply/accounting, fallback, unrelated inode isolation, unregister,
 in-flight sleeping callback drain, and actual shmem swap-out to guest zram plus
 data read-back. This tests the core memory path, not KGSL GPU DMA on avr.
 
-Still required: real SoC info, LLCC/DCVS, secure-buffer/mem-buf and SCM backend,
-SMMU/io-pgtable, devfreq governors, SYNX and sysstats providers. The vendor SMMU
+Ported support providers: SoC info, SMEM, hwspinlock, LLCC/DCVS, three external
+devfreq governors, and qcom_iommu_util (FAST and LPAE). Actual external governors
+are selected using firmware configuration and MODULE_SOFTDEP, preserving their
+registration-before-GPU order. Missing symbols now belong to secure-buffer,
+shutdown retry, SYNX and sysstats; the public SMMU helper exports exist, but the
+physical ARM SMMU controller driver still needs porting.
+
+The three software page-table cases passed in SMP4 QEMU: FAST mapping/partial
+unmap/remap, LPAE equivalent, and partial unmap of a 16-page contiguous group.
+These check actual provider translation tables with emulated TLB callbacks;
+they do not verify device DMA, cache coherency or physical TLB maintenance.
+Fifteen support modules loaded in QEMU; nine exit-capable drivers unloaded and
+six permanent firmware/RPMh dependencies remained as designed.
+
+Still required: secure-buffer/mem-buf and the complete firmware backend,
+physical SMMU, SYNX and sysstats, plus broader driver lifecycle/bounds review. The vendor SMMU
 must use the same avr_adreno_smmu_priv extension as KGSL; it cannot be cast to the
 upstream drm/msm private layout. The secure firmware backend (including the
 vendor SMCI/PIL path) requires review against the device firmware.

@@ -20,13 +20,16 @@ def main():
     parser.add_argument("--pinctrl", action="store_true", help="Also link the staged Alor pinctrl modules; requires --platform")
     parser.add_argument("--boot-core", action="store_true", help="Apply core patches and build clock/RPMh/IRQ/pinctrl and OxygenOS sync modules")
     parser.add_argument("--qemu-tests", action="store_true", help="Build boot-core plus isolated clock/RCU and fence test fixtures")
+    parser.add_argument("--gpu-deps", action="store_true", help="Build ported GPU support modules; KGSL and physical SMMU bring-up remain incomplete")
     args = parser.parse_args()
+    if args.gpu_deps:
+        args.boot_core = True
     if args.qemu_tests:
         args.boot_core = True
     if args.boot_core:
         args.platform = True
         args.pinctrl = True
-        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch']:
+        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch']:
             command=['git','-C',str(SOURCE),'apply']
             if subprocess.run(command+['--reverse','--check',str(patch)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0:
                 continue
@@ -73,7 +76,14 @@ def main():
     if args.pinctrl:
         root_run(base + ["M=/work/avr-port/ports/pinctrl-alor-vendor-core", "-j2", "modules"])
 
+    if args.gpu_deps:
+        for name in ['qcom-hwspinlock', 'qcom-smem', 'qcom-socinfo', 'qcom-llcc',
+                     'qcom-dcvs', 'governor-adreno-ro', 'governor-gpubw',
+                     'governor-adreno-tz', 'qcom-iommu-util']:
+            root_run(base + ["M=/work/avr-port/ports/"+name, "-j"+os.environ.get('BUILD_JOBS','4'), "modules"])
     if args.qemu_tests:
+        if args.gpu_deps:
+            root_run(base + ["M=/work/avr-port/tests/iommu", "-j2", "modules"])
         for suite in ["clock", "memory"]:
             root_run(base + ["M=/work/avr-port/tests/"+suite, "-j2", "modules"])
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',

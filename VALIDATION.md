@@ -41,7 +41,7 @@ The current 6.12 environment is the reference for behavior, not a 7.3 test.
 - OxygenOS sync module passed 1,283 checks on SMP4 with the current Image.
 - Evidence hashes and results: reports/runtime-test-results.json.
 - KGSL user ZIP staged with custom interfaces retained; all C sources now
-  compile into msm_kgsl.o. Final module linking still lacks 40 real dependency
+  compile into msm_kgsl.o. Final module linking still lacks 11 real dependency
   symbols. The shmem and thermal API migrations compile. Six memory cases
   (35 total with clock/RCU) passed on SMP4, including guest-zram swap and data
   read-back. This does not prove GPU DMA or protected-content behavior.
@@ -56,3 +56,20 @@ Storage/encryption, power, IOMMU/interconnect, GPU/display, modem/network, audio
 camera and all runtime rows above remain pending. No efficiency claim is made
 until measurements against 6.12 are available. Preparing a physical boot also
 requires a concrete restoration plan and authorization for that operation.
+
+## Additional GPU support evidence
+
+- Ten additional support modules built: hwspinlock, SMEM, SoCinfo, LLCC, two
+  DCVS modules, three governors and qcom_iommu_util. Stage4 has 46 partial-port
+  modules, with all 1,686 recorded import CRCs matching current providers.
+- The SCM module implements 11 vendor GPU/DCVS methods. Firmware availability,
+  secure memory transport and actual firmware command execution are unverified.
+- SMP4 guest loaded 15 support modules, unloaded nine exit-capable drivers and
+  retained six permanent providers/dependencies. This does not exercise probes
+  for absent Qualcomm hardware.
+- Three actual software page-table cases passed for FAST, LPAE and a contiguous
+  group with a partial unmap/remap. Hardware DMA/TLB/cache behavior remains open.
+- The physical ARM SMMU driver is not ported yet. A resolved helper name does
+  not prove a domain is registered or usable by GPU or other devices.
+- SoCinfo firmware offsets/bounds and publication lifetime need a broader audit;
+  the vendor LLCC EDAC/perfmon consumers need its explicitly named private layout.

@@ -24,3 +24,11 @@
 #define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
 #define CONFIG_QCOM_LLCC_MODULE 1
 #define CONFIG_QCOM_DCVS_MODULE 1
+/* Match the firmware's external governor modules; they must be loaded first. */
+#define CONFIG_DEVFREQ_GOV_QCOM_ADRENO_TZ_MODULE 1
+#define CONFIG_DEVFREQ_GOV_QCOM_GPUBW_MON_MODULE 1
+#define CONFIG_DEVFREQ_GOV_QCOM_ADRENO_RO_MODULE 1
+
+/* Match the actual vendor io-pgtable engine configuration. */
+#define CONFIG_IOMMU_IO_PGTABLE_FAST 1
+#define CONFIG_IOMMU_IO_PGTABLE_CONTIG_HINT 1

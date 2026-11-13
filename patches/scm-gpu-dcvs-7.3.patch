@@ -1,0 +1,279 @@
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 17739b8bf..e05068054 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -2035,6 +2035,225 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+ }
+ EXPORT_SYMBOL_GPL(qcom_scm_lmh_dcvsh);
+ 
++
++/* Motorola W3WWL36.65-11-18 GPU/DCVS firmware interfaces. */
++int qcom_scm_io_reset(void)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_IO,
++		.cmd = QCOM_SCM_IO_RESET,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.arginfo = QCOM_SCM_ARGS(2),
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
++}
++EXPORT_SYMBOL(qcom_scm_io_reset);
++
++bool qcom_scm_dcvs_core_available(void)
++{
++	struct device *dev = __scm ? __scm->dev : NULL;
++
++	if (!__scm)
++		return false;
++
++	return __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_DCVS,
++					    QCOM_SCM_DCVS_INIT) &&
++	       __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_DCVS,
++					    QCOM_SCM_DCVS_UPDATE) &&
++	       __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_DCVS,
++					    QCOM_SCM_DCVS_RESET);
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_core_available);
++
++bool qcom_scm_dcvs_ca_available(void)
++{
++	struct device *dev = __scm ? __scm->dev : NULL;
++
++	if (!__scm)
++		return false;
++
++	return __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_DCVS,
++					    QCOM_SCM_DCVS_INIT_CA_V2) &&
++	       __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_DCVS,
++					    QCOM_SCM_DCVS_UPDATE_CA_V2);
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_ca_available);
++
++int qcom_scm_dcvs_reset(void)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_RESET,
++		.owner = ARM_SMCCC_OWNER_SIP
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	return qcom_scm_call(__scm ? __scm->dev : NULL, &desc, NULL);
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_reset);
++
++int qcom_scm_dcvs_init_v2(phys_addr_t addr, size_t size, int *version)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_INIT_V2,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = addr,
++		.args[1] = size,
++		.arginfo = QCOM_SCM_ARGS(2, QCOM_SCM_RW, QCOM_SCM_VAL),
++	};
++	struct qcom_scm_res res = {};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++	if (!version)
++		return -EINVAL;
++
++	ret = qcom_scm_call(__scm->dev, &desc, &res);
++
++	if (ret >= 0)
++		*version = res.result[0];
++	return ret;
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_init_v2);
++
++int qcom_scm_dcvs_init_ca_v2(phys_addr_t addr, size_t size)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_INIT_CA_V2,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = addr,
++		.args[1] = size,
++		.arginfo = QCOM_SCM_ARGS(2, QCOM_SCM_RW, QCOM_SCM_VAL),
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	return qcom_scm_call(__scm->dev, &desc, NULL);
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_init_ca_v2);
++
++int qcom_scm_dcvs_update(int level, s64 total_time, s64 busy_time)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_UPDATE,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = level,
++		.args[1] = total_time,
++		.args[2] = busy_time,
++		.arginfo = QCOM_SCM_ARGS(3),
++	};
++	struct qcom_scm_res res = {};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	ret = qcom_scm_call_atomic(__scm->dev, &desc, &res);
++
++	return ret ? : res.result[0];
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_update);
++
++int qcom_scm_dcvs_update_v2(int level, s64 total_time, s64 busy_time)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_UPDATE_V2,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = level,
++		.args[1] = total_time,
++		.args[2] = busy_time,
++		.arginfo = QCOM_SCM_ARGS(3),
++	};
++	struct qcom_scm_res res = {};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	ret = qcom_scm_call(__scm->dev, &desc, &res);
++
++	return ret ? : res.result[0];
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_update_v2);
++
++int qcom_scm_dcvs_update_ca_v2(int level, s64 total_time, s64 busy_time,
++			       int context_count)
++{
++	int ret;
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_UPDATE_CA_V2,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = level,
++		.args[1] = total_time,
++		.args[2] = busy_time,
++		.args[3] = context_count,
++		.arginfo = QCOM_SCM_ARGS(4),
++	};
++	struct qcom_scm_res res = {};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	ret = qcom_scm_call(__scm->dev, &desc, &res);
++
++	return ret ? : res.result[0];
++}
++EXPORT_SYMBOL(qcom_scm_dcvs_update_ca_v2);
++
++int qcom_scm_kgsl_dcvs_tuning(u32 mingap, u32 penalty, u32 numbusy)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_DCVS,
++		.cmd = QCOM_SCM_DCVS_TUNING,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = mingap,
++		.args[1] = penalty,
++		.args[2] = numbusy,
++		.arginfo = QCOM_SCM_ARGS(3),
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	return qcom_scm_call(__scm->dev, &desc, NULL);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_kgsl_dcvs_tuning);
++
++int qcom_scm_kgsl_set_smmu_lpac_aperture(unsigned int num_context_bank)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_MP,
++		.cmd = QCOM_SCM_MP_CP_SMMU_APERTURE_ID,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = 0xffff0000
++			   | ((QCOM_SCM_CP_LPAC_APERTURE_REG & 0xff) << 8)
++			   | (num_context_bank & 0xff),
++		.args[1] = 0xffffffff,
++		.args[2] = 0xffffffff,
++		.args[3] = 0xffffffff,
++		.arginfo = QCOM_SCM_ARGS(4),
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++
++	return qcom_scm_call(__scm->dev, &desc, NULL);
++}
++EXPORT_SYMBOL(qcom_scm_kgsl_set_smmu_lpac_aperture);
++
+ int qcom_scm_gpu_init_regs(u32 gpu_req)
+ {
+ 	struct qcom_scm_desc desc = {
+diff --git a/drivers/firmware/qcom/qcom_scm.h b/drivers/firmware/qcom/qcom_scm.h
+index 232a76537..2f7023a7b 100644
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -16,6 +16,19 @@ enum qcom_scm_convention {
+ 
+ extern enum qcom_scm_convention qcom_scm_convention;
+ 
++/* Vendor GPU/DCVS firmware commands. */
++#define QCOM_SCM_CP_LPAC_APERTURE_REG	0x1
++#define QCOM_SCM_DCVS_INIT			0x09
++#define QCOM_SCM_DCVS_INIT_CA_V2		0x0c
++#define QCOM_SCM_DCVS_INIT_V2			0x0b
++#define QCOM_SCM_DCVS_RESET			0x07
++#define QCOM_SCM_DCVS_TUNING			0x0e
++#define QCOM_SCM_DCVS_UPDATE			0x08
++#define QCOM_SCM_DCVS_UPDATE_CA_V2		0x0d
++#define QCOM_SCM_DCVS_UPDATE_V2			0x0a
++#define QCOM_SCM_IO_RESET			0x03
++#define QCOM_SCM_SVC_DCVS			0x0D
++
+ #define MAX_QCOM_SCM_ARGS 10
+ #define MAX_QCOM_SCM_RETS 3
+ 
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index ac3d94cb3..7cbcca2e6 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -163,6 +163,20 @@ bool qcom_scm_lmh_dcvsh_available(void);
+ 
+ int qcom_scm_gpu_init_regs(u32 gpu_req);
+ 
++/* Motorola GPU/DCVS firmware services. */
++int qcom_scm_io_reset(void);
++bool qcom_scm_dcvs_core_available(void);
++bool qcom_scm_dcvs_ca_available(void);
++int qcom_scm_dcvs_reset(void);
++int qcom_scm_dcvs_init_v2(phys_addr_t addr, size_t size, int *version);
++int qcom_scm_dcvs_init_ca_v2(phys_addr_t addr, size_t size);
++int qcom_scm_dcvs_update(int level, s64 total_time, s64 busy_time);
++int qcom_scm_dcvs_update_v2(int level, s64 total_time, s64 busy_time);
++int qcom_scm_dcvs_update_ca_v2(int level, s64 total_time, s64 busy_time,
++			       int context_count);
++int qcom_scm_kgsl_dcvs_tuning(u32 mingap, u32 penalty, u32 numbusy);
++int qcom_scm_kgsl_set_smmu_lpac_aperture(unsigned int num_context_bank);
++
+ int qcom_scm_shm_bridge_create(u64 pfn_and_ns_perm_flags,
+ 			       u64 ipfn_and_s_perm_flags, u64 size_and_flags,
+ 			       u64 ns_vmids, u64 *handle);

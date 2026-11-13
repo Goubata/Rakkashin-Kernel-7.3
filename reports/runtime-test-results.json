@@ -62,12 +62,33 @@
       "log_sha256": "ad7c5d31725aaf0dfd70554c7af9b95ea9eabef4fe07d75e381770fc3e7daea1",
       "guest_cpus": 4,
       "zram_swap_bytes": 67108864
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-gpu-dependencies-smoke.log",
+      "test": "modules",
+      "passed": true,
+      "failures": [],
+      "log_sha256": "7dbbe6de799a8bd19ab1b420c70c7407fb61168877b1c8f0dce93997765cce00"
+    },
+    {
+      "log": "avr-kernel-7.3/reports/qemu-iommu-pgtable-tests-attempt2.log",
+      "test": "iommu",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        3,
+        0,
+        0,
+        3
+      ],
+      "log_sha256": "9e183301fb36d3807ae5118a669c9ea0a2e0f42a4ea4ed80143c1a4258150cf0"
     }
   ],
   "known_failure_evidence": [
     "qemu-clock-tests-attempt2.log",
     "qemu-clock-hold-before-fix-up.log",
-    "qemu-baseline-smp-diagnostic.log"
+    "qemu-baseline-smp-diagnostic.log",
+    "qemu-vendor-modules-smoke.log: initial harness incorrectly tried to unload permanent RPMh; corrected to preserve permanent providers and their dependency"
   ],
   "physical_boot": false
 }

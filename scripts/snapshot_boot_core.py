@@ -11,6 +11,7 @@ ROOT=Path(__file__).resolve().parents[1]
 out=ROOT/'out/native-gki'
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--name',default='android73-boot-core-stage2')
+parser.add_argument("--gpu-deps",action="store_true")
 args=parser.parse_args()
 if not args.name.replace('-','').replace('_','').isalnum():parser.error('invalid snapshot name')
 dst=ROOT/'artifacts'/args.name
@@ -18,7 +19,11 @@ dst.mkdir(parents=True,exist_ok=True)
 for path,name in [(out/'arch/arm64/boot/Image','Image'),(out/'.config','config'),(out/'Module.symvers','Module.symvers'),(out/'System.map','System.map')]:
     shutil.copyfile(path,dst/name)
 modules=[]
-for name in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync']:
+ports=['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync']
+if args.gpu_deps:
+    ports += ['qcom-hwspinlock','qcom-smem','qcom-socinfo','qcom-llcc','qcom-dcvs',
+              'governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util']
+for name in ports:
     modules += [(p,'modules/'+name+'/'+p.name) for p in (ROOT/'ports'/name).glob('*.ko')]
 for name in ['qcom-scm','qcom_pas','qcom_tzmem']:
     p=out/'drivers/firmware/qcom'/(name+'.ko')

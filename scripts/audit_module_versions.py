@@ -8,7 +8,7 @@ import struct
 ROOT=Path(__file__).resolve().parents[1]
 
 def sections(data):
-    if data[:6]!=b'\x7fELF\x02\x01':raise ValueError('expected ELF64 LE')
+    if data[:6]!=b'\x7fELF\x02\x01' or struct.unpack_from('<H',data,18)[0]!=183:raise ValueError('expected AArch64 ELF64 LE')
     offset=struct.unpack_from('<Q',data,40)[0]
     size,count,names_index=struct.unpack_from('<HHH',data,58)
     headers=[struct.unpack_from('<IIQQQQIIQQ',data,offset+i*size) for i in range(count)]
@@ -17,29 +17,35 @@ def sections(data):
 
 def versions(path):
     s=sections(path.read_bytes())
+    result={}
+    if '__versions' in s:
+        data=s['__versions']
+        if len(data)%64:raise ValueError(f'{path}: unexpected modversion size')
+        result.update({data[i+8:i+64].split(b'\0',1)[0].decode():struct.unpack_from('<Q',data,i)[0] for i in range(0,len(data),64)})
     if '__version_ext_names' in s:
         names=s['__version_ext_names'].rstrip(b'\0').split(b'\0')
         crcs=s['__version_ext_crcs']
         if len(crcs)!=len(names)*4:raise ValueError(f'{path}: invalid extended versions')
-        return dict(zip((n.decode() for n in names),struct.unpack('<'+'I'*len(names),crcs)))
-    if '__versions' in s:
-        data=s['__versions']
-        if len(data)%64:raise ValueError(f'{path}: unexpected modversion size')
-        return {data[i+8:i+64].split(b'\0',1)[0].decode():struct.unpack_from('<Q',data,i)[0] for i in range(0,len(data),64)}
-    raise ValueError(f'{path}: no version information')
+        for name,crc in zip((n.decode() for n in names),struct.unpack('<'+'I'*len(names),crcs)):
+            if name in result and result[name]!=crc:raise ValueError(f'{path}: conflicting CRCs for {name}')
+            result[name]=crc
+    if not result:raise ValueError(f'{path}: no version information')
+    return result
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('module',type=Path,nargs='*')
     args=parser.parse_args()
     tables=[ROOT/'out/native-gki/Module.symvers']
-    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync']]
+    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util']]
     exports={}
     for table in tables:
+        if not table.is_file():continue
         for line in table.read_text().splitlines():
             fields=line.split()
             if fields:exports[fields[1]]=int(fields[0],16)
     paths=args.module or sorted((ROOT/'artifacts/android73-boot-core-stage2/modules').rglob('*.ko'))
+    if not paths:raise SystemExit("No module files selected")
     results=[]
     for path in paths:
         imports=versions(path)

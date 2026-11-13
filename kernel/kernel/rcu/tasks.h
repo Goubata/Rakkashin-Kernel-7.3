@@ -976,6 +976,16 @@ static void rcu_tasks_pregp_step(struct list_head *hop)
 	synchronize_rcu();
 }
 
+/*
+ * Proxy donors can remain queued while sleeping on a mutex. Check under the
+ * task/runqueue locks that the task has actually switched out: __state or
+ * is_blocked alone can be set before the voluntary context switch completes.
+ */
+static int rcu_tasks_proxy_blocked(struct task_struct *t, void *unused)
+{
+	return t->is_blocked && !task_curr(t);
+}
+
 /* Check for quiescent states since the pregp's synchronize_rcu() */
 static bool rcu_tasks_is_holdout(struct task_struct *t)
 {
@@ -983,6 +993,10 @@ static bool rcu_tasks_is_holdout(struct task_struct *t)
 
 	/* Has the task been seen voluntarily sleeping? */
 	if (!READ_ONCE(t->on_rq))
+		return false;
+
+	if (IS_ENABLED(CONFIG_SCHED_PROXY_EXEC) && READ_ONCE(t->is_blocked) &&
+	    task_call_func(t, rcu_tasks_proxy_blocked, NULL))
 		return false;
 
 	/*

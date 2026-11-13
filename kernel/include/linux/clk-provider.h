@@ -45,6 +45,9 @@
 #define CLK_IS_CRITICAL		BIT(11)
 #define CLK_OPS_PARENT_ENABLE	BIT(12)
 #define CLK_DUTY_CYCLE_PARENT	BIT(13)
+#define CLK_DONT_HOLD_STATE	BIT(14) /* Do not hold boot state until sync_state */
+
+void clk_sync_state(struct device *dev);
 
 struct clk;
 struct clk_hw;

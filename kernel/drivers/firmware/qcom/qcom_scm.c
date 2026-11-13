@@ -1161,6 +1161,25 @@ int qcom_scm_io_writel(phys_addr_t addr, unsigned int val)
 }
 EXPORT_SYMBOL_GPL(qcom_scm_io_writel);
 
+/* Vendor GIC CPU-class firmware interface used by Alor interrupt routing. */
+int qcom_scm_set_gic_cpuclass(u32 mpidr, u32 clss)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_GIC,
+		.cmd = QCOM_SCM_GIC_SET_CPUCLASS,
+		.arginfo = QCOM_SCM_ARGS(2),
+		.args[0] = mpidr,
+		.args[1] = clss,
+		.owner = ARM_SMCCC_OWNER_SIP,
+	};
+
+	if (!__scm)
+		return -EPROBE_DEFER;
+	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_set_gic_cpuclass);
+
+
 /**
  * qcom_scm_restore_sec_cfg_available() - Check if secure environment
  * supports restore security config interface.

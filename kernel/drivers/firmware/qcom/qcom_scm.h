@@ -193,4 +193,8 @@ static inline int qcom_scm_remap_error(int err)
 	return -EINVAL;
 }
 
+/* Vendor GIC service used by Alor CPU-class interrupt routing. */
+#define QCOM_SCM_SVC_GIC 0x1d
+#define QCOM_SCM_GIC_SET_CPUCLASS 0x02
+
 #endif

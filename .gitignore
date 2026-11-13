@@ -11,3 +11,4 @@ modules.order
 /reports/*.log
 /reports/module-imports.json
 *.o.d
+/artifacts/

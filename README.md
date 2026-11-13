@@ -50,3 +50,11 @@ chrootのproc、dev、work/avr-src、work/avr-portにはbind mountを使用し�
 実機はDevice Tree上avr/alorで、ユーザー作成のOnePlusポートROMを使用中です。ro.product等の製品名は実機識別に使いません。
 
 `device-baseline/` に現在の設定、稼働DTB、ロード済みモジュール一覧、vendor 323モジュール、system 104モジュールと起動イメージの読み取りダンプを保存しています。候補リストとは別に、これを実機基準とします。boot_aはheader v4、ramdiskなしでした。
+
+## 完了した最初のビルド
+
+7.3.0-4kのImage（46,488,064 bytes）と付属モジュール128個をこの実機上でビルドし、makeの終了コード0を確認しました。arm64 Imageのmagicも検証しています。成果物とSHA-256は `artifacts/android73-baseline/` に保存しています。
+
+これは未改変Android 7.3の土台です。avr用移植コードはまだImageに組み込んでいません。実機起動・常用動作は未確認で、端末対応boot.imgではありません。
+
+Alor pinctrlの2オブジェクト、状態保持処理を移植したCCFのオブジェクト、Alor GCCのオブジェクトがコンパイルできました。pinctrlのモジュールリンクはqcom_scm_io_readl/writelの不足で停止しています。汎用GKI設定はCONFIG_QCOM_SCMを無効にしているため、次の統合作業ではSCM/PAS/TZMEMの依存関係を有効な構成でビルドする必要があります。未解決シンボルを無視する設定は使用していません。

@@ -19,6 +19,7 @@ def inspect(data):
     names_hdr = sections[stridx]
     names = data[names_hdr[4]:names_hdr[4]+names_hdr[5]]
     imports = set()
+    exports = set()
     metadata = []
     for s in sections:
         name = names[s[0]:].split(b'\0', 1)[0]
@@ -30,9 +31,12 @@ def inspect(data):
         strings = data[strings_hdr[4]:strings_hdr[4]+strings_hdr[5]]
         for pos in range(s[4], s[4]+s[5], s[9]):
             n, info, other, idx, value, size = struct.unpack_from('<IBBHQQ', data, pos)
+            name = strings[n:].split(b'\0', 1)[0].decode() if n else ''
             if idx == 0 and n and info >> 4 in (1, 2):
-                imports.add(strings[n:].split(b'\0', 1)[0].decode())
-    return {'imports': sorted(imports),
+                imports.add(name)
+            if idx != 0 and name.startswith('__ksymtab_'):
+                exports.add(name[len('__ksymtab_'):])
+    return {'imports': sorted(imports), 'exports': sorted(exports),
             'vermagic': next((m[9:] for m in metadata if m.startswith('vermagic=')), None)}
 
 def main():
@@ -46,6 +50,16 @@ def main():
         modules[str(path.relative_to(BASE))] = inspect(path.read_bytes())
     symbols = sorted({s for m in modules.values() for s in m['imports']})
     (PORT/'reports/module-imports.json').write_text(json.dumps({'modules': modules, 'required_symbols': symbols}, indent=2)+'\n')
+    symvers = PORT/'out/native-gki/Module.symvers'
+    if symvers.is_file():
+        baseline = {l.split()[1] for l in symvers.read_text().splitlines() if l.strip()}
+        archived = {s for m in modules.values() for s in m['exports']}
+        missing = sorted(set(symbols) - baseline - archived)
+        report = {'scope': 'symbol-name inventory only; source/API porting can change imports',
+                  'baseline_export_count': len(baseline), 'archived_module_export_count': len(archived),
+                  'unmatched_import_names': missing}
+        (PORT/'reports/baseline-symbol-gaps.json').write_text(json.dumps(report, indent=2)+'\n')
+        print(f'{len(missing)} imported names absent from baseline and archived module exports')
     print(f'{len(modules)} module files; {len(symbols)} distinct imported symbols')
 
 if __name__ == '__main__':

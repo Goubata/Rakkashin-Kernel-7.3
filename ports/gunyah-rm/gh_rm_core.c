@@ -30,6 +30,7 @@
 
 #include "drivers/virt/gunyah/rsc_mgr.h"
 #include "gh_rm_drv_private.h"
+#include "avr-rm-notifiers.h"
 
 #define GH_RM_MAX_NUM_FRAGMENTS	62
 
@@ -1137,6 +1138,19 @@ static struct notifier_block gh_vm_status_nb = {
 };
 #endif
 
+static const struct avr_rm_notifier_ops status_notifier_ops = {
+	.register_first = gh_rm_register_notifier,
+	.unregister_first = gh_rm_unregister_notifier,
+#ifdef CONFIG_QTVM_WITH_AVF
+	.register_second = gh_register_vm_notifier,
+	.unregister_second = gh_unregister_vm_notifier,
+#endif
+};
+static struct avr_rm_notifiers status_notifiers = {
+	.ops = &status_notifier_ops,
+	.first = &gh_rm_status_nb,
+};
+
 static void gh_vm_check_peer(struct device *dev, struct device_node *rm_root)
 {
 	int peers_cnt, ret, i;
@@ -1230,7 +1244,7 @@ out:
 
 static int gh_vm_probe(struct device *dev, struct device_node *hyp_root)
 {
-	struct device_node *node;
+	struct device_node *node __free(device_node) = NULL;
 	struct gh_vm_property temp_property = {0};
 	int vmid, owner_vmid, ret;
 	const char *vm_name;
@@ -1238,10 +1252,11 @@ static int gh_vm_probe(struct device *dev, struct device_node *hyp_root)
 
 
 	gh_init_vm_prop_table();
+	status_notifiers.second = NULL;
 
-	node = of_find_compatible_node(hyp_root, NULL, "qcom,gunyah-vm-id-1.0");
+	node = of_find_compatible_node(of_node_get(hyp_root), NULL, "qcom,gunyah-vm-id-1.0");
 	if (IS_ERR_OR_NULL(node)) {
-		node = of_find_compatible_node(hyp_root, NULL, "qcom,haven-vm-id-1.0");
+		node = of_find_compatible_node(of_node_get(hyp_root), NULL, "qcom,haven-vm-id-1.0");
 		if (IS_ERR_OR_NULL(node)) {
 			dev_err(dev, "Could not find vm-id node\n");
 			return -ENODEV;
@@ -1260,8 +1275,10 @@ static int gh_vm_probe(struct device *dev, struct device_node *hyp_root)
 		temp_property.vmid = vmid;
 		gh_update_vm_prop_table(GH_PRIMARY_VM, &temp_property);
 #ifdef CONFIG_QTVM_WITH_AVF
-		gh_rm_register_notifier(&gh_rm_status_nb);
-		gh_register_vm_notifier(&gh_vm_status_nb);
+		status_notifiers.second = &gh_vm_status_nb;
+		ret = avr_rm_notifiers_register(&status_notifiers);
+		if (ret)
+			return ret;
 		gh_rm_core_skip_irq_cleanup = true;
 #endif
 		gh_rm_core_initialized = true;
@@ -1293,7 +1310,9 @@ static int gh_vm_probe(struct device *dev, struct device_node *hyp_root)
 
 		/* check peer to see if any VM has been bootup */
 		gh_vm_check_peer(dev, node);
-		gh_rm_register_notifier(&gh_rm_status_nb);
+		ret = avr_rm_notifiers_register(&status_notifiers);
+		if (ret)
+			return ret;
 		gh_rm_core_initialized = true;
 		/* Query RM for available resources */
 		schedule_work(&gh_rm_get_svm_res_work);
@@ -1323,6 +1342,15 @@ static struct device_node *gh_rm_find_of_node(void)
 	return of_get_compatible_child(gunyah_np, "gunyah-resource-manager");
 }
 
+static void gh_rm_stop_clients(void)
+{
+	WRITE_ONCE(gh_rm_core_initialized, false);
+	avr_rm_notifiers_unregister(&status_notifiers);
+	cancel_work_sync(&gh_rm_get_svm_res_work);
+	gh_rm_cleanup_feature_scm_assign();
+	gh_rm_core_skip_irq_cleanup = false;
+}
+
 static int gh_rm_drv_probe(struct auxiliary_device *adev,
 				const struct auxiliary_device_id *adev_id)
 {
@@ -1331,6 +1359,7 @@ static int gh_rm_drv_probe(struct auxiliary_device *adev,
 	struct device_node *hyp_node;
 	int ret;
 
+	WRITE_ONCE(gh_rm_core_initialized, false);
 	rm = dev->platform_data;
 	if (!rm) {
 		dev_err(dev, "Failed to get the rm pointer\n");
@@ -1350,36 +1379,53 @@ static int gh_rm_drv_probe(struct auxiliary_device *adev,
 	gh_rm_intc = of_irq_find_parent(node);
 	if (!gh_rm_intc) {
 		dev_err(dev, "Failed to get the IRQ parent node\n");
-		return -ENXIO;
+		ret = -ENXIO;
+		goto clear_rm;
 	}
 	gh_rm_irq_domain = irq_find_host(gh_rm_intc);
 	if (!gh_rm_irq_domain) {
 		dev_err(dev, "Failed to get IRQ domain associated with RM\n");
-		return -ENXIO;
+		ret = -ENXIO;
+		goto put_intc;
 	}
 
 	ret = gunyah_rm_notifier_register(rm, &gh_rm_core_notifier_blk);
 	if (ret) {
 		dev_err(dev, "Failed to register to RM notifier %d\n", ret);
-		return ret;
+		goto put_intc;
 	}
 
 	/* Probe the vmid */
 	ret = gh_vm_probe(dev, hyp_node);
 	if (ret < 0 && ret != -ENODEV)
-		return ret;
+		goto unregister_rm;
 
 	ret = gh_rm_setup_feature_scm_assign();
 	if (ret)
-		return ret;
+		goto unregister_rm;
 
-	of_node_put(node);
 	return 0;
+
+unregister_rm:
+	gunyah_rm_notifier_unregister(rm, &gh_rm_core_notifier_blk);
+	gh_rm_stop_clients();
+put_intc:
+	of_node_put(gh_rm_intc);
+	gh_rm_intc = NULL;
+	gh_rm_irq_domain = NULL;
+clear_rm:
+	rm = NULL;
+	return ret;
 }
 
 static void gh_rm_drv_remove(struct auxiliary_device *adev)
 {
 	gunyah_rm_notifier_unregister(rm, &gh_rm_core_notifier_blk);
+	gh_rm_stop_clients();
+	of_node_put(gh_rm_intc);
+	gh_rm_intc = NULL;
+	gh_rm_irq_domain = NULL;
+	rm = NULL;
 	idr_destroy(&gh_rm_call_idr);
 }
 

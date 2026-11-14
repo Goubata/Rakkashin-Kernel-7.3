@@ -27,6 +27,10 @@
     "stock": true,
     "port": true
   },
+  "qtvm_notifier_module_sha256": {
+    "stock": "a13bc7be236ae611a87a9f1d0b9039c6bf0450ce200887f628aa5d9be1d04755",
+    "port": "6c1ac448a1db9716c18029d1ac63147fb76eaff2acc208cf57b82ce0bef50123"
+  },
   "required_hw_fence_doorbell_label": "0x106",
   "message_queue_min_label": "0x101",
   "structure_note": "Kernel-private spinlock/lockdep layout may differ; import CRCs and wire fields are checked separately"

@@ -27,7 +27,7 @@ def main():
     if args.gpu_driver:
         targets += ['ports/qti-fence','ports/kgsl']
     if args.tests:
-        targets += ['tests/remoteproc','tests/scm','tests/gpu-policy']
+        targets += ['tests/remoteproc','tests/scm','tests/gpu-policy','tests/rm-lifetime']
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',
                    'make', '-C', '/work/avr-src', 'O=/work/avr-port/out/native-gki',

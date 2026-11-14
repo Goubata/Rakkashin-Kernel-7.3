@@ -169,3 +169,13 @@ requires a concrete restoration plan and authorization for that operation.
 - KernelSU-Next's external source/commit is absent from the reference and has
   not been ported. Actual Android services, GPU/firmware, all hardware, SELinux
   enforcing, performance and idle drain remain pending. No partition writes.
+
+## Stage10 notifier ownership
+
+The vendor RM adapter now unwinds partial SCM/hyp and RM/QTVM registration,
+unregisters callbacks and drains work on failure/removal, and balances OF node
+references. Eight diskless SMP4 cases exercise the production orchestration
+helper with real kernel notifier chains, including registration failure and an
+in-flight callback. This does not verify physical VM or hypervisor teardown.
+The stage10 snapshot has 71 modules with 3,622 import CRCs checked. Base Image
+and stage9 test scope remain recorded separately; see gpu-stage10-validation.json.

@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT = ROOT.parent / 'avr-upstream-audit'
@@ -55,29 +56,13 @@ def main():
         rows.append({'file': str(path.relative_to(ROOT)), 'source_repository': 'android-7.3', 'commit': NATIVE,
                      'origin': origin, 'original_git_blob': expected, 'port_changes': [],
                      'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
-    for relative, origin, use_common in [
-        ('gh_rm_core.c','drivers/virt/gunyah/gh_rm_core.c',False),
-        ('gh_rm_iface.c','drivers/virt/gunyah/gh_rm_iface.c',False),
-        ('gh_rm_drv_private.h','drivers/virt/gunyah/gh_rm_drv_private.h',False),
-        ('include/trace/events/gunyah.h','include/trace/events/gunyah.h',False),
-        ('include/linux/gunyah/gh_vm.h','include/linux/gunyah/gh_vm.h',False),
-        ('include/drivers/virt/gunyah/rsc_mgr.h','drivers/virt/gunyah/rsc_mgr.h',True),
-        ('include/linux/gunyah_qtvm.h','include/linux/gunyah_qtvm.h',True)]:
-        path=ROOT/'ports/gunyah-rm'/relative
-        data=path.read_bytes();original=data;changes=[]
-        if relative=='gh_rm_core.c':
-            original=original.replace(b'of_fwnode_handle(gh_rm_intc)',b'of_node_to_fwnode(gh_rm_intc)')
-            changes.append('Use target OF firmware-node conversion API')
-        if relative=='include/linux/gunyah/gh_vm.h':
-            original=original.replace(b'#ifdef CONFIG_QTVM_WITH_AVF\n#include <linux/gunyah_qtvm.h>\n#endif',b'#include <linux/gunyah_qtvm.h>')
-            changes.append('Include QTVM-only header only for the QTVM build path')
-        repo=AUDIT/('vendor-repos/kernel-common' if use_common else 'qcom-soc')
-        commit=COMMON if use_common else SOC
-        expected=subprocess.check_output(['git','-C',str(repo),'rev-parse',commit+':'+origin],text=True).strip()
-        if git_blob(original)!=expected:raise ValueError('Unexpected RM modification: '+relative)
-        rows.append({'file':str(path.relative_to(ROOT)),'source_repository':repo.name,'commit':commit,
-                     'origin':origin,'original_git_blob':expected,'port_changes':changes,
-                     'sha256':hashlib.sha256(data).hexdigest()})
+    subprocess.run([sys.executable, str(ROOT/'scripts/audit_gunyah_core_sources.py'), '--vendor-rm'], check=True)
+    vendor_lock = json.loads((ROOT/'reports/gunyah-rm-source-lock.json').read_text())
+    for row in vendor_lock['files']:
+        rows.append({'file': row['file'], 'source_repository': row['repository'],
+                     'commit': row['commit'], 'origin': row['origin'],
+                     'original_git_blob': row['original_git_blob'],
+                     'port_changes': vendor_lock['reviewed_changes'], 'sha256': row['sha256']})
     report = {'passed': True, 'scope': 'staged source provenance only; not a runtime proof', 'files': rows}
     (ROOT / 'reports/ipc-source-provenance.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Verified IPC source provenance:', len(rows), 'files')

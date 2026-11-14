@@ -17,8 +17,8 @@
     {
       "area": "Gunyah vendor RM teardown",
       "file": "ports/gunyah-rm/gh_rm_core.c",
-      "status": "open",
-      "finding": "Audit removal/probe failure for SCM/hyp assignment and VM status notifier registrations, not just common RM registration."
+      "status": "notifier registration/rollback/cleanup helper verified; full physical teardown pending",
+      "finding": "SCM/hyp and RM/QTVM registrations now roll back and unregister; probe failures drain work and release DT references. Eight helper cases pass, including an in-flight callback. Physical VM/resource cleanup remains unverified."
     },
     {
       "area": "Gunyah common transport lifetime",

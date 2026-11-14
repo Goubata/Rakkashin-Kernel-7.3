@@ -1,0 +1,405 @@
+--- a/ports/gunyah-rm/avr-rm-deps.h
++++ b/ports/gunyah-rm/avr-rm-deps.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef AVR_RM_DEPS_H
++#define AVR_RM_DEPS_H
++#include <linux/firmware/qcom/qcom_scm.h>
++#include <linux/gunyah/gh_rm_drv.h>
++/* Exact vendor declarations. These do not supply a backend or suppress modpost. */
++#ifndef QCOM_SCM_VMID_SOCCP
++#define QCOM_SCM_VMID_SOCCP 0x3c
++#endif
++int gh_rm_mem_append(gh_memparcel_handle_t handle, u8 flags, struct gh_sgl_entry *sgl_entries, u32 n_sgl_entries);
++#endif
+--- a/ports/gunyah-rm/avr-rm-notifiers.h
++++ b/ports/gunyah-rm/avr-rm-notifiers.h
+@@ -0,0 +1,53 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef AVR_RM_NOTIFIERS_H
++#define AVR_RM_NOTIFIERS_H
++#include <linux/errno.h>
++#include <linux/notifier.h>
++
++/* Probe/remove serialize this state. Unregister functions must synchronize
++ * in-flight callbacks, as the production SRCU/blocking notifier APIs do.
++ */
++struct avr_rm_notifier_ops {
++	int (*register_first)(struct notifier_block *);
++	int (*unregister_first)(struct notifier_block *);
++	int (*register_second)(struct notifier_block *);
++	int (*unregister_second)(struct notifier_block *);
++};
++struct avr_rm_notifiers {
++	const struct avr_rm_notifier_ops *ops;
++	struct notifier_block *first, *second;
++	bool first_registered, second_registered;
++};
++static inline int avr_rm_notifiers_register(struct avr_rm_notifiers *state)
++{
++	int ret;
++
++	if (state->first_registered || state->second_registered)
++		return -EALREADY;
++	ret = state->ops->register_first(state->first);
++	if (ret)
++		return ret;
++	state->first_registered = true;
++	if (!state->second)
++		return 0;
++	ret = state->ops->register_second(state->second);
++	if (ret) {
++		state->ops->unregister_first(state->first);
++		state->first_registered = false;
++		return ret;
++	}
++	state->second_registered = true;
++	return 0;
++}
++static inline void avr_rm_notifiers_unregister(struct avr_rm_notifiers *state)
++{
++	if (state->second_registered) {
++		state->ops->unregister_second(state->second);
++		state->second_registered = false;
++	}
++	if (state->first_registered) {
++		state->ops->unregister_first(state->first);
++		state->first_registered = false;
++	}
++}
++#endif
+--- a/ports/gunyah-rm/gh_rm_core.c
++++ b/ports/gunyah-rm/gh_rm_core.c
+@@ -30,6 +30,7 @@
+ 
+ #include "drivers/virt/gunyah/rsc_mgr.h"
+ #include "gh_rm_drv_private.h"
++#include "avr-rm-notifiers.h"
+ 
+ #define GH_RM_MAX_NUM_FRAGMENTS	62
+ 
+@@ -281,7 +282,7 @@
+  */
+ int gh_rm_virq_to_irq(u32 virq, u32 type)
+ {
+-	return gh_get_irq(virq, type, of_node_to_fwnode(gh_rm_intc));
++	return gh_get_irq(virq, type, of_fwnode_handle(gh_rm_intc));
+ }
+ EXPORT_SYMBOL_GPL(gh_rm_virq_to_irq);
+ 
+@@ -1136,6 +1137,19 @@
+ 	.priority = INT_MAX,
+ };
+ #endif
++
++static const struct avr_rm_notifier_ops status_notifier_ops = {
++	.register_first = gh_rm_register_notifier,
++	.unregister_first = gh_rm_unregister_notifier,
++#ifdef CONFIG_QTVM_WITH_AVF
++	.register_second = gh_register_vm_notifier,
++	.unregister_second = gh_unregister_vm_notifier,
++#endif
++};
++static struct avr_rm_notifiers status_notifiers = {
++	.ops = &status_notifier_ops,
++	.first = &gh_rm_status_nb,
++};
+ 
+ static void gh_vm_check_peer(struct device *dev, struct device_node *rm_root)
+ {
+@@ -1230,7 +1244,7 @@
+ 
+ static int gh_vm_probe(struct device *dev, struct device_node *hyp_root)
+ {
+-	struct device_node *node;
++	struct device_node *node __free(device_node) = NULL;
+ 	struct gh_vm_property temp_property = {0};
+ 	int vmid, owner_vmid, ret;
+ 	const char *vm_name;
+@@ -1238,10 +1252,11 @@
+ 
+ 
+ 	gh_init_vm_prop_table();
+-
+-	node = of_find_compatible_node(hyp_root, NULL, "qcom,gunyah-vm-id-1.0");
++	status_notifiers.second = NULL;
++
++	node = of_find_compatible_node(of_node_get(hyp_root), NULL, "qcom,gunyah-vm-id-1.0");
+ 	if (IS_ERR_OR_NULL(node)) {
+-		node = of_find_compatible_node(hyp_root, NULL, "qcom,haven-vm-id-1.0");
++		node = of_find_compatible_node(of_node_get(hyp_root), NULL, "qcom,haven-vm-id-1.0");
+ 		if (IS_ERR_OR_NULL(node)) {
+ 			dev_err(dev, "Could not find vm-id node\n");
+ 			return -ENODEV;
+@@ -1260,8 +1275,10 @@
+ 		temp_property.vmid = vmid;
+ 		gh_update_vm_prop_table(GH_PRIMARY_VM, &temp_property);
+ #ifdef CONFIG_QTVM_WITH_AVF
+-		gh_rm_register_notifier(&gh_rm_status_nb);
+-		gh_register_vm_notifier(&gh_vm_status_nb);
++		status_notifiers.second = &gh_vm_status_nb;
++		ret = avr_rm_notifiers_register(&status_notifiers);
++		if (ret)
++			return ret;
+ 		gh_rm_core_skip_irq_cleanup = true;
+ #endif
+ 		gh_rm_core_initialized = true;
+@@ -1293,7 +1310,9 @@
+ 
+ 		/* check peer to see if any VM has been bootup */
+ 		gh_vm_check_peer(dev, node);
+-		gh_rm_register_notifier(&gh_rm_status_nb);
++		ret = avr_rm_notifiers_register(&status_notifiers);
++		if (ret)
++			return ret;
+ 		gh_rm_core_initialized = true;
+ 		/* Query RM for available resources */
+ 		schedule_work(&gh_rm_get_svm_res_work);
+@@ -1323,6 +1342,15 @@
+ 	return of_get_compatible_child(gunyah_np, "gunyah-resource-manager");
+ }
+ 
++static void gh_rm_stop_clients(void)
++{
++	WRITE_ONCE(gh_rm_core_initialized, false);
++	avr_rm_notifiers_unregister(&status_notifiers);
++	cancel_work_sync(&gh_rm_get_svm_res_work);
++	gh_rm_cleanup_feature_scm_assign();
++	gh_rm_core_skip_irq_cleanup = false;
++}
++
+ static int gh_rm_drv_probe(struct auxiliary_device *adev,
+ 				const struct auxiliary_device_id *adev_id)
+ {
+@@ -1331,6 +1359,7 @@
+ 	struct device_node *hyp_node;
+ 	int ret;
+ 
++	WRITE_ONCE(gh_rm_core_initialized, false);
+ 	rm = dev->platform_data;
+ 	if (!rm) {
+ 		dev_err(dev, "Failed to get the rm pointer\n");
+@@ -1350,36 +1379,53 @@
+ 	gh_rm_intc = of_irq_find_parent(node);
+ 	if (!gh_rm_intc) {
+ 		dev_err(dev, "Failed to get the IRQ parent node\n");
+-		return -ENXIO;
++		ret = -ENXIO;
++		goto clear_rm;
+ 	}
+ 	gh_rm_irq_domain = irq_find_host(gh_rm_intc);
+ 	if (!gh_rm_irq_domain) {
+ 		dev_err(dev, "Failed to get IRQ domain associated with RM\n");
+-		return -ENXIO;
++		ret = -ENXIO;
++		goto put_intc;
+ 	}
+ 
+ 	ret = gunyah_rm_notifier_register(rm, &gh_rm_core_notifier_blk);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register to RM notifier %d\n", ret);
+-		return ret;
++		goto put_intc;
+ 	}
+ 
+ 	/* Probe the vmid */
+ 	ret = gh_vm_probe(dev, hyp_node);
+ 	if (ret < 0 && ret != -ENODEV)
+-		return ret;
++		goto unregister_rm;
+ 
+ 	ret = gh_rm_setup_feature_scm_assign();
+ 	if (ret)
+-		return ret;
+-
+-	of_node_put(node);
++		goto unregister_rm;
++
+ 	return 0;
++
++unregister_rm:
++	gunyah_rm_notifier_unregister(rm, &gh_rm_core_notifier_blk);
++	gh_rm_stop_clients();
++put_intc:
++	of_node_put(gh_rm_intc);
++	gh_rm_intc = NULL;
++	gh_rm_irq_domain = NULL;
++clear_rm:
++	rm = NULL;
++	return ret;
+ }
+ 
+ static void gh_rm_drv_remove(struct auxiliary_device *adev)
+ {
+ 	gunyah_rm_notifier_unregister(rm, &gh_rm_core_notifier_blk);
++	gh_rm_stop_clients();
++	of_node_put(gh_rm_intc);
++	gh_rm_intc = NULL;
++	gh_rm_irq_domain = NULL;
++	rm = NULL;
+ 	idr_destroy(&gh_rm_call_idr);
+ }
+ 
+--- a/ports/gunyah-rm/gh_rm_drv_private.h
++++ b/ports/gunyah-rm/gh_rm_drv_private.h
+@@ -620,6 +620,7 @@
+ gh_rm_vm_get_hyp_res(gh_vmid_t vmid, u32 *out_n_entries);
+ int gh_msgq_populate_cap_info(int label, u64 cap_id, int direction, int irq);
+ int gh_rm_setup_feature_scm_assign(void);
++void gh_rm_cleanup_feature_scm_assign(void);
+ void gh_reset_vm_prop_table_entry(gh_vmid_t vmid);
+ void gh_wait_for_vm_setup(enum gh_vm_names vm_name);
+ void gh_complete_vm_setup(enum gh_vm_names vm_name);
+--- a/ports/gunyah-rm/gh_rm_iface.c
++++ b/ports/gunyah-rm/gh_rm_iface.c
+@@ -17,6 +17,7 @@
+ #define CREATE_TRACE_POINTS
+ 
+ #include "gh_rm_drv_private.h"
++#include "avr-rm-notifiers.h"
+ #include <trace/events/gunyah.h>
+ 
+ #define GH_RM_MEM_RELEASE_VALID_FLAGS GH_RM_MEM_RELEASE_CLEAR
+@@ -53,7 +54,7 @@
+  * Indicates qcom_scm_assign_mem() is required when transferring memory to
+  * a Gunyah managed VM.
+  */
+-static bool gh_feature_use_scm_assign;
++static bool gh_feature_use_scm_assign = true;
+ 
+ void gh_init_vm_prop_table(void)
+ {
+@@ -2943,16 +2944,27 @@
+  */
+ static int __gh_rm_setup_feature_scm_assign(void)
+ {
+-	gh_feature_use_scm_assign = true;
++	WRITE_ONCE(gh_feature_use_scm_assign, true);
+ 	return 0;
+ }
+ #else
+ static struct notifier_block gh_rm_scm_assign_nb;
+ static struct notifier_block gh_rm_hyp_assign_nb;
++static const struct avr_rm_notifier_ops assign_notifier_ops = {
++	.register_first = qcom_scm_assign_mem_notifier_register,
++	.unregister_first = qcom_scm_assign_mem_notifier_unregister,
++	.register_second = hyp_assign_notifier_register,
++	.unregister_second = hyp_assign_notifier_unregister,
++};
++static struct avr_rm_notifiers assign_notifiers = {
++	.ops = &assign_notifier_ops,
++	.first = &gh_rm_scm_assign_nb,
++	.second = &gh_rm_hyp_assign_nb,
++};
+ 
+ static int __gh_rm_setup_feature_scm_assign(void)
+ {
+-	int ret, gh_acl_sz, gh_sgl_sz;
++	int ret, notify_ret = 0, gh_acl_sz, gh_sgl_sz;
+ 	int vmid = 0;
+ 	gh_vmid_t self_vmid;
+ 	struct page *page;
+@@ -2965,7 +2977,7 @@
+ 		return ret;
+ 
+ 	if (self_vmid != QCOM_SCM_VMID_HLOS) {
+-		gh_feature_use_scm_assign = false;
++		WRITE_ONCE(gh_feature_use_scm_assign, false);
+ 		return 0;
+ 	}
+ 
+@@ -2976,11 +2988,11 @@
+ 	gh_acl_sz = sizeof(*gh_acl) + offsetof(struct gh_acl_desc, acl_entries[1]);
+ 	gh_sgl_sz = sizeof(*gh_sgl) + offsetof(struct gh_sgl_desc, sgl_entries[1]);
+ 	gh_acl = kzalloc(gh_acl_sz + gh_sgl_sz, GFP_KERNEL);
+-	gh_sgl = (void *)gh_acl + gh_acl_sz;
+ 	if (!gh_acl) {
+ 		__free_page(page);
+ 		return -ENOMEM;
+ 	}
++	gh_sgl = (void *)gh_acl + gh_acl_sz;
+ 
+ 	ret = gh_rm_vm_alloc_vmid(GH_TRUSTED_VM, &vmid);
+ 	if (ret) {
+@@ -2999,18 +3011,18 @@
+ 
+ 	ret = ghd_rm_mem_lend(GH_RM_MEM_TYPE_NORMAL, 0, 0, gh_acl, gh_sgl, NULL, &handle);
+ 	if (ret) {
+-		gh_feature_use_scm_assign = true;
++		WRITE_ONCE(gh_feature_use_scm_assign, true);
+ 	} else {
+-		gh_feature_use_scm_assign = false;
+-		qcom_scm_assign_mem_notifier_register(&gh_rm_scm_assign_nb);
+-		hyp_assign_notifier_register(&gh_rm_hyp_assign_nb);
++		notify_ret = avr_rm_notifiers_register(&assign_notifiers);
++		if (!notify_ret)
++			WRITE_ONCE(gh_feature_use_scm_assign, false);
+ 	}
+ 
+ 	if (ret || !ghd_rm_mem_reclaim(handle, 0))
+ 		__free_page(page);
+ 	gh_rm_vm_dealloc_vmid(vmid);
+ 	kfree(gh_acl);
+-	return 0;
++	return notify_ret;
+ }
+ #endif
+ 
+@@ -3020,16 +3032,24 @@
+ 
+ 	ret = __gh_rm_setup_feature_scm_assign();
+ 	if (ret) {
+-		gh_feature_use_scm_assign = true;
++		WRITE_ONCE(gh_feature_use_scm_assign, true);
+ 		pr_err("%s: Detection of gh_feature_use_scm_assign failed with %d. Default: %s\n",
+ 			__func__, ret,
+-			gh_feature_use_scm_assign ? "Enabled" : "Disabled");
++			READ_ONCE(gh_feature_use_scm_assign) ? "Enabled" : "Disabled");
+ 	} else {
+ 		pr_info("%s: gh_feature_use_scm_assign mem %s\n", __func__,
+-			gh_feature_use_scm_assign ? "Enabled" : "Disabled");
++			READ_ONCE(gh_feature_use_scm_assign) ? "Enabled" : "Disabled");
+ 	}
+ 
+ 	return ret;
++}
++
++void gh_rm_cleanup_feature_scm_assign(void)
++{
++	WRITE_ONCE(gh_feature_use_scm_assign, true);
++#ifndef CONFIG_GUNYAH_LEGACY
++	avr_rm_notifiers_unregister(&assign_notifiers);
++#endif
+ }
+ 
+ #define QCOM_SCM_MAX_MANAGED_VMID 0x3F
+@@ -3072,7 +3092,7 @@
+ 	const struct qcom_scm_vmperm *newvm = args->newvm;
+ 	unsigned int dest_cnt = args->dest_cnt;
+ 
+-	if (gh_feature_use_scm_assign)
++	if (READ_ONCE(gh_feature_use_scm_assign))
+ 		return NOTIFY_OK;
+ 
+ 	ret = gh_rm_get_this_vmid(&self_vmid);
+@@ -3114,7 +3134,7 @@
+ 	int *dst_vm_list = args->dest_vmids;
+ 	int dst_nelems = args->dest_nelems;
+ 
+-	if (gh_feature_use_scm_assign)
++	if (READ_ONCE(gh_feature_use_scm_assign))
+ 		return NOTIFY_OK;
+ 
+ 	ret = gh_rm_get_this_vmid(&self_vmid);
+--- a/ports/gunyah-rm/include/linux/gunyah/gh_vm.h
++++ b/ports/gunyah-rm/include/linux/gunyah/gh_vm.h
+@@ -6,7 +6,9 @@
+ #ifndef _GH_VM_H
+ #define _GH_VM_H
+ 
++#ifdef CONFIG_QTVM_WITH_AVF
+ #include <linux/gunyah_qtvm.h>
++#endif
+ 
+ #ifdef CONFIG_QTVM_WITH_AVF
+ #define GH_VM_BEFORE_POWERUP		GUNYAH_QTVM_BEFORE_POWERUP

@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-gpu-stage9/（71モジュール、3,618インポートCRC一致）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-gpu-stage10/（71モジュール、3,622インポートCRC一致）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -115,3 +115,7 @@ KernelSU-Nextは元ツリーに外部ディレクトリへのシンボリック�
 保存済みPAS/hw_fenceの逆アセンブルから、実機モジュールはV1のrproc_set_state exportを必要としないことを確認しました。V2の実queue/IPCC/応答待ち処理を維持し、非対応V1は明示的に失敗させます。旧モジュールの流用・署名偽装・CRC書換えはしていません。
 
 hw_fenceの旧8依存は実装へリンク済みです。現在の課題は実機検証と未移植ドライバ、GPU制御の期限・寿命管理、Gunyahの終了／失敗時処理、起動用イメージとROMポリシーの整合です。常用版ではありません。
+
+## 通知登録の寿命管理
+
+Gunyah vendor RMのSCM/hyp・RM/QTVM通知に、登録失敗時の巻き戻しと終了時の解除・work排出を追加しました。OFノードの二重putと借用参照の扱いも修正。共通helperの8 KUnitがSMP4 QEMUで成功し、実行中コールバックが終わるまで解除が待つことも確認しました。Stage10の71モジュールは3,622インポートCRCが一致しています。実ハイパーバイザの終了、共有メモリ回収、サスペンドを検証した証明ではありません。reports/gpu-stage10-validation.json と ports/gunyah-rm/README.md を参照。

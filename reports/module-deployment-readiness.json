@@ -1,6 +1,6 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-gpu-stage9",
+  "stage": "android73-gpu-stage10",
   "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
   "archived_unique_count": 544,
   "staged_count": 71,
@@ -810,7 +810,7 @@
     },
     "gh_rm_drv": {
       "file": "modules/gunyah-rm/gh_rm_drv.ko",
-      "sha256": "5f23aa59b4bab335eeadaf3bd91af3a61fad4fd4fa0f1300e97deed57eba29b7",
+      "sha256": "6c1ac448a1db9716c18029d1ac63147fb76eaff2acc208cf57b82ce0bef50123",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "gh_arm_drv",

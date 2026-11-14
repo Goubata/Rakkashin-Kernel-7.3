@@ -17,6 +17,7 @@
 #define CREATE_TRACE_POINTS
 
 #include "gh_rm_drv_private.h"
+#include "avr-rm-notifiers.h"
 #include <trace/events/gunyah.h>
 
 #define GH_RM_MEM_RELEASE_VALID_FLAGS GH_RM_MEM_RELEASE_CLEAR
@@ -53,7 +54,7 @@ static struct gh_vm_property gh_vm_table[GH_VM_MAX];
  * Indicates qcom_scm_assign_mem() is required when transferring memory to
  * a Gunyah managed VM.
  */
-static bool gh_feature_use_scm_assign;
+static bool gh_feature_use_scm_assign = true;
 
 void gh_init_vm_prop_table(void)
 {
@@ -2943,16 +2944,27 @@ EXPORT_SYMBOL_GPL(gh_rm_vm_set_debug);
  */
 static int __gh_rm_setup_feature_scm_assign(void)
 {
-	gh_feature_use_scm_assign = true;
+	WRITE_ONCE(gh_feature_use_scm_assign, true);
 	return 0;
 }
 #else
 static struct notifier_block gh_rm_scm_assign_nb;
 static struct notifier_block gh_rm_hyp_assign_nb;
+static const struct avr_rm_notifier_ops assign_notifier_ops = {
+	.register_first = qcom_scm_assign_mem_notifier_register,
+	.unregister_first = qcom_scm_assign_mem_notifier_unregister,
+	.register_second = hyp_assign_notifier_register,
+	.unregister_second = hyp_assign_notifier_unregister,
+};
+static struct avr_rm_notifiers assign_notifiers = {
+	.ops = &assign_notifier_ops,
+	.first = &gh_rm_scm_assign_nb,
+	.second = &gh_rm_hyp_assign_nb,
+};
 
 static int __gh_rm_setup_feature_scm_assign(void)
 {
-	int ret, gh_acl_sz, gh_sgl_sz;
+	int ret, notify_ret = 0, gh_acl_sz, gh_sgl_sz;
 	int vmid = 0;
 	gh_vmid_t self_vmid;
 	struct page *page;
@@ -2965,7 +2977,7 @@ static int __gh_rm_setup_feature_scm_assign(void)
 		return ret;
 
 	if (self_vmid != QCOM_SCM_VMID_HLOS) {
-		gh_feature_use_scm_assign = false;
+		WRITE_ONCE(gh_feature_use_scm_assign, false);
 		return 0;
 	}
 
@@ -2976,11 +2988,11 @@ static int __gh_rm_setup_feature_scm_assign(void)
 	gh_acl_sz = sizeof(*gh_acl) + offsetof(struct gh_acl_desc, acl_entries[1]);
 	gh_sgl_sz = sizeof(*gh_sgl) + offsetof(struct gh_sgl_desc, sgl_entries[1]);
 	gh_acl = kzalloc(gh_acl_sz + gh_sgl_sz, GFP_KERNEL);
-	gh_sgl = (void *)gh_acl + gh_acl_sz;
 	if (!gh_acl) {
 		__free_page(page);
 		return -ENOMEM;
 	}
+	gh_sgl = (void *)gh_acl + gh_acl_sz;
 
 	ret = gh_rm_vm_alloc_vmid(GH_TRUSTED_VM, &vmid);
 	if (ret) {
@@ -2999,18 +3011,18 @@ static int __gh_rm_setup_feature_scm_assign(void)
 
 	ret = ghd_rm_mem_lend(GH_RM_MEM_TYPE_NORMAL, 0, 0, gh_acl, gh_sgl, NULL, &handle);
 	if (ret) {
-		gh_feature_use_scm_assign = true;
+		WRITE_ONCE(gh_feature_use_scm_assign, true);
 	} else {
-		gh_feature_use_scm_assign = false;
-		qcom_scm_assign_mem_notifier_register(&gh_rm_scm_assign_nb);
-		hyp_assign_notifier_register(&gh_rm_hyp_assign_nb);
+		notify_ret = avr_rm_notifiers_register(&assign_notifiers);
+		if (!notify_ret)
+			WRITE_ONCE(gh_feature_use_scm_assign, false);
 	}
 
 	if (ret || !ghd_rm_mem_reclaim(handle, 0))
 		__free_page(page);
 	gh_rm_vm_dealloc_vmid(vmid);
 	kfree(gh_acl);
-	return 0;
+	return notify_ret;
 }
 #endif
 
@@ -3020,16 +3032,24 @@ int gh_rm_setup_feature_scm_assign(void)
 
 	ret = __gh_rm_setup_feature_scm_assign();
 	if (ret) {
-		gh_feature_use_scm_assign = true;
+		WRITE_ONCE(gh_feature_use_scm_assign, true);
 		pr_err("%s: Detection of gh_feature_use_scm_assign failed with %d. Default: %s\n",
 			__func__, ret,
-			gh_feature_use_scm_assign ? "Enabled" : "Disabled");
+			READ_ONCE(gh_feature_use_scm_assign) ? "Enabled" : "Disabled");
 	} else {
 		pr_info("%s: gh_feature_use_scm_assign mem %s\n", __func__,
-			gh_feature_use_scm_assign ? "Enabled" : "Disabled");
+			READ_ONCE(gh_feature_use_scm_assign) ? "Enabled" : "Disabled");
 	}
 
 	return ret;
+}
+
+void gh_rm_cleanup_feature_scm_assign(void)
+{
+	WRITE_ONCE(gh_feature_use_scm_assign, true);
+#ifndef CONFIG_GUNYAH_LEGACY
+	avr_rm_notifiers_unregister(&assign_notifiers);
+#endif
 }
 
 #define QCOM_SCM_MAX_MANAGED_VMID 0x3F
@@ -3072,7 +3092,7 @@ static int scm_assign_notifier(struct notifier_block *nb,
 	const struct qcom_scm_vmperm *newvm = args->newvm;
 	unsigned int dest_cnt = args->dest_cnt;
 
-	if (gh_feature_use_scm_assign)
+	if (READ_ONCE(gh_feature_use_scm_assign))
 		return NOTIFY_OK;
 
 	ret = gh_rm_get_this_vmid(&self_vmid);
@@ -3114,7 +3134,7 @@ static int hyp_assign_notifier(struct notifier_block *nb,
 	int *dst_vm_list = args->dest_vmids;
 	int dst_nelems = args->dest_nelems;
 
-	if (gh_feature_use_scm_assign)
+	if (READ_ONCE(gh_feature_use_scm_assign))
 		return NOTIFY_OK;
 
 	ret = gh_rm_get_this_vmid(&self_vmid);

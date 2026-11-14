@@ -250,24 +250,46 @@
       "sha256": "02601daee6453985b6d149a7787c7b0b66b02a423deeab8b62164322a6f5de1d"
     },
     {
+      "file": "ports/gunyah-rm/avr-rm-deps.h",
+      "source_repository": "project",
+      "commit": null,
+      "origin": null,
+      "original_git_blob": null,
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "89f42eabb98a78bcafd7f99903400c25d267b1882302c42cbc57a434b195a14a"
+    },
+    {
+      "file": "ports/gunyah-rm/avr-rm-notifiers.h",
+      "source_repository": "project",
+      "commit": null,
+      "origin": null,
+      "original_git_blob": null,
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "d0baa7e88f0771b435d8aa4dbb6e6cb995a18d6ae143d249868af9db7e70a946"
+    },
+    {
       "file": "ports/gunyah-rm/gh_rm_core.c",
       "source_repository": "qcom-soc",
       "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
       "origin": "drivers/virt/gunyah/gh_rm_core.c",
       "original_git_blob": "9df5499705a6d2ba27f5143424558650cc134b84",
       "port_changes": [
-        "Use target OF firmware-node conversion API"
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
       ],
-      "sha256": "1e4d9c6e77ae48f016000a24ef5729c2eb6632d9892db049206004d8be5f435e"
-    },
-    {
-      "file": "ports/gunyah-rm/gh_rm_iface.c",
-      "source_repository": "qcom-soc",
-      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
-      "origin": "drivers/virt/gunyah/gh_rm_iface.c",
-      "original_git_blob": "40c7436a7f5ecc5eeddeb19cdbad455e94df0c64",
-      "port_changes": [],
-      "sha256": "20e9dd4cac7d4bc319141748c1ad8b0cb6616e1cfeb278ac2c406f1c7ff94762"
+      "sha256": "2bb5aa3c91980c9c7b2e306aedcb7869d3858549d241f43f75d6f9d07ae48c8d"
     },
     {
       "file": "ports/gunyah-rm/gh_rm_drv_private.h",
@@ -275,17 +297,41 @@
       "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
       "origin": "drivers/virt/gunyah/gh_rm_drv_private.h",
       "original_git_blob": "f6684cfdc83453b972f5d9cde03817d25510bd6e",
-      "port_changes": [],
-      "sha256": "7684d3e32f2f99d457b5c0502200e4b47ffaf4680669603c806942347020b1e0"
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "b222b8ff8465763f570a24a06be6f4ecfaa7883aa4d13db25a114a3a00e6fffb"
     },
     {
-      "file": "ports/gunyah-rm/include/trace/events/gunyah.h",
+      "file": "ports/gunyah-rm/gh_rm_iface.c",
       "source_repository": "qcom-soc",
       "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
-      "origin": "include/trace/events/gunyah.h",
-      "original_git_blob": "a35148210dbbfc278e4c2461545b128c5b30c31e",
-      "port_changes": [],
-      "sha256": "e0d44e218bda1090b3609ef43d4cdf68962dbb99704d66a223f84a98ffbd8fe0"
+      "origin": "drivers/virt/gunyah/gh_rm_iface.c",
+      "original_git_blob": "40c7436a7f5ecc5eeddeb19cdbad455e94df0c64",
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "800d8a478d26c256426798f0bbe6bd9041d481d17e6e49fd3aa7db1dd3437951"
+    },
+    {
+      "file": "ports/gunyah-rm/include/drivers/virt/gunyah/rsc_mgr.h",
+      "source_repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "origin": "drivers/virt/gunyah/rsc_mgr.h",
+      "original_git_blob": "af65801489bb6a5e21fd81464aafdb6b581a6410",
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "acbf62f07156cb68bb3302c740b04de2701dcfc2fa49eed75d36613bd2df37cb"
     },
     {
       "file": "ports/gunyah-rm/include/linux/gunyah/gh_vm.h",
@@ -294,18 +340,12 @@
       "origin": "include/linux/gunyah/gh_vm.h",
       "original_git_blob": "825183f6900ff05c550f0f2c792c318cfedebeb5",
       "port_changes": [
-        "Include QTVM-only header only for the QTVM build path"
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
       ],
       "sha256": "a6109619992232c8a5940fadc584e8000bfdd29929f66a6e618fc50347ed86dd"
-    },
-    {
-      "file": "ports/gunyah-rm/include/drivers/virt/gunyah/rsc_mgr.h",
-      "source_repository": "kernel-common",
-      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
-      "origin": "drivers/virt/gunyah/rsc_mgr.h",
-      "original_git_blob": "af65801489bb6a5e21fd81464aafdb6b581a6410",
-      "port_changes": [],
-      "sha256": "acbf62f07156cb68bb3302c740b04de2701dcfc2fa49eed75d36613bd2df37cb"
     },
     {
       "file": "ports/gunyah-rm/include/linux/gunyah_qtvm.h",
@@ -313,8 +353,27 @@
       "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "include/linux/gunyah_qtvm.h",
       "original_git_blob": "3986b207a395fcf8f0c0a933cd17ceccfd0c0e9d",
-      "port_changes": [],
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
       "sha256": "dda3786113c730cbf0fd01088b8ffd450471efc11c33a61807b5b6ac2b6df9ec"
+    },
+    {
+      "file": "ports/gunyah-rm/include/trace/events/gunyah.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/trace/events/gunyah.h",
+      "original_git_blob": "a35148210dbbfc278e4c2461545b128c5b30c31e",
+      "port_changes": [
+        "Target OF firmware-node and scoped DT references",
+        "Transactional SCM/hyp and RM/QTVM notifier registration",
+        "Probe failure and remove detach callbacks and drain work",
+        "Owned declaration/notifier lifecycle glue"
+      ],
+      "sha256": "e0d44e218bda1090b3609ef43d4cdf68962dbb99704d66a223f84a98ffbd8fe0"
     }
   ]
 }

@@ -56,6 +56,7 @@ def main():
               'vendor_config_sha256': sha(config), 'flag': 'CONFIG_QTVM_WITH_AVF=y',
               'compile_commands_checked': commands, 'doorbell_range_evidence': rows,
               'real_qtvm_notifier_import': imports,
+              'qtvm_notifier_module_sha256': {name: sha(path) for name, path in paths.items()},
               'required_hw_fence_doorbell_label': '0x106', 'message_queue_min_label': '0x101',
               'structure_note': 'Kernel-private spinlock/lockdep layout may differ; import CRCs and wire fields are checked separately'}
     (ROOT / 'reports/gunyah-avf-abi-audit.json').write_text(json.dumps(report, indent=2) + '\n')

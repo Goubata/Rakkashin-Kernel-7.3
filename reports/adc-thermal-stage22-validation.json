@@ -1,0 +1,33 @@
+{
+  "stage": "android73-adc-thermal-stage22",
+  "scope": "real ADC/common/thermal modules, source replay and isolated conversion/client tests only; physical temperature safety remains unverified",
+  "module_count": 94,
+  "imports_checked": 4733,
+  "all_import_crcs_match": true,
+  "kunit_cases_passed": 12,
+  "production_module_load_unload_passed": true,
+  "dt_channels": 35,
+  "dt_gen3_channels": 20,
+  "dt_gen4_channels": 15,
+  "dt_alarm_providers": 12,
+  "qualified_iio_references_checked": 6,
+  "selected_dt_channel_coverage_passed": true,
+  "whole_dt_validation_passed": false,
+  "physical_adc_or_alarm_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "pending": [
+    "PMIC transactions, calibration and all real IRQ/thermal protection acceptance",
+    "Exported raw handle supplier lifetime, concurrent client callback/disable/context lifetime",
+    "Thermal alarm threshold/suspend/restore fault-injection review is next",
+    "Original duplicate SID4 and all incomplete phone/ROM functions"
+  ],
+  "sha256": {
+    "reports/module-crc-stage22.json": "e2c2ce84add8cefafda9fe48e6d8df2be90b6d38fed7c9c94465d3ea92e01d35",
+    "reports/adc-thermal-qemu-stage22-final.log": "74da86f9dcf8586ad3f8b1df7da420365c963d9a2e2017438be71a9b7a0c127b",
+    "reports/adc-thermal-qemu-stage22-final.json": "e9ad52287f0a44b784bd6af11033d120d467002d8cd6f41fbabdcaa7338cbb7b",
+    "reports/adc-thermal-stage22-final-build.log": "113b1855de17abe5f4262bc8cabb33b16c777c4fa4c7724479a98370eb855ee0",
+    "reports/adc-thermal-dt-validation.json": "fc61a237832cc0c49b377cab8e44ca3cdf74562c9b893620126370cc7bcbc7fc"
+  }
+}

@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -254,3 +254,23 @@ python scripts/snapshot_boot_core.py --name android73-pmic-gpio-stage21 --gpu-dr
 ```
 
 本体ImageとStage19候補DTの値は変更していません。Stage21は91モジュール・4,649インポートCRC一致ですが、実機7.3起動・常用版の完成は未達です。`reports/pmic-pinctrl-stage21-validation.json`。
+
+## Stage22: ADCとPMIC温度監視の接続
+
+実ソースのADC共通換算・GEN3/GEN4 ADC・温度警報の3モジュールを追加。
+換算テーブルは固定したMotorolaソースの値を保持。ADC割り込み前のwork初期化、
+失敗時の解除順序、クライアント登録のNULL参照、7.3のworkqueue指定を修正した。
+独立したSMP4ゲストで12項目の実コードテストと実モジュールのロード・解除が通過。
+PM7の100kΩは固定テーブル上25.6°Cで、電池用の25.0°C換算とは別に検証した。
+保存DT・候補DTとも35チャンネル（GEN3:20、GEN4:15）、温度警報12ノード、
+修飾されたIIO参照6件を確認。これは実機の測定・過熱保護の証明ではない。
+
+```sh
+python scripts/build_storage_deps.py --adc-thermal-tests
+python scripts/run_qemu.py --test adc-thermal --cpus 4 --log reports/adc-thermal-qemu-stage22-final.log
+python scripts/audit_adc_thermal_dt.py
+python scripts/snapshot_boot_core.py --name android73-adc-thermal-stage22 --gpu-driver --rakkashin --adc-thermal
+```
+
+94モジュール・4,733 CRC一致。参照の寿命、温度警報のtrip/復帰処理、
+実機PMIC・温度保護・起動・常用検証は未完。`reports/adc-thermal-stage22-validation.json`。

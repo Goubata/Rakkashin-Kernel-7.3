@@ -23,7 +23,9 @@ parser.add_argument('--regulators',action='store_true')
 parser.add_argument('--interconnect',action='store_true')
 parser.add_argument('--spmi',action='store_true')
 parser.add_argument('--pmic-pinctrl',action='store_true')
+parser.add_argument('--adc-thermal',action='store_true')
 args=parser.parse_args()
+if args.adc_thermal:args.pmic_pinctrl=True
 if args.pmic_pinctrl:args.spmi=True
 if args.spmi:args.interconnect=True
 if args.interconnect:args.regulators=True
@@ -61,6 +63,8 @@ if args.spmi:
     ports.append('qcom-spmi')
 if args.pmic_pinctrl:
     ports.append('pmic-pinctrl')
+if args.adc_thermal:
+    ports.append('qcom-adc-thermal')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

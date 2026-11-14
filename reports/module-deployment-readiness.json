@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-pmic-gpio-stage21",
+  "stage": "android73-adc-thermal-stage22",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
-  "staged_count": 91,
-  "same_name_candidate_count": 78,
-  "archived_names_without_same_name_candidate_count": 466,
-  "loaded_names_without_same_name_candidate_count": 451,
+  "staged_count": 94,
+  "same_name_candidate_count": 81,
+  "archived_names_without_same_name_candidate_count": 463,
+  "loaded_names_without_same_name_candidate_count": 448,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -275,6 +275,18 @@
     {
       "name": "pinctrl_alor",
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+    },
+    {
+      "name": "qcom_spmi_temp_alarm",
+      "file": "modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko"
+    },
+    {
+      "name": "qcom_vadc_common",
+      "file": "modules/qcom-adc-thermal/qcom-vadc-common.ko"
+    },
+    {
+      "name": "qcom_spmi_adc5_gen3",
+      "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
     },
     {
       "name": "qnoc_qos",
@@ -642,6 +654,18 @@
     {
       "name": "qcom_pdc",
       "file": "modules/qcom-irq/qcom-pdc.ko"
+    },
+    {
+      "name": "qcom_spmi_temp_alarm",
+      "file": "modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko"
+    },
+    {
+      "name": "qcom_vadc_common",
+      "file": "modules/qcom-adc-thermal/qcom-vadc-common.ko"
+    },
+    {
+      "name": "qcom_spmi_adc5_gen3",
+      "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
     },
     {
       "name": "qnoc_qos",
@@ -1159,6 +1183,50 @@
     "pinctrl_spmi_mpp": {
       "file": "modules/pmic-pinctrl/pinctrl-spmi-mpp.ko",
       "sha256": "105d7106d63a689918e0023f582a20d8e9e9053194badf8c5e24ecdeecf9da1c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_spmi_adc5_gen3": {
+      "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko",
+      "sha256": "8ff1533204b4db75566c85113a9b5983779ae5f8d54b072fef257c2705d3153c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_vadc_common"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_spmi_temp_alarm": {
+      "file": "modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko",
+      "sha256": "9f71964fcc0d73755ff6701c4fcae4697035e61ab26e0fbb2a48b3ddd63199e4",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_vadc_common": {
+      "file": "modules/qcom-adc-thermal/qcom-vadc-common.ko",
+      "sha256": "7c69812e73c834bdfc135367e5c70e1f269858370be4703dad10cae9e655964a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -4360,22 +4428,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_spmi_adc5_gen3",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qcom_spmi_temp_alarm",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_spmi_wled",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4416,14 +4468,6 @@
     },
     {
       "name": "qcom_va_minidump",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qcom_vadc_common",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
@@ -5863,15 +5907,12 @@
     "qcom_sdei",
     "qcom_smd",
     "qcom_soc_wdt",
-    "qcom_spmi_adc5_gen3",
-    "qcom_spmi_temp_alarm",
     "qcom_spmi_wled",
     "qcom_spss",
     "qcom_stats",
     "qcom_sysmon",
     "qcom_tsens",
     "qcom_va_minidump",
-    "qcom_vadc_common",
     "qcom_voltage_adj",
     "qcom_wdt_core",
     "qcrypto_msm_dlkm",

@@ -28,7 +28,11 @@ def main():
     parser.add_argument('--spmi-tests',action='store_true')
     parser.add_argument('--pmic-pinctrl',action='store_true')
     parser.add_argument('--pmic-gpio-tests',action='store_true')
+    parser.add_argument('--adc-thermal',action='store_true')
+    parser.add_argument('--adc-thermal-tests',action='store_true')
     args=parser.parse_args()
+    if args.adc_thermal_tests:args.adc_thermal=True
+    if args.adc_thermal:args.diagnostics=True
     if args.ufs_host:args.ice=True
     if args.pmic_gpio_tests:args.pmic_pinctrl=True
     if args.spmi_tests:args.spmi=True
@@ -81,6 +85,10 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_pmic_pinctrl_sources.py')],check=True)
         targets.append('ports/pmic-pinctrl')
         if args.pmic_gpio_tests:targets.append('tests/pmic-pinctrl')
+    if args.adc_thermal:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_adc_thermal_sources.py')],check=True)
+        targets.append('ports/qcom-adc-thermal')
+        if args.adc_thermal_tests:targets.append('tests/adc-thermal')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

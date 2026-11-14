@@ -13,7 +13,7 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 ROOTFS=ROOT.parent/'.andronix/distros/ubuntu/rootfs'
 p=argparse.ArgumentParser(description=__doc__)
-p.add_argument('--test',choices=['pmic-gpio','spmi','interconnect','regulators','storage-host','diagnostics','debug-symbol','ufs','ice','storage-phy','smoke','clock','oplus','modules','iommu','secure','sysstats','fence','rakkashin','ntsync','power','adios','platform','scm','gpu-policy','rm-lifetime'],required=True)
+p.add_argument('--test',choices=['adc-thermal','pmic-gpio','spmi','interconnect','regulators','storage-host','diagnostics','debug-symbol','ufs','ice','storage-phy','smoke','clock','oplus','modules','iommu','secure','sysstats','fence','rakkashin','ntsync','power','adios','platform','scm','gpu-policy','rm-lifetime'],required=True)
 p.add_argument('--cpus',type=int,choices=[1,2,4],default=2)
 p.add_argument('--timeout',type=int,default=120)
 p.add_argument('--log',type=Path,required=True)
@@ -24,7 +24,7 @@ a=p.parse_args()
 if a.ufs_mcq and a.test!='ufs':p.error('--ufs-mcq requires --test ufs')
 if not 10<=a.timeout<=600:p.error('timeout must be 10..600 seconds')
 subprocess.run([sys.executable,str(ROOT/'scripts/make_qemu_initramfs.py')]+([] if a.test=='smoke' else ['--'+a.test+'-tests'])+(['--ufs-mcq'] if a.ufs_mcq else []),check=True)
-ramdisk={'pmic-gpio':'pmic-gpio-tests','spmi':'spmi-tests','interconnect':'interconnect-tests','regulators':'regulators-tests','storage-host':'storage-host-tests','diagnostics':'diagnostics-tests','debug-symbol':'debug-symbol-tests','ufs':'ufs-tests','ice':'ice-tests','storage-phy':'storage-phy-tests','smoke':'boot-smoke','clock':'clock-tests','oplus':'oplus-tests','modules':'modules-tests','iommu':'iommu-tests','secure':'secure-tests','sysstats':'sysstats-tests','fence':'fence-tests','rakkashin':'rakkashin-tests','ntsync':'ntsync-tests','power':'power-tests','rm-lifetime':'rm-lifetime-tests','gpu-policy':'gpu-policy-tests','scm':'scm-tests','platform':'platform-tests','adios':'adios-tests'}[a.test]
+ramdisk={'adc-thermal':'adc-thermal-tests','pmic-gpio':'pmic-gpio-tests','spmi':'spmi-tests','interconnect':'interconnect-tests','regulators':'regulators-tests','storage-host':'storage-host-tests','diagnostics':'diagnostics-tests','debug-symbol':'debug-symbol-tests','ufs':'ufs-tests','ice':'ice-tests','storage-phy':'storage-phy-tests','smoke':'boot-smoke','clock':'clock-tests','oplus':'oplus-tests','modules':'modules-tests','iommu':'iommu-tests','secure':'secure-tests','sysstats':'sysstats-tests','fence':'fence-tests','rakkashin':'rakkashin-tests','ntsync':'ntsync-tests','power':'power-tests','rm-lifetime':'rm-lifetime-tests','gpu-policy':'gpu-policy-tests','scm':'scm-tests','platform':'platform-tests','adios':'adios-tests'}[a.test]
 command=['chroot',str(ROOTFS),'/usr/bin/env','-i','PATH=/usr/sbin:/usr/bin:/sbin:/bin','timeout',str(a.timeout),
 'qemu-system-aarch64','-machine','virt,gic-version=3','-cpu','max','-smp',str(a.cpus),'-m','1024','-accel','tcg,thread=multi',
 '-nodefaults','-serial','stdio','-monitor','none','-display','none','-no-reboot',

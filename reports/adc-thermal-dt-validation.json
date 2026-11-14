@@ -1,0 +1,867 @@
+{
+  "scope": "active provider, channel-table, basic parameter and qualified IIO specifier coverage only; no PMIC transaction/calibration/overheat proof",
+  "physical_verified": false,
+  "inputs": {
+    "saved": {
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "provider_count": 1,
+      "channel_count": 35,
+      "gen3_channel_count": 20,
+      "gen4_channel_count": 15,
+      "thermal_alarm_count": 12,
+      "iio_references_checked": 6,
+      "providers": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000": {
+          "parent_generation": 3,
+          "sdam_bases": [
+            36864,
+            37120
+          ],
+          "channels": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_quiet_therm",
+              "virtual_channel": 1868,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 76,
+              "table_entry": "ADC5_GEN4_AMUX3_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_batt_therm",
+              "virtual_channel": 1860,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN4_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_chg_therm",
+              "virtual_channel": 1867,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 75,
+              "table_entry": "ADC5_GEN4_AMUX2_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_mchg_therm",
+              "virtual_channel": 1866,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 74,
+              "table_entry": "ADC5_GEN4_AMUX1_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_xog_therm",
+              "virtual_channel": 333,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 77,
+              "table_entry": "ADC5_GEN3_AMUX4_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_spkr_therm",
+              "virtual_channel": 328,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 72,
+              "table_entry": "ADC5_GEN3_AMUX5_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_wlan_therm",
+              "virtual_channel": 326,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 70,
+              "table_entry": "ADC5_GEN3_AMUX3_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_lite_die_temp",
+              "virtual_channel": 1816,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 24,
+              "table_entry": "ADC5_GEN4_TEMP_ALARM_LITE",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_chg_temp",
+              "virtual_channel": 1808,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 16,
+              "table_entry": "ADC5_GEN4_CHG_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_ichg_fb",
+              "virtual_channel": 1953,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 161,
+              "table_entry": "ADC5_GEN4_ICHG_FB",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_iin",
+              "virtual_channel": 1815,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 23,
+              "table_entry": "ADC5_GEN4_IIN",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vbat_sns_qbg",
+              "virtual_channel": 1935,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 143,
+              "table_entry": "ADC5_GEN4_VBAT_SNS_QBG",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vph_pwr",
+              "virtual_channel": 1934,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 142,
+              "table_entry": "ADC5_GEN4_VPH_PWR",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_die_temp",
+              "virtual_channel": 1795,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN4_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vref_1p25",
+              "virtual_channel": 1793,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN4_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_offset_ref",
+              "virtual_channel": 1792,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN4_OFFSET_REF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_sys_therm_8",
+              "virtual_channel": 1863,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 71,
+              "table_entry": "ADC5_GEN4_AMUX4_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_sys_therm_7",
+              "virtual_channel": 1869,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 77,
+              "table_entry": "ADC5_GEN4_AMUX4_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_12",
+              "virtual_channel": 329,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 73,
+              "table_entry": "ADC5_GEN3_AMUX6_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_6",
+              "virtual_channel": 325,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 69,
+              "table_entry": "ADC5_GEN3_AMUX2_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_5",
+              "virtual_channel": 330,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 74,
+              "table_entry": "ADC5_GEN3_AMUX1_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_3",
+              "virtual_channel": 324,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN3_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_2",
+              "virtual_channel": 327,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 71,
+              "table_entry": "ADC5_GEN3_AMUX4_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_sys_therm_0",
+              "virtual_channel": 68,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN3_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_i_die_temp",
+              "virtual_channel": 2051,
+              "generation": 3,
+              "sid": 8,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_g_die_temp",
+              "virtual_channel": 1539,
+              "generation": 3,
+              "sid": 6,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_f_die_temp",
+              "virtual_channel": 1283,
+              "generation": 3,
+              "sid": 5,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_d_die_temp",
+              "virtual_channel": 771,
+              "generation": 3,
+              "sid": 3,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_vph_pwr",
+              "virtual_channel": 398,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 142,
+              "table_entry": "ADC5_GEN3_VPH_PWR",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_die_temp",
+              "virtual_channel": 259,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_vref_1p25",
+              "virtual_channel": 257,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN3_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_offset_ref",
+              "virtual_channel": 256,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN3_OFFSET_REF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_die_temp",
+              "virtual_channel": 3,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_vref_1p25",
+              "virtual_channel": 1,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN3_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_offset_ref",
+              "virtual_channel": 0,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN3_OFFSET_REF",
+              "thermal_monitor_type": 0
+            }
+          ]
+        }
+      },
+      "thermal_alarms": [
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pmd802x-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm-lite@c00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d/pm8010n-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c/pm8010m-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4/pm8010e-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pmr735d-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00"
+      ],
+      "iio_references": [
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1795
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            2051
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1539
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1283
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            771
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            259
+          ]
+        }
+      ],
+      "unparsed_iio_consumers": [],
+      "errors": []
+    },
+    "candidate": {
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "provider_count": 1,
+      "channel_count": 35,
+      "gen3_channel_count": 20,
+      "gen4_channel_count": 15,
+      "thermal_alarm_count": 12,
+      "iio_references_checked": 6,
+      "providers": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000": {
+          "parent_generation": 3,
+          "sdam_bases": [
+            36864,
+            37120
+          ],
+          "channels": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_quiet_therm",
+              "virtual_channel": 1868,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 76,
+              "table_entry": "ADC5_GEN4_AMUX3_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_batt_therm",
+              "virtual_channel": 1860,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN4_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_chg_therm",
+              "virtual_channel": 1867,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 75,
+              "table_entry": "ADC5_GEN4_AMUX2_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_mchg_therm",
+              "virtual_channel": 1866,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 74,
+              "table_entry": "ADC5_GEN4_AMUX1_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_xog_therm",
+              "virtual_channel": 333,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 77,
+              "table_entry": "ADC5_GEN3_AMUX4_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_spkr_therm",
+              "virtual_channel": 328,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 72,
+              "table_entry": "ADC5_GEN3_AMUX5_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_wlan_therm",
+              "virtual_channel": 326,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 70,
+              "table_entry": "ADC5_GEN3_AMUX3_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_lite_die_temp",
+              "virtual_channel": 1816,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 24,
+              "table_entry": "ADC5_GEN4_TEMP_ALARM_LITE",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_chg_temp",
+              "virtual_channel": 1808,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 16,
+              "table_entry": "ADC5_GEN4_CHG_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_ichg_fb",
+              "virtual_channel": 1953,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 161,
+              "table_entry": "ADC5_GEN4_ICHG_FB",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_iin",
+              "virtual_channel": 1815,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 23,
+              "table_entry": "ADC5_GEN4_IIN",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vbat_sns_qbg",
+              "virtual_channel": 1935,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 143,
+              "table_entry": "ADC5_GEN4_VBAT_SNS_QBG",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vph_pwr",
+              "virtual_channel": 1934,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 142,
+              "table_entry": "ADC5_GEN4_VPH_PWR",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_die_temp",
+              "virtual_channel": 1795,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN4_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_vref_1p25",
+              "virtual_channel": 1793,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN4_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_offset_ref",
+              "virtual_channel": 1792,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN4_OFFSET_REF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_sys_therm_8",
+              "virtual_channel": 1863,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 71,
+              "table_entry": "ADC5_GEN4_AMUX4_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmih010x_sys_therm_7",
+              "virtual_channel": 1869,
+              "generation": 4,
+              "sid": 7,
+              "bus": 0,
+              "channel": 77,
+              "table_entry": "ADC5_GEN4_AMUX4_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_12",
+              "virtual_channel": 329,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 73,
+              "table_entry": "ADC5_GEN3_AMUX6_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_6",
+              "virtual_channel": 325,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 69,
+              "table_entry": "ADC5_GEN3_AMUX2_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_5",
+              "virtual_channel": 330,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 74,
+              "table_entry": "ADC5_GEN3_AMUX1_GPIO_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_3",
+              "virtual_channel": 324,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN3_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_sys_therm_2",
+              "virtual_channel": 327,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 71,
+              "table_entry": "ADC5_GEN3_AMUX4_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_sys_therm_0",
+              "virtual_channel": 68,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 68,
+              "table_entry": "ADC5_GEN3_AMUX1_THM_100K_PU",
+              "thermal_monitor_type": 1
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_i_die_temp",
+              "virtual_channel": 2051,
+              "generation": 3,
+              "sid": 8,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_g_die_temp",
+              "virtual_channel": 1539,
+              "generation": 3,
+              "sid": 6,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_f_die_temp",
+              "virtual_channel": 1283,
+              "generation": 3,
+              "sid": 5,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550ve_d_die_temp",
+              "virtual_channel": 771,
+              "generation": 3,
+              "sid": 3,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_vph_pwr",
+              "virtual_channel": 398,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 142,
+              "table_entry": "ADC5_GEN3_VPH_PWR",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_die_temp",
+              "virtual_channel": 259,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_vref_1p25",
+              "virtual_channel": 257,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN3_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pm8550_offset_ref",
+              "virtual_channel": 256,
+              "generation": 3,
+              "sid": 1,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN3_OFFSET_REF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_die_temp",
+              "virtual_channel": 3,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 3,
+              "table_entry": "ADC5_GEN3_DIE_TEMP",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_vref_1p25",
+              "virtual_channel": 1,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 1,
+              "table_entry": "ADC5_GEN3_1P25VREF",
+              "thermal_monitor_type": 0
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000/pmk8550_offset_ref",
+              "virtual_channel": 0,
+              "generation": 3,
+              "sid": 0,
+              "bus": 0,
+              "channel": 0,
+              "table_entry": "ADC5_GEN3_OFFSET_REF",
+              "thermal_monitor_type": 0
+            }
+          ]
+        }
+      },
+      "thermal_alarms": [
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pmr735d-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4/pm8010e-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c/pm8010m-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d/pm8010n-temp-alarm@2400",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm-lite@c00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pmd802x-temp-alarm@a00"
+      ],
+      "iio_references": [
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            259
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            771
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1283
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1539
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            2051
+          ]
+        },
+        {
+          "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "args": [
+            1795
+          ]
+        }
+      ],
+      "unparsed_iio_consumers": [],
+      "errors": []
+    }
+  },
+  "passed": true
+}

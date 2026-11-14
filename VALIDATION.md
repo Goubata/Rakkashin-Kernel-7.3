@@ -355,3 +355,22 @@ have valid nominal indices; valid-hole/subtype/electrical/IRQ acceptance is pend
 Whole-DT validation still fails on the original duplicate SID4. Concurrent cache
 access, partial-write recovery, physical PMIC/GPIO/IRQ/suspend and all whole-phone
 acceptance remain open. No partition write or physical 7.3 boot was performed.
+
+## Stage22: real ADC and PMIC thermal modules
+
+94 staged modules / 4,733 matching imports. The firmware-pinned conversion
+library, GEN3/GEN4 ADC and PMIC temperature alarm link on the unchanged Image.
+Twelve isolated real-code cases cover voltage/resistance vectors, temperature
+units, both generations' NTC monotonicity and threshold roundtrips, invalid
+arguments/DT parameters, client registration/polarity and queue cleanup with a
+worker acquiring the ADC mutex. The real driver loads after the source-including
+test module leaves. A missing explicit queue affinity produced a warning and was
+fixed in the actual queue factory; strict final checks require no warning.
+
+The saved/candidate DT both contain 35 active ADC channels (20 GEN3, 15 GEN4),
+12 temperature alarms and six qualified IIO references covered by these ports.
+This is table/specifier coverage, not register access, calibration or overheat
+protection evidence. Original conversion tables and generation constants stay
+unchanged. Raw client handles, callback/context lifetime, hardware transaction
+rollback and alarm trip/suspend fault injection remain open. No physical 7.3
+boot or daily-use acceptance exists; duplicate SID4 still fails the whole-DT audit.

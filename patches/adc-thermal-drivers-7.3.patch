@@ -1,0 +1,415 @@
+--- a/ports/qcom-adc-thermal/qcom-vadc-common.c
++++ b/ports/qcom-adc-thermal/qcom-vadc-common.c
+@@ -1562,14 +1562,18 @@
+ 		    const struct adc5_data *data,
+ 		    u16 adc_code, int *result)
+ {
+-	const struct u32_fract *prescale = &adc5_prescale_ratios[prescale_ratio];
+-
+-	if (!(scaletype >= SCALE_HW_CALIB_DEFAULT &&
+-		scaletype < SCALE_HW_CALIB_INVALID)) {
+-		pr_err("Invalid scale type %d\n", scaletype);
++	const struct u32_fract *prescale;
++
++	/* Validate before indexing the function and prescale tables. */
++	if (scaletype < SCALE_HW_CALIB_DEFAULT ||
++	    scaletype >= ARRAY_SIZE(scale_adc5_fn) ||
++	    !scale_adc5_fn[scaletype].scale_fn ||
++	    prescale_ratio >= ARRAY_SIZE(adc5_prescale_ratios) ||
++	    !data || !result || !data->full_scale_code_volt ||
++	    !data->full_scale_code_cur || !data->full_scale_code_raw)
+ 		return -EINVAL;
+-	}
+-
++
++	prescale = &adc5_prescale_ratios[prescale_ratio];
+ 	return scale_adc5_fn[scaletype].scale_fn(prescale, data,
+ 					adc_code, result);
+ }
+--- a/ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.c
++++ b/ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.c
+@@ -28,6 +28,7 @@
+ #include <dt-bindings/iio/qcom,spmi-vadc.h>
+ 
+ static LIST_HEAD(adc_tm_device_list);
++static DEFINE_MUTEX(adc_tm_device_lock);
+ 
+ #define ADC5_GEN3_REGMAP_ID			0x40
+ 
+@@ -270,6 +271,8 @@
+ 	struct iio_chan_spec		*iio_chans;
+ 	struct completion		complete;
+ 	struct mutex			lock;
++	unsigned int			n_irqs;
++	bool				hw_active;
+ 	/* TM properties */
+ 	unsigned int			n_tm_channels;
+ 	struct list_head		list;
+@@ -858,6 +861,9 @@
+ 						&chan_prop->work);
+ 			}
+ 		} else {
++			/* IRQs also serve IIO reads during thermal registration. */
++			if (!READ_ONCE(chan_prop->tzd))
++				continue;
+ 			ret = qcom_adc5_hw_scale(chan_prop->scale_fn_type,
+ 				chan_prop->prescale, chan_prop->data, code, &temp);
+ 
+@@ -885,6 +891,9 @@
+ 	struct adc5_chip *adc = iio_priv(indio_dev);
+ 	int i, v_channel;
+ 
++	if (iiospec->nargs != 1)
++		return -EINVAL;
++
+ 	for (i = 0; i < adc->nchannels; i++) {
+ 		v_channel = V_CHAN(adc->chan_props[i]);
+ 		if (v_channel == iiospec->args[0])
+@@ -942,7 +951,7 @@
+ };
+ 
+ /* Used by thermal clients to read ADC channel temperature */
+-int adc_tm_gen3_get_temp(struct thermal_zone_device *tz, int *temp)
++static int adc_tm_gen3_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	int ret;
+ 	struct adc5_channel_prop *prop = thermal_zone_device_priv(tz);
+@@ -1107,13 +1116,16 @@
+ 	if (node == NULL)
+ 		return ERR_PTR(-ENODEV);
+ 
++	mutex_lock(&adc_tm_device_lock);
+ 	list_for_each_entry(chip, &adc_tm_device_list, list) {
+ 		pdev = to_platform_device(chip->dev);
+ 		if (pdev->dev.of_node == node) {
+ 			of_node_put(node);
++			mutex_unlock(&adc_tm_device_lock);
+ 			return chip;
+ 		}
+ 	}
++	mutex_unlock(&adc_tm_device_lock);
+ 	of_node_put(node);
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+@@ -1144,7 +1156,8 @@
+ 		if (!client_info)
+ 			return -ENOMEM;
+ 
+-		client_info->param->id = (uintptr_t) client_info;
++		client_info->param = param;
++		param->id = (uintptr_t)client_info;
+ 		client_info->low_thr_requested = param->low_thr;
+ 		client_info->high_thr_requested = param->high_thr;
+ 		client_info->state_request = param->state_request;
+@@ -1242,7 +1255,7 @@
+ }
+ 
+ /* Used to notify non-thermal clients of threshold crossing */
+-void notify_adc_tm_fn(struct work_struct *work)
++static void notify_adc_tm_fn(struct work_struct *work)
+ {
+ 	struct adc5_channel_prop *prop = container_of(work,
+ 		struct adc5_channel_prop, work);
+@@ -1335,7 +1348,7 @@
+ 	uint32_t v_channel, dt_index = 0;
+ 	bool chan_found = false;
+ 
+-	if (param == NULL)
++	if (IS_ERR_OR_NULL(chip) || !param)
+ 		return -EINVAL;
+ 
+ 	if (param->threshold_notification == NULL) {
+@@ -1357,15 +1370,20 @@
+ 		return -EINVAL;
+ 	}
+ 
++	if (chip->chan_props[dt_index].adc_tm != ADC_TM_NON_THERMAL)
++		return -EINVAL;
++
+ 	mutex_lock(&chip->lock);
+ 
+ 	/* add channel client to channel list */
+-	adc_tm_add_to_list(chip, dt_index, param);
++	ret = adc_tm_add_to_list(chip, dt_index, param);
++	if (ret < 0)
++		goto fail_unlock;
+ 
+ 	/* set right thresholds for the sensor */
+ 	ret = adc_tm_gen3_manage_thresholds(&chip->chan_props[dt_index]);
+ 	if (ret < 0)
+-		pr_err("Error in reverse scaling:%d\n", ret);
++		goto fail_unlock;
+ 
+ 	/* configure channel */
+ 	ret = adc_tm5_gen3_configure(&chip->chan_props[dt_index]);
+@@ -1388,7 +1406,7 @@
+ 	uint32_t dt_index = 0, v_channel;
+ 	struct adc_tm_client_info *client_info = NULL;
+ 
+-	if (param == NULL)
++	if (IS_ERR_OR_NULL(chip) || !param)
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < chip->nchannels; i++) {
+@@ -1403,6 +1421,9 @@
+ 		pr_err("not a valid ADC_TM channel\n");
+ 		return -EINVAL;
+ 	}
++
++	if (chip->chan_props[dt_index].adc_tm != ADC_TM_NON_THERMAL)
++		return -EINVAL;
+ 
+ 	mutex_lock(&chip->lock);
+ 	list_for_each_entry(client_info,
+@@ -1653,6 +1674,12 @@
+ };
+ MODULE_DEVICE_TABLE(of, adc5_match_table);
+ 
++static struct workqueue_struct *adc_tm_create_notify_queue(void)
++{
++	/* 7.3 requires an explicit affinity mode; preserve the old per-CPU mode. */
++	return alloc_workqueue("adc_tm_notify_wq", WQ_PERCPU | WQ_HIGHPRI, 0);
++}
++
+ static int adc5_get_dt_channel_data(struct adc5_chip *adc,
+ 				    struct adc5_channel_prop *prop,
+ 				    struct device_node *node,
+@@ -1804,8 +1831,7 @@
+ 		prop->timer = MEAS_INT_1S;
+ 
+ 		if (prop->adc_tm == ADC_TM_NON_THERMAL) {
+-			prop->req_wq = alloc_workqueue(
+-				"adc_tm_notify_wq", WQ_HIGHPRI, 0);
++			prop->req_wq = adc_tm_create_notify_queue();
+ 			if (!prop->req_wq) {
+ 				pr_err("Requesting priority wq failed\n");
+ 				return -ENOMEM;
+@@ -1880,6 +1906,49 @@
+ 	return 0;
+ }
+ 
++/* Runs before thermal resources are released, including failed probe. */
++static void adc5_gen3_cleanup(void *context)
++{
++	struct adc5_chip *adc = context;
++	unsigned int i, sdam_index;
++	u8 data;
++
++	mutex_lock(&adc_tm_device_lock);
++	list_del_init(&adc->list);
++	mutex_unlock(&adc_tm_device_lock);
++
++	/* Stop all producers before draining work that may refer to a TZ/client. */
++	while (adc->n_irqs)
++		devm_free_irq(adc->dev, adc->base[--adc->n_irqs].irq, adc);
++	cancel_work_sync(&adc->tm_err_handler_work);
++	cancel_work_sync(&adc->tm_handler_work);
++	if (adc->chan_props) {
++		for (i = 0; i < adc->nchannels; i++) {
++			if (adc->chan_props[i].req_wq) {
++				destroy_workqueue(adc->chan_props[i].req_wq);
++				adc->chan_props[i].req_wq = NULL;
++			}
++		}
++	}
++
++	if (adc->hw_active) {
++		mutex_lock(&adc->lock);
++		for (i = 0; i < adc->num_sdams * 8; i++) {
++			sdam_index = i / 8;
++			data = MEAS_INT_DISABLE;
++			adc5_write(adc, sdam_index, ADC5_GEN3_TIMER_SEL, &data, 1);
++			data = ADC5_GEN3_CHAN_CONV_REQ | (i % 8);
++			adc5_write(adc, sdam_index, ADC5_GEN3_PERPH_CH, &data, 1);
++			data = ADC5_GEN3_CONV_REQ_REQ;
++			adc5_write(adc, sdam_index, ADC5_GEN3_CONV_REQ, &data, 1);
++		}
++		mutex_unlock(&adc->lock);
++		adc->hw_active = false;
++	}
++	ipc_log_context_destroy(adc->ipc_log);
++	adc->ipc_log = NULL;
++}
++
+ static int adc5_gen3_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *node = pdev->dev.of_node;
+@@ -1904,8 +1973,8 @@
+ 	adc->dev = dev;
+ 
+ 	ret = of_property_count_u32_elems(node, "reg");
+-	if (ret < 0)
+-		return ret;
++	if (ret <= 0)
++		return ret ? ret : -EINVAL;
+ 
+ 	adc->num_sdams = ret;
+ 
+@@ -1923,6 +1992,8 @@
+ 		if (ret < 0)
+ 			return ret;
+ 
++		if (reg > U16_MAX - ADC5_GEN3_CONV_REQ)
++			return -EINVAL;
+ 		adc->base[i].base_addr = reg;
+ 
+ 		scnprintf(buf, sizeof(buf), "adc-sdam%d", i);
+@@ -1948,6 +2019,9 @@
+ 	init_completion(&adc->complete);
+ 	mutex_init(&adc->lock);
+ 	spin_lock_init(&adc->tm_lock);
++	INIT_LIST_HEAD(&adc->list);
++	INIT_WORK(&adc->tm_handler_work, tm_handler_work);
++	INIT_WORK(&adc->tm_err_handler_work, tm_err_handler_work);
+ 
+ 	ret = adc5_get_dt_data(adc, node);
+ 	if (ret < 0) {
+@@ -1960,16 +2034,13 @@
+ 					0, adc->base[i].irq_name, adc);
+ 		if (ret < 0)
+ 			goto fail;
+-	}
+-
++		adc->n_irqs++;
++	}
++
++	adc->hw_active = true;
+ 	ret = adc_tm_register_tzd(adc);
+ 	if (ret < 0)
+ 		goto fail;
+-
+-	if (adc->n_tm_channels) {
+-		INIT_WORK(&adc->tm_handler_work, tm_handler_work);
+-		INIT_WORK(&adc->tm_err_handler_work, tm_err_handler_work);
+-	}
+ 
+ 	indio_dev->dev.parent = dev;
+ 	indio_dev->dev.of_node = node;
+@@ -1978,64 +2049,26 @@
+ 	indio_dev->channels = adc->iio_chans;
+ 	indio_dev->num_channels = adc->nchannels;
+ 
+-	list_add_tail(&adc->list, &adc_tm_device_list);
+-	adc->device_list = &adc_tm_device_list;
+-
+ 	adc->ipc_log = ipc_log_context_create(10, "adc5-gen3", 0);
+ 	if (!adc->ipc_log)
+ 		pr_warn("Error in creating ipc_log for adc5-gen3\n");
+ 
+-	return devm_iio_device_register(dev, indio_dev);
++	ret = devm_add_action_or_reset(dev, adc5_gen3_cleanup, adc);
++	if (ret)
++		return ret;
++	ret = devm_iio_device_register(dev, indio_dev);
++	if (ret)
++		return ret;
++
++	mutex_lock(&adc_tm_device_lock);
++	list_add_tail(&adc->list, &adc_tm_device_list);
++	adc->device_list = &adc_tm_device_list;
++	mutex_unlock(&adc_tm_device_lock);
++	return 0;
+ 
+ fail:
+-	i = 0;
+-	while (i < adc->nchannels) {
+-		if (adc->chan_props[i].req_wq)
+-			destroy_workqueue(adc->chan_props[i].req_wq);
+-		i++;
+-	}
++	adc5_gen3_cleanup(adc);
+ 	return ret;
+-}
+-
+-static void adc5_gen3_exit(struct platform_device *pdev)
+-{
+-	struct adc5_chip *adc = platform_get_drvdata(pdev);
+-	u8 data = 0;
+-	int i, sdam_index;
+-
+-	mutex_lock(&adc->lock);
+-	for (i = 0; i < adc->nchannels; i++) {
+-		if (adc->chan_props[i].req_wq)
+-			destroy_workqueue(adc->chan_props[i].req_wq);
+-		adc->chan_props[i].timer = MEAS_INT_DISABLE;
+-	}
+-
+-	/* Disable all available channels */
+-	for (i = 0; i < adc->num_sdams * 8; i++) {
+-		sdam_index = i / 8;
+-		data = MEAS_INT_DISABLE;
+-		adc5_write(adc, sdam_index, ADC5_GEN3_TIMER_SEL, &data, 1);
+-
+-		/* To indicate there is an actual conversion request */
+-		data = ADC5_GEN3_CHAN_CONV_REQ | (i - (sdam_index*8));
+-		adc5_write(adc, sdam_index, ADC5_GEN3_PERPH_CH, &data, 1);
+-
+-		data = ADC5_GEN3_CONV_REQ_REQ;
+-		adc5_write(adc, sdam_index, ADC5_GEN3_CONV_REQ, &data, 1);
+-	}
+-
+-	mutex_unlock(&adc->lock);
+-
+-	if (adc->n_tm_channels) {
+-		cancel_work_sync(&adc->tm_err_handler_work);
+-		cancel_work_sync(&adc->tm_handler_work);
+-	}
+-
+-	mutex_destroy(&adc->lock);
+-
+-	list_del(&adc->list);
+-
+-	ipc_log_context_destroy(adc->ipc_log);
+ }
+ 
+ static int adc5_gen3_freeze(struct device *dev)
+@@ -2045,8 +2078,9 @@
+ 
+ 	mutex_lock(&adc->lock);
+ 
+-	for (i = 0; i < adc->num_sdams; i++)
++	for (i = 0; i < adc->n_irqs; i++)
+ 		devm_free_irq(dev, adc->base[i].irq, adc);
++	adc->n_irqs = 0;
+ 
+ 	mutex_unlock(&adc->lock);
+ 
+@@ -2062,8 +2096,12 @@
+ 	for (i = 0; i < adc->num_sdams; i++) {
+ 		ret = devm_request_irq(dev, adc->base[i].irq, adc5_gen3_isr,
+ 				0, adc->base[i].irq_name, adc);
+-		if (ret < 0)
++		if (ret < 0) {
++			while (adc->n_irqs)
++				devm_free_irq(dev, adc->base[--adc->n_irqs].irq, adc);
+ 			return ret;
++		}
++		adc->n_irqs++;
+ 	}
+ 
+ 	return ret;
+@@ -2097,7 +2135,6 @@
+ 		.pm = pm_ptr(&adc5_gen3_pm_ops),
+ 	},
+ 	.probe = adc5_gen3_probe,
+-	.remove = adc5_gen3_exit,
+ };
+ module_platform_driver(adc5_gen3_driver);
+ 
+--- a/ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c
++++ b/ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c
+@@ -911,4 +911,5 @@
+ 
+ MODULE_ALIAS("platform:spmi-temp-alarm");
+ MODULE_DESCRIPTION("QPNP PMIC Temperature Alarm driver");
++MODULE_IMPORT_NS("IIO_CONSUMER");
+ MODULE_LICENSE("GPL v2");
+--- a/ports/qcom-adc-thermal/Makefile
++++ b/ports/qcom-adc-thermal/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom-vadc-common.o qcom-spmi-adc5-gen3.o qcom-spmi-temp-alarm.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-ipc-logging/include -I$(srctree)
++ccflags-y += -include $(src)/include/linux/iio/adc/qcom-vadc-common.h -include $(src)/include/dt-bindings/iio/qcom,spmi-vadc.h
++ccflags-y += -DCONFIG_QCOM_SPMI_ADC5_GEN3_MODULE=1 -DCONFIG_QCOM_VADC_COMMON_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ipc-logging/Module.symvers

@@ -1,0 +1,20 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-regulators/rpmh-regulator.c",
+      "source": "drivers/regulator/rpmh-regulator.c",
+      "original_sha256": "75096232b52feb9359519cf71f2edcce3ddf299ad80625f2d86bee5068461f02"
+    },
+    {
+      "file": "ports/qcom-regulators/debug-regulator.c",
+      "source": "drivers/regulator/debug-regulator.c",
+      "original_sha256": "4c95990aae522d4f8a8cecf1baeaa69c48ff4db52c9790ce1958f0a2bfc56e69"
+    },
+    {
+      "file": "ports/qcom-regulators/stub-regulator.c",
+      "source": "drivers/regulator/stub-regulator.c",
+      "original_sha256": "b5587649dc481fab04c189e7b4700ad12a042040e3d4a5fe3ca7c45def8fed8f"
+    }
+  ]
+}

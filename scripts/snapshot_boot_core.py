@@ -19,7 +19,9 @@ parser.add_argument("--rakkashin",action="store_true")
 parser.add_argument('--storage-phy',action='store_true')
 parser.add_argument('--ice',action='store_true')
 parser.add_argument('--ufs-host',action='store_true')
+parser.add_argument('--regulators',action='store_true')
 args=parser.parse_args()
+if args.regulators:args.ufs_host=True
 if args.ufs_host:args.ice=True;args.gpu_deps=True
 if args.ice:args.storage_phy=True
 if args.gpu_driver:
@@ -45,6 +47,8 @@ if args.ice:
     ports.append('qcom-ice')
 if args.ufs_host:
     ports += ['qcom-minidump','qcom-ipc-logging','ufs-host']
+if args.regulators:
+    ports.append('qcom-regulators')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

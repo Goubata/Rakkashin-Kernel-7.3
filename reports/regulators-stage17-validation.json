@@ -1,0 +1,44 @@
+{
+  "stage": "android73-regulators-stage17",
+  "scope": "linked firmware-pinned providers; synthetic guest logical-rail/software teardown only",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "module_count": 80,
+  "imports_checked": 4285,
+  "all_import_crcs_match": true,
+  "saved_candidate_compatible_matches": 72,
+  "guest_kunit_cases_passed": 5,
+  "guest_custom_checks": [
+    "retained open voltage fd cannot read freed state after unbind",
+    "rebind and diagnostic read succeed",
+    "diagnostic consumer holds provider module reference",
+    "final unbind followed by provider/RPMh/debug module unload succeeds"
+  ],
+  "reproduced_before_fix": "Kernel panic from regulator_get_voltage_rdev via custom unsafe debugfs voltage read after device unbind",
+  "saved_optional_suspend_debug_exports": {
+    "vreg_dump_info": false,
+    "vreg_before_sleep_save_configs": false,
+    "vreg_before_sleep_dump_info": false
+  },
+  "physical_rpmh_probe_verified": false,
+  "physical_voltage_votes_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "phone_rail_voltage_changed": false,
+  "pending": [
+    "Real RPMh acknowledgement and aggregate vote/rollback correctness",
+    "Physical rail voltages, proxy votes, clocks/power transitions and suspend",
+    "Concurrent reader/removal/suspend diagnostic stress",
+    "Remaining hardware, DT/image/ROM alignment and whole-device physical acceptance"
+  ],
+  "sha256": {
+    "reports/regulators-source-lock.json": "94c9f5cedcbbccb6a78727d7feb5fdd24af1f57c2135fe916069c1774104e022",
+    "reports/regulators-dt-matches.json": "00cf5de9d45bd74b8f9c18497997b13ed359e2a2ed9da3943c52ae0acc107220",
+    "reports/regulators-saved-debug-features.json": "f9bb43c16e6acc57f88802cc66de6074bab974ccf8a88104f3b8dcd0eadafcc4",
+    "reports/module-crc-stage17.json": "dc1cb49e3cde471ef1084bbe248b94260e3bfa3e034515aa2d4bf454319f567d",
+    "reports/qemu-regulators-stage17.log": "247c3dc358a6fde8b21b541f894b3d6ba3e6027e96f6da4ad8130269080aa478",
+    "reports/qemu-regulators-stage17.json": "14b17da0208e9186c12c2f6db91b4dcf99927d7f0e8ae7d8bbe80880716d4060",
+    "reports/regulators-stage17-build.log": "6432330fe7b0cbb075a9b7e9f8377590349075b21e4270fa28b8f34ed68a1ffd",
+    "reports/qemu-regulators-stage17-before-lifetime-fix.log": "0ad5633b9c2f22a29e4f8958ab44cba4e3b220eea090fda3bd6189b760c2110d"
+  }
+}

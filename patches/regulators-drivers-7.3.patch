@@ -1,0 +1,248 @@
+--- a/ports/qcom-regulators/rpmh-regulator.c
++++ b/ports/qcom-regulators/rpmh-regulator.c
+@@ -1752,6 +1752,11 @@
+  *
+  * Return: 0 on success, errno on failure
+  */
++static void rpmh_regulator_put_node(void *data)
++{
++	of_node_put(data);
++}
++
+ static int rpmh_regulator_allocate_vreg(struct rpmh_aggr_vreg *aggr_vreg)
+ {
+ 	struct device_node *node;
+@@ -1782,7 +1787,13 @@
+ 		if (of_find_property(node, "compatible", NULL))
+ 			continue;
+ 
+-		aggr_vreg->vreg[i].of_node = node;
++		aggr_vreg->vreg[i].of_node = of_node_get(node);
++		rc = devm_add_action_or_reset(aggr_vreg->dev,
++				rpmh_regulator_put_node, aggr_vreg->vreg[i].of_node);
++		if (rc) {
++			of_node_put(node);
++			return rc;
++		}
+ 		aggr_vreg->vreg[i].aggr_vreg = aggr_vreg;
+ 
+ 		rc = of_property_read_string(node, "regulator-name",
+@@ -1790,6 +1801,7 @@
+ 		if (rc) {
+ 			aggr_vreg_err(aggr_vreg, "could not read regulator-name property, rc=%d\n",
+ 				rc);
++			of_node_put(node);
+ 			return rc;
+ 		}
+ 
+@@ -2109,9 +2121,10 @@
+ 	}
+ 
+ 	rc = devm_regulator_proxy_consumer_register(dev, vreg->of_node);
+-	if (rc)
+-		vreg_err(vreg, "failed to register proxy consumer, rc=%d\n",
+-			rc);
++	if (rc) {
++		vreg_err(vreg, "failed to register proxy consumer, rc=%d\n", rc);
++		return rc;
++	}
+ 
+ 	rc = devm_regulator_debug_register(dev, vreg->rdev);
+ 	if (rc)
+@@ -2273,7 +2286,9 @@
+ 		mutex_unlock(&aggr_vreg->lock);
+ 	}
+ 
+-	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
++	rc = devm_of_platform_populate(dev);
++	if (rc)
++		return rc;
+ 	platform_set_drvdata(pdev, aggr_vreg);
+ 
+ 	aggr_vreg_debug(aggr_vreg, "successfully probed; addr=0x%05X, type=%s\n",
+@@ -2298,15 +2313,22 @@
+ 
+ static int rpmh_regulator_init(void)
+ {
++	int ret;
++
+ 	rpmh_reg_ipc_log = ipc_log_context_create(IPC_LOG_PAGES, "rpmh_regulator", 0);
+-	return platform_driver_register(&rpmh_regulator_driver);
++	ret = platform_driver_register(&rpmh_regulator_driver);
++	if (ret && rpmh_reg_ipc_log) {
++		ipc_log_context_destroy(rpmh_reg_ipc_log);
++		rpmh_reg_ipc_log = NULL;
++	}
++	return ret;
+ }
+ 
+ static void rpmh_regulator_exit(void)
+ {
++	platform_driver_unregister(&rpmh_regulator_driver);
+ 	if (rpmh_reg_ipc_log)
+ 		ipc_log_context_destroy(rpmh_reg_ipc_log);
+-	platform_driver_unregister(&rpmh_regulator_driver);
+ }
+ 
+ MODULE_DESCRIPTION("RPMh regulator driver");
+--- a/ports/qcom-regulators/debug-regulator.c
++++ b/ports/qcom-regulators/debug-regulator.c
+@@ -29,6 +29,8 @@
+ 	struct regulator	*reg;
+ 	struct device		*dev;
+ 	struct regulator_dev	*rdev;
++	struct mutex consumer_lock;
++	struct dentry *files[7];
+ };
+ 
+ static DEFINE_MUTEX(debug_reg_list_lock);
+@@ -54,17 +56,19 @@
+ {
+ 	struct regulator *regulator;
+ 
+-	if (dreg->reg)
+-		return dreg->reg;
+-
+-	regulator = regulator_get(NULL, rdev_name(dreg->rdev));
+-	if (IS_ERR(regulator)) {
+-		dreg_dbg(dreg, "debug regulator get failed, ret=%ld\n",
+-			PTR_ERR(regulator));
+-		return NULL;
+-	}
+-	dreg->reg = regulator;
+-
++	mutex_lock(&dreg->consumer_lock);
++	regulator = dreg->reg;
++	if (!regulator) {
++		regulator = regulator_get(NULL, rdev_name(dreg->rdev));
++		if (IS_ERR(regulator)) {
++			dreg_dbg(dreg, "debug regulator get failed, ret=%ld\n",
++				 PTR_ERR(regulator));
++			regulator = NULL;
++		} else {
++			dreg->reg = regulator;
++		}
++	}
++	mutex_unlock(&dreg->consumer_lock);
+ 	return regulator;
+ }
+ 
+@@ -232,6 +236,7 @@
+ }
+ 
+ static const struct file_operations reg_voltage_fops = {
++	.owner	= THIS_MODULE,
+ 	.open	= simple_open,
+ 	.read	= reg_debug_voltage_read,
+ 	.write	= reg_debug_voltage_write,
+@@ -338,6 +343,7 @@
+ }
+ 
+ static const struct file_operations reg_consumers_fops = {
++	.owner		= THIS_MODULE,
+ 	.open		= reg_debug_consumers_open,
+ 	.read		= seq_read,
+ 	.llseek		= seq_lseek,
+@@ -375,6 +381,7 @@
+ 	if (!dreg)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	mutex_init(&dreg->consumer_lock);
+ 	dreg->dev = dev;
+ 	dreg->rdev = rdev;
+ 
+@@ -385,9 +392,9 @@
+ 	ops = rdev->desc->ops;
+ 	dir = rdev->debugfs;
+ 
+-	debugfs_create_file_unsafe("enable", 0644, dir, dreg, &reg_enable_fops);
++	dreg->files[0] = debugfs_create_file_unsafe("enable", 0644, dir, dreg, &reg_enable_fops);
+ 	if (ops->set_bypass)
+-		debugfs_create_file_unsafe("bypass", 0644, dir, dreg,
++		dreg->files[1] = debugfs_create_file_unsafe("bypass", 0644, dir, dreg,
+ 						&reg_bypass_enable_fops);
+ 
+ 	mode = 0;
+@@ -396,7 +403,7 @@
+ 	if (ops->disable)
+ 		mode |= 0200;
+ 	if (mode)
+-		debugfs_create_file_unsafe("force_disable", mode, dir, dreg,
++		dreg->files[2] = debugfs_create_file_unsafe("force_disable", mode, dir, dreg,
+ 						&reg_force_disable_fops);
+ 
+ 	mode = 0;
+@@ -405,7 +412,7 @@
+ 	if (ops->set_voltage || ops->set_voltage_sel)
+ 		mode |= 0200;
+ 	if (mode)
+-		debugfs_create_file_unsafe("voltage", mode, dir, dreg,
++		dreg->files[3] = debugfs_create_file("voltage", mode, dir, dreg,
+ 						&reg_voltage_fops);
+ 
+ 	mode = 0;
+@@ -414,7 +421,7 @@
+ 	if (ops->set_mode)
+ 		mode |= 0200;
+ 	if (mode)
+-		debugfs_create_file_unsafe("mode", mode, dir, dreg,
++		dreg->files[4] = debugfs_create_file_unsafe("mode", mode, dir, dreg,
+ 						&reg_mode_fops);
+ 
+ 	mode = 0;
+@@ -423,10 +430,10 @@
+ 	if (ops->set_load || (ops->get_optimum_mode && ops->set_mode))
+ 		mode |= 0200;
+ 	if (mode)
+-		debugfs_create_file_unsafe("load", mode, dir, dreg,
++		dreg->files[5] = debugfs_create_file_unsafe("load", mode, dir, dreg,
+ 						&reg_set_load_fops);
+ 
+-	debugfs_create_file("consumers", 0444, dir, rdev, &reg_consumers_fops);
++	dreg->files[6] = debugfs_create_file("consumers", 0444, dir, rdev, &reg_consumers_fops);
+ 
+ 	return dreg;
+ }
+@@ -452,6 +459,15 @@
+ /* debug_reg_list_lock must be held by caller. */
+ static void regulator_debug_remove(struct debug_regulator *dreg)
+ {
++	unsigned int i;
++
++	/* Attributes use debugfs_attr guards; custom voltage/seq operations
++	 * use the full debugfs proxy. Removal
++	 * drains those operations before releasing their private data.
++	 * Leave the core-owned regulator directory and its other files intact.
++	 */
++	for (i = 0; i < ARRAY_SIZE(dreg->files); i++)
++		debugfs_remove(dreg->files[i]);
+ 	regulator_put(dreg->reg);
+ 	list_del(&dreg->list);
+ 	kfree(dreg);
+@@ -879,6 +895,7 @@
+ 	if (debug_suspend)
+ 		unregister_trace_suspend_resume(
+ 				regulator_debug_suspend_trace_probe, NULL);
++	tracepoint_synchronize_unregister();
+ }
+ module_exit(regulator_debug_exit);
+ 
+--- a/ports/qcom-regulators/stub-regulator.c
++++ b/ports/qcom-regulators/stub-regulator.c
+@@ -229,7 +229,7 @@
+ 	.probe	= regulator_stub_probe,
+ };
+ 
+-int __init regulator_stub_init(void)
++static int __init regulator_stub_init(void)
+ {
+ 	return platform_driver_register(&regulator_stub_driver);
+ }
+--- a/ports/qcom-regulators/Makefile
++++ b/ports/qcom-regulators/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += rpmh-regulator.o debug-regulator.o stub-regulator.o
++ccflags-y += -I$(src)/../qcom-clock-core/include -I$(src)/../qcom-rpmh/include -I$(src)/../qcom-ipc-logging/include -I$(srctree)
++ccflags-y += -DCONFIG_REGULATOR_DEBUG_CONTROL_MODULE=1 -DCONFIG_REGULATOR_PROXY_CONSUMER_MODULE=1 -DCONFIG_IPC_LOGGING_MODULE=1 -DCONFIG_QCOM_RPMH_MODULE=1 -DCONFIG_QCOM_COMMAND_DB_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-clock-core/Module.symvers $(src)/../qcom-rpmh/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

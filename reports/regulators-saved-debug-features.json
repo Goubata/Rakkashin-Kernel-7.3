@@ -1,0 +1,9 @@
+{
+  "saved_module": "device-baseline/early-modules/0/lib/modules/debug-regulator.ko",
+  "sha256": "4031cba9b4c0c1979bafd64b5367ec2ad0ae9c0b46d05f69b263a1dd5a6c5dd6",
+  "suspend_debug_exports": {
+    "vreg_dump_info": false,
+    "vreg_before_sleep_save_configs": false,
+    "vreg_before_sleep_dump_info": false
+  }
+}

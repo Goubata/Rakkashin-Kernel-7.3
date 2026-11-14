@@ -20,9 +20,12 @@ def main():
     parser.add_argument('--ufs-core-tests',action='store_true')
     parser.add_argument('--diagnostics',action='store_true')
     parser.add_argument('--diagnostics-tests',action='store_true')
+    parser.add_argument('--regulators',action='store_true')
+    parser.add_argument('--regulators-tests',action='store_true')
     args=parser.parse_args()
     if args.ufs_host:args.ice=True
-    if args.ufs_host or args.diagnostics_tests:args.diagnostics=True
+    if args.regulators_tests:args.regulators=True
+    if args.ufs_host or args.diagnostics_tests or args.regulators:args.diagnostics=True
     if args.tests and not args.ice:parser.error('--tests requires --ice')
     report = json.loads((ROOT / 'reports/ufs-phy-source-lock.json').read_text())
     repo = ROOT.parent / 'avr-upstream-audit/qcom-soc'
@@ -53,6 +56,10 @@ def main():
     if args.ufs_host:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ufs_sources.py')],check=True)
         targets.append('ports/ufs-host')
+    if args.regulators:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_regulators_sources.py')],check=True)
+        targets.append('ports/qcom-regulators')
+        if args.regulators_tests:targets.append('tests/regulators')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

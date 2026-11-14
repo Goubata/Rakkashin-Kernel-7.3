@@ -22,6 +22,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--regulators-tests", action="store_true")
     group.add_argument("--storage-host-tests", action="store_true")
     group.add_argument("--diagnostics-tests", action="store_true")
     group.add_argument("--debug-symbol-tests", action="store_true")
@@ -191,6 +192,39 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.regulators_tests:
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko'] + [ROOT/'ports'/name for name in [
+            'qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko',
+            'qcom-minidump/minidump.ko','qcom-ipc-logging/qcom_ipc_logging.ko',
+            'qcom-clock-core/crm-v2.ko','qcom-rpmh/cmd-db.ko','qcom-rpmh/qcom_rpmh.ko',
+            'qcom-clock-core/proxy-consumer.ko','qcom-regulators/debug-regulator.ko',
+            'qcom-regulators/rpmh-regulator.ko','qcom-regulators/stub-regulator.ko',
+        ]] + [ROOT/'tests/regulators/avr-regulators-test.ko']
+        commands=[]
+        for source in sources:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_REGULATORS_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands += [
+            '/bin/busybox mkdir -p /sys/kernel/debug',
+            '/bin/busybox mount -t debugfs debugfs /sys/kernel/debug || { echo AVR_REGULATORS_DEBUGFS_FAIL; /bin/busybox poweroff -f; }',
+            'rail=/sys/kernel/debug/regulator/avr_qemu_rail',
+            'test -f "$rail/enable" || { echo AVR_REGULATORS_FILE_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox cat "$rail/enable" || { echo AVR_REGULATORS_READ_FAIL; /bin/busybox poweroff -f; }',
+            'exec 9<"$rail/voltage"',
+            '/bin/busybox rmmod avr_regulators_test || { echo AVR_REGULATORS_TEST_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            'echo avr-qemu-regulator > /sys/bus/platform/drivers/stub-regulator/unbind || { echo AVR_REGULATORS_UNBIND_FAIL; /bin/busybox poweroff -f; }',
+            'if /bin/busybox cat <&9; then echo AVR_REGULATORS_STALE_READ_FAIL; /bin/busybox poweroff -f; fi',
+            'exec 9<&-',
+            'echo avr-qemu-regulator > /sys/bus/platform/drivers/stub-regulator/bind || { echo AVR_REGULATORS_REBIND_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox cat "$rail/enable" || { echo AVR_REGULATORS_REBIND_READ_FAIL; /bin/busybox poweroff -f; }',
+            'if /bin/busybox rmmod stub_regulator; then echo AVR_REGULATORS_REFCOUNT_FAIL; /bin/busybox poweroff -f; fi',
+            'echo avr-qemu-regulator > /sys/bus/platform/drivers/stub-regulator/unbind || { echo AVR_REGULATORS_FINAL_UNBIND_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod stub_regulator || { echo AVR_REGULATORS_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod rpmh_regulator || { echo AVR_REGULATORS_RPMH_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod debug_regulator || { echo AVR_REGULATORS_DEBUG_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            'echo AVR_REGULATORS_TESTS_PASS scope=logical-rail-and-teardown-only']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.diagnostics_tests or args.storage_host_tests:
         sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko',
                  ROOT/'ports/qcom-hwspinlock/qcom_hwspinlock.ko',
@@ -333,7 +367,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

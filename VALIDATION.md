@@ -246,3 +246,23 @@ encrypted unlock, power/reset transitions, active interrupt/hotplug teardown
 and all physical daily-use criteria above. IPC retains memory if unregister
 fails and has no deferred reclamation. Its original firmware module has no
 module_exit; tests do not claim unload support. See the Stage16 report.
+
+## Stage17: regulator providers and debugfs lifetime
+
+The firmware-pinned RPMh, debug-control and existing logical-regulator drivers
+link, giving 80 staged modules and 4,285 matching imports on the Stage16 Image.
+All 72 selected regulator provider paths have matching compatible values in
+the saved and candidate DTs. This does not validate their bindings/probe/voltage.
+
+An explicitly synthetic QEMU rail executes the real vendor logical driver and
+native regulator framework. Five KUnit cases cover balanced nested enables,
+voltage constraints/enumeration, modes and load-driven modes. A retained open
+voltage descriptor reproduced an actual post-unbind crash; after the fix its
+read fails safely. Rebind, consumer-held module reference rejection, final
+unbind and unload also pass. Real RPMh hardware is not exercised by that test.
+The guest DT overlay is never included in an AVR device tree or snapshot.
+
+Physical RPMh acknowledgement/aggregation/rollback, voltage levels, proxy votes,
+suspend, concurrent teardown and all whole-device acceptance remain pending.
+A diagnostic consumer holds its regulator provider module until device unbind;
+the runner explicitly tests this reference rather than forcing module removal.

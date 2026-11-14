@@ -1,0 +1,47 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-regulators/rpmh-regulator.c",
+      "source": "drivers/regulator/rpmh-regulator.c",
+      "original_sha256": "75096232b52feb9359519cf71f2edcce3ddf299ad80625f2d86bee5068461f02",
+      "sha256": "e26e7979a958da9fd8b6cb60eb1261e9691ce86e664e4ca65962e2338beb5a31"
+    },
+    {
+      "file": "ports/qcom-regulators/debug-regulator.c",
+      "source": "drivers/regulator/debug-regulator.c",
+      "original_sha256": "4c95990aae522d4f8a8cecf1baeaa69c48ff4db52c9790ce1958f0a2bfc56e69",
+      "sha256": "03b767b97dc734c0e26302fbabbcb922c1d3fad80cec3227ddc2d4b0fae4ebc8"
+    },
+    {
+      "file": "ports/qcom-regulators/stub-regulator.c",
+      "source": "drivers/regulator/stub-regulator.c",
+      "original_sha256": "b5587649dc481fab04c189e7b4700ad12a042040e3d4a5fe3ca7c45def8fed8f",
+      "sha256": "2c07a3dfb62026e09b3be22dcd4303a2dff533b62364d76606ad67e930e65fe6"
+    },
+    {
+      "file": "ports/qcom-regulators/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "bbd34544ba5ea5e263d85f29d44078ce4ee000b39a43b36896264d681ddfd737"
+    }
+  ],
+  "patch_sha256": "82dd1f178bcba4c0ae8a6cc30be2a127842f1cc64ab483e94a10b39b4f8ead15",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "reviewed_changes": [
+    "Preserve firmware voltage/mode/RPMh aggregation and real IPC/debug providers",
+    "Hold OF nodes with managed references and drop iterator on errors",
+    "Propagate proxy-consumer failure and manage populated child devices",
+    "Rollback failed driver registration and destroy IPC log after unregister",
+    "Track only owned debugfs files, drain accesses before freeing private data",
+    "Use full debugfs proxy for custom voltage operations and module ownership",
+    "Serialize lazy diagnostic consumer acquisition and synchronize trace removal"
+  ],
+  "known_open_items": [
+    "Physical RPMh acknowledgements, rail votes, suspend/resume and voltage transitions",
+    "Review aggregate request rollback and acknowledgement/error paths",
+    "Concurrent debugfs removal, regulator core locks and suspend diagnostics stress",
+    "Debug consumer holds provider module reference until device unbind",
+    "Optional suspend-debug exports are absent from the saved AVR module; see saved feature report"
+  ]
+}

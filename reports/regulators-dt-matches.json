@@ -1,0 +1,440 @@
+{
+  "scope": "dump-aligned candidate DT; property differences remain elsewhere",
+  "nodes": [
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-gfxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-ebilvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-msslvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-nsplvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-nsp2lvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-cxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-mmcxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-lcxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-lmxlvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxclvl",
+      "compatible": [
+        "qcom,rpmh-arc-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l4b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l6b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l7b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l8b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l9b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l10b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l11b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l12b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l13b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l14b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l15b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l16b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l17b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-b1b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-b2b-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s1j-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s1l-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l4m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l6m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l7m-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l4n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l6n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l7n-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l4k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l6k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l7k-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s1d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s2d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s3d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s4d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3d-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1f-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2f-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3f-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s4f-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s5f-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s3g-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-s4g-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2g-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l1i-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2i-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3i-e0",
+      "compatible": [
+        "qcom,rpmh-vrm-regulator"
+      ]
+    },
+    {
+      "path": "/soc/rsc@18900000/drv@2/rpmh-regulator-vrm-wcal",
+      "compatible": [
+        "qcom,rpmh-pbs-regulator"
+      ]
+    }
+  ],
+  "count": 72,
+  "saved_compatible_mismatches": [],
+  "saved_compatible_match_count": 72
+}

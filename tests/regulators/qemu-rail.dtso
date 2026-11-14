@@ -1,0 +1,19 @@
+/dts-v1/;
+/plugin/;
+/* Isolated guest logical regulator only. Never merge into the AVR device DT. */
+/ {
+ fragment@0 {
+  target-path = "/";
+  __overlay__ {
+   avr-qemu-regulator {
+    compatible = "qcom,stub-regulator";
+    regulator-name = "avr_qemu_rail";
+    regulator-min-microvolt = <900000>;
+    regulator-max-microvolt = <1200000>;
+    regulator-allow-set-load;
+    qcom,hpm-min-load = <100>;
+    qcom,system-load = <10>;
+   };
+  };
+ };
+};

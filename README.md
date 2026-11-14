@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホストを含む77モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系を含む80モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -170,3 +170,19 @@ python scripts/snapshot_boot_core.py --name android73-ufs-host-stage16 --gpu-dri
 ```
 
 全体の実機完了条件は未達です。パーティションは変更していません。`reports/ufs-stage16-validation.json` に範囲と未確認事項を記録します。
+
+## Stage17: RPMhレギュレータと診断ファイルの寿命管理
+
+固定MotorolaソースからRPMh、debug-regulator、元から存在する論理stub-regulatorを移植しました。実電源向けのRPMh投票処理は維持し、論理ドライバを物理レギュレータの代わりには使いません。保存DT・候補DT双方の72ノードでcompatibleが一致します（probe成功を意味しません）。保存済みdebug-regulatorの実ELF exportsから、任意のsuspend-debug拡張が含まれないことも確認しました。
+
+OFノード参照の保持・解放、proxy登録失敗の伝播、管理された子デバイス生成、IPCログの失敗時巻き戻し/終了順を修正しました。診断ファイルは自分が生成した分だけ取り除き、アクセス終了後に内部データを解放します。電圧操作の独自file operationsにはdebugfsの保護を適用し、診断consumerの生成も排他しました。
+
+QEMU専用の論理レール（実機DTへは入れない）で、参照数・電圧範囲・列挙・モード・負荷要求の5 KUnitが通過しました。開いた電圧ファイルからデバイス解除後に読み取ると停止する不具合を再現し、修正後は読取り拒否・再接続・module ref保持・解除後のアンロードまで通過しました。RPMhの実応答、実電圧、スリープ復帰は未検証です。
+
+```sh
+python scripts/build_storage_deps.py --regulators-tests
+python scripts/run_qemu.py --test regulators --cpus 4 --log reports/regulators.log
+python scripts/snapshot_boot_core.py --name android73-regulators-stage17 --gpu-driver --rakkashin --regulators
+```
+
+Stage17は80モジュール・4,285インポートCRC一致です。新しい本体変更はなくImageはStage16と同じです。常用版や実機起動可能なboot.imgではありません。詳細は `reports/regulators-stage17-validation.json`。

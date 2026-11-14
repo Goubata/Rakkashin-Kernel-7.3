@@ -307,7 +307,7 @@ config QCOM_MDT_LOADER
 	select QCOM_SCM
 
 config QCOM_PDR_HELPERS
-	tristate
+	tristate "Qualcomm PDR helpers for external clients"
 	select QCOM_QMI_HELPERS
 	select QCOM_PDR_MSG
 	depends on NET

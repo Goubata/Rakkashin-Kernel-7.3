@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-pmic-glink-stage29/（100モジュール、5,054インポートCRC一致）。Stage25は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-rproc-gate-stage30/（100モジュール、5,054インポートCRC一致）。Stage29は artifacts/android73-pmic-glink-stage29/（100モジュール、5,054インポートCRC一致）。Stage25は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -360,3 +360,23 @@ python scripts/snapshot_boot_core.py --name android73-pmic-glink-stage29 --gpu-d
 ```
 
 実機の7.3起動、実充電、常用の完成は未達。`reports/pmic-glink-stage29-validation.json`。
+
+## Stage30: 選択された通信サブデバイスには実際のedgeを要求
+
+native helperではGLINK/SMDが無効な場合のNULLを開始成功として扱える。
+全機能を接続する本プロジェクトでは、有効な通信サブデバイスのedgeがなければ
+-EOPNOTSUPPを返す方針とした。修正前の2項目失敗、修正後の2項目通過を確認。
+実GLINK/QMIの19項目・QRTR128回・実GLINKモジュール登録/解除も再通過した。
+これは通信の実装完了を示すものではなく、欠落した通信を成功に見せないための処理。
+100モジュール・5,054 CRC一致。`reports/rproc-gate-stage30-validation.json`。
+
+```sh
+python scripts/build_storage_deps.py --rproc-gate-tests --pmic-glink-tests
+python scripts/run_qemu.py --test rproc-gate --cpus 4 --log reports/rproc-gate-stage30-after.log
+python scripts/snapshot_boot_core.py --name android73-rproc-gate-stage30 --gpu-driver --rakkashin --pmic-glink
+```
+
+`reports/soccp-next-source-review.json`に次のSoCCP移植条件を記録した。
+7.3には他SoC向けのearly_boot/attach実装があり、PAS ID・firmware名は一部一致する。
+AVRのalor対応表、cx/mx電源・割り込み・SMEM/handover条件の照合と実装はまだ必要。
+他SoCのcompatibleを名目上追加する変更は行っていない。物理起動・常用は未達。

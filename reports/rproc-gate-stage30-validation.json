@@ -1,0 +1,40 @@
+{
+  "stage": "android73-rproc-gate-stage30",
+  "scope": "project policy requiring a real edge for selected remoteproc GLINK/SMD subdevices; not proof of firmware boot or remote communication",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "image_sha256": "919ed4fc3189a0d1e888d795f843637363a0e1c099d0591c0727d0e9a6f09001",
+  "module_count": 100,
+  "imports_checked": 5054,
+  "all_import_crcs_match": true,
+  "before_policy_cases_failed": 2,
+  "after_policy_cases_passed": 2,
+  "glink_qmi_regression_cases_passed": 19,
+  "qrtr_local_packets_verified": 128,
+  "production_glink_registration_unregistration_passed": true,
+  "policy": "A selected subdevice receiving NULL from a disabled transport API returns EOPNOTSUPP instead of success; genuine ERR_PTR propagation and real-edge behavior remain unchanged",
+  "physical_verified": false,
+  "whole_dt_validation_passed": false,
+  "firmware_boot_verified": false,
+  "image_packaging_ready": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Real GLINK SMEM/SMEM state/SMP2P/mailbox providers and SOCCP early-boot attachment",
+    "Adapt alor regulators/IRQ/handover while preserving saved firmware and power requests",
+    "Motorola/QTI charging, USB-C services and all missing phone/ROM driver families",
+    "Hardware fault/stress/thermal/power/physical boot acceptance and original duplicate SID4"
+  ],
+  "sha256": {
+    "reports/rproc-gate-stage30-before.log": "3ae66f1f0a25b8978169f9bba1d610308936e1dc9e88337030625836e8f4ac17",
+    "reports/rproc-gate-stage30-before.json": "380777ae6a0164120b3370b09a943970adb686523ce4f20b8f124fa96ff9c953",
+    "reports/rproc-gate-stage30-after.log": "05ad509a47ab02ded4040249c22bc8a8ba74117e270888e05872283577ed7e0a",
+    "reports/rproc-gate-stage30-after.json": "42f5e28e70bd9b7eff1da4def07ffbd2f28426c61ad1640b664bc50bfb0b295f",
+    "reports/rproc-gate-stage30-glink-regression.log": "a7c7e9eedd3632bb47b46d5128bd555b3e4f86025a82b5f7d0059db9f21726fd",
+    "reports/rproc-gate-stage30-glink-regression.json": "a31b1f02c7a400d1e8b7a0bf6b3c409e8dfe4889c63dd0cb619278f99e973c94",
+    "reports/rproc-gate-stage30-build.log": "67a91c0a551e444c54a651ab9cd2651f380f0257427ecd093260891f190eda78",
+    "reports/ipc-source-provenance.json": "e12b245b23266ed54b414b19728ea21339608c492249405780a14151a86b1fb6",
+    "patches/rproc-transport-gate-7.3.patch": "c3d960adfe478d4b0e2f7e92291324752630746f006a64027ab0ef65bcf5dcf5",
+    "reports/module-crc-stage30.json": "33ef5aabc20b80f1f2286d7e25cc937bc5bbb6ace503f5a69840a09a90569337",
+    "reports/soccp-next-source-review.json": "969360897ec90e938f5b711b6193c63d2321f53afc160992719aa57d20e3060b"
+  }
+}

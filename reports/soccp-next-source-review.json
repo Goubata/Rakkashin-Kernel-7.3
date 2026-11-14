@@ -1,0 +1,104 @@
+{
+  "scope": "pinned source and saved-DT comparison only; no firmware/secure/register operations performed",
+  "native_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "vendor_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "native_has_alor_compatible": false,
+  "native_has_early_boot_attach_implementation": true,
+  "vendor_alor_soccp": {
+    "crash_reason_smem": 656,
+    "firmware_name": "soccp.mbn",
+    "dtb_firmware_name": "soccp_dtb.mbn",
+    "pas_id": 51,
+    "dtb_pas_id": 65,
+    "ssr_name": "soccp",
+    "sysmon_name": "soccp",
+    "early_boot": true,
+    "auto_boot": true
+  },
+  "native_comparison_resources": {
+    "kaanapali_soccp_resource": {
+      "crash_reason_smem": 656,
+      "firmware_name": "soccp.mbn",
+      "dtb_firmware_name": "soccp_dtb.mbn",
+      "pas_id": 51,
+      "dtb_pas_id": 65,
+      "ssr_name": "soccp",
+      "sysmon_name": "soccp",
+      "early_boot": true,
+      "auto_boot": true
+    },
+    "glymur_soccp_resource": {
+      "crash_reason_smem": 656,
+      "firmware_name": "soccp.mbn",
+      "dtb_firmware_name": "soccp_dtb.mbn",
+      "pas_id": 51,
+      "dtb_pas_id": 65,
+      "ssr_name": "soccp",
+      "sysmon_name": "soccp",
+      "early_boot": true,
+      "auto_boot": true,
+      "needs_tzmem": true
+    }
+  },
+  "candidate_dt": {
+    "node": "/soc/remoteproc-soccp@a3380000",
+    "compatible": [
+      "qcom,alor-soccp-pas"
+    ],
+    "firmware_names": [
+      "soccp.mbn",
+      "soccp_dtb.mbn"
+    ],
+    "regulator_names": [
+      "cx",
+      "mx"
+    ],
+    "cx_uV_uA_raw": [
+      64,
+      0
+    ],
+    "mx_uV_uA_raw": [
+      64,
+      0
+    ],
+    "power_domains_present": false,
+    "interrupt_names": [
+      "wdog",
+      "fatal",
+      "ready",
+      "stop-ack",
+      "handover",
+      "pong",
+      "wake-ack"
+    ],
+    "smem_state_names": [
+      "stop",
+      "wakeup",
+      "sleep",
+      "ping"
+    ],
+    "glink_remote_pid": [
+      19
+    ],
+    "glink_label": [
+      "soccp"
+    ]
+  },
+  "next_requirements": [
+    "Preserve alor early-boot attachment/IRQ/handover policy; matching PAS IDs alone do not prove silicon compatibility",
+    "Adapt real regulator resources: vendor DT requests cx and mx; native code names optional cx/px and comparison resources request cx/mx power domains",
+    "Validate voltage-corner/load semantics before interpreting raw regulator request cells",
+    "Implement/enable real GLINK SMEM and required SMEM state/SMP2P/mailbox controllers",
+    "Verify PAS firmware/resource-table and secure ABI against actual saved modules/firmware before physical boot",
+    "Port Motorola/QTI charging plus USB-C services after SOCCP transport is real"
+  ],
+  "compatibility_alias_added": false,
+  "new_remoteproc_driver_staged": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "sha256": {
+    "/data/data/com.termux/files/home/avr-upstream-audit/android-7.3/drivers/remoteproc/qcom_q6v5_pas.c": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
+    "/data/data/com.termux/files/home/avr-upstream-audit/qcom-soc/drivers/remoteproc/qcom_q6v5_pas.c": "6b5604c4097481511e66661b461295fa2dea77fb06f68c31c210229c5c8bd79b",
+    "candidate_dtb": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d"
+  }
+}

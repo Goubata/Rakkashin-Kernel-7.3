@@ -218,6 +218,8 @@ static int glink_subdev_start(struct rproc_subdev *subdev)
 	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
 
 	glink->edge = qcom_glink_smem_register(glink->dev, glink->node);
+	if (!glink->edge)
+		return -EOPNOTSUPP;
 
 	return PTR_ERR_OR_ZERO(glink->edge);
 }
@@ -331,6 +333,8 @@ static int smd_subdev_start(struct rproc_subdev *subdev)
 	struct qcom_rproc_subdev *smd = to_smd_subdev(subdev);
 
 	smd->edge = qcom_smd_register_edge(smd->dev, smd->node);
+	if (!smd->edge)
+		return -EOPNOTSUPP;
 
 	return PTR_ERR_OR_ZERO(smd->edge);
 }

@@ -1,6 +1,7 @@
 {
   "passed": true,
   "scope": "staged source provenance only; not a runtime proof",
+  "remoteproc_error_policy_patch_sha256": "c3d960adfe478d4b0e2f7e92291324752630746f006a64027ab0ef65bcf5dcf5",
   "files": [
     {
       "file": "ports/gunyah/arm64/gh_arm.c",
@@ -237,8 +238,10 @@
       "commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
       "origin": "drivers/remoteproc/qcom_common.c",
       "original_git_blob": "5294e327f1587efc917eb01dde59bd1e723c225e",
-      "port_changes": [],
-      "sha256": "59691a7bb2f24c88fd499f230f8fed9ed6dfee653a50025646e706a06adcee73"
+      "port_changes": [
+        "Require a real edge for selected GLINK/SMD subdevices; unavailable transport returns EOPNOTSUPP"
+      ],
+      "sha256": "b98cf5be6aaf79557c5217369088f4a051f561dfbe35a92173497509b6fb3fbd"
     },
     {
       "file": "ports/qcom-rproc-common/qcom_common.h",

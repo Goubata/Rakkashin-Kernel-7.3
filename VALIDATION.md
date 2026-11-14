@@ -468,3 +468,19 @@ match. Saved/candidate DT has two covered SOCCP channels and eight active child
 services. Native has no alor SOCCP PAS compatible; firmware handover, SMEM
 transport, child services, physical OF/notifier/charging behavior, allocation
 fault injection, stress and all full-phone criteria remain incomplete.
+
+## Stage30: selected remoteproc transport availability
+
+Two actual-source cases fail before the project error policy (both disabled
+transport APIs return NULL and startup reports zero). Both pass after returning
+EOPNOTSUPP for NULL edges. Valid edges and ERR_PTR handling are unchanged.
+The separate guest does not load production common simultaneously with its
+source-including test module. GLINK/QMI 19-case, QRTR 128-packet and production
+GLINK registration regressions pass again. Stage30 retains 100 modules / 5,054
+matching import CRCs. This is an availability gate, not firmware communication.
+
+The next source review records existing native early-boot attach support for
+other SoCCP targets and matching PAS/firmware fields. Alor compatible, regulator
+cx/mx versus native supply/domain handling, IRQ, SMEM/state/mailbox/handover and
+secure ABI still need implementation/validation. No compatibility alias, phone
+partition write, firmware boot or daily-use claim is made.

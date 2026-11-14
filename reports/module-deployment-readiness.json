@@ -1,6 +1,6 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-pmic-glink-stage29",
+  "stage": "android73-rproc-gate-stage30",
   "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
   "archived_unique_count": 544,
   "staged_count": 100,
@@ -2075,7 +2075,7 @@
     },
     "qcom_common": {
       "file": "modules/qcom-rproc-common/qcom_common.ko",
-      "sha256": "96bcf0126ee8f4d3f16e5d772651e2bf68921f92594e871286fbaf53890fd6c0",
+      "sha256": "ff2f382bf8cdec2bac1b9f7459a04b9ba6618ad3ee63f68c621e26edf441a016",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "smem"

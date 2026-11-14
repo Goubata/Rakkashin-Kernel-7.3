@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += avr-rproc-gate-test.o
+ccflags-y += -I$(srctree)/drivers/remoteproc -DCONFIG_QCOM_RPROC_COMMON_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
+KBUILD_EXTRA_SYMBOLS += $(src)/../../ports/qcom-smem/Module.symvers

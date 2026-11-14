@@ -12,9 +12,13 @@ out=ROOT/'out/native-gki'
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--name',default='android73-boot-core-stage2')
 parser.add_argument("--gpu-deps",action="store_true")
+parser.add_argument("--gpu-driver",action="store_true")
 parser.add_argument("--ipc-deps",action="store_true")
 parser.add_argument("--rakkashin",action="store_true")
 args=parser.parse_args()
+if args.gpu_driver:
+    args.gpu_deps = True
+    args.ipc_deps = True
 if not args.name.replace('-','').replace('_','').isalnum():parser.error('invalid snapshot name')
 dst=ROOT/'artifacts'/args.name
 dst.mkdir(parents=True,exist_ok=True)
@@ -25,8 +29,12 @@ ports=['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctr
 if args.gpu_deps:
     ports += ['qcom-hwspinlock','qcom-smem','qcom-socinfo','qcom-llcc','qcom-dcvs',
               'governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats']
-if args.ipc_deps:
+if args.ipc_deps or args.gpu_driver:
     ports += ['qcom-rproc-common','gunyah']
+if args.gpu_driver:
+    ports += ['gunyah-core','gunyah-rm','qti-fence','kgsl']
+    modules += [(out/'drivers/hwtracing/coresight/coresight.ko','modules/native/coresight.ko'),
+                (out/'drivers/nvmem/nvmem_qfprom.ko','modules/native/nvmem_qfprom.ko')]
 if args.rakkashin:
     ports.append("rakkashin/adios")
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))
@@ -41,7 +49,7 @@ for source,name in modules:
     shutil.copyfile(source,target)
 report={
     'source_commit':subprocess.check_output(['git','-C',str(ROOT.parent/'avr-upstream-audit/android-7.3'),'rev-parse','HEAD'],text=True).strip(),
-    'description':'Partial port, no physical boot; KGSL not yet linked; not a flashable boot image',
+    'description':('Partial port with linked KGSL; no physical boot or GPU hardware validation; not a flashable boot image' if args.gpu_driver else 'Partial port, no physical boot; KGSL not yet linked; not a flashable boot image'),
     'module_count':len(modules),'modules':sorted(name for _,name in modules),
     'image_sha256':hashlib.sha256((dst/'Image').read_bytes()).hexdigest(),
 }

@@ -1,0 +1,33 @@
+{
+  "scope": "selected AVF ABI evidence and build configuration only; not full binary equivalence or hypervisor runtime validation",
+  "passed": true,
+  "vendor_config_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "vendor_config_sha256": "6ca3798902e9c865357f7c464e744fd3e102b9d7d1d75230eb125f90a9f777b1",
+  "flag": "CONFIG_QTVM_WITH_AVF=y",
+  "compile_commands_checked": [
+    "ports/gunyah/.gh_dbl.o.cmd",
+    "ports/gunyah/.gh_msgq.o.cmd",
+    "ports/gunyah-rm/.gh_rm_core.o.cmd",
+    "ports/qti-fence/hw_fence/src/.hw_fence_drv_utils.o.cmd",
+    "tests/remoteproc/.avr-gunyah-test.o.cmd"
+  ],
+  "doorbell_range_evidence": {
+    "stock": {
+      "sha256": "484aed3b5691363b0b8487e42eeb6d81ea9501a37b537ff7ec3623825dd44fbb",
+      "avf_range_checks_present": true,
+      "disassembly_sha256": "0d81578d5985ce368b86845998b7f66f4c60f5fd80efaec7b88883f1a57e1762"
+    },
+    "port": {
+      "sha256": "7cdbf9ccdf9cc166d6fc25cc1ca46db02dd1df3500be360d41fbb11a33c4e15b",
+      "avf_range_checks_present": true,
+      "disassembly_sha256": "6d2e594bdaddb4daaa5174159600ebb47d0d483364ad147f9c3001ecf68f561d"
+    }
+  },
+  "real_qtvm_notifier_import": {
+    "stock": true,
+    "port": true
+  },
+  "required_hw_fence_doorbell_label": "0x106",
+  "message_queue_min_label": "0x101",
+  "structure_note": "Kernel-private spinlock/lockdep layout may differ; import CRCs and wire fields are checked separately"
+}

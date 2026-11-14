@@ -14,3 +14,7 @@ ccflags-y += -include $(src)/avr-fence-compat.h
 
 ccflags-y += -include $(src)/avr-platform-deps.h
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-rproc-common/Module.symvers $(src)/../gunyah/Module.symvers
+KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah-core/Module.symvers $(src)/../gunyah-rm/Module.symvers
+
+# Motorola canoe_perf.bzl: shared AVF labels are part of the wire ABI.
+ccflags-y += -DCONFIG_QTVM_WITH_AVF=1

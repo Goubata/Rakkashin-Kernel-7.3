@@ -521,7 +521,7 @@ struct adreno_power_ops {
 	int (*gpu_bus_set)(struct adreno_device *adreno_dev, int bus_level,
 		u32 ab);
 	/** @gmu_based_dcvs_pwr_ops: Function ops for GMU based DCVS power operations */
-	void (*gmu_based_dcvs_pwr_ops)(struct adreno_device *adreno_dev, u32 arg,
+	int (*gmu_based_dcvs_pwr_ops)(struct adreno_device *adreno_dev, u32 arg,
 			enum gpu_pwrlevel_op op);
 	/** @set_thermal_index: Function ops for sending thermal constraint to GMU */
 	void (*set_thermal_index)(struct adreno_device *adreno_dev);

@@ -5,3 +5,8 @@ ccflags-y += -I$(src)/include -I$(src)/../gunyah/include -I$(src)/../secure-buff
 ccflags-y += -DCONFIG_GH_RM_DRV_MODULE=1 -DCONFIG_GH_ARM64_DRV_MODULE=1 -DCONFIG_GH_DBL_MODULE=1 -DCONFIG_GH_MSGQ_MODULE=1 -DCONFIG_GUNYAH_MODULE=1 -DCONFIG_QCOM_SECURE_BUFFER_MODULE=1
 KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah/Module.symvers $(src)/../secure-buffer/Module.symvers
 ccflags-y += -include $(src)/avr-rm-deps.h
+KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah-core/Module.symvers
+
+# Motorola canoe_perf.bzl: shared AVF labels are part of the wire ABI.
+ccflags-y += -DCONFIG_QTVM_WITH_AVF=1
+ccflags-y += -DCONFIG_GUNYAH_QCOM_TRUSTED_VM_MODULE=1

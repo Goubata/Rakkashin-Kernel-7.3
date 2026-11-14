@@ -1,3 +1,27 @@
+# Stage9 current status
+
+`msm_kgsl.ko` now links against the real 7.3 SCM, Gunyah, SYNX, IPCLite and
+hardware-fence providers. The stage9 snapshot contains 71 modules; all 3,618
+import CRCs and declared hard/soft dependency presence have been checked.
+This is not a physical GPU probe/rendering result or a flashable boot image.
+
+The original custom 100 ms busy-update default and Boost 0..3 controls remain.
+Boost cap selection now reapplies current thermal/max constraints after
+retaining a previous floor, and the worker rechecks limits before submission.
+The actual gen8 HFI min-level error is propagated through the power-ops layer;
+a failed submission is no longer recorded as successfully applied. Eight
+production-policy KUnit cases include all 18,432 small level combinations.
+Firmware behavior and restart/expiry/concurrency paths still need validation.
+
+Build the configured core/GPU dependencies, then run
+`python scripts/build_ipc_deps.py --gpu-driver --tests`. CoreSight and read-only
+QFPROM candidates are included in the snapshot to satisfy KGSL dependencies.
+The AVF external build flag is matched to saved binaries and the pinned vendor
+configuration; CRC rewriting or optional-header success fallbacks are not a
+substitute for providers.
+
+The earlier notes below describe the intermediate migration work.
+
 # Rakkashin KGSL 7.3 port in progress
 
 Input: kgsl-avr-1.0-source.zip, SHA256 0b65d98f38556912f5fd486535f455b580287c178197fd07cc22b0448c656e1f.

@@ -1712,16 +1712,17 @@ static void gen8_hwsched_set_gpuclk(struct adreno_device *adreno_dev, u32 value)
 	}
 }
 
-static void gen8_hwsched_set_minpwrlevel(struct adreno_device *adreno_dev, u32 value)
+static int gen8_hwsched_set_minpwrlevel(struct adreno_device *adreno_dev, u32 value)
 {
 	struct kgsl_device *device = KGSL_DEVICE(adreno_dev);
 	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
 
 	if (device->state == KGSL_STATE_ACTIVE) {
 		/* If GMU is up, send the HFI */
-		gen8_hwsched_set_gmu_based_dcvs_value(adreno_dev, HFI_VALUE_MIN_GPU_PERF_INDEX, 0,
+		return gen8_hwsched_set_gmu_based_dcvs_value(adreno_dev, HFI_VALUE_MIN_GPU_PERF_INDEX, 0,
 				(pwr->num_pwrlevels - value), false);
 	}
+	return 0;
 }
 
 static void gen8_hwsched_set_maxpwrlevel(struct adreno_device *adreno_dev, u32 value)
@@ -2005,7 +2006,7 @@ static struct kobj_type ktype_dcvs = {
 	.default_groups = dcvs_groups,
 };
 
-static void gen8_hwsched_gmu_based_dcvs_pwr_ops(struct adreno_device *adreno_dev, u32 arg,
+static int gen8_hwsched_gmu_based_dcvs_pwr_ops(struct adreno_device *adreno_dev, u32 arg,
 		enum gpu_pwrlevel_op op)
 {
 	/* For all ops except GPU_PWRLEVEL_OP_PERF_HINT, caller must hold the device mutex */
@@ -2014,8 +2015,7 @@ static void gen8_hwsched_gmu_based_dcvs_pwr_ops(struct adreno_device *adreno_dev
 		gen8_hwsched_set_thermal_index(adreno_dev);
 		break;
 	case GPU_PWRLEVEL_OP_MIN_PWRLEVEL:
-		gen8_hwsched_set_minpwrlevel(adreno_dev, arg);
-		break;
+		return gen8_hwsched_set_minpwrlevel(adreno_dev, arg);
 	case GPU_PWRLEVEL_OP_MAX_PWRLEVEL:
 		gen8_hwsched_set_maxpwrlevel(adreno_dev, arg);
 		break;
@@ -2037,6 +2037,7 @@ static void gen8_hwsched_gmu_based_dcvs_pwr_ops(struct adreno_device *adreno_dev
 		gen8_hwsched_set_tuning_param(adreno_dev, arg);
 		break;
 	}
+	return 0;
 }
 
 const struct adreno_power_ops gen8_hwsched_power_ops = {

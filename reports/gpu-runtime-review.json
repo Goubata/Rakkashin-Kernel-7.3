@@ -1,0 +1,35 @@
+{
+  "scope": "concrete source/runtime review items before daily-use acceptance; not a success claim",
+  "daily_use_ready": false,
+  "items": [
+    {
+      "area": "Adreno Boost expiry",
+      "file": "ports/kgsl/kgsl_pwrctrl.c",
+      "status": "open",
+      "finding": "Hold expiry is currently evaluated on incoming GMU samples; a quiet trace stream does not independently schedule a floor drop."
+    },
+    {
+      "area": "Adreno Boost concurrency/lifetime",
+      "file": "ports/kgsl/kgsl_pwrctrl.c",
+      "status": "open",
+      "finding": "Sampling, worker state/statistics and teardown do not yet share complete serialization; review queueing versus cancel_work_sync."
+    },
+    {
+      "area": "Gunyah vendor RM teardown",
+      "file": "ports/gunyah-rm/gh_rm_core.c",
+      "status": "open",
+      "finding": "Audit removal/probe failure for SCM/hyp assignment and VM status notifier registrations, not just common RM registration."
+    },
+    {
+      "area": "Gunyah common transport lifetime",
+      "file": "ports/gunyah-core/rsc_mgr.c",
+      "status": "open",
+      "finding": "Audit PM notifier, IRQ/wake, auxiliary device and allocated context cleanup through all init failures and exit paths."
+    },
+    {
+      "area": "GPU firmware/Android runtime",
+      "status": "untested",
+      "finding": "No physical GPU probe, rendering, protected memory, reset/suspend or HAL/SELinux test has occurred."
+    }
+  ]
+}

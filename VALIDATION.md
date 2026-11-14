@@ -40,13 +40,15 @@ The current 6.12 environment is the reference for behavior, not a 7.3 test.
   evidence, not a substitute for RCU torture/stress or real-device testing.
 - OxygenOS sync module passed 1,283 checks on SMP4 with the current Image.
 - Evidence hashes and results: reports/runtime-test-results.json.
-- KGSL user ZIP staged with custom interfaces retained; all C sources now
-  compile into msm_kgsl.o. Final module linking still lacks 11 real dependency
-  symbols. The shmem and thermal API migrations compile. Six memory cases
-  (35 total with clock/RCU) passed on SMP4, including guest-zram swap and data
-  read-back. This does not prove GPU DMA or protected-content behavior.
-  Dependency migration and boost cap/concurrency review are outstanding. See
-  ports/kgsl/PORTING.md; do not install this unfinished source build.
+- KGSL now links as msm_kgsl.ko with the real Gunyah transport/RM, SYNX,
+  IPCLite, hardware-fence and SCM providers. Stage9 has 71 modules with 3,618
+  import CRCs matching, and all declared hard/soft dependency names present.
+  GPU rendering, DMA/protected-content and firmware operation are unverified.
+  The final Image passes 71 KUnit cases across five diskless SMP4 suites;
+  reports/gpu-stage9-validation.json records their hashes and exact scope.
+  The AVF external module configuration is checked against actual saved
+  binaries and vendor configuration. Boost cap and min-level error propagation
+  fixes are included. Expiry/concurrency and shutdown lifecycle review remain.
 - 32 firmware-matched official repository refs found. A vantage camera source
   with canoe configuration is a candidate; exact avr compatibility is unproven.
 

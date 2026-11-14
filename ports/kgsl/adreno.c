@@ -2660,9 +2660,9 @@ static int adreno_gmu_based_dcvs_pwr_ops(struct kgsl_device *device, u32 arg,
 		return -EOPNOTSUPP;
 
 	if (ops->gmu_based_dcvs_pwr_ops)
-		ops->gmu_based_dcvs_pwr_ops(adreno_dev, arg, op);
+		return ops->gmu_based_dcvs_pwr_ops(adreno_dev, arg, op);
 
-	return 0;
+	return -EOPNOTSUPP;
 }
 
 int adreno_set_constraint(struct kgsl_device *device,

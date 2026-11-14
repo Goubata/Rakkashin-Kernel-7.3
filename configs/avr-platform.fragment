@@ -4,3 +4,5 @@ CONFIG_QCOM_SCM=m
 CONFIG_QCOM_PAS=m
 CONFIG_QCOM_TZMEM=m
 CONFIG_QCOM_TZMEM_MODE_GENERIC=y
+# KGSL softdep; saved AVR DT has qcom,qfprom fallback and read-only cells.
+CONFIG_NVMEM_QCOM_QFPROM=m

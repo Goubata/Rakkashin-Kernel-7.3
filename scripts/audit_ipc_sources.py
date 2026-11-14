@@ -61,7 +61,8 @@ def main():
         ('gh_rm_drv_private.h','drivers/virt/gunyah/gh_rm_drv_private.h',False),
         ('include/trace/events/gunyah.h','include/trace/events/gunyah.h',False),
         ('include/linux/gunyah/gh_vm.h','include/linux/gunyah/gh_vm.h',False),
-        ('include/drivers/virt/gunyah/rsc_mgr.h','drivers/virt/gunyah/rsc_mgr.h',True)]:
+        ('include/drivers/virt/gunyah/rsc_mgr.h','drivers/virt/gunyah/rsc_mgr.h',True),
+        ('include/linux/gunyah_qtvm.h','include/linux/gunyah_qtvm.h',True)]:
         path=ROOT/'ports/gunyah-rm'/relative
         data=path.read_bytes();original=data;changes=[]
         if relative=='gh_rm_core.c':

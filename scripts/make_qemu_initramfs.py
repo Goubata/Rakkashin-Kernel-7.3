@@ -21,6 +21,8 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--gpu-policy-tests", action="store_true")
+    group.add_argument("--scm-tests", action="store_true")
     group.add_argument("--platform-tests", action="store_true")
     group.add_argument("--adios-tests", action="store_true")
     group.add_argument("--power-tests", action="store_true")
@@ -186,20 +188,51 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         modules += [ROOT/'ports'/name for name in [
             'qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko',
             'qcom-rproc-common/qcom_common.ko','gunyah/gh_arm_drv.ko',
-            'gunyah/gh_dbl.ko','gunyah/gh_msgq.ko']]
+            'gunyah/gh_dbl.ko','gunyah/gh_msgq.ko',
+            'gunyah-core/gunyah_hypercall.ko','gunyah-core/gunyah_platform_hooks.ko']]
+        modules += [ROOT/'out/native-gki'/name for name in ['drivers/hwtracing/coresight/coresight.ko','drivers/nvmem/nvmem_qfprom.ko']]
         modules += [ROOT/'tests/remoteproc'/name for name in ['avr-rproc-test.ko','avr-gunyah-test.ko']]
         commands=[]
         for source in modules:
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_PLATFORM_LOAD_FAIL; /bin/busybox poweroff -f; }}')
-        for name in ['avr_gunyah_test','avr_rproc_test','gh_msgq','gh_dbl','gh_arm_drv','qcom_common','smem','qcom_hwspinlock']:
+        add('modules/gunyah.ko',stat.S_IFREG|0o644,(ROOT/'ports/gunyah-core/gunyah.ko').read_bytes())
+        commands += [
+            'if /bin/busybox insmod /modules/gunyah.ko > /tmp/gunyah-gate 2>&1; then echo AVR_GUNYAH_GATE_FAIL; /bin/busybox poweroff -f; fi',
+            '/bin/busybox cat /tmp/gunyah-gate',
+            '/bin/busybox grep -q "No such device" /tmp/gunyah-gate || { echo AVR_GUNYAH_GATE_ERRNO_FAIL; /bin/busybox poweroff -f; }',
+            'test ! -d /sys/module/gunyah || { echo AVR_GUNYAH_GATE_STATE_FAIL; /bin/busybox poweroff -f; }',
+            'echo AVR_GUNYAH_GUEST_GATE_PASS']
+        for name in ['avr_gunyah_test','avr_rproc_test','nvmem_qfprom','coresight','gh_msgq','gh_dbl','gh_arm_drv','gunyah_platform_hooks','gunyah_hypercall','qcom_common','smem','qcom_hwspinlock']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_PLATFORM_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands.append('echo AVR_PLATFORM_TESTS_PASS')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.scm_tests:
+        modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
+        modules += [ROOT/'out/native-gki/drivers/firmware/qcom'/name for name in
+                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules.append(ROOT/'tests/scm/avr-scm-notifier-test.ko')
+        commands=[]
+        for source in modules:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_SCM_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('/bin/busybox rmmod avr_scm_notifier_test || { echo AVR_SCM_UNLOAD_FAIL; /bin/busybox poweroff -f; }')
+        commands.append('echo AVR_SCM_TESTS_PASS')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.gpu_policy_tests:
+        modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests/gpu-policy/avr-adrenoboost-test.ko']
+        commands=[]
+        for source in modules:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_GPU_POLICY_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_GPU_POLICY_TESTS_PASS')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

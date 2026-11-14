@@ -68,9 +68,15 @@ static void virtual_irq_lifetime(struct kunit *test)
 	KUNIT_EXPECT_EQ(test, gh_put_virq(second), 0);
 	KUNIT_EXPECT_EQ(test, gh_put_virq(first), -EINVAL);
 }
+static void avf_wire_labels(struct kunit *test)
+{
+	KUNIT_EXPECT_EQ(test, (int)GH_DBL_HW_FENCE, 0x106);
+	KUNIT_EXPECT_EQ(test, GUNYAH_QCOM_MIN_MSGQ, 0x101);
+}
 static struct kunit_case cases[] = {
 	KUNIT_CASE(doorbell_missing_capability), KUNIT_CASE(shared_direction_lifetime),
-	KUNIT_CASE(message_queue_missing_capability), KUNIT_CASE(virtual_irq_lifetime), {}
+	KUNIT_CASE(message_queue_missing_capability), KUNIT_CASE(virtual_irq_lifetime),
+	KUNIT_CASE(avf_wire_labels), {}
 };
 static struct kunit_suite suite = { .name = "avr-gunyah-local", .test_cases = cases };
 kunit_test_suite(suite);

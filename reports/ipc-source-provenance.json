@@ -306,6 +306,15 @@
       "original_git_blob": "af65801489bb6a5e21fd81464aafdb6b581a6410",
       "port_changes": [],
       "sha256": "acbf62f07156cb68bb3302c740b04de2701dcfc2fa49eed75d36613bd2df37cb"
+    },
+    {
+      "file": "ports/gunyah-rm/include/linux/gunyah_qtvm.h",
+      "source_repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "origin": "include/linux/gunyah_qtvm.h",
+      "original_git_blob": "3986b207a395fcf8f0c0a933cd17ceccfd0c0e9d",
+      "port_changes": [],
+      "sha256": "dda3786113c730cbf0fd01088b8ffd450471efc11c33a61807b5b6ac2b6df9ec"
     }
   ]
 }

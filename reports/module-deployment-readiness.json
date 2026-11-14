@@ -1,13 +1,591 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-ipc-stage8",
-  "source_commit": "4b563b7618db434257288743d9b64d901db76773",
+  "stage": "android73-gpu-stage9",
+  "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
   "archived_unique_count": 544,
-  "staged_count": 56,
-  "same_name_candidate_count": 50,
-  "archived_names_without_same_name_candidate_count": 494,
-  "loaded_names_without_same_name_candidate_count": 479,
+  "staged_count": 71,
+  "same_name_candidate_count": 57,
+  "archived_names_without_same_name_candidate_count": 487,
+  "loaded_names_without_same_name_candidate_count": 472,
   "all_staged_module_dependencies_present": true,
+  "all_staged_soft_dependencies_present": true,
+  "elf_dependency_graph_acyclic": true,
+  "combined_hard_soft_graph_acyclic": true,
+  "combined_dependency_order": [
+    {
+      "name": "adios",
+      "file": "modules/rakkashin/adios/adios.ko"
+    },
+    {
+      "name": "avr_oplus_sync",
+      "file": "modules/avr-oplus-sync/avr_oplus_sync.ko"
+    },
+    {
+      "name": "cmd_db",
+      "file": "modules/qcom-rpmh/cmd-db.ko"
+    },
+    {
+      "name": "coresight",
+      "file": "modules/native/coresight.ko"
+    },
+    {
+      "name": "cpu_phys_log_map",
+      "file": "modules/qcom-irq/cpu_phys_log_map.ko"
+    },
+    {
+      "name": "crm_v2",
+      "file": "modules/qcom-clock-core/crm-v2.ko"
+    },
+    {
+      "name": "gh_arm_drv",
+      "file": "modules/gunyah/gh_arm_drv.ko"
+    },
+    {
+      "name": "gh_dbl",
+      "file": "modules/gunyah/gh_dbl.ko"
+    },
+    {
+      "name": "gh_msgq",
+      "file": "modules/gunyah/gh_msgq.ko"
+    },
+    {
+      "name": "governor_gpubw_mon",
+      "file": "modules/governor-gpubw/governor_gpubw_mon.ko"
+    },
+    {
+      "name": "governor_msm_adreno_ro",
+      "file": "modules/governor-adreno-ro/governor_msm_adreno_ro.ko"
+    },
+    {
+      "name": "gunyah_hypercall",
+      "file": "modules/gunyah-core/gunyah_hypercall.ko"
+    },
+    {
+      "name": "gunyah",
+      "file": "modules/gunyah-core/gunyah.ko"
+    },
+    {
+      "name": "gunyah_platform_hooks",
+      "file": "modules/gunyah-core/gunyah_platform_hooks.ko"
+    },
+    {
+      "name": "gunyah_rsc_mgr",
+      "file": "modules/gunyah-core/gunyah_rsc_mgr.ko"
+    },
+    {
+      "name": "gunyah_ioeventfd",
+      "file": "modules/gunyah-core/gunyah_ioeventfd.ko"
+    },
+    {
+      "name": "gunyah_irqfd",
+      "file": "modules/gunyah-core/gunyah_irqfd.ko"
+    },
+    {
+      "name": "gunyah_qtvm",
+      "file": "modules/gunyah-core/gunyah_qtvm.ko"
+    },
+    {
+      "name": "gunyah_vcpu",
+      "file": "modules/gunyah-core/gunyah_vcpu.ko"
+    },
+    {
+      "name": "iommu_logger",
+      "file": "modules/iommu-logger/iommu_logger.ko"
+    },
+    {
+      "name": "llcc_qcom",
+      "file": "modules/qcom-llcc/llcc-qcom.ko"
+    },
+    {
+      "name": "msm_sysstats",
+      "file": "modules/msm-sysstats/msm_sysstats.ko"
+    },
+    {
+      "name": "ntsync",
+      "file": "modules/ntsync/ntsync.ko"
+    },
+    {
+      "name": "nvmem_qfprom",
+      "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "proxy_consumer",
+      "file": "modules/qcom-clock-core/proxy-consumer.ko"
+    },
+    {
+      "name": "gdsc_regulator",
+      "file": "modules/qcom-clock-core/gdsc-regulator.ko"
+    },
+    {
+      "name": "clk_qcom",
+      "file": "modules/qcom-clock-core/clk-qcom.ko"
+    },
+    {
+      "name": "cambistmclkcc_canoe",
+      "file": "modules/qcom-clock-controllers/cambistmclkcc-canoe.ko"
+    },
+    {
+      "name": "camcc_alor",
+      "file": "modules/qcom-clock-controllers/camcc-alor.ko"
+    },
+    {
+      "name": "camcc_canoe",
+      "file": "modules/qcom-clock-controllers/camcc-canoe.ko"
+    },
+    {
+      "name": "camcc_chora",
+      "file": "modules/qcom-clock-controllers/camcc-chora.ko"
+    },
+    {
+      "name": "clk_dummy",
+      "file": "modules/qcom-clock-controllers/clk-dummy.ko"
+    },
+    {
+      "name": "debugcc_alor",
+      "file": "modules/qcom-clock-controllers/debugcc-alor.ko"
+    },
+    {
+      "name": "debugcc_canoe",
+      "file": "modules/qcom-clock-controllers/debugcc-canoe.ko"
+    },
+    {
+      "name": "debugcc_chora",
+      "file": "modules/qcom-clock-controllers/debugcc-chora.ko"
+    },
+    {
+      "name": "dispcc_canoe",
+      "file": "modules/qcom-clock-controllers/dispcc-canoe.ko"
+    },
+    {
+      "name": "dispcc_chora",
+      "file": "modules/qcom-clock-controllers/dispcc-chora.ko"
+    },
+    {
+      "name": "evacc_canoe",
+      "file": "modules/qcom-clock-controllers/evacc-canoe.ko"
+    },
+    {
+      "name": "gcc_alor",
+      "file": "modules/qcom-clock-controllers/gcc-alor.ko"
+    },
+    {
+      "name": "gcc_canoe",
+      "file": "modules/qcom-clock-controllers/gcc-canoe.ko"
+    },
+    {
+      "name": "gcc_chora",
+      "file": "modules/qcom-clock-controllers/gcc-chora.ko"
+    },
+    {
+      "name": "gpucc_canoe",
+      "file": "modules/qcom-clock-controllers/gpucc-canoe.ko"
+    },
+    {
+      "name": "gpucc_chora",
+      "file": "modules/qcom-clock-controllers/gpucc-chora.ko"
+    },
+    {
+      "name": "qcom_hwspinlock",
+      "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko"
+    },
+    {
+      "name": "ipclite",
+      "file": "modules/qti-fence/ipclite.ko"
+    },
+    {
+      "name": "qcom_pas",
+      "file": "modules/firmware/qcom_pas.ko"
+    },
+    {
+      "name": "qcom_rpmh",
+      "file": "modules/qcom-rpmh/qcom_rpmh.ko"
+    },
+    {
+      "name": "clk_rpmh",
+      "file": "modules/qcom-clock-controllers/clk-rpmh.ko"
+    },
+    {
+      "name": "dcvs_fp",
+      "file": "modules/qcom-dcvs/dcvs_fp.ko"
+    },
+    {
+      "name": "qcom_dcvs",
+      "file": "modules/qcom-dcvs/qcom-dcvs.ko"
+    },
+    {
+      "name": "qcom_tzmem",
+      "file": "modules/firmware/qcom_tzmem.ko"
+    },
+    {
+      "name": "qcom_scm",
+      "file": "modules/firmware/qcom-scm.ko"
+    },
+    {
+      "name": "gic_intr_routing",
+      "file": "modules/qcom-irq/gic_intr_routing.ko"
+    },
+    {
+      "name": "governor_msm_adreno_tz",
+      "file": "modules/governor-adreno-tz/governor_msm_adreno_tz.ko"
+    },
+    {
+      "name": "qcom_iommu_util",
+      "file": "modules/qcom-iommu-util/qcom_iommu_util.ko"
+    },
+    {
+      "name": "arm_smmu",
+      "file": "modules/arm-smmu-vendor/arm_smmu.ko"
+    },
+    {
+      "name": "qcom_pdc",
+      "file": "modules/qcom-irq/qcom-pdc.ko"
+    },
+    {
+      "name": "pinctrl_msm",
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-msm.ko"
+    },
+    {
+      "name": "pinctrl_alor",
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+    },
+    {
+      "name": "secure_buffer",
+      "file": "modules/secure-buffer/secure_buffer.ko"
+    },
+    {
+      "name": "gh_rm_drv",
+      "file": "modules/gunyah-rm/gh_rm_drv.ko"
+    },
+    {
+      "name": "smem",
+      "file": "modules/qcom-smem/smem.ko"
+    },
+    {
+      "name": "qcom_common",
+      "file": "modules/qcom-rproc-common/qcom_common.ko"
+    },
+    {
+      "name": "msm_hw_fence",
+      "file": "modules/qti-fence/msm_hw_fence.ko"
+    },
+    {
+      "name": "socinfo",
+      "file": "modules/qcom-socinfo/socinfo.ko"
+    },
+    {
+      "name": "synx_driver",
+      "file": "modules/qti-fence/synx-driver.ko"
+    },
+    {
+      "name": "msm_kgsl",
+      "file": "modules/kgsl/msm_kgsl.ko"
+    },
+    {
+      "name": "tcsrcc_canoe",
+      "file": "modules/qcom-clock-controllers/tcsrcc-canoe.ko"
+    },
+    {
+      "name": "tcsrcc_chora",
+      "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko"
+    },
+    {
+      "name": "videocc_canoe",
+      "file": "modules/qcom-clock-controllers/videocc-canoe.ko"
+    },
+    {
+      "name": "videocc_chora",
+      "file": "modules/qcom-clock-controllers/videocc-chora.ko"
+    }
+  ],
+  "combined_dependency_cycle_or_blocked_names": [],
+  "elf_dependency_order": [
+    {
+      "name": "adios",
+      "file": "modules/rakkashin/adios/adios.ko"
+    },
+    {
+      "name": "avr_oplus_sync",
+      "file": "modules/avr-oplus-sync/avr_oplus_sync.ko"
+    },
+    {
+      "name": "cmd_db",
+      "file": "modules/qcom-rpmh/cmd-db.ko"
+    },
+    {
+      "name": "coresight",
+      "file": "modules/native/coresight.ko"
+    },
+    {
+      "name": "cpu_phys_log_map",
+      "file": "modules/qcom-irq/cpu_phys_log_map.ko"
+    },
+    {
+      "name": "crm_v2",
+      "file": "modules/qcom-clock-core/crm-v2.ko"
+    },
+    {
+      "name": "gh_arm_drv",
+      "file": "modules/gunyah/gh_arm_drv.ko"
+    },
+    {
+      "name": "gh_dbl",
+      "file": "modules/gunyah/gh_dbl.ko"
+    },
+    {
+      "name": "gh_msgq",
+      "file": "modules/gunyah/gh_msgq.ko"
+    },
+    {
+      "name": "governor_gpubw_mon",
+      "file": "modules/governor-gpubw/governor_gpubw_mon.ko"
+    },
+    {
+      "name": "governor_msm_adreno_ro",
+      "file": "modules/governor-adreno-ro/governor_msm_adreno_ro.ko"
+    },
+    {
+      "name": "gunyah_hypercall",
+      "file": "modules/gunyah-core/gunyah_hypercall.ko"
+    },
+    {
+      "name": "gunyah",
+      "file": "modules/gunyah-core/gunyah.ko"
+    },
+    {
+      "name": "gunyah_platform_hooks",
+      "file": "modules/gunyah-core/gunyah_platform_hooks.ko"
+    },
+    {
+      "name": "gunyah_rsc_mgr",
+      "file": "modules/gunyah-core/gunyah_rsc_mgr.ko"
+    },
+    {
+      "name": "gunyah_ioeventfd",
+      "file": "modules/gunyah-core/gunyah_ioeventfd.ko"
+    },
+    {
+      "name": "gunyah_irqfd",
+      "file": "modules/gunyah-core/gunyah_irqfd.ko"
+    },
+    {
+      "name": "gunyah_qtvm",
+      "file": "modules/gunyah-core/gunyah_qtvm.ko"
+    },
+    {
+      "name": "gunyah_vcpu",
+      "file": "modules/gunyah-core/gunyah_vcpu.ko"
+    },
+    {
+      "name": "iommu_logger",
+      "file": "modules/iommu-logger/iommu_logger.ko"
+    },
+    {
+      "name": "ipclite",
+      "file": "modules/qti-fence/ipclite.ko"
+    },
+    {
+      "name": "llcc_qcom",
+      "file": "modules/qcom-llcc/llcc-qcom.ko"
+    },
+    {
+      "name": "msm_sysstats",
+      "file": "modules/msm-sysstats/msm_sysstats.ko"
+    },
+    {
+      "name": "ntsync",
+      "file": "modules/ntsync/ntsync.ko"
+    },
+    {
+      "name": "nvmem_qfprom",
+      "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "proxy_consumer",
+      "file": "modules/qcom-clock-core/proxy-consumer.ko"
+    },
+    {
+      "name": "gdsc_regulator",
+      "file": "modules/qcom-clock-core/gdsc-regulator.ko"
+    },
+    {
+      "name": "clk_qcom",
+      "file": "modules/qcom-clock-core/clk-qcom.ko"
+    },
+    {
+      "name": "cambistmclkcc_canoe",
+      "file": "modules/qcom-clock-controllers/cambistmclkcc-canoe.ko"
+    },
+    {
+      "name": "camcc_alor",
+      "file": "modules/qcom-clock-controllers/camcc-alor.ko"
+    },
+    {
+      "name": "camcc_canoe",
+      "file": "modules/qcom-clock-controllers/camcc-canoe.ko"
+    },
+    {
+      "name": "camcc_chora",
+      "file": "modules/qcom-clock-controllers/camcc-chora.ko"
+    },
+    {
+      "name": "clk_dummy",
+      "file": "modules/qcom-clock-controllers/clk-dummy.ko"
+    },
+    {
+      "name": "debugcc_alor",
+      "file": "modules/qcom-clock-controllers/debugcc-alor.ko"
+    },
+    {
+      "name": "debugcc_canoe",
+      "file": "modules/qcom-clock-controllers/debugcc-canoe.ko"
+    },
+    {
+      "name": "debugcc_chora",
+      "file": "modules/qcom-clock-controllers/debugcc-chora.ko"
+    },
+    {
+      "name": "dispcc_canoe",
+      "file": "modules/qcom-clock-controllers/dispcc-canoe.ko"
+    },
+    {
+      "name": "dispcc_chora",
+      "file": "modules/qcom-clock-controllers/dispcc-chora.ko"
+    },
+    {
+      "name": "evacc_canoe",
+      "file": "modules/qcom-clock-controllers/evacc-canoe.ko"
+    },
+    {
+      "name": "gcc_alor",
+      "file": "modules/qcom-clock-controllers/gcc-alor.ko"
+    },
+    {
+      "name": "gcc_canoe",
+      "file": "modules/qcom-clock-controllers/gcc-canoe.ko"
+    },
+    {
+      "name": "gcc_chora",
+      "file": "modules/qcom-clock-controllers/gcc-chora.ko"
+    },
+    {
+      "name": "gpucc_canoe",
+      "file": "modules/qcom-clock-controllers/gpucc-canoe.ko"
+    },
+    {
+      "name": "gpucc_chora",
+      "file": "modules/qcom-clock-controllers/gpucc-chora.ko"
+    },
+    {
+      "name": "qcom_hwspinlock",
+      "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko"
+    },
+    {
+      "name": "qcom_pas",
+      "file": "modules/firmware/qcom_pas.ko"
+    },
+    {
+      "name": "qcom_rpmh",
+      "file": "modules/qcom-rpmh/qcom_rpmh.ko"
+    },
+    {
+      "name": "clk_rpmh",
+      "file": "modules/qcom-clock-controllers/clk-rpmh.ko"
+    },
+    {
+      "name": "dcvs_fp",
+      "file": "modules/qcom-dcvs/dcvs_fp.ko"
+    },
+    {
+      "name": "qcom_dcvs",
+      "file": "modules/qcom-dcvs/qcom-dcvs.ko"
+    },
+    {
+      "name": "qcom_tzmem",
+      "file": "modules/firmware/qcom_tzmem.ko"
+    },
+    {
+      "name": "qcom_scm",
+      "file": "modules/firmware/qcom-scm.ko"
+    },
+    {
+      "name": "gic_intr_routing",
+      "file": "modules/qcom-irq/gic_intr_routing.ko"
+    },
+    {
+      "name": "governor_msm_adreno_tz",
+      "file": "modules/governor-adreno-tz/governor_msm_adreno_tz.ko"
+    },
+    {
+      "name": "pinctrl_msm",
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-msm.ko"
+    },
+    {
+      "name": "pinctrl_alor",
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+    },
+    {
+      "name": "qcom_iommu_util",
+      "file": "modules/qcom-iommu-util/qcom_iommu_util.ko"
+    },
+    {
+      "name": "arm_smmu",
+      "file": "modules/arm-smmu-vendor/arm_smmu.ko"
+    },
+    {
+      "name": "qcom_pdc",
+      "file": "modules/qcom-irq/qcom-pdc.ko"
+    },
+    {
+      "name": "secure_buffer",
+      "file": "modules/secure-buffer/secure_buffer.ko"
+    },
+    {
+      "name": "gh_rm_drv",
+      "file": "modules/gunyah-rm/gh_rm_drv.ko"
+    },
+    {
+      "name": "smem",
+      "file": "modules/qcom-smem/smem.ko"
+    },
+    {
+      "name": "qcom_common",
+      "file": "modules/qcom-rproc-common/qcom_common.ko"
+    },
+    {
+      "name": "msm_hw_fence",
+      "file": "modules/qti-fence/msm_hw_fence.ko"
+    },
+    {
+      "name": "socinfo",
+      "file": "modules/qcom-socinfo/socinfo.ko"
+    },
+    {
+      "name": "synx_driver",
+      "file": "modules/qti-fence/synx-driver.ko"
+    },
+    {
+      "name": "msm_kgsl",
+      "file": "modules/kgsl/msm_kgsl.ko"
+    },
+    {
+      "name": "tcsrcc_canoe",
+      "file": "modules/qcom-clock-controllers/tcsrcc-canoe.ko"
+    },
+    {
+      "name": "tcsrcc_chora",
+      "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko"
+    },
+    {
+      "name": "videocc_canoe",
+      "file": "modules/qcom-clock-controllers/videocc-canoe.ko"
+    },
+    {
+      "name": "videocc_chora",
+      "file": "modules/qcom-clock-controllers/videocc-chora.ko"
+    }
+  ],
+  "dependency_cycle_or_blocked_names": [],
+  "order_scope": "ELF hard dependencies only; not DT probe readiness, init order or softdep resolution",
   "image_packaging_ready": false,
   "blockers": [
     "Missing hardware drivers and providers",
@@ -25,64 +603,76 @@
         "qcom_iommu_util",
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "avr_oplus_sync": {
       "file": "modules/avr-oplus-sync/avr_oplus_sync.ko",
       "sha256": "786f96f216b9a75cc78396a07c2e3adc2943468a94eefb585100a83b38c65c60",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_scm": {
       "file": "modules/firmware/qcom-scm.ko",
-      "sha256": "18c819309bfce8fa841bda9825be91ade2e7b6c6e567eedbae7aeea32cd0718d",
+      "sha256": "09353532245c67a52e145d29e95150e5570213ac6a396a862d52cd9b1c17e4ff",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_pas",
         "qcom_tzmem"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_pas": {
       "file": "modules/firmware/qcom_pas.ko",
-      "sha256": "d21baf333ceb644cb81f28c462ed9616896c24232528fff164c628e52d713e4f",
+      "sha256": "3363d02588e51706b17f32d1d0058ab8e1673f594fb8a43c4ffbf2b71c7ce0bf",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": false,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_tzmem": {
       "file": "modules/firmware/qcom_tzmem.ko",
-      "sha256": "430a14789f1e77c8c6678aa68bd2306f8109d4da2147e8652b34a6bdc6050a6e",
+      "sha256": "d0911d4d9b444f622615f19a9e48a3f6d4841e353096080ce2819a0030450ad8",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": false,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "governor_msm_adreno_ro": {
       "file": "modules/governor-adreno-ro/governor_msm_adreno_ro.ko",
       "sha256": "b3a842c8df45449cf28300b68794bb8edfa5fbf5ef2fcebed8bcfac1e39614a9",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "governor_msm_adreno_tz": {
       "file": "modules/governor-adreno-tz/governor_msm_adreno_tz.ko",
@@ -91,89 +681,286 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "governor_gpubw_mon": {
       "file": "modules/governor-gpubw/governor_gpubw_mon.ko",
       "sha256": "4192afea4b18f6ab1c0ad11e0d474cc82cb46d985da06d9c53c87a8b7815283b",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah": {
+      "file": "modules/gunyah-core/gunyah.ko",
+      "sha256": "a63345cd99dd1b20acd3ffa3f91fbf2fb82ba28bfa8f3b897bbae6673d4867da",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah_hypercall"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_hypercall": {
+      "file": "modules/gunyah-core/gunyah_hypercall.ko",
+      "sha256": "3f159a6fe6d10e49779d80dd56e904597325432939123e4c088b12a1bbe4e45c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_ioeventfd": {
+      "file": "modules/gunyah-core/gunyah_ioeventfd.ko",
+      "sha256": "57278ed3c47c4e52085a54e19e8aaa6e338e33325355f233054ff525eb91ac43",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah_rsc_mgr"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_irqfd": {
+      "file": "modules/gunyah-core/gunyah_irqfd.ko",
+      "sha256": "8252493f9dc6c804803d9b9a467e77d7e9537bfdcae7e9de441db5a1c568baf7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah_hypercall",
+        "gunyah_rsc_mgr"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_platform_hooks": {
+      "file": "modules/gunyah-core/gunyah_platform_hooks.ko",
+      "sha256": "1a48c395f0575bc7a3faf8ef3ddd0afd1270710cc36249d84ee4ed56b25ae5a5",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_qtvm": {
+      "file": "modules/gunyah-core/gunyah_qtvm.ko",
+      "sha256": "f6969fea8ddde7766f654853b19ca1e868bc7b5aa17272329ee1eff28719609f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah_rsc_mgr"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_rsc_mgr": {
+      "file": "modules/gunyah-core/gunyah_rsc_mgr.ko",
+      "sha256": "b5c984bb8c714c1abcfd87a69e77ff26757b843dece8927c55405ba8b204f4b3",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah",
+        "gunyah_hypercall",
+        "gunyah_platform_hooks"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gunyah_vcpu": {
+      "file": "modules/gunyah-core/gunyah_vcpu.ko",
+      "sha256": "c6e5064ee97559ca4549e8024b3f5785115f45227e8004f2edb141eeefb4d4d8",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gunyah_hypercall",
+        "gunyah_rsc_mgr"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "gh_rm_drv": {
+      "file": "modules/gunyah-rm/gh_rm_drv.ko",
+      "sha256": "5f23aa59b4bab335eeadaf3bd91af3a61fad4fd4fa0f1300e97deed57eba29b7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gh_arm_drv",
+        "gh_dbl",
+        "gh_msgq",
+        "gunyah_qtvm",
+        "gunyah_rsc_mgr",
+        "qcom_scm",
+        "secure_buffer"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gh_arm_drv": {
       "file": "modules/gunyah/gh_arm_drv.ko",
-      "sha256": "08654f4bc9b244a84fabbe76895ecb5eab8ae8a0d9535744bc581d624f369242",
+      "sha256": "77fdf552e4b474002818342b459f5907831028b3bd87f2f72cdc99d63b98e67f",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gh_dbl": {
       "file": "modules/gunyah/gh_dbl.ko",
-      "sha256": "aa6185a9a869b9945e238b89a5827e39750a2c9e8028d1aaf61863da27a719f8",
+      "sha256": "7cdbf9ccdf9cc166d6fc25cc1ca46db02dd1df3500be360d41fbb11a33c4e15b",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gh_msgq": {
       "file": "modules/gunyah/gh_msgq.ko",
-      "sha256": "5b3c56768d8eb77cf93097e16aed570476b54e1353b0ffb59ae16898658853b8",
+      "sha256": "bbb4e75c88555f8e9814810b5c16e79e0792acef158d689797cd2107bdeb5a61",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "iommu_logger": {
       "file": "modules/iommu-logger/iommu_logger.ko",
       "sha256": "43a4f13f93e5333ad27399062d468ac7affa9db62bad1fc832f2edb953e533a9",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "msm_kgsl": {
+      "file": "modules/kgsl/msm_kgsl.ko",
+      "sha256": "b502171ab8092028d30c9cb4c1daf4724f9efa8980cdc9602ea62a4177041a6b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom",
+        "coresight",
+        "llcc_qcom",
+        "msm_sysstats",
+        "qcom_dcvs",
+        "qcom_iommu_util",
+        "qcom_scm",
+        "secure_buffer",
+        "socinfo",
+        "synx_driver"
+      ],
+      "softdep": [
+        "pre: arm_smmu nvmem_qfprom socinfo governor_msm_adreno_tz governor_gpubw_mon governor_msm_adreno_ro",
+        "pre: governor_msm_adreno_tz governor_gpubw_mon governor_msm_adreno_ro"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "msm_sysstats": {
       "file": "modules/msm-sysstats/msm_sysstats.ko",
       "sha256": "587dc79a294819ced87529471f5324dc22cd34763d54dddaff02b2951ebb1d04",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "coresight": {
+      "file": "modules/native/coresight.ko",
+      "sha256": "78afdd5d4a2dd557e4b54cae9b6782b39a797dbd3e4ceb0c51103165f6ee1f05",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "nvmem_qfprom": {
+      "file": "modules/native/nvmem_qfprom.ko",
+      "sha256": "fcc8115db187e4752a6558e8e0ffb89e8e6026b2a985d5f29dde79da72a1db3e",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "ntsync": {
       "file": "modules/ntsync/ntsync.ko",
-      "sha256": "698af99ae49535dce0456851c880120c17735daf40a5754b6f6d25399a00372c",
+      "sha256": "17d4c2e788f3fc0acc8842cb4fb4687f2677688061993ac2d01607f989f84460",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "pinctrl_alor": {
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko",
@@ -182,11 +969,13 @@
       "depends": [
         "pinctrl_msm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "pinctrl_msm": {
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-msm.ko",
@@ -195,11 +984,15 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [
+        "pre: qcom-pdc"
+      ],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "cambistmclkcc_canoe": {
       "file": "modules/qcom-clock-controllers/cambistmclkcc-canoe.ko",
@@ -208,11 +1001,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "camcc_alor": {
       "file": "modules/qcom-clock-controllers/camcc-alor.ko",
@@ -221,11 +1016,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "camcc_canoe": {
       "file": "modules/qcom-clock-controllers/camcc-canoe.ko",
@@ -234,11 +1031,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "camcc_chora": {
       "file": "modules/qcom-clock-controllers/camcc-chora.ko",
@@ -247,12 +1046,14 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "clk_dummy": {
       "file": "modules/qcom-clock-controllers/clk-dummy.ko",
@@ -261,11 +1062,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "clk_rpmh": {
       "file": "modules/qcom-clock-controllers/clk-rpmh.ko",
@@ -276,11 +1079,13 @@
         "cmd_db",
         "qcom_rpmh"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "debugcc_alor": {
       "file": "modules/qcom-clock-controllers/debugcc-alor.ko",
@@ -290,12 +1095,14 @@
         "clk_dummy",
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "debugcc_canoe": {
       "file": "modules/qcom-clock-controllers/debugcc-canoe.ko",
@@ -305,11 +1112,13 @@
         "clk_dummy",
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "debugcc_chora": {
       "file": "modules/qcom-clock-controllers/debugcc-chora.ko",
@@ -319,12 +1128,14 @@
         "clk_dummy",
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "dispcc_canoe": {
       "file": "modules/qcom-clock-controllers/dispcc-canoe.ko",
@@ -333,11 +1144,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "dispcc_chora": {
       "file": "modules/qcom-clock-controllers/dispcc-chora.ko",
@@ -346,11 +1159,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "evacc_canoe": {
       "file": "modules/qcom-clock-controllers/evacc-canoe.ko",
@@ -359,11 +1174,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gcc_alor": {
       "file": "modules/qcom-clock-controllers/gcc-alor.ko",
@@ -372,11 +1189,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gcc_canoe": {
       "file": "modules/qcom-clock-controllers/gcc-canoe.ko",
@@ -385,11 +1204,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gcc_chora": {
       "file": "modules/qcom-clock-controllers/gcc-chora.ko",
@@ -398,11 +1219,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gpucc_canoe": {
       "file": "modules/qcom-clock-controllers/gpucc-canoe.ko",
@@ -411,11 +1234,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gpucc_chora": {
       "file": "modules/qcom-clock-controllers/gpucc-chora.ko",
@@ -424,12 +1249,14 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "tcsrcc_canoe": {
       "file": "modules/qcom-clock-controllers/tcsrcc-canoe.ko",
@@ -438,11 +1265,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "tcsrcc_chora": {
       "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko",
@@ -451,11 +1280,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "videocc_canoe": {
       "file": "modules/qcom-clock-controllers/videocc-canoe.ko",
@@ -464,11 +1295,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "videocc_chora": {
       "file": "modules/qcom-clock-controllers/videocc-chora.ko",
@@ -477,11 +1310,13 @@
       "depends": [
         "clk_qcom"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "clk_qcom": {
       "file": "modules/qcom-clock-core/clk-qcom.ko",
@@ -491,22 +1326,26 @@
         "crm_v2",
         "gdsc_regulator"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "crm_v2": {
       "file": "modules/qcom-clock-core/crm-v2.ko",
       "sha256": "6c912fc106e9910ac10fc56b75774043a1560a3df86958cc74e12dfaf22d577a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gdsc_regulator": {
       "file": "modules/qcom-clock-core/gdsc-regulator.ko",
@@ -515,22 +1354,26 @@
       "depends": [
         "proxy_consumer"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "proxy_consumer": {
       "file": "modules/qcom-clock-core/proxy-consumer.ko",
       "sha256": "368caf81a1971e89fe446aad0e2c75afdaf02dd743b9866c234106738aef3c0c",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "dcvs_fp": {
       "file": "modules/qcom-dcvs/dcvs_fp.ko",
@@ -540,11 +1383,13 @@
         "cmd_db",
         "qcom_rpmh"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_dcvs": {
       "file": "modules/qcom-dcvs/qcom-dcvs.ko",
@@ -553,22 +1398,26 @@
       "depends": [
         "dcvs_fp"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_hwspinlock": {
       "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko",
       "sha256": "ef19828018e07edd4a62948a1cff4a617b95300cb7c2fd5bfc46cdcf2928b3dc",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_iommu_util": {
       "file": "modules/qcom-iommu-util/qcom_iommu_util.ko",
@@ -577,22 +1426,26 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "cpu_phys_log_map": {
       "file": "modules/qcom-irq/cpu_phys_log_map.ko",
       "sha256": "9a2655762db3ff59cdaf324c71630e1501b715e295fe36632eb7f96c72e49432",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "gic_intr_routing": {
       "file": "modules/qcom-irq/gic_intr_routing.ko",
@@ -602,11 +1455,13 @@
         "cpu_phys_log_map",
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_pdc": {
       "file": "modules/qcom-irq/qcom-pdc.ko",
@@ -615,33 +1470,39 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "llcc_qcom": {
       "file": "modules/qcom-llcc/llcc-qcom.ko",
       "sha256": "cd206c6f9d21bb681e35590acc846cbdfa50a0fbeb1244af1e393bba1a625096",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "cmd_db": {
       "file": "modules/qcom-rpmh/cmd-db.ko",
       "sha256": "ee894edcde2a401b49e76fd90cbc908ca4f19194ccbfff57c335ba05e1c506d7",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_rpmh": {
       "file": "modules/qcom-rpmh/qcom_rpmh.ko",
@@ -651,11 +1512,13 @@
         "cmd_db",
         "crm_v2"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "qcom_common": {
       "file": "modules/qcom-rproc-common/qcom_common.ko",
@@ -664,20 +1527,26 @@
       "depends": [
         "smem"
       ],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": false,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "smem": {
       "file": "modules/qcom-smem/smem.ko",
       "sha256": "4ace3ba0f44b1b645b5cdfa88cb0fc7c693281126a20196c2dd60ee10d27845b",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [
+        "pre: qcom_hwspinlock"
+      ],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "socinfo": {
       "file": "modules/qcom-socinfo/socinfo.ko",
@@ -686,20 +1555,77 @@
       "depends": [
         "smem"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "ipclite": {
+      "file": "modules/qti-fence/ipclite.ko",
+      "sha256": "62f49d279969c1f3152ba6a79c66a4f518e69c4b2a2b6cee8d2f0e8cc255845d",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [
+        "pre: qcom_hwspinlock"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "msm_hw_fence": {
+      "file": "modules/qti-fence/msm_hw_fence.ko",
+      "sha256": "7af5faf762f8169adddcc78d7d508f7fa2e2833d0594088ae8081f4983fc047c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "gh_dbl",
+        "gh_rm_drv",
+        "qcom_common",
+        "qcom_scm"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "synx_driver": {
+      "file": "modules/qti-fence/synx-driver.ko",
+      "sha256": "cac00c411566d8020171a7acda81201ddee4ae4f1ed1365d375159c2cfc40a7b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "ipclite",
+        "msm_hw_fence",
+        "qcom_common"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "adios": {
       "file": "modules/rakkashin/adios/adios.ko",
       "sha256": "092d75ebecfd1dc81747f7c166a5592dd25b0ba063e0e41eb3f65a2cc1d901c7",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": false,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     },
     "secure_buffer": {
       "file": "modules/secure-buffer/secure_buffer.ko",
@@ -708,11 +1634,13 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
-      "dependencies_absent_from_stage": []
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
     }
   },
   "archived_without_same_name_candidate": [
@@ -1126,14 +2054,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "coresight",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "coresight_csr",
       "placements": [
         "vendor_boot:fragment-0",
@@ -1474,13 +2394,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "gh_rm_drv",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "gh_rm_heap_manager",
       "placements": [
         "vendor_boot:fragment-0"
@@ -1746,14 +2659,6 @@
     {
       "name": "ipanetm",
       "placements": [
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "ipclite",
-      "placements": [
-        "vendor_boot:fragment-0",
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true
@@ -2236,22 +3141,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "msm_hw_fence",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "msm_kgsl",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "msm_memshare",
       "placements": [
         "vendor_boot:fragment-0",
@@ -2388,14 +3277,6 @@
       "name": "nvmem_qcom_spmi_sdam",
       "placements": [
         "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "nvmem_qfprom",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
       ],
       "loaded_on_baseline": true
     },
@@ -4009,14 +4890,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "synx_driver",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "sys_pm_vx",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4436,7 +5309,6 @@
     "cnss_prealloc",
     "cnss_utils",
     "core_hang_detect",
-    "coresight",
     "coresight_csr",
     "coresight_cti",
     "coresight_dummy",
@@ -4481,7 +5353,6 @@
     "gh_mem_notifier",
     "gh_panic_notifier",
     "gh_rm_booster",
-    "gh_rm_drv",
     "gh_rm_heap_manager",
     "gh_tlmm_vm_mem_access",
     "gh_vcpu_mgr",
@@ -4518,7 +5389,6 @@
     "input_test",
     "ipam",
     "ipanetm",
-    "ipclite",
     "kryo_arm64_edac",
     "kunit",
     "kunit_example_test",
@@ -4581,8 +5451,6 @@
     "msm_geni_serial",
     "msm_gpi",
     "msm_hfi_core",
-    "msm_hw_fence",
-    "msm_kgsl",
     "msm_memshare",
     "msm_mmrm",
     "msm_performance",
@@ -4602,7 +5470,6 @@
     "nhc_routing",
     "nhc_udp",
     "nvmem_qcom_spmi_sdam",
-    "nvmem_qfprom",
     "nxp_nci",
     "of_kunit_helpers",
     "open_dice",
@@ -4815,7 +5682,6 @@
     "swr_haptics_dlkm",
     "sx937x_sar",
     "sync_fence",
-    "synx_driver",
     "sys_pm_vx",
     "sysmon_subsystem_stats",
     "thermal_config",

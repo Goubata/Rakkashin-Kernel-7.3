@@ -1,0 +1,91 @@
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 1229d1974..73062278c 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -21,6 +21,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/kstrtox.h>
+ #include <linux/module.h>
++#include <linux/notifier.h>
+ #include <linux/overflow.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+@@ -1377,6 +1378,20 @@ int qcom_scm_assign_mem_regions(struct qcom_scm_mem_map_info *regions,
+ }
+ EXPORT_SYMBOL(qcom_scm_assign_mem_regions);
+ 
++SRCU_NOTIFIER_HEAD_STATIC(qcom_scm_assign_mem_nh);
++
++int qcom_scm_assign_mem_notifier_register(struct notifier_block *nb)
++{
++	return srcu_notifier_chain_register(&qcom_scm_assign_mem_nh, nb);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_assign_mem_notifier_register);
++
++int qcom_scm_assign_mem_notifier_unregister(struct notifier_block *nb)
++{
++	return srcu_notifier_chain_unregister(&qcom_scm_assign_mem_nh, nb);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_assign_mem_notifier_unregister);
++
+ /**
+  * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
+  * @mem_addr: mem region whose ownership need to be reassigned
+@@ -1407,12 +1422,22 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
+ 	__le32 *src;
+ 	int ret, i, b;
+ 	u64 srcvm_bits;
++	struct qcom_scm_assign_mem_notifier_data data = {
++		.mem_addr = mem_addr,
++		.mem_sz = mem_sz,
++		.srcvm = srcvm,
++		.newvm = newvm,
++		.dest_cnt = dest_cnt,
++	};
+ 
+ 	if (!srcvm || !newvm || !dest_cnt || dest_cnt > 64)
+ 		return -EINVAL;
+ 	for (i = 0; i < dest_cnt; i++)
+ 		if (newvm[i].vmid < 0 || newvm[i].vmid >= 64)
+ 			return -EINVAL;
++	ret = srcu_notifier_call_chain(&qcom_scm_assign_mem_nh, 0, &data);
++	if (ret & NOTIFY_STOP_MASK)
++		return notifier_to_errno(ret);
+ 	if (!__scm || !__scm->mempool)
+ 		return -EPROBE_DEFER;
+ 	srcvm_bits = *srcvm;
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index 4b413b72b..b99d2e3b1 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -17,6 +17,8 @@
+ #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
+ #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
+ 
++struct notifier_block;
++
+ struct qcom_scm_hdcp_req {
+ 	u32 addr;
+ 	u32 val;
+@@ -151,6 +153,21 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz, u64 *src,
+ 			const struct qcom_scm_vmperm *newvm,
+ 			unsigned int dest_cnt);
+ 
++/* A registered backend may handle ownership changes instead of issuing SCM.
++ * NOTIFY_STOP means handled; notifier_to_errno errors abort the operation.
++ * NOTIFY_DONE/OK continue to the real SCM firmware call. The handler owns any
++ * source-mask update on the handled path, matching the vendor ABI.
++ */
++struct qcom_scm_assign_mem_notifier_data {
++	phys_addr_t mem_addr;
++	size_t mem_sz;
++	u64 *srcvm;
++	const struct qcom_scm_vmperm *newvm;
++	unsigned int dest_cnt;
++};
++int qcom_scm_assign_mem_notifier_register(struct notifier_block *nb);
++int qcom_scm_assign_mem_notifier_unregister(struct notifier_block *nb);
++
+ bool qcom_scm_ocmem_lock_available(void);
+ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+ 			u32 mode);

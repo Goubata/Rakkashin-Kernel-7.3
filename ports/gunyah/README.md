@@ -7,3 +7,5 @@ Hypercall、capability、IRQ、キュー処理は実ソースを維持してい�
 SMP4のディスクを接続しないQEMUで3モジュールのロード・アンロードに成功。登録の排他、送受信方向で共有するdescriptorの寿命、capabilityが未配布の場合のNONBLOCK失敗、仮想IRQ確保・解放の4 KUnitに成功しました。テストは実際の関数を呼びますが、hypercallを発行する手前の経路だけです。実機ハイパーバイザとの通信成功は未確認です。
 
 リソースマネージャーは隣の `gunyah-rm/` で移植中です。これら3モジュールだけではGunyah輸送やGPUの依存は完成しません。
+
+外部DDK設定のAVFフラグをcanoe_perf.bzl・実機バイナリと照合して反映しました。HW fence doorbellは0x106、message queueの下限は0x101です。実際のcompile commandとQTVM notifier importも検査します（scripts/audit_gunyah_abi.py）。

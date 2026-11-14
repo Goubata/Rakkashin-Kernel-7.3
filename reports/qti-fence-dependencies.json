@@ -11,20 +11,10 @@
     },
     "msm_hw_fence.o": {
       "import_count": 147,
-      "unresolved": [
-        "gh_rm_register_notifier",
-        "ghd_rm_get_vmid",
-        "ghd_rm_mem_share"
-      ]
+      "unresolved": []
     }
   },
-  "unresolved": [
-    "gh_rm_register_notifier",
-    "ghd_rm_get_vmid",
-    "ghd_rm_mem_share"
-  ],
-  "required_providers": [
-    "Gunyah resource manager"
-  ],
+  "unresolved": [],
+  "required_providers": [],
   "soccp_variant": "AVR V2 queue/IPCC/firmware acknowledgement retained; unsupported V1 rejected without its provider"
 }

@@ -1,15 +1,11 @@
-# Gunyah resource-manager adapter: unfinished
+# Gunyah resource-manager adapter
 
-Motorolaの `gh_rm_core.c` / `gh_rm_iface.c` を7.3へ移植中です。全対象Cソースがコンパイルされ、`gh_rm_drv.o` を生成できました。最終modpostは以下の実装不足で失敗します。
+Motorolaの `gh_rm_core.c` / `gh_rm_iface.c` から7.3用 `gh_rm_drv.ko` を生成しました。前段階で不足していた実common RM輸送とSCM assign-memory通知も移植され、最終リンクが通っています。hw_fenceが必要とする3 APIを提供します。実機でのprobe・通信成功は未確認です。
 
-- `gunyah_rm_call`
-- `gunyah_rm_notifier_register` / `gunyah_rm_notifier_unregister`
-- `qcom_scm_assign_mem_notifier_register`
+SoCソースは `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`、共通RM/QTVM headerは `479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4`。現代のメモリ割当通知経路を維持しています。`CONFIG_GUNYAH_LEGACY` による迂回はありません。
 
-このモジュールが実装する3 exportはhw_fenceの残る3依存に対応します。ただし未リンクなので成功済み56モジュールには含めません。`reports/gunyah-rm-dependencies.json` に記録しています。
+実機gh_rm_drvの `gunyah_qtvm_register_notifier` インポートとcanoe_perf.bzlを照合し、外部モジュール用 `CONFIG_QTVM_WITH_AVF=y` を反映しました。QTVM providerを有効にして実APIへリンクしています。ドアベルの範囲チェックは実機バイナリとも照合しました。`reports/gunyah-avf-abi-audit.json` を参照。通常のcore `.config` だけでは外部DDK設定は確認できません。
 
-SoC元ソースは `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`、共通RM headerは `479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4`。OF firmware-node変換を7.3 APIへ変更し、AVF固有ヘッダはそのビルド時のみincludeします。`avr-rm-deps.h` は実ソースにある型・APIの宣言のみであり、実装を代用しません。
+OF firmware-node変換は7.3 APIを使います。`avr-rm-deps.h` は不足したvendor宣言だけを補い、SCM通知本体は7.3側の実装です。
 
-現代のメモリ割当通知経路を維持しています。`CONFIG_GUNYAH_LEGACY` を強制して検出・通知を回避する変更はありません。次の依存となるcommon側のrsc_mgr輸送ソースも固定コミットから取得済みです。VM管理・CMA・実hypercall・メモリ所有権を扱うので、輸送とSCMの実装および失敗時処理の検証が必要です。
-
-通常の成功ビルドは `python scripts/build_ipc_deps.py --tests`。この未完成リンクの再現には `--rm-research` を追加します（現状、上記の未解決依存で失敗します）。
+`python scripts/build_ipc_deps.py --rm` で輸送を含めて作成します。GPUまで作る場合は `--gpu-driver`。通常／失敗時の通知登録解除、IRQ・共有メモリ・VMの寿命、実hypercallとファームウェアとの相互運用は引き続き検証が必要です。リンク成功を常用動作の証明とは扱いません。

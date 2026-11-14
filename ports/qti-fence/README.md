@@ -1,11 +1,10 @@
 # SYNX, IPCLite and Qualcomm hardware fences: work in progress
 
-This directory is not part of the 56 successfully linked support modules.
-All selected C translation units compile. Final modpost now fails on three
-Gunyah RM API names, down from the previous eight. The real SSR helpers and
-Gunyah doorbell/message queue modules have been linked separately. No final
-fence .ko or physical hardware operation is claimed. See
-reports/qti-fence-dependencies.json and reports/qti-fence-stage8-v2-link.log.
+SYNX, IPCLite and msm_hw_fence now link as real 7.3 modules and are included
+in the 71-module stage9 snapshot. The common Gunyah transport, vendor RM and
+SCM notifier supply their actual providers. No unresolved import names remain.
+Physical controller operation is not verified. See reports/gpu-stage9-validation.json
+and reports/qti-fence-stage9-link.log.
 
 Sources:
 
@@ -18,8 +17,8 @@ Sources:
 - Local vendor-only Gunyah and secure-buffer headers: Motorola kernel-msm
   037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1.
 - Absent target linux/gunyah.h and matching UAPI: Motorola kernel-common
-  479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4. These are declarations for the
-  future real provider; they do not implement a substitute backend.
+  479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4. The real provider is built in ../gunyah-core and ../gunyah-rm;
+  these headers do not supply a substitute backend.
 
 The config explicitly enables hardware-fence and SYNX interoperation, including
 Gunyah doorbell/resource-manager and remoteproc notifier imports. No synx_stub
@@ -41,11 +40,10 @@ Port changes:
   request types and zero object counts rather than freeing an uninitialized
   pointer or returning success without performing a merge.
 
-Remaining actual provider: Gunyah resource manager.
-
-- `gh_rm_register_notifier`, `ghd_rm_get_vmid`, `ghd_rm_mem_share`.
-- The adapter in `../gunyah-rm` compiles, but still needs the real common RM
-  transport and SCM assign-memory notifier; it is not a successfully linked module.
+The external AVF configuration is now matched to canoe_perf.bzl. Stock and
+ported doorbell validation code use the same AVF range, the hardware-fence
+label is 0x106, and the RM imports the real QTVM notifier. Build flags, binary
+evidence and source hashes are in reports/gunyah-avf-abi-audit.json.
 
 Static analysis of the saved phone modules corrected an earlier assumption:
 stock qcom_q6v5_pas does not export rproc_set_state, and stock msm_hw_fence does
@@ -58,6 +56,6 @@ the old optional-header stub. No V1 functionality is claimed for this build.
 See reports/soccp-binary-analysis.json; disassembly stays in ignored artifacts.
 
 Object name coverage does not prove module CRCs or firmware compatibility.
-Complete providers, final link, lifecycle/security audit, IPC tests, GPU/display/
+Lifecycle/security audit, physical IPC tests, GPU/display/
 camera clients and actual SOCCP reset/suspend paths still need verification.
 Do not load these objects into the phone's running 6.12 kernel.

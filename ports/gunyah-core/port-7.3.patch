@@ -1,0 +1,59 @@
+--- a/ports/gunyah-core/rsc_mgr.c
++++ b/ports/gunyah-core/rsc_mgr.c
+@@ -887,7 +887,7 @@
+ 	}
+ 	of_node_put(of_root);
+ 
+-	rm->parent_fwnode = of_node_to_fwnode(parent_irq_node);
++	rm->parent_fwnode = of_fwnode_handle(parent_irq_node);
+ 	if (!rm->parent_fwnode) {
+ 		pr_err("Failed to find interrupt parent domain of resource manager\n");
+ 		return -ENODEV;
+--- a/ports/gunyah-core/vm_mgr.c
++++ b/ports/gunyah-core/vm_mgr.c
+@@ -172,7 +172,7 @@
+ 	return ret;
+ }
+ 
+-void gunyah_generic_vm_start_fail(struct gunyah_vm *ghvm)
++static void gunyah_generic_vm_start_fail(struct gunyah_vm *ghvm)
+ {
+ 	/**
+ 	 * need to rollback parcel_to_paged because RM is still
+--- a/ports/gunyah-core/vm_mgr.h
++++ b/ports/gunyah-core/vm_mgr.h
+@@ -172,11 +172,9 @@
+ 	bool ret = false;
+ 
+ 	i_mmap_lock_read(mapping);
+-	vma_interval_tree_foreach(vma, &mapping->i_mmap, folio_index(folio),
+-				  folio_index(folio) + folio_nr_pages(folio)) {
+-		ret = true;
+-		break;
+-	}
++	vma = mapping_rmap_tree_iter_first(mapping, folio->index,
++					   folio_next_index(folio) - 1);
++	ret = !!vma;
+ 	i_mmap_unlock_read(mapping);
+ 	return ret;
+ }
+--- a/ports/gunyah-core/vm_mgr_cma_mem.c
++++ b/ports/gunyah-core/vm_mgr_cma_mem.c
+@@ -100,7 +100,7 @@
+ 	}
+ 
+ 	for (i = 0; i < nr_pages; i++)
+-		pages[i] = nth_page(cma->page, i);
++		pages[i] = pfn_to_page(page_to_pfn(cma->page) + i);
+ 
+ 	ret =  vm_map_pages_zero(vma, pages, nr_pages);
+ 	if (ret)
+@@ -439,7 +439,7 @@
+ 
+ static struct platform_driver gunyah_cma_driver = {
+ 	.probe = gunyah_cma_probe,
+-	.remove_new = gunyah_cma_remove,
++	.remove = gunyah_cma_remove,
+ 	.driver = {
+ 		.name = "gunyah_cma_vm_mem_driver",
+ 		.of_match_table = gunyah_cma_match_table,

@@ -5,3 +5,6 @@ KBUILD_EXTRA_SYMBOLS += $(src)/../../ports/qcom-rproc-common/Module.symvers
 obj-m += avr-gunyah-test.o
 ccflags-y += -I$(src)/../../ports/gunyah/include -DCONFIG_GH_DBL_MODULE=1 -DCONFIG_GH_MSGQ_MODULE=1 -DCONFIG_GH_ARM64_DRV_MODULE=1
 KBUILD_EXTRA_SYMBOLS += $(src)/../../ports/gunyah/Module.symvers
+
+# Motorola canoe_perf.bzl: shared AVF labels are part of the wire ABI.
+ccflags-y += -DCONFIG_QTVM_WITH_AVF=1

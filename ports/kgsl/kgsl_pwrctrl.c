@@ -19,6 +19,7 @@
 #include <soc/qcom/dcvs.h>
 
 #include "kgsl_device.h"
+#include "avr-adrenoboost-policy.h"
 #include "kgsl_bus.h"
 #include "kgsl_eventlog.h"
 #include "kgsl_power_trace.h"
@@ -1173,25 +1174,30 @@ static void adrenoboost_work(struct work_struct *work)
 {
 	struct kgsl_device *device = boost.device;
 	struct kgsl_pwrctrl *pwr;
-	int want;
+	int want, cap, ret;
 
 	if (!device)
 		return;
 
 	pwr = &device->pwrctrl;
 	kgsl_mutex_lock(&device->mutex);
-	want = READ_ONCE(boost.want);
+	cap = max3(pwr->max_pwrlevel, pwr->thermal_pwrlevel, pwr->pmqos_max_pwrlevel);
+	want = avr_adrenoboost_clamp(READ_ONCE(boost.want), cap, pwr->min_pwrlevel);
 	if (device->state != KGSL_STATE_ACTIVE) {
 		/* slumber exit resends pwr->min_pwrlevel to the GMU */
 		boost.applied = -1;
 	} else if (want != boost.applied) {
-		u32 level = want < 0 ? pwr->min_pwrlevel : want;
+		u32 level = max(want < 0 ? (int)pwr->min_pwrlevel : want, cap);
 
-		device->ftbl->gmu_based_dcvs_pwr_ops(device, level,
+		ret = device->ftbl->gmu_based_dcvs_pwr_ops(device, level,
 				GPU_PWRLEVEL_OP_MIN_PWRLEVEL);
-		boost.applied = want;
-		if (want >= 0)
-			boost.boosts++;
+		if (!ret) {
+			boost.applied = want;
+			if (want >= 0)
+				boost.boosts++;
+		} else {
+			dev_err_ratelimited(device->dev, "Adreno Boost GMU floor failed: %d\n", ret);
+		}
 	}
 	kgsl_mutex_unlock(&device->mutex);
 }
@@ -1231,21 +1237,11 @@ void kgsl_pwrctrl_adrenoboost_sample(struct kgsl_device *device, u64 time, u64 b
 	/* Highest frequency we may ask for: the lowest-frequency cap wins */
 	cap = max3(pwr->max_pwrlevel, pwr->thermal_pwrlevel, pwr->pmqos_max_pwrlevel);
 
-	if (pct >= boost_up_pct[level]) {
-		want = max_t(int, (int)pwr->active_pwrlevel - (int)level, cap);
-		/* only ever raise the floor while boosted */
-		if (boost.want >= 0)
-			want = min(want, boost.want);
-		if (want >= (int)pwr->min_pwrlevel)
-			want = -1;
-		else
-			boost.until = jiffies + msecs_to_jiffies(BOOST_HOLD_MS * level);
-	} else if (boost.want >= 0 && time_before(jiffies, boost.until)) {
-		/* keep the floor for the hold time, but never above a new cap */
-		want = max(boost.want, cap);
-		if (want >= (int)pwr->min_pwrlevel)
-			want = -1;
-	}
+	want = avr_adrenoboost_select(READ_ONCE(pwr->active_pwrlevel), level,
+		READ_ONCE(boost.want), cap, READ_ONCE(pwr->min_pwrlevel),
+		pct >= boost_up_pct[level], time_before(jiffies, boost.until));
+	if (pct >= boost_up_pct[level] && want >= 0)
+		boost.until = jiffies + msecs_to_jiffies(BOOST_HOLD_MS * level);
 
 	/* also re-send after a GMU restart dropped an applied floor */
 	if (want != boost.want || want != READ_ONCE(boost.applied)) {

@@ -1,5 +1,5 @@
 {
-  "scope": "observed signal-slot contract only; not firmware IPC operation or recovery of the absent vendor header",
+  "scope": "saved DT/source contract only; not firmware IPC operation or recovery of the absent vendor header",
   "passed": true,
   "vendor_header_recovered": false,
   "constants": {
@@ -11,179 +11,361 @@
     "IPCLITE_DEBUG_SIGNAL": 5,
     "MAX_CHANNEL_SIGNALS": 6
   },
+  "hardware_signal_constants": {
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG": 0,
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT": 1,
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION": 2,
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST": 3,
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR": 4,
+    "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG": 5
+  },
   "driver_header_sha256": "a505334208e062a1a6e5f339a522e70e1bbc9282d6c780fb526e198998a67975",
+  "synx_commit": "55b6a18a2a48ac12a258a80e85ea40daccd7ca62",
+  "synx_dtsi_sha256": "2d3880ffc3f7dc3c772b6050bbad579a4283d6e1faa7af5c336f6a4808df1b86",
+  "soc_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "client_header_sha256": {
+    "include/dt-bindings/mailbox/qcom-ipcc.h": "707417525132148f3a7bb33665104dfa148324047bbdd21b81904f3c8d66fe5f",
+    "include/dt-bindings/mailbox/qcom-ipcc-canoe.h": "10a56acec385c88c946bb759bde0d032c4d3dd509cd732cd690b2cae598738e7"
+  },
   "saved_dtb_sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
   "saved_signal_entries": [
     {
       "node": "/soc/ipclite/apss/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_APSS",
+      "client_id": 3,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/apss/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_CLIENT_BROADCAST",
+      "client_id": 61440,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/apss/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_APSS",
+      "client_id": 3,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/apss/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_APSS",
+      "client_id": 3,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/apss/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_APSS",
+      "client_id": 3,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/apss/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_APSS",
+      "client_id": 3,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/soccp/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_SOCCP",
+      "client_id": 16,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/cdsp/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_CDSP",
+      "client_id": 2,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/cvp/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_CVP",
+      "client_id": 8,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/cam/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_CAM",
+      "client_id": 9,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/cam1/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_CAM1",
+      "client_id": 10,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_0",
-      "index": 0
+      "index": 0,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MSG",
+      "hardware_signal_id": 0
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_1",
-      "index": 1
+      "index": 1,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_MEM_INIT",
+      "hardware_signal_id": 1
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_2",
-      "index": 2
+      "index": 2,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_VERSION",
+      "hardware_signal_id": 2
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_3",
-      "index": 3
+      "index": 3,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_TEST",
+      "hardware_signal_id": 3
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_4",
-      "index": 4
+      "index": 4,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_SSR",
+      "hardware_signal_id": 4
     },
     {
       "node": "/soc/ipclite/gpu/ipclite_signal_5",
-      "index": 5
+      "index": 5,
+      "client_macro": "IPCC_COMPUTE_L0_GPU",
+      "client_id": 4,
+      "hardware_signal_macro": "IPCC_COMPUTE_L0_SIGNAL_IPCLITE_DEBUG",
+      "hardware_signal_id": 5
     }
   ],
   "output": "ports/device-tree/compat/dt-bindings/ipclite-signals.h",
-  "output_sha256": "adc18374aaaf3c83b3c511c32833f98b1d18d2fe8f320a4d5031374e0dee4424",
-  "hardware_ipcc_signal_ids": "Use the pinned qcom-ipcc-canoe.h; do not infer them from the 0..5 slot indices"
+  "output_sha256": "beb5ee58581bdec223119a76361ac67a2887e79f1bf5db0c2d8ee919795787cb"
 }

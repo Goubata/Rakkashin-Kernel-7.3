@@ -1,6 +1,6 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-thermal-alarm-stage23",
+  "stage": "android73-adc-lifetime-stage24",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
   "staged_count": 94,
@@ -1196,7 +1196,7 @@
     },
     "qcom_spmi_adc5_gen3": {
       "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko",
-      "sha256": "8ff1533204b4db75566c85113a9b5983779ae5f8d54b072fef257c2705d3153c",
+      "sha256": "5743950f9ef9ad60c528668462a069229445fa871d3abb1080437d26208fecff",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_vadc_common"
@@ -1226,7 +1226,7 @@
     },
     "qcom_vadc_common": {
       "file": "modules/qcom-adc-thermal/qcom-vadc-common.ko",
-      "sha256": "7c69812e73c834bdfc135367e5c70e1f269858370be4703dad10cae9e655964a",
+      "sha256": "544035ffd52746cc95b1f51017ee015b2118d91bc97b2b5d9eb14153fe170ab9",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],

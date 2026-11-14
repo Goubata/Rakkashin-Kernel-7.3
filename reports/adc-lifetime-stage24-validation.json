@@ -1,0 +1,31 @@
+{
+  "stage": "android73-adc-lifetime-stage24",
+  "scope": "actual driver-core device links and source callbacks in isolated SMP4 guest; no physical ADC or charging proof",
+  "module_count": 94,
+  "imports_checked": 4741,
+  "all_import_crcs_match": true,
+  "kunit_cases_passed": 24,
+  "supplier_unbind_orders_consumer_first": true,
+  "busy_and_unbound_supplier_defer": true,
+  "owned_request_copy_verified": true,
+  "callback_self_disable_verified": true,
+  "external_disable_waits_for_inflight_callback": true,
+  "test_transport": "RAM-only immediate request completion; no physical PMIC transport or fabricated production samples",
+  "physical_boot_verified": false,
+  "whole_dt_validation_passed": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Physical consumer use of probe-time handles, serialized measure/disable and remove-time cleanup",
+    "Retention of inactive client records until supplier unbind and pointer-derived client ID policy",
+    "Partial hardware configuration rollback and actual ADC/IRQ/suspend/thermal safety",
+    "Original duplicate SID4, missing phone/ROM features and all physical acceptance"
+  ],
+  "sha256": {
+    "reports/module-crc-stage24.json": "c964786ff618c3b3cb688f3c9a636d8ea0f273b9bb20ff9d51382bb987086e06",
+    "reports/adc-supplier-stage24-final-qemu.log": "f98f1512402755dafdb90f8193762bd3b0f8ab6a57eb73c82cef11a30bc9b6d4",
+    "reports/adc-supplier-stage24-final-qemu.json": "218338886468e51420bec601c1e2bd72d744166257d1e05a36eb4b2f916c0257",
+    "reports/adc-supplier-stage24-final-build.log": "9d12be172809b38ae8db9cb815818e13ee50267eaee102cea0100d717d05b538",
+    "reports/adc-thermal-source-lock.json": "dab9d19c13c52b7a66e8a705be07fc3418d5c3dd077a2d8cccc1c48777c00cd9"
+  }
+}

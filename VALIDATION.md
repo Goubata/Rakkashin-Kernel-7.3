@@ -387,3 +387,14 @@ Restore initializes before requesting the IRQ and preserves the DT trigger;
 partial multi-trip write rollback, concurrent updates and physical IRQ/PM paths
 are not proven. Artifact remains 94 modules / 4,733 matching imports. No physical
 7.3 boot, temperature-safety acceptance, partition write or daily-use claim.
+
+## Stage24: consumer and notification lifetime
+
+Twenty-four actual-code cases pass. New cases bind real synthetic platform
+supplier/consumer drivers, verify managed-link consumer-first removal and
+busy/unbound deferral, check request copying, execute self-disabling callbacks,
+and use a blocked callback plus a separate disable kthread to verify external
+disable waits for the callback. Only test transports complete RAM requests
+immediately. No test provider enters the phone artifacts. Physical consumer
+contracts, inactive-record retention, ID policy, hardware rollback and all
+physical ADC/charging/thermal acceptance remain open.

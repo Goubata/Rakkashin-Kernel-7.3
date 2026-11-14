@@ -11,7 +11,7 @@
       "file": "ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.c",
       "source": "drivers/iio/adc/qcom-spmi-adc5-gen3.c",
       "original_sha256": "7cbf82c12eea63d0eda0d79b11c8a202c0006b8cc3263789a655f14a140a13cc",
-      "sha256": "409fcfa801dcabf162c571b5532e5ccb21ed9fc24589a587c4c3a90535434f48"
+      "sha256": "313f8d07b8b0cd0ad329c47e3b7dc3bb6e3f34ccc5595ff20d47efe12ba448a4"
     },
     {
       "file": "ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c",
@@ -23,13 +23,13 @@
       "file": "ports/qcom-adc-thermal/include/linux/adc-tm-clients.h",
       "source": "include/linux/adc-tm-clients.h",
       "original_sha256": "838fe907af4d1c0ed2ab85217b83c18ce05b912ef4cf2a106a045072cb41d4ae",
-      "sha256": "838fe907af4d1c0ed2ab85217b83c18ce05b912ef4cf2a106a045072cb41d4ae"
+      "sha256": "5abd057ded12e3815a3e466f320a93d570456cdcc79bd43bfa8587a0c61c9777"
     },
     {
       "file": "ports/qcom-adc-thermal/include/linux/iio/adc/qcom-vadc-common.h",
       "source": "include/linux/iio/adc/qcom-vadc-common.h",
       "original_sha256": "21734ebcc3e28b77a4b604f926beeceb781a36ac135b45b59cfe6e5a8a23fc6f",
-      "sha256": "21734ebcc3e28b77a4b604f926beeceb781a36ac135b45b59cfe6e5a8a23fc6f"
+      "sha256": "038152a8be624640c53844097ee393f1eb33ba69f9ea66de76bd54fea8a57392"
     },
     {
       "file": "ports/qcom-adc-thermal/include/dt-bindings/iio/qcom,spmi-vadc.h",
@@ -44,7 +44,7 @@
       "sha256": "5455f266141bead2b48e8dc45fd1262b0142ec2826d8afd439e0c5650b6c79fc"
     }
   ],
-  "patch_sha256": "5d857fc2b91c2846d60b3827c77def395cf071b37dfb06dc2f03616b1893754c",
+  "patch_sha256": "9ec226323f6ec82896d61c391050295f771aa64d5dd1c1fb2d699f5a9eff264e",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "reviewed_changes": [
     "Private firmware enum, data and DT-binding headers forced before native headers",
@@ -55,10 +55,15 @@
     "Quiesce IRQs then global work then client queues before releasing thermal resources",
     "Cover partial DT/IRQ/thermal probe failure and IIO registration failure with cleanup",
     "Do not destroy a client workqueue while holding the mutex its worker needs",
-    "Bind new client records to their actual parameter before assigning the client ID",
+    "Initialize new client records with an owned request copy and return their actual client ID",
     "Propagate client allocation/reverse-scaling failures and reject non-client channels",
     "Validate fwnode specifier arity, SDAM addresses and nonempty register array",
     "Track requested IRQs across freeze/restore and unwind partial restore",
+    "Link ADC consumers during probe under the supplier device lock; busy/unbound suppliers defer",
+    "Managed link orders actual consumer removal before supplier removal; bound handle lifetime documented",
+    "Own a copy of client request parameters; dispatch notification snapshots under the ADC mutex",
+    "Clear queued notifications/context on disable and synchronize external disable outside the mutex",
+    "Allow a callback to disable itself without self-flush deadlock or a second pending callback",
     "Commit cached critical threshold and initialized state only after successful register writes",
     "Restart DAC/LITE stage enumeration for repeated restore and preserve DT IRQ trigger mode",
     "Reject unsupported GEN2 revision and out-of-range thermal register bases; defer missing regmap",
@@ -67,8 +72,8 @@
   ],
   "pending": [
     "Physical ADC/IRQ/thermal-alarm probe and calibration, threshold/overheat behavior",
-    "Supplier links for exported raw ADC handles and concurrent consumer unbind lifetime",
-    "Client notification list iteration, parameter/context lifetime and disable synchronization",
+    "Physical consumers must use probe-time get and stop all use during their remove callback",
+    "Physical consumers must serialize same-client measure/disable and honor callback context lifetime",
     "Transactional hardware configuration after failed conversion/write and suspend/resume concurrency",
     "Thermal alarm register variants, trip boundaries, fault injection and physical safety acceptance",
     "Review remaining public legacy conversion API input contracts and unused configurations"

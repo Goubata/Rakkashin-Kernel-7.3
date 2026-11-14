@@ -131,6 +131,7 @@ struct adc_tm_reverse_scale_fn {
 struct adc_tm_client_info {
 	struct list_head			list;
 	struct adc_tm_param			*param;
+	struct adc_tm_param			owned_param;
 	int32_t						low_thr_requested;
 	int32_t						high_thr_requested;
 	bool						notify_low_thr;

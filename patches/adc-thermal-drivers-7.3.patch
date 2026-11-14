@@ -74,43 +74,175 @@
  {
  	int ret;
  	struct adc5_channel_prop *prop = thermal_zone_device_priv(tz);
-@@ -1107,13 +1116,16 @@
- 	if (node == NULL)
+@@ -1093,29 +1102,61 @@
+ 	return ret;
+ }
+ 
++/* Called from consumer probe: supplier unbind first unbinds its linked clients. */
++static struct adc5_chip *adc_tm_link_provider(struct device *consumer,
++					    struct device *supplier)
++{
++	struct adc5_chip *chip;
++
++	/* Avoid lock inversion with a consumer's probe/device lock. */
++	if (!device_trylock(supplier))
++		return ERR_PTR(-EPROBE_DEFER);
++	if (!device_is_bound(supplier)) {
++		chip = ERR_PTR(-EPROBE_DEFER);
++		goto unlock;
++	}
++	chip = dev_get_drvdata(supplier);
++	if (!chip || !device_link_add(consumer, supplier, DL_FLAG_AUTOREMOVE_CONSUMER))
++		chip = ERR_PTR(-EINVAL);
++unlock:
++	device_unlock(supplier);
++	return chip;
++}
++
+ #define MAX_PROP_NAME_LEN		32
+ struct adc5_chip *get_adc_tm_gen3(struct device *dev, const char *name)
+ {
+-	struct platform_device *pdev;
+ 	struct adc5_chip *chip;
+-	struct device_node *node = NULL;
++	struct device *supplier = NULL;
++	struct device_node *node;
+ 	char prop_name[MAX_PROP_NAME_LEN];
+-
+-	scnprintf(prop_name, MAX_PROP_NAME_LEN, "qcom,%s-adc_tm", name);
+-
++	int len;
++
++	if (!dev || !dev->of_node || !name)
++		return ERR_PTR(-EINVAL);
++	len = snprintf(prop_name, sizeof(prop_name), "qcom,%s-adc_tm", name);
++	if (len >= sizeof(prop_name))
++		return ERR_PTR(-EINVAL);
+ 	node = of_parse_phandle(dev->of_node, prop_name, 0);
+-	if (node == NULL)
++	if (!node)
  		return ERR_PTR(-ENODEV);
  
 +	mutex_lock(&adc_tm_device_lock);
  	list_for_each_entry(chip, &adc_tm_device_list, list) {
- 		pdev = to_platform_device(chip->dev);
- 		if (pdev->dev.of_node == node) {
- 			of_node_put(node);
-+			mutex_unlock(&adc_tm_device_lock);
- 			return chip;
- 		}
- 	}
+-		pdev = to_platform_device(chip->dev);
+-		if (pdev->dev.of_node == node) {
+-			of_node_put(node);
+-			return chip;
+-		}
+-	}
++		if (chip->dev->of_node == node) {
++			supplier = get_device(chip->dev);
++			break;
++		}
++	}
 +	mutex_unlock(&adc_tm_device_lock);
  	of_node_put(node);
- 	return ERR_PTR(-EPROBE_DEFER);
+-	return ERR_PTR(-EPROBE_DEFER);
++	if (!supplier)
++		return ERR_PTR(-EPROBE_DEFER);
++
++	/* Only inspect driver data while holding the supplier's device lock. */
++	chip = adc_tm_link_provider(dev, supplier);
++	put_device(supplier);
++	return chip;
  }
-@@ -1144,7 +1156,8 @@
+ EXPORT_SYMBOL_GPL(get_adc_tm_gen3);
+ 
+@@ -1129,6 +1170,7 @@
+ 	list_for_each_entry(client_info,
+ 			&chip->chan_props[dt_index].thr_list, list) {
+ 		if (client_info->param->id == param->id) {
++			client_info->owned_param = *param;
+ 			client_info->low_thr_requested = param->low_thr;
+ 			client_info->high_thr_requested = param->high_thr;
+ 			client_info->state_request = param->state_request;
+@@ -1144,7 +1186,9 @@
  		if (!client_info)
  			return -ENOMEM;
  
 -		client_info->param->id = (uintptr_t) client_info;
-+		client_info->param = param;
 +		param->id = (uintptr_t)client_info;
++		client_info->owned_param = *param;
++		client_info->param = &client_info->owned_param;
  		client_info->low_thr_requested = param->low_thr;
  		client_info->high_thr_requested = param->high_thr;
  		client_info->state_request = param->state_request;
-@@ -1242,7 +1255,7 @@
+@@ -1241,8 +1285,43 @@
+ 	return 0;
  }
  
++/* Copy one notification under the client lock, then allow callback reentry. */
++static void adc_tm_dispatch_notifications(struct adc5_channel_prop *prop)
++{
++	struct adc_tm_client_info *client;
++	void (*notify)(enum adc_tm_state, void *);
++	void *context;
++	enum adc_tm_state state;
++
++	for (;;) {
++		notify = NULL;
++		context = NULL;
++		state = ADC_TM_LOW_STATE;
++		mutex_lock(&prop->chip->lock);
++		list_for_each_entry(client, &prop->thr_list, list) {
++			if (!client->notify_low_thr && !client->notify_high_thr)
++				continue;
++			if (client->notify_low_thr) {
++				client->notify_low_thr = false;
++				state = ADC_TM_LOW_STATE;
++			} else {
++				client->notify_high_thr = false;
++				state = ADC_TM_HIGH_STATE;
++			}
++			notify = client->param->threshold_notification;
++			context = client->param->btm_ctx;
++			if (notify)
++				break;
++		}
++		mutex_unlock(&prop->chip->lock);
++		if (!notify)
++			break;
++		notify(state, context);
++	}
++}
++
  /* Used to notify non-thermal clients of threshold crossing */
 -void notify_adc_tm_fn(struct work_struct *work)
 +static void notify_adc_tm_fn(struct work_struct *work)
  {
  	struct adc5_channel_prop *prop = container_of(work,
  		struct adc5_channel_prop, work);
-@@ -1335,7 +1348,7 @@
+@@ -1303,27 +1382,7 @@
+ 
+ 	mutex_unlock(&chip->lock);
+ 
+-	list_for_each_entry(client_info, &prop->thr_list, list) {
+-		if (client_info->notify_low_thr &&
+-				client_info->param->threshold_notification != NULL) {
+-			pr_debug("notify kernel with low state for channel 0x%x\n",
+-					prop->channel);
+-			client_info->param->threshold_notification(
+-				ADC_TM_LOW_STATE,
+-				client_info->param->btm_ctx);
+-			client_info->notify_low_thr = false;
+-		}
+-
+-		if (client_info->notify_high_thr &&
+-				client_info->param->threshold_notification != NULL) {
+-			pr_debug("notify kernel with high state for channel 0x%x\n",
+-					prop->channel);
+-			client_info->param->threshold_notification(
+-				ADC_TM_HIGH_STATE,
+-				client_info->param->btm_ctx);
+-			client_info->notify_high_thr = false;
+-		}
+-	}
++	adc_tm_dispatch_notifications(prop);
+ }
+ 
+ /* Used by non-thermal clients to configure an ADC_TM channel */
+@@ -1335,7 +1394,7 @@
  	uint32_t v_channel, dt_index = 0;
  	bool chan_found = false;
  
@@ -119,7 +251,7 @@
  		return -EINVAL;
  
  	if (param->threshold_notification == NULL) {
-@@ -1357,15 +1370,20 @@
+@@ -1357,15 +1416,20 @@
  		return -EINVAL;
  	}
  
@@ -142,7 +274,7 @@
  
  	/* configure channel */
  	ret = adc_tm5_gen3_configure(&chip->chan_props[dt_index]);
-@@ -1388,7 +1406,7 @@
+@@ -1388,7 +1452,7 @@
  	uint32_t dt_index = 0, v_channel;
  	struct adc_tm_client_info *client_info = NULL;
  
@@ -151,7 +283,7 @@
  		return -EINVAL;
  
  	for (i = 0; i < chip->nchannels; i++) {
-@@ -1403,6 +1421,9 @@
+@@ -1403,6 +1467,9 @@
  		pr_err("not a valid ADC_TM channel\n");
  		return -EINVAL;
  	}
@@ -161,7 +293,30 @@
  
  	mutex_lock(&chip->lock);
  	list_for_each_entry(client_info,
-@@ -1653,6 +1674,12 @@
+@@ -1410,6 +1477,10 @@
+ 		if (client_info->param->id == param->id) {
+ 			client_info->state_request =
+ 				ADC_TM_HIGH_LOW_THR_DISABLE;
++			client_info->notify_low_thr = false;
++			client_info->notify_high_thr = false;
++			client_info->param->threshold_notification = NULL;
++			client_info->param->btm_ctx = NULL;
+ 			ret = adc_tm_gen3_manage_thresholds(&chip->chan_props[i]);
+ 			if (ret < 0) {
+ 				pr_err("Error in reverse scaling:%d\n",
+@@ -1427,6 +1498,11 @@
+ 
+ fail:
+ 	mutex_unlock(&chip->lock);
++	/* External disable waits out an already-copied callback/context. A
++	 * callback may disable itself without waiting for its own work item.
++	 */
++	if (current_work() != &chip->chan_props[dt_index].work)
++		flush_work(&chip->chan_props[dt_index].work);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(adc_tm_disable_chan_meas_gen3);
+@@ -1653,6 +1729,12 @@
  };
  MODULE_DEVICE_TABLE(of, adc5_match_table);
  
@@ -174,7 +329,7 @@
  static int adc5_get_dt_channel_data(struct adc5_chip *adc,
  				    struct adc5_channel_prop *prop,
  				    struct device_node *node,
-@@ -1804,8 +1831,7 @@
+@@ -1804,8 +1886,7 @@
  		prop->timer = MEAS_INT_1S;
  
  		if (prop->adc_tm == ADC_TM_NON_THERMAL) {
@@ -184,7 +339,7 @@
  			if (!prop->req_wq) {
  				pr_err("Requesting priority wq failed\n");
  				return -ENOMEM;
-@@ -1880,6 +1906,49 @@
+@@ -1880,6 +1961,49 @@
  	return 0;
  }
  
@@ -234,7 +389,7 @@
  static int adc5_gen3_probe(struct platform_device *pdev)
  {
  	struct device_node *node = pdev->dev.of_node;
-@@ -1904,8 +1973,8 @@
+@@ -1904,8 +2028,8 @@
  	adc->dev = dev;
  
  	ret = of_property_count_u32_elems(node, "reg");
@@ -245,7 +400,7 @@
  
  	adc->num_sdams = ret;
  
-@@ -1923,6 +1992,8 @@
+@@ -1923,6 +2047,8 @@
  		if (ret < 0)
  			return ret;
  
@@ -254,7 +409,7 @@
  		adc->base[i].base_addr = reg;
  
  		scnprintf(buf, sizeof(buf), "adc-sdam%d", i);
-@@ -1948,6 +2019,9 @@
+@@ -1948,6 +2074,9 @@
  	init_completion(&adc->complete);
  	mutex_init(&adc->lock);
  	spin_lock_init(&adc->tm_lock);
@@ -264,7 +419,7 @@
  
  	ret = adc5_get_dt_data(adc, node);
  	if (ret < 0) {
-@@ -1960,16 +2034,13 @@
+@@ -1960,16 +2089,13 @@
  					0, adc->base[i].irq_name, adc);
  		if (ret < 0)
  			goto fail;
@@ -285,7 +440,7 @@
  
  	indio_dev->dev.parent = dev;
  	indio_dev->dev.of_node = node;
-@@ -1978,64 +2049,26 @@
+@@ -1978,64 +2104,26 @@
  	indio_dev->channels = adc->iio_chans;
  	indio_dev->num_channels = adc->nchannels;
  
@@ -363,7 +518,7 @@
  }
  
  static int adc5_gen3_freeze(struct device *dev)
-@@ -2045,8 +2078,9 @@
+@@ -2045,8 +2133,9 @@
  
  	mutex_lock(&adc->lock);
  
@@ -374,7 +529,7 @@
  
  	mutex_unlock(&adc->lock);
  
-@@ -2062,8 +2096,12 @@
+@@ -2062,8 +2151,12 @@
  	for (i = 0; i < adc->num_sdams; i++) {
  		ret = devm_request_irq(dev, adc->base[i].irq, adc5_gen3_isr,
  				0, adc->base[i].irq_name, adc);
@@ -388,7 +543,7 @@
  	}
  
  	return ret;
-@@ -2097,7 +2135,6 @@
+@@ -2097,7 +2190,6 @@
  		.pm = pm_ptr(&adc5_gen3_pm_ops),
  	},
  	.probe = adc5_gen3_probe,
@@ -599,6 +754,34 @@
  MODULE_DESCRIPTION("QPNP PMIC Temperature Alarm driver");
 +MODULE_IMPORT_NS("IIO_CONSUMER");
  MODULE_LICENSE("GPL v2");
+--- a/ports/qcom-adc-thermal/include/linux/adc-tm-clients.h
++++ b/ports/qcom-adc-thermal/include/linux/adc-tm-clients.h
+@@ -76,7 +76,14 @@
+ 
+ struct device;
+ 
+-/* Public API */
++/* Public API.
++ * get_adc_tm_gen3() must be called from consumer probe. Its managed device link
++ * orders consumer removal before supplier removal. Keep the returned handle
++ * only until consumer remove; disable measurements and stop callbacks there.
++ * Disable synchronizes an external caller with in-flight notifications. A
++ * callback may disable itself; its context must live until that callback exits.
++ * Callers must serialize measure/disable for the same client ID.
++ */
+ 
+ #if IS_ENABLED(CONFIG_QCOM_SPMI_ADC5_GEN3)
+ struct adc5_chip *get_adc_tm_gen3(struct device *dev, const char *name);
+--- a/ports/qcom-adc-thermal/include/linux/iio/adc/qcom-vadc-common.h
++++ b/ports/qcom-adc-thermal/include/linux/iio/adc/qcom-vadc-common.h
+@@ -131,6 +131,7 @@
+ struct adc_tm_client_info {
+ 	struct list_head			list;
+ 	struct adc_tm_param			*param;
++	struct adc_tm_param			owned_param;
+ 	int32_t						low_thr_requested;
+ 	int32_t						high_thr_requested;
+ 	bool						notify_low_thr;
 --- a/ports/qcom-adc-thermal/Makefile
 +++ b/ports/qcom-adc-thermal/Makefile
 @@ -0,0 +1,6 @@

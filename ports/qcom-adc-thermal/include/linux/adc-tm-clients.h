@@ -76,7 +76,14 @@ struct adc_tm_param {
 
 struct device;
 
-/* Public API */
+/* Public API.
+ * get_adc_tm_gen3() must be called from consumer probe. Its managed device link
+ * orders consumer removal before supplier removal. Keep the returned handle
+ * only until consumer remove; disable measurements and stop callbacks there.
+ * Disable synchronizes an external caller with in-flight notifications. A
+ * callback may disable itself; its context must live until that callback exits.
+ * Callers must serialize measure/disable for the same client ID.
+ */
 
 #if IS_ENABLED(CONFIG_QCOM_SPMI_ADC5_GEN3)
 struct adc5_chip *get_adc_tm_gen3(struct device *dev, const char *name);

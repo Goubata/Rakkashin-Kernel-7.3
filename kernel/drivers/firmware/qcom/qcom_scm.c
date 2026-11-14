@@ -21,6 +21,7 @@
 #include <linux/interrupt.h>
 #include <linux/kstrtox.h>
 #include <linux/module.h>
+#include <linux/notifier.h>
 #include <linux/overflow.h>
 #include <linux/of.h>
 #include <linux/of_address.h>
@@ -1377,6 +1378,20 @@ int qcom_scm_assign_mem_regions(struct qcom_scm_mem_map_info *regions,
 }
 EXPORT_SYMBOL(qcom_scm_assign_mem_regions);
 
+SRCU_NOTIFIER_HEAD_STATIC(qcom_scm_assign_mem_nh);
+
+int qcom_scm_assign_mem_notifier_register(struct notifier_block *nb)
+{
+	return srcu_notifier_chain_register(&qcom_scm_assign_mem_nh, nb);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_assign_mem_notifier_register);
+
+int qcom_scm_assign_mem_notifier_unregister(struct notifier_block *nb)
+{
+	return srcu_notifier_chain_unregister(&qcom_scm_assign_mem_nh, nb);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_assign_mem_notifier_unregister);
+
 /**
  * qcom_scm_assign_mem() - Make a secure call to reassign memory ownership
  * @mem_addr: mem region whose ownership need to be reassigned
@@ -1407,12 +1422,22 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
 	__le32 *src;
 	int ret, i, b;
 	u64 srcvm_bits;
+	struct qcom_scm_assign_mem_notifier_data data = {
+		.mem_addr = mem_addr,
+		.mem_sz = mem_sz,
+		.srcvm = srcvm,
+		.newvm = newvm,
+		.dest_cnt = dest_cnt,
+	};
 
 	if (!srcvm || !newvm || !dest_cnt || dest_cnt > 64)
 		return -EINVAL;
 	for (i = 0; i < dest_cnt; i++)
 		if (newvm[i].vmid < 0 || newvm[i].vmid >= 64)
 			return -EINVAL;
+	ret = srcu_notifier_call_chain(&qcom_scm_assign_mem_nh, 0, &data);
+	if (ret & NOTIFY_STOP_MASK)
+		return notifier_to_errno(ret);
 	if (!__scm || !__scm->mempool)
 		return -EPROBE_DEFER;
 	srcvm_bits = *srcvm;

@@ -17,6 +17,8 @@
 #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
 #define QCOM_SCM_HDCP_MAX_REQ_CNT	5
 
+struct notifier_block;
+
 struct qcom_scm_hdcp_req {
 	u32 addr;
 	u32 val;
@@ -150,6 +152,21 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
 int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz, u64 *src,
 			const struct qcom_scm_vmperm *newvm,
 			unsigned int dest_cnt);
+
+/* A registered backend may handle ownership changes instead of issuing SCM.
+ * NOTIFY_STOP means handled; notifier_to_errno errors abort the operation.
+ * NOTIFY_DONE/OK continue to the real SCM firmware call. The handler owns any
+ * source-mask update on the handled path, matching the vendor ABI.
+ */
+struct qcom_scm_assign_mem_notifier_data {
+	phys_addr_t mem_addr;
+	size_t mem_sz;
+	u64 *srcvm;
+	const struct qcom_scm_vmperm *newvm;
+	unsigned int dest_cnt;
+};
+int qcom_scm_assign_mem_notifier_register(struct notifier_block *nb);
+int qcom_scm_assign_mem_notifier_unregister(struct notifier_block *nb);
 
 bool qcom_scm_ocmem_lock_available(void);
 int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,

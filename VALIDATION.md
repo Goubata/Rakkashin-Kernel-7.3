@@ -484,3 +484,23 @@ other SoCCP targets and matching PAS/firmware fields. Alor compatible, regulator
 cx/mx versus native supply/domain handling, IRQ, SMEM/state/mailbox/handover and
 secure ABI still need implementation/validation. No compatibility alias, phone
 partition write, firmware boot or daily-use claim is made.
+
+## Stage31–32: actual GLINK SMEM/control transport
+
+103 staged modules / 5,216 matching imports. Real native GLINK/SSR, SMEM transport
+and RPMSG control libraries precede common helpers; actual ELF imports confirm
+register/unregister/SSR are not disabled-header paths. Explicit external flags
+select these real APIs while avoiding duplicate native core providers.
+
+Eleven guarded-RAM actual-source cases pass, including VERSION/ACK wire vectors,
+real control-driver binding, FIFO wrap/padding, notification reserve, invalid
+metadata/access and size overflow, unsupported-feature exclusion and removing a
+blocked response worker. Pre-fix tests reproduce index errors and cancel-before-
+abort deadlock. Only the doorbell is recorded; physical shared memory is absent.
+Related SMP4 regressions pass: remoteproc2, PMIC/QMI19, SSR/Gunyah10 and QRTR128
+packets. Real transport modules register/unregister after the source test leaves.
+
+Five active DT edges retain semantic providers/arguments despite phandle numeric
+renumbering. Three SMEM IDs and 15 common wire IDs match pinned vendor source.
+Vendor command10/zero-copy is not implemented or advertised; complete protocol,
+partition19/coherency/IRQ/mailbox/SoCCP/firmware and all phone criteria remain open.

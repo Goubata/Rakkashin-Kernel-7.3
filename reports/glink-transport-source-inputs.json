@@ -1,0 +1,35 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_native.c",
+      "source": "drivers/rpmsg/qcom_glink_native.c",
+      "original_sha256": "ca4bf69f7f7d39a18589bf0c6ac365fef68d463b9443bd2457caff6fd4500cc6"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_smem.c",
+      "source": "drivers/rpmsg/qcom_glink_smem.c",
+      "original_sha256": "22f8cdfbedfb1dd5b2c2d4f3cf0293b840b884afc86efd62f3efd4fc353389c4"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_ssr.c",
+      "source": "drivers/rpmsg/qcom_glink_ssr.c",
+      "original_sha256": "8d9357ede12cd460ae93cd77c0c18ded01cc776279d865a4e47f4892384360e7"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_native.h",
+      "source": "drivers/rpmsg/qcom_glink_native.h",
+      "original_sha256": "9f599891c3acb4f389d4775b9ca9aedac0d7a1fe8471178f692688c9337a075c"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_trace.h",
+      "source": "drivers/rpmsg/qcom_glink_trace.h",
+      "original_sha256": "e124700298c91a70d3f72569c61780e4fd8a00b8e9fefa497c8b55e6db457049"
+    },
+    {
+      "file": "ports/qcom-glink-transport/rpmsg_ctrl.c",
+      "source": "drivers/rpmsg/rpmsg_ctrl.c",
+      "original_sha256": "e52a81e2aed8b147afbe0e24f2d1beb2edbddcada585e1355915c86b6355eaf7"
+    }
+  ]
+}

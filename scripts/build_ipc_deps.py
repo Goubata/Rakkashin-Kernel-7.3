@@ -20,7 +20,8 @@ def main():
         if not (ROOT / relative).is_file():
             raise SystemExit('Build core/GPU dependencies first: missing ' + relative)
     subprocess.run([sys.executable, str(ROOT / 'scripts/audit_ipc_sources.py')], check=True)
-    targets = ['ports/qcom-rproc-common', 'ports/gunyah']
+    subprocess.run([sys.executable, str(ROOT/'scripts/audit_glink_transport_sources.py')], check=True)
+    targets = ['ports/qcom-glink-transport', 'ports/qcom-rproc-common', 'ports/gunyah']
     if args.rm or args.gpu_driver:
         subprocess.run([sys.executable, str(ROOT / 'scripts/audit_gunyah_core_sources.py')], check=True)
         targets += ['ports/gunyah-core', 'ports/gunyah-rm']

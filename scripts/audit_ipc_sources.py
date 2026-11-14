@@ -80,7 +80,7 @@ def main():
                      'commit': row['commit'], 'origin': row['origin'],
                      'original_git_blob': row['original_git_blob'],
                      'port_changes': vendor_lock['reviewed_changes'], 'sha256': row['sha256']})
-    report = {'passed': True, 'scope': 'staged source provenance only; not a runtime proof', 'remoteproc_error_policy_patch_sha256': hashlib.sha256((ROOT/'patches/rproc-transport-gate-7.3.patch').read_bytes()).hexdigest(), 'files': rows}
+    report = {'passed': True, 'scope': 'staged source provenance only; not a runtime proof', 'remoteproc_build_sha256': hashlib.sha256((ROOT/'ports/qcom-rproc-common/Makefile').read_bytes()).hexdigest(), 'remoteproc_error_policy_patch_sha256': hashlib.sha256((ROOT/'patches/rproc-transport-gate-7.3.patch').read_bytes()).hexdigest(), 'files': rows}
     (ROOT / 'reports/ipc-source-provenance.json').write_text(json.dumps(report, indent=2) + '\n')
     print('Verified IPC source provenance:', len(rows), 'files')
 

@@ -33,7 +33,10 @@ def main():
     parser.add_argument('--pmic-ipc-tests',action='store_true')
     parser.add_argument('--pmic-glink-tests',action='store_true')
     parser.add_argument('--rproc-gate-tests',action='store_true')
+    parser.add_argument('--glink-transport',action='store_true')
+    parser.add_argument('--glink-transport-tests',action='store_true')
     args=parser.parse_args()
+    if args.glink_transport_tests or args.pmic_glink_tests or args.rproc_gate_tests:args.glink_transport=True
     if args.pmic_glink_tests:args.pmic_ipc_tests=True;args.diagnostics=True
     if args.adc_thermal_tests:args.adc_thermal=True
     if args.adc_thermal:args.diagnostics=True
@@ -97,6 +100,10 @@ def main():
         from native_module_inventory import pmic_ipc_modules
         pmic_ipc_modules()
         targets.append('tests/pmic-ipc')
+    if args.glink_transport:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_glink_transport_sources.py')],check=True)
+        targets += ['ports/qcom-hwspinlock','ports/qcom-smem','ports/qcom-glink-transport']
+        if args.glink_transport_tests:targets.append('tests/glink-transport')
     if args.pmic_glink_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_pmic_glink_sources.py')],check=True)
         targets += ['ports/qcom-rproc-common','ports/qcom-pmic-glink','tests/pmic-glink']

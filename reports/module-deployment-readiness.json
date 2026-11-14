@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-rproc-gate-stage30",
+  "stage": "android73-glink-transport-stage32",
   "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
   "archived_unique_count": 544,
-  "staged_count": 100,
-  "same_name_candidate_count": 87,
-  "archived_names_without_same_name_candidate_count": 457,
-  "loaded_names_without_same_name_candidate_count": 442,
+  "staged_count": 103,
+  "same_name_candidate_count": 89,
+  "archived_names_without_same_name_candidate_count": 455,
+  "loaded_names_without_same_name_candidate_count": 440,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -321,6 +321,14 @@
       "file": "modules/qcom-spmi/qcom-spmi-pmic.ko"
     },
     {
+      "name": "rpmsg_ctrl",
+      "file": "modules/qcom-glink-transport/rpmsg_ctrl.ko"
+    },
+    {
+      "name": "qcom_glink",
+      "file": "modules/qcom-glink-transport/qcom_glink.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -335,6 +343,10 @@
     {
       "name": "minidump",
       "file": "modules/qcom-minidump/minidump.ko"
+    },
+    {
+      "name": "qcom_glink_smem",
+      "file": "modules/qcom-glink-transport/qcom_glink_smem.ko"
     },
     {
       "name": "qcom_common",
@@ -616,6 +628,10 @@
       "file": "modules/qcom-clock-controllers/gpucc-chora.ko"
     },
     {
+      "name": "qcom_glink",
+      "file": "modules/qcom-glink-transport/qcom_glink.ko"
+    },
+    {
       "name": "qcom_hwspinlock",
       "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko"
     },
@@ -724,6 +740,10 @@
       "file": "modules/qcom-spmi/qcom-spmi-pmic.ko"
     },
     {
+      "name": "rpmsg_ctrl",
+      "file": "modules/qcom-glink-transport/rpmsg_ctrl.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -738,6 +758,10 @@
     {
       "name": "minidump",
       "file": "modules/qcom-minidump/minidump.ko"
+    },
+    {
+      "name": "qcom_glink_smem",
+      "file": "modules/qcom-glink-transport/qcom_glink_smem.ko"
     },
     {
       "name": "qcom_common",
@@ -1774,6 +1798,50 @@
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
+    "qcom_glink": {
+      "file": "modules/qcom-glink-transport/qcom_glink.ko",
+      "sha256": "cd32ee154c3fee157559d88c5d4d10f6bc48539a204962947fda591e1732fe68",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [
+        "pre: rpmsg_ctrl"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_glink_smem": {
+      "file": "modules/qcom-glink-transport/qcom_glink_smem.ko",
+      "sha256": "14ace266c8f8ae38d63ab306f99031e16a7604b17c4bb0d57afa04f2b59c8779",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_glink",
+        "smem"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "rpmsg_ctrl": {
+      "file": "modules/qcom-glink-transport/rpmsg_ctrl.ko",
+      "sha256": "de90d659f02b2269458bb827e4723fd606770f6596db681c0710262855348b66",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
     "qcom_hwspinlock": {
       "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko",
       "sha256": "ef19828018e07edd4a62948a1cff4a617b95300cb7c2fd5bfc46cdcf2928b3dc",
@@ -2075,9 +2143,11 @@
     },
     "qcom_common": {
       "file": "modules/qcom-rproc-common/qcom_common.ko",
-      "sha256": "ff2f382bf8cdec2bac1b9f7459a04b9ba6618ad3ee63f68c621e26edf441a016",
+      "sha256": "3bd85662531813b70505831ef5620cbfddbca98477d90a721f0325394988a6da",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
+        "qcom_glink",
+        "qcom_glink_smem",
         "smem"
       ],
       "softdep": [],
@@ -4348,22 +4418,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_glink",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qcom_glink_smem",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_glink_spss",
       "placements": [
         "vendor_boot:fragment-0",
@@ -5972,8 +6026,6 @@
     "qcom_dynamic_ramoops",
     "qcom_edac",
     "qcom_fdcvs",
-    "qcom_glink",
-    "qcom_glink_smem",
     "qcom_glink_spss",
     "qcom_hv_haptics",
     "qcom_i2c_pmic",

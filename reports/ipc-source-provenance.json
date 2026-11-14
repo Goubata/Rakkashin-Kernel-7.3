@@ -1,6 +1,7 @@
 {
   "passed": true,
   "scope": "staged source provenance only; not a runtime proof",
+  "remoteproc_build_sha256": "02b3b123408e2c359043c837b01b5db1266a03e0d8ed6de383f99ac29c10e33a",
   "remoteproc_error_policy_patch_sha256": "c3d960adfe478d4b0e2f7e92291324752630746f006a64027ab0ef65bcf5dcf5",
   "files": [
     {

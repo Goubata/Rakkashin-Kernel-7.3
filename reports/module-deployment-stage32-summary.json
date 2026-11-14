@@ -1,0 +1,24 @@
+{
+  "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
+  "stage": "android73-glink-transport-stage32",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "archived_unique_count": 544,
+  "staged_count": 103,
+  "same_name_candidate_count": 89,
+  "archived_names_without_same_name_candidate_count": 455,
+  "loaded_names_without_same_name_candidate_count": 440,
+  "all_staged_module_dependencies_present": true,
+  "all_staged_soft_dependencies_present": true,
+  "elf_dependency_graph_acyclic": true,
+  "combined_hard_soft_graph_acyclic": true,
+  "combined_dependency_cycle_or_blocked_names": [],
+  "dependency_cycle_or_blocked_names": [],
+  "order_scope": "ELF hard dependencies only; not DT probe readiness, init order or softdep resolution",
+  "image_packaging_ready": false,
+  "blockers": [
+    "Missing hardware drivers and providers",
+    "Same-name candidates require probe and hardware validation",
+    "Init load order, softdeps, signing and ROM policy review pending",
+    "Old 6.12 modules cannot be carried over as 7.3 modules"
+  ]
+}

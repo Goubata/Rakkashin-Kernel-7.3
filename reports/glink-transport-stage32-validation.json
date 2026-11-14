@@ -1,0 +1,79 @@
+{
+  "stage": "android73-glink-transport-stage32",
+  "scope": "real native GLINK/SMEM/RPMSG control libraries linked into remoteproc common; actual source on guarded RAM and real control driver only; no physical remote endpoint",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "source_base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "image_sha256": "919ed4fc3189a0d1e888d795f843637363a0e1c099d0591c0727d0e9a6f09001",
+  "module_count": 103,
+  "imports_checked": 5216,
+  "all_import_crcs_match": true,
+  "transport_source_cases_passed": 11,
+  "remoteproc_error_cases_passed": 2,
+  "pmic_qmi_regression_cases_passed": 19,
+  "ssr_gunyah_regression_cases_passed": 10,
+  "qrtr_local_packets_verified": 128,
+  "real_remoteproc_imports": [
+    "qcom_glink_smem_register",
+    "qcom_glink_smem_unregister",
+    "qcom_glink_ssr_notify"
+  ],
+  "zero_copy_implemented": false,
+  "wire_equivalence_complete": false,
+  "before_fix_evidence": {
+    "ring_position_suite": {
+      "pass": 5,
+      "fail": 1,
+      "total": 6
+    },
+    "blocked_response_remove_suite": {
+      "pass": 9,
+      "fail": 1,
+      "total": 10
+    }
+  },
+  "selected_dt_active_edge_count": 5,
+  "selected_wire_command_ids_equal_count": 15,
+  "selected_smem_item_ids": [
+    478,
+    479,
+    480
+  ],
+  "dt_edge_semantics_preserved": true,
+  "software_fixture": "Both actual GLINK native and SMEM callback sources compiled into one test TU; guarded RAM ring, recorded doorbell, actual RPMSG control binding. No physical mailbox or SMEM hardware is emulated in production.",
+  "physical_boot_verified": false,
+  "physical_smem_partition_or_irq_verified": false,
+  "firmware_communication_verified": false,
+  "charging_or_battery_verified": false,
+  "whole_dt_validation_passed": false,
+  "image_packaging_ready": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "SoCCP/PAS early-boot handover and actual power/IRQ/firmware ABI",
+    "IPCC mailbox/IRQ and SMP2P state producers; SMEM state core is already built in",
+    "Physical partition 19, shared-memory coherency and full channel/intent/data/SSR traffic",
+    "Vendor zero-copy command/feature and extended API behavior; unsupported feature is not advertised",
+    "Long TX backpressure, callback/teardown stress and probe/allocation fault injection",
+    "Charging/USB child services and all phone/ROM/efficiency criteria; original duplicate SID4"
+  ],
+  "sha256": {
+    "reports/glink-transport-source-lock.json": "4de5a0c1b91afce378a150dddb8e4d03e780cac7a1129d4755c6af84efd2a5d9",
+    "reports/glink-transport-stage31-before.log": "3d4bc0e9cb112cf7f1c5f5701e110a846a809c0c0ee55d3832a1acafb1625d94",
+    "reports/glink-transport-stage31-before.json": "68a93d1ced15781fd8b06682f6f7a093803f2d472e407792d901fef478269000",
+    "reports/glink-transport-stage31-teardown-before.log": "26d335dcf708b68be154bbf27427642f95c2f4155730f26462f949594fcfc49f",
+    "reports/glink-transport-stage31-teardown-before.json": "33318407678e55fefd614b9b1706107e507e7f93d0787b9c3854b3468ab11278",
+    "reports/glink-transport-stage32-build.log": "6c6f07ee881b387075fb899136bb8a0900e3fef0f6a8e55a8b617bb2c28403bb",
+    "reports/glink-transport-stage32-final-build.log": "d282a2d0aa173b795539be1226a0ff7f4c2744e24b7855548664762efc556937",
+    "reports/glink-transport-stage32-final-qemu.log": "4521a4f6307a0ee83dbef9f3e84d65630996d0651630fc8cd0e2969b65316f99",
+    "reports/glink-transport-stage32-final-qemu.json": "46712768c00057186d59496a425deb6fbd55467280789c0aa23f2bb9d92ff72b",
+    "reports/glink-transport-stage32-rproc-qemu.log": "16c5733a61b53d8a6dcabbcfceb59d0b6715fa33d61cc63e61205138b67d8d5d",
+    "reports/glink-transport-stage32-rproc-qemu.json": "84e505ed82121cd0a43d0297ad9a1e87e575a2178c801b661b0f106ee08754d3",
+    "reports/glink-transport-stage32-pmic-qemu.log": "b646550a06ca61f37a12b7c1e78faaad18724fd70b5cb266c27994b7ec615d6f",
+    "reports/glink-transport-stage32-pmic-qemu.json": "d62e59dc6a556c0853701e3b6820c8fd643504688b1f0415d15dfbb6272304af",
+    "reports/glink-transport-stage32-platform-qemu.log": "1cddc223e3c28dc16c6d5230d1894386919ba389adb2a6e0cf7504d71b097ccf",
+    "reports/glink-transport-stage32-platform-qemu.json": "cdc73d6b919042ee17a9fa433a23ef4298961c15b85f6a2c4248c3ef3694bc58",
+    "reports/glink-transport-dt-validation.json": "463448e413c9d07cbdec76352cf792a71a8bb287897a1c3d97db723fee8b211b",
+    "reports/module-crc-stage32.json": "29142a294130c66d64cc8b52df45eecdf7ad2ca955d939c0a68fa3f3d0f71216",
+    "reports/ipc-source-provenance.json": "9895921d22e9253060f16a3bb107e08fae4a9e9d6b77430ba24632b987a4aac0"
+  }
+}

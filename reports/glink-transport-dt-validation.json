@@ -1,0 +1,318 @@
+{
+  "scope": "active DT edge cells, saved property equality and selected wire command/SMEM IDs only; not firmware, mailbox/IRQ delivery, partition presence or protocol equivalence proof",
+  "vendor_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "native_smem_ids": {
+    "SMEM_GLINK_NATIVE_XPRT_DESCRIPTOR": 478,
+    "SMEM_GLINK_NATIVE_XPRT_FIFO_0": 479,
+    "SMEM_GLINK_NATIVE_XPRT_FIFO_1": 480
+  },
+  "vendor_smem_ids": {
+    "SMEM_GLINK_NATIVE_XPRT_DESCRIPTOR": 478,
+    "SMEM_GLINK_NATIVE_XPRT_FIFO_0": 479,
+    "SMEM_GLINK_NATIVE_XPRT_FIFO_1": 480
+  },
+  "common_wire_commands_checked": 15,
+  "wire_command_mismatches": {},
+  "vendor_only_commands": [
+    "GLINK_CMD_TX_DATA_ZERO_COPY"
+  ],
+  "native_advertised_features": [
+    "GLINK_FEATURE_INTENT_REUSE"
+  ],
+  "vendor_additional_advertised_features": [
+    "GLINK_FEATURE_ZERO_COPY"
+  ],
+  "zero_copy_implemented": false,
+  "wire_subset_only": true,
+  "physical_verified": false,
+  "inputs": {
+    "saved": {
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "edges": [
+        {
+          "node": "/soc/remoteproc-wpss@99f00000/glink-edge",
+          "label": "wpss",
+          "remote_pid": [
+            13
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            17,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            78,
+            17,
+            0
+          ],
+          "mailbox_args": [
+            17,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-mss@04080000/glink-edge",
+          "label": "modem",
+          "remote_pid": [
+            1
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            2,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            78,
+            2,
+            0
+          ],
+          "mailbox_args": [
+            2,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-adsp@06800000/glink-edge",
+          "label": "adsp",
+          "remote_pid": [
+            2
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            3,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            78,
+            3,
+            0
+          ],
+          "mailbox_args": [
+            3,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-cdsp@26300000/glink-edge",
+          "label": "cdsp",
+          "remote_pid": [
+            5
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            5,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            78,
+            5,
+            0
+          ],
+          "mailbox_args": [
+            5,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-soccp@a3380000/glink-edge",
+          "label": "soccp",
+          "remote_pid": [
+            19
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            13,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            78,
+            13,
+            0
+          ],
+          "mailbox_args": [
+            13,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        }
+      ],
+      "active_edge_count": 5,
+      "errors": []
+    },
+    "candidate": {
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "edges": [
+        {
+          "node": "/soc/remoteproc-wpss@99f00000/glink-edge",
+          "label": "wpss",
+          "remote_pid": [
+            13
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            17,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            77,
+            17,
+            0
+          ],
+          "mailbox_args": [
+            17,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-mss@04080000/glink-edge",
+          "label": "modem",
+          "remote_pid": [
+            1
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            2,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            77,
+            2,
+            0
+          ],
+          "mailbox_args": [
+            2,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-adsp@06800000/glink-edge",
+          "label": "adsp",
+          "remote_pid": [
+            2
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            3,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            77,
+            3,
+            0
+          ],
+          "mailbox_args": [
+            3,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-cdsp@26300000/glink-edge",
+          "label": "cdsp",
+          "remote_pid": [
+            5
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            5,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            77,
+            5,
+            0
+          ],
+          "mailbox_args": [
+            5,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        },
+        {
+          "node": "/soc/remoteproc-soccp@a3380000/glink-edge",
+          "label": "soccp",
+          "remote_pid": [
+            19
+          ],
+          "interrupt_parent": "/soc/qcom,ipcc@1106000",
+          "interrupts": [
+            13,
+            0,
+            1
+          ],
+          "mailbox_provider": "/soc/qcom,ipcc@1106000",
+          "mailbox_cells": [
+            77,
+            13,
+            0
+          ],
+          "mailbox_args": [
+            13,
+            0
+          ],
+          "mailbox_arity": [
+            2
+          ],
+          "transport": "smem"
+        }
+      ],
+      "active_edge_count": 5,
+      "errors": []
+    }
+  },
+  "smem_host_count": 30,
+  "selected_edge_semantics_equal": true,
+  "raw_mailbox_phandle_renumbered": true,
+  "passed": true
+}

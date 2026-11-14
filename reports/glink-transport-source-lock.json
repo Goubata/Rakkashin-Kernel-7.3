@@ -1,0 +1,68 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_native.c",
+      "source": "drivers/rpmsg/qcom_glink_native.c",
+      "original_sha256": "ca4bf69f7f7d39a18589bf0c6ac365fef68d463b9443bd2457caff6fd4500cc6",
+      "sha256": "ee9567be06695702ffdc268860906e7b993941da70a4b561e071d625d49ba239"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_smem.c",
+      "source": "drivers/rpmsg/qcom_glink_smem.c",
+      "original_sha256": "22f8cdfbedfb1dd5b2c2d4f3cf0293b840b884afc86efd62f3efd4fc353389c4",
+      "sha256": "810444588f7de5d8b57aa2e34347c2321cbea4b7e4b4aac250213c65016567f8"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_ssr.c",
+      "source": "drivers/rpmsg/qcom_glink_ssr.c",
+      "original_sha256": "8d9357ede12cd460ae93cd77c0c18ded01cc776279d865a4e47f4892384360e7",
+      "sha256": "8d9357ede12cd460ae93cd77c0c18ded01cc776279d865a4e47f4892384360e7"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_native.h",
+      "source": "drivers/rpmsg/qcom_glink_native.h",
+      "original_sha256": "9f599891c3acb4f389d4775b9ca9aedac0d7a1fe8471178f692688c9337a075c",
+      "sha256": "9f599891c3acb4f389d4775b9ca9aedac0d7a1fe8471178f692688c9337a075c"
+    },
+    {
+      "file": "ports/qcom-glink-transport/qcom_glink_trace.h",
+      "source": "drivers/rpmsg/qcom_glink_trace.h",
+      "original_sha256": "e124700298c91a70d3f72569c61780e4fd8a00b8e9fefa497c8b55e6db457049",
+      "sha256": "e124700298c91a70d3f72569c61780e4fd8a00b8e9fefa497c8b55e6db457049"
+    },
+    {
+      "file": "ports/qcom-glink-transport/rpmsg_ctrl.c",
+      "source": "drivers/rpmsg/rpmsg_ctrl.c",
+      "original_sha256": "e52a81e2aed8b147afbe0e24f2d1beb2edbddcada585e1355915c86b6355eaf7",
+      "sha256": "e52a81e2aed8b147afbe0e24f2d1beb2edbddcada585e1355915c86b6355eaf7"
+    },
+    {
+      "file": "ports/qcom-glink-transport/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "ad321326d92ee6bf4efda3230bb2863a1349984dd1e0e32b0e1ba06dde6710e9"
+    }
+  ],
+  "patch_sha256": "7719c6a5e5038f83fadd9be65b42609582dc6579ace1a5a863fddb59aa84a05e",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Real external native GLINK/SMEM/control modules using current RPMSG internals and real SMEM exports",
+    "Preserve version 1 wire IDs, feature negotiation, ring barriers and READ_NOTIF reserve",
+    "Validate FIFO geometry, indices and bounded peek/advance/write without touching RAM on invalid calls",
+    "Publish RX FIFO length before its pointer and use single-copy shared head/tail accesses",
+    "Reject invalid registration arguments, retain OF nodes and propagate deferred IRQ mapping",
+    "Use native explicit per-CPU workqueues and reject oversized TX sizes before integer narrowing",
+    "Abort/wake blocked TX before cancelling response work; wait predicates observe abort and no post-abort write",
+    "Load real RPMSG control driver before GLINK via soft dependency"
+  ],
+  "pending": [
+    "Physical SMEM partition 19, descriptor/IRQ/mailbox/coherency and remote SoCCP firmware negotiation",
+    "Full intents/data/channel/SSR protocol and callback lifetime stress with remote endpoint",
+    "Registration/probe fault injection, long ordinary TX backpressure and RX malformed-frame recovery",
+    "Qualcomm vendor extensions beyond native wire features and saved module behavior equivalence",
+    "SoCCP/PAS/SMEM state/SMP2P/mailbox and all phone/charging/USB child service acceptance"
+  ]
+}

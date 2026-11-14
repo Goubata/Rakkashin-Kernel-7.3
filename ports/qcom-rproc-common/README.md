@@ -1,6 +1,6 @@
 # Qualcomm remoteproc common helpers
 
-Android common 7.3 commit `4dd306a07b2f456fd70ddaa28f4f65640374f202` の `drivers/remoteproc/qcom_common.c/.h` を無改変で外部モジュールとしてビルドしています。private remoteproc headerは同じ7.3ツリーから参照します。SMEMは既に移植した実装へリンクします。
+Android common 7.3 commit `4dd306a07b2f456fd70ddaa28f4f65640374f202` の `drivers/remoteproc/qcom_common.c/.h` を基に外部モジュールとしてビルドしています。private remoteproc headerは同じ7.3ツリーから参照します。SMEMは既に移植した実装へリンクします。
 
 `qcom_register_ssr_notifier` / `qcom_unregister_ssr_notifier` と、実際のremoteproc subdeviceによる通知を提供します。Vendorとnativeの4イベントの値・通知データ配置を確認しました。通常起動・クラッシュ・別サブシステムへの分離・登録解除・sleep可能なコールバックの5 KUnitがSMP4 QEMUで成功しました。実DSP/モデムの起動やSSR成功の証明ではありません。
 
@@ -13,3 +13,8 @@ edge. If the native disabled-feature API returns NULL, startup returns
 EOPNOTSUPP. This avoids treating unavailable IPC as a completed functional port.
 Two actual-source tests reproduce the prior zero returns and verify rejection;
 real transport, firmware boot and physical remoteproc operation remain pending.
+
+Stage32 links real GLINK SMEM register/unregister and SSR APIs through explicit
+external module flags, with GLINK/control built before this module. The invalid
+GLINK argument test now checks a real-provider error; disabled SMD still checks
+EOPNOTSUPP. Firmware/physical remoteproc operation remains unverified.

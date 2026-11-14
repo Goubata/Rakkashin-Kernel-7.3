@@ -1,0 +1,322 @@
+--- a/ports/qcom-glink-transport/qcom_glink_native.c
++++ b/ports/qcom-glink-transport/qcom_glink_native.c
+@@ -343,13 +343,15 @@
+ 			 const void *hdr, size_t hlen,
+ 			 const void *data, size_t dlen, bool wait)
+ {
+-	unsigned int tlen = hlen + dlen;
++	size_t tlen;
+ 	unsigned long flags;
+ 	int ret = 0;
+ 
+ 	/* Reject packets that are too big */
+-	if (tlen >= glink->tx_pipe->length)
++	if (hlen >= glink->tx_pipe->length ||
++	    dlen >= glink->tx_pipe->length - hlen)
+ 		return -EINVAL;
++	tlen = hlen + dlen;
+ 
+ 	spin_lock_irqsave(&glink->tx_lock, flags);
+ 
+@@ -378,6 +380,7 @@
+ 		spin_unlock_irqrestore(&glink->tx_lock, flags);
+ 
+ 		wait_event_timeout(glink->tx_avail_notify,
++				   READ_ONCE(glink->abort_tx) ||
+ 				   qcom_glink_tx_avail(glink) >= tlen, 10 * HZ);
+ 
+ 		spin_lock_irqsave(&glink->tx_lock, flags);
+@@ -386,6 +389,10 @@
+ 			glink->sent_read_notify = false;
+ 	}
+ 
++	if (glink->abort_tx) {
++		ret = -EIO;
++		goto out;
++	}
+ 	qcom_glink_tx_write(glink, hdr, hlen, data, dlen);
+ 	qcom_glink_tx_kick(glink);
+ 
+@@ -615,7 +622,7 @@
+ 	list_add_tail(&intent->node, &channel->done_intents);
+ 	spin_unlock(&channel->intent_lock);
+ 
+-	schedule_work(&channel->intent_work);
++	queue_work(system_percpu_wq, &channel->intent_work);
+ }
+ 
+ /**
+@@ -889,7 +896,7 @@
+ 	list_add_tail(&dcmd->node, &glink->rx_queue);
+ 	spin_unlock(&glink->rx_lock);
+ 
+-	schedule_work(&glink->rx_work);
++	queue_work(system_percpu_wq, &glink->rx_work);
+ 	qcom_glink_rx_advance(glink, sizeof(dcmd->msg) + extra);
+ 
+ 	return 0;
+@@ -1951,13 +1958,14 @@
+ 	int cid;
+ 	int ret;
+ 
+-	qcom_glink_cancel_rx_work(glink);
+-
+-	/* Fail all attempts at sending messages */
++	/* Fail TX and wake its waiters before cancelling RX: a response worker
++	 * may be blocked waiting for space from the remote being removed.
++	 */
+ 	spin_lock_irqsave(&glink->tx_lock, flags);
+-	glink->abort_tx = true;
++	WRITE_ONCE(glink->abort_tx, true);
+ 	wake_up_all(&glink->tx_avail_notify);
+ 	spin_unlock_irqrestore(&glink->tx_lock, flags);
++	qcom_glink_cancel_rx_work(glink);
+ 
+ 	/* Abort any senders waiting for intent requests */
+ 	spin_lock_irqsave(&glink->idr_lock, flags);
+@@ -1982,5 +1990,6 @@
+ }
+ EXPORT_SYMBOL_GPL(qcom_glink_native_remove);
+ 
++MODULE_SOFTDEP("pre: rpmsg_ctrl");
+ MODULE_DESCRIPTION("Qualcomm GLINK driver");
+ MODULE_LICENSE("GPL v2");
+--- a/ports/qcom-glink-transport/qcom_glink_smem.c
++++ b/ports/qcom-glink-transport/qcom_glink_smem.c
+@@ -60,6 +60,23 @@
+ 
+ #define to_smem_pipe(p) container_of(p, struct glink_smem_pipe, native)
+ 
++static bool glink_smem_positions(struct glink_smem_pipe *pipe,
++				u32 *head, u32 *tail)
++{
++	size_t length;
++
++	if (!smp_load_acquire(&pipe->fifo) || !pipe->head || !pipe->tail)
++		return false;
++	length = READ_ONCE(pipe->native.length);
++	if (length < FIFO_ALIGNMENT || length > U32_MAX ||
++	    !IS_ALIGNED(length, FIFO_ALIGNMENT))
++		return false;
++	*head = le32_to_cpu(READ_ONCE(*pipe->head));
++	*tail = le32_to_cpu(READ_ONCE(*pipe->tail));
++	return *head < length && *tail < length &&
++		IS_ALIGNED(*head, FIFO_ALIGNMENT) && IS_ALIGNED(*tail, FIFO_ALIGNMENT);
++}
++
+ static size_t glink_smem_rx_avail(struct qcom_glink_pipe *np)
+ {
+ 	struct glink_smem_pipe *pipe = to_smem_pipe(np);
+@@ -78,12 +95,15 @@
+ 			return 0;
+ 		}
+ 
+-		pipe->fifo = fifo;
++		if (!fifo || len < FIFO_ALIGNMENT || len > U32_MAX ||
++		    !IS_ALIGNED(len, FIFO_ALIGNMENT))
++			return 0;
+ 		pipe->native.length = len;
+-	}
+-
+-	head = le32_to_cpu(*pipe->head);
+-	tail = le32_to_cpu(*pipe->tail);
++		smp_store_release(&pipe->fifo, fifo);
++	}
++
++	if (!glink_smem_positions(pipe, &head, &tail))
++		return 0;
+ 
+ 	if (head < tail)
+ 		return pipe->native.length - tail + head;
+@@ -95,65 +115,59 @@
+ 			       void *data, unsigned int offset, size_t count)
+ {
+ 	struct glink_smem_pipe *pipe = to_smem_pipe(np);
+-	size_t len;
+-	u32 tail;
+-
+-	tail = le32_to_cpu(*pipe->tail);
+-	tail += offset;
+-	if (tail >= pipe->native.length)
+-		tail -= pipe->native.length;
+-
+-	/*
+-	 * Order the availability (head) read in glink_smem_rx_avail()
+-	 * against the FIFO payload read below, so APPS never consumes
+-	 * stale data the remote has not yet published.
+-	 */
++	size_t available = glink_smem_rx_avail(np), len, position;
++	u32 head, tail;
++
++	if (!count)
++		return;
++	if (!data || offset > available || count > available - offset ||
++	    !glink_smem_positions(pipe, &head, &tail))
++		return;
++	position = (size_t)tail + offset;
++	if (position >= pipe->native.length)
++		position -= pipe->native.length;
++
++	/* Pair remote head publication with FIFO payload consumption. */
+ 	rmb();
+-
+-	len = min_t(size_t, count, pipe->native.length - tail);
++	len = min_t(size_t, count, pipe->native.length - position);
+ 	if (len)
+-		memcpy_fromio(data, pipe->fifo + tail, len);
+-
++		memcpy_fromio(data, pipe->fifo + position, len);
+ 	if (len != count)
+-		memcpy_fromio(data + len, pipe->fifo, (count - len));
+-}
+-
+-static void glink_smem_rx_advance(struct qcom_glink_pipe *np,
+-				  size_t count)
++		memcpy_fromio(data + len, pipe->fifo, count - len);
++}
++
++static void glink_smem_rx_advance(struct qcom_glink_pipe *np, size_t count)
+ {
+ 	struct glink_smem_pipe *pipe = to_smem_pipe(np);
+-	u32 tail;
+-
+-	tail = le32_to_cpu(*pipe->tail);
+-
+-	tail += count;
+-	if (tail >= pipe->native.length)
+-		tail -= pipe->native.length;
+-
+-	*pipe->tail = cpu_to_le32(tail);
++	size_t position;
++	u32 head, tail;
++
++	if (!IS_ALIGNED(count, FIFO_ALIGNMENT) || count > glink_smem_rx_avail(np) ||
++	    !glink_smem_positions(pipe, &head, &tail))
++		return;
++	position = (size_t)tail + count;
++	if (position >= pipe->native.length)
++		position -= pipe->native.length;
++	WRITE_ONCE(*pipe->tail, cpu_to_le32(position));
++}
++
++/* Raw free space includes the reserve for READ_NOTIF. Normal packets use
++ * tx_avail(), which keeps both the empty/full gap and notification reserve.
++ */
++static size_t glink_smem_tx_free(struct glink_smem_pipe *pipe)
++{
++	u32 head, tail;
++	if (!glink_smem_positions(pipe, &head, &tail))
++		return 0;
++	return tail <= head ? pipe->native.length - head + tail : tail - head;
+ }
+ 
+ static size_t glink_smem_tx_avail(struct qcom_glink_pipe *np)
+ {
+-	struct glink_smem_pipe *pipe = to_smem_pipe(np);
+-	u32 head;
+-	u32 tail;
+-	u32 avail;
+-
+-	head = le32_to_cpu(*pipe->head);
+-	tail = le32_to_cpu(*pipe->tail);
+-
+-	if (tail <= head)
+-		avail = pipe->native.length - head + tail;
+-	else
+-		avail = tail - head;
+-
+-	if (avail < (FIFO_FULL_RESERVE + TX_BLOCKED_CMD_RESERVE))
+-		avail = 0;
+-	else
+-		avail -= FIFO_FULL_RESERVE + TX_BLOCKED_CMD_RESERVE;
+-
+-	return avail;
++	size_t avail = glink_smem_tx_free(to_smem_pipe(np));
++	if (avail < FIFO_FULL_RESERVE + TX_BLOCKED_CMD_RESERVE)
++		return 0;
++	return avail - FIFO_FULL_RESERVE - TX_BLOCKED_CMD_RESERVE;
+ }
+ 
+ static unsigned int glink_smem_tx_write_one(struct glink_smem_pipe *pipe,
+@@ -182,8 +196,15 @@
+ {
+ 	struct glink_smem_pipe *pipe = to_smem_pipe(glink_pipe);
+ 	unsigned int head;
+-
+-	head = le32_to_cpu(*pipe->head);
++	size_t available = glink_smem_tx_free(pipe);
++
++	if (available < FIFO_FULL_RESERVE || (!hdr && hlen) || (!data && dlen))
++		return;
++	available -= FIFO_FULL_RESERVE;
++	if (hlen > available || dlen > available - hlen ||
++	    ALIGN(hlen + dlen, FIFO_ALIGNMENT) > available)
++		return;
++	head = le32_to_cpu(READ_ONCE(*pipe->head));
+ 
+ 	head = glink_smem_tx_write_one(pipe, head, hdr, hlen);
+ 	head = glink_smem_tx_write_one(pipe, head, data, dlen);
+@@ -196,7 +217,7 @@
+ 	/* Ensure ordering of fifo and head update */
+ 	wmb();
+ 
+-	*pipe->head = cpu_to_le32(head);
++	WRITE_ONCE(*pipe->head, cpu_to_le32(head));
+ }
+ 
+ static void glink_smem_tx_kick(struct qcom_glink_pipe *glink_pipe)
+@@ -221,6 +242,7 @@
+ {
+ 	struct qcom_glink_smem *smem = container_of(dev, struct qcom_glink_smem, dev);
+ 
++	of_node_put(dev->of_node);
+ 	kfree(smem);
+ }
+ 
+@@ -237,6 +259,9 @@
+ 	size_t size;
+ 	int ret;
+ 
++	if (!parent || !parent->parent || !node)
++		return ERR_PTR(-EINVAL);
++
+ 	smem = kzalloc_obj(*smem);
+ 	if (!smem)
+ 		return ERR_PTR(-ENOMEM);
+@@ -244,7 +269,7 @@
+ 	dev = &smem->dev;
+ 
+ 	dev->parent = parent;
+-	dev->of_node = node;
++	dev->of_node = of_node_get(node);
+ 	dev->release = qcom_glink_smem_release;
+ 	dev_set_name(dev, "%s:%pOFn", dev_name(parent->parent), node);
+ 	ret = device_register(dev);
+@@ -311,7 +336,18 @@
+ 		goto err_put_dev;
+ 	}
+ 
++	if (tx_pipe->native.length < FIFO_FULL_RESERVE + TX_BLOCKED_CMD_RESERVE + FIFO_ALIGNMENT ||
++	    tx_pipe->native.length > U32_MAX ||
++	    !IS_ALIGNED(tx_pipe->native.length, FIFO_ALIGNMENT)) {
++		ret = -EINVAL;
++		goto err_put_dev;
++	}
++
+ 	smem->irq = of_irq_get(smem->dev.of_node, 0);
++	if (smem->irq <= 0) {
++		ret = smem->irq ?: -EINVAL;
++		goto err_put_dev;
++	}
+ 	ret = devm_request_irq(&smem->dev, smem->irq, qcom_glink_smem_intr,
+ 			       IRQF_NO_SUSPEND | IRQF_NO_AUTOEN,
+ 			       "glink-smem", smem);
+--- a/ports/qcom-glink-transport/Makefile
++++ b/ports/qcom-glink-transport/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom_glink.o qcom_glink_smem.o rpmsg_ctrl.o
++qcom_glink-y := qcom_glink_native.o qcom_glink_ssr.o
++ccflags-y += -I$(src) -I$(srctree)/drivers/rpmsg
++ccflags-y += -DCONFIG_RPMSG_QCOM_GLINK_MODULE=1 -DCONFIG_RPMSG_QCOM_GLINK_SMEM_MODULE=1 -DCONFIG_RPMSG_CTRL_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers

@@ -17,7 +17,7 @@
       "file": "ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c",
       "source": "drivers/thermal/qcom/qcom-spmi-temp-alarm.c",
       "original_sha256": "53ee0a5e43b10efd4551c28aa7c1a43e739d6e0a212a1524862781bd51a37390",
-      "sha256": "b603980645f3c8723096dd59bfb9c71a44c50527bded5ba8c5088ddea43944cc"
+      "sha256": "0f296c7792fbb788920f2fe0ebf46d5e3ec83de5389bc4d758ac83f3a8f0de9b"
     },
     {
       "file": "ports/qcom-adc-thermal/include/linux/adc-tm-clients.h",
@@ -44,7 +44,7 @@
       "sha256": "5455f266141bead2b48e8dc45fd1262b0142ec2826d8afd439e0c5650b6c79fc"
     }
   ],
-  "patch_sha256": "8948c0a3a58fcfde1a118a61ce5ae86816d3cc01ec07dcf9d4420fd657738992",
+  "patch_sha256": "5d857fc2b91c2846d60b3827c77def395cf071b37dfb06dc2f03616b1893754c",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "reviewed_changes": [
     "Private firmware enum, data and DT-binding headers forced before native headers",
@@ -59,6 +59,9 @@
     "Propagate client allocation/reverse-scaling failures and reject non-client channels",
     "Validate fwnode specifier arity, SDAM addresses and nonempty register array",
     "Track requested IRQs across freeze/restore and unwind partial restore",
+    "Commit cached critical threshold and initialized state only after successful register writes",
+    "Restart DAC/LITE stage enumeration for repeated restore and preserve DT IRQ trigger mode",
+    "Reject unsupported GEN2 revision and out-of-range thermal register bases; defer missing regmap",
     "Select explicit WQ_PERCPU affinity required by 7.3, preserving the prior queue mode",
     "Preserve all firmware conversion tables, calibration constants and per-channel GEN4 selection"
   ],

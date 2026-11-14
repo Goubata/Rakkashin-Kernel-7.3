@@ -1,0 +1,24 @@
+{
+  "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
+  "stage": "android73-thermal-alarm-stage23",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "archived_unique_count": 544,
+  "staged_count": 94,
+  "same_name_candidate_count": 81,
+  "archived_names_without_same_name_candidate_count": 463,
+  "loaded_names_without_same_name_candidate_count": 448,
+  "all_staged_module_dependencies_present": true,
+  "all_staged_soft_dependencies_present": true,
+  "elf_dependency_graph_acyclic": true,
+  "combined_hard_soft_graph_acyclic": true,
+  "combined_dependency_cycle_or_blocked_names": [],
+  "dependency_cycle_or_blocked_names": [],
+  "order_scope": "ELF hard dependencies only; not DT probe readiness, init order or softdep resolution",
+  "image_packaging_ready": false,
+  "blockers": [
+    "Missing hardware drivers and providers",
+    "Same-name candidates require probe and hardware validation",
+    "Init load order, softdeps, signing and ROM policy review pending",
+    "Old 6.12 modules cannot be carried over as 7.3 modules"
+  ]
+}

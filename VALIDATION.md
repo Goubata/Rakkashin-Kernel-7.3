@@ -374,3 +374,16 @@ protection evidence. Original conversion tables and generation constants stay
 unchanged. Raw client handles, callback/context lifetime, hardware transaction
 rollback and alarm trip/suspend fault injection remain open. No physical 7.3
 boot or daily-use acceptance exists; duplicate SID4 still fails the whole-DT audit.
+
+## Stage23: alarm fault and repeated-restore regression cases
+
+Twenty isolated cases pass on SMP4 (previous 12 plus eight real alarm-source
+cases with RAM regmap/native thermal zones). Four new cases failed on Stage22:
+critical-trip cache publication before a failed write, repeated DAC and LITE
+stage enumeration starting at index 3, and initialized=true after failed alarm
+enable. All four now pass. Tests also cover GEN2 revision shutdown guards, DAC
+limits, LITE register-bit preservation and rounding, hysteresis and read errors.
+Restore initializes before requesting the IRQ and preserves the DT trigger;
+partial multi-trip write rollback, concurrent updates and physical IRQ/PM paths
+are not proven. Artifact remains 94 modules / 4,733 matching imports. No physical
+7.3 boot, temperature-safety acceptance, partition write or daily-use claim.

@@ -1,6 +1,6 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-adc-thermal-stage22",
+  "stage": "android73-thermal-alarm-stage23",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
   "staged_count": 94,
@@ -1212,7 +1212,7 @@
     },
     "qcom_spmi_temp_alarm": {
       "file": "modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko",
-      "sha256": "9f71964fcc0d73755ff6701c4fcae4697035e61ab26e0fbb2a48b3ddd63199e4",
+      "sha256": "129c23e228ac5dfa49fc4f795143a1d11f69ec6d262beb149b847531778b67e2",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],

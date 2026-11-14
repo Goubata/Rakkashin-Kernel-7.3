@@ -205,13 +205,14 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                  ROOT/'ports/qcom-adc-thermal/qcom-vadc-common.ko',
                  ROOT/'ports/qcom-adc-thermal/qcom-spmi-temp-alarm.ko',
                  ROOT/'tests/adc-thermal/avr-adc-thermal-test.ko',
-                 ROOT/'tests/adc-thermal/avr-adc-driver-test.ko']
+                 ROOT/'tests/adc-thermal/avr-adc-driver-test.ko',
+                 ROOT/'tests/adc-thermal/avr-temp-alarm-test.ko']
         commands=[]
         for source in sources:
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_ADC_THERMAL_LOAD_FAIL; /bin/busybox poweroff -f; }}')
-        for name in ['avr_adc_driver_test','avr_adc_thermal_test','qcom_spmi_temp_alarm']:
+        for name in ['avr_temp_alarm_test','avr_adc_driver_test','avr_adc_thermal_test','qcom_spmi_temp_alarm']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_ADC_THERMAL_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         source=ROOT/'ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko'
         add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())

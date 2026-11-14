@@ -398,7 +398,202 @@
  
 --- a/ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c
 +++ b/ports/qcom-adc-thermal/qcom-spmi-temp-alarm.c
-@@ -911,4 +911,5 @@
+@@ -128,6 +128,7 @@
+ 	unsigned int			base;
+ 	unsigned int			ntrips;
+ 	int				irq;
++	bool				irq_requested;
+ 	/* protects .thresh, .stage and chip registers */
+ 	struct mutex			lock;
+ 	bool				initialized;
+@@ -262,7 +263,7 @@
+ 	if (!temp)
+ 		return -EINVAL;
+ 
+-	if (!chip->initialized) {
++	if (!READ_ONCE(chip->initialized)) {
+ 		*temp = DEFAULT_TEMP;
+ 		return 0;
+ 	}
+@@ -397,6 +398,8 @@
+ 	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
+ 	bool disable_s2_shutdown = false;
+ 	bool require_s2_shutdown = false;
++	unsigned int thresh;
++	int ret;
+ 	u8 reg;
+ 
+ 	WARN_ON(!mutex_is_locked(&chip->lock));
+@@ -409,17 +412,17 @@
+ 
+ 	if (temp == THERMAL_TEMP_INVALID ||
+ 	    temp < stage2_threshold_min) {
+-		chip->thresh = THRESH_MIN;
++		thresh = THRESH_MIN;
+ 		goto skip;
+ 	}
+ 
+ 	if (temp <= stage2_threshold_max) {
+-		chip->thresh = THRESH_MAX -
++		thresh = THRESH_MAX -
+ 			((stage2_threshold_max - temp) /
+ 			 TEMP_THRESH_STEP);
+ 		disable_s2_shutdown = true;
+ 	} else {
+-		chip->thresh = THRESH_MAX;
++		thresh = THRESH_MAX;
+ 
+ 		if (chip->adc)
+ 			disable_s2_shutdown = true;
+@@ -446,11 +449,14 @@
+ 	}
+ 
+ skip:
+-	reg |= chip->thresh;
++	reg |= thresh;
+ 	if (disable_s2_shutdown && !require_s2_shutdown)
+ 		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
+ 
+-	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
++	ret = qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
++	if (!ret)
++		chip->thresh = thresh;
++	return ret;
+ }
+ 
+ static int qpnp_tm_set_trip_temp(struct thermal_zone_device *tz,
+@@ -539,6 +545,11 @@
+ static int qpnp_tm_temp_dac_update_trip_temps(struct qpnp_tm_chip *chip)
+ {
+ 	int ret, i;
++
++	/* Probe and each restore enumerate the same hardware stages from zero. */
++	mutex_lock(&chip->lock);
++	chip->ntrips = 0;
++	mutex_unlock(&chip->lock);
+ 
+ 	ret = thermal_zone_for_each_trip(chip->tz_dev,
+ 		qpnp_tm_temp_dac_configure_trip_temp, chip);
+@@ -593,6 +604,11 @@
+ static int qpnp_tm_temp_lite_update_trip_temps(struct qpnp_tm_chip *chip)
+ {
+ 	int ret;
++
++	/* Probe and each restore enumerate the same hardware stages from zero. */
++	mutex_lock(&chip->lock);
++	chip->ntrips = 0;
++	mutex_unlock(&chip->lock);
+ 
+ 	ret = thermal_zone_for_each_trip(chip->tz_dev,
+ 		qpnp_tm_temp_lite_configure_trip_temp, chip);
+@@ -653,6 +669,7 @@
+ 	int crit_temp;
+ 
+ 	mutex_lock(&chip->lock);
++	WRITE_ONCE(chip->initialized, false);
+ 
+ 	ret = qpnp_tm_read(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, &reg);
+ 	if (ret < 0)
+@@ -703,7 +720,8 @@
+ 	reg = ALARM_CTRL_FORCE_ENABLE;
+ 	ret = qpnp_tm_write(chip, QPNP_TM_REG_ALARM_CTRL, reg);
+ 
+-	chip->initialized = true;
++	if (!ret)
++		WRITE_ONCE(chip->initialized, true);
+ 
+ out:
+ 	mutex_unlock(&chip->lock);
+@@ -732,7 +750,7 @@
+ 
+ 	chip->map = dev_get_regmap(pdev->dev.parent, NULL);
+ 	if (!chip->map)
+-		return -ENXIO;
++		return -EPROBE_DEFER;
+ 
+ 	ret = of_property_read_u32(node, "reg", &res);
+ 	if (ret < 0)
+@@ -751,6 +769,8 @@
+ 			return ret;
+ 	}
+ 
++	if (res > U16_MAX - QPNP_TM_REG_LITE_TEMP_CFG2)
++		return -EINVAL;
+ 	chip->base = res;
+ 
+ 	ret = qpnp_tm_read(chip, QPNP_TM_REG_TYPE, &type);
+@@ -792,6 +812,9 @@
+ 		chip->temp_map = &temp_map_gen2_v1;
+ 	else if (subtype == QPNP_TM_SUBTYPE_GEN1)
+ 		chip->temp_map = &temp_map_gen1;
++	else if (subtype != QPNP_TM_SUBTYPE_LITE)
++		return dev_err_probe(chip->dev, -ENODEV,
++				     "unsupported thermal alarm revision\n");
+ 
+ 	if (chip->has_temp_dac) {
+ 		ops = &qpnp_tm_sensor_temp_dac_ops;
+@@ -829,6 +852,7 @@
+ 	if (ret < 0)
+ 		return ret;
+ 
++	chip->irq_requested = true;
+ 	thermal_zone_device_update(chip->tz_dev, THERMAL_EVENT_UNSPECIFIED);
+ 
+ 	return 0;
+@@ -836,36 +860,32 @@
+ 
+ static int qpnp_tm_restore(struct device *dev)
+ {
+-	int ret = 0;
+ 	struct qpnp_tm_chip *chip = dev_get_drvdata(dev);
+-	struct device_node *node = dev->of_node;
+-	unsigned long flags;
+-
+-	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2)
+-		flags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
+-	else
+-		flags = IRQF_TRIGGER_RISING;
+-
+-	if (chip->irq > 0) {
++	int ret;
++
++	ret = qpnp_tm_init(chip);
++	if (ret)
++		return dev_err_probe(dev, ret, "thermal restore init failed\n");
++
++	if (!chip->irq_requested) {
++		/* Keep the trigger configured by the DT, as during initial probe. */
+ 		ret = devm_request_threaded_irq(dev, chip->irq, NULL,
+-			qpnp_tm_isr, flags | IRQF_ONESHOT, node->name, chip);
+-		if (ret < 0)
++			qpnp_tm_isr, IRQF_ONESHOT, dev->of_node->name, chip);
++		if (ret)
+ 			return ret;
+-	}
+-
+-	ret = qpnp_tm_init(chip);
+-	if (ret < 0)
+-		dev_err(dev, "init failed\n");
+-
+-	return ret;
++		chip->irq_requested = true;
++	}
++	return 0;
+ }
+ 
+ static int qpnp_tm_freeze(struct device *dev)
+ {
+ 	struct qpnp_tm_chip *chip = dev_get_drvdata(dev);
+ 
+-	if (chip->irq > 0)
++	if (chip->irq_requested) {
+ 		devm_free_irq(dev, chip->irq, chip);
++		chip->irq_requested = false;
++	}
+ 
+ 	return 0;
+ }
+@@ -911,4 +931,5 @@
  
  MODULE_ALIAS("platform:spmi-temp-alarm");
  MODULE_DESCRIPTION("QPNP PMIC Temperature Alarm driver");

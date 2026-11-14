@@ -1,0 +1,43 @@
+{
+  "stage": "android73-thermal-alarm-stage23",
+  "scope": "actual alarm callbacks with RAM regmap and native thermal framework; no physical overheat or suspend proof",
+  "module_count": 94,
+  "imports_checked": 4733,
+  "all_import_crcs_match": true,
+  "kunit_cases_passed": 20,
+  "before_fix_cases_passed": 16,
+  "before_fix_cases_failed": 4,
+  "reproduced_and_fixed": [
+    "Critical threshold cache changed on failed register write",
+    "Repeated DAC stage configuration starts at trip index 3",
+    "Repeated LITE stage configuration starts at trip index 3",
+    "Alarm initialized flag set after failed enable write"
+  ],
+  "other_tests": [
+    "GEN2 revision-specific hardware shutdown guard",
+    "DAC limits and failed-write cache preservation",
+    "LITE threshold rounding and unrelated register-bit preservation",
+    "Stage hysteresis and read-error propagation"
+  ],
+  "production_module_load_unload_passed": true,
+  "whole_dt_validation_passed": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "physical_boot_verified": false,
+  "pending": [
+    "Actual PMIC/temperature/IRQ calibration and overheat protection",
+    "Hardware rollback after partial multi-trip configuration and concurrent trip changes",
+    "IRQ/suspend/resume behavior and register write-error recovery",
+    "ADC raw handle supplier lifetime and concurrent notification/client disable",
+    "Original duplicate SID4, missing hardware drivers and all full-device acceptance"
+  ],
+  "sha256": {
+    "reports/module-crc-stage23.json": "8cbda6267338957b44be73ef473385a676c87c7e24c44e3b2dc905c9970e773f",
+    "reports/thermal-alarm-stage23-before-fixed-fixture.log": "9e1d63e021cb73bedab942d81f3d951cf79a9251af11801066911f879fbee9d2",
+    "reports/thermal-alarm-stage23-before-fixed-fixture.json": "659c997917395a03ef2af6c0a2df545a6a8c824bb84842846bc288dc83d9cdf1",
+    "reports/thermal-alarm-stage23-after.log": "1ae0b620cd97ea7f75c8a1502bffc8c02b10412837da9a338792a71656f9c13c",
+    "reports/thermal-alarm-stage23-after.json": "6f640d6d7558cfb9da250512c7144dbdd6af7561869c08a94cb3112fdc937fb8",
+    "reports/thermal-alarm-stage23-build.log": "57e354b2a8af4525f9c03701bb9a4b9bbac37c681f18579c551b1f462ef5ea34",
+    "reports/adc-thermal-source-lock.json": "d01df3884b462b4b1f58ddeade2170903444fe4372e005168e340bc9bfd0becc"
+  }
+}

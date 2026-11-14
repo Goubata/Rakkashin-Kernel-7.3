@@ -112,4 +112,5 @@ static struct kunit_case cases[] = {
 };
 static struct kunit_suite suite = { .name = "avr-adc-thermal", .test_cases = cases };
 kunit_test_suite(suite);
+MODULE_DESCRIPTION("AVR actual ADC conversion tests");
 MODULE_LICENSE("GPL");

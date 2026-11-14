@@ -47,7 +47,8 @@ for kind,path in [('saved','artifacts/dt-input-audit/stock-merged.dtb'),('candid
    for field,allowed in [('qcom,decimation',[85,340,1360]),('qcom,avg-samples',[1,2,4,8,16]),('qcom,adc-tm-type',[0,1,2,3])]:
     if field in p and (len(cells(p[field]))!=1 or cells(p[field])[0] not in allowed):errors.append({'node':child,'error':'unsupported '+field})
   registers=cells(props.get('reg',b''))
-  if not registers or any(r>0xffa9 for r in registers):errors.append({'node':node,'error':'invalid SDAM register bases'})
+  max_sdam_offset=int(re.search(r'^#define ADC5_GEN3_CONV_REQ\s+(0x[0-9a-f]+)',source,re.M).group(1),0)
+  if not registers or any(r>0xffff-max_sdam_offset for r in registers):errors.append({'node':node,'error':'invalid SDAM register bases'})
   providers[node]={'parent_generation':parentgen,'sdam_bases':registers,'channels':channels}
  ph={cells(p['phandle'])[0]:node for node,p in tree.items() if 'phandle' in p}
  refs=[];unparsed=[]

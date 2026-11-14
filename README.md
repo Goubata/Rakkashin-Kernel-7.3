@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMICを含む89モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む91モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -230,3 +230,27 @@ python scripts/snapshot_boot_core.py --name android73-spmi-stage19 --gpu-driver 
 
 候補DT: `artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb`。
 本体ImageはStage16と同じです。常用・実機起動・充電/温度/IRQ・ROM全体の確認は未完了で、パーティションへの書込みはしていません。`reports/spmi-stage19-validation.json` に検証範囲を記録します。
+
+## Stage20: レギュレータの手動解除を実際に検証
+
+実コードのproxy consumerとregulator debugにも、登録時と異なるdevres識別子を使う手動解除の不具合がありました。QEMU論理レールで修正前に「解除後もenable要求が残る」「debugファイルが残る」の2件を再現し、正しい登録キーでdevresを取り外して既存のロック下で解放するように修正しました。再帰ロックは導入しません。
+
+電源要求の登録→解除を2回繰り返し、診断の解除→再登録も確認しました。既存5項目と追加2項目の全7項目、保持fd・unbind/rebind・参照保護・unloadが通過しています。モジュール数は89のままで、実機電源や故障時の復旧を証明する試験ではありません。`reports/regulator-lifetime-stage20-validation.json`。
+
+## Stage21: PMIC GPIO/MPPの接続
+
+固定Motorola GPIO/MPPソースを7.3のPIN_CONFIG_LEVEL、戻り値を持つGPIO set、remove callbackへ接続しました。ピン数と物理ピン番号/引数数を検査し、親regmapが無い間はprobeを遅延し、can_sleepは親regmapから取得します。GPIOの方向切替は固定7.3 native実装と完全一致させ、CMOS出力は入力bufferを無効化し、open-drain/sourceでは実ラインを読み取れるようにします。入力の読取りでは要求中の出力ラッチ値を書き換えません。
+
+実GPIO callbackソースを登録処理無効の試験TUへ直接取り込み、RAM regmapとgpiolib上で7項目を確認しました。ピン境界、set/get、読書きのエラー伝播、CMOS方向切替、open-drainのRAM入力サンプリング/要求値保持、無効な電源入力番号の拒否が通過しました。本番モジュール2つは別途ロード/アンロードしています。実PMICのprobeや電圧・波形・IRQの検証ではありません。試験用コード/RAM backendは本番成果物へ含めません。
+
+静的な範囲検査では、候補DTの9 GPIO provider、3 phandle参照、7 pin名が表内でした。選択DTにMPP providerは0で、MPPは追加の移植済み参考ドライバです。MPP callback/probe試験は未実施です。全DTの重複SID4、実GPIOの有効穴、pad subtype、部分書込み後の復旧、並行アクセス、実IRQは未解決/未検証です。
+
+```sh
+python scripts/build_storage_deps.py --regulators-tests --pmic-gpio-tests
+python scripts/run_qemu.py --test regulators --cpus 4 --log reports/regulators.log
+python scripts/run_qemu.py --test pmic-gpio --cpus 4 --log reports/pmic-gpio.log
+python scripts/audit_pmic_pinctrl_dt.py
+python scripts/snapshot_boot_core.py --name android73-pmic-gpio-stage21 --gpu-driver --rakkashin --pmic-pinctrl
+```
+
+本体ImageとStage19候補DTの値は変更していません。Stage21は91モジュール・4,649インポートCRC一致ですが、実機7.3起動・常用版の完成は未達です。`reports/pmic-pinctrl-stage21-validation.json`。

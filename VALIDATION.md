@@ -321,3 +321,37 @@ Pending: silicon/APID/EE/security ownership, actual transactions/IRQ delivery,
 returned mapping consumer ownership, concurrent PMIC/metadata/debug teardown,
 duplicate SID resolution, charging/thermal/GPIO dependencies and whole-device
 boot, ROM, stability, performance and power acceptance. No flashable image exists.
+
+## Stage20: actual managed regulator unregister
+
+Before the fix, seven logical-rail tests produced five passes and two failures:
+the proxy enable vote stayed active and diagnostic files stayed present after
+managed unregister. Matching the actual devres release key and freeing with the
+list mutex already held fixes both without recursive locking. After the fix all
+seven cases, repeated register/unregister, restored diagnostics and the existing
+retained-fd/unbind/rebind/reference/unload checks pass. Snapshot remains 89 modules.
+This is not evidence of physical rail behavior or fault recovery.
+
+## Stage21: PMIC GPIO callback source and real modules
+
+Two real GPIO/MPP modules link and load/unload on the unchanged Stage16 Image,
+for 91 staged modules / 4,649 matching imports. GPIO callbacks use native level
+configuration and integer error returns. Physical pin translation is bounded,
+missing parent regmap defers probe, and sleeping capability follows that regmap.
+The direction functions exactly match pinned native 7.3, including CMOS versus
+open-drain/source input-buffer handling. Input sampling preserves the output
+request latch rather than overwriting it with the observed line value.
+
+Seven RAM-backed cases compile the actual GPIO callback source in a test-only
+translation unit with platform-driver registration disabled. A real gpiolib chip
+and regmap exercise indices, values, error propagation, direction transitions,
+open-drain readback/request preservation and invalid voltage-source rejection.
+They do not exercise production OF probe, SPMI transactions or physical pins.
+Test doubles/fixtures are excluded from hardware artifacts. MPP callbacks/probe
+are not covered; the selected DT has zero MPP providers. Nine selected GPIO
+providers, three qualified GPIO references and seven configuration pin names
+have valid nominal indices; valid-hole/subtype/electrical/IRQ acceptance is pending.
+
+Whole-DT validation still fails on the original duplicate SID4. Concurrent cache
+access, partial-write recovery, physical PMIC/GPIO/IRQ/suspend and all whole-phone
+acceptance remain open. No partition write or physical 7.3 boot was performed.

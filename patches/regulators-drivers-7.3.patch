@@ -219,7 +219,35 @@
  	regulator_put(dreg->reg);
  	list_del(&dreg->list);
  	kfree(dreg);
-@@ -879,6 +895,7 @@
+@@ -575,17 +591,24 @@
+ void devm_regulator_debug_unregister(struct regulator_dev *rdev)
+ {
+ 	struct debug_regulator *dreg, *temp;
++	void *res;
+ 
+ 	if (IS_ERR_OR_NULL(rdev)) {
+ 		pr_err("%s: invalid regulator device pointer\n", __func__);
+ 		return;
+ 	}
+ 
++	/* Match the registered wrapper; release under the already-held list lock. */
+ 	mutex_lock(&debug_reg_list_lock);
+ 	list_for_each_entry_safe(dreg, temp, &debug_reg_list, list) {
+-		if (dreg->rdev == rdev)
+-			devres_release(dreg->dev, _devm_regulator_debug_release,
+-					devm_regulator_debug_match, dreg);
++		if (dreg->rdev != rdev)
++			continue;
++		res = devres_remove(dreg->dev, devm_regulator_debug_release,
++				    devm_regulator_debug_match, dreg);
++		if (res) {
++			_devm_regulator_debug_release(dreg->dev, res);
++			devres_free(res);
++		}
+ 	}
+ 	mutex_unlock(&debug_reg_list_lock);
+ }
+@@ -879,6 +902,7 @@
  	if (debug_suspend)
  		unregister_trace_suspend_resume(
  				regulator_debug_suspend_trace_probe, NULL);
@@ -237,6 +265,44 @@
 +static int __init regulator_stub_init(void)
  {
  	return platform_driver_register(&regulator_stub_driver);
+ }
+--- a/ports/qcom-clock-core/proxy-consumer.c
++++ b/ports/qcom-clock-core/proxy-consumer.c
+@@ -15,6 +15,7 @@
+ #include <linux/slab.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/regulator/proxy-consumer.h>
++#include "qcom-vendor-clock.h"
+ 
+ struct proxy_consumer {
+ 	struct list_head	list;
+@@ -339,17 +340,22 @@
+ void devm_regulator_proxy_consumer_unregister(struct device *dev)
+ {
+ 	struct proxy_consumer *consumer, *temp;
++	void *res;
+ 
+ 	if (IS_ERR_OR_NULL(dev))
+ 		return;
+ 
++	/* Match the registered wrapper; release under the already-held list lock. */
+ 	mutex_lock(&proxy_consumer_list_lock);
+ 	list_for_each_entry_safe(consumer, temp, &proxy_consumer_list, list) {
+-		if (consumer->dev == dev)
+-			devres_release(dev,
+-					_devm_regulator_proxy_consumer_release,
+-					devm_regulator_proxy_consumer_match,
+-					consumer);
++		if (consumer->dev != dev)
++			continue;
++		res = devres_remove(dev, devm_regulator_proxy_consumer_release,
++				    devm_regulator_proxy_consumer_match, consumer);
++		if (res) {
++			_devm_regulator_proxy_consumer_release(dev, res);
++			devres_free(res);
++		}
+ 	}
+ 	mutex_unlock(&proxy_consumer_list_lock);
  }
 --- a/ports/qcom-regulators/Makefile
 +++ b/ports/qcom-regulators/Makefile

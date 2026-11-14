@@ -1,0 +1,254 @@
+--- a/ports/pmic-pinctrl/pinctrl-spmi-gpio.c
++++ b/ports/pmic-pinctrl/pinctrl-spmi-gpio.c
+@@ -443,7 +443,7 @@
+ 	case PIN_CONFIG_OUTPUT_ENABLE:
+ 		arg = pad->output_enabled;
+ 		break;
+-	case PIN_CONFIG_OUTPUT:
++	case PIN_CONFIG_LEVEL:
+ 		arg = pad->out_value;
+ 		break;
+ 	case PMIC_GPIO_CONF_PULL_UP:
+@@ -536,7 +536,7 @@
+ 		case PIN_CONFIG_OUTPUT_ENABLE:
+ 			pad->output_enabled = arg ? true : false;
+ 			break;
+-		case PIN_CONFIG_OUTPUT:
++		case PIN_CONFIG_LEVEL:
+ 			pad->output_enabled = true;
+ 			pad->out_value = arg;
+ 			break;
+@@ -730,22 +730,40 @@
+ static int pmic_gpio_direction_input(struct gpio_chip *chip, unsigned pin)
+ {
+ 	struct pmic_gpio_state *state = gpiochip_get_data(chip);
+-	unsigned long config;
+-
+-	config = pinconf_to_config_packed(PIN_CONFIG_INPUT_ENABLE, 1);
+-
+-	return pmic_gpio_config_set(state->ctrl, pin, &config, 1);
++	unsigned long configs[2];
++
++	configs[0] = pinconf_to_config_packed(PIN_CONFIG_OUTPUT_ENABLE, 0);
++	configs[1] = pinconf_to_config_packed(PIN_CONFIG_INPUT_ENABLE, 1);
++
++	return pmic_gpio_config_set(state->ctrl, pin, configs,
++				    ARRAY_SIZE(configs));
+ }
+ 
+ static int pmic_gpio_direction_output(struct gpio_chip *chip,
+ 				      unsigned pin, int val)
+ {
+ 	struct pmic_gpio_state *state = gpiochip_get_data(chip);
+-	unsigned long config;
+-
+-	config = pinconf_to_config_packed(PIN_CONFIG_OUTPUT, val);
+-
+-	return pmic_gpio_config_set(state->ctrl, pin, &config, 1);
++	struct pmic_gpio_pad *pad = state->ctrl->desc->pins[pin].drv_data;
++	unsigned long configs[2];
++
++	/*
++	 * An open-drain or open-source pad only ever drives one rail, so the
++	 * line can still be sampled while the pad is an output.  Keep the input
++	 * buffer enabled for those, so that pmic_gpio_get() reports what is on
++	 * the wire rather than the value last written, and disable it for a
++	 * CMOS pad, so that the pad ends up in DIGITAL_OUTPUT rather than
++	 * DIGITAL_INPUT_OUTPUT.  Program it either way, as the buffer may have
++	 * been left in the opposite state by the bootloader or by an earlier
++	 * direction change with a different buffer type.  gpiolib applies
++	 * PIN_CONFIG_DRIVE_OPEN_DRAIN before calling this, so buffer_type is
++	 * already up to date here.
++	 */
++	configs[0] = pinconf_to_config_packed(PIN_CONFIG_INPUT_ENABLE,
++					     pad->buffer_type != PMIC_GPIO_OUT_BUF_CMOS);
++	configs[1] = pinconf_to_config_packed(PIN_CONFIG_LEVEL, val);
++
++	return pmic_gpio_config_set(state->ctrl, pin, configs,
++				    ARRAY_SIZE(configs));
+ }
+ 
+ static int pmic_gpio_get(struct gpio_chip *chip, unsigned pin)
+@@ -764,27 +782,29 @@
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		pad->out_value = ret & PMIC_MPP_REG_RT_STS_VAL_MASK;
++		/* Sampling a wired line must not replace the requested output latch. */
++		return !!(ret & PMIC_MPP_REG_RT_STS_VAL_MASK);
+ 	}
+ 
+ 	return !!pad->out_value;
+ }
+ 
+-static void pmic_gpio_set(struct gpio_chip *chip, unsigned pin, int value)
++static int pmic_gpio_set(struct gpio_chip *chip, unsigned pin, int value)
+ {
+ 	struct pmic_gpio_state *state = gpiochip_get_data(chip);
+ 	unsigned long config;
+ 
+-	config = pinconf_to_config_packed(PIN_CONFIG_OUTPUT, value);
+-
+-	pmic_gpio_config_set(state->ctrl, pin, &config, 1);
++	config = pinconf_to_config_packed(PIN_CONFIG_LEVEL, value);
++
++	return pmic_gpio_config_set(state->ctrl, pin, &config, 1);
+ }
+ 
+ static int pmic_gpio_of_xlate(struct gpio_chip *chip,
+ 			      const struct of_phandle_args *gpio_desc,
+ 			      u32 *flags)
+ {
+-	if (chip->of_gpio_n_cells < 2)
++	if (chip->of_gpio_n_cells != 2 || gpio_desc->args_count != 2 ||
++	    gpio_desc->args[0] < 1 || gpio_desc->args[0] > chip->ngpio)
+ 		return -EINVAL;
+ 
+ 	if (flags)
+@@ -1116,6 +1136,8 @@
+ 	}
+ 
+ 	npins = (uintptr_t) device_get_match_data(&pdev->dev);
++	if (npins <= 0 || npins > ARRAY_SIZE(pmic_gpio_groups))
++		return -EINVAL;
+ 
+ 	state = devm_kzalloc(dev, sizeof(*state), GFP_KERNEL);
+ 	if (!state)
+@@ -1125,6 +1147,8 @@
+ 
+ 	state->dev = &pdev->dev;
+ 	state->map = dev_get_regmap(dev->parent, NULL);
++	if (!state->map)
++		return -EPROBE_DEFER;
+ 	parent_spmi_dev = to_spmi_device(dev->parent);
+ 	state->usid = parent_spmi_dev->usid;
+ 	state->pid_base = reg >> 8;
+@@ -1173,7 +1197,7 @@
+ 	state->chip.ngpio = npins;
+ 	state->chip.label = dev_name(dev);
+ 	state->chip.of_gpio_n_cells = 2;
+-	state->chip.can_sleep = false;
++	state->chip.can_sleep = regmap_might_sleep(state->map);
+ 
+ 	state->ctrl = devm_pinctrl_register(dev, pctrldesc, state);
+ 	if (IS_ERR(state->ctrl))
+@@ -1327,7 +1351,7 @@
+ 		   .pm = pm_ptr(&pmic_gpio_pm_ops),
+ 	},
+ 	.probe	= pmic_gpio_probe,
+-	.remove_new = pmic_gpio_remove,
++	.remove = pmic_gpio_remove,
+ };
+ 
+ module_platform_driver(pmic_gpio_driver);
+--- a/ports/pmic-pinctrl/pinctrl-spmi-mpp.c
++++ b/ports/pmic-pinctrl/pinctrl-spmi-mpp.c
+@@ -369,7 +369,7 @@
+ 			return -EINVAL;
+ 		arg = 1;
+ 		break;
+-	case PIN_CONFIG_OUTPUT:
++	case PIN_CONFIG_LEVEL:
+ 		arg = pad->out_value;
+ 		break;
+ 	case PMIC_MPP_CONF_DTEST_SELECTOR:
+@@ -446,7 +446,7 @@
+ 		case PIN_CONFIG_INPUT_ENABLE:
+ 			pad->input_enabled = arg ? true : false;
+ 			break;
+-		case PIN_CONFIG_OUTPUT:
++		case PIN_CONFIG_LEVEL:
+ 			pad->output_enabled = true;
+ 			pad->out_value = arg;
+ 			break;
+@@ -575,7 +575,7 @@
+ 	struct pmic_mpp_state *state = gpiochip_get_data(chip);
+ 	unsigned long config;
+ 
+-	config = pinconf_to_config_packed(PIN_CONFIG_OUTPUT, val);
++	config = pinconf_to_config_packed(PIN_CONFIG_LEVEL, val);
+ 
+ 	return pmic_mpp_config_set(state->ctrl, pin, &config, 1);
+ }
+@@ -593,27 +593,29 @@
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		pad->out_value = ret & PMIC_MPP_REG_RT_STS_VAL_MASK;
++		/* Sampling a wired line must not replace the requested output latch. */
++		return !!(ret & PMIC_MPP_REG_RT_STS_VAL_MASK);
+ 	}
+ 
+ 	return !!pad->out_value;
+ }
+ 
+-static void pmic_mpp_set(struct gpio_chip *chip, unsigned pin, int value)
++static int pmic_mpp_set(struct gpio_chip *chip, unsigned pin, int value)
+ {
+ 	struct pmic_mpp_state *state = gpiochip_get_data(chip);
+ 	unsigned long config;
+ 
+-	config = pinconf_to_config_packed(PIN_CONFIG_OUTPUT, value);
+-
+-	pmic_mpp_config_set(state->ctrl, pin, &config, 1);
++	config = pinconf_to_config_packed(PIN_CONFIG_LEVEL, value);
++
++	return pmic_mpp_config_set(state->ctrl, pin, &config, 1);
+ }
+ 
+ static int pmic_mpp_of_xlate(struct gpio_chip *chip,
+ 			     const struct of_phandle_args *gpio_desc,
+ 			     u32 *flags)
+ {
+-	if (chip->of_gpio_n_cells < 2)
++	if (chip->of_gpio_n_cells != 2 || gpio_desc->args_count != 2 ||
++	    gpio_desc->args[0] < 1 || gpio_desc->args[0] > chip->ngpio)
+ 		return -EINVAL;
+ 
+ 	if (flags)
+@@ -869,8 +871,9 @@
+ 	}
+ 
+ 	npins = (uintptr_t) device_get_match_data(&pdev->dev);
+-
+-	BUG_ON(npins > ARRAY_SIZE(pmic_mpp_groups));
++	if (npins <= 0 || npins > ARRAY_SIZE(pmic_mpp_groups))
++		return -EINVAL;
++
+ 
+ 	state = devm_kzalloc(dev, sizeof(*state), GFP_KERNEL);
+ 	if (!state)
+@@ -880,6 +883,8 @@
+ 
+ 	state->dev = &pdev->dev;
+ 	state->map = dev_get_regmap(dev->parent, NULL);
++	if (!state->map)
++		return -EPROBE_DEFER;
+ 
+ 	pindesc = devm_kcalloc(dev, npins, sizeof(*pindesc), GFP_KERNEL);
+ 	if (!pindesc)
+@@ -926,7 +931,7 @@
+ 	state->chip.ngpio = npins;
+ 	state->chip.label = dev_name(dev);
+ 	state->chip.of_gpio_n_cells = 2;
+-	state->chip.can_sleep = false;
++	state->chip.can_sleep = regmap_might_sleep(state->map);
+ 
+ 	state->ctrl = devm_pinctrl_register(dev, pctrldesc, state);
+ 	if (IS_ERR(state->ctrl))
+@@ -1000,7 +1005,7 @@
+ 		   .of_match_table = pmic_mpp_of_match,
+ 	},
+ 	.probe	= pmic_mpp_probe,
+-	.remove_new = pmic_mpp_remove,
++	.remove = pmic_mpp_remove,
+ };
+ 
+ module_platform_driver(pmic_mpp_driver);
+--- a/ports/pmic-pinctrl/Makefile
++++ b/ports/pmic-pinctrl/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += pinctrl-spmi-gpio.o pinctrl-spmi-mpp.o
++ccflags-y += -I$(src)/include -I$(srctree)
++ccflags-y += -include $(src)/include/dt-bindings/pinctrl/qcom,pmic-gpio.h -include $(src)/include/dt-bindings/pinctrl/qcom,pmic-mpp.h

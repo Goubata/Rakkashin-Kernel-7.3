@@ -340,17 +340,22 @@ static int devm_regulator_proxy_consumer_match(struct device *dev, void *res,
 void devm_regulator_proxy_consumer_unregister(struct device *dev)
 {
 	struct proxy_consumer *consumer, *temp;
+	void *res;
 
 	if (IS_ERR_OR_NULL(dev))
 		return;
 
+	/* Match the registered wrapper; release under the already-held list lock. */
 	mutex_lock(&proxy_consumer_list_lock);
 	list_for_each_entry_safe(consumer, temp, &proxy_consumer_list, list) {
-		if (consumer->dev == dev)
-			devres_release(dev,
-					_devm_regulator_proxy_consumer_release,
-					devm_regulator_proxy_consumer_match,
-					consumer);
+		if (consumer->dev != dev)
+			continue;
+		res = devres_remove(dev, devm_regulator_proxy_consumer_release,
+				    devm_regulator_proxy_consumer_match, consumer);
+		if (res) {
+			_devm_regulator_proxy_consumer_release(dev, res);
+			devres_free(res);
+		}
 	}
 	mutex_unlock(&proxy_consumer_list_lock);
 }

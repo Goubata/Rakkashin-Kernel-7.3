@@ -1,0 +1,273 @@
+{
+  "scope": "selected compatible and qualified GPIO-phandle pin-range checks only; no valid-hole, routing, PMIC probe, electrical or IRQ proof",
+  "inputs": {
+    "saved": {
+      "providers": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pinctrl@8800": {
+          "compatible": "qcom,pmd802x-gpio",
+          "kind": "gpio",
+          "pin_count": 4
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800": {
+          "compatible": "qcom,pmih010x-gpio",
+          "kind": "gpio",
+          "pin_count": 18
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pinctrl@8800": {
+          "compatible": "qcom,pmr735d-gpio",
+          "kind": "gpio",
+          "pin_count": 2
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800": {
+          "compatible": "qcom,pm8550-gpio",
+          "kind": "gpio",
+          "pin_count": 12
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800": {
+          "compatible": "qcom,pmk8550-gpio",
+          "kind": "gpio",
+          "pin_count": 6
+        }
+      },
+      "gpio_provider_count": 9,
+      "mpp_provider_count": 0,
+      "references_checked": 3,
+      "references": [
+        {
+          "consumer": "/soc/bt_kera",
+          "property": "qcom,bt-fmd-clk-gpio",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "args": [
+            6,
+            0
+          ]
+        },
+        {
+          "consumer": "/soc/bt_kera",
+          "property": "qcom,bt-reset-gpio",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "args": [
+            3,
+            0
+          ]
+        },
+        {
+          "consumer": "/soc/gpio_key/vol_up",
+          "property": "gpios",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "args": [
+            6,
+            1
+          ]
+        }
+      ],
+      "pin_config_mentions": 7,
+      "pin_configs": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800/sys_therm_7_gpio12/sys_therm_7_gpio12_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800",
+          "pin": "gpio12"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800/bt_fmd_clk_en",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "pin": "gpio6"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800/bt_en",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "pin": "gpio3"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/key_vol_up/key_vol_up_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio6"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/sys_therm_12_gpio2/sys_therm_12_gpio2_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio2"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/sys_therm_5_gpio3/sys_therm_5_gpio3_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio3"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800/alt_sleep_clk/alt_sleep_clk_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800",
+          "pin": "gpio3"
+        }
+      ],
+      "invalid_pin_references": [],
+      "unparsed_gpio_properties": [
+        "/soc/qcom,wcn7750:dev-sol-gpio",
+        "/soc/qcom,wcn7750:host-sol-gpio",
+        "/soc/qcom,wcn7750:sw-ctrl-gpio",
+        "/soc/qcom,wcn7750:wlan-en-gpio"
+      ]
+    },
+    "candidate": {
+      "providers": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800": {
+          "compatible": "qcom,pmk8550-gpio",
+          "kind": "gpio",
+          "pin_count": 6
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800": {
+          "compatible": "qcom,pm8550-gpio",
+          "kind": "gpio",
+          "pin_count": 12
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pinctrl@8800": {
+          "compatible": "qcom,pm8550ve-gpio",
+          "kind": "gpio",
+          "pin_count": 8
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pinctrl@8800": {
+          "compatible": "qcom,pmr735d-gpio",
+          "kind": "gpio",
+          "pin_count": 2
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800": {
+          "compatible": "qcom,pmih010x-gpio",
+          "kind": "gpio",
+          "pin_count": 18
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pinctrl@8800": {
+          "compatible": "qcom,pmd802x-gpio",
+          "kind": "gpio",
+          "pin_count": 4
+        }
+      },
+      "gpio_provider_count": 9,
+      "mpp_provider_count": 0,
+      "references_checked": 3,
+      "references": [
+        {
+          "consumer": "/soc/bt_kera",
+          "property": "qcom,bt-reset-gpio",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "args": [
+            3,
+            0
+          ]
+        },
+        {
+          "consumer": "/soc/bt_kera",
+          "property": "qcom,bt-fmd-clk-gpio",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "args": [
+            6,
+            0
+          ]
+        },
+        {
+          "consumer": "/soc/gpio_key/vol_up",
+          "property": "gpios",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "args": [
+            6,
+            1
+          ]
+        }
+      ],
+      "pin_config_mentions": 7,
+      "pin_configs": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800/alt_sleep_clk/alt_sleep_clk_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pinctrl@b800",
+          "pin": "gpio3"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/key_vol_up/key_vol_up_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio6"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/sys_therm_12_gpio2/sys_therm_12_gpio2_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio2"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800/sys_therm_5_gpio3/sys_therm_5_gpio3_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pinctrl@8800",
+          "pin": "gpio3"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800/bt_fmd_clk_en",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "pin": "gpio6"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800/bt_en",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pinctrl@8800",
+          "pin": "gpio3"
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800/sys_therm_7_gpio12/sys_therm_7_gpio12_default",
+          "property": "pins",
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pinctrl@8800",
+          "pin": "gpio12"
+        }
+      ],
+      "invalid_pin_references": [],
+      "unparsed_gpio_properties": [
+        "/soc/qcom,wcn7750:dev-sol-gpio",
+        "/soc/qcom,wcn7750:host-sol-gpio",
+        "/soc/qcom,wcn7750:sw-ctrl-gpio",
+        "/soc/qcom,wcn7750:wlan-en-gpio"
+      ]
+    }
+  },
+  "physical_verified": false,
+  "passed": true
+}

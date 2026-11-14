@@ -14,7 +14,7 @@ def normalize(name):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--stage', default='android73-spmi-stage19')
+    parser.add_argument('--stage', default='android73-pmic-gpio-stage21')
     args = parser.parse_args()
     stage = ROOT / 'artifacts' / args.stage
     metadata = json.loads((stage / 'metadata.json').read_text())

@@ -39,7 +39,7 @@ def main():
     args=parser.parse_args()
     if args.stage and args.module:parser.error('Choose --stage or explicit module files')
     tables=[ROOT/'out/native-gki/Module.symvers']
-    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats','rakkashin/adios','qcom-rproc-common','gunyah','gunyah-core','gunyah-rm','qti-fence','kgsl','ufs-phy-canoe','qcom-ice','qcom-minidump','qcom-ipc-logging','ufs-host','qcom-regulators','qcom-interconnect','qcom-spmi']]
+    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats','rakkashin/adios','qcom-rproc-common','gunyah','gunyah-core','gunyah-rm','qti-fence','kgsl','ufs-phy-canoe','qcom-ice','qcom-minidump','qcom-ipc-logging','ufs-host','qcom-regulators','qcom-interconnect','qcom-spmi','pmic-pinctrl']]
     exports={}
     for table in tables:
         if not table.is_file():continue

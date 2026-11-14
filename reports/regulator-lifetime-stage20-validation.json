@@ -1,0 +1,33 @@
+{
+  "stage": "android73-regulator-lifetime-stage20",
+  "scope": "real manual proxy/debug unregister on synthetic QEMU logical rail only",
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "module_count": 89,
+  "imports_checked": 4567,
+  "all_import_crcs_match": true,
+  "before_fix": {
+    "kunit_passed": 5,
+    "kunit_failed": 2,
+    "failure_effects": [
+      "proxy rail enable vote stayed active after managed unregister",
+      "debug enable file remained after managed unregister"
+    ]
+  },
+  "after_fix": {
+    "kunit_passed": 7,
+    "kunit_failed": 0,
+    "proxy_enable_vote_released": true,
+    "debug_files_removed_and_reregistered": true,
+    "retained_fd_unbind_rebind_unload_passed": true
+  },
+  "physical_regulator_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "sha256": {
+    "reports/qemu-regulators-before-managed-fix-stage20.log": "ceb7fb7fffbc540f01ef999ae6fa69785c5fb4e8fc7ec8cdb0bc5c4b6df2bb62",
+    "reports/qemu-regulators-stage20.log": "8fd0e12744a1302089dca45cdcae499d67e502575b34275b1b4e89285beac097",
+    "reports/qemu-regulators-stage20.json": "9907d498fe5a4326679b372d1ad86828a8906e40dac5ba7a77c1068846903a2c",
+    "reports/regulators-source-lock.json": "dd2a3a1105bea8f4673473a07b1f0c59eb183a76603475be25f2afd3a0090076",
+    "reports/module-crc-stage20.json": "7700a9fdb24c7b0189e7998c593573ee686bf69ec81e493e56e9f2903e9aabde"
+  }
+}

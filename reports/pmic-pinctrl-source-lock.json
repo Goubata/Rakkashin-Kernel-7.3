@@ -1,0 +1,56 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/pmic-pinctrl/pinctrl-spmi-gpio.c",
+      "source": "drivers/pinctrl/qcom/pinctrl-spmi-gpio.c",
+      "original_sha256": "68dde62f7b2ea2947e420cf38a24733a0e358ca2b40cee645acfe24ec2ebfe03",
+      "sha256": "ef1245e1f3c79c217881f9bb897f7a10816e5def9eaa115f4d71b6aa381d6f80"
+    },
+    {
+      "file": "ports/pmic-pinctrl/pinctrl-spmi-mpp.c",
+      "source": "drivers/pinctrl/qcom/pinctrl-spmi-mpp.c",
+      "original_sha256": "f0f79bba129e477d83c20bd7423f6efed078eb6d98768439e9ab7cfe5be36d64",
+      "sha256": "01eaf7ddffdc8fcd5157565cd07d51221c8a8ed9601e6e6c0ba18dfe0bba028b"
+    },
+    {
+      "file": "ports/pmic-pinctrl/include/dt-bindings/pinctrl/qcom,pmic-gpio.h",
+      "source": "include/dt-bindings/pinctrl/qcom,pmic-gpio.h",
+      "original_sha256": "71e18a03849fbba076d3dc743b493514440875a803a764af246bda98ea2be6cf",
+      "sha256": "71e18a03849fbba076d3dc743b493514440875a803a764af246bda98ea2be6cf"
+    },
+    {
+      "file": "ports/pmic-pinctrl/include/dt-bindings/pinctrl/qcom,pmic-mpp.h",
+      "source": "include/dt-bindings/pinctrl/qcom,pmic-mpp.h",
+      "original_sha256": "d3337692d5f6c6d4c41c9e9303b4189b6548e716a4b62e25361af376841ac791",
+      "sha256": "d3337692d5f6c6d4c41c9e9303b4189b6548e716a4b62e25361af376841ac791"
+    },
+    {
+      "file": "ports/pmic-pinctrl/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "6e04d81cb4c6b73525b1ef64bb0caf819790850120b6a61b584cbf3caba4d6e2"
+    }
+  ],
+  "patch_sha256": "dd55b5ec46b2da5e5fa3747ab8a82dfe935ee22dad17f96cd90347998263100a",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "additional_source_commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+  "native_gpio_reference_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "native_gpio_direction_sha256": "975d2d531f9b2fe362d7663cd2bb707c7de565734710fb6ac00c73a36ad5dcc5",
+  "reviewed_changes": [
+    "Use native PIN_CONFIG_LEVEL and return actual write status from GPIO set",
+    "Preserve binding constants from pinned Motorola headers",
+    "Validate physical pin indices and argument count before translation",
+    "Use exact native CMOS/open-drain/open-source direction implementations",
+    "Sampling input preserves the requested output latch value",
+    "Reject invalid pin counts and defer until parent regmap exists",
+    "Derive can_sleep from the actual parent regmap; native remove callback"
+  ],
+  "known_open_items": [
+    "Physical pad subtype/voltage/pull/strength, readback and IRQ delivery",
+    "Concurrent pad cache access and partial-register-write recovery",
+    "Parent PMIC/IRQ domain and suspend/removal lifetime validation",
+    "MPP callback/probe tests are not provided by the GPIO callback suite",
+    "Target duplicate SID4 and full board/ROM/power acceptance remain open"
+  ]
+}

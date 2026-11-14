@@ -591,17 +591,24 @@ static int devm_regulator_debug_match(struct device *dev, void *res, void *data)
 void devm_regulator_debug_unregister(struct regulator_dev *rdev)
 {
 	struct debug_regulator *dreg, *temp;
+	void *res;
 
 	if (IS_ERR_OR_NULL(rdev)) {
 		pr_err("%s: invalid regulator device pointer\n", __func__);
 		return;
 	}
 
+	/* Match the registered wrapper; release under the already-held list lock. */
 	mutex_lock(&debug_reg_list_lock);
 	list_for_each_entry_safe(dreg, temp, &debug_reg_list, list) {
-		if (dreg->rdev == rdev)
-			devres_release(dreg->dev, _devm_regulator_debug_release,
-					devm_regulator_debug_match, dreg);
+		if (dreg->rdev != rdev)
+			continue;
+		res = devres_remove(dreg->dev, devm_regulator_debug_release,
+				    devm_regulator_debug_match, dreg);
+		if (res) {
+			_devm_regulator_debug_release(dreg->dev, res);
+			devres_free(res);
+		}
 	}
 	mutex_unlock(&debug_reg_list_lock);
 }

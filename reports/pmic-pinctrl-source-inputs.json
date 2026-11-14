@@ -1,0 +1,33 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/pmic-pinctrl/pinctrl-spmi-gpio.c",
+      "source": "drivers/pinctrl/qcom/pinctrl-spmi-gpio.c",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "original_sha256": "68dde62f7b2ea2947e420cf38a24733a0e358ca2b40cee645acfe24ec2ebfe03"
+    },
+    {
+      "file": "ports/pmic-pinctrl/pinctrl-spmi-mpp.c",
+      "source": "drivers/pinctrl/qcom/pinctrl-spmi-mpp.c",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "original_sha256": "f0f79bba129e477d83c20bd7423f6efed078eb6d98768439e9ab7cfe5be36d64"
+    },
+    {
+      "file": "ports/pmic-pinctrl/include/dt-bindings/pinctrl/qcom,pmic-gpio.h",
+      "source": "include/dt-bindings/pinctrl/qcom,pmic-gpio.h",
+      "repo": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "original_sha256": "71e18a03849fbba076d3dc743b493514440875a803a764af246bda98ea2be6cf"
+    },
+    {
+      "file": "ports/pmic-pinctrl/include/dt-bindings/pinctrl/qcom,pmic-mpp.h",
+      "source": "include/dt-bindings/pinctrl/qcom,pmic-mpp.h",
+      "repo": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "original_sha256": "d3337692d5f6c6d4c41c9e9303b4189b6548e716a4b62e25361af376841ac791"
+    }
+  ]
+}

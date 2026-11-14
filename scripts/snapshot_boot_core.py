@@ -22,7 +22,9 @@ parser.add_argument('--ufs-host',action='store_true')
 parser.add_argument('--regulators',action='store_true')
 parser.add_argument('--interconnect',action='store_true')
 parser.add_argument('--spmi',action='store_true')
+parser.add_argument('--pmic-pinctrl',action='store_true')
 args=parser.parse_args()
+if args.pmic_pinctrl:args.spmi=True
 if args.spmi:args.interconnect=True
 if args.interconnect:args.regulators=True
 if args.regulators:args.ufs_host=True
@@ -57,6 +59,8 @@ if args.interconnect:
     ports.append('qcom-interconnect')
 if args.spmi:
     ports.append('qcom-spmi')
+if args.pmic_pinctrl:
+    ports.append('pmic-pinctrl')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

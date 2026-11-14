@@ -50,7 +50,8 @@ def main():
                       'Rollback failed driver registration and destroy IPC log after unregister',
                       'Track only owned debugfs files, drain accesses before freeing private data',
                       'Use full debugfs proxy for custom voltage operations and module ownership',
-                      'Serialize lazy diagnostic consumer acquisition and synchronize trace removal'],
+                      'Serialize lazy diagnostic consumer acquisition and synchronize trace removal',
+                      'Match actual devres release keys for manual proxy/debug unregister; avoid recursive lock'],
                   'known_open_items': [
                       'Physical RPMh acknowledgements, rail votes, suspend/resume and voltage transitions',
                       'Review aggregate request rollback and acknowledgement/error paths',

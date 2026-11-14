@@ -5,7 +5,7 @@
  fragment@0 {
   target-path = "/";
   __overlay__ {
-   avr-qemu-regulator {
+   avr_qemu_rail: avr-qemu-regulator {
     compatible = "qcom,stub-regulator";
     regulator-name = "avr_qemu_rail";
     regulator-min-microvolt = <900000>;
@@ -13,6 +13,11 @@
     regulator-allow-set-load;
     qcom,hpm-min-load = <100>;
     qcom,system-load = <10>;
+   };
+   avr-qemu-proxy-consumer {
+    compatible = "avr,regulator-test";
+    proxy-supply = <&avr_qemu_rail>;
+    qcom,proxy-consumer-enable;
    };
   };
  };

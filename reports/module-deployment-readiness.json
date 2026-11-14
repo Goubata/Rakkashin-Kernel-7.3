@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-spmi-stage19",
+  "stage": "android73-pmic-gpio-stage21",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
-  "staged_count": 89,
-  "same_name_candidate_count": 76,
-  "archived_names_without_same_name_candidate_count": 468,
-  "loaded_names_without_same_name_candidate_count": 453,
+  "staged_count": 91,
+  "same_name_candidate_count": 78,
+  "archived_names_without_same_name_candidate_count": 466,
+  "loaded_names_without_same_name_candidate_count": 451,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -123,6 +123,14 @@
     {
       "name": "phy_qcom_ufs_qmp_v4_canoe",
       "file": "modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
+    },
+    {
+      "name": "pinctrl_spmi_gpio",
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-gpio.ko"
+    },
+    {
+      "name": "pinctrl_spmi_mpp",
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-mpp.ko"
     },
     {
       "name": "proxy_consumer",
@@ -486,6 +494,14 @@
     {
       "name": "phy_qcom_ufs_qmp_v4_canoe",
       "file": "modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
+    },
+    {
+      "name": "pinctrl_spmi_gpio",
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-gpio.ko"
+    },
+    {
+      "name": "pinctrl_spmi_mpp",
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-mpp.ko"
     },
     {
       "name": "proxy_consumer",
@@ -1126,6 +1142,34 @@
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
+    "pinctrl_spmi_gpio": {
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-gpio.ko",
+      "sha256": "3e3e9ed600ba73fea4f08754d98b30820a53a09ff1e5a63180186b5eeeec0d9b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "pinctrl_spmi_mpp": {
+      "file": "modules/pmic-pinctrl/pinctrl-spmi-mpp.ko",
+      "sha256": "105d7106d63a689918e0023f582a20d8e9e9053194badf8c5e24ecdeecf9da1c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
     "cambistmclkcc_canoe": {
       "file": "modules/qcom-clock-controllers/cambistmclkcc-canoe.ko",
       "sha256": "3b35ef6cf7075f78811b51ff996630f05b4ed142772fc733253e703fefff0e34",
@@ -1496,7 +1540,7 @@
     },
     "proxy_consumer": {
       "file": "modules/qcom-clock-core/proxy-consumer.ko",
-      "sha256": "368caf81a1971e89fe446aad0e2c75afdaf02dd743b9866c234106738aef3c0c",
+      "sha256": "0b6b2e088c6014f2f916ca2231d9e967bcc66c282978decf7b44745d05677ea6",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1746,7 +1790,7 @@
     },
     "debug_regulator": {
       "file": "modules/qcom-regulators/debug-regulator.ko",
-      "sha256": "d4e391cb124dbbbf0ad5ac46dfaab40d949479beaa1942a8f4339c8099ac4719",
+      "sha256": "f7afb99c7a8a1fc0441d1ea776ece08ec252236f00537036dfc536ceb53ee275",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -3839,22 +3883,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "pinctrl_spmi_gpio",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "pinctrl_spmi_mpp",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "platform_mpam",
       "placements": [
         "vendor_boot:fragment-0",
@@ -5772,8 +5800,6 @@
     "pinctrl_chora",
     "pinctrl_lpi_dlkm",
     "pinctrl_ravelin",
-    "pinctrl_spmi_gpio",
-    "pinctrl_spmi_mpp",
     "platform_mpam",
     "platform_test",
     "pm8941_pwrkey",

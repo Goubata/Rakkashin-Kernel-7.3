@@ -15,6 +15,11 @@
       "file": "ports/qcom-regulators/stub-regulator.c",
       "source": "drivers/regulator/stub-regulator.c",
       "original_sha256": "b5587649dc481fab04c189e7b4700ad12a042040e3d4a5fe3ca7c45def8fed8f"
+    },
+    {
+      "file": "ports/qcom-clock-core/proxy-consumer.c",
+      "source": "drivers/regulator/proxy-consumer.c",
+      "original_sha256": "77802e6d77447a6d7bfbab3735f92d3f9a7fd29766efadc8d9598cb7a5e9485f"
     }
   ]
 }

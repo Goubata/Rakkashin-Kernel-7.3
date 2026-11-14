@@ -26,8 +26,11 @@ def main():
     parser.add_argument('--interconnect-tests',action='store_true')
     parser.add_argument('--spmi',action='store_true')
     parser.add_argument('--spmi-tests',action='store_true')
+    parser.add_argument('--pmic-pinctrl',action='store_true')
+    parser.add_argument('--pmic-gpio-tests',action='store_true')
     args=parser.parse_args()
     if args.ufs_host:args.ice=True
+    if args.pmic_gpio_tests:args.pmic_pinctrl=True
     if args.spmi_tests:args.spmi=True
     if args.interconnect_tests:args.interconnect=True
     if args.regulators_tests:args.regulators=True
@@ -64,7 +67,7 @@ def main():
         targets.append('ports/ufs-host')
     if args.regulators:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_regulators_sources.py')],check=True)
-        targets.append('ports/qcom-regulators')
+        targets += ['ports/qcom-clock-core','ports/qcom-regulators']
         if args.regulators_tests:targets.append('tests/regulators')
     if args.interconnect:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_interconnect_sources.py')],check=True)
@@ -74,6 +77,10 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_spmi_sources.py')],check=True)
         targets.append('ports/qcom-spmi')
         if args.spmi_tests:targets.append('tests/spmi')
+    if args.pmic_pinctrl:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_pmic_pinctrl_sources.py')],check=True)
+        targets.append('ports/pmic-pinctrl')
+        if args.pmic_gpio_tests:targets.append('tests/pmic-pinctrl')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

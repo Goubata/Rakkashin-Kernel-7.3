@@ -1,0 +1,63 @@
+{
+  "stage": "android73-ufs-host-stage16",
+  "scope": "real linked vendor modules; isolated guest software lifecycle and native emulated UFS I/O; no physical acceptance",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "module_count": 77,
+  "imports_checked": 4168,
+  "all_import_crcs_match": true,
+  "vendor_host_final_link_passed": true,
+  "remaining_link_symbols": [],
+  "guest_cases": {
+    "native_debug_symbol_lookup": 5,
+    "pre_probe_registry_and_ipc": 8,
+    "storage_host_module_lifecycle_with_same_registry_cases": 8,
+    "native_ufs_sq": 3,
+    "native_ufs_mcq": 3
+  },
+  "distinct_case_note": "the eight registry/IPC cases are shared between the diagnostics and host-lifecycle runs, not 16 distinct cases",
+  "vendor_host_guest_scope": "module load/unload only; no matching Qualcomm hardware/OF probe",
+  "physical_qualcomm_probe_verified": false,
+  "real_wrapped_key_operations_verified": false,
+  "daily_use_ready": false,
+  "phone_storage_accessed_by_tests": false,
+  "partition_written": false,
+  "pending_acceptance": [
+    "SMEM backend activation and bootloader consumption; active registry removal and panic collection",
+    "Qualcomm UFS PHY/host/ICE, secure key operations and encrypted unlock",
+    "Host resource bounds, affinity/hotplug, notifier/sysfs/minidump lifetime and power/error recovery",
+    "Other hardware drivers, final DT/boot/vendor_boot/DTBO/DLKM/SELinux alignment",
+    "Physical full-function, long stability, power/thermal/performance comparisons"
+  ],
+  "known_software_limits": [
+    "IPC has no original module_exit and is intentionally kept resident",
+    "Failed IPC unregister retains context/pages; deferred reclamation not implemented",
+    "Concurrent IPC same-name creation and reader teardown review remains open"
+  ],
+  "sha256": {
+    "reports/ufs-host-source-lock.json": "cf9be1c81c5d3e4f1db034d36b722fb75939bd23c35547ba348506ae437075a9",
+    "reports/diagnostics-source-lock.json": "ada4e96640b27eb87a6d8e8e5391f50625080200e29699d6e6e4717cd24c9619",
+    "reports/core-patch-replay.json": "e8638b3ac1e218279124a0fcdbda703cc0b23962f8b248ad277dae031b483ded",
+    "reports/module-crc-stage16.json": "25260e6badbc419d5a73cfbecb3ed5660467d2b34cc0cdb7932201a1b3a4350a",
+    "reports/ufs-host-build.log": "44113e1a82e4b862354e94a94ce277a90e6c2bf0849ceaba7aed19e73b3db0a5",
+    "reports/storage-stage16-build.log": "1ab14104619cb482897d88eddb3a658a0a97d006ea74a115ac39bc2e7c92bf28",
+    "reports/qemu-debug-symbol-stage16.log": "e693c3350d41c155344c9d5fcaf5fb46f1c7a97118e18ed46ff49311c59bb2d7",
+    "reports/qemu-debug-symbol-stage16.json": "e16aea5d191cafaeb284f109bb9711e0b86b59c6833dd5f2ee735c2a3d573927",
+    "reports/qemu-storage-host-stage16.log": "c3144f40d79e8e5119e52328c949bea569d4625af2e0cff756e25aa22e8e5f8b",
+    "reports/qemu-storage-host-stage16.json": "66f13b15f581da91c6c0efd3e86fd9d6a34a30c128eb5d1c03a0c920d9851a1d",
+    "reports/qemu-ufs-sq-stage16.log": "ff848710fd4dca4433638961e431ac2accdbd5e3df86f1f733b09702891ce78a",
+    "reports/qemu-ufs-sq-stage16.json": "71cf475e8c4363196934fee00ade7aedf567dc4f43ccac94214a861810d85254",
+    "reports/qemu-ufs-mcq-stage16.log": "f82415da97c929e1d2950fd2ef35695cbaf28eab24fdf590ceb55dfc11122019",
+    "reports/qemu-ufs-mcq-stage16.json": "60cce17f643acbf7c3375cf9d8e1cf70774f64de7628d5ae56bdf1252f448960"
+  },
+  "native_emulated_ufs_io": {
+    "modes": [
+      "sq",
+      "mcq"
+    ],
+    "rounds_per_mode": 2,
+    "bytes_written_per_mode": 8388608,
+    "bytes_read_per_mode": 8388608,
+    "host_pattern_bytes_per_mode": 4194304
+  }
+}

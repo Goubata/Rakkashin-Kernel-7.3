@@ -1,0 +1,660 @@
+--- a/ports/qcom-minidump/msm_minidump.c
++++ b/ports/qcom-minidump/msm_minidump.c
+@@ -76,7 +76,8 @@
+ {
+ 	struct md_region tmp = {0};
+ 
+-	tmp = md_core.ops->get_region(name);
++	if (name && smp_load_acquire(&md_init_done))
++		tmp = md_core.ops->get_region(name);
+ 
+ 	return tmp;
+ }
+@@ -209,7 +210,9 @@
+ 	if (!entry)
+ 		return -EINVAL;
+ 
+-	if ((strlen(entry->name) > MAX_NAME_LENGTH) || !entry->virt_addr ||
++	if ((!entry->name[0] ||
++	     strnlen(entry->name, sizeof(entry->name)) > MAX_NAME_LENGTH) ||
++	    !entry->virt_addr || !entry->size ||
+ 		(!IS_ALIGNED(entry->size, 4))) {
+ 		printk_deferred("Invalid entry details\n");
+ 		return -EINVAL;
+@@ -227,7 +230,7 @@
+ 	if (!smp_load_acquire(&md_init_done))
+ 		return -EINVAL;
+ 
+-	if (validate_region(entry) || (regno >= MAX_NUM_ENTRIES))
++	if (validate_region(entry) || (regno < 0 || regno >= MAX_NUM_ENTRIES))
+ 		return -EINVAL;
+ 
+ 	if (md_core.ops)
+@@ -248,59 +251,61 @@
+ 	if (validate_region(entry))
+ 		return -EINVAL;
+ 
+-	/* Region adding should after init completes */
+-	if (md_core.ops && smp_load_acquire(&md_init_done)) {
+-		ret = md_core.ops->add_region(entry);
+-	} else {
+-		/* Local table not initialized
+-		 * add to pending list, need free after initialized
+-		 */
+-		pr_info("Minidump driver hasn't probe, add region to pending list\n");
+-		spin_lock_irqsave(&mdt_lock, flags);
+-
+-		if (md_num_regions >= MAX_NUM_ENTRIES) {
+-			printk_deferred("Maximum entries reached\n");
++	/* Serialize publication with the SMEM backend's pending-list handoff. */
++	spin_lock_irqsave(&mdt_lock, flags);
++	if (smp_load_acquire(&md_init_done)) {
++		spin_unlock_irqrestore(&mdt_lock, flags);
++		return md_core.ops->add_region(entry);
++	}
++	list_for_each_entry(pending_region, &pending_list, list) {
++		if (!strcmp(pending_region->entry.name, entry->name)) {
+ 			spin_unlock_irqrestore(&mdt_lock, flags);
+-			return -ENOMEM;
++			return -EEXIST;
+ 		}
+-
+-		pending_region = kzalloc(sizeof(*pending_region), GFP_ATOMIC);
+-		if (!pending_region) {
++	}
++	/* One SMEM table slot belongs to the ELF header itself. */
++	if (md_num_regions >= MAX_NUM_ENTRIES - 1) {
++		spin_unlock_irqrestore(&mdt_lock, flags);
++		return -ENOMEM;
++	}
++	pending_region = kzalloc(sizeof(*pending_region), GFP_ATOMIC);
++	if (!pending_region) {
++		spin_unlock_irqrestore(&mdt_lock, flags);
++		return -ENOMEM;
++	}
++	pending_region->entry = *entry;
++	list_add_tail(&pending_region->list, &pending_list);
++	ret = md_num_regions++;
++	spin_unlock_irqrestore(&mdt_lock, flags);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(msm_minidump_add_region);
++
++int msm_minidump_remove_region(const struct md_region *entry)
++{
++	struct md_pending_region *pending;
++	unsigned long flags;
++	bool ready;
++
++	if (validate_region(entry))
++		return -EINVAL;
++
++	spin_lock_irqsave(&mdt_lock, flags);
++	list_for_each_entry(pending, &pending_list, list) {
++		if (!strcmp(pending->entry.name, entry->name)) {
++			list_del(&pending->list);
++			md_num_regions--;
+ 			spin_unlock_irqrestore(&mdt_lock, flags);
+-			return -ENOMEM;
++			kfree(pending);
++			return 0;
+ 		}
+-		pending_region->entry = *entry;
+-		list_add_tail(&pending_region->list, &pending_list);
+-		ret = md_num_regions;
+-		md_num_regions++;
+-		spin_unlock_irqrestore(&mdt_lock, flags);
+-	}
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(msm_minidump_add_region);
+-
+-int msm_minidump_remove_region(const struct md_region *entry)
+-{
+-	int ret;
+-
+-	if (!entry)
+-		return -EINVAL;
+-
+-	/* Ensure that init completes before we remove regions */
+-	if (!smp_load_acquire(&md_init_done))
+-		return -EINVAL;
+-
+-	if (md_core.ops)
+-		ret = md_core.ops->remove_region(entry);
+-	else
+-		ret = -EINVAL;
+-
+-	if (ret)
+-		printk_deferred("Failed to remove region:%s\n", entry->name);
+-
+-	return ret;
+-}
++	}
++	ready = smp_load_acquire(&md_init_done);
++	spin_unlock_irqrestore(&mdt_lock, flags);
++	return ready ? md_core.ops->remove_region(entry) : -ENOENT;
++}
++
+ EXPORT_SYMBOL_GPL(msm_minidump_remove_region);
+ 
+ static int msm_minidump_add_header(void)
+@@ -420,9 +425,6 @@
+ 		return ret;
+ 	}
+ 
+-	/* All updates above should be visible, before init completes */
+-	smp_store_release(&md_init_done, true);
+-
+ 	ret = md_core.ops->add_pending_entry(&pending_list);
+ 	if (ret) {
+ 		pr_err("Add pending entry failed\n");
+@@ -439,5 +441,6 @@
+ EXPORT_SYMBOL_GPL(msm_minidump_driver_probe);
+ 
+ MODULE_DESCRIPTION("MSM Mini Dump Driver");
+-MODULE_IMPORT_NS(MINIDUMP);
++MODULE_IMPORT_NS("MINIDUMP");
++MODULE_IMPORT_NS("DMA_BUF");
+ MODULE_LICENSE("GPL");
+--- a/ports/qcom-minidump/minidump_log.c
++++ b/ports/qcom-minidump/minidump_log.c
+@@ -29,6 +29,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/panic_notifier.h>
+ #include "debug_symbol.h"
++#include "minidump_private.h"
+ #ifdef CONFIG_QCOM_MINIDUMP_PSTORE
+ #include <linux/math64.h>
+ #include <linux/of.h>
+@@ -46,7 +47,9 @@
+ 
+ #include <linux/sched/cputime.h>
+ #include "kernel/sched/sched.h"
++#if IS_ENABLED(CONFIG_SCHED_WALT)
+ #include <linux/sched/walt.h>
++#endif
+ 
+ #include <linux/kdebug.h>
+ #include <linux/thread_info.h>
+@@ -681,15 +684,10 @@
+ 	smp_mb();
+ 	WRITE_ONCE(md_ftrace_buf_addr, buffer_start);
+ }
+-#else
+-#include <trace/hooks/ftrace_dump.h>
+-
+-static void md_trace_oops_enter(void *unused, bool *enter_check)
+-{
+-	pr_err("Skip, do not need add ftrace mini dump");
+-	*enter_check = true;
+-}
+-#endif
++#endif /* CONFIG_QCOM_MINIDUMP_FTRACE */
++/* The saved AVR configuration disables private minidump ftrace capture.
++ * Native ftrace retains its normal oops output; no vendor skip hook is needed.
++ */
+ 
+ #ifdef CONFIG_QCOM_MINIDUMP_PANIC_DUMP
+ 
+@@ -748,9 +746,9 @@
+ 		md_dump_task_info(task, status, curr);
+ 		return;
+ 	}
+-	nr_running = my_q->nr_running;
++	nr_running = my_q->nr_queued;
+ 	md_dump_align();
+-	seq_buf_printf(md_runq_seq_buf, "%s: %d process is grouping\n",
++	seq_buf_printf(md_runq_seq_buf, "%s: %d queued entities in group\n",
+ 				   status, nr_running);
+ 	md_align_offset++;
+ 	md_dump_cfs_rq(my_q, curr);
+@@ -1007,8 +1005,8 @@
+ 			       "CPU%d has %d process, current is pid %d\n",
+ 			       cpu, rq->nr_running, cpu_curr(cpu)->pid);
+ 		seq_buf_printf(md_runq_seq_buf,
+-			       "CFS has %d process\n",
+-			       cfs->nr_running);
++			       "CFS has %d queued entities (%d runnable tasks)\n",
++			       cfs->nr_queued, cfs->h_nr_runnable);
+ 		md_dump_cfs_rq(cfs, cpu_curr(cpu));
+ 		seq_buf_printf(md_runq_seq_buf,
+ 			       "RT has %d process\n",
+@@ -1642,9 +1640,6 @@
+ #endif
+ #ifdef CONFIG_QCOM_MINIDUMP_FTRACE
+ 	md_register_trace_buf();
+-#else
+-	register_trace_android_vh_ftrace_oops_enter(md_trace_oops_enter,
+-							 NULL);
+ #endif
+ 	register_cpufreq_log();
+ #ifdef CONFIG_QCOM_MINIDUMP_PANIC_DUMP
+--- a/ports/qcom-minidump/minidump_smem.c
++++ b/ports/qcom-minidump/minidump_smem.c
+@@ -189,7 +189,7 @@
+ 					  SBL_MINIDUMP_SMEM_ID, &size);
+ 	if (IS_ERR_OR_NULL(md_global_toc)) {
+ 		pr_err("SMEM is not initialized\n");
+-		return PTR_ERR(md_global_toc);
++		return md_global_toc ? PTR_ERR(md_global_toc) : -ENODEV;
+ 	}
+ 
+ 	/*Check global minidump support initialization */
+@@ -242,6 +242,8 @@
+ 		kfree(pending_region);
+ 		region_number++;
+ 	}
++	/* Publish readiness while excluding additions to the pending list. */
++	smp_store_release(&md_init_done, true);
+ 	spin_unlock_irqrestore(&mdt_lock, flags);
+ 
+ 	return 0;
+@@ -367,7 +369,7 @@
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&mdt_lock, flags);
+-	res = MAX_NUM_ENTRIES - md_num_regions;
++	res = MAX_NUM_ENTRIES - 1 - md_num_regions;
+ 	spin_unlock_irqrestore(&mdt_lock, flags);
+ 
+ 	return res;
+--- a/ports/qcom-minidump/minidump_memory.c
++++ b/ports/qcom-minidump/minidump_memory.c
+@@ -24,11 +24,12 @@
+ #include <linux/dma-buf.h>
+ #include <linux/dma-resv.h>
+ #include <linux/fdtable.h>
+-#include <linux/qcom_dma_heap.h>
++
+ #include "debug_symbol.h"
+ #include "minidump_memory.h"
+ #include "mm/slab.h"
+ #include "mm/internal.h"
++#include "mm/page_alloc.h"
+ 
+ /* Meminfo */
+ static struct seq_buf *md_meminfo_seq_buf;
+@@ -153,13 +154,10 @@
+ #endif
+ 	show_val_kb(m, "PageTables:     ",
+ 		    global_node_page_state(NR_PAGETABLE));
+-	show_val_kb(m, "Bounce:         ",
+-		    global_zone_page_state(NR_BOUNCE));
+-	show_val_kb(m, "WritebackTmp:   ",
+-		    global_node_page_state(NR_WRITEBACK_TEMP));
++	/* Native 7.3 removed these obsolete counters; omit them explicitly. */
+ 	seq_buf_printf(m, "VmallocTotal:   %8lu kB\n",
+ 		   (unsigned long)VMALLOC_TOTAL >> 10);
+-	show_val_kb(m, "VmallocUsed: ", vmalloc_nr_pages());
++	show_val_kb(m, "VmallocUsed: ", global_node_page_state(NR_VMALLOC));
+ 	show_val_kb(m, "Percpu:         ", pcpu_nr_pages());
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -268,15 +266,18 @@
+ static inline void md_dump_slabinfo(void) {}
+ #endif /* CONFIG_SLUB_DEBUG */
+ 
+-bool md_register_memory_dump(int size, char *name)
++static bool md_register_memory_dump(int size, char *name)
+ {
+ 	struct md_region md_entry;
+ 	void *buffer_start;
+ 	struct page *page;
+ 	int ret;
+ 
+-	page  = cma_alloc(dma_contiguous_default_area, size >> PAGE_SHIFT,
+-			0, GFP_KERNEL);
++	if (size <= 0 || !IS_ALIGNED(size, PAGE_SIZE) || !dev_get_cma_area(NULL))
++		return false;
++
++	page  = cma_alloc(dev_get_cma_area(NULL), size >> PAGE_SHIFT,
++			0, false);
+ 
+ 	if (!page) {
+ 		pr_err("Failed to allocate %s minidump, increase cma size\n",
+@@ -291,7 +292,7 @@
+ 	md_entry.size = size;
+ 	ret = msm_minidump_add_region(&md_entry);
+ 	if (ret < 0) {
+-		cma_release(dma_contiguous_default_area, page, size >> PAGE_SHIFT);
++		cma_release(dev_get_cma_area(NULL), page, size >> PAGE_SHIFT);
+ 		pr_err("Failed to add %s entry in Minidump\n", name);
+ 		return false;
+ 	}
+@@ -317,7 +318,7 @@
+ 	return true;
+ }
+ 
+-bool md_unregister_memory_dump(char *name)
++static bool md_unregister_memory_dump(char *name)
+ {
+ 	struct page *page;
+ 	struct md_region mdr;
+@@ -337,7 +338,7 @@
+ 	if (msm_minidump_remove_region(&md_entry) < 0)
+ 		return false;
+ 
+-	cma_release(dma_contiguous_default_area, page,
++	cma_release(dev_get_cma_area(NULL), page,
+ 			(md_entry.size) >> PAGE_SHIFT);
+ 	return true;
+ }
+@@ -390,7 +391,7 @@
+ 	char name[50];
+ };
+ 
+-bool is_page_owner_enabled(void)
++static bool is_page_owner_enabled(void)
+ {
+ 	if (md_debug_page_owner_inited &&
+ 		atomic_read(&md_debug_page_owner_inited->enabled))
+@@ -429,8 +430,7 @@
+ 	unsigned int nr_entries;
+ 	struct accounted_call_site *call_site;
+ 
+-	if ((page->flags &
+-		((1UL << PG_lru) | (1UL << PG_swapbacked))))
++	if (PageLRU(page) || folio_test_swapbacked(page_folio(page)))
+ 		return false;
+ 
+ 	if (PageSlab(page))
+@@ -480,12 +480,12 @@
+ 					goto dump;
+ 				break;
+ 			case 0x4:
+-				if (page->flags & (1UL << PG_swapbacked))
++				if (folio_test_swapbacked(page_folio(page)))
+ 					goto dump;
+ 				break;
+ 			case 0x8:
+-				if ((page->flags & (1UL << PG_lru)) &&
+-					~(page->flags & (1UL << PG_swapbacked)))
++				if (PageLRU(page) &&
++					!folio_test_swapbacked(page_folio(page)))
+ 					goto dump;
+ 				break;
+ 			default:
+@@ -1088,7 +1088,7 @@
+ 
+ 	ret = scnprintf(priv_buf->buf + priv_buf->offset,
+ 			priv_buf->size - priv_buf->offset,
+-			"%08zu\t%08x\t%08x\t%08ld\t%s\t%08lu\t%s\n",
++			"%08zu\t%08x\t%08x\t%08ld\t%s\t%08llu\t%s\n",
+ 			buf_obj->size,
+ 			buf_obj->file->f_flags, buf_obj->file->f_mode,
+ 			file_count(buf_obj->file),
+@@ -1175,7 +1175,21 @@
+ 			"size", "flags", "mode", "count", "ino");
+ 	buf.offset = ret;
+ 
+-	ret = get_dmabuf_debugfs_data(dump_bufinfo, (void *)&dma_buf_priv);
++	/* The native iterator holds each buffer reference and consumes the old
++	 * reference on next(); release it explicitly when the callback stops. */
++	{
++		struct dma_buf *entry;
++
++		ret = 0;
++		for (entry = dma_buf_iter_begin(); entry;
++		     entry = dma_buf_iter_next(entry)) {
++			ret = dump_bufinfo(entry, &dma_buf_priv);
++			if (ret) {
++				dma_buf_put(entry);
++				break;
++			}
++		}
++	}
+ 	if (ret)
+ 		pr_err("Error occurred during dmabuf debugfs data collection!\n");
+ 
+@@ -1229,7 +1243,7 @@
+ 	int ret;
+ 	u32 index;
+ 
+-	if (!qcom_is_dma_buf_file(file))
++	if (!is_dma_buf_file(file))
+ 		return 0;
+ 
+ 	dma_buf_priv = (struct dma_buf_priv *)data;
+@@ -1257,7 +1271,7 @@
+ 	if (buf->offset == buf->size - 1)
+ 		return -EINVAL;
+ 	ret = scnprintf(buf->buf + buf->offset, buf->size - buf->offset,
+-			"%08zu\t%08x\t%08x\t%08ld\t%s\t%08lu\t%s\n",
++			"%08zu\t%08x\t%08x\t%08ld\t%s\t%08llu\t%s\n",
+ 			dmabuf->size,
+ 			dmabuf->file->f_flags, dmabuf->file->f_mode,
+ 			file_count(dmabuf->file),
+@@ -1522,4 +1536,4 @@
+ 	return error;
+ }
+ 
+-MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");
+--- a/ports/qcom-ipc-logging/ipc_logging.c
++++ b/ports/qcom-ipc-logging/ipc_logging.c
+@@ -5,6 +5,7 @@
+ 
+ #include <asm/arch_timer.h>
+ #include <linux/slab.h>
++#include <linux/bitmap.h>
+ #include <linux/uaccess.h>
+ #include <linux/module.h>
+ #include <linux/fs.h>
+@@ -31,7 +32,14 @@
+ /*16th bit is used for minidump feature*/
+ #define FEATURE_MASK 0x10000
+ 
+-static int minidump_buf_cnt;
++static DECLARE_BITMAP(minidump_slots, MAX_MINIDUMP_BUFFERS);
++static DEFINE_SPINLOCK(minidump_lock);
++static LIST_HEAD(permanent_minidump_regions);
++struct ipc_minidump_region {
++	struct list_head list;
++	struct md_region region;
++	unsigned int slot;
++};
+ static LIST_HEAD(ipc_log_context_list);
+ static DEFINE_RWLOCK(context_list_lock_lha1);
+ static void *get_deserialization_func(struct ipc_log_context *ilctxt,
+@@ -131,30 +139,68 @@
+ 	return pg;
+ }
+ 
+-static void register_minidump(u64 vaddr, u64 size,
+-			      const char *buf_name, int index)
+-{
+-	struct md_region md_entry;
++/* The quota, unique names and successful registrations share one lock.
++ * Callers may hold a context spinlock, so allocation must remain atomic.
++ */
++static void register_minidump(struct list_head *owner, u64 vaddr, u64 size,
++			      const char *buf_name)
++{
++	struct ipc_minidump_region *record;
++	unsigned long flags;
++	unsigned int slot;
+ 	int ret;
+ 
+-	if (msm_minidump_enabled()
+-	    && (minidump_buf_cnt < MAX_MINIDUMP_BUFFERS)) {
+-		scnprintf(md_entry.name, sizeof(md_entry.name), "%s_%d",
+-			  buf_name, index);
+-		md_entry.virt_addr = vaddr;
+-		md_entry.phys_addr = virt_to_phys((void *)vaddr);
+-		md_entry.size = size;
+-
+-		ret = msm_minidump_add_region(&md_entry);
+-		if (ret < 0) {
+-			pr_err(
+-		 "Failed to register log buffer %s_%d in Minidump ret %d\n",
+-		  buf_name, index, ret);
+-
+-			return;
++	if (!msm_minidump_enabled())
++		return;
++	record = kzalloc(sizeof(*record), GFP_ATOMIC);
++	if (!record)
++		return;
++	spin_lock_irqsave(&minidump_lock, flags);
++	slot = find_first_zero_bit(minidump_slots, MAX_MINIDUMP_BUFFERS);
++	if (slot >= MAX_MINIDUMP_BUFFERS)
++		goto fail;
++	/* Reserve two characters for separator and one hexadecimal slot digit. */
++	scnprintf(record->region.name, sizeof(record->region.name), "%.*s_%x",
++		  MAX_NAME_LENGTH - 2, buf_name, slot);
++	record->region.virt_addr = vaddr;
++	record->region.phys_addr = virt_to_phys((void *)vaddr);
++	record->region.size = size;
++	ret = msm_minidump_add_region(&record->region);
++	if (ret < 0) {
++		pr_err("IPC log minidump registration failed: %d\n", ret);
++		goto fail;
++	}
++	record->slot = slot;
++	__set_bit(slot, minidump_slots);
++	list_add_tail(&record->list, owner);
++	spin_unlock_irqrestore(&minidump_lock, flags);
++	return;
++fail:
++	spin_unlock_irqrestore(&minidump_lock, flags);
++	kfree(record);
++}
++
++static bool unregister_minidumps(struct list_head *owner)
++{
++	struct ipc_minidump_region *record, *tmp;
++	unsigned long flags;
++	bool empty;
++	int ret;
++
++	spin_lock_irqsave(&minidump_lock, flags);
++	list_for_each_entry_safe(record, tmp, owner, list) {
++		ret = msm_minidump_remove_region(&record->region);
++		if (ret) {
++			pr_err("IPC log minidump removal failed: %d; retaining memory\n", ret);
++			continue;
+ 		}
+-		minidump_buf_cnt++;
+-	}
++		__clear_bit(record->slot, minidump_slots);
++		list_del(&record->list);
++		kfree(record);
++	}
++	empty = list_empty(owner);
++	spin_unlock_irqrestore(&minidump_lock, flags);
++	return empty;
+ }
+ /**
+  * ipc_log_read - do non-destructive read of the log
+@@ -831,6 +877,9 @@
+ 	unsigned long flags;
+ 	int enable_minidump;
+ 
++	if (max_num_pages <= 0 || !mod_name || !*mod_name)
++		return NULL;
++
+ 	/* check if ipc ctxt already exists */
+ 	read_lock_irq(&context_list_lock_lha1);
+ 	list_for_each_entry(tmp, &ipc_log_context_list, list)
+@@ -849,6 +898,7 @@
+ 
+ 	init_completion(&ctxt->read_avail);
+ 	INIT_LIST_HEAD(&ctxt->page_list);
++	INIT_LIST_HEAD(&ctxt->minidump_regions);
+ 	INIT_LIST_HEAD(&ctxt->dfunc_info_list);
+ 	spin_lock_init(&ctxt->context_lock_lhb1);
+ 
+@@ -856,8 +906,8 @@
+ 
+ 	spin_lock_irqsave(&ctxt->context_lock_lhb1, flags);
+ 	if (enable_minidump) {
+-		register_minidump((u64)ctxt, sizeof(struct ipc_log_context),
+-				  "ipc_ctxt", minidump_buf_cnt);
++		register_minidump(&ctxt->minidump_regions, (u64)ctxt,
++				  sizeof(*ctxt), "ipc_ctxt");
+ 	}
+ 	spin_unlock_irqrestore(&ctxt->context_lock_lhb1, flags);
+ 
+@@ -878,8 +928,8 @@
+ 		list_add_tail(&pg->hdr.list, &ctxt->page_list);
+ 
+ 		if (enable_minidump) {
+-			register_minidump((u64)pg, sizeof(struct ipc_log_page),
+-					  mod_name, minidump_buf_cnt);
++			register_minidump(&ctxt->minidump_regions, (u64)pg,
++					  sizeof(*pg), mod_name);
+ 		}
+ 		spin_unlock_irqrestore(&ctxt->context_lock_lhb1, flags);
+ 	}
+@@ -904,7 +954,7 @@
+ 	ctxt->nmagic = ~(IPC_LOG_CONTEXT_MAGIC_NUM);
+ 
+ 	write_lock_irqsave(&context_list_lock_lha1, flags);
+-	if (enable_minidump  && (minidump_buf_cnt < MAX_MINIDUMP_BUFFERS))
++	if (enable_minidump)
+ 		list_add(&ctxt->list, &ipc_log_context_list);
+ 	else
+ 		list_add_tail(&ctxt->list, &ipc_log_context_list);
+@@ -913,6 +963,8 @@
+ 	return (void *)ctxt;
+ 
+ release_ipc_log_context:
++	if (!unregister_minidumps(&ctxt->minidump_regions))
++		return NULL;
+ 	while (page_cnt-- > 0) {
+ 		pg = get_first_page(ctxt);
+ 		list_del(&pg->hdr.list);
+@@ -928,6 +980,9 @@
+ 	struct ipc_log_context *ilctxt = container_of(kref,
+ 				struct ipc_log_context, refcount);
+ 	struct ipc_log_page *pg = NULL;
++
++	if (!unregister_minidumps(&ilctxt->minidump_regions))
++		return; /* Never free memory still owned by the dump backend. */
+ 
+ 	while (!list_empty(&ilctxt->page_list)) {
+ 		pg = get_first_page(ilctxt);
+@@ -977,8 +1032,9 @@
+ {
+ 	check_and_create_debugfs();
+ 	ipc_log_cdev_init();
+-	register_minidump((u64)&ipc_log_context_list, sizeof(struct list_head),
+-			  "ipc_log_ctxt_list", minidump_buf_cnt);
++	register_minidump(&permanent_minidump_regions,
++			  (u64)&ipc_log_context_list, sizeof(struct list_head),
++			  "ipc_log_list");
+ 
+ 	return 0;
+ }
+--- a/ports/qcom-ipc-logging/ipc_logging_private.h
++++ b/ports/qcom-ipc-logging/ipc_logging_private.h
+@@ -130,6 +130,8 @@
+ 	struct kref refcount;
+ 	bool destroyed;
+ 	struct ipc_log_cdev cdev;
++	/* Private registration ownership; page wire layout remains unchanged. */
++	struct list_head minidump_regions;
+ };
+ 
+ struct dfunc_info {
+--- a/ports/qcom-minidump/Makefile
++++ b/ports/qcom-minidump/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += minidump.o
++minidump-y := msm_minidump.o minidump_log.o minidump_smem.o minidump_memory.o
++ccflags-y += -I$(src)/include -I$(src) -I$(srctree) -I$(src)/../gunyah/include
++ccflags-y += -DCONFIG_QCOM_MINIDUMP_MODULE=1 -DCONFIG_QCOM_MINIDUMP_SMEM=1 -DCONFIG_QCOM_DEBUG_SYMBOL_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1 -DCONFIG_MINIDUMP_MAX_ENTRIES=200
++ccflags-y += -DCONFIG_QCOM_MINIDUMP_PANIC_DUMP=1 -DCONFIG_QCOM_MINIDUMP_PANIC_CPU_CONTEXT=1 -DCONFIG_QCOM_MINIDUMP_PANIC_MEMORY_INFO=1 -DCONFIG_QCOM_MINIDUMP_PANIC_CPUFREQ_INFO=1 -DCONFIG_QCOM_MINIDUMP_PANIC_KTASK_STACK=1 -DCONFIG_QCOM_MINIDUMP_PSTORE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers
+--- a/ports/qcom-ipc-logging/Makefile
++++ b/ports/qcom-ipc-logging/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom_ipc_logging.o
++qcom_ipc_logging-y := ipc_logging.o ipc_logging_debug.o
++ccflags-y += -I$(src)/include -I$(src) -DCONFIG_IPC_LOGGING_MODULE=1 -DCONFIG_QCOM_MINIDUMP_MODULE=1 -DCONFIG_IPC_LOG_MINIDUMP_BUFFERS=16
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers

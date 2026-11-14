@@ -3,10 +3,11 @@
 Sources are pinned to qcom-soc `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`.
 `python scripts/audit_ufs_sources.py` verifies ten files and replays the reviewed
 patch. `python scripts/build_storage_deps.py --ufs-host` attempts the real build.
-Currently C compilation passes, but final modpost fails on four missing real
-providers: ipc_log_context_create, ipc_log_string, msm_minidump_enabled and
-msm_minidump_add_region. No fake providers or CRC replacements are used. These
-unfinished modules are excluded from production snapshots.
+Both real host modules now link with the ported SMEM minidump and IPC logging
+providers and are included in the Stage16 partial snapshot. The four previously
+missing exports are implemented by actual pinned source, not success stubs.
+QEMU confirms module loading/unloading without a matching Qualcomm device;
+physical UFS probe, encrypted unlock and daily use remain unverified.
 
 The variant keeps its actual MCQ resource metadata in private host storage.
 It uses target scsi_cmnd/request CPU/tag information, negotiate_pwr_mode,
@@ -23,7 +24,7 @@ program_key variant-op slot no longer exists in 7.3. Firmware/ICE integration
 and encrypted-data compatibility still require physical validation.
 
 Source review remains open for mapped-resource bounds and insertion cleanup,
-ESI CPU array bounds/hotplug, hook/notifier/sysfs/minidump lifetime, initialization
+ESI CPU array bounds/hotplug, notifier/sysfs/minidump lifetime, initialization
 rollback, clock/PHY/power transitions, error recovery and actual I/O.
 
 Separately, the native PCI UFS core is tested using QEMU UFS and private regular
@@ -38,5 +39,10 @@ python scripts/run_qemu.py --test ufs --ufs-mcq --cpus 4 --log reports/ufs-mcq.l
 Each mode writes and directly reads two distinct 4MiB patterns, flushes, then
 checks controller state/IRQ bookkeeping/queue mode with three KUnit cases. The
 runner independently checks the final 4MiB pattern in the backing file. This
-is real core I/O on an emulator, not execution of the unfinished Qualcomm host,
+is real core I/O on an emulator, not Qualcomm host hardware execution,
 Canoe PHY training, real SHM/ICE operations, encrypted unlock or phone acceptance.
+
+Trace callbacks are now scoped to their host, checked on registration, unwound
+on partial failure and synchronized on teardown. Broader removal cleanup and
+IRQ/CPU hotplug ownership still require review. Diagnostic source locks/replay
+are checked by `scripts/audit_diagnostics_sources.py`.

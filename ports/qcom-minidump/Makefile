@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += minidump.o
+minidump-y := msm_minidump.o minidump_log.o minidump_smem.o minidump_memory.o
+ccflags-y += -I$(src)/include -I$(src) -I$(srctree) -I$(src)/../gunyah/include
+ccflags-y += -DCONFIG_QCOM_MINIDUMP_MODULE=1 -DCONFIG_QCOM_MINIDUMP_SMEM=1 -DCONFIG_QCOM_DEBUG_SYMBOL_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1 -DCONFIG_MINIDUMP_MAX_ENTRIES=200
+ccflags-y += -DCONFIG_QCOM_MINIDUMP_PANIC_DUMP=1 -DCONFIG_QCOM_MINIDUMP_PANIC_CPU_CONTEXT=1 -DCONFIG_QCOM_MINIDUMP_PANIC_MEMORY_INFO=1 -DCONFIG_QCOM_MINIDUMP_PANIC_CPUFREQ_INFO=1 -DCONFIG_QCOM_MINIDUMP_PANIC_KTASK_STACK=1 -DCONFIG_QCOM_MINIDUMP_PSTORE=1
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers

@@ -18,7 +18,9 @@ parser.add_argument("--ipc-deps",action="store_true")
 parser.add_argument("--rakkashin",action="store_true")
 parser.add_argument('--storage-phy',action='store_true')
 parser.add_argument('--ice',action='store_true')
+parser.add_argument('--ufs-host',action='store_true')
 args=parser.parse_args()
+if args.ufs_host:args.ice=True;args.gpu_deps=True
 if args.ice:args.storage_phy=True
 if args.gpu_driver:
     args.gpu_deps = True
@@ -41,6 +43,8 @@ if args.gpu_driver:
                 (out/'drivers/nvmem/nvmem_qfprom.ko','modules/native/nvmem_qfprom.ko')]
 if args.ice:
     ports.append('qcom-ice')
+if args.ufs_host:
+    ports += ['qcom-minidump','qcom-ipc-logging','ufs-host']
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

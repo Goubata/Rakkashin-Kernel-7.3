@@ -223,3 +223,26 @@ exports still prevent final link, so those modules are not in the snapshot.
 Stage15 retains 73 linked modules / 3,727 import CRC checks. Core patch replay
 now reproduces 12 patches / 56 files. No Qualcomm PHY, real key programming,
 encrypted unlock or physical stability/performance/power evidence is implied.
+
+## Stage16: linked Qualcomm UFS host and real diagnostic dependencies
+
+The firmware-pinned SMEM minidump and IPC logging ports provide the four
+previously missing exports. The real vendor UFS host and QTI crypto profile
+now link; the partial snapshot contains 77 modules / 4,168 import CRC checks.
+No saved 6.12 module binary was substituted or re-signed to claim compatibility.
+
+On the new Image, SMP4 guest tests cover five actual symbol-lookup cases and
+eight pre-probe registry/IPC cases, including exact 200-user-region capacity,
+duplicate rejection, cancellation, invalid names/ranges, decoded log contents
+and repeated context creation/destruction. The Qualcomm host and crypto modules
+load and unload without a matching physical device. Native PCI UFS SQ and MCQ
+again pass three cases each and 8 MiB writes / 8 MiB reads per configuration;
+the final 4 MiB private backing pattern is independently checked on the host.
+Core patch replay reproduces 13 patches / 58 exact files.
+
+Still unverified: actual SMEM table publication/firmware consumption, live
+backend registry removal, panic collection, Qualcomm PHY/host/ICE probe,
+encrypted unlock, power/reset transitions, active interrupt/hotplug teardown
+and all physical daily-use criteria above. IPC retains memory if unregister
+fails and has no deferred reclamation. Its original firmware module has no
+module_exit; tests do not claim unload support. See the Stage16 report.

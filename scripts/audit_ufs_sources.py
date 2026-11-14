@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lock/replay the in-progress vendor UFS host port without claiming link success."""
+"""Lock and replay the vendor UFS host port; physical acceptance remains separate."""
 import argparse
 import difflib
 import hashlib
@@ -48,7 +48,7 @@ def main():
                                                    fromfile='a/' + path, tofile='b/' + path))
         patch.write_text(changes)
         report = {'source_commit': COMMIT, 'files': rows, 'patch_sha256': sha(patch.read_bytes()),
-                  'scope': 'source and reviewed patch replay only; final module link and physical acceptance pending',
+                  'scope': 'source and reviewed patch replay only; module link is recorded separately; physical acceptance pending',
                   'reviewed_changes': ['Explicit vendor ICE and ported CCF interfaces',
                                        'Private variant MCQ resource metadata instead of modifying core resource layout',
                                        '7.3 command hooks use scsi_cmnd and the actual request CPU/tag',
@@ -58,11 +58,12 @@ def main():
                                        'Map the old 5ms VCC-off delay to the actual 7.3 delay field',
                                        'Connect real QTI profile to CUSTOM_CRYPTO_PROFILE, propagate init failure',
                                        'Move raw key routine into profile module; HWKM rejects raw programming',
-                                       'Use target MSI, thermal, removal, DME and tracing APIs'],
-                  'known_open_items': ['Actual IPC/minidump providers before final link',
-                                       'MCQ mapped resource bounds and managed inserted-resource cleanup',
+                                       'Use target MSI, thermal, removal, DME and tracing APIs',
+                                       'Per-host hook ownership, checked registration rollback and synchronized teardown',
+                                       'Link actual ported IPC logging and minidump providers'],
+                  'known_open_items': ['MCQ mapped resource bounds and managed inserted-resource cleanup',
                                        'ESI affinity bounds and CPU hotplug lifetime',
-                                       'Host hook/notifier/sysfs/minidump registration lifetime',
+                                       'Broader host notifier/sysfs/minidump registration lifetime',
                                        'Hardware training, reset, cryptographic profile compatibility and real I/O']}
         lock.write_text(json.dumps(report, indent=2) + '\n')
     report = json.loads(lock.read_text())
@@ -84,7 +85,7 @@ def main():
     for row in report['files']:
         if sha((replay / row['file']).read_bytes()) != row['sha256']:
             raise ValueError('UFS patch replay mismatch')
-    print('Verified in-progress UFS sources/replay:', len(FILES), 'files; link/hardware unproven')
+    print('Verified UFS source/patch replay:', len(FILES), 'files; hardware acceptance separate')
 
 
 if __name__ == '__main__':

@@ -16,10 +16,13 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--ice',action='store_true')
     parser.add_argument('--tests',action='store_true')
-    parser.add_argument('--ufs-host',action='store_true',help='Build the in-progress real host; fails until remaining providers are ported')
+    parser.add_argument('--ufs-host',action='store_true',help='Build real diagnostic dependencies and vendor host; no physical probe')
     parser.add_argument('--ufs-core-tests',action='store_true')
+    parser.add_argument('--diagnostics',action='store_true')
+    parser.add_argument('--diagnostics-tests',action='store_true')
     args=parser.parse_args()
     if args.ufs_host:args.ice=True
+    if args.ufs_host or args.diagnostics_tests:args.diagnostics=True
     if args.tests and not args.ice:parser.error('--tests requires --ice')
     report = json.loads((ROOT / 'reports/ufs-phy-source-lock.json').read_text())
     repo = ROOT.parent / 'avr-upstream-audit/qcom-soc'
@@ -43,6 +46,10 @@ def main():
         if 'qcom_ice_enable' in symbols:raise ValueError('Native ICE and vendor ICE must not provide the same symbols')
         targets.append('ports/qcom-ice')
         if args.tests:targets.append('tests/ice')
+    if args.diagnostics:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_diagnostics_sources.py')],check=True)
+        targets += ['ports/qcom-minidump','ports/qcom-ipc-logging']
+        if args.diagnostics_tests:targets += ['tests/debug-symbol','tests/diagnostics']
     if args.ufs_host:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ufs_sources.py')],check=True)
         targets.append('ports/ufs-host')

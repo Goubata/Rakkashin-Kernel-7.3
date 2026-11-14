@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-ufs-core-stage15",
-  "source_commit": "07caf754565c089559662685517b296fb1401c98",
+  "stage": "android73-ufs-host-stage16",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
-  "staged_count": 73,
-  "same_name_candidate_count": 60,
-  "archived_names_without_same_name_candidate_count": 484,
-  "loaded_names_without_same_name_candidate_count": 469,
+  "staged_count": 77,
+  "same_name_candidate_count": 64,
+  "archived_names_without_same_name_candidate_count": 480,
+  "loaded_names_without_same_name_candidate_count": 465,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -269,12 +269,20 @@
       "file": "modules/qcom-smem/smem.ko"
     },
     {
+      "name": "minidump",
+      "file": "modules/qcom-minidump/minidump.ko"
+    },
+    {
       "name": "qcom_common",
       "file": "modules/qcom-rproc-common/qcom_common.ko"
     },
     {
       "name": "msm_hw_fence",
       "file": "modules/qti-fence/msm_hw_fence.ko"
+    },
+    {
+      "name": "qcom_ipc_logging",
+      "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
     },
     {
       "name": "socinfo",
@@ -295,6 +303,14 @@
     {
       "name": "tcsrcc_chora",
       "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko"
+    },
+    {
+      "name": "ufshcd_crypto_qti",
+      "file": "modules/ufs-host/ufshcd-crypto-qti.ko"
+    },
+    {
+      "name": "ufs_qcom",
+      "file": "modules/ufs-host/ufs-qcom.ko"
     },
     {
       "name": "videocc_canoe",
@@ -564,12 +580,20 @@
       "file": "modules/qcom-smem/smem.ko"
     },
     {
+      "name": "minidump",
+      "file": "modules/qcom-minidump/minidump.ko"
+    },
+    {
       "name": "qcom_common",
       "file": "modules/qcom-rproc-common/qcom_common.ko"
     },
     {
       "name": "msm_hw_fence",
       "file": "modules/qti-fence/msm_hw_fence.ko"
+    },
+    {
+      "name": "qcom_ipc_logging",
+      "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
     },
     {
       "name": "socinfo",
@@ -590,6 +614,14 @@
     {
       "name": "tcsrcc_chora",
       "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko"
+    },
+    {
+      "name": "ufshcd_crypto_qti",
+      "file": "modules/ufs-host/ufshcd-crypto-qti.ko"
+    },
+    {
+      "name": "ufs_qcom",
+      "file": "modules/ufs-host/ufs-qcom.ko"
     },
     {
       "name": "videocc_canoe",
@@ -640,7 +672,7 @@
     },
     "qcom_scm": {
       "file": "modules/firmware/qcom-scm.ko",
-      "sha256": "1205ea96db91d437559cdded8f657d2b116a2974dc7cca76242f03dec1495b35",
+      "sha256": "56ddb721d7ae001fe68c9228a95a0fc662b30c8d882fe4141755e208c9f94e24",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_pas"
@@ -655,7 +687,7 @@
     },
     "qcom_pas": {
       "file": "modules/firmware/qcom_pas.ko",
-      "sha256": "265760b2afc4e607a318c3249752dfeffd0863d00f83b69da49b52cd42eb6695",
+      "sha256": "73cd7aa2ee2d0ef8da23fbc39353001a76b53d0d02e064644ce920e5b4b84b09",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -929,7 +961,7 @@
     },
     "coresight": {
       "file": "modules/native/coresight.ko",
-      "sha256": "3dc286850e7ff0dc305d1cac7ff026b4435b0dc3cff428ca3182257a0fee6616",
+      "sha256": "6c8ea5bd6c2457d0933df85ddca7ccd31f02c7bd6f6fba9fb4af57f230cc8b4a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -943,7 +975,7 @@
     },
     "nvmem_qfprom": {
       "file": "modules/native/nvmem_qfprom.ko",
-      "sha256": "3c16e3292524d8cc9a932ff3e8c9eed918daea8792f37c67b6b38e8266371383",
+      "sha256": "8cea6de6787917b71b0d01c9d65fba4ee56bb5d37cdcf62c4693d015192df22c",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -957,7 +989,7 @@
     },
     "ntsync": {
       "file": "modules/ntsync/ntsync.ko",
-      "sha256": "7ae29b521d3f5161e266a82639452262ec1ae80f828151e8637e426a3a97fab8",
+      "sha256": "2cd06048794630173528a8176a7ed91fded344e54d882f3d83195aeb71792cf9",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1453,6 +1485,21 @@
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
+    "qcom_ipc_logging": {
+      "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko",
+      "sha256": "0b1558890db039f7392b4a84f4a3486269d2db4da0b09aa836ae7477950ebb1a",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "minidump"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
     "cpu_phys_log_map": {
       "file": "modules/qcom-irq/cpu_phys_log_map.ko",
       "sha256": "9a2655762db3ff59cdaf324c71630e1501b715e295fe36632eb7f96c72e49432",
@@ -1502,6 +1549,21 @@
       "sha256": "cd206c6f9d21bb681e35590acc846cbdfa50a0fbeb1244af1e393bba1a625096",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "minidump": {
+      "file": "modules/qcom-minidump/minidump.ko",
+      "sha256": "505f33e5a2edf7c7de869a92f815ab088b545598cd10cfec3911476e50515241",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "smem"
+      ],
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
@@ -1652,6 +1714,41 @@
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_scm"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "ufs_qcom": {
+      "file": "modules/ufs-host/ufs-qcom.ko",
+      "sha256": "a286dcfca3f9bb09b7d45f6e37eb9b087a013fb4464dd0af465f1a8c2a748c51",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom",
+        "minidump",
+        "phy_qcom_ufs",
+        "qcom_ice",
+        "qcom_ipc_logging",
+        "ufshcd_crypto_qti"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "ufshcd_crypto_qti": {
+      "file": "modules/ufs-host/ufshcd-crypto-qti.ko",
+      "sha256": "922d145ea763838b1c157c2920b30e07285e34b19666c29387717fd9ec1d6e83",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_ice"
       ],
       "softdep": [],
       "archived_placement_candidates": [
@@ -3027,13 +3124,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "minidump",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "mmi_annotate",
       "placements": [
         "vendor_dlkm"
@@ -3824,13 +3914,6 @@
     },
     {
       "name": "qcom_iommu_debug",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qcom_ipc_logging",
       "placements": [
         "vendor_boot:fragment-0"
       ],
@@ -5007,20 +5090,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "ufs_qcom",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "ufshcd_crypto_qti",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "usb_f_ccid",
       "placements": [
         "vendor_boot:fragment-0",
@@ -5456,7 +5525,6 @@
     "mhi_dev_uci",
     "microdump_collector",
     "mii",
-    "minidump",
     "mmi_annotate",
     "mmi_glink_charger",
     "mmi_info",
@@ -5562,7 +5630,6 @@
     "qcom_hv_haptics",
     "qcom_i2c_pmic",
     "qcom_iommu_debug",
-    "qcom_ipc_logging",
     "qcom_ipcc",
     "qcom_llcc_pmu",
     "qcom_logbuf_boot_log",
@@ -5717,8 +5784,6 @@
     "touchscreen_mmi",
     "tz_log_dlkm",
     "ucsi_qti_glink",
-    "ufs_qcom",
-    "ufshcd_crypto_qti",
     "usb_f_ccid",
     "usb_f_cdev",
     "usb_f_gsi",

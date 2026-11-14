@@ -5,3 +5,4 @@ ccflags-y += -I$(srctree)/drivers/ufs/core -I$(src)/../qcom-clock-core/include -
 ccflags-y += -DCONFIG_SCSI_UFS_CRYPTO_QTI_MODULE=1 -DCONFIG_IPC_LOGGING=1 -DCONFIG_QCOM_MINIDUMP=1
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ice/Module.symvers $(src)/../ufs-phy-canoe/Module.symvers
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-clock-core/Module.symvers
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

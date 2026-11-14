@@ -333,16 +333,24 @@
  	.fixup_dev_quirks       = ufs_qcom_fixup_dev_quirks,
  	.mcq_config_resource	= ufs_qcom_mcq_config_resource,
  	.get_hba_mac		= ufs_qcom_get_hba_mac,
-@@ -6102,7 +6083,7 @@
+@@ -6102,10 +6083,13 @@
  }
  
  static void ufs_qcom_hook_send_command(void *param, struct ufs_hba *hba,
 -				       struct ufshcd_lrb *lrbp)
+-{
+-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
 +				       struct scsi_cmnd *cmd)
- {
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++{
++	struct ufs_qcom_host *host = param;
  	unsigned long flags;
-@@ -6115,23 +6096,23 @@
++
++	if (!host || host->hba != hba)
++		return;
+ 
+ 	if (!host->disable_lpm && host->broken_ahit_wa) {
+ 		spin_lock_irqsave(hba->host->host_lock, flags);
+@@ -6115,23 +6099,23 @@
  		spin_unlock_irqrestore(hba->host->host_lock, flags);
  	}
  
@@ -373,7 +381,7 @@
  						ufshcd_readl(hba,
  							REG_UTP_TRANSFER_REQ_DOOR_BELL),
  						sz);
-@@ -6146,14 +6127,14 @@
+@@ -6146,14 +6130,14 @@
  			struct ufs_hw_queue *hwq = &hba->uhq[idx];
  
  			ufs_qcom_log_str(host, "<,%x,%d,%d,%d\n",
@@ -392,16 +400,26 @@
  						hwq->id,
  						sz);
  		}
-@@ -6161,7 +6142,7 @@
+@@ -6161,11 +6145,14 @@
  }
  
  static void ufs_qcom_hook_compl_command(void *param, struct ufs_hba *hba,
 -				       struct ufshcd_lrb *lrbp)
+-{
+-
+-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
 +				       struct scsi_cmnd *cmd)
- {
++{
++
++	struct ufs_qcom_host *host = param;
+ 	unsigned long flags;
++
++	if (!host || host->hba != hba)
++		return;
  
- 	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-@@ -6176,21 +6157,21 @@
+ 	if (!host->disable_lpm && host->broken_ahit_wa) {
+ 		spin_lock_irqsave(hba->host->host_lock, flags);
+@@ -6176,21 +6163,21 @@
  		spin_unlock_irqrestore(hba->host->host_lock, flags);
  	}
  
@@ -429,7 +447,7 @@
  						ufshcd_readl(hba,
  							REG_UTP_TRANSFER_REQ_DOOR_BELL),
  						sz);
-@@ -6209,14 +6190,14 @@
+@@ -6209,14 +6196,14 @@
  			struct ufs_hw_queue *hwq = &hba->uhq[idx];
  
  			ufs_qcom_log_str(host, ">,%x,%d,%d,%d\n",
@@ -448,7 +466,33 @@
  						hwq->id,
  						sz);
  		}
-@@ -6274,7 +6255,7 @@
+@@ -6227,9 +6214,12 @@
+ 					const struct uic_command *ucmd,
+ 					int str_t)
+ {
+-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	struct ufs_qcom_host *host = param;
+ 	unsigned int a, b, c, cmd;
+ 	char ch;
++
++	if (!host || host->hba != hba)
++		return;
+ 
+ 	if (str_t == UFS_CMD_SEND) {
+ 		a = ucmd->argument1;
+@@ -6263,7 +6253,10 @@
+ static void ufs_qcom_hook_check_int_errors(void *param, struct ufs_hba *hba,
+ 					bool queue_eh_work)
+ {
+-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
++	struct ufs_qcom_host *host = param;
++
++	if (!host || host->hba != hba)
++		return;
+ 
+ 	if (queue_eh_work) {
+ 		ufs_qcom_log_str(host, "_,%x,%x\n",
+@@ -6274,7 +6267,7 @@
  	}
  }
  
@@ -457,15 +501,101 @@
  {
  	sdev->broken_fua = 1;
  }
-@@ -6294,7 +6275,6 @@
- 				ufs_qcom_hook_send_tm_command, NULL);
- 	register_trace_android_vh_ufs_check_int_errors(
- 				ufs_qcom_hook_check_int_errors, NULL);
+@@ -6282,19 +6275,52 @@
+ /*
+  * Refer: common/include/trace/hooks/ufshcd.h for available hooks
+  */
+-static void ufs_qcom_register_hooks(void)
+-{
+-	register_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command,
+-						NULL);
+-	register_trace_android_vh_ufs_compl_command(
+-				ufs_qcom_hook_compl_command, NULL);
+-	register_trace_android_vh_ufs_send_uic_command(
+-				ufs_qcom_hook_send_uic_command, NULL);
+-	register_trace_android_vh_ufs_send_tm_command(
+-				ufs_qcom_hook_send_tm_command, NULL);
+-	register_trace_android_vh_ufs_check_int_errors(
+-				ufs_qcom_hook_check_int_errors, NULL);
 -	register_trace_android_vh_ufs_update_sdev(ufs_qcom_update_sdev, NULL);
++static int ufs_qcom_register_hooks(struct ufs_qcom_host *host)
++{
++	int ret;
++
++	ret = register_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
++	if (ret)
++		goto fail_0;
++	ret = register_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
++	if (ret)
++		goto fail_1;
++	ret = register_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
++	if (ret)
++		goto fail_2;
++	ret = register_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
++	if (ret)
++		goto fail_3;
++	ret = register_trace_android_vh_ufs_check_int_errors(ufs_qcom_hook_check_int_errors, host);
++	if (ret)
++		goto fail_4;
++	host->hooks_registered = true;
++	return 0;
++
++fail_4:
++	unregister_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
++fail_3:
++	unregister_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
++fail_2:
++	unregister_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
++fail_1:
++	unregister_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
++fail_0:
++	tracepoint_synchronize_unregister();
++	return ret;
++}
++
++static void ufs_qcom_unregister_hooks(struct ufs_qcom_host *host)
++{
++	if (!host->hooks_registered)
++		return;
++	host->hooks_registered = false;
++	unregister_trace_android_vh_ufs_check_int_errors(ufs_qcom_hook_check_int_errors, host);
++	unregister_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
++	unregister_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
++	unregister_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
++	unregister_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
++	tracepoint_synchronize_unregister();
  }
  
  #ifdef CONFIG_ARM_QCOM_CPUFREQ_HW
-@@ -6630,7 +6610,7 @@
+@@ -6380,6 +6406,8 @@
+  *
+  * Return: zero for success and non-zero for failure.
+  */
++static void ufs_qcom_remove(struct platform_device *pdev);
++
+ static int ufs_qcom_probe(struct platform_device *pdev)
+ {
+ 	int err = 0;
+@@ -6417,7 +6445,9 @@
+ 	if (err)
+ 		return dev_err_probe(dev, err, "ufshcd_pltfrm_init() failed\n");
+ 
+-	ufs_qcom_register_hooks();
++	err = ufs_qcom_register_hooks(ufshcd_get_variant(platform_get_drvdata(pdev)));
++	if (err)
++		ufs_qcom_remove(pdev);
+ 	return err;
+ }
+ 
+@@ -6442,6 +6472,7 @@
+ 
+ 	hba =  platform_get_drvdata(pdev);
+ 	host = ufshcd_get_variant(hba);
++	ufs_qcom_unregister_hooks(host);
+ 
+ 	if (host->ufs_qos) {
+ 		r = host->ufs_qos;
+@@ -6630,7 +6661,7 @@
  
  static struct platform_driver ufs_qcom_pltform = {
  	.probe	= ufs_qcom_probe,
@@ -503,15 +633,16 @@
  struct ufs_qcom_host {
  	/*
  	 * Set this capability if host controller supports shared ICE.
-@@ -505,6 +516,7 @@
+@@ -505,6 +516,8 @@
  
  	struct phy *generic_phy;
  	struct ufs_hba *hba;
 +	struct avr_ufs_res_info res[RES_MAX];
++	bool hooks_registered;
  	struct ufs_qcom_bus_vote bus_vote;
  	struct ufs_pa_layer_attr dev_req_params;
  	struct clk *rx_l0_sync_clk;
-@@ -617,6 +629,14 @@
+@@ -617,6 +630,14 @@
  	struct moto_hid_jedec_feature hid_jedec;
  };
  
@@ -526,7 +657,7 @@
  static inline u32
  ufs_qcom_get_debug_reg_offset(struct ufs_qcom_host *host, u32 reg)
  {
-@@ -641,31 +661,7 @@
+@@ -641,31 +662,7 @@
  	return !!(host->caps & UFS_QCOM_CAP_SHARED_ICE);
  }
  
@@ -681,7 +812,7 @@
  static const struct attribute_group ufs_sysfs_hid_group = {
 --- a/ports/ufs-host/Makefile
 +++ b/ports/ufs-host/Makefile
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,8 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +obj-m += ufs-qcom.o ufshcd-crypto-qti.o
 +ufs-qcom-y := ufs-qcom-main.o vendor/ufs_hid_jedec.o
@@ -689,3 +820,4 @@
 +ccflags-y += -DCONFIG_SCSI_UFS_CRYPTO_QTI_MODULE=1 -DCONFIG_IPC_LOGGING=1 -DCONFIG_QCOM_MINIDUMP=1
 +KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ice/Module.symvers $(src)/../ufs-phy-canoe/Module.symvers
 +KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-clock-core/Module.symvers
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

@@ -6085,8 +6085,11 @@ static int ufs_qcom_init_sysfs(struct ufs_hba *hba)
 static void ufs_qcom_hook_send_command(void *param, struct ufs_hba *hba,
 				       struct scsi_cmnd *cmd)
 {
-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+	struct ufs_qcom_host *host = param;
 	unsigned long flags;
+
+	if (!host || host->hba != hba)
+		return;
 
 	if (!host->disable_lpm && host->broken_ahit_wa) {
 		spin_lock_irqsave(hba->host->host_lock, flags);
@@ -6145,8 +6148,11 @@ static void ufs_qcom_hook_compl_command(void *param, struct ufs_hba *hba,
 				       struct scsi_cmnd *cmd)
 {
 
-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+	struct ufs_qcom_host *host = param;
 	unsigned long flags;
+
+	if (!host || host->hba != hba)
+		return;
 
 	if (!host->disable_lpm && host->broken_ahit_wa) {
 		spin_lock_irqsave(hba->host->host_lock, flags);
@@ -6208,9 +6214,12 @@ static void ufs_qcom_hook_send_uic_command(void *param, struct ufs_hba *hba,
 					const struct uic_command *ucmd,
 					int str_t)
 {
-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+	struct ufs_qcom_host *host = param;
 	unsigned int a, b, c, cmd;
 	char ch;
+
+	if (!host || host->hba != hba)
+		return;
 
 	if (str_t == UFS_CMD_SEND) {
 		a = ucmd->argument1;
@@ -6244,7 +6253,10 @@ static void ufs_qcom_hook_send_tm_command(void *param, struct ufs_hba *hba,
 static void ufs_qcom_hook_check_int_errors(void *param, struct ufs_hba *hba,
 					bool queue_eh_work)
 {
-	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
+	struct ufs_qcom_host *host = param;
+
+	if (!host || host->hba != hba)
+		return;
 
 	if (queue_eh_work) {
 		ufs_qcom_log_str(host, "_,%x,%x\n",
@@ -6263,18 +6275,52 @@ static void ufs_qcom_config_scsi_dev(struct scsi_device *sdev)
 /*
  * Refer: common/include/trace/hooks/ufshcd.h for available hooks
  */
-static void ufs_qcom_register_hooks(void)
+static int ufs_qcom_register_hooks(struct ufs_qcom_host *host)
 {
-	register_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command,
-						NULL);
-	register_trace_android_vh_ufs_compl_command(
-				ufs_qcom_hook_compl_command, NULL);
-	register_trace_android_vh_ufs_send_uic_command(
-				ufs_qcom_hook_send_uic_command, NULL);
-	register_trace_android_vh_ufs_send_tm_command(
-				ufs_qcom_hook_send_tm_command, NULL);
-	register_trace_android_vh_ufs_check_int_errors(
-				ufs_qcom_hook_check_int_errors, NULL);
+	int ret;
+
+	ret = register_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
+	if (ret)
+		goto fail_0;
+	ret = register_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
+	if (ret)
+		goto fail_1;
+	ret = register_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
+	if (ret)
+		goto fail_2;
+	ret = register_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
+	if (ret)
+		goto fail_3;
+	ret = register_trace_android_vh_ufs_check_int_errors(ufs_qcom_hook_check_int_errors, host);
+	if (ret)
+		goto fail_4;
+	host->hooks_registered = true;
+	return 0;
+
+fail_4:
+	unregister_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
+fail_3:
+	unregister_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
+fail_2:
+	unregister_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
+fail_1:
+	unregister_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
+fail_0:
+	tracepoint_synchronize_unregister();
+	return ret;
+}
+
+static void ufs_qcom_unregister_hooks(struct ufs_qcom_host *host)
+{
+	if (!host->hooks_registered)
+		return;
+	host->hooks_registered = false;
+	unregister_trace_android_vh_ufs_check_int_errors(ufs_qcom_hook_check_int_errors, host);
+	unregister_trace_android_vh_ufs_send_tm_command(ufs_qcom_hook_send_tm_command, host);
+	unregister_trace_android_vh_ufs_send_uic_command(ufs_qcom_hook_send_uic_command, host);
+	unregister_trace_android_vh_ufs_compl_command(ufs_qcom_hook_compl_command, host);
+	unregister_trace_android_vh_ufs_send_command(ufs_qcom_hook_send_command, host);
+	tracepoint_synchronize_unregister();
 }
 
 #ifdef CONFIG_ARM_QCOM_CPUFREQ_HW
@@ -6360,6 +6406,8 @@ ret:
  *
  * Return: zero for success and non-zero for failure.
  */
+static void ufs_qcom_remove(struct platform_device *pdev);
+
 static int ufs_qcom_probe(struct platform_device *pdev)
 {
 	int err = 0;
@@ -6397,7 +6445,9 @@ static int ufs_qcom_probe(struct platform_device *pdev)
 	if (err)
 		return dev_err_probe(dev, err, "ufshcd_pltfrm_init() failed\n");
 
-	ufs_qcom_register_hooks();
+	err = ufs_qcom_register_hooks(ufshcd_get_variant(platform_get_drvdata(pdev)));
+	if (err)
+		ufs_qcom_remove(pdev);
 	return err;
 }
 
@@ -6422,6 +6472,7 @@ static void ufs_qcom_remove(struct platform_device *pdev)
 
 	hba =  platform_get_drvdata(pdev);
 	host = ufshcd_get_variant(hba);
+	ufs_qcom_unregister_hooks(host);
 
 	if (host->ufs_qos) {
 		r = host->ufs_qos;

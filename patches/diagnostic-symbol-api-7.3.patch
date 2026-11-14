@@ -1,0 +1,42 @@
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index d5dd54c53..8afbb998a 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -77,6 +77,10 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+ /* Lookup the address for a symbol. Returns 0 if not found. */
+ unsigned long kallsyms_lookup_name(const char *name);
+ 
++/* Native backing for Qualcomm diagnostic clients on this custom kernel. */
++bool debug_symbol_available(void);
++unsigned long debug_symbol_lookup_name(const char *name);
++
+ extern int kallsyms_lookup_size_offset(unsigned long addr,
+ 				  unsigned long *symbolsize,
+ 				  unsigned long *offset);
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index aec2f0685..a9dbd8992 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -240,6 +240,22 @@ unsigned long kallsyms_lookup_name(const char *name)
+ 	return module_kallsyms_lookup_name(name);
+ }
+ 
++/* Use the running kernel's real symbol table, including native module lookup,
++ * rather than re-decoding a vendor-version-specific reserved-memory format. */
++bool debug_symbol_available(void)
++{
++	return kallsyms_num_syms != 0;
++}
++EXPORT_SYMBOL_GPL(debug_symbol_available);
++
++unsigned long debug_symbol_lookup_name(const char *name)
++{
++	if (!name || !*name)
++		return 0;
++	return kallsyms_lookup_name(name);
++}
++EXPORT_SYMBOL_GPL(debug_symbol_lookup_name);
++
+ /*
+  * Iterate over all symbols in vmlinux.  For symbols from modules use
+  * module_kallsyms_on_each_symbol instead.

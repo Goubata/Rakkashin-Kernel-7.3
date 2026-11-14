@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "07caf754565c089559662685517b296fb1401c98",
-  "patch_count": 12,
+  "target_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "patch_count": 13,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -137,6 +137,10 @@
       "sha256": "2093579f458c940fe20d9f8321f0362fde385d59f4c43a2806c2e5348a2c3f8c"
     },
     {
+      "file": "include/linux/kallsyms.h",
+      "sha256": "9eafc31ec09aa84fdb55defe05d16f63b89d9b30ef807f68d425c4a981880ce9"
+    },
+    {
       "file": "include/linux/launch_boost.h",
       "sha256": "d97cc2b6d35410eb35f3e84a47dbbfaa37b00ab83a609814e1cea34629b39653"
     },
@@ -185,6 +189,10 @@
       "sha256": "c1c0528be895193faa98752af8845e20f31ee5049a5c8c09442164f2bd95d99d"
     },
     {
+      "file": "kernel/kallsyms.c",
+      "sha256": "a512302216bf11971913cac595cd2e40c447ee6c32e4c865484770f4182e0527"
+    },
+    {
       "file": "kernel/launch_boost.c",
       "sha256": "ffd9b1e94cdb448b1ff6b7252111e5394a1a9022e0dc5c7d9839b352d62e4c69"
     },
@@ -230,5 +238,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "9f247ecedef3c850ba949d4ac456f55a12c72dcecc51b9c557f175a38ec9f508"
+  "checkpoint_sha256": "729d4f99b7a3d1ec048fc39e46bad2dfdc16d77f524dbe4b83aa591e2ceacaaa"
 }

@@ -1,0 +1,120 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-minidump/msm_minidump.c",
+      "source": "drivers/soc/qcom/msm_minidump.c",
+      "original_sha256": "d1ced6248477b25ee1d1638b0cd7913d94985ab6be80fc04b56f313e148375e9",
+      "sha256": "626d0b3825427d084ca3c68ecddb47e43ce4a32e66e98651d938223327f5b4f9"
+    },
+    {
+      "file": "ports/qcom-minidump/minidump_log.c",
+      "source": "drivers/soc/qcom/minidump_log.c",
+      "original_sha256": "60a30b94f19c0b21cfc9a678545f477b52fce772fbb9344659727faf33db6bf8",
+      "sha256": "a431a0faa149ed4b216c483d4c56538e0b27225c8a47e82a6839df7c215c7b4e"
+    },
+    {
+      "file": "ports/qcom-minidump/minidump_smem.c",
+      "source": "drivers/soc/qcom/minidump_smem.c",
+      "original_sha256": "1e9ed7f9076b37c782c77c08fb193c62a3b71a15c42af1c031cd6923d86e6879",
+      "sha256": "71ab8c3663f737a653e9bd84474440a07f727912c654f661d26592e9ef1fd43d"
+    },
+    {
+      "file": "ports/qcom-minidump/minidump_memory.c",
+      "source": "drivers/soc/qcom/minidump_memory.c",
+      "original_sha256": "3658d8f78264330e5b0cb711ca6311a44cb06d06aa64ffe9bff58c2a478285b7",
+      "sha256": "c8d1879144020a5eedeca29ede5884d943df80e14058f303a58071396127920f"
+    },
+    {
+      "file": "ports/qcom-minidump/minidump_private.h",
+      "source": "drivers/soc/qcom/minidump_private.h",
+      "original_sha256": "9050fe35a76cdf706dd4c2d882fe93c937b8e7a61cc75c47f1135ef02e9dd169",
+      "sha256": "9050fe35a76cdf706dd4c2d882fe93c937b8e7a61cc75c47f1135ef02e9dd169"
+    },
+    {
+      "file": "ports/qcom-minidump/minidump_memory.h",
+      "source": "drivers/soc/qcom/minidump_memory.h",
+      "original_sha256": "9fe51425b9e2aff6001f47235fdc10559b3b234723d7af1dbbcf3b844d091bba",
+      "sha256": "9fe51425b9e2aff6001f47235fdc10559b3b234723d7af1dbbcf3b844d091bba"
+    },
+    {
+      "file": "ports/qcom-minidump/debug_symbol.h",
+      "source": "drivers/soc/qcom/debug_symbol.h",
+      "original_sha256": "3f4a30dabf41282973dc909163b1ea16af977b461ed982a14fd4c038f528eb5c",
+      "sha256": "3f4a30dabf41282973dc909163b1ea16af977b461ed982a14fd4c038f528eb5c"
+    },
+    {
+      "file": "ports/qcom-minidump/elf.h",
+      "source": "drivers/soc/qcom/elf.h",
+      "original_sha256": "f28781d54bcc84b7e74e6df3e853a4abec70876606f6ca54e6b9b61f53e4426b",
+      "sha256": "f28781d54bcc84b7e74e6df3e853a4abec70876606f6ca54e6b9b61f53e4426b"
+    },
+    {
+      "file": "ports/qcom-minidump/include/soc/qcom/minidump.h",
+      "source": "include/soc/qcom/minidump.h",
+      "original_sha256": "cf4b98adea59a85ba37940a0e197e675b48f5b3f41742782cfaa5db881c081cf",
+      "sha256": "cf4b98adea59a85ba37940a0e197e675b48f5b3f41742782cfaa5db881c081cf"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/ipc_logging.c",
+      "source": "kernel/trace/ipc_logging.c",
+      "original_sha256": "e0750d851743b1d897e28795a35c6bff7e324afa28634e016705e9a869bbe31c",
+      "sha256": "92d8093b0a4089fdff2b487f10a8efbea0ae590201503627b60f9b0aacad586e"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/ipc_logging_debug.c",
+      "source": "kernel/trace/ipc_logging_debug.c",
+      "original_sha256": "bff2df6f14deb2c10e37ebf9a6e03e2a16f0037f961a0866d133954660748f38",
+      "sha256": "bff2df6f14deb2c10e37ebf9a6e03e2a16f0037f961a0866d133954660748f38"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/ipc_logging_private.h",
+      "source": "kernel/trace/ipc_logging_private.h",
+      "original_sha256": "a4491c865f52d70a1a59f0916dc1e2072dba2dfb0757e112a23b81d030589c23",
+      "sha256": "536e32e4116d7df5f988a3e5c5363a69a8fe6b7be1c36914b908775fdb56f7ac"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/include/soc/qcom/minidump.h",
+      "source": "include/soc/qcom/minidump.h",
+      "original_sha256": "cf4b98adea59a85ba37940a0e197e675b48f5b3f41742782cfaa5db881c081cf",
+      "sha256": "cf4b98adea59a85ba37940a0e197e675b48f5b3f41742782cfaa5db881c081cf"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/include/linux/ipc_logging.h",
+      "source": "include/linux/ipc_logging.h",
+      "original_sha256": "bd844816a83ec14c872fa3cfe74f4f1c906ea81a27f255b20c6e3bf36d76fd72",
+      "sha256": "bd844816a83ec14c872fa3cfe74f4f1c906ea81a27f255b20c6e3bf36d76fd72"
+    },
+    {
+      "file": "ports/qcom-minidump/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "00f31b61abddea48cd8a92d26c9d7abfe63f658f81d7d35046eead2f6281c4d2"
+    },
+    {
+      "file": "ports/qcom-ipc-logging/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "6828b964ed56f7d4332469d0a1b71aa210d4b3dd9c5751cb3894d8af7d58650e"
+    }
+  ],
+  "patch_sha256": "ef0ae68372d97699c0411202de1c37b1a546ab44c3a7b622276326464a102f91",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "reviewed_changes": [
+    "Actual native symbol lookup and native DMA buffer iterator with correct references",
+    "Keep target panic diagnostics; use native folio flags, CMA API and EEVDF counters",
+    "Bounded names and nonzero regions; cancel pending registrations and reject duplicates",
+    "Publish SMEM readiness inside the pending-transfer critical section",
+    "Track IPC regions, serialize 16-slot quota, unregister before freeing context/pages",
+    "Retain memory with an explicit error if the backend refuses unregistration",
+    "Saved AVR disables private ftrace capture; native oops output stays active"
+  ],
+  "known_open_items": [
+    "Physical SMEM/bootloader table and firmware dump acceptance",
+    "Active-backend registration/removal and failed-probe recovery tests",
+    "Panic path scheduler and memory metadata runtime review",
+    "IPC concurrent same-name context creation and reader teardown review",
+    "No IPC module unload: original module has no module_exit",
+    "Memory retained after failed unregister has no deferred reclamation yet"
+  ]
+}

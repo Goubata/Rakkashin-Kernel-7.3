@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPUを含む71モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホストを含む77モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -146,10 +146,27 @@ Motorolaの既存ICEモジュールは、鍵登録0x05（6引数）・消去0x06
 
 固定7.3基盤から11パッチ・54ファイルの再適用結果が現在のnativeコミットと完全一致することも確認しました。既にレビュー済みの重なったパッチを誤って再適用する問題を修正し、ソースの正確なコミット・クリーン状態・全パッチのハッシュを照合しています。
 
-## UFSコアの実I/O試験とホスト移植の続き
+## Stage15: UFSコアの実I/O試験とホスト移植
 
 7.3標準PCI UFSドライバをQEMUの実UFSエミュレータへ接続し、単一キューとMCQ両方で、異なるパターンを2回ずつ書き込み・読み戻しました。各構成で書き込み8 MiB・読み込み8 MiBが一致し、QEMUのprivate backing file先頭4 MiBも最終パターンと照合しました。新規の通常ファイルのみを仮想ディスクへ渡し、携帯のブロックデバイスは渡していません。各構成の3 KUnitでは、コントローラ状態・実IRQ記録・実キューモードも確認しています。
 
 Motorolaホストは7.3のHID/device descriptor、電力交渉、scsi_cmnd通知、CCFフラグ、MSI/thermal/removal、暗号化profileへ接続し、Cコンパイルを通過しました。最終リンクは本物のIPC logging/minidumpの4 symbols不足で失敗しており、成果物へは含めません。空の成功関数には置き換えていません。`reports/ufs-stage15-validation.json` と `ports/ufs-host/README.md` を参照。
 
 この結果はQualcomm PHY training、実機UFS/ICE、暗号化解除を証明しません。新Imageの保存先はStage15です。実機起動・常用・電力/性能比較は未実施で、全体目標は未完了です。
+
+## Stage16: UFSホストのリンクと診断依存
+
+Motorola固定ソースからSMEM minidumpとIPC loggingを移植し、実際の診断シンボル検索・DMA buffer iterator・CMA・folio・EEVDFインターフェースに接続しました。以前不足していた4 exportsを実コードで供給し、`ufs-qcom.ko` と `ufshcd-crypto-qti.ko` の最終リンクを通過しました。Stage16には77モジュールを保存し、4,168インポートCRCが一致します。
+
+初期化前minidumpの重複名・登録取消・上限・SMEMへの引渡し競合を修正しました。SMEM表のELFヘッダ用1枠を予約し、IPCでは16枠の競合管理と登録解除を追加しました。解除を拒否された場合はダンプ対象メモリを解放せずエラーを記録します（その保持メモリの再回収は未実装）。UFSのtrace callbackはhost単位で登録し、失敗時の巻き戻しと解除完了待ちを実装しました。
+
+新Imageの4コアQEMUで、実シンボル検索5項目、初期化前登録・IPCログの往復/再生成8項目が通過し、Qualcommホスト/暗号モジュールのロード・アンロードも確認しました。実UFSエミュレータのSQ/MCQ各3項目と各8 MiB書込み/8 MiB読戻しも通過しました。Qualcommの実機probe、SMEMバックエンド実稼働、ICE、暗号化解除、電源遷移の証明ではありません。
+
+```sh
+python scripts/build_storage_deps.py --ufs-host --diagnostics-tests
+python scripts/run_qemu.py --test debug-symbol --cpus 4 --log reports/debug-symbol.log
+python scripts/run_qemu.py --test storage-host --cpus 4 --log reports/storage-host.log
+python scripts/snapshot_boot_core.py --name android73-ufs-host-stage16 --gpu-driver --rakkashin --ufs-host
+```
+
+全体の実機完了条件は未達です。パーティションは変更していません。`reports/ufs-stage16-validation.json` に範囲と未確認事項を記録します。

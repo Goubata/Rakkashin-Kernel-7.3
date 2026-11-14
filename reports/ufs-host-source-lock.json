@@ -5,13 +5,13 @@
       "file": "ports/ufs-host/ufs-qcom-main.c",
       "source": "drivers/ufs/host/ufs-qcom.c",
       "original_sha256": "68e1d5af274a4634e994948edf2b8db7132ea901b0e4e6485c8844320eae5ead",
-      "sha256": "2a4527cb962bd25ccbd78162862af0060414833638050aff757edba78837390a"
+      "sha256": "501cb2fc325dc3f53ccf9c94dc0b1fd88f5b313ada41f579020f1c85a9fc88dc"
     },
     {
       "file": "ports/ufs-host/ufs-qcom.h",
       "source": "drivers/ufs/host/ufs-qcom.h",
       "original_sha256": "382c036899e80cc71ffb4e0dc83f197257aa1314bfdbf8e45eb96f56bf397759",
-      "sha256": "2564698269569845880773ca94e32dcaa93128e9eb19168e0a558034161b869a"
+      "sha256": "06cad21ff4b0892201f93e9ef56fb34c2ec7fda1438fcb4225dfb7b0d0b7e9d7"
     },
     {
       "file": "ports/ufs-host/ufs-qcom-trace.h",
@@ -59,11 +59,11 @@
       "file": "ports/ufs-host/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "51b8f7ce02e66cacbd5601b3ffbc2cc4267b912500a77042be1c63cfde16e8c3"
+      "sha256": "9fd7e14f88508475e2b60d7bc6061dedd85d0c7c6e763c1d104509446acc6dea"
     }
   ],
-  "patch_sha256": "0af535d2d6a513f356df58ad565c4658bed84c99b28802283e7b5519bc4ee4c0",
-  "scope": "source and reviewed patch replay only; final module link and physical acceptance pending",
+  "patch_sha256": "9bee7bd51c8f162d6bc0a0cbe847080a5ade5b03aca54b3609a691cd90eacfb4",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "reviewed_changes": [
     "Explicit vendor ICE and ported CCF interfaces",
     "Private variant MCQ resource metadata instead of modifying core resource layout",
@@ -74,13 +74,14 @@
     "Map the old 5ms VCC-off delay to the actual 7.3 delay field",
     "Connect real QTI profile to CUSTOM_CRYPTO_PROFILE, propagate init failure",
     "Move raw key routine into profile module; HWKM rejects raw programming",
-    "Use target MSI, thermal, removal, DME and tracing APIs"
+    "Use target MSI, thermal, removal, DME and tracing APIs",
+    "Per-host hook ownership, checked registration rollback and synchronized teardown",
+    "Link actual ported IPC logging and minidump providers"
   ],
   "known_open_items": [
-    "Actual IPC/minidump providers before final link",
     "MCQ mapped resource bounds and managed inserted-resource cleanup",
     "ESI affinity bounds and CPU hotplug lifetime",
-    "Host hook/notifier/sysfs/minidump registration lifetime",
+    "Broader host notifier/sysfs/minidump registration lifetime",
     "Hardware training, reset, cryptographic profile compatibility and real I/O"
   ]
 }

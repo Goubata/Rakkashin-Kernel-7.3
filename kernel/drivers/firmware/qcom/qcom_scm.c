@@ -38,6 +38,7 @@
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 
 #include "qcom_pas.h"
+#include "qcom_ice_v2.h"
 #include "qcom_pas_retry.h"
 #include "qcom_scm.h"
 #include "qcom_tzmem.h"
@@ -1663,6 +1664,93 @@ int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,
 	return ret;
 }
 EXPORT_SYMBOL_GPL(qcom_scm_ice_set_key);
+
+/* The vendor ICE V2 commands must not be silently mapped to legacy 0x03/04. */
+static int qcom_scm_ice_v2_call(const struct qcom_scm_desc *desc)
+{
+	enum qcom_scm_convention convention = __get_convention();
+
+	might_sleep();
+	if (convention != SMC_CONVENTION_ARM_32 &&
+	    convention != SMC_CONVENTION_ARM_64)
+		return -EOPNOTSUPP;
+	return __scm_smc_call_noretry(__scm->dev, desc, convention, NULL);
+}
+
+bool qcom_scm_ice_v2_available(void)
+{
+	if (!__scm)
+		return false;
+	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x05) &&
+	       __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x06) &&
+	       __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x07);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ice_v2_available);
+
+int qcom_scm_ice_set_key_v2(u32 index, const u8 *key, size_t key_size,
+			  u32 cipher, u32 data_unit_size, u32 ce)
+{
+	struct qcom_scm_desc desc;
+	void *buffer __free(qcom_tzmem) = NULL;
+	int ret;
+
+	if (!key || !key_size || key_size > 128)
+		return -EINVAL;
+	if (!__scm || !__scm->mempool)
+		return -EPROBE_DEFER;
+	buffer = qcom_tzmem_alloc(__scm->mempool, key_size, GFP_KERNEL);
+	if (!buffer)
+		return -ENOMEM;
+	memcpy(buffer, key, key_size);
+	desc = qcom_ice_v2_set_desc(index, qcom_tzmem_to_phys(buffer), key_size,
+				    cipher, data_unit_size, ce);
+	ret = qcom_scm_ice_v2_call(&desc);
+	memzero_explicit(buffer, key_size);
+	return ret;
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ice_set_key_v2);
+
+int qcom_scm_ice_clear_key_v2(u32 index, u32 ce)
+{
+	struct qcom_scm_desc desc = qcom_ice_v2_clear_desc(index, ce);
+
+	if (!__scm)
+		return -EPROBE_DEFER;
+	return qcom_scm_ice_v2_call(&desc);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ice_clear_key_v2);
+
+int qcom_scm_ice_derive_secret_v2(const u8 *key, size_t key_size,
+			       u8 *secret, size_t secret_size)
+{
+	struct qcom_scm_desc desc;
+	void *keybuf __free(qcom_tzmem) = NULL;
+	void *outbuf __free(qcom_tzmem) = NULL;
+	int ret;
+
+	if (!key || !key_size || key_size > 128 || !secret || secret_size != 32)
+		return -EINVAL;
+	memset(secret, 0, secret_size);
+	if (!__scm || !__scm->mempool)
+		return -EPROBE_DEFER;
+	keybuf = qcom_tzmem_alloc(__scm->mempool, key_size, GFP_KERNEL);
+	if (!keybuf)
+		return -ENOMEM;
+	outbuf = qcom_tzmem_alloc(__scm->mempool, secret_size, GFP_KERNEL);
+	if (!outbuf)
+		return -ENOMEM;
+	memcpy(keybuf, key, key_size);
+	memset(outbuf, 0, secret_size);
+	desc = qcom_ice_v2_derive_desc(qcom_tzmem_to_phys(keybuf), key_size,
+				       qcom_tzmem_to_phys(outbuf), secret_size);
+	ret = qcom_scm_ice_v2_call(&desc);
+	if (!ret)
+		memcpy(secret, outbuf, secret_size);
+	memzero_explicit(keybuf, key_size);
+	memzero_explicit(outbuf, secret_size);
+	return ret;
+}
+EXPORT_SYMBOL_GPL(qcom_scm_ice_derive_secret_v2);
 
 bool qcom_scm_has_wrapped_key_support(void)
 {

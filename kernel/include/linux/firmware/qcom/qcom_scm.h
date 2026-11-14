@@ -174,6 +174,13 @@ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
 			u32 mode);
 int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size);
 
+/* Motorola V2 ICE ABI; key buffers are virtual and marshalled via TZMEM. */
+bool qcom_scm_ice_v2_available(void);
+int qcom_scm_ice_set_key_v2(u32 index, const u8 *key, size_t key_size,
+			  u32 cipher, u32 data_unit_size, u32 ce);
+int qcom_scm_ice_clear_key_v2(u32 index, u32 ce);
+int qcom_scm_ice_derive_secret_v2(const u8 *key, size_t key_size,
+			       u8 *secret, size_t secret_size);
 bool qcom_scm_ice_available(void);
 int qcom_scm_ice_invalidate_key(u32 index);
 int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,

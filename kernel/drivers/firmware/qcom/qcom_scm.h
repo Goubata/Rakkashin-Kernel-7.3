@@ -95,6 +95,10 @@ int scm_legacy_call_atomic(struct device *dev, const struct qcom_scm_desc *desc,
 int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
 		    struct qcom_scm_res *res);
 
+int __scm_smc_call_noretry(struct device *dev, const struct qcom_scm_desc *desc,
+			 enum qcom_scm_convention convention,
+			 struct qcom_scm_res *res);
+
 struct qcom_tzmem_pool *qcom_scm_get_tzmem_pool(void);
 int qcom_scm_shm_bridge_enable(struct device *scm_dev);
 

@@ -22,6 +22,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--ufs-tests", action="store_true")
     group.add_argument("--ice-tests", action="store_true")
     group.add_argument("--storage-phy-tests", action="store_true")
     group.add_argument("--rm-lifetime-tests", action="store_true")
@@ -39,7 +40,9 @@ def main():
     group.add_argument("--oplus-tests", action="store_true")
     group.add_argument("--modules-tests", action="store_true")
     group.add_argument("--iommu-tests", action="store_true")
+    parser.add_argument("--ufs-mcq",action="store_true")
     args=parser.parse_args()
+    if args.ufs_mcq and not args.ufs_tests:parser.error("--ufs-mcq requires --ufs-tests")
     data=b'';ino=1
     def add(name,mode,body=b'',major=0,minor=0):
         nonlocal data,ino
@@ -185,6 +188,21 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.ufs_tests:
+        for source in [ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests/ufs/avr-ufs-test.ko']:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+        add('bin/ufs-io-test',stat.S_IFREG|0o755,(ROOT/'tests/ufs/ufs-io-test').read_bytes())
+        commands=[
+            'tries=0; while test ! -e /sys/block/sda/dev; do tries=$((tries+1)); if test "$tries" -gt 100; then echo AVR_UFS_ENUM_FAIL; /bin/busybox poweroff -f; fi; /bin/busybox sleep 0.1; done',
+            '/bin/busybox cat /sys/block/sda/device/vendor /sys/block/sda/device/model',
+            'devno=$(/bin/busybox cat /sys/block/sda/dev)',
+            '/bin/busybox mknod /dev/avr-ufs b ${devno%:*} ${devno#*:} || { echo AVR_UFS_NODE_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/ufs-io-test || { echo AVR_UFS_IO_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox insmod /modules/kunit.ko enable=1 || { echo AVR_UFS_KUNIT_LOAD_FAIL; /bin/busybox poweroff -f; }',
+            f'/bin/busybox insmod /modules/avr-ufs-test.ko expected_mcq={int(args.ufs_mcq)} || {{ echo AVR_UFS_TEST_LOAD_FAIL; /bin/busybox poweroff -f; }}',
+            '/bin/busybox rmmod avr_ufs_test || { echo AVR_UFS_TEST_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            'echo AVR_UFS_TESTS_PASS']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.ice_tests:
         modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
         modules += firmware_modules()
@@ -272,7 +290,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

@@ -28,3 +28,5 @@ modules.order
 /ports/rakkashin/ntsync-selftest-original-O2
 /tests/rakkashin/ntsync-selftest.generated.c
 /tests/rakkashin/adios-io-test
+
+/tests/ufs/ufs-io-test

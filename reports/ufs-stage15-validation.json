@@ -1,0 +1,50 @@
+{
+  "scope": "7.3 UFS core I/O against QEMU PCI UFS with a new private regular backing file; vendor Qualcomm host source port is not yet finally linked",
+  "stage": "android73-ufs-core-stage15",
+  "source_commit": "07caf754565c089559662685517b296fb1401c98",
+  "image_sha256": "bef4d9d933dba51faeec9cee4850ce7ed13ba9edf5e475f0b7a83071ae50287d",
+  "module_count": 73,
+  "imports_checked": 3727,
+  "core_virtual_io_passed": true,
+  "runs": {
+    "sq": {
+      "kunit_cases": 3,
+      "rounds": 2,
+      "bytes_written": 8388608,
+      "bytes_read": 8388608,
+      "host_final_pattern_bytes_verified": 4194304,
+      "mcq_enabled": false,
+      "metadata": "reports/qemu-ufs-sq-stage15.json"
+    },
+    "mcq": {
+      "kunit_cases": 3,
+      "rounds": 2,
+      "bytes_written": 8388608,
+      "bytes_read": 8388608,
+      "host_final_pattern_bytes_verified": 4194304,
+      "mcq_enabled": true,
+      "metadata": "reports/qemu-ufs-mcq-stage15.json"
+    }
+  },
+  "vendor_host_c_compilation_passed": true,
+  "vendor_host_final_link_passed": false,
+  "remaining_symbols": [
+    "ipc_log_context_create",
+    "ipc_log_string",
+    "msm_minidump_add_region",
+    "msm_minidump_enabled"
+  ],
+  "physical_qualcomm_probe_verified": false,
+  "real_wrapped_key_operations_verified": false,
+  "phone_storage_accessed": false,
+  "sha256": {
+    "reports/ufs-host-source-lock.json": "0ed0318fd4957adf35b0e5902de8185fd92b9b336290640747358ee5f55ccf66",
+    "reports/ufs-host-build.log": "433c558cd2970ce7bd366bdd28fda9a5ea89086c0994461e1bb9131d8cebc331",
+    "reports/core-patch-replay.json": "1fbafd9bd8d11d8153fddcc38888e378aa88fbdc3cb9e81a59a555c6fb4c8c89",
+    "reports/module-crc-stage15.json": "5da97b393bef0e788d20a6e78d8b64682ee3340b5c54f67d98d7062dd8ca42f9",
+    "reports/qemu-ufs-sq-stage15.log": "a8c723234579d7ded8756ff81146a3040781d84b2b8b2a5f5902de4b77a91fec",
+    "reports/qemu-ufs-sq-stage15.json": "30ecd4fb9c933409ce6c1d7725956ab30efca4b8e8270c894bae18877384bcd1",
+    "reports/qemu-ufs-mcq-stage15.log": "8a619e44cf41c71a867a7ecfabad49f5a063d7912a6e2deecce39f04235d6ff0",
+    "reports/qemu-ufs-mcq-stage15.json": "4985c53eb713f2c478620041856ecfd11b389ddee9ab5b4c72b01508ec24ad8d"
+  }
+}

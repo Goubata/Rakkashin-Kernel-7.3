@@ -1,7 +1,7 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-ice-stage14",
-  "source_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
+  "stage": "android73-ufs-core-stage15",
+  "source_commit": "07caf754565c089559662685517b296fb1401c98",
   "archived_unique_count": 544,
   "staged_count": 73,
   "same_name_candidate_count": 60,
@@ -640,7 +640,7 @@
     },
     "qcom_scm": {
       "file": "modules/firmware/qcom-scm.ko",
-      "sha256": "f90d2e4b43e2bcf985f344179d007a16eb0d29d01837c9ca64fdff2fec7ba486",
+      "sha256": "1205ea96db91d437559cdded8f657d2b116a2974dc7cca76242f03dec1495b35",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_pas"
@@ -655,7 +655,7 @@
     },
     "qcom_pas": {
       "file": "modules/firmware/qcom_pas.ko",
-      "sha256": "3363d02588e51706b17f32d1d0058ab8e1673f594fb8a43c4ffbf2b71c7ce0bf",
+      "sha256": "265760b2afc4e607a318c3249752dfeffd0863d00f83b69da49b52cd42eb6695",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -929,7 +929,7 @@
     },
     "coresight": {
       "file": "modules/native/coresight.ko",
-      "sha256": "78afdd5d4a2dd557e4b54cae9b6782b39a797dbd3e4ceb0c51103165f6ee1f05",
+      "sha256": "3dc286850e7ff0dc305d1cac7ff026b4435b0dc3cff428ca3182257a0fee6616",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -943,7 +943,7 @@
     },
     "nvmem_qfprom": {
       "file": "modules/native/nvmem_qfprom.ko",
-      "sha256": "fcc8115db187e4752a6558e8e0ffb89e8e6026b2a985d5f29dde79da72a1db3e",
+      "sha256": "3c16e3292524d8cc9a932ff3e8c9eed918daea8792f37c67b6b38e8266371383",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -957,7 +957,7 @@
     },
     "ntsync": {
       "file": "modules/ntsync/ntsync.ko",
-      "sha256": "17d4c2e788f3fc0acc8842cb4fb4687f2677688061993ac2d01607f989f84460",
+      "sha256": "7ae29b521d3f5161e266a82639452262ec1ae80f828151e8637e426a3a97fab8",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],

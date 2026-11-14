@@ -209,3 +209,17 @@ buffer 5. Coverage includes production descriptor/slot/retry/readiness helpers,
 module insertion/removal and no-firmware/error guards. It excludes real TZMEM
 bridge registration, BIST, secure key programming, reset/keytable behavior,
 UFS data I/O and encrypted unlock. Those remain acceptance requirements.
+
+## Stage15: emulated UFS I/O and vendor host adaptation
+
+On Image `bef4d9d933dba51faeec9cee4850ce7ed13ba9edf5e475f0b7a83071ae50287d`,
+the real native PCI UFS core completed two direct-I/O pattern rounds in both
+single-queue and MCQ configurations. Each mode wrote/read 8 MiB, independently
+verified the final 4 MiB in a new private backing file, and passed three KUnit
+cases for controller/IRQ/queue state. The phone's storage was never attached.
+
+The vendor host C sources compile after API adaptation. Four logging/minidump
+exports still prevent final link, so those modules are not in the snapshot.
+Stage15 retains 73 linked modules / 3,727 import CRC checks. Core patch replay
+now reproduces 12 patches / 56 files. No Qualcomm PHY, real key programming,
+encrypted unlock or physical stability/performance/power evidence is implied.

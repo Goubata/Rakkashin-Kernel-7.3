@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-ice-stage14/（73モジュール、3,727インポートCRC一致）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -145,3 +145,11 @@ Motorolaの既存ICEモジュールは、鍵登録0x05（6引数）・消去0x06
 一致ソースのcanoe設定に合わせSHM Bridgeを選択し、SCM/TZMEMを実体のある同じモジュールにまとめて依存循環を解消しました。旧standalone TZMEMの残存.koはKbuildのmodules.orderを基に除外します。ICE追加とTZMEM統合で合計は73個、3,727インポートCRC一致です。新ImageのSMP4 QEMUでICE 10、SCM/PAS 13、secure-buffer 5件が成功。これらは実キー登録・データ復号・実機SHM登録を証明しません。UFSホストは引き続き未完成です。`reports/ice-stage14-validation.json` を参照。
 
 固定7.3基盤から11パッチ・54ファイルの再適用結果が現在のnativeコミットと完全一致することも確認しました。既にレビュー済みの重なったパッチを誤って再適用する問題を修正し、ソースの正確なコミット・クリーン状態・全パッチのハッシュを照合しています。
+
+## UFSコアの実I/O試験とホスト移植の続き
+
+7.3標準PCI UFSドライバをQEMUの実UFSエミュレータへ接続し、単一キューとMCQ両方で、異なるパターンを2回ずつ書き込み・読み戻しました。各構成で書き込み8 MiB・読み込み8 MiBが一致し、QEMUのprivate backing file先頭4 MiBも最終パターンと照合しました。新規の通常ファイルのみを仮想ディスクへ渡し、携帯のブロックデバイスは渡していません。各構成の3 KUnitでは、コントローラ状態・実IRQ記録・実キューモードも確認しています。
+
+Motorolaホストは7.3のHID/device descriptor、電力交渉、scsi_cmnd通知、CCFフラグ、MSI/thermal/removal、暗号化profileへ接続し、Cコンパイルを通過しました。最終リンクは本物のIPC logging/minidumpの4 symbols不足で失敗しており、成果物へは含めません。空の成功関数には置き換えていません。`reports/ufs-stage15-validation.json` と `ports/ufs-host/README.md` を参照。
+
+この結果はQualcomm PHY training、実機UFS/ICE、暗号化解除を証明しません。新Imageの保存先はStage15です。実機起動・常用・電力/性能比較は未実施で、全体目標は未完了です。

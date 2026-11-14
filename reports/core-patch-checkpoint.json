@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
+  "source_commit": "07caf754565c089559662685517b296fb1401c98",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -12,6 +12,7 @@
     "patches/gunyah-core-api-7.3.patch": "46fcefcdad4f6732f4a6548edb312e5fa7e0323ef1c7ebe008581dd9eceb3b90",
     "patches/pas-shutdown-retry-7.3.patch": "069dce72a80d5436142b96cbc3a79aec2bf56947321120999ef3172975b9c1cc",
     "patches/scm-ice-v2-7.3.patch": "3c06f286a5b0d20513dfbe05b0cd50b8b73d175b12138fe51cc997add423a21c",
+    "patches/ufs-core-irq-stats-7.3.patch": "5c4c27c5c63a57fd5297bfd18c959ecb6b1a42d937a069b8d96d1b3b5b2ab87a",
     "patches/rakkashin-features-7.3.patch": "4d53b1ed48b734ea6ad6422972b15e4f0f46aa68f97c76d9bf20e42f95c969af"
   }
 }

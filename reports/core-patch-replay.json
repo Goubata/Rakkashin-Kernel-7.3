@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
-  "patch_count": 11,
+  "target_commit": "07caf754565c089559662685517b296fb1401c98",
+  "patch_count": 12,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -121,6 +121,10 @@
       "sha256": "5a213cc6491222b93265505861d5ce51ddebb10e5941e5942036f6179bef57dd"
     },
     {
+      "file": "drivers/ufs/core/ufshcd.c",
+      "sha256": "fb5277527e3988cc52e57f406c309e49c5c819683456b26e7155ad5978805c10"
+    },
+    {
       "file": "include/linux/avr_profile.h",
       "sha256": "db55ee0ecd455640de7ff7d8b8bcf6517db1409bb3007e3dad5612ca200bc3e0"
     },
@@ -155,6 +159,10 @@
     {
       "file": "include/uapi/linux/ntsync.h",
       "sha256": "185b19dd7a3fb89990545ea6e53817a4cc80b1c493cbd3b566caf8273075a6ac"
+    },
+    {
+      "file": "include/ufs/ufshcd.h",
+      "sha256": "1fee4cd435797b3d28c3e4e96a87ba1cbaa31f43c49ffb3f2c1f42c6775cb42c"
     },
     {
       "file": "init/Kconfig",
@@ -222,5 +230,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "dce82f0b52ff186508a6dc4e8764cc89d674a2b5c9ce8223a6c428c621c2a9b0"
+  "checkpoint_sha256": "9f247ecedef3c850ba949d4ac456f55a12c72dcecc51b9c557f175a38ec9f508"
 }

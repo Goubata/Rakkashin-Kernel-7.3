@@ -239,21 +239,47 @@ static struct pmic_glink_dev *get_pmic_glink_from_dev(struct device *dev)
 	return NULL;
 }
 
-static struct pmic_glink_dev *get_pmic_glink_from_rpdev(
-						struct rpmsg_device *rpdev)
+static struct device *find_pmic_glink_supplier(const char *channel)
 {
-	struct pmic_glink_dev *tmp, *pos;
+	struct pmic_glink_dev *pos;
+	struct device *supplier = NULL;
 
 	mutex_lock(&pmic_glink_dev_lock);
-	list_for_each_entry_safe(pos, tmp, &pmic_glink_dev_list, dev_list) {
-		if (!strcmp(rpdev->id.name, pos->channel_name)) {
-			mutex_unlock(&pmic_glink_dev_lock);
-			return pos;
+	list_for_each_entry(pos, &pmic_glink_dev_list, dev_list) {
+		if (!strcmp(channel, pos->channel_name)) {
+			supplier = get_device(pos->dev);
+			break;
 		}
 	}
 	mutex_unlock(&pmic_glink_dev_lock);
+	return supplier;
+}
 
-	return NULL;
+static struct pmic_glink_dev *pmic_glink_link_provider(struct device *consumer,
+				struct device *supplier, const char *channel)
+{
+	struct pmic_glink_dev *pgdev;
+
+	/* Consumer probe already holds its device lock. Defer instead of
+	 * blocking on a supplier that may be unbinding or probing a dependency.
+	 */
+	if (!device_trylock(supplier))
+		return ERR_PTR(-EPROBE_DEFER);
+	pgdev = get_pmic_glink_from_dev(supplier);
+	if (!device_is_bound(supplier) || !pgdev ||
+	    pgdev != dev_get_drvdata(supplier)) {
+		pgdev = ERR_PTR(-EPROBE_DEFER);
+		goto out;
+	}
+	if (strcmp(channel, pgdev->channel_name)) {
+		pgdev = ERR_PTR(-ENODEV);
+		goto out;
+	}
+	if (!device_link_add(consumer, supplier, DL_FLAG_AUTOREMOVE_CONSUMER))
+		pgdev = ERR_PTR(-EINVAL);
+out:
+	device_unlock(supplier);
+	return pgdev;
 }
 
 /**
@@ -320,7 +346,7 @@ EXPORT_SYMBOL(pmic_glink_write);
  * callback function so that the pmic_glink driver can route the messages
  * to the client.
  */
-struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
+static struct pmic_glink_client *__pmic_glink_register_client(struct device *dev,
 			const struct pmic_glink_client_data *client_data)
 {
 	int rc;
@@ -394,6 +420,19 @@ struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
 	mutex_unlock(&pgdev->client_lock);
 
 	pmic_glink_dbg(pgdev, "Registered client %s\n", client->name);
+	return client;
+}
+struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
+			const struct pmic_glink_client_data *client_data)
+{
+	struct pmic_glink_client *client;
+	int index = srcu_read_lock(&pmic_glink_ingress);
+
+	/* Provider removal unpublishes its registry entry and waits out all
+	 * registrations before tearing down child clients and the IDR.
+	 */
+	client = __pmic_glink_register_client(dev, client_data);
+	srcu_read_unlock(&pmic_glink_ingress, index);
 	return client;
 }
 EXPORT_SYMBOL(pmic_glink_register_client);
@@ -547,22 +586,25 @@ static void pmic_glink_rpmsg_remove(struct rpmsg_device *rpdev)
 
 static int pmic_glink_rpmsg_probe(struct rpmsg_device *rpdev)
 {
-	struct pmic_glink_dev *pgdev = NULL;
+	struct pmic_glink_dev *pgdev;
+	struct device *supplier;
 
-	pgdev = get_pmic_glink_from_rpdev(rpdev);
-	if (!pgdev) {
-		pr_err("Failed to get pmic_glink_dev for %s\n", rpdev->id.name);
+	supplier = find_pmic_glink_supplier(rpdev->id.name);
+	if (!supplier)
 		return -EPROBE_DEFER;
-	}
+	pgdev = pmic_glink_link_provider(&rpdev->dev, supplier, rpdev->id.name);
+	put_device(supplier);
+	if (IS_ERR(pgdev))
+		return PTR_ERR(pgdev);
 
+	/* The managed link keeps the bound provider until this consumer leaves. */
 	down_write(&pgdev->rpdev_sem);
 	smp_store_release(&rpdev->dev.driver_data, pgdev);
 	pgdev->rpdev = rpdev;
 	atomic_set(&pgdev->state, 1);
 	up_write(&pgdev->rpdev_sem);
-	schedule_work(&pgdev->init_work);
+	queue_work(system_percpu_wq, &pgdev->init_work);
 	pmic_glink_dbg(pgdev, "%s probed\n", rpdev->id.name);
-
 	return 0;
 }
 
@@ -777,7 +819,8 @@ static int pmic_glink_probe(struct platform_device *pdev)
 error_pdr:
 	pdr_handle_release(pgdev->pdr_handle);
 error_service:
-	qcom_unregister_ssr_notifier(pgdev->subsys_handle, &pgdev->ssr_nb);
+	if (!IS_ERR_OR_NULL(pgdev->subsys_handle))
+		qcom_unregister_ssr_notifier(pgdev->subsys_handle, &pgdev->ssr_nb);
 error_subsys:
 	ipc_log_context_destroy(pgdev->ipc_log);
 	idr_destroy(&pgdev->client_idr);
@@ -789,17 +832,28 @@ static void pmic_glink_remove(struct platform_device *pdev)
 {
 	struct pmic_glink_dev *pgdev = dev_get_drvdata(&pdev->dev);
 
-	ipc_log_context_destroy(pgdev->ipc_log);
+	/* Linked RPMSG consumers have detached first. Stop new lookups and
+	 * finish registrations before preventing any more child population.
+	 */
+	pmic_glink_dev_remove(pgdev);
+	synchronize_srcu(&pmic_glink_ingress);
+	cancel_work_sync(&pgdev->init_work);
 	pdr_handle_release(pgdev->pdr_handle);
-	qcom_unregister_ssr_notifier(pgdev->subsys_handle, &pgdev->ssr_nb);
-	device_init_wakeup(pgdev->dev, false);
-	debugfs_remove_recursive(pgdev->debugfs_dir);
+	pgdev->pdr_handle = NULL;
+	if (!IS_ERR_OR_NULL(pgdev->subsys_handle)) {
+		qcom_unregister_ssr_notifier(pgdev->subsys_handle, &pgdev->ssr_nb);
+		pgdev->subsys_handle = NULL;
+	}
 	flush_workqueue(pgdev->rx_wq);
-	destroy_workqueue(pgdev->rx_wq);
-	idr_destroy(&pgdev->client_idr);
+	/* Child remove/unregister still needs the client IDR and logging. */
 	of_platform_depopulate(&pdev->dev);
 	pgdev->child_probed = false;
-	pmic_glink_dev_remove(pgdev);
+	debugfs_remove_recursive(pgdev->debugfs_dir);
+	destroy_workqueue(pgdev->rx_wq);
+	idr_destroy(&pgdev->client_idr);
+	device_init_wakeup(pgdev->dev, false);
+	ipc_log_context_destroy(pgdev->ipc_log);
+	pgdev->ipc_log = NULL;
 }
 
 static const struct of_device_id pmic_glink_of_match[] = {

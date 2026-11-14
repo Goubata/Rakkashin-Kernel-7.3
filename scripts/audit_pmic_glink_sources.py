@@ -55,6 +55,9 @@ def main():
                       'Initialize and unwind each client SRCU before/after registry publication',
                       'Protect RPMSG driver-data ingress with module-lifetime SRCU until work is queued',
                       'Unpublish transport, drain ingress, cancel init work and drain RX before RPMSG removal completes',
+                      'Retain supplier devices, verify binding under device lock, and link RPMSG consumers before transport publication',
+                      'Protect client registration with the provider registry epoch and drain before child teardown',
+                      'Unpublish provider/cancel init, stop notifiers, drain RX, remove children, then destroy IDR and IPC last',
                   ],
                   'pending': [
                       'Provider/rpmsg/global registry references and unbind serialization',

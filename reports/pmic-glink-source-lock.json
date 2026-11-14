@@ -5,7 +5,7 @@
       "file": "ports/qcom-pmic-glink/qti_pmic_glink.c",
       "source": "drivers/soc/qcom/qti_pmic_glink.c",
       "original_sha256": "1015cfe816fc50a1c18eeec692a2c63f00e45a3a1308f44e847a93474fed84e1",
-      "sha256": "7a1bcaec5b3f1041e8ae01a3c38d58181d1340bc752c3b35bf0648d6702fc828"
+      "sha256": "7b6cc4b8a60d6f4e9546537e21fce43721fbcb974571f32bd784eff7027b903f"
     },
     {
       "file": "ports/qcom-pmic-glink/include/linux/soc/qcom/qti_pmic_glink.h",
@@ -20,7 +20,7 @@
       "sha256": "b9bc692c320dd075e6c13a2f95fbd530924812c1e826a53495a92e894bf13e27"
     }
   ],
-  "patch_sha256": "f6bc8c919bb2581fba96b25321164391e460360556fde06c986c67684a17702c",
+  "patch_sha256": "f1aa05dccc5ff881d23ce0c54b5ec6005729108f7fac583a138ece9f3bb60988",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "draft_not_packaged": true,
   "reviewed_changes": [
@@ -33,7 +33,10 @@
     "Serialize RX/state callbacks outside the registry mutex and reject self-unregister with EDEADLK",
     "Initialize and unwind each client SRCU before/after registry publication",
     "Protect RPMSG driver-data ingress with module-lifetime SRCU until work is queued",
-    "Unpublish transport, drain ingress, cancel init work and drain RX before RPMSG removal completes"
+    "Unpublish transport, drain ingress, cancel init work and drain RX before RPMSG removal completes",
+    "Retain supplier devices, verify binding under device lock, and link RPMSG consumers before transport publication",
+    "Protect client registration with the provider registry epoch and drain before child teardown",
+    "Unpublish provider/cancel init, stop notifiers, drain RX, remove children, then destroy IDR and IPC last"
   ],
   "pending": [
     "Provider/rpmsg/global registry references and unbind serialization",

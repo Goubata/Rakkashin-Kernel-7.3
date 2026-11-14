@@ -1,0 +1,29 @@
+{
+  "scope": "retained device lookup, actual managed link/helper and production remove on software provider; native RPMSG hardware probe untested",
+  "glink_source_cases_passed": 10,
+  "native_qmi_cases_passed": 6,
+  "qrtr_local_packets_verified": 128,
+  "verified": [
+    "Bound supplier/channel verification and busy/unbound deferral",
+    "Retained supplier lookup with balanced put_device",
+    "Real driver-core consumer-first unbind before the actual vendor provider remove callback",
+    "Transport detach before queue/IDR teardown and provider registry unpublication"
+  ],
+  "hardware_artifacts_unchanged": "artifacts/android73-pmic-ipc-stage25",
+  "vendor_glink_packaged": false,
+  "physical_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Managed client release and public registration device-link contract",
+    "Native RPMSG bus probe and real OF child/notifier teardown",
+    "Concurrent callback unregister/context contracts and live firmware/charging/full-device acceptance"
+  ],
+  "sha256": {
+    "reports/pmic-glink-source-lock.json": "31baceca5409ca121bb25354b85c0d2403d8dda72a1a13711d5bb5ae3a657aa6",
+    "reports/pmic-glink-stage28-final-build.log": "630e00ec0a9c9ca382635275df7834cf8b717b577309c59ee2bf228e4a43947e",
+    "reports/pmic-glink-stage28-qemu.log": "18a5145cf02ee87040f3f6a867f0420d4fea90061daf186fe0fc9c771e5e8401",
+    "reports/pmic-glink-stage28-qemu.json": "48bba98b9e3e8b50c808f3d29c1d7f14fa0ee31d5bcba1de42ff03ec7bd4e29b",
+    "reports/pmic-glink-stage28-import-crc.json": "b2ff3c0817ab1351f2f785d3354ea5d699ca0c68f7fe9edddbc95cde23b60beb"
+  }
+}

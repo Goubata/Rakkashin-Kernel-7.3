@@ -438,3 +438,16 @@ remove is harmless. One test holds ingress with no RX work; another blocks a
 real client callback, so ingress and work draining are checked independently.
 Native RPMSG bus probe/provider lifetime and charging remain unverified. The
 vendor module stays excluded from the unchanged 99-module Stage25 artifacts.
+
+## Stage28: retained supplier and managed transport dependency
+
+Ten vendor-source cases plus six native QMI cases pass with 128 QRTR packets.
+Supplier lookup holds a device reference; a helper locks/verifies the bound
+supplier and channel before installing a managed dependency. A real platform
+consumer/supplier pair verifies consumer-first unbind and calls the actual
+transport/provider remove functions on software resources. This is the link
+helper and teardown, not native RPMSG hardware bus probe. Parent removal now
+unpublishes/drains registrations, cancels init, stops notifiers, drains RX,
+removes children while IDR/logging live, and destroys IPC last. Managed public
+client release and real OF/notifier/firmware behavior remain pending; no new
+hardware module is packaged yet.

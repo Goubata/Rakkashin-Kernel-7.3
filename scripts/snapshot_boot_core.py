@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Snapshot the partial port; this never creates or flashes a boot.img."""
 from pathlib import Path
-from native_module_inventory import firmware_modules
+from native_module_inventory import firmware_modules, pmic_ipc_modules
 import argparse
 import hashlib
 import json
@@ -24,7 +24,9 @@ parser.add_argument('--interconnect',action='store_true')
 parser.add_argument('--spmi',action='store_true')
 parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
+parser.add_argument('--pmic-ipc',action='store_true')
 args=parser.parse_args()
+if args.pmic_ipc:args.adc_thermal=True
 if args.adc_thermal:args.pmic_pinctrl=True
 if args.pmic_pinctrl:args.spmi=True
 if args.spmi:args.interconnect=True
@@ -72,6 +74,8 @@ if args.rakkashin:
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))
 for name in ports:
     modules += [(p,'modules/'+name+'/'+p.name) for p in (ROOT/'ports'/name).glob('*.ko')]
+if args.pmic_ipc:
+    modules += [(p,'modules/native-ipc/'+p.name) for p in pmic_ipc_modules()]
 for p in firmware_modules():
     modules.append((p,'modules/firmware/'+p.name))
 for source,name in modules:

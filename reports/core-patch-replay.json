@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
-  "patch_count": 13,
+  "target_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "patch_count": 15,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -119,6 +119,14 @@
     {
       "file": "drivers/misc/ntsync.c",
       "sha256": "5a213cc6491222b93265505861d5ce51ddebb10e5941e5942036f6179bef57dd"
+    },
+    {
+      "file": "drivers/soc/qcom/Kconfig",
+      "sha256": "ba0e6e90a1aff0ce1660dc9c48edf32dd79bb2deb91237cd18c46f23e536a50b"
+    },
+    {
+      "file": "drivers/soc/qcom/qmi_encdec.c",
+      "sha256": "48b711c8f05edf7f07e2bd50eaf5c3946d076782773170d2e9f12d01ef452223"
     },
     {
       "file": "drivers/ufs/core/ufshcd.c",
@@ -238,5 +246,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "729d4f99b7a3d1ec048fc39e46bad2dfdc16d77f524dbe4b83aa591e2ceacaaa"
+  "checkpoint_sha256": "d49a04732e9165971b4dd7c1d1c7da85bd8257e54c22e3aaf1d37956f4cdaf9e"
 }

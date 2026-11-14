@@ -398,3 +398,18 @@ disable waits for the callback. Only test transports complete RAM requests
 immediately. No test provider enters the phone artifacts. Physical consumer
 contracts, inactive-record retention, ID policy, hardware rollback and all
 physical ADC/charging/thermal acceptance remain open.
+
+## Stage25: native local IPC dependencies and QMI bounds
+
+99 staged modules / 4,975 matching imports include real native QRTR, QRTR-SMD,
+QMI, PDR messages and PDR helper. The original Android common base is retained;
+15 local patches replay to 60 exact source files. A real truncated-TLV test
+failed before QMI frame/TLV/basic/length/string bounds fixes. Six native QMI
+cases now pass; 128 packets pass between real local AF_QIPCRTR sockets. Native
+modules unload in dependency order. The new Image also passes 24 ADC and 35
+clock/RCU regression cases. No remote endpoint or phone block device is exposed.
+
+Firmware-pinned vendor GLINK source compiles but is explicitly a draft excluded
+from artifacts until client/provider/receive/removal lifetime issues are fixed
+and tested. GLINK transport, remoteproc/PDR services, battery/charging, QMI schema
+stress and all physical safety/boot/whole-phone acceptance remain open.

@@ -1,0 +1,39 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-pmic-glink/qti_pmic_glink.c",
+      "source": "drivers/soc/qcom/qti_pmic_glink.c",
+      "original_sha256": "1015cfe816fc50a1c18eeec692a2c63f00e45a3a1308f44e847a93474fed84e1",
+      "sha256": "629dd20ba06e2e690d9fbcfdb59db41259b4e3101ed1416f967b998149deca3d"
+    },
+    {
+      "file": "ports/qcom-pmic-glink/include/linux/soc/qcom/qti_pmic_glink.h",
+      "source": "include/linux/soc/qcom/qti_pmic_glink.h",
+      "original_sha256": "a1d6a70007391059ed6c9f42c9279256d1dfadb36ab807715a72393d00dd13a9",
+      "sha256": "a1d6a70007391059ed6c9f42c9279256d1dfadb36ab807715a72393d00dd13a9"
+    },
+    {
+      "file": "ports/qcom-pmic-glink/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "b9bc692c320dd075e6c13a2f95fbd530924812c1e826a53495a92e894bf13e27"
+    }
+  ],
+  "patch_sha256": "6ed34979050ee33533b1c41b784ce3633798a426f15d74e2c04084d4deed3fab",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "draft_not_packaged": true,
+  "reviewed_changes": [
+    "Explicit native OF header and real SSR/PDR/IPC imports",
+    "Validate message data, minimum header length and integer length before sending",
+    "Validate client-data pointer and representable nonzero IDR IDs",
+    "Reject unterminated rpmsg channel name length and initialize device before notifier registration",
+    "Unregister platform driver if rpmsg registration fails"
+  ],
+  "pending": [
+    "RX callback versus client unregister use-after-free and state callback reentry",
+    "Provider/rpmsg/global registry references and unbind serialization",
+    "Remove/init work ordering and child/notifier/IPC/IDR cleanup",
+    "Actual-code transport/client tests and all remote firmware/charging acceptance"
+  ]
+}

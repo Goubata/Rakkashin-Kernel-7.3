@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-adc-lifetime-stage24",
-  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "stage": "android73-pmic-ipc-stage25",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
   "archived_unique_count": 544,
-  "staged_count": 94,
-  "same_name_candidate_count": 81,
-  "archived_names_without_same_name_candidate_count": 463,
-  "loaded_names_without_same_name_candidate_count": 448,
+  "staged_count": 99,
+  "same_name_candidate_count": 86,
+  "archived_names_without_same_name_candidate_count": 458,
+  "loaded_names_without_same_name_candidate_count": 443,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -289,8 +289,28 @@
       "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
     },
     {
+      "name": "qmi_helpers",
+      "file": "modules/native-ipc/qmi_helpers.ko"
+    },
+    {
+      "name": "qcom_pdr_msg",
+      "file": "modules/native-ipc/qcom_pdr_msg.ko"
+    },
+    {
+      "name": "pdr_interface",
+      "file": "modules/native-ipc/pdr_interface.ko"
+    },
+    {
       "name": "qnoc_qos",
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
+    },
+    {
+      "name": "qrtr",
+      "file": "modules/native-ipc/qrtr.ko"
+    },
+    {
+      "name": "qrtr_smd",
+      "file": "modules/native-ipc/qrtr-smd.ko"
     },
     {
       "name": "qti_regmap_debugfs",
@@ -668,8 +688,28 @@
       "file": "modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
     },
     {
+      "name": "qmi_helpers",
+      "file": "modules/native-ipc/qmi_helpers.ko"
+    },
+    {
+      "name": "qcom_pdr_msg",
+      "file": "modules/native-ipc/qcom_pdr_msg.ko"
+    },
+    {
+      "name": "pdr_interface",
+      "file": "modules/native-ipc/pdr_interface.ko"
+    },
+    {
       "name": "qnoc_qos",
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
+    },
+    {
+      "name": "qrtr",
+      "file": "modules/native-ipc/qrtr.ko"
+    },
+    {
+      "name": "qrtr_smd",
+      "file": "modules/native-ipc/qrtr-smd.ko"
     },
     {
       "name": "qti_regmap_debugfs",
@@ -1090,6 +1130,82 @@
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "pdr_interface": {
+      "file": "modules/native-ipc/pdr_interface.ko",
+      "sha256": "1c9c1ab91b6bc375178779ecaf64b874e93dea93422c4eea34d6bb1647d947c8",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_pdr_msg",
+        "qmi_helpers"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_pdr_msg": {
+      "file": "modules/native-ipc/qcom_pdr_msg.ko",
+      "sha256": "9d146622400930fe2d0702de0fa84a909cdfb0df14243bd81a0859826982a62f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qmi_helpers"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qmi_helpers": {
+      "file": "modules/native-ipc/qmi_helpers.ko",
+      "sha256": "f80b6d66b404b0a23e4de2dbbb176a6dd99f9e16b6ec491bd8478b31f8629f3f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qrtr_smd": {
+      "file": "modules/native-ipc/qrtr-smd.ko",
+      "sha256": "7b32ff532cb64634dbf1f4294e05ea208ac5ecf2f81590762c048dc7baa5458d",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qrtr"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qrtr": {
+      "file": "modules/native-ipc/qrtr.ko",
+      "sha256": "6eb1c4736df9bb09a411b1b5000bee156b47fe9f1959ff2f9c47be3970da2764",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
@@ -3829,14 +3945,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "pdr_interface",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "phy_generic",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4314,14 +4422,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_pdr_msg",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_pil_info",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4497,14 +4597,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qmi_helpers",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qmp_dlkm",
       "placements": [
         "vendor_dlkm"
@@ -4563,13 +4655,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qrtr",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qrtr_gunyah",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4579,14 +4664,6 @@
     },
     {
       "name": "qrtr_mhi",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qrtr_smd",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
@@ -5828,7 +5905,6 @@
     "pci_msm_drv",
     "pci_phy_access",
     "pcie_pdc",
-    "pdr_interface",
     "phy_generic",
     "phy_msm_m31_eusb2",
     "phy_msm_snps_eusb2",
@@ -5892,7 +5968,6 @@
     "qcom_lpm",
     "qcom_lpm_monitor",
     "qcom_pd_mapper",
-    "qcom_pdr_msg",
     "qcom_pil_info",
     "qcom_pmic_ecid",
     "qcom_pmu_lib",
@@ -5916,7 +5991,6 @@
     "qcom_voltage_adj",
     "qcom_wdt_core",
     "qcrypto_msm_dlkm",
-    "qmi_helpers",
     "qmp_dlkm",
     "qnoc_canoe",
     "qnoc_chora",
@@ -5925,10 +5999,8 @@
     "qpnp_lcdb_regulator",
     "qptf",
     "qrng_dlkm",
-    "qrtr",
     "qrtr_gunyah",
     "qrtr_mhi",
-    "qrtr_smd",
     "qsee_ipc_irq_bridge",
     "qseecom_proxy",
     "qti_amoled_ecm",

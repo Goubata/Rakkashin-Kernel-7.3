@@ -30,6 +30,7 @@ def main():
     parser.add_argument('--pmic-gpio-tests',action='store_true')
     parser.add_argument('--adc-thermal',action='store_true')
     parser.add_argument('--adc-thermal-tests',action='store_true')
+    parser.add_argument('--pmic-ipc-tests',action='store_true')
     args=parser.parse_args()
     if args.adc_thermal_tests:args.adc_thermal=True
     if args.adc_thermal:args.diagnostics=True
@@ -89,6 +90,10 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_adc_thermal_sources.py')],check=True)
         targets.append('ports/qcom-adc-thermal')
         if args.adc_thermal_tests:targets.append('tests/adc-thermal')
+    if args.pmic_ipc_tests:
+        from native_module_inventory import pmic_ipc_modules
+        pmic_ipc_modules()
+        targets.append('tests/pmic-ipc')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',
@@ -96,6 +101,11 @@ def main():
                    'make', '-C', '/work/avr-src', 'O=/work/avr-port/out/native-gki',
                    'M=/work/avr-port/'+target, 'ARCH=arm64', 'LLVM=1', '-j2', 'modules']
         subprocess.run(['su', '-c', shlex.join(command)], check=True)
+    if args.pmic_ipc_tests:
+        command=['chroot',str(ROOTFS),'/usr/bin/env','-i','PATH=/usr/sbin:/usr/bin:/sbin:/bin',
+                 'cc','-static','-O2','-Wall','-Wextra','-Werror',
+                 '/work/avr-port/tests/pmic-ipc/qrtr-local-test.c','-o','/work/avr-port/tests/pmic-ipc/qrtr-local-test']
+        subprocess.run(['su','-c',shlex.join(command)],check=True)
     if args.ufs_core_tests:
         command=['chroot',str(ROOTFS),'/usr/bin/env','-i','PATH=/usr/sbin:/usr/bin:/sbin:/bin',
                  'cc','-static','-O2','-Wall','-Wextra','-Werror',

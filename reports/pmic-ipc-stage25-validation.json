@@ -1,0 +1,49 @@
+{
+  "stage": "android73-pmic-ipc-stage25",
+  "scope": "real native QRTR/QMI/PDR modules and isolated local IPC tests; draft vendor GLINK excluded; no remote firmware or charging proof",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "base_unchanged": true,
+  "image_sha256": "919ed4fc3189a0d1e888d795f843637363a0e1c099d0591c0727d0e9a6f09001",
+  "module_count": 99,
+  "imports_checked": 4975,
+  "all_import_crcs_match": true,
+  "native_qmi_kunit_cases_passed": 6,
+  "qrtr_local_packets_verified": 128,
+  "adc_regression_cases_passed": 24,
+  "clock_rcu_regression_cases_passed": 35,
+  "qmi_malformed_tlv_reproduced_before_fix": true,
+  "native_patch_replay": {
+    "patches": 15,
+    "exact_files": 60
+  },
+  "vendor_glink_draft_compiled": true,
+  "vendor_glink_packaged": false,
+  "physical_firmware_transport_verified": false,
+  "charging_or_battery_verified": false,
+  "whole_dt_validation_passed": false,
+  "physical_boot_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Vendor GLINK RX/client/state/provider lifetime and teardown with actual-code tests",
+    "GLINK SMEM/remoteproc/SSR/PDR live remote service operation and battery/charging clients",
+    "Broader nested QMI schemas/lookup/callback stress and actual firmware compatibility",
+    "Original duplicate SID4 and all missing phone/ROM/hardware/stability acceptance"
+  ],
+  "sha256": {
+    "reports/module-crc-stage25.json": "e254b9fd33441de40e8da028304d5adc4668831c70f67e0e325d19bd8ffec186",
+    "reports/pmic-ipc-stage25-final-qemu.log": "b373660cb55204a5238079e97e4d562909ae09c7bcfe7045a2caa5579757a94c",
+    "reports/pmic-ipc-stage25-final-qemu.json": "d7b46e6c2374d4ac2a5a6cd5a25b5079b02beb46a74381d4a66e1c003781ff93",
+    "reports/pmic-ipc-stage25-bounds-qemu.log": "c3c180e0f73af1a5734fbfce7d0777b033d3371a41e4526810a9bb2a69784b84",
+    "reports/pmic-ipc-stage25-bounds-qemu.json": "4854728763c6e0d0886e301882d967061ada9a3e5469726595131b8c297cc5d3",
+    "reports/pmic-ipc-stage25-bounds-adc-regression.log": "120867443a75f06051ddc7343c24d6c8a70fa97ddc0016bacb6643d83453996d",
+    "reports/pmic-ipc-stage25-bounds-adc-regression.json": "29883ea97391779b179f1e36fd510b7edefd57eba9a2fb7ea522e81a12d95f5c",
+    "reports/pmic-ipc-stage25-bounds-clock-regression.log": "6c7d0bb8c6e0f62dd562b00938ea8d2c62209df67c0ca5aa1689a78e6f2a99b9",
+    "reports/pmic-ipc-stage25-bounds-clock-regression.json": "1004279574d454a7a9f0ab57910f922393881f83373354980aaae028f78b7b81",
+    "reports/pmic-ipc-stage25-bounds-build.log": "0be5d382792f57827e969e5b0e031d9942c905e46cd532a9868f9862b8c69d21",
+    "reports/pmic-ipc-stage25-final-build.log": "5fbeb6966815bca94a1952471fb4c796b191d865718839387093faaf7bf3b2bd",
+    "reports/core-patch-checkpoint.json": "d49a04732e9165971b4dd7c1d1c7da85bd8257e54c22e3aaf1d37956f4cdaf9e",
+    "reports/core-patch-replay.json": "03020d501811f50743c7eb016cf2756e713bc569287aa5416e351dfe0d529950"
+  }
+}

@@ -25,7 +25,10 @@ def main():
     parser.add_argument("--qemu-tests", action="store_true", help="Build boot-core plus isolated clock/RCU and fence test fixtures")
     parser.add_argument("--gpu-deps", action="store_true", help="Build ported GPU support modules; KGSL and physical SMMU bring-up remain incomplete")
     parser.add_argument("--rakkashin", action="store_true", help="Port Rakkashin profiles, boosts, FAS, wake filters, legacy ntsync and ADIOS")
+    parser.add_argument("--pmic-glink", action="store_true", help="Enable native QRTR/QMI/PDR dependencies; physical PMIC service acceptance separate")
     args = parser.parse_args()
+    if args.pmic_glink:
+        args.boot_core = True
     if args.rakkashin:
         args.boot_core = True
     if args.gpu_deps:
@@ -35,7 +38,7 @@ def main():
     if args.boot_core:
         args.platform = True
         args.pinctrl = True
-        patches = [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch', PORT/'patches/scm-assign-notifier-7.3.patch', PORT/'patches/gunyah-core-api-7.3.patch', PORT/'patches/pas-shutdown-retry-7.3.patch', PORT/'patches/scm-ice-v2-7.3.patch', PORT/'patches/ufs-core-irq-stats-7.3.patch', PORT/'patches/diagnostic-symbol-api-7.3.patch']
+        patches = [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch', PORT/'patches/scm-assign-notifier-7.3.patch', PORT/'patches/gunyah-core-api-7.3.patch', PORT/'patches/pas-shutdown-retry-7.3.patch', PORT/'patches/scm-ice-v2-7.3.patch', PORT/'patches/ufs-core-irq-stats-7.3.patch', PORT/'patches/diagnostic-symbol-api-7.3.patch', PORT/'patches/pdr-external-clients-7.3.patch', PORT/'patches/qmi-decode-bounds-7.3.patch']
         if args.rakkashin:
             patches.append(PORT/'patches/rakkashin-features-7.3.patch')
         checkpoint_path=PORT/'reports/core-patch-checkpoint.json'
@@ -96,6 +99,14 @@ def main():
                   '-O', '/work/avr-port/out/native-gki',
                   '/work/avr-port/out/native-gki/.config',
                   '/work/avr-port/configs/avr-qemu-tests.fragment'])
+        root_run(base + ['olddefconfig'])
+    if args.pmic_glink:
+        root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                  'PATH=/usr/sbin:/usr/bin:/sbin:/bin', '/bin/bash',
+                  '/work/avr-src/scripts/kconfig/merge_config.sh', '-m',
+                  '-O', '/work/avr-port/out/native-gki',
+                  '/work/avr-port/out/native-gki/.config',
+                  '/work/avr-port/configs/avr-pmic-glink.fragment'])
         root_run(base + ['olddefconfig'])
     root_run(base + ['-j' + os.environ.get('BUILD_JOBS', '4'), 'Image', 'modules'])
     if args.boot_core:

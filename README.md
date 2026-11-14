@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -297,3 +297,25 @@ disableは自己待ちせず残りの通知とcontextをクリアする。
 含む計24項目がSMP4で通過。実機の利用側ドライバが契約を守るかは今後確認する。
 inactive clientレコードの提供側解除までの保持、ハードウェア部分更新の回復も未完。
 `reports/adc-lifetime-stage24-validation.json`。
+
+## Stage25: 実QRTR/QMI/PDRと入力長の検証
+
+固定したandroid18-7.3基点は維持し、外部PDR利用を選択できるKconfig変更と
+QMI入力長の修正を追加。15パッチ・60ファイルが基点から完全に再現する。
+QRTR、QRTR-SMD、QMI、PDRメッセージ、PDR helperのnative 5モジュールを追加した。
+修正前に途中で切れたTLVの成功扱いを再現し、frame/TLV/要素/配列長/文字列長の
+読取り範囲を修正。正常wireの既知値と往復、短いframe/TLV、handle終了を6項目で検証。
+実AF_QIPCRTRローカルソケットで128回の双方向送受信を検証した。
+新ImageでADC24項目とclock/RCU35項目も通過。99モジュール・4,975 CRC一致。
+
+```sh
+python scripts/build_native.py --boot-core --gpu-deps --rakkashin --qemu-tests --pmic-glink
+python scripts/build_storage_deps.py --adc-thermal-tests --pmic-ipc-tests
+python scripts/run_qemu.py --test pmic-ipc --cpus 4 --log reports/pmic-ipc-stage25-bounds-qemu.log
+python scripts/snapshot_boot_core.py --name android73-pmic-ipc-stage25 --gpu-driver --rakkashin --pmic-ipc
+```
+
+Motorola qti_pmic_glinkの草稿はリンクしたが、RX/client解除・provider寿命・
+後始末に未修正の競合があるため、この成果物には含めない。
+リモートサービス、実充電、電池表示、物理7.3起動と常用判定は未完。
+`reports/pmic-ipc-stage25-validation.json`。

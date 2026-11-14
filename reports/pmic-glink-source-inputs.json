@@ -1,0 +1,15 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-pmic-glink/qti_pmic_glink.c",
+      "source": "drivers/soc/qcom/qti_pmic_glink.c",
+      "original_sha256": "1015cfe816fc50a1c18eeec692a2c63f00e45a3a1308f44e847a93474fed84e1"
+    },
+    {
+      "file": "ports/qcom-pmic-glink/include/linux/soc/qcom/qti_pmic_glink.h",
+      "source": "include/linux/soc/qcom/qti_pmic_glink.h",
+      "original_sha256": "a1d6a70007391059ed6c9f42c9279256d1dfadb36ab807715a72393d00dd13a9"
+    }
+  ]
+}

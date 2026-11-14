@@ -1,0 +1,78 @@
+--- a/ports/qcom-pmic-glink/qti_pmic_glink.c
++++ b/ports/qcom-pmic-glink/qti_pmic_glink.c
+@@ -12,6 +12,7 @@
+ #include <linux/ipc_logging.h>
+ #include <linux/list.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/rpmsg.h>
+@@ -248,8 +249,10 @@
+ {
+ 	int rc;
+ 
+-	if (!client || !client->pgdev || !client->name)
++	if (IS_ERR_OR_NULL(client) || !client->pgdev || !client->name)
+ 		return -ENODEV;
++	if (!data || len < sizeof(struct pmic_glink_hdr) || len > INT_MAX)
++		return -EINVAL;
+ 
+ 	down_read(&client->pgdev->rpdev_sem);
+ 
+@@ -306,7 +309,8 @@
+ 	if (!dev || !dev->parent)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	if (!client_data->id || !client_data->msg_cb || !client_data->name)
++	if (!client_data || !client_data->id || client_data->id >= INT_MAX ||
++	    !client_data->msg_cb || !client_data->name)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	pgdev = get_pmic_glink_from_dev(dev->parent);
+@@ -452,7 +456,7 @@
+ 	struct pmic_glink_buf *pbuf;
+ 	unsigned long flags;
+ 
+-	if (len < sizeof(struct pmic_glink_hdr)) {
++	if (!data || len < (int)sizeof(struct pmic_glink_hdr)) {
+ 		pr_err("Received length %d less than header size: %zu\n", len,
+ 			sizeof(struct pmic_glink_hdr));
+ 		return -EINVAL;
+@@ -604,6 +608,7 @@
+ 	pgdev = devm_kzalloc(dev, sizeof(*pgdev), GFP_KERNEL);
+ 	if (!pgdev)
+ 		return -ENOMEM;
++	pgdev->dev = dev;
+ 
+ 	rc = of_property_read_string(dev->of_node, "qcom,pmic-glink-channel",
+ 					&pgdev->channel_name);
+@@ -612,7 +617,7 @@
+ 		return rc;
+ 	}
+ 
+-	if (strlen(pgdev->channel_name) > RPMSG_NAME_SIZE) {
++	if (strlen(pgdev->channel_name) >= RPMSG_NAME_SIZE) {
+ 		pr_err("pmic glink channel name %s exceeds length\n",
+ 			pgdev->channel_name);
+ 		return -EINVAL;
+@@ -769,7 +774,10 @@
+ 	if (rc < 0)
+ 		return rc;
+ 
+-	return register_rpmsg_driver(&pmic_glink_rpmsg_driver);
++	rc = register_rpmsg_driver(&pmic_glink_rpmsg_driver);
++	if (rc)
++		platform_driver_unregister(&pmic_glink_driver);
++	return rc;
+ }
+ module_init(pmic_glink_init);
+ 
+--- a/ports/qcom-pmic-glink/Makefile
++++ b/ports/qcom-pmic-glink/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qti_pmic_glink.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-ipc-logging/include
++ccflags-y += -DCONFIG_QTI_PMIC_GLINK_MODULE=1 -DCONFIG_QCOM_RPROC_COMMON_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-rproc-common/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

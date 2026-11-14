@@ -30,3 +30,5 @@ modules.order
 /tests/rakkashin/adios-io-test
 
 /tests/ufs/ufs-io-test
+
+/tests/pmic-ipc/qrtr-local-test

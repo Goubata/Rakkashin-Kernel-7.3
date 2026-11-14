@@ -1,0 +1,6 @@
+# Real upstream IPC/service-registry dependencies for firmware PMIC GLINK.
+# Transport and physical services are separate acceptance requirements.
+CONFIG_QRTR=m
+CONFIG_QRTR_SMD=m
+CONFIG_QCOM_QMI_HELPERS=m
+CONFIG_QCOM_PDR_HELPERS=m

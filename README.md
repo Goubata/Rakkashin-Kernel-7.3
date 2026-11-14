@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-gpu-stage11/（71モジュール、3,623インポートCRC一致）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-gpu-stage12/（71モジュール、3,624インポートCRC一致）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -127,3 +127,5 @@ Gunyah vendor RMのSCM/hyp・RM/QTVM通知に、登録失敗時の巻き戻し�
 拡張component DTはGPU・フェンス・映像・IPCLite・BT・WLAN・AVRのNXP NFCを追加し、公開ソース189ファイルから5,063ノードを合成しました。不足39ノードのほか、GPU表・予約メモリ・未解釈の参照値等のプロパティ差が残ります。ノード数は動作率ではありません。カメラbindingは明示したVantage参照で、ドライバ互換性は未確認です。
 
 ユーザーGPU設定は保存実機DT（静的画像と稼働中DTで一致）の21段階を復元しました。`--saved-gpu-table` の別出力ではGPU表の全プロパティ一致を確認し、全体5,069ノード、不足33ノードです。低電圧化やクロックの新しい値は生成していません。7.3でのGPU実動作・温度・安定性は未検証です。
+
+Stage12では共通RMのscoped OFノード二重putとIRQ親参照の漏れを修正し、IPC/GPU全体を再ビルド・照合しました。新しい実機/QEMUハイパーバイザ試験を実施したという意味ではありません。`reports/gpu-stage12-validation.json` を参照。DTの不足33ノードと予約メモリの不一致は `reports/dt-critical-gaps.json` に切り分け、起動用イメージへの使用を保留しています。

@@ -2,7 +2,7 @@
   "kind": "common-core",
   "scope": "source provenance and patch replay only; not runtime or complete lifecycle validation",
   "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
-  "patch_sha256": "6ce6f68426c1e4af92b4f9d4d38c6611b17e28cdbf9fb88c484ca5507653f452",
+  "patch_sha256": "8f3f07b74b6054b80fb25478487edf1969f11b08cde05757f4f837c944f07453",
   "files": [
     {
       "file": "ports/gunyah-core/gunyah.c",
@@ -101,7 +101,7 @@
       "origin": "drivers/virt/gunyah/rsc_mgr.c",
       "original_git_blob": "6fd544ce5e7d7a57cc485a519c1d12673f120a51",
       "original_sha256": "b195e6bac5b8c09ebccf77c9677c3ab2995da46d20feefbda5c6d730f61964eb",
-      "sha256": "cda0ae7dc74c15b9a60c94cd9ce6905700cb398b3e34e0b10b1ff640a9266edc",
+      "sha256": "1a74f25140bd111098d2739a193159c74b7166d8388722e52139aec17f6b5650",
       "changed": true
     },
     {
@@ -171,6 +171,7 @@
     "Scope file-local VM failure helper static",
     "Physical PFN iteration for CMA pages",
     "Target void platform remove callback",
-    "Track and unwind common transport PM notifier ownership"
+    "Track and unwind common transport PM notifier ownership",
+    "Balance scoped RM OF nodes and own/release the parent IRQ fwnode"
   ]
 }

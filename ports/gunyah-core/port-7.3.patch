@@ -16,7 +16,15 @@
  };
  
  /**
-@@ -867,6 +869,11 @@
+@@ -779,7 +781,6 @@
+ 		return -EINVAL;
+ 	rm->rx_ghrsc.irq = ret;
+ 
+-	of_node_put(rm_np);
+ 	return 0;
+ }
+ 
+@@ -867,11 +868,16 @@
  	return NOTIFY_BAD;
  }
  
@@ -28,16 +36,32 @@
  static struct gunyah_rm *__rm;
  
  static int __init gunyah_rm_init(void)
-@@ -887,7 +894,7 @@
- 	}
- 	of_node_put(of_root);
+ {
+-	struct device_node *parent_irq_node;
++	struct device_node *parent_irq_node __free(device_node) = NULL;
+ 	struct gunyah_rm *rm __free(kfree) = NULL;
+ 	int ret;
  
+@@ -879,15 +885,14 @@
+ 	if (!rm)
+ 		return -ENOMEM;
+ 
+-	of_node_get(of_root);
+ 	parent_irq_node = of_irq_find_parent(of_root);
+ 	if (!parent_irq_node) {
+ 		pr_err("Failed to find interrupt parent of resource manager\n");
+ 		return -ENODEV;
+ 	}
+-	of_node_put(of_root);
+-
 -	rm->parent_fwnode = of_node_to_fwnode(parent_irq_node);
-+	rm->parent_fwnode = of_fwnode_handle(parent_irq_node);
++
++	/* Own the IRQ domain fwnode independently of the scoped OF lookup. */
++	rm->parent_fwnode = fwnode_handle_get(of_fwnode_handle(parent_irq_node));
  	if (!rm->parent_fwnode) {
  		pr_err("Failed to find interrupt parent domain of resource manager\n");
  		return -ENODEV;
-@@ -896,6 +903,8 @@
+@@ -896,6 +901,8 @@
  	mutex_init(&rm->send_lock);
  	init_completion(&rm->send_ready);
  	BLOCKING_INIT_NOTIFIER_HEAD(&rm->nh);
@@ -46,7 +70,7 @@
  	xa_init_flags(&rm->call_xarray, XA_FLAGS_ALLOC);
  
  	ret = gunyah_rm_probe_info_area(rm);
-@@ -903,19 +912,19 @@
+@@ -903,19 +910,19 @@
  		ret = gunyah_rm_get_of_info(rm);
  	} else if (!ret) {
  		rm->pm_nb.notifier_call = gunyah_rm_hibernation_restore;
@@ -69,16 +93,17 @@
  	/* assume RM is ready to receive messages from us */
  	complete(&rm->send_ready);
  
-@@ -954,6 +963,8 @@
+@@ -954,6 +961,9 @@
  	free_irq(rm->rx_ghrsc.irq, rm);
  free_tx_irq:
  	free_irq(rm->tx_ghrsc.irq, rm);
 +unregister_pm:
 +	avr_rm_notifiers_unregister(&rm->pm_notifiers);
++	fwnode_handle_put(rm->parent_fwnode);
  	return ret;
  }
  module_init(gunyah_rm_init);
-@@ -967,6 +978,7 @@
+@@ -967,11 +977,13 @@
  	if (!rm)
  		return;
  
@@ -86,6 +111,12 @@
  	gunyah_cma_mem_exit();
  	auxiliary_device_delete(&rm->adev);
  	misc_deregister(&rm->miscdev);
+ 	free_irq(rm->rx_ghrsc.irq, rm);
+ 	free_irq(rm->tx_ghrsc.irq, rm);
++	fwnode_handle_put(rm->parent_fwnode);
+ }
+ module_exit(gunyah_rm_exit);
+ 
 --- a/ports/gunyah-core/vm_mgr.c
 +++ b/ports/gunyah-core/vm_mgr.c
 @@ -172,7 +172,7 @@

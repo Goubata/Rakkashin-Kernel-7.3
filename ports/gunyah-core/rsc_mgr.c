@@ -781,7 +781,6 @@ static int gunyah_rm_get_of_info(struct gunyah_rm *rm)
 		return -EINVAL;
 	rm->rx_ghrsc.irq = ret;
 
-	of_node_put(rm_np);
 	return 0;
 }
 
@@ -878,7 +877,7 @@ static struct gunyah_rm *__rm;
 
 static int __init gunyah_rm_init(void)
 {
-	struct device_node *parent_irq_node;
+	struct device_node *parent_irq_node __free(device_node) = NULL;
 	struct gunyah_rm *rm __free(kfree) = NULL;
 	int ret;
 
@@ -886,15 +885,14 @@ static int __init gunyah_rm_init(void)
 	if (!rm)
 		return -ENOMEM;
 
-	of_node_get(of_root);
 	parent_irq_node = of_irq_find_parent(of_root);
 	if (!parent_irq_node) {
 		pr_err("Failed to find interrupt parent of resource manager\n");
 		return -ENODEV;
 	}
-	of_node_put(of_root);
 
-	rm->parent_fwnode = of_fwnode_handle(parent_irq_node);
+	/* Own the IRQ domain fwnode independently of the scoped OF lookup. */
+	rm->parent_fwnode = fwnode_handle_get(of_fwnode_handle(parent_irq_node));
 	if (!rm->parent_fwnode) {
 		pr_err("Failed to find interrupt parent domain of resource manager\n");
 		return -ENODEV;
@@ -965,6 +963,7 @@ free_tx_irq:
 	free_irq(rm->tx_ghrsc.irq, rm);
 unregister_pm:
 	avr_rm_notifiers_unregister(&rm->pm_notifiers);
+	fwnode_handle_put(rm->parent_fwnode);
 	return ret;
 }
 module_init(gunyah_rm_init);
@@ -984,6 +983,7 @@ static void __exit gunyah_rm_exit(void)
 	misc_deregister(&rm->miscdev);
 	free_irq(rm->rx_ghrsc.irq, rm);
 	free_irq(rm->tx_ghrsc.irq, rm);
+	fwnode_handle_put(rm->parent_fwnode);
 }
 module_exit(gunyah_rm_exit);
 

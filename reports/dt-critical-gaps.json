@@ -1,0 +1,82 @@
+{
+  "scope": "Concrete missing nodes and reserved-memory register differences; not exhaustive property/reference/schema or driver validation",
+  "missing_nodes": {
+    "display memory": [
+      "/reserved-memory/non_secure_display_region",
+      "/soc/qcom,dma-heaps/qcom,display"
+    ],
+    "CVP": [
+      "/soc/qcom,cvp@2400000",
+      "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+      "/soc/qcom,cvp@2400000/cvp_camera_cb",
+      "/soc/qcom,cvp@2400000/cvp_cnoc",
+      "/soc/qcom,cvp@2400000/cvp_dsp_cb",
+      "/soc/qcom,cvp@2400000/cvp_iommu_region_partition",
+      "/soc/qcom,cvp@2400000/cvp_non_secure_cb",
+      "/soc/qcom,cvp@2400000/cvp_non_secure_cb_group",
+      "/soc/qcom,cvp@2400000/cvp_secure_nonpixel_cb",
+      "/soc/qcom,cvp@2400000/cvp_secure_pixel_cb",
+      "/soc/qcom,cvp@2400000/ipclite_mappings",
+      "/soc/qcom,cvp@2400000/qcom,msm-cvp,mem_cdsp"
+    ],
+    "FastRPC": [
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@1",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@2",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@3",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@4",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@5",
+      "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@6",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@1",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@10",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@11",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@2",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@3",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@4",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@5",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@6",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@7",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@8",
+      "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@9"
+    ]
+  },
+  "missing_node_count": 33,
+  "reserved_memory_differences": [
+    {
+      "node": "/reserved-memory/reserved_region@80e00000",
+      "reg_cells": {
+        "saved_static": [
+          0,
+          2162163712,
+          0,
+          4194304
+        ],
+        "saved_running": [
+          0,
+          2162163712,
+          0,
+          4194304
+        ],
+        "source_composed_with_saved_gpu": [
+          0,
+          3594321920,
+          0,
+          8388608
+        ]
+      },
+      "status": "unresolved; do not package this source composition for physical boot"
+    }
+  ],
+  "input_sha256": {
+    "saved_static": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+    "saved_running": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+    "source_composed_with_saved_gpu": "55b5b81ae749a0764a16d903fbe4cb3d8dcad1dc97f0a8a10657211d62904e89"
+  },
+  "packaging_allowed": false,
+  "notes": [
+    "Source composition remains research output",
+    "GPU table is verified independently against saved static and running DT",
+    "Do not copy bootloader dynamic memory, seeds or hypervisor capabilities into a static image"
+  ]
+}

@@ -26,6 +26,7 @@
 #include <trace/hooks/fpsimd.h>
 #include <trace/hooks/gic.h>
 #include <trace/hooks/gic_v3.h>
+#include <trace/hooks/gunyah.h>
 #include <trace/hooks/iommu.h>
 #include <trace/hooks/logbuf.h>
 #include <trace/hooks/mm.h>
@@ -55,6 +56,11 @@
  */
 
 /* keep-sorted start */
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_after_vcpu_run);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_before_vcpu_run);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_note_fw_parcel);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_vcpu_release);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_vm_release);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_arm64_serror_panic);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_cpu_capacity_show);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_cpu_cgroup_attach);

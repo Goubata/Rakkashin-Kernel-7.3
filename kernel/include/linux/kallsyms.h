@@ -77,6 +77,10 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
 /* Lookup the address for a symbol. Returns 0 if not found. */
 unsigned long kallsyms_lookup_name(const char *name);
 
+/* Native backing for Qualcomm diagnostic clients on this custom kernel. */
+bool debug_symbol_available(void);
+unsigned long debug_symbol_lookup_name(const char *name);
+
 extern int kallsyms_lookup_size_offset(unsigned long addr,
 				  unsigned long *symbolsize,
 				  unsigned long *offset);

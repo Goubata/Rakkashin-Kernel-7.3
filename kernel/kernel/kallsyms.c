@@ -240,6 +240,22 @@ unsigned long kallsyms_lookup_name(const char *name)
 	return module_kallsyms_lookup_name(name);
 }
 
+/* Use the running kernel's real symbol table, including native module lookup,
+ * rather than re-decoding a vendor-version-specific reserved-memory format. */
+bool debug_symbol_available(void)
+{
+	return kallsyms_num_syms != 0;
+}
+EXPORT_SYMBOL_GPL(debug_symbol_available);
+
+unsigned long debug_symbol_lookup_name(const char *name)
+{
+	if (!name || !*name)
+		return 0;
+	return kallsyms_lookup_name(name);
+}
+EXPORT_SYMBOL_GPL(debug_symbol_lookup_name);
+
 /*
  * Iterate over all symbols in vmlinux.  For symbols from modules use
  * module_kallsyms_on_each_symbol instead.

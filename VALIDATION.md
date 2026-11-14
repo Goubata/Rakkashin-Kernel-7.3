@@ -179,3 +179,19 @@ helper with real kernel notifier chains, including registration failure and an
 in-flight callback. This does not verify physical VM or hypervisor teardown.
 The stage10 snapshot has 71 modules with 3,622 import CRCs checked. Base Image
 and stage9 test scope remain recorded separately; see gpu-stage10-validation.json.
+
+## Stage13: static DT coverage and UFS PHY modules
+
+The explicit DSP/EVA reference profile plus saved GPU and memory overlays now
+has 5,102 nodes with no missing/extra node paths against the saved static DT.
+This is not full property, binding, firmware or hardware acceptance: 240 nodes
+still have unresolved reference/property differences. Selected DSP/CVP nodes
+match within the known comparison encodings; the GPU table matches exactly.
+Twenty Python checks cover reference renumbering, equal numeric handles pointing
+elsewhere, changed range arguments, memory pool size and display heap targets.
+
+Two firmware-pinned UFS PHY modules build unmodified and pass insertion/removal
+in the diskless SMP4 guest, which has no matching hardware. Stage13 has 73
+modules / 3,700 import CRC checks. This provides no UFS training, data I/O,
+wrapped-key compatibility or encrypted unlock evidence. Host/ICE integration
+and physical tests remain required. See `reports/storage-stage13-validation.json`.

@@ -1,0 +1,39 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Stable definitions recovered from saved static AND running AVR DT.
+ * Dynamic pool allocation remains dynamic; no bootloader RAM or
+ * hypervisor runtime addresses are copied into this source. */
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/reserved-memory";
+		__overlay__ {
+			avr_saved_display_pool: non_secure_display_region {
+				alignment = <0x00000000 0x00400000>;
+				alloc-ranges = <0x00000000 0x00000000 0x00000000 0xffffffff>;
+				compatible = "shared-dma-pool";
+				reusable;
+				size = <0x00000000 0x0c800000>;
+			};
+		};
+	};
+	fragment@1 {
+		target-path = "/reserved-memory/reserved_region@80e00000";
+		__overlay__ {
+			no-map;
+			reg = <0x00000000 0x80e00000 0x00000000 0x00400000>;
+		};
+	};
+	fragment@2 {
+		target-path = "/soc/qcom,dma-heaps";
+		__overlay__ {
+			qcom,display {
+				qcom,dma-heap-name = "qcom,display";
+				qcom,dma-heap-type = <0x00000002>;
+				qcom,max-align = <0x00000009>;
+				memory-region = <&avr_saved_display_pool>;
+			};
+		};
+	};
+};

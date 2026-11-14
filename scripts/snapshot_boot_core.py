@@ -15,6 +15,7 @@ parser.add_argument("--gpu-deps",action="store_true")
 parser.add_argument("--gpu-driver",action="store_true")
 parser.add_argument("--ipc-deps",action="store_true")
 parser.add_argument("--rakkashin",action="store_true")
+parser.add_argument('--storage-phy',action='store_true')
 args=parser.parse_args()
 if args.gpu_driver:
     args.gpu_deps = True
@@ -35,6 +36,8 @@ if args.gpu_driver:
     ports += ['gunyah-core','gunyah-rm','qti-fence','kgsl']
     modules += [(out/'drivers/hwtracing/coresight/coresight.ko','modules/native/coresight.ko'),
                 (out/'drivers/nvmem/nvmem_qfprom.ko','modules/native/nvmem_qfprom.ko')]
+if args.storage_phy:
+    ports.append('ufs-phy-canoe')
 if args.rakkashin:
     ports.append("rakkashin/adios")
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))

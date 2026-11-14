@@ -1,0 +1,23 @@
+{
+  "scope": "saved stable memory definitions and resolved display heap reference only; not CMA allocation, DMA heap driver, firmware or device runtime proof",
+  "static_and_running_definitions_match": true,
+  "input_sha256": {
+    "artifacts/dt-input-audit/stock-merged.dtb": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+    "device-baseline/running.dtb": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0"
+  },
+  "output": "ports/device-tree/recovered/avr-saved-memory.dtso",
+  "output_sha256": "dc187a09277147edf8a567c3742668ce159639ef803d1c3c19dd4e8d8bef1972",
+  "nodes": [
+    "/reserved-memory/non_secure_display_region",
+    "/reserved-memory/reserved_region@80e00000",
+    "/soc/qcom,dma-heaps/qcom,display"
+  ],
+  "display_pool_size": 209715200,
+  "display_pool_alignment": 4194304,
+  "fixed_region_address": 2162163712,
+  "fixed_region_size": 4194304,
+  "fixed_region_saved_overlap_check_passed": true,
+  "packaging_allowed": false,
+  "merged_values_and_reference_match": true,
+  "merged_sha256": "f7e6c9a9aef15dfda317dedec0e6796ecd9b5f5f15bb81630bc499e7859d0f22"
+}

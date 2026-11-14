@@ -47,3 +47,19 @@ component DTSの合成順序と製品選択の復元、各ドライバの7.3対�
 ユーザーの低電圧化・クロック・段数変更は公開標準値へ置き換えません。`python scripts/reconstruct_gpu_dt.py --write` は保存した静的DTと稼働中DTのGPU表が一致することを確認し、21段階の周波数・電圧corner・ACD・bus設定と初期段を `recovered/avr-saved-gpu-pwrlevels.dtso` に復元します。新しいチューニング値は生成しません。移植ドライバの32段階上限内、index連続、周波数順序、bus範囲を確認しますが、これは7.3での電圧/firmware動作の検証ではありません。
 
 `python scripts/build_dt_components.py --camera-reference --extended-platform --saved-gpu-table` は別の研究出力にこの表を最後に適用します。適用後の22ノード（表親と21段）の全プロパティがダンプと完全一致することを確認し、一致しなければ失敗します。出力は `artifacts/dt-avr-platform-gpu-saved-build/`、照合は `reports/gpu-dt-reconstruction.json` です。全体5,069ノード、不足33ノードで、完成DTBや常用動作の証明ではありません。
+
+## DSP/EVA参照と保存メモリを含むプロファイル
+
+一致リリースにDSP/EVA DT refはありませんでした。別MotorolaリリースからAlor向けのDSP (`a6c46c4e0203f4679ac7249a1e5d30a7fedfad3c`) とEVA (`90082d47f3259fe1888019f8a6e78dffa47f24ad`) を参照入力として固定しています。DSPのAlor 2ファイルは `3a921fd2ace6c373cc4a115852bf29f2beab4452` にも同じGit blobで存在します。firmware一致とは区別します。
+
+```sh
+python scripts/prepare_dt_sources.py --components --camera-reference --extended-platform --dsp-eva-reference
+python scripts/reconstruct_memory_dt.py --write
+python scripts/build_dt_components.py --camera-reference --extended-platform --dsp-eva-reference --saved-gpu-table --saved-memory-layout
+```
+
+193入力ファイルを使うこの研究出力は `artifacts/dt-avr-dump-aligned-build/`。GPU表の完全一致を維持したまま5,102ノード（不足0、追加0）になりました。DSP/CVPの31ノードについて、scalar/string、既知形式の参照先と引数は保存静的DTと一致します。比較は同じphandle数値が別ノードを指す場合も検出し、未知形式を適当にphandleとみなしません。全体では240ノードに未解釈の参照やプロパティ差が残っています。これは全体のsemantic一致やfirmware/driver互換性の証明ではありません。
+
+保存メモリoverlayは静的・稼働中の両ダンプで一致する3ノードに限定します。表示用shared-dma-poolは200 MiB / 4 MiB alignmentで、動的割当のままです。heapのmemory-regionはoverlay内の参照で結び、ダンプの数値phandleを流用しません。固定予約領域はダンプの0x80e00000 / 4 MiBを復元し、保存済みの他の固定領域との非重複を確認しています。実機CMA allocation、DMA heap driver、suspendやfirmware動作は未確認です。
+
+`reports/dt-dsp-eva-reference-comparison.json` と `reports/memory-dt-reconstruction.json` に検証範囲とハッシュを記録しています。ノード一致のみではpackagingを許可しません。DTBOコンテナ・vendor_boot・DLKM・ROM側の整合と実機検証は引き続き必要です。

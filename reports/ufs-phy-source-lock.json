@@ -1,0 +1,36 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "source_path": "drivers/phy/qualcomm/phy-qcom-ufs.c",
+      "staged_path": "ports/ufs-phy-canoe/phy-qcom-ufs.c",
+      "original_git_blob": "9a22b4508e52a877ff4387144a59a86a9242689d",
+      "original_sha256": "3ea7e93c33f8c6f3d45d4f385adf4586e78c3e658cd9f62f60617e46d6f0a5ba"
+    },
+    {
+      "source_path": "drivers/phy/qualcomm/phy-qcom-ufs-i.h",
+      "staged_path": "ports/ufs-phy-canoe/phy-qcom-ufs-i.h",
+      "original_git_blob": "c8dab3bab755c47f7acad8442b2bfaa71f6bb244",
+      "original_sha256": "303c9d9d9260ee0dbf82c020e3a1827d4fd70d0152b84731be59e3792b64592a"
+    },
+    {
+      "source_path": "drivers/phy/qualcomm/phy-qcom-ufs-qmp-v4-canoe.c",
+      "staged_path": "ports/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.c",
+      "original_git_blob": "4dbdb0c97ab55cba7ec2ffcd7727b4d007c7ff05",
+      "original_sha256": "12a38ecc0e590ced555595bb3e97859d47ea95f5d5d7d39d378b6fd075d90b72"
+    },
+    {
+      "source_path": "drivers/phy/qualcomm/phy-qcom-ufs-qmp-v4-canoe.h",
+      "staged_path": "ports/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.h",
+      "original_git_blob": "31d7272ac0df99e1836a40eaffa06d56e3ae515f",
+      "original_sha256": "59ea9861cef846e7f4315956a6a19369e313569c19e45dca3ecc09dd09d6a634"
+    },
+    {
+      "source_path": "include/linux/phy/phy-qcom-ufs.h",
+      "staged_path": "ports/ufs-phy-canoe/include/linux/phy/phy-qcom-ufs.h",
+      "original_git_blob": "411b53c6eb07497146d12852ac210a007f3a2624",
+      "original_sha256": "fffe5326f07fd624adb891830ceff5e93e302b0a9b898900135d773b50ae1e56"
+    }
+  ],
+  "scope": "source inputs only; build and physical PHY validation pending"
+}

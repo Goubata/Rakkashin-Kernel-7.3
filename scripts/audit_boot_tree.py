@@ -98,19 +98,21 @@ def semantic_compare(left,right):
               'thermal-sensors':'#thermal-sensor-cells','cooling-device':'#cooling-cells',
               'qcom,smem-states':'#qcom,smem-state-cells'}
     lists={'nvmem-cells','memory-region','operating-points-v2','interrupt-affinity','cpu-idle-states'}
-    singles={'interrupt-parent','remote-endpoint','target','qcom,wsa-macro-handle','soccp_controller'}
+    singles={'interrupt-parent','remote-endpoint','target','qcom,wsa-macro-handle','soccp_controller','qcom,iommu-group'}
     def resolve(name,data,nodes,mapping):
         if data is None or len(data)%4:return None
         cells=variable.get(name)
         if name=='gpios' or name.endswith('-gpios'):cells='#gpio-cells'
         single=name in singles or name.endswith('-supply')
-        fixed=single or name in lists or re.fullmatch(r'pinctrl-\d+',name)
+        iommu_ranges=name=='iommu-addresses'
+        fixed=single or name in lists or re.fullmatch(r'pinctrl-\d+',name) or iommu_ranges
         if not cells and not fixed:return None
         values=struct.unpack('>'+'I'*(len(data)//4),data)
         if single and len(values)!=1:return None
         result=[];pos=0
         while pos<len(values):
             handle=values[pos];pos+=1
+            if not handle and iommu_ranges:return None
             if not handle and not single:
                 result.append((None,()));continue
             if handle not in mapping:return None
@@ -120,13 +122,36 @@ def semantic_compare(left,right):
                 if count is None or len(count)!=4:return None
                 argc=int.from_bytes(count,'big')
                 if argc>32:return None
+            if iommu_ranges:
+                # Match the direct DMA parent encoding only; do not guess an
+                # inherited/default arity or follow vendor DMA-parent links.
+                target_props=nodes[target]
+                if 'dma-parent' in target_props:return None
+                parent=target.rsplit('/',1)[0] or '/'
+                if parent not in nodes:return None
+                counts=[nodes[parent].get(key) for key in ('#address-cells','#size-cells')]
+                if any(v is None or len(v)!=4 for v in counts):return None
+                arities=[int.from_bytes(v,'big') for v in counts]
+                if not 1<=arities[0]<=4 or not 0<=arities[1]<=4:return None
+                argc=sum(arities)
             if pos+argc>len(values):return None
             result.append((target,tuple(values[pos:pos+argc])));pos+=argc
         return result
-    for path,names in raw['changed_property_names'].items():
+    # Equal numeric bytes do not imply an equal reference: the same phandle
+    # number can point at a different node in independently compiled trees.
+    candidates={p:set(names) for p,names in raw['changed_property_names'].items()}
+    for path in left.keys() & right.keys():
+        if path.startswith('/__'):continue
+        for name in left[path].keys() & right[path].keys():
+            lv=left[path][name];rv=right[path][name]
+            if lv!=rv:continue
+            left_ref=resolve(name,lv,left,lm);right_ref=resolve(name,rv,right,rm)
+            if left_ref!=right_ref and (left_ref is not None or right_ref is not None):
+                candidates.setdefault(path,set()).add(name)
+    for path,names in sorted(candidates.items()):
         if path=='/__symbols__':continue
         changed=[]
-        for name in names:
+        for name in sorted(names):
             lv=left[path].get(name);rv=right[path].get(name)
             if not path.startswith('/__') and name in ('phandle','linux,phandle'):
                 if lv is not None and rv is not None and len(lv)==len(rv)==4:

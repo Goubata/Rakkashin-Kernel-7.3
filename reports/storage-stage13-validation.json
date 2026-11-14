@@ -1,0 +1,32 @@
+{
+  "scope": "Firmware-pinned UFS PHY modules built, CRC/dependencies checked and loaded/unloaded without matching hardware in QEMU; no storage read/write or hardware training",
+  "stage": "android73-storage-stage13",
+  "module_count": 73,
+  "imports_checked": 3700,
+  "image_sha256": "47b5ddb0f1e7e52e21599ddb1c24c69400b441c1c43083bc0dcbacc6619c9cae",
+  "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
+  "passed": true,
+  "phy_source_files_unmodified": true,
+  "phy_compatible_matches_saved_dt": true,
+  "new_guest_modules": [
+    "phy_qcom_ufs",
+    "phy_qcom_ufs_qmp_v4_canoe"
+  ],
+  "guest_scope": "real module insertion, /sys/module presence, reverse removal and /sys/module absence; no OF probe on QEMU",
+  "prior_validation": "gpu-stage12-validation.json",
+  "physical_probe_verified": false,
+  "storage_read_write_performed": false,
+  "blockers": [
+    "UFS host adaptation: native CONFIG_SCSI_UFS_QCOM is currently disabled",
+    "ICE/wrapped-key provider and encrypted data compatibility",
+    "Clock, reset, regulator, interconnect, IOMMU and PHY probe integration",
+    "Full Android hardware/runtime acceptance"
+  ],
+  "sha256": {
+    "reports/ufs-phy-source-lock.json": "09dd4369222caf5bc793347de2f52dc3e5ca603cf95914dd283667bf3b171326",
+    "reports/ufs-phy-build-verified.log": "0bf0c934545c5ed1d61606d101e01761d5e272273d1a920902bb484a51f16ec0",
+    "reports/qemu-storage-phy-stage13.log": "7152acf2485bf1e98cfa9c35018f03a8095bc489c4c85def17a126887b537850",
+    "reports/qemu-storage-phy-stage13.json": "f4f99df849947bc89e797832671744fd1767b3fa103f539c79666428c2684964",
+    "reports/module-crc-stage13.json": "7b6f438c0acccbb0f43153344023ba63459c2bd0eb9464a9e5a786195abec8bc"
+  }
+}

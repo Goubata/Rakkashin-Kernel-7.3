@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-gpu-stage12/（71モジュール、3,624インポートCRC一致）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-storage-stage13/（73モジュール、3,700インポートCRC一致）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -129,3 +129,11 @@ Gunyah vendor RMのSCM/hyp・RM/QTVM通知に、登録失敗時の巻き戻し�
 ユーザーGPU設定は保存実機DT（静的画像と稼働中DTで一致）の21段階を復元しました。`--saved-gpu-table` の別出力ではGPU表の全プロパティ一致を確認し、全体5,069ノード、不足33ノードです。低電圧化やクロックの新しい値は生成していません。7.3でのGPU実動作・温度・安定性は未検証です。
 
 Stage12では共通RMのscoped OFノード二重putとIRQ親参照の漏れを修正し、IPC/GPU全体を再ビルド・照合しました。新しい実機/QEMUハイパーバイザ試験を実施したという意味ではありません。`reports/gpu-stage12-validation.json` を参照。DTの不足33ノードと予約メモリの不一致は `reports/dt-critical-gaps.json` に切り分け、起動用イメージへの使用を保留しています。
+
+## DSP/CVP・保存メモリのDT合成とUFS PHY
+
+193ファイルの明示的なDSP/EVA参照プロファイルに、ダンプのGPU表・表示CMA pool・DMA heap・固定予約領域を適用し、静的基準と同じ5,102ノード（不足・追加0）になりました。DSP/CVPの31ノードは既知形式の参照先と引数を含めて一致。GPU表は引き続き全プロパティ完全一致です。表示poolは200 MiB、4 MiB alignmentの動的割当を保持し、bootloaderが決めるアドレスを固定していません。
+
+同じ数値のphandleが異なるノードを指す場合を見逃さないよう比較も修正しました。範囲・参照・メモリの20検査が成功。全体にはまだ240ノードの未解釈の参照やプロパティ差が残り、OEM合成順序・binding・ドライバ実動作は未検証です。ノード数一致を完成扱いにはしません。`reports/dt-dsp-eva-reference-comparison.json` と `reports/dt-avr-dump-aligned-build.json` を参照。
+
+UFS PHYはfirmware一致のMotorolaソース5ファイルを変更せず、`phy-qcom-ufs.ko` と `phy-qcom-ufs-qmp-v4-canoe.ko` を7.3でリンクしました。実機DTのcompatibleとモジュールaliasが対応し、SMP4 QEMUでロード・存在確認・逆順アンロードまで成功。実機のPHY training、UFS接続、読み書き、暗号化解除は未確認です。UFSホストとICE/wrapped-key対応も未完成で、起動用イメージではありません。`reports/storage-stage13-validation.json` を参照。

@@ -13,14 +13,18 @@ ROOT=Path(__file__).resolve().parents[1]
 AUDIT=ROOT.parent/'avr-upstream-audit'
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--components',action='store_true',help='Also materialize AVR audio/display/camera input graphs for research')
-parser.add_argument('--component',action='append',choices=['display','audio','camera','gpu','hw-fence','hfi','synx','video','data','bluetooth','wlan','nfc'],default=[])
+parser.add_argument('--component',action='append',choices=['display','audio','camera','gpu','hw-fence','hfi','synx','video','data','bluetooth','wlan','nfc','dsp','eva'],default=[])
 parser.add_argument('--camera-reference',action='store_true',help='Explicitly use the unverified Vantage camera binding reference in a separate research bundle')
 parser.add_argument('--extended-platform',action='store_true',help='Add firmware-pinned GPU, fence, video, data, BT and WLAN graphs for research')
+parser.add_argument('--dsp-eva-reference',action='store_true',help='Use explicit Alor DSP/EVA references from different Motorola releases, without assuming firmware compatibility')
 args=parser.parse_args()
+if args.dsp_eva_reference and not args.extended_platform:parser.error('--dsp-eva-reference requires --extended-platform')
 selected=set(['display','audio','camera'] if args.components else args.component)
 if args.extended_platform:
  if not args.camera_reference or not {'display','audio','camera'}<=selected:parser.error('--extended-platform requires --components --camera-reference')
  selected |= {'gpu','hw-fence','hfi','synx','video','data','bluetooth','wlan','nfc'}
+if selected & {'dsp','eva'} and not args.dsp_eva_reference:parser.error('DSP/EVA selections require --dsp-eva-reference')
+if args.dsp_eva_reference:selected |= {'dsp','eva'}
 args.components=bool(selected)
 if args.camera_reference and 'camera' not in selected:parser.error('--camera-reference requires selecting camera components')
 DEST=ROOT/('artifacts/dt-component-source-bundle' if args.components else 'artifacts/dt-source-bundle')
@@ -31,6 +35,9 @@ if args.camera_reference:
 if args.extended_platform:
  DEST=ROOT/'artifacts/dt-avr-platform-bundle'
  REPORT=ROOT/'reports/dt-avr-platform-source-lock.json'
+if args.dsp_eva_reference:
+ DEST=ROOT/'artifacts/dt-avr-dsp-eva-reference-bundle'
+ REPORT=ROOT/'reports/dt-avr-dsp-eva-reference-source-lock.json'
 rows=json.loads((ROOT/'reports/vendor-source-refs.json').read_text())
 repos={r['repository']:(AUDIT/'vendor-repos'/r['repository'],r['commit']) for r in rows
        if ('devicetree' in r['repository'] or r['repository'] in ('motorola-kernel-modules','vendor-qcom-opensource-audio-kernel')) and 'commit' in r}
@@ -40,6 +47,9 @@ if args.camera_reference:
  repos['camera-vantage-reference']=(AUDIT/'camera-vantage-reference','cfc9f5178968206a4c859e29350222b68ca1cd13')
 if args.extended_platform:
  repos['avr-dt-compat']=(ROOT,'939f0f35270aaa103b4f9dfeb7e98fb3aa3d8918')
+if args.dsp_eva_reference:
+ repos['kernel-dsp-reference']=(AUDIT/'kernel-dsp-devicetree-reference','a6c46c4e0203f4679ac7249a1e5d30a7fedfad3c')
+ repos['kernel-eva-reference']=(AUDIT/'kernel-eva-devicetree-reference','90082d47f3259fe1888019f8a6e78dffa47f24ad')
 indexes={}
 links={}
 aliases={}
@@ -120,7 +130,9 @@ component_roots.update({
  'data':[('kernel-data-devicetree','alor-ipa.dts'),('kernel-data-devicetree','alor-smem-mailbox.dts')],
  'bluetooth':[('kernel-bt-devicetree','alor-wcn7750-bt-avr-evb.dts')],
  'wlan':[('kernel-wlan-devicetree','alor-qrd-wcn7750-avr-evb.dts')],
- 'nfc':[('kernel-nfc-devicetree','nxp/alor-nfc-avr-evb.dts')]})
+ 'nfc':[('kernel-nfc-devicetree','nxp/alor-nfc-avr-evb.dts')],
+ 'dsp':[('kernel-dsp-reference','alor/alor-dsp.dts')],
+ 'eva':[('kernel-eva-reference','alor-eva.dts')]})
 for component in sorted(selected):roots += component_roots[component]
 queue=list(roots);seen=set();files=[];edges=[]
 DEST.mkdir(parents=True,exist_ok=True)
@@ -145,7 +157,7 @@ try:
    resolved=resolve(name,path,include);queue.append(resolved)
    edges.append({'from':name+':'+path,'include':include,'to':resolved[0]+':'+resolved[1]})
   if len(files)%20==0:print('Verified source files:',len(files),flush=True)
- report={'extended_platform':args.extended_platform,'camera_reference_used':args.camera_reference,'camera_driver_compatibility_verified':False,
+ report={'dsp_eva_reference_used':args.dsp_eva_reference,'dsp_eva_firmware_compatibility_verified':False,'extended_platform':args.extended_platform,'camera_reference_used':args.camera_reference,'camera_driver_compatibility_verified':False,
          'status':'include graph materialized','roots':[n+':'+p for n,p in roots],
          'repositories':{n:c for n,(_,c) in repos.items() if any(f['repository']==n for f in files)},
          'files':files,'include_edges':edges,'symlink_aliases':aliases,'scope':'pinned source inputs only; not a compiled or validated 7.3 DTB'}

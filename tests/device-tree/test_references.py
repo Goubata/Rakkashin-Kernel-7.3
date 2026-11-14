@@ -43,6 +43,30 @@ class References(unittest.TestCase):
         a,b=self.pair();a['/__local_fixups__/consumer']={'pinctrl-0':cells(1)}
         b['/__local_fixups__/consumer']={'pinctrl-0':cells(101)}
         self.assertIn('/__local_fixups__/consumer',self.changed((a,b)))
+    def test_equal_raw_reference_to_different_target_is_visible(self):
+        a,b=self.pair('memory-region',cells(1),cells(1))
+        b['/gpio']['phandle']=cells(1)
+        self.assertIn('memory-region',self.changed((a,b))['/consumer'])
+    def test_equal_raw_reference_with_missing_target_is_visible(self):
+        self.assertIn('/consumer',self.changed(self.pair('memory-region',cells(1),cells(1))))
+    def test_iommu_group_renumbering(self):
+        self.assertNotIn('/consumer',self.changed(self.pair('qcom,iommu-group',cells(1),cells(101))))
+    def iommu_pair(self):
+        a,b=self.pair('iommu-addresses',cells(1,0,4096,0,8192),cells(101,0,4096,0,8192))
+        for tree in (a,b):
+            tree['/'].update({'#address-cells':cells(2),'#size-cells':cells(2)})
+        return a,b
+    def test_iommu_range_target_renumbering(self):
+        self.assertNotIn('/consumer',self.changed(self.iommu_pair()))
+    def test_iommu_range_length_difference_is_visible(self):
+        a,b=self.iommu_pair();b['/consumer']['iommu-addresses']=cells(101,0,4096,0,8193)
+        self.assertIn('/consumer',self.changed((a,b)))
+    def test_iommu_range_missing_bus_arity_is_not_guessed(self):
+        a,b=self.iommu_pair();del b['/']['#size-cells']
+        self.assertIn('/consumer',self.changed((a,b)))
+    def test_iommu_range_dma_parent_is_not_guessed(self):
+        a,b=self.iommu_pair();b['/clock']['dma-parent']=cells(102)
+        self.assertIn('/consumer',self.changed((a,b)))
     def test_added_phandle_is_not_hidden(self):
         a,b=self.pair();del a['/clock']['phandle']
         self.assertIn('phandle',self.changed((a,b))['/clock'])

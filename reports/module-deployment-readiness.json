@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-gpu-stage12",
+  "stage": "android73-storage-stage13",
   "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
   "archived_unique_count": 544,
-  "staged_count": 71,
-  "same_name_candidate_count": 57,
-  "archived_names_without_same_name_candidate_count": 487,
-  "loaded_names_without_same_name_candidate_count": 472,
+  "staged_count": 73,
+  "same_name_candidate_count": 59,
+  "archived_names_without_same_name_candidate_count": 485,
+  "loaded_names_without_same_name_candidate_count": 470,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -107,6 +107,14 @@
     {
       "name": "nvmem_qfprom",
       "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "phy_qcom_ufs",
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs.ko"
+    },
+    {
+      "name": "phy_qcom_ufs_qmp_v4_canoe",
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
     },
     {
       "name": "proxy_consumer",
@@ -398,6 +406,14 @@
     {
       "name": "nvmem_qfprom",
       "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "phy_qcom_ufs",
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs.ko"
+    },
+    {
+      "name": "phy_qcom_ufs_qmp_v4_canoe",
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
     },
     {
       "name": "proxy_consumer",
@@ -1634,6 +1650,34 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "phy_qcom_ufs_qmp_v4_canoe": {
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko",
+      "sha256": "dd1b602fa5982322f6aa2a2580f340b59744efae8514ab2bff844e35a15829ed",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "phy_qcom_ufs"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "phy_qcom_ufs": {
+      "file": "modules/ufs-phy-canoe/phy-qcom-ufs.ko",
+      "sha256": "573e984616c879b1118b8a2bcd78f619c24fda52bd86f5b45714e47a2ac0f8ef",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
@@ -3410,20 +3454,6 @@
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "phy_qcom_ufs",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "phy_qcom_ufs_qmp_v4_canoe",
-      "placements": [
-        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true
     },
@@ -5487,8 +5517,6 @@
     "phy_qcom_eusb2_repeater",
     "phy_qcom_m31_eusb2",
     "phy_qcom_qmp_combo",
-    "phy_qcom_ufs",
-    "phy_qcom_ufs_qmp_v4_canoe",
     "phy_qcom_ufs_qmp_v4_crow",
     "phy_qcom_ufs_qrbtc_sdm845",
     "pinctrl_canoe",

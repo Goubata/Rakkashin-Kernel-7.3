@@ -21,6 +21,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--storage-phy-tests", action="store_true")
     group.add_argument("--rm-lifetime-tests", action="store_true")
     group.add_argument("--gpu-policy-tests", action="store_true")
     group.add_argument("--scm-tests", action="store_true")
@@ -184,6 +185,20 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.storage_phy_tests:
+        commands=[]
+        for name in ['phy-qcom-ufs','phy-qcom-ufs-qmp-v4-canoe']:
+            source=ROOT/'ports/ufs-phy-canoe'/(name+'.ko')
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            module=name.replace('-','_')
+            commands += [f'/bin/busybox insmod /modules/{source.name} || {{ echo AVR_STORAGE_PHY_LOAD_FAIL; /bin/busybox poweroff -f; }}',
+                         f'test -d /sys/module/{module} || {{ echo AVR_STORAGE_PHY_STATE_FAIL; /bin/busybox poweroff -f; }}']
+        commands.append('echo AVR_STORAGE_PHY_LOADED count=2')
+        for name in ['phy_qcom_ufs_qmp_v4_canoe','phy_qcom_ufs']:
+            commands += [f'/bin/busybox rmmod {name} || {{ echo AVR_STORAGE_PHY_UNLOAD_FAIL; /bin/busybox poweroff -f; }}',
+                         f'test ! -d /sys/module/{name} || {{ echo AVR_STORAGE_PHY_EXIT_STATE_FAIL; /bin/busybox poweroff -f; }}']
+        commands.append('echo AVR_STORAGE_PHY_TESTS_PASS count=2')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.platform_tests:
         modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
         modules += [ROOT/'ports'/name for name in [
@@ -243,7 +258,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

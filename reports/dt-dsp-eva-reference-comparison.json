@@ -1,0 +1,74 @@
+{
+  "scope": "31 selected DSP/EVA DT nodes: exact scalar/strings plus known reference encodings with exact argument and target comparison. Not driver ABI, firmware or physical runtime proof",
+  "node_count": 31,
+  "nodes": [
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@1",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@2",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@3",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@4",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@5",
+    "/soc/remoteproc-adsp@06800000/glink-edge/qcom,fastrpc/compute-cb@6",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@1",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@2",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@3",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@4",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@5",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@6",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@7",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@8",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@9",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@10",
+    "/soc/remoteproc-cdsp@26300000/glink-edge/qcom,fastrpc/compute-cb@11",
+    "/soc/qcom,cvp@2400000",
+    "/soc/qcom,cvp@2400000/cvp_cnoc",
+    "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+    "/soc/qcom,cvp@2400000/cvp_camera_cb",
+    "/soc/qcom,cvp@2400000/cvp_non_secure_cb_group",
+    "/soc/qcom,cvp@2400000/cvp_iommu_region_partition",
+    "/soc/qcom,cvp@2400000/cvp_non_secure_cb",
+    "/soc/qcom,cvp@2400000/cvp_secure_nonpixel_cb",
+    "/soc/qcom,cvp@2400000/cvp_secure_pixel_cb",
+    "/soc/qcom,cvp@2400000/cvp_dsp_cb",
+    "/soc/qcom,cvp@2400000/qcom,msm-cvp,mem_cdsp",
+    "/soc/qcom,cvp@2400000/ipclite_mappings"
+  ],
+  "unresolved_properties_in_selected_nodes": {},
+  "selected_node_property_comparison_passed": true,
+  "source_rows": [
+    {
+      "repository": "kernel-dsp-reference",
+      "commit": "a6c46c4e0203f4679ac7249a1e5d30a7fedfad3c",
+      "path": "alor/alor-dsp.dts",
+      "git_blob": "b14c5b76bb1ad178b1674f5b9d84cf83a1f50c90",
+      "sha256": "4486f1b604a3ea955e1c86dc73ca127f928feb1ae570dd412d4a2fe271b54b5f"
+    },
+    {
+      "repository": "kernel-eva-reference",
+      "commit": "90082d47f3259fe1888019f8a6e78dffa47f24ad",
+      "path": "alor-eva.dts",
+      "git_blob": "772831d2802b5c218849eb0b59b61ba019a741a7",
+      "sha256": "f64d099ad5940771d91570b05cebc01a983229b958e2bbaf5c25a98025014d7d"
+    },
+    {
+      "repository": "kernel-dsp-reference",
+      "commit": "a6c46c4e0203f4679ac7249a1e5d30a7fedfad3c",
+      "path": "alor/alor-dsp.dtsi",
+      "git_blob": "ded188037a1073cecb7dd3b5886f88ade6d1f3c8",
+      "sha256": "e58abd8938cee6a175b59732db45675524e7d7519ee32323ea84b216829342d4"
+    },
+    {
+      "repository": "kernel-eva-reference",
+      "commit": "90082d47f3259fe1888019f8a6e78dffa47f24ad",
+      "path": "alor-eva.dtsi",
+      "git_blob": "19f6c18c5d08eb221c18cd2ee8d24a3c2e5dcb75",
+      "sha256": "010c8c2183099b61d966f8a1c97eba2f8ec9150797c79e975aab1145e95c572f"
+    }
+  ],
+  "firmware_release_match_verified": false,
+  "report_sha256": "0e2f16409b9ef7a04277f6d93c7fa4353375d1819cc3203ebbe9bd06b01369b5",
+  "semantic_checker_sha256": "895396a4bac7eaceacf8cc8ef135ac6b75cac743759b54bacdec90957073a20d",
+  "remaining_unresolved_property_node_count": 240,
+  "physical_runtime_verified": false
+}

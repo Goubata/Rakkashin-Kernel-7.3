@@ -29,7 +29,13 @@ def main():
     parser.add_argument('--camera-reference',action='store_true')
     parser.add_argument('--extended-platform',action='store_true')
     parser.add_argument('--saved-gpu-table',action='store_true',help='Apply and exactly verify the user GPU table recovered from the saved device DT')
+    parser.add_argument('--dsp-eva-reference',action='store_true')
+    parser.add_argument('--saved-memory-layout',action='store_true',help='Restore only the reviewed stable memory nodes from saved AVR DT')
     args=parser.parse_args()
+    if args.saved_memory_layout and not (args.dsp_eva_reference and args.saved_gpu_table):
+        parser.error('--saved-memory-layout requires --dsp-eva-reference --saved-gpu-table')
+    if args.dsp_eva_reference and not args.extended_platform:
+        parser.error('--dsp-eva-reference requires --extended-platform')
     if args.saved_gpu_table and not args.extended_platform:
         parser.error('--saved-gpu-table requires --extended-platform')
     lock_name='dt-camera-reference-lock.json' if args.camera_reference else 'dt-component-source-lock.json'
@@ -45,6 +51,14 @@ def main():
     if args.saved_gpu_table:
         OUT=ROOT/'artifacts/dt-avr-platform-gpu-saved-build'
         report_name='dt-avr-platform-gpu-saved-build.json'
+    if args.dsp_eva_reference:
+        BUNDLE=ROOT/'artifacts/dt-avr-dsp-eva-reference-bundle'
+        OUT=ROOT/('artifacts/dt-avr-dsp-eva-gpu-saved-build' if args.saved_gpu_table else 'artifacts/dt-avr-dsp-eva-build')
+        lock_name='dt-avr-dsp-eva-reference-source-lock.json'
+        report_name='dt-avr-dsp-eva-gpu-saved-build.json' if args.saved_gpu_table else 'dt-avr-dsp-eva-build.json'
+    if args.saved_memory_layout:
+        OUT=ROOT/'artifacts/dt-avr-dump-aligned-build'
+        report_name='dt-avr-dump-aligned-build.json'
     lock = json.loads((ROOT / 'reports' / lock_name).read_text())
     if lock['status'] != 'include graph materialized':
         raise SystemExit('Component inputs incomplete; prepare and review them first')
@@ -76,7 +90,7 @@ def main():
     # Keep component base extensions before board-specific overrides.
     order = [name for name in ['alor-audio', 'alor-sde', 'alor-camera',
                               'alor-gpu','alor-hw-fence','alor-hfi-core','alor-vidc',
-                              'alor-ipa','alor-smem-mailbox','canoe-synx',
+                              'alor-ipa','alor-smem-mailbox','canoe-synx','alor-dsp','alor-eva',
                               'alor-avr-evb-overlay', 'alor-audio-moto-avr-evb',
                               'alor-sde-display-avr-evb-overlay', 'alor-camera-sensor-avr-evb',
                               'alor-wcn7750-bt-avr-evb','alor-qrd-wcn7750-avr-evb','alor-nfc-avr-evb']
@@ -90,12 +104,23 @@ def main():
                                       '-o',inside(output),inside(saved_gpu_source)],OUT/'saved-gpu-dtc.log')
         outputs['avr-saved-gpu-pwrlevels']=output
         order.append('avr-saved-gpu-pwrlevels')
+    saved_memory_source=None
+    if args.saved_memory_layout:
+        subprocess.run(['python', str(ROOT/'scripts/reconstruct_memory_dt.py')],check=True)
+        saved_memory_source=ROOT/'ports/device-tree/recovered/avr-saved-memory.dtso'
+        output=OUT/'avr-saved-memory.dtb'
+        commands['saved_memory_dtc']=run([DTC+'dtc','-@','-H','epapr','-I','dts','-O','dtb',
+                                         '-o',inside(output),inside(saved_memory_source)],OUT/'saved-memory-dtc.log')
+        outputs['avr-saved-memory']=output
+        order.append('avr-saved-memory')
     merged = OUT / 'avr-experimental-merged.dtb'
     command = [DTC + 'fdtoverlay', '-i', inside(outputs['alor-avr-base']), '-o', inside(merged)]
     command += [inside(outputs[name]) for name in order]
     commands['experimental_apply'] = run(command, OUT / 'experimental-apply.log')
     if args.saved_gpu_table:
         subprocess.run(['python', str(ROOT/'scripts/reconstruct_gpu_dt.py'), '--verify-merged', str(merged)], check=True)
+    if args.saved_memory_layout:
+        subprocess.run(['python', str(ROOT/'scripts/reconstruct_memory_dt.py'), '--verify-merged', str(merged)],check=True)
     spec = importlib.util.spec_from_file_location('dt_audit', ROOT / 'scripts/audit_boot_tree.py')
     audit = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(audit)
@@ -104,9 +129,15 @@ def main():
     difference = audit.compare(stock, rebuilt)
     report = {'scope': 'component compilation and experimental ordering only; not an OEM recipe, binding validation or phone test',
               'source_file_count': len(lock['files']), 'source_lock': lock_name, 'source_lock_sha256': hashlib.sha256((ROOT/'reports'/lock_name).read_bytes()).hexdigest(), 'camera_reference_used': lock.get('camera_reference_used',False), 'extended_platform': args.extended_platform, 'camera_driver_compatibility_verified': False,
+              'dsp_eva_reference_used': lock.get('dsp_eva_reference_used',False),
+              'dsp_eva_firmware_compatibility_verified': False,
+              'saved_memory_layout_used': args.saved_memory_layout,
+              'saved_memory_source_sha256': hashlib.sha256(saved_memory_source.read_bytes()).hexdigest() if saved_memory_source else None,
+              'saved_memory_values_and_reference_match': True if args.saved_memory_layout else None,
               'saved_gpu_table_used': args.saved_gpu_table,
               'saved_gpu_source_sha256': hashlib.sha256(saved_gpu_source.read_bytes()).hexdigest() if saved_gpu_source else None,
               'saved_gpu_table_exact_match': True if args.saved_gpu_table else None,
+              'semantic_checker_sha256': hashlib.sha256((ROOT/'scripts/audit_boot_tree.py').read_bytes()).hexdigest(),
               'composition_order': order, 'oem_order_verified': False, 'packaging_allowed': False,
               'stock_node_count': len(stock), 'rebuilt_node_count': len(rebuilt),
               'missing_node_count': len(difference['left_only_nodes']),

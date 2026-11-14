@@ -7,12 +7,12 @@ from pathlib import Path
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('log',type=Path)
-p.add_argument('--test',choices=['smoke','clock','oplus','modules','iommu','secure','sysstats','fence','rakkashin','ntsync','power','adios','platform','scm','gpu-policy','rm-lifetime'],required=True)
+p.add_argument('--test',choices=['storage-phy','smoke','clock','oplus','modules','iommu','secure','sysstats','fence','rakkashin','ntsync','power','adios','platform','scm','gpu-policy','rm-lifetime'],required=True)
 p.add_argument("--clock-count",type=int,default=35)
 p.add_argument("--module-count",type=int,default=20)
 a=p.parse_args()
 s=a.log.read_text(errors='replace')
-markers={'rm-lifetime':'AVR_RM_LIFETIME_TESTS_PASS','gpu-policy':'AVR_GPU_POLICY_TESTS_PASS','scm':'AVR_SCM_TESTS_PASS','platform':'AVR_PLATFORM_TESTS_PASS','smoke':'AVR_QEMU_SMOKE_PASS','clock':'AVR_QEMU_KUNIT_MODULES_LOADED','oplus':'AVR_OPLUS_SYNC_PASS','modules':f'AVR_VENDOR_MODULES_PASS count={a.module_count} ','iommu':'AVR_IOMMU_TESTS_LOADED','secure':'AVR_SECURE_TESTS_LOADED','sysstats':'AVR_SYSSTATS_TESTS_LOADED','fence':'AVR_FENCE_TESTS_LOADED','rakkashin':'AVR_RAKKASHIN_PASS','ntsync':'AVR_NTSYNC_SELFTEST_PASS','power':'AVR_POWER_TESTS_LOADED','adios':'AVR_ADIOS_TESTS_PASS rounds=3 workers=4'}
+markers={'storage-phy':'AVR_STORAGE_PHY_TESTS_PASS count=2','rm-lifetime':'AVR_RM_LIFETIME_TESTS_PASS','gpu-policy':'AVR_GPU_POLICY_TESTS_PASS','scm':'AVR_SCM_TESTS_PASS','platform':'AVR_PLATFORM_TESTS_PASS','smoke':'AVR_QEMU_SMOKE_PASS','clock':'AVR_QEMU_KUNIT_MODULES_LOADED','oplus':'AVR_OPLUS_SYNC_PASS','modules':f'AVR_VENDOR_MODULES_PASS count={a.module_count} ','iommu':'AVR_IOMMU_TESTS_LOADED','secure':'AVR_SECURE_TESTS_LOADED','sysstats':'AVR_SYSSTATS_TESTS_LOADED','fence':'AVR_FENCE_TESTS_LOADED','rakkashin':'AVR_RAKKASHIN_PASS','ntsync':'AVR_NTSYNC_SELFTEST_PASS','power':'AVR_POWER_TESTS_LOADED','adios':'AVR_ADIOS_TESTS_PASS rounds=3 workers=4'}
 failures=[]
 for pattern in [r'Kernel panic',r'BUG:',r'WARNING:',r'\bnot ok\b',r'AVR_\w*FAIL',r'rcu: .*stall',r'rcu: .*detected stalls']:
     if re.search(pattern,s):failures.append(pattern)
@@ -28,6 +28,8 @@ if a.test in ('clock','iommu','secure','sysstats','fence','power','platform','sc
     result['totals']=[passes-skips,0,skips,passes]
     if result['totals'] != [expected,0,0,expected]:
         failures.append(f'expected all {expected} KTAP cases')
+if a.test=='storage-phy' and 'AVR_STORAGE_PHY_LOADED count=2' not in s:
+    failures.append('missing both real UFS PHY module loads')
 if a.test=='platform' and 'AVR_GUNYAH_GUEST_GATE_PASS' not in s:
     failures.append('missing real Gunyah guest rejection check')
 if a.test=='modules' and a.module_count>=20 and 'AVR_SYSSTATS_NETLINK_PASS checks=4' not in s:

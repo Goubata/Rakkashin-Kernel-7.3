@@ -1,0 +1,291 @@
+diff --git a/drivers/firmware/qcom/Makefile b/drivers/firmware/qcom/Makefile
+index 88ce74d74..b7153b788 100644
+--- a/drivers/firmware/qcom/Makefile
++++ b/drivers/firmware/qcom/Makefile
+@@ -6,7 +6,13 @@
+ obj-$(CONFIG_QCOM_SCM)		+= qcom-scm.o
+ qcom-scm-objs += qcom_scm.o qcom_scm-smc.o qcom_scm-legacy.o
+ CFLAGS_qcom_scm-smc.o := -I$(src)
++# SHM Bridge calls SCM, and SCM allocates from TZMEM. Keep both in one
++# module in this mode so their real exports do not form a load-time cycle.
++ifeq ($(CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE),y)
++qcom-scm-objs += qcom_tzmem.o
++else
+ obj-$(CONFIG_QCOM_TZMEM)	+= qcom_tzmem.o
++endif
+ obj-$(CONFIG_QCOM_QSEECOM)	+= qcom_qseecom.o
+ obj-$(CONFIG_QCOM_QSEECOM_UEFISECAPP) += qcom_qseecom_uefisecapp.o
+ obj-$(CONFIG_QCOM_PAS)		+= qcom_pas.o
+diff --git a/drivers/firmware/qcom/qcom_ice_v2.h b/drivers/firmware/qcom/qcom_ice_v2.h
+new file mode 100644
+index 000000000..c6c5e52fd
+--- /dev/null
++++ b/drivers/firmware/qcom/qcom_ice_v2.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef QCOM_ICE_V2_DESC_H
++#define QCOM_ICE_V2_DESC_H
++#include <linux/arm-smccc.h>
++#include "qcom_scm.h"
++
++/* Pinned Motorola qcom_scm.c: ES V2 set/clear/derive are 0x05/0x06/0x07. */
++static inline struct qcom_scm_desc qcom_ice_v2_set_desc(u32 slot,
++		phys_addr_t key, size_t size, u32 cipher, u32 unit, u32 ce)
++{
++	return (struct qcom_scm_desc) {
++		.svc = QCOM_SCM_SVC_ES, .cmd = 0x05,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.arginfo = QCOM_SCM_ARGS(6, QCOM_SCM_VAL, QCOM_SCM_RW,
++			QCOM_SCM_VAL, QCOM_SCM_VAL, QCOM_SCM_VAL, QCOM_SCM_VAL),
++		.args = { slot, key, size, cipher, unit, ce },
++	};
++}
++static inline struct qcom_scm_desc qcom_ice_v2_clear_desc(u32 slot, u32 ce)
++{
++	return (struct qcom_scm_desc) {
++		.svc = QCOM_SCM_SVC_ES, .cmd = 0x06,
++		.owner = ARM_SMCCC_OWNER_SIP, .arginfo = QCOM_SCM_ARGS(2),
++		.args = { slot, ce },
++	};
++}
++static inline struct qcom_scm_desc qcom_ice_v2_derive_desc(phys_addr_t key,
++		size_t key_size, phys_addr_t secret, size_t secret_size)
++{
++	return (struct qcom_scm_desc) {
++		.svc = QCOM_SCM_SVC_ES, .cmd = 0x07,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_RW, QCOM_SCM_VAL,
++			QCOM_SCM_RW, QCOM_SCM_VAL),
++		.args = { key, key_size, secret, secret_size },
++	};
++}
++#endif
+diff --git a/drivers/firmware/qcom/qcom_scm-smc.c b/drivers/firmware/qcom/qcom_scm-smc.c
+index 127365ab1..238845554 100644
+--- a/drivers/firmware/qcom/qcom_scm-smc.c
++++ b/drivers/firmware/qcom/qcom_scm-smc.c
+@@ -15,6 +15,7 @@
+ #include <linux/dma-mapping.h>
+ 
+ #include "qcom_scm.h"
++#include "qcom_scm_retry.h"
+ 
+ /**
+  * struct arm_smccc_args
+@@ -125,7 +126,7 @@ static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_
+ }
+ 
+ static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
+-			struct arm_smccc_res *res, bool atomic)
++			struct arm_smccc_res *res, bool atomic, bool retry_busy)
+ {
+ 	int ret, retry_count = 0;
+ 
+@@ -145,7 +146,8 @@ static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
+ 			return ret;
+ 
+ 		if (res->a0 == QCOM_SCM_V2_EBUSY) {
+-			if (retry_count++ > QCOM_SCM_EBUSY_MAX_RETRY)
++			if (!qcom_scm_retry_busy(retry_busy, res->a0,
++					 retry_count++, QCOM_SCM_EBUSY_MAX_RETRY))
+ 				break;
+ 			msleep(QCOM_SCM_EBUSY_WAIT_MS);
+ 		}
+@@ -155,9 +157,9 @@ static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
+ }
+ 
+ 
+-int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
++static int scm_smc_call_impl(struct device *dev, const struct qcom_scm_desc *desc,
+ 		   enum qcom_scm_convention qcom_convention,
+-		   struct qcom_scm_res *res, bool atomic)
++		   struct qcom_scm_res *res, bool atomic, bool retry_busy)
+ {
+ 	int arglen = desc->arginfo & 0xf;
+ 	int i, ret;
+@@ -207,7 +209,7 @@ int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
+ 		smc.args[SCM_SMC_LAST_REG_IDX] = qcom_tzmem_to_phys(args_virt);
+ 	}
+ 
+-	ret = __scm_smc_do(dev, &smc, &smc_res, atomic);
++	ret = __scm_smc_do(dev, &smc, &smc_res, atomic, retry_busy);
+ 
+ 	trace_scm_smc_done(ret, smc.args[0], &smc_res);
+ 
+@@ -223,3 +225,19 @@ int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
+ 	return (long)smc_res.a0 ? qcom_scm_remap_error(smc_res.a0) : 0;
+ 
+ }
++
++/* Keep the established ABI and busy-retry behavior for existing callers. */
++int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,
++		 enum qcom_scm_convention convention,
++		 struct qcom_scm_res *res, bool atomic)
++{
++	return scm_smc_call_impl(dev, desc, convention, res, atomic, true);
++}
++
++/* Standard, sleepable SMC with WAITQ handling, but no replay on EBUSY. */
++int __scm_smc_call_noretry(struct device *dev, const struct qcom_scm_desc *desc,
++			 enum qcom_scm_convention convention,
++			 struct qcom_scm_res *res)
++{
++	return scm_smc_call_impl(dev, desc, convention, res, false, false);
++}
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index c2c627b6c..260c5b48e 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -38,6 +38,7 @@
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+ #include "qcom_pas.h"
++#include "qcom_ice_v2.h"
+ #include "qcom_pas_retry.h"
+ #include "qcom_scm.h"
+ #include "qcom_tzmem.h"
+@@ -1664,6 +1665,93 @@ int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,
+ }
+ EXPORT_SYMBOL_GPL(qcom_scm_ice_set_key);
+ 
++/* The vendor ICE V2 commands must not be silently mapped to legacy 0x03/04. */
++static int qcom_scm_ice_v2_call(const struct qcom_scm_desc *desc)
++{
++	enum qcom_scm_convention convention = __get_convention();
++
++	might_sleep();
++	if (convention != SMC_CONVENTION_ARM_32 &&
++	    convention != SMC_CONVENTION_ARM_64)
++		return -EOPNOTSUPP;
++	return __scm_smc_call_noretry(__scm->dev, desc, convention, NULL);
++}
++
++bool qcom_scm_ice_v2_available(void)
++{
++	if (!__scm)
++		return false;
++	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x05) &&
++	       __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x06) &&
++	       __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES, 0x07);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_ice_v2_available);
++
++int qcom_scm_ice_set_key_v2(u32 index, const u8 *key, size_t key_size,
++			  u32 cipher, u32 data_unit_size, u32 ce)
++{
++	struct qcom_scm_desc desc;
++	void *buffer __free(qcom_tzmem) = NULL;
++	int ret;
++
++	if (!key || !key_size || key_size > 128)
++		return -EINVAL;
++	if (!__scm || !__scm->mempool)
++		return -EPROBE_DEFER;
++	buffer = qcom_tzmem_alloc(__scm->mempool, key_size, GFP_KERNEL);
++	if (!buffer)
++		return -ENOMEM;
++	memcpy(buffer, key, key_size);
++	desc = qcom_ice_v2_set_desc(index, qcom_tzmem_to_phys(buffer), key_size,
++				    cipher, data_unit_size, ce);
++	ret = qcom_scm_ice_v2_call(&desc);
++	memzero_explicit(buffer, key_size);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(qcom_scm_ice_set_key_v2);
++
++int qcom_scm_ice_clear_key_v2(u32 index, u32 ce)
++{
++	struct qcom_scm_desc desc = qcom_ice_v2_clear_desc(index, ce);
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++	return qcom_scm_ice_v2_call(&desc);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_ice_clear_key_v2);
++
++int qcom_scm_ice_derive_secret_v2(const u8 *key, size_t key_size,
++			       u8 *secret, size_t secret_size)
++{
++	struct qcom_scm_desc desc;
++	void *keybuf __free(qcom_tzmem) = NULL;
++	void *outbuf __free(qcom_tzmem) = NULL;
++	int ret;
++
++	if (!key || !key_size || key_size > 128 || !secret || secret_size != 32)
++		return -EINVAL;
++	memset(secret, 0, secret_size);
++	if (!__scm || !__scm->mempool)
++		return -EPROBE_DEFER;
++	keybuf = qcom_tzmem_alloc(__scm->mempool, key_size, GFP_KERNEL);
++	if (!keybuf)
++		return -ENOMEM;
++	outbuf = qcom_tzmem_alloc(__scm->mempool, secret_size, GFP_KERNEL);
++	if (!outbuf)
++		return -ENOMEM;
++	memcpy(keybuf, key, key_size);
++	memset(outbuf, 0, secret_size);
++	desc = qcom_ice_v2_derive_desc(qcom_tzmem_to_phys(keybuf), key_size,
++				       qcom_tzmem_to_phys(outbuf), secret_size);
++	ret = qcom_scm_ice_v2_call(&desc);
++	if (!ret)
++		memcpy(secret, outbuf, secret_size);
++	memzero_explicit(keybuf, key_size);
++	memzero_explicit(outbuf, secret_size);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(qcom_scm_ice_derive_secret_v2);
++
+ bool qcom_scm_has_wrapped_key_support(void)
+ {
+ 	return __qcom_scm_is_call_available(__scm->dev, QCOM_SCM_SVC_ES,
+diff --git a/drivers/firmware/qcom/qcom_scm.h b/drivers/firmware/qcom/qcom_scm.h
+index 2f7023a7b..97de13753 100644
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -95,6 +95,10 @@ int scm_legacy_call_atomic(struct device *dev, const struct qcom_scm_desc *desc,
+ int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+ 		    struct qcom_scm_res *res);
+ 
++int __scm_smc_call_noretry(struct device *dev, const struct qcom_scm_desc *desc,
++			 enum qcom_scm_convention convention,
++			 struct qcom_scm_res *res);
++
+ struct qcom_tzmem_pool *qcom_scm_get_tzmem_pool(void);
+ int qcom_scm_shm_bridge_enable(struct device *scm_dev);
+ 
+diff --git a/drivers/firmware/qcom/qcom_scm_retry.h b/drivers/firmware/qcom/qcom_scm_retry.h
+new file mode 100644
+index 000000000..e8fa3a95c
+--- /dev/null
++++ b/drivers/firmware/qcom/qcom_scm_retry.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef QCOM_SCM_RETRY_POLICY_H
++#define QCOM_SCM_RETRY_POLICY_H
++#include <linux/types.h>
++#include "qcom_scm.h"
++/* Match the established busy retry boundary; V2 ICE explicitly disables it. */
++static inline bool qcom_scm_retry_busy(bool enabled, long status,
++				     unsigned int retries, unsigned int limit)
++{
++	return enabled && status == QCOM_SCM_V2_EBUSY && retries <= limit;
++}
++#endif
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index dd1e3375e..0d4f5ae81 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -174,6 +174,13 @@ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+ 			u32 mode);
+ int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size);
+ 
++/* Motorola V2 ICE ABI; key buffers are virtual and marshalled via TZMEM. */
++bool qcom_scm_ice_v2_available(void);
++int qcom_scm_ice_set_key_v2(u32 index, const u8 *key, size_t key_size,
++			  u32 cipher, u32 data_unit_size, u32 ce);
++int qcom_scm_ice_clear_key_v2(u32 index, u32 ce);
++int qcom_scm_ice_derive_secret_v2(const u8 *key, size_t key_size,
++			       u8 *secret, size_t secret_size);
+ bool qcom_scm_ice_available(void);
+ int qcom_scm_ice_invalidate_key(u32 index);
+ int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,

@@ -195,3 +195,17 @@ in the diskless SMP4 guest, which has no matching hardware. Stage13 has 73
 modules / 3,700 import CRC checks. This provides no UFS training, data I/O,
 wrapped-key compatibility or encrypted unlock evidence. Host/ICE integration
 and physical tests remain required. See `reports/storage-stage13-validation.json`.
+
+## Stage14: vendor ICE V2 and modular SHM Bridge
+
+Stage14 retains the firmware's V2 key commands and uses the target TZMEM pool.
+SCM and TZMEM share a module in SHM Bridge mode; both dependency DAGs pass,
+73 modules / 3,727 import CRCs agree, and stale standalone TZMEM artifacts are
+excluded via Kbuild selection. Eleven native patches reproduce 54 files exactly
+from the pinned upstream base. Twenty-four host Python checks pass.
+
+On the new Image, SMP4 diskless guest tests pass: ICE 10, SCM/PAS 13 and secure
+buffer 5. Coverage includes production descriptor/slot/retry/readiness helpers,
+module insertion/removal and no-firmware/error guards. It excludes real TZMEM
+bridge registration, BIST, secure key programming, reset/keytable behavior,
+UFS data I/O and encrypted unlock. Those remain acceptance requirements.

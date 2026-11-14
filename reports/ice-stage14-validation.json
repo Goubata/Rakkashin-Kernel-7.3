@@ -1,0 +1,42 @@
+{
+  "scope": "Real vendor ICE port, V2 SCM descriptors and error gates, SHM Bridge module linkage and diskless tests. Not real key programming, SHM registration or encrypted unlock acceptance",
+  "stage": "android73-ice-stage14",
+  "source_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
+  "image_sha256": "b471a6e482fa62a77dc130931762bdf1f30f7274ce55cfcf4946bf0ab37b38b0",
+  "module_count": 73,
+  "imports_checked": 3727,
+  "passed": true,
+  "kunit_cases": {
+    "ice": 10,
+    "scm": 13,
+    "secure": 5
+  },
+  "python_checks": 24,
+  "tzmem_mode": "SHMBRIDGE",
+  "tzmem_and_scm_provider": "qcom-scm.ko",
+  "module_count_note": "Adds qcom_ice.ko and folds separate qcom_tzmem.ko into real SCM module; total stays 73",
+  "new_firmware_api": "ES V2 set=0x05/6 args, clear=0x06/2 args, derive=0x07/4 args; no EBUSY replay, normal SCM retry unchanged",
+  "remaining": [
+    "UFS host/core adaptation and crypto profile integration",
+    "Real SHM registration and secure firmware compatibility",
+    "ICE/HWKM/reset/clock and OF supplier lifetime under physical probe",
+    "Vendor uninitialized-HWKM eviction/reset-cleared assumption not physically verified",
+    "Storage I/O, encrypted data unlock and full Android hardware acceptance"
+  ],
+  "physical_probe_verified": false,
+  "real_key_programming_performed": false,
+  "storage_read_write_performed": false,
+  "sha256": {
+    "reports/ice-source-lock.json": "7a02abe7d71f6665a55b2cf352840bf9db27d5e78f408c06eec9529cf6a0ddf1",
+    "reports/ice-saved-module-abi.json": "33d2200c2eb3aecd01e78bd3befc958d3a26bab57984f626d869b31a675a46ec",
+    "reports/core-patch-replay.json": "fe52de50c7d2287dcf853660f5ccd49d630c263e896e02bbd33082cbaaeef038",
+    "reports/module-crc-stage14.json": "79307b28efe1c70afec5050520d90391bed794e9845bad4fe82acc64eac36933",
+    "reports/ice-stage14-full-build.log": "1a68d72da7bd64ba0055486d6657ee4d9c777dc9817110a299b01597c99be5db",
+    "reports/qemu-ice-bridge-stage14.json": "480ce1e4e7a1e428cc0bde5dcf13f38a2bf661c76b347c5410bc87cdb7fa25e3",
+    "reports/qemu-ice-bridge-stage14.log": "935bbc5a77dcc584065fdbe1d3fe13d9a9adc695bdb138eca64b146f6d23b227",
+    "reports/qemu-scm-bridge-stage14.json": "eeec98c91044e38144aa76ed5b3356e1fc34f51e365ce3cf594ca0a0aec13a4c",
+    "reports/qemu-scm-bridge-stage14.log": "85fceb51f65d98ac5a3f4d4bd9a03c6973a2903d5e5b40905b3d5a2fcb940c7d",
+    "reports/qemu-secure-bridge-stage14.json": "344efad7110be3b6ee1749d78a75983cb7f24a9ac9c8e334f6f80bf63e168a4f",
+    "reports/qemu-secure-bridge-stage14.log": "f52c7ee772ca96799897df5bf64ea175e12c0c7d1cfd5e9b9a7a8ae2c84eef1a"
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "scope": "exact native source patch replay only; not clean build or hardware validation",
+  "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "target_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
+  "patch_count": 11,
+  "source_files": [
+    {
+      "file": "arch/arm64/mm/pageattr.c",
+      "sha256": "1607b868c68b8b643ae0e8235f1bcb7fd915f2c3fa8899439ac8951a1bdef8ff"
+    },
+    {
+      "file": "drivers/android/vendor_hooks.c",
+      "sha256": "a7a9eada46f248085aad2d6dc0da10cfd25d4feb603d4e9839ec512de5cdd09a"
+    },
+    {
+      "file": "drivers/base/power/Makefile",
+      "sha256": "bdb5b066e2d0d394abacebea8ea9188b17c434ccf64aa201bb3cbc8b1576a7b9"
+    },
+    {
+      "file": "drivers/base/power/boeffla_wl_blocker.c",
+      "sha256": "f07a11ce7114c5bc57143c12d296ccc3a5e8a91f7e0af203ec1e1a69b103a0c3"
+    },
+    {
+      "file": "drivers/base/power/power.h",
+      "sha256": "01ac122ff6a15976ddff0277227ebb20f7a68fda0de3f85391cc7a6c7cd2fde7"
+    },
+    {
+      "file": "drivers/base/power/wakeup.c",
+      "sha256": "0287cb35683edfa7b4d0589c537a0abfc75f59f42ec220ec73a8d4122c109cef"
+    },
+    {
+      "file": "drivers/clk/clk.c",
+      "sha256": "334ed4ab8fc2141e9031b038149961a59f6381c975d4425a63cfc6be7c15002a"
+    },
+    {
+      "file": "drivers/firmware/qcom/Makefile",
+      "sha256": "8a56ecc17ae99825641916c242d54b971862e427055b284696ab3e8c1d43e7bd"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_ice_v2.h",
+      "sha256": "af1238cdc08b2f95dc675e0ab42230f8137a7a9a590747e652e57cfae0603405"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_pas_retry.h",
+      "sha256": "409f5960baa0b083d86ca12bcfaf7afc271137bb6083c1aec43d5b21827761b9"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_scm-smc.c",
+      "sha256": "26497dafe6f3e73a99ce4fc325f295136f1d119d86e2571e9cf1a9ddf0718b62"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_scm.c",
+      "sha256": "f59e24c3c6f4d1f6052c3789f3e4447e580a02e3e9e6a454b8ffaa46165f629e"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_scm.h",
+      "sha256": "1975228fabf86fe6cbd97ed140ca445880b3fe02f3c6b060d2cfdd0f6bc5db59"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_scm_retry.h",
+      "sha256": "61fa5a36ff3dbc7bcab313470cfe32d384cb3ab634bec182c970d6aed98e770c"
+    },
+    {
+      "file": "drivers/misc/Kconfig",
+      "sha256": "07beea407a8264e219a1f6095c40139f7a952903f9f615db61d83f459b64cf58"
+    },
+    {
+      "file": "drivers/misc/Makefile",
+      "sha256": "24d95573a68ad34a1baf42cb2d711391132673089b9e57d4c6b3b21fba4bb7ec"
+    },
+    {
+      "file": "drivers/misc/encore_fas/Kconfig",
+      "sha256": "555e31d1b814e2f68170ee00fb798790b4967dbb326d3207d7c68ff43a351855"
+    },
+    {
+      "file": "drivers/misc/encore_fas/Makefile",
+      "sha256": "848e9e6c0a224a6f7d4689f78f9dc8cc7f038c2957f5476fd5a5c5e69bb46e69"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_compat.h",
+      "sha256": "bf7649c180c71e33a2c4c8045a86b8a9f9132aed8e5bb35265df61715d4c6a89"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_ctx.c",
+      "sha256": "1ddf067038fda00a54154de26b276ca84e943b4bdf8e25d518ba6088b583ee6e"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_ctx.h",
+      "sha256": "3313aea8c0d4552a82335514f5aa0554630748f2f04f94397e170581afb93489"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_det.h",
+      "sha256": "52db04a652c8919461ea756c62ba82cb9f1b4ece30436c9527df3b066777b58e"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_evq.c",
+      "sha256": "a116a6e8c109e9a9cf574f8bf0f3fa5a5542d0a5d4a6d369562a51305bd53576"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_evq.h",
+      "sha256": "376b7408c344fc47acd7b7ac58209e51c894d32dbdeb93f9735282de7665983b"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_main.c",
+      "sha256": "4473f7d2a37a11e2eb709bfbc5cabf861cb905cc731901882cf4a1403652cfe5"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_time.c",
+      "sha256": "8233c0936d0054ec6a2c3d77d849502c05de645aaaead1ed27a9b3a73eee14cb"
+    },
+    {
+      "file": "drivers/misc/encore_fas/encore_fas_time.h",
+      "sha256": "c235da92667577a4cddc62f5ee05b6d23b202dbbb03b3ecebbbaaeb25cca48f0"
+    },
+    {
+      "file": "drivers/misc/encore_fas/include/uapi/encore_fas_uapi.h",
+      "sha256": "f90d986a0ea9249c6d145a7413d0c60e8d07836df26278eae632541ea528a990"
+    },
+    {
+      "file": "drivers/misc/ntsync.c",
+      "sha256": "5a213cc6491222b93265505861d5ce51ddebb10e5941e5942036f6179bef57dd"
+    },
+    {
+      "file": "include/linux/avr_profile.h",
+      "sha256": "db55ee0ecd455640de7ff7d8b8bcf6517db1409bb3007e3dad5612ca200bc3e0"
+    },
+    {
+      "file": "include/linux/clk-provider.h",
+      "sha256": "b1cb25bae2468d478892c976c1a7f07a5aa95b5c8215800feee0cb550ab2ea7b"
+    },
+    {
+      "file": "include/linux/firmware/qcom/qcom_scm.h",
+      "sha256": "2093579f458c940fe20d9f8321f0362fde385d59f4c43a2806c2e5348a2c3f8c"
+    },
+    {
+      "file": "include/linux/launch_boost.h",
+      "sha256": "d97cc2b6d35410eb35f3e84a47dbbfaa37b00ab83a609814e1cea34629b39653"
+    },
+    {
+      "file": "include/linux/rk_tboost.h",
+      "sha256": "1b0b49c2603b68e19cf1908d0c241d5506748829d97e292761bf422646d12fbf"
+    },
+    {
+      "file": "include/linux/shmem_fs.h",
+      "sha256": "ad1bb9f5ac92ad396660698c16499d1bfcc3e549cc9929d25648ae03c7b0a9b6"
+    },
+    {
+      "file": "include/trace/hooks/gunyah.h",
+      "sha256": "3f17ed05e80c23f2181eefc18afcf6b85370c849444bacd7c25c987f242b9c1e"
+    },
+    {
+      "file": "include/trace/hooks/sched.h",
+      "sha256": "14897623cfd95774dd630c88f827bbb038ab84b3a41ea5aa2771cbce1e45d2b6"
+    },
+    {
+      "file": "include/uapi/linux/ntsync.h",
+      "sha256": "185b19dd7a3fb89990545ea6e53817a4cc80b1c493cbd3b566caf8273075a6ac"
+    },
+    {
+      "file": "init/Kconfig",
+      "sha256": "c22fe92a2b3907239193778e0424dce9adca3685d1aedeeaac7e115e198e346c"
+    },
+    {
+      "file": "kernel/Makefile",
+      "sha256": "290e15077e520b910d56e2085c93fdd8fb7801dec5375e5eac56a4d5a61f8755"
+    },
+    {
+      "file": "kernel/avr_profile.c",
+      "sha256": "a809535a9d578def82b5e69ce8884ab31e28e9210092bbbbd3bd050c36a28915"
+    },
+    {
+      "file": "kernel/cgroup/cpuset.c",
+      "sha256": "22999f9050798f808595f1aef664d8b8b214bc2656b6ea1be60bdf2efdafc23d"
+    },
+    {
+      "file": "kernel/irq/manage.c",
+      "sha256": "c1c0528be895193faa98752af8845e20f31ee5049a5c8c09442164f2bd95d99d"
+    },
+    {
+      "file": "kernel/launch_boost.c",
+      "sha256": "ffd9b1e94cdb448b1ff6b7252111e5394a1a9022e0dc5c7d9839b352d62e4c69"
+    },
+    {
+      "file": "kernel/power/Kconfig",
+      "sha256": "92bd5dbff0c091bf62948e2233b677bc1f510e7cd8f4530f19b149fbd05a5c6e"
+    },
+    {
+      "file": "kernel/rcu/tasks.h",
+      "sha256": "ead492acb3ebc52cfc0015f029e2c381655e68a646821a642a7be94dfbd300cc"
+    },
+    {
+      "file": "kernel/rk_tboost.c",
+      "sha256": "688747f1047a41d6596c789d6251ec499044f76181c6e79e9d1e6c651e180d64"
+    },
+    {
+      "file": "kernel/sched/core.c",
+      "sha256": "74e980a693fb13c5c14840ee1d9c6f1909cf1ab3effa190ec124a12a635cd046"
+    },
+    {
+      "file": "kernel/sched/pelt.c",
+      "sha256": "36f9d6a22eb81f314646e6bd608ec6255fd632cc6306d091d91cd814c8063d0d"
+    },
+    {
+      "file": "kernel/sched/pelt.h",
+      "sha256": "80467058803d96433f6337f046527fd413752168504373bd40cd56d7a3411637"
+    },
+    {
+      "file": "kernel/sched/sched.h",
+      "sha256": "29ac38c4c00dcb9faee53f098306bdfb93ceaf90334ccc7f5d6cae5f1e3485cd"
+    },
+    {
+      "file": "kernel/sched/vendor_hooks.c",
+      "sha256": "31834aba578157ec87554229f8177fcb6fa0931244247542e24fcbfef3ee6b2e"
+    },
+    {
+      "file": "kernel/sys.c",
+      "sha256": "ab5919441ded8a83c5ac629dc25b51fba4c639950d608e5f5744f6cd29451f6a"
+    },
+    {
+      "file": "mm/shmem.c",
+      "sha256": "6e68ed3430db44bf81e2f24552ab4f395d5dd366ac91a267987456998af75aa9"
+    }
+  ],
+  "passed": true,
+  "checkpoint_sha256": "dce82f0b52ff186508a6dc4e8764cc89d674a2b5c9ce8223a6c428c621c2a9b0"
+}

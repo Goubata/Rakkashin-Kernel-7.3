@@ -1,0 +1,17 @@
+{
+  "scope": "Saved module import names corroborate the vendor key API dependencies; no key material or firmware execution inspected",
+  "module_sha256": "bde430ab27de5da992610f62512379952609103702ea314fc0ca43fc5f53871c",
+  "selected_import_names": [
+    "qcom_scm_clear_ice_key",
+    "qcom_scm_config_set_ice_key",
+    "qcom_scm_derive_sw_secret",
+    "qtee_shmbridge_allocate_shm",
+    "qtee_shmbridge_flush_shm_buf",
+    "qtee_shmbridge_free_shm",
+    "qtee_shmbridge_inv_shm_buf"
+  ],
+  "v2_set_import_present": true,
+  "v2_clear_import_present": true,
+  "derive_import_present": true,
+  "hwkm_v1_imports_present": false
+}

@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-storage-stage13",
-  "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
+  "stage": "android73-ice-stage14",
+  "source_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
   "archived_unique_count": 544,
   "staged_count": 73,
-  "same_name_candidate_count": 59,
-  "archived_names_without_same_name_candidate_count": 485,
-  "loaded_names_without_same_name_candidate_count": 470,
+  "same_name_candidate_count": 60,
+  "archived_names_without_same_name_candidate_count": 484,
+  "loaded_names_without_same_name_candidate_count": 469,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -221,10 +221,6 @@
       "file": "modules/qcom-dcvs/qcom-dcvs.ko"
     },
     {
-      "name": "qcom_tzmem",
-      "file": "modules/firmware/qcom_tzmem.ko"
-    },
-    {
       "name": "qcom_scm",
       "file": "modules/firmware/qcom-scm.ko"
     },
@@ -235,6 +231,10 @@
     {
       "name": "governor_msm_adreno_tz",
       "file": "modules/governor-adreno-tz/governor_msm_adreno_tz.ko"
+    },
+    {
+      "name": "qcom_ice",
+      "file": "modules/qcom-ice/qcom_ice.ko"
     },
     {
       "name": "qcom_iommu_util",
@@ -516,10 +516,6 @@
       "file": "modules/qcom-dcvs/qcom-dcvs.ko"
     },
     {
-      "name": "qcom_tzmem",
-      "file": "modules/firmware/qcom_tzmem.ko"
-    },
-    {
       "name": "qcom_scm",
       "file": "modules/firmware/qcom-scm.ko"
     },
@@ -538,6 +534,10 @@
     {
       "name": "pinctrl_alor",
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+    },
+    {
+      "name": "qcom_ice",
+      "file": "modules/qcom-ice/qcom_ice.ko"
     },
     {
       "name": "qcom_iommu_util",
@@ -612,7 +612,7 @@
   "staged_modules": {
     "arm_smmu": {
       "file": "modules/arm-smmu-vendor/arm_smmu.ko",
-      "sha256": "8ecb9f5841e39fe88254def98bd9082b612a24cd814466922a94f0029737f582",
+      "sha256": "7a6944c9fb5c713322e7424d758d18a0fea66fc379ddd565f702081f39cb191a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "iommu_logger",
@@ -640,11 +640,10 @@
     },
     "qcom_scm": {
       "file": "modules/firmware/qcom-scm.ko",
-      "sha256": "09353532245c67a52e145d29e95150e5570213ac6a396a862d52cd9b1c17e4ff",
+      "sha256": "f90d2e4b43e2bcf985f344179d007a16eb0d29d01837c9ca64fdff2fec7ba486",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
-        "qcom_pas",
-        "qcom_tzmem"
+        "qcom_pas"
       ],
       "softdep": [],
       "archived_placement_candidates": [
@@ -657,17 +656,6 @@
     "qcom_pas": {
       "file": "modules/firmware/qcom_pas.ko",
       "sha256": "3363d02588e51706b17f32d1d0058ab8e1673f594fb8a43c4ffbf2b71c7ce0bf",
-      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
-      "depends": [],
-      "softdep": [],
-      "archived_placement_candidates": [],
-      "loaded_on_baseline": false,
-      "dependencies_absent_from_stage": [],
-      "soft_dependencies_absent_from_stage": []
-    },
-    "qcom_tzmem": {
-      "file": "modules/firmware/qcom_tzmem.ko",
-      "sha256": "d0911d4d9b444f622615f19a9e48a3f6d4841e353096080ce2819a0030450ad8",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -826,7 +814,7 @@
     },
     "gh_rm_drv": {
       "file": "modules/gunyah-rm/gh_rm_drv.ko",
-      "sha256": "6c1ac448a1db9716c18029d1ac63147fb76eaff2acc208cf57b82ce0bef50123",
+      "sha256": "d8cc1133cc269f6582e93436844ca7b9a9e6737c31b2c2f474d5272fc275bee6",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "gh_arm_drv",
@@ -899,7 +887,7 @@
     },
     "msm_kgsl": {
       "file": "modules/kgsl/msm_kgsl.ko",
-      "sha256": "b502171ab8092028d30c9cb4c1daf4724f9efa8980cdc9602ea62a4177041a6b",
+      "sha256": "2ff18997702d4c7311ee0eb8481f61d5dfaf4b6a3b61578e9e0761ae800c77ec",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "clk_qcom",
@@ -995,7 +983,7 @@
     },
     "pinctrl_msm": {
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-msm.ko",
-      "sha256": "ef9376e2b3e9cdfd17e90a20e5ac202979c8babb9e8e54997d024492b005711e",
+      "sha256": "c132a232add60b46e34c28cd818f22351175661efe3199cb20625554bd4c3701",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_scm"
@@ -1435,9 +1423,24 @@
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
+    "qcom_ice": {
+      "file": "modules/qcom-ice/qcom_ice.ko",
+      "sha256": "56b5c663ee4df8dc1c4f50c904be8f1d7744d57da11397070f50ebcd9415c3f0",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
     "qcom_iommu_util": {
       "file": "modules/qcom-iommu-util/qcom_iommu_util.ko",
-      "sha256": "bd4ee84b78d0f59a80f23a67e4827b24d60811f9220a897c922962a2b7a5bd1c",
+      "sha256": "51e47203789ab1778245ef5b495f38b37d56e431c1a3e7baa0f88ea1746531b5",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_scm"
@@ -1465,7 +1468,7 @@
     },
     "gic_intr_routing": {
       "file": "modules/qcom-irq/gic_intr_routing.ko",
-      "sha256": "6aa8b3b1736ef40824256afbff0592236a783f16134192f32fc4b49a4f300134",
+      "sha256": "380d3e3247a00e7019815e2397b50a30402e3a16fcc03758cac3821d0e2f2a05",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "cpu_phys_log_map",
@@ -1481,7 +1484,7 @@
     },
     "qcom_pdc": {
       "file": "modules/qcom-irq/qcom-pdc.ko",
-      "sha256": "d8d1f4a5df8522dc2e3cdf2ac4cbda083d3a0143aa129f2229adaabadfeb569b",
+      "sha256": "df3c10e983cc1ab6597bdde202017a7af884c19631d83faed3e3bb289c5a7276",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_scm"
@@ -1597,7 +1600,7 @@
     },
     "msm_hw_fence": {
       "file": "modules/qti-fence/msm_hw_fence.ko",
-      "sha256": "7af5faf762f8169adddcc78d7d508f7fa2e2833d0594088ae8081f4983fc047c",
+      "sha256": "892f9290b35a09150836d31157dafd44b7676aac434671d7a0e5a256a10c0da7",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "gh_dbl",
@@ -1645,7 +1648,7 @@
     },
     "secure_buffer": {
       "file": "modules/secure-buffer/secure_buffer.ko",
-      "sha256": "0bfe99b19d0c33a8607ee7c994241d05308dec6063f2aa8ac01c026fa18d095d",
+      "sha256": "6300d2f6a8eab3bab14dcd311661a2c2b4e6f40b1593b8e03eed3dc9ab693058",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_scm"
@@ -3820,13 +3823,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_ice",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_iommu_debug",
       "placements": [
         "vendor_boot:fragment-0"
@@ -5565,7 +5561,6 @@
     "qcom_glink_spss",
     "qcom_hv_haptics",
     "qcom_i2c_pmic",
-    "qcom_ice",
     "qcom_iommu_debug",
     "qcom_ipc_logging",
     "qcom_ipcc",

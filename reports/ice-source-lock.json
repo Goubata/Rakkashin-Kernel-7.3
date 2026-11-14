@@ -1,0 +1,44 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-ice/ice.c",
+      "source": "drivers/soc/qcom/ice.c",
+      "source_repository": "qcom-soc",
+      "original_sha256": "75521226984ee9836a63ab883da9ed2a897151370c9841181f6719f394aff755",
+      "sha256": "c169ec7c2a268d0e038a3598d614cf9fd87f8fca9c438cc7e7c841e56c8e14c4"
+    },
+    {
+      "file": "ports/qcom-ice/include/soc/qcom/ice.h",
+      "source": "include/soc/qcom/ice.h",
+      "source_repository": "qcom-soc",
+      "original_sha256": "3e01411373b3a2a68eaad011c07e7cf88e9b40ccda3a86d2634118da334499c1",
+      "sha256": "3e01411373b3a2a68eaad011c07e7cf88e9b40ccda3a86d2634118da334499c1"
+    },
+    {
+      "file": "ports/qcom-ice/avr-ice-policy.h",
+      "source": null,
+      "source_repository": "avr-kernel-7.3",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "7ccbf0d063a6887e3f319adf09fa258c88a28adb013d573feff6e16e0b83dfac"
+    },
+    {
+      "file": "ports/qcom-ice/Makefile",
+      "source": null,
+      "source_repository": "avr-kernel-7.3",
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "ab9862a8b5eb28d46b3e6b824c22787d5cc0cd632973b33c6ced156e3d0c780d"
+    }
+  ],
+  "patch_sha256": "074a4fe38a44efa66cefc81e800fb846b327a03911b4a837cfb97db5ddd01c6a",
+  "reviewed_changes": [
+    "Real V2 SCM commands and target TZMEM allocation instead of cached qtee buffers",
+    "Target blk_crypto_key bytes field and private vendor ICE header",
+    "Keep HWKM version-dependent slot mapping with overflow/negative guards",
+    "Reject unexpected raw requests in wrapped-key programming entry",
+    "Reject incomplete HWKM initialization before wrapped-key MMIO",
+    "Return BIST errors without silently downgrading HW-wrapped mode to raw",
+    "Check BIST before marking resume ready and roll back newly enabled clock on failure"
+  ],
+  "scope": "source identity and patch replay, not real key handling or storage acceptance"
+}

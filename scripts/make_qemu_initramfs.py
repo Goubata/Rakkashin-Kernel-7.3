@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Create an isolated RAM-only boot smoke test; it cannot access phone disks."""
 from pathlib import Path
+from native_module_inventory import firmware_modules
 import gzip
 import argparse
 import stat
@@ -21,6 +22,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--ice-tests", action="store_true")
     group.add_argument("--storage-phy-tests", action="store_true")
     group.add_argument("--rm-lifetime-tests", action="store_true")
     group.add_argument("--gpu-policy-tests", action="store_true")
@@ -92,8 +94,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         relative=['qcom-clock-core/crm-v2.ko','qcom-rpmh/cmd-db.ko',
                   'qcom-rpmh/qcom_rpmh.ko']
         modules=[ROOT/'ports'/name for name in relative]
-        modules += [ROOT/'out/native-gki/drivers/firmware/qcom'/name for name in
-                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules += firmware_modules()
         modules += [ROOT/'ports'/name for name in
                     ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko',
                      'qcom-socinfo/socinfo.ko','qcom-llcc/llcc-qcom.ko',
@@ -128,8 +129,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.iommu_tests:
         modules=[(ROOT/'out/native-gki/lib/kunit/kunit.ko',' enable=1')]
-        modules += [(ROOT/'out/native-gki/drivers/firmware/qcom'/name,'') for name in
-                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules += [(p,'') for p in firmware_modules()]
         modules += [(ROOT/'ports/qcom-iommu-util/qcom_iommu_util.ko',''),
                     (ROOT/'tests/iommu/avr-io-pgtable-test.ko','')]
         commands=[]
@@ -185,6 +185,21 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.ice_tests:
+        modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
+        modules += firmware_modules()
+        modules += [ROOT/'ports/qcom-ice/qcom_ice.ko',ROOT/'tests/ice/avr-ice-test.ko']
+        commands=[]
+        for source in modules:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_ICE_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands += ['test -d /sys/module/qcom_ice || { echo AVR_ICE_STATE_FAIL; /bin/busybox poweroff -f; }',
+                     '/bin/busybox rmmod avr_ice_test || { echo AVR_ICE_TEST_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+                     '/bin/busybox rmmod qcom_ice || { echo AVR_ICE_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+                     'test ! -d /sys/module/qcom_ice || { echo AVR_ICE_EXIT_STATE_FAIL; /bin/busybox poweroff -f; }',
+                     'echo AVR_ICE_TESTS_PASS']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.storage_phy_tests:
         commands=[]
         for name in ['phy-qcom-ufs','phy-qcom-ufs-qmp-v4-canoe']:
@@ -226,8 +241,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.scm_tests:
         modules=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
-        modules += [ROOT/'out/native-gki/drivers/firmware/qcom'/name for name in
-                    ['qcom_tzmem.ko','qcom_pas.ko','qcom-scm.ko']]
+        modules += firmware_modules()
         modules.append(ROOT/'tests/scm/avr-scm-notifier-test.ko')
         commands=[]
         for source in modules:
@@ -258,7 +272,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

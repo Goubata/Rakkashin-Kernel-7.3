@@ -2,6 +2,8 @@
 """Build native GKI, optionally with initial Qualcomm firmware dependencies."""
 from pathlib import Path
 import argparse
+import hashlib
+import json
 import os
 import shlex
 import subprocess
@@ -33,10 +35,21 @@ def main():
     if args.boot_core:
         args.platform = True
         args.pinctrl = True
-        patches = [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch', PORT/'patches/scm-assign-notifier-7.3.patch', PORT/'patches/gunyah-core-api-7.3.patch', PORT/'patches/pas-shutdown-retry-7.3.patch']
+        patches = [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch', PORT/'patches/scm-assign-notifier-7.3.patch', PORT/'patches/gunyah-core-api-7.3.patch', PORT/'patches/pas-shutdown-retry-7.3.patch', PORT/'patches/scm-ice-v2-7.3.patch']
         if args.rakkashin:
             patches.append(PORT/'patches/rakkashin-features-7.3.patch')
+        checkpoint_path=PORT/'reports/core-patch-checkpoint.json'
+        exact_checkpoint=False
+        if checkpoint_path.is_file():
+            checkpoint=json.loads(checkpoint_path.read_text())
+            head=subprocess.check_output(['git','-C',str(SOURCE),'rev-parse','HEAD'],text=True).strip()
+            clean=not subprocess.check_output(['git','-C',str(SOURCE),'status','--porcelain']).strip()
+            exact_checkpoint=(clean and head==checkpoint['source_commit'] and
+                all(checkpoint['patch_sha256'].get(p.relative_to(PORT).as_posix())==
+                    hashlib.sha256(p.read_bytes()).hexdigest() for p in patches))
         for patch in patches:
+            if exact_checkpoint:
+                continue
             command=['git','-C',str(SOURCE),'apply']
             if subprocess.run(command+['--reverse','--check',str(patch)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0:
                 continue

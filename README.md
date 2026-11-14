@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-storage-stage13/（73モジュール、3,700インポートCRC一致）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-ice-stage14/（73モジュール、3,727インポートCRC一致）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -137,3 +137,11 @@ Stage12では共通RMのscoped OFノード二重putとIRQ親参照の漏れを�
 同じ数値のphandleが異なるノードを指す場合を見逃さないよう比較も修正しました。範囲・参照・メモリの20検査が成功。全体にはまだ240ノードの未解釈の参照やプロパティ差が残り、OEM合成順序・binding・ドライバ実動作は未検証です。ノード数一致を完成扱いにはしません。`reports/dt-dsp-eva-reference-comparison.json` と `reports/dt-avr-dump-aligned-build.json` を参照。
 
 UFS PHYはfirmware一致のMotorolaソース5ファイルを変更せず、`phy-qcom-ufs.ko` と `phy-qcom-ufs-qmp-v4-canoe.ko` を7.3でリンクしました。実機DTのcompatibleとモジュールaliasが対応し、SMP4 QEMUでロード・存在確認・逆順アンロードまで成功。実機のPHY training、UFS接続、読み書き、暗号化解除は未確認です。UFSホストとICE/wrapped-key対応も未完成で、起動用イメージではありません。`reports/storage-stage13-validation.json` を参照。
+
+## ICE V2とSHM Bridge
+
+Motorolaの既存ICEモジュールは、鍵登録0x05（6引数）・消去0x06（2引数）のV2 SCMを使用します。7.3標準のlegacy 0x04/0x03へ名前だけ対応させません。実ICEコードを移植し、7.3のTZMEMで共有・消去・解放します。wrappedキー入口のraw要求を成功扱いにする経路も修正し、HWKM未初期化・slot overflow・BIST失敗を検出します。実ファームウェアの鍵操作は未検証です。
+
+一致ソースのcanoe設定に合わせSHM Bridgeを選択し、SCM/TZMEMを実体のある同じモジュールにまとめて依存循環を解消しました。旧standalone TZMEMの残存.koはKbuildのmodules.orderを基に除外します。ICE追加とTZMEM統合で合計は73個、3,727インポートCRC一致です。新ImageのSMP4 QEMUでICE 10、SCM/PAS 13、secure-buffer 5件が成功。これらは実キー登録・データ復号・実機SHM登録を証明しません。UFSホストは引き続き未完成です。`reports/ice-stage14-validation.json` を参照。
+
+固定7.3基盤から11パッチ・54ファイルの再適用結果が現在のnativeコミットと完全一致することも確認しました。既にレビュー済みの重なったパッチを誤って再適用する問題を修正し、ソースの正確なコミット・クリーン状態・全パッチのハッシュを照合しています。

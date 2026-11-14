@@ -29,7 +29,7 @@
   },
   "qtvm_notifier_module_sha256": {
     "stock": "a13bc7be236ae611a87a9f1d0b9039c6bf0450ce200887f628aa5d9be1d04755",
-    "port": "6c1ac448a1db9716c18029d1ac63147fb76eaff2acc208cf57b82ce0bef50123"
+    "port": "d8cc1133cc269f6582e93436844ca7b9a9e6737c31b2c2f474d5272fc275bee6"
   },
   "required_hw_fence_doorbell_label": "0x106",
   "message_queue_min_label": "0x101",

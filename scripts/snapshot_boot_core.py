@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Snapshot the partial port; this never creates or flashes a boot.img."""
 from pathlib import Path
+from native_module_inventory import firmware_modules
 import argparse
 import hashlib
 import json
@@ -16,7 +17,9 @@ parser.add_argument("--gpu-driver",action="store_true")
 parser.add_argument("--ipc-deps",action="store_true")
 parser.add_argument("--rakkashin",action="store_true")
 parser.add_argument('--storage-phy',action='store_true')
+parser.add_argument('--ice',action='store_true')
 args=parser.parse_args()
+if args.ice:args.storage_phy=True
 if args.gpu_driver:
     args.gpu_deps = True
     args.ipc_deps = True
@@ -36,6 +39,8 @@ if args.gpu_driver:
     ports += ['gunyah-core','gunyah-rm','qti-fence','kgsl']
     modules += [(out/'drivers/hwtracing/coresight/coresight.ko','modules/native/coresight.ko'),
                 (out/'drivers/nvmem/nvmem_qfprom.ko','modules/native/nvmem_qfprom.ko')]
+if args.ice:
+    ports.append('qcom-ice')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:
@@ -43,8 +48,7 @@ if args.rakkashin:
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))
 for name in ports:
     modules += [(p,'modules/'+name+'/'+p.name) for p in (ROOT/'ports'/name).glob('*.ko')]
-for name in ['qcom-scm','qcom_pas','qcom_tzmem']:
-    p=out/'drivers/firmware/qcom'/(name+'.ko')
+for p in firmware_modules():
     modules.append((p,'modules/firmware/'+p.name))
 for source,name in modules:
     target=dst/name

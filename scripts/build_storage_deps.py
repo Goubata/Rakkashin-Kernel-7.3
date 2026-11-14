@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 """Verify pinned Canoe UFS PHY sources and build against configured 7.3; no device access."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 import shlex
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOTFS = ROOT.parent / '.andronix/distros/ubuntu/rootfs'
 
 
 def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--ice',action='store_true')
+    parser.add_argument('--tests',action='store_true')
+    args=parser.parse_args()
+    if args.tests and not args.ice:parser.error('--tests requires --ice')
     report = json.loads((ROOT / 'reports/ufs-phy-source-lock.json').read_text())
     repo = ROOT.parent / 'avr-upstream-audit/qcom-soc'
     for row in report['files']:
@@ -20,11 +27,25 @@ def main():
         if (ROOT / row['staged_path']).read_bytes() != raw:
             raise ValueError('Staged PHY source differs; review and record port changes explicitly: ' + row['staged_path'])
     print('Verified five unmodified firmware-pinned UFS PHY source files', flush=True)
-    command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',
-               'KBUILD_BUILD_USER=avr-builder', 'KBUILD_BUILD_HOST=avr-arm64',
-               'make', '-C', '/work/avr-src', 'O=/work/avr-port/out/native-gki',
-               'M=/work/avr-port/ports/ufs-phy-canoe', 'ARCH=arm64', 'LLVM=1', '-j2', 'modules']
-    subprocess.run(['su', '-c', shlex.join(command)], check=True)
+    targets=['ports/ufs-phy-canoe']
+    if args.ice:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_ice_sources.py')],check=True)
+        config=(ROOT/'out/native-gki/.config').read_text()
+        if 'CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE=y' not in config:
+            raise ValueError('AVR ICE requires the firmware-matched SHM Bridge configuration')
+        symbols={line.split()[1] for line in (ROOT/'out/native-gki/Module.symvers').read_text().splitlines() if line.strip()}
+        needed={'qcom_scm_ice_v2_available','qcom_scm_ice_set_key_v2',
+                'qcom_scm_ice_clear_key_v2','qcom_scm_ice_derive_secret_v2'}
+        if not needed <= symbols:raise ValueError('Build the ICE V2 core patch first')
+        if 'qcom_ice_enable' in symbols:raise ValueError('Native ICE and vendor ICE must not provide the same symbols')
+        targets.append('ports/qcom-ice')
+        if args.tests:targets.append('tests/ice')
+    for target in targets:
+        command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',
+                   'KBUILD_BUILD_USER=avr-builder', 'KBUILD_BUILD_HOST=avr-arm64',
+                   'make', '-C', '/work/avr-src', 'O=/work/avr-port/out/native-gki',
+                   'M=/work/avr-port/'+target, 'ARCH=arm64', 'LLVM=1', '-j2', 'modules']
+        subprocess.run(['su', '-c', shlex.join(command)], check=True)
 
 
 if __name__ == '__main__':

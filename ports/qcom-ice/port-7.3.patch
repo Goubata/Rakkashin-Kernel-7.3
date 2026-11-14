@@ -1,0 +1,306 @@
+--- a/ports/qcom-ice/ice.c
++++ b/ports/qcom-ice/ice.c
+@@ -21,8 +21,9 @@
+ 
+ #include <linux/firmware/qcom/qcom_scm.h>
+ 
+-#include <soc/qcom/ice.h>
+-#include <linux/qtee_shmbridge.h>
++#include "include/soc/qcom/ice.h"
++#include "avr-ice-policy.h"
++
+ 
+ #define AES_256_XTS_KEY_SIZE			64
+ 
+@@ -122,8 +123,8 @@
+ 	else
+ 		ice->hwkm_version = 0;
+ 
+-	if (ice->hwkm_version == 0)
+-		ice->use_hwkm = false;
++	if (!ice->hwkm_version && ice->use_hwkm)
++		return false;
+ 
+ 	dev_info(dev, "Found QC Inline Crypto Engine (ICE) v%d.%d.%d\n",
+ 		 major, minor, step);
+@@ -196,8 +197,11 @@
+ 	err = readl_poll_timeout(ice->base + QCOM_ICE_REG_BIST_STATUS,
+ 				 regval, !(regval & QCOM_ICE_BIST_STATUS_MASK),
+ 				 50, 5000);
+-	if (err)
++	if (err) {
+ 		dev_err(ice->dev, "Timed out waiting for ICE self-test to complete\n");
++		ice->hwkm_init_complete = false;
++		return err;
++	}
+ 
+ 	if (ice->use_hwkm) {
+ 		bist_done_val = (ice->hwkm_version == 1) ?
+@@ -207,7 +211,8 @@
+ 				   HWKM_OFFSET(QCOM_ICE_REG_HWKM_TZ_KM_STATUS)) !=
+ 				   bist_done_val) {
+ 			dev_warn(ice->dev, "HWKM BIST error\n");
+-			ice->use_hwkm = false;
++			ice->hwkm_init_complete = false;
++			return -EIO;
+ 		}
+ 	}
+ 
+@@ -279,6 +284,7 @@
+ {
+ 	int err;
+ 
++	ice->hwkm_init_complete = false;
+ 	qcom_ice_low_power_mode_enable(ice);
+ 	qcom_ice_optimization_enable(ice);
+ 
+@@ -308,9 +314,16 @@
+ 		}
+ 	}
+ 
++	ice->hwkm_init_complete = false;
+ 	qcom_ice_enable_standard_mode(ice);
++	err = qcom_ice_wait_bist_status(ice);
++	if (err) {
++		if (ice->handle_clks)
++			clk_disable_unprepare(ice->core_clk);
++		return err;
++	}
+ 	qcom_ice_hwkm_init(ice);
+-	return qcom_ice_wait_bist_status(ice);
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(qcom_ice_resume);
+ 
+@@ -330,18 +343,13 @@
+  */
+ static int translate_hwkm_slot(struct qcom_ice *ice, int slot)
+ {
+-	if (!ice->use_hwkm)
+-		return slot;
+-
+-	int offset = 0;
+-	u32 hwkm_version = 0;
+-
+-	if (ice->hwkm_init_complete) {
+-		hwkm_version = qcom_ice_readl(ice, HWKM_OFFSET(QTI_HWKM_ICE_RG_IPCAT_VERSION));
+-		if (hwkm_version >= QCOM_ICE_HWKM_V2_0_0 && hwkm_version < QCOM_ICE_HWKM_V2_1_0)
+-			offset = 10;
+-	}
+-	return (ice->hwkm_version == 1) ? slot : ((slot * 2) + offset);
++	u32 ipcat_version = 0;
++
++	if (ice->hwkm_init_complete)
++		ipcat_version = qcom_ice_readl(ice,
++			HWKM_OFFSET(QTI_HWKM_ICE_RG_IPCAT_VERSION));
++	return avr_ice_hwkm_slot(slot, ice->use_hwkm, ice->hwkm_version,
++				ice->hwkm_init_complete, ipcat_version);
+ }
+ 
+ #if IS_ENABLED(CONFIG_SCSI_UFS_CRYPTO_QTI) || IS_ENABLED(CONFIG_MMC_CRYPTO_QTI)
+@@ -352,9 +360,14 @@
+ 	int hwkm_slot;
+ 	int err;
+ 	union crypto_cfg cfg;
+-	struct qtee_shm shm;
+-
++
++	err = avr_ice_wrapped_ready(ice->use_hwkm, ice->hwkm_init_complete,
++				    key->size, data_unit_size, slot);
++	if (err)
++		return err;
+ 	hwkm_slot = translate_hwkm_slot(ice, slot);
++	if (hwkm_slot < 0)
++		return hwkm_slot;
+ 
+ #if IS_ENABLED(CONFIG_QTI_HW_KEY_MANAGER_V1)
+ 	err = qcom_hwkm_program_key(ice->base, key, hwkm_slot,
+@@ -378,26 +391,14 @@
+ 	qcom_ice_writel(ice, 0x0, QCOM_ICE_LUT_KEYS_CRYPTOCFG_R16 +
+ 				  QCOM_ICE_LUT_KEYS_CRYPTOCFG_OFFSET * slot);
+ 
+-	/*
+-	 * The following logic for shmbridge will be taken care in SCM driver
+-	 * in upstream. For now, handle it in the ICE driver downstream until
+-	 * wrapped key upstream effort is complete.
+-	 */
+-	err = qtee_shmbridge_allocate_shm(key->size, &shm);
+-	if (err)
+-		return -ENOMEM;
+-
+-	memcpy(shm.vaddr, key->raw, key->size);
+-	qtee_shmbridge_flush_shm_buf(&shm);
+-
+-	if (!ice->use_hwkm) {
+-		err = qcom_scm_config_set_ice_key(hwkm_slot, shm.paddr, key->size,
++	/* The 7.3 SCM adapter owns TZMEM allocation, wiping and release on
++	 * every outcome. Preserve the vendor V2 command and HWKM arguments. */
++	if (!ice->use_hwkm)
++		err = qcom_scm_ice_set_key_v2(hwkm_slot, key->bytes, key->size,
+ 			QCOM_SCM_ICE_CIPHER_AES_256_XTS, data_unit_size, 0);
+-	} else {
+-		/* Call trustzone to program the wrapped key using hwkm */
+-		err = qcom_scm_config_set_ice_key(hwkm_slot, shm.paddr, key->size,
+-					  0, 0, 0);
+-	}
++	else
++		err = qcom_scm_ice_set_key_v2(hwkm_slot, key->bytes, key->size,
++			0, 0, 0);
+ 	if (err) {
+ 		pr_err("%s:SCM call Error: 0x%x slot %d\n", __func__, err,
+ 		       slot);
+@@ -408,8 +409,6 @@
+ 	qcom_ice_writel(ice, cfg.regval, QCOM_ICE_LUT_KEYS_CRYPTOCFG_R16 +
+ 					 QCOM_ICE_LUT_KEYS_CRYPTOCFG_OFFSET * slot);
+ 
+-	qtee_shmbridge_inv_shm_buf(&shm);
+-	qtee_shmbridge_free_shm(&shm);
+ 	return err;
+ }
+ 
+@@ -419,7 +418,7 @@
+ 			      u8 data_unit_size, int slot)
+ {
+ 	struct device *dev = ice->dev;
+-	int err = 0;
++	int err;
+ 
+ 	/* Only AES-256-XTS has been tested so far. */
+ 	if (algorithm_id != QCOM_ICE_CRYPTO_ALG_AES_XTS ||
+@@ -431,11 +430,9 @@
+ 		return -EINVAL;
+ 	}
+ 
+-	if (bkey->crypto_cfg.key_type == BLK_CRYPTO_KEY_TYPE_HW_WRAPPED) {
+-		err = qcom_ice_program_wrapped_key(ice, bkey, data_unit_size,
+-						   slot);
+-	}
+-
++	if (!bkey || bkey->crypto_cfg.key_type != BLK_CRYPTO_KEY_TYPE_HW_WRAPPED)
++		return -EINVAL;
++	err = qcom_ice_program_wrapped_key(ice, bkey, data_unit_size, slot);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(qcom_ice_program_key_hwkm);
+@@ -484,6 +481,8 @@
+ {
+ 	int hwkm_slot = slot;
+ 
++	if (slot < 0)
++		return -EINVAL;
+ #if IS_ENABLED(CONFIG_QTI_HW_KEY_MANAGER_V1)
+ 	return qcom_hwkm_invalidate_key(slot);
+ #endif
+@@ -500,7 +499,9 @@
+ 			return 0;
+ 	}
+ 
+-	return qcom_scm_clear_ice_key(hwkm_slot, 0);
++	if (hwkm_slot < 0)
++		return hwkm_slot;
++	return qcom_scm_ice_clear_key_v2(hwkm_slot, 0);
+ }
+ EXPORT_SYMBOL_GPL(qcom_ice_evict_key);
+ 
+@@ -514,49 +515,8 @@
+ 			      unsigned int wkey_size,
+ 			      u8 sw_secret[BLK_CRYPTO_SW_SECRET_SIZE])
+ {
+-	int err = 0;
+-	struct qtee_shm shm_key, shm_secret;
+-
+-#if IS_ENABLED(CONFIG_QTI_HW_KEY_MANAGER_V1)
+-	return qcom_hwkm_derive_raw_secret_platform(wkey,
+-				wkey_size, sw_secret, BLK_CRYPTO_SW_SECRET_SIZE);
+-#endif
+-
+-	/*
+-	 * The following logic for shmbridge will be taken care in SCM driver
+-	 * in upstream. For now, handle it in the ICE driver downstream until
+-	 * wrapped key upstream effort is complete.
+-	 */
+-	err = qtee_shmbridge_allocate_shm(wkey_size, &shm_key);
+-	if (err)
+-		return -ENOMEM;
+-
+-	err = qtee_shmbridge_allocate_shm(BLK_CRYPTO_SW_SECRET_SIZE, &shm_secret);
+-	if (err)
+-		goto free_key;
+-
+-	memcpy(shm_key.vaddr, wkey, wkey_size);
+-	qtee_shmbridge_flush_shm_buf(&shm_key);
+-
+-	memset(shm_secret.vaddr, 0, BLK_CRYPTO_SW_SECRET_SIZE);
+-	qtee_shmbridge_flush_shm_buf(&shm_secret);
+-
+-	err = qcom_scm_derive_sw_secret(shm_key.paddr, wkey_size,
+-					shm_secret.paddr, BLK_CRYPTO_SW_SECRET_SIZE);
+-	if (err) {
+-		pr_err("%s:SCM call error for raw secret: 0x%x\n", __func__, err);
+-		goto free_secret;
+-	}
+-
+-	qtee_shmbridge_inv_shm_buf(&shm_secret);
+-	memcpy(sw_secret, shm_secret.vaddr, BLK_CRYPTO_SW_SECRET_SIZE);
+-	qtee_shmbridge_inv_shm_buf(&shm_key);
+-
+-free_secret:
+-	qtee_shmbridge_free_shm(&shm_secret);
+-free_key:
+-	qtee_shmbridge_free_shm(&shm_key);
+-	return err;
++	return qcom_scm_ice_derive_secret_v2(wkey, wkey_size, sw_secret,
++					   BLK_CRYPTO_SW_SECRET_SIZE);
+ }
+ EXPORT_SYMBOL_GPL(qcom_ice_derive_sw_secret);
+ 
+@@ -568,7 +528,8 @@
+ 	if (!qcom_scm_is_available())
+ 		return ERR_PTR(-EPROBE_DEFER);
+ 
+-	if (!qcom_scm_ice_available()) {
++	if (!(of_property_read_bool(dev->of_node, "qcom,ice-use-hwkm") ?
++	      qcom_scm_ice_v2_available() : qcom_scm_ice_available())) {
+ 		dev_warn(dev, "ICE SCM interface not found\n");
+ 		return NULL;
+ 	}
+--- a/ports/qcom-ice/avr-ice-policy.h
++++ b/ports/qcom-ice/avr-ice-policy.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef AVR_ICE_POLICY_H
++#define AVR_ICE_POLICY_H
++#include <linux/errno.h>
++#include <linux/limits.h>
++#include <linux/types.h>
++static inline int avr_ice_hwkm_slot(int slot, bool use_hwkm, u8 version,
++				   bool initialized, u32 ipcat_version)
++{
++	int offset = initialized && ipcat_version >= 0x02000000 &&
++			ipcat_version < 0x02010000 ? 10 : 0;
++
++	if (slot < 0)
++		return -EINVAL;
++	if (!use_hwkm || version == 1)
++		return slot;
++	if (slot > (INT_MAX - offset) / 2)
++		return -ERANGE;
++	return slot * 2 + offset;
++}
++/* Check before any CFGE/MMIO write or secure firmware request. */
++static inline int avr_ice_wrapped_ready(bool use_hwkm, bool initialized,
++				      size_t key_size, u8 data_unit, int slot)
++{
++	if (!key_size || key_size > 128 || !data_unit ||
++	    (data_unit & (data_unit - 1)) || slot < 0)
++		return -EINVAL;
++	return use_hwkm && !initialized ? -EAGAIN : 0;
++}
++#endif
+--- a/ports/qcom-ice/Makefile
++++ b/ports/qcom-ice/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom_ice.o
++qcom_ice-y := ice.o
++ccflags-y += -DCONFIG_SCSI_UFS_CRYPTO_QTI_MODULE=1

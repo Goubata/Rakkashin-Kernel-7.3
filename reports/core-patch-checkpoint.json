@@ -1,0 +1,17 @@
+{
+  "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
+  "source_commit": "85db3a8be93d1bee072f61e9deb517fb6a33d6cc",
+  "patch_sha256": {
+    "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
+    "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
+    "patches/rcu-proxy-holdout-7.3.patch": "bab75c108aeac6a32355f51e25e6f6ce9d1ba09143400f48885c521d78f520a3",
+    "patches/shmem-folio-provider-7.3.patch": "4aae5fcbb73c1096a8c2850daa88bf6e26791a84a8d2e631416c4d2f11e2bf89",
+    "patches/scm-gpu-dcvs-7.3.patch": "f1fadf51f2bfd1f21bccba0f4f8273f72da2cce2e1e6c251228758c84518bb78",
+    "patches/scm-memory-batch-7.3.patch": "f8fa4a6f4b76dee4afc31a606c5ea7d5c34cb739ebe308a52084cd6441917159",
+    "patches/scm-assign-notifier-7.3.patch": "d14a3f7cd633859a07ac84318fc126657a419c9c1750efe8f2d5c627cfd97694",
+    "patches/gunyah-core-api-7.3.patch": "46fcefcdad4f6732f4a6548edb312e5fa7e0323ef1c7ebe008581dd9eceb3b90",
+    "patches/pas-shutdown-retry-7.3.patch": "069dce72a80d5436142b96cbc3a79aec2bf56947321120999ef3172975b9c1cc",
+    "patches/scm-ice-v2-7.3.patch": "3c06f286a5b0d20513dfbe05b0cd50b8b73d175b12138fe51cc997add423a21c",
+    "patches/rakkashin-features-7.3.patch": "4d53b1ed48b734ea6ad6422972b15e4f0f46aa68f97c76d9bf20e42f95c969af"
+  }
+}

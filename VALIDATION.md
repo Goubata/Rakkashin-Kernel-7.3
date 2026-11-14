@@ -428,3 +428,13 @@ The real module links and its import CRCs match, but provider/rpmsg references,
 init/notifier/RX/child/IPC teardown and physical transport remain unaccepted.
 Hardware artifacts stay at Stage25 (99 modules); vendor GLINK is excluded.
 Caller TX/unregister serialization and all charging/full-phone criteria remain.
+
+## Stage27: RPMSG ingress and detach
+
+Nine vendor-source cases plus six native QMI cases and 128 local QRTR packets
+pass. Removal unpublishes driver data, drains module-lifetime ingress SRCU,
+cancels init work and flushes queued RX. Late RX returns ENOTCONN; repeated
+remove is harmless. One test holds ingress with no RX work; another blocks a
+real client callback, so ingress and work draining are checked independently.
+Native RPMSG bus probe/provider lifetime and charging remain unverified. The
+vendor module stays excluded from the unchanged 99-module Stage25 artifacts.

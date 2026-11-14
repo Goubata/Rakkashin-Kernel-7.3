@@ -53,6 +53,8 @@ def main():
                       'Acquire per-client SRCU while holding the lookup mutex and drain it before client free',
                       'Serialize RX/state callbacks outside the registry mutex and reject self-unregister with EDEADLK',
                       'Initialize and unwind each client SRCU before/after registry publication',
+                      'Protect RPMSG driver-data ingress with module-lifetime SRCU until work is queued',
+                      'Unpublish transport, drain ingress, cancel init work and drain RX before RPMSG removal completes',
                   ],
                   'pending': [
                       'Provider/rpmsg/global registry references and unbind serialization',

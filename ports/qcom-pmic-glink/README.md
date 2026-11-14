@@ -15,12 +15,9 @@ references, unbind serialization and removal ordering (init work, notifiers, RX
 queue, children, IPC and IDR) are resolved and tested. Live GLINK transport,
 remote services and battery/charging clients are still missing.
 
-Next provider/transport review constraint: native rpmsg_core.c calls the driver's
-remove callback BEFORE destroying the default endpoint. Clearing transport state
-or merely flushing RX work inside remove cannot by itself exclude an already
-running or newly arriving RX callback. The planned fix must first unpublish the
-rpdev driver-data association and synchronize ingress readers, then drain work.
-Link the rpmsg consumer to a bound provider under its device lock to order
-provider unbind. Unpublish global registry entries and cancel init work before
-children/notifier/queue/IPC destruction. Add actual-source detach/late-RX and
-provider/consumer removal tests before including this module in an artifact.
+Stage27 resolves the native default-endpoint constraint: RX loads the transport
+association under a module-lifetime SRCU epoch. Remove clears that association,
+waits for ingress readers, cancels init work and drains RX. Separate tests hold
+an ingress epoch without work and block an actual RX callback, and verify late
+RX is rejected. Remaining provider references/managed links, registration and
+parent removal ordering must still be resolved before packaging.

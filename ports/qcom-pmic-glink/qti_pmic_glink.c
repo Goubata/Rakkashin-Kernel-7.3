@@ -134,6 +134,10 @@ struct pmic_glink_buf {
 
 static LIST_HEAD(pmic_glink_dev_list);
 static DEFINE_MUTEX(pmic_glink_dev_lock);
+/* The RPMSG core destroys its default endpoint after ->remove(). Protect
+ * driver-data lookup until every ingress callback has finished queueing work.
+ */
+DEFINE_STATIC_SRCU(pmic_glink_ingress);
 
 static void pmic_glink_notify_clients(struct pmic_glink_dev *pgdev,
 					enum pmic_glink_state state)
@@ -486,9 +490,10 @@ static void pmic_glink_rx_work(struct work_struct *work)
 static int pmic_glink_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
 				int len, void *priv, u32 addr)
 {
-	struct pmic_glink_dev *pdev = dev_get_drvdata(&rpdev->dev);
+	struct pmic_glink_dev *pdev;
 	struct pmic_glink_buf *pbuf;
 	unsigned long flags;
+	int index, ret = 0;
 
 	if (!data || len < (int)sizeof(struct pmic_glink_hdr)) {
 		pr_err("Received length %d less than header size: %zu\n", len,
@@ -496,35 +501,47 @@ static int pmic_glink_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
 		return -EINVAL;
 	}
 
+	index = srcu_read_lock(&pmic_glink_ingress);
+	pdev = smp_load_acquire(&rpdev->dev.driver_data);
+	if (!pdev) {
+		ret = -ENOTCONN;
+		goto out;
+	}
 	pbuf = kzalloc(sizeof(*pbuf) + len, GFP_ATOMIC);
-	if (!pbuf)
-		return -ENOMEM;
-
+	if (!pbuf) {
+		ret = -ENOMEM;
+		goto out;
+	}
 	pbuf->len = len;
 	memcpy(pbuf->buf, data, len);
 
 	spin_lock_irqsave(&pdev->rx_lock, flags);
 	list_add_tail(&pbuf->node, &pdev->rx_list);
 	spin_unlock_irqrestore(&pdev->rx_lock, flags);
-
 	queue_work(pdev->rx_wq, &pdev->rx_work);
-	return 0;
+out:
+	srcu_read_unlock(&pmic_glink_ingress, index);
+	return ret;
 }
 
 static void pmic_glink_rpmsg_remove(struct rpmsg_device *rpdev)
 {
-	struct pmic_glink_dev *pgdev = NULL;
+	struct pmic_glink_dev *pgdev = dev_get_drvdata(&rpdev->dev);
 
-	pgdev = get_pmic_glink_from_rpdev(rpdev);
-	if (!pgdev) {
-		pr_err("Failed to get pmic_glink_dev for %s\n", rpdev->id.name);
+	if (!pgdev)
 		return;
-	}
 
 	down_write(&pgdev->rpdev_sem);
 	atomic_set(&pgdev->state, 0);
 	pgdev->rpdev = NULL;
+	/* New callbacks see NULL; readers that already saw pgdev must finish
+	 * before the queue can be drained or its provider freed.
+	 */
+	WRITE_ONCE(rpdev->dev.driver_data, NULL);
 	up_write(&pgdev->rpdev_sem);
+	synchronize_srcu(&pmic_glink_ingress);
+	cancel_work_sync(&pgdev->init_work);
+	flush_workqueue(pgdev->rx_wq);
 	pmic_glink_dbg(pgdev, "%s removed\n", rpdev->id.name);
 }
 
@@ -539,7 +556,7 @@ static int pmic_glink_rpmsg_probe(struct rpmsg_device *rpdev)
 	}
 
 	down_write(&pgdev->rpdev_sem);
-	dev_set_drvdata(&rpdev->dev, pgdev);
+	smp_store_release(&rpdev->dev.driver_data, pgdev);
 	pgdev->rpdev = rpdev;
 	atomic_set(&pgdev->state, 1);
 	up_write(&pgdev->rpdev_sem);

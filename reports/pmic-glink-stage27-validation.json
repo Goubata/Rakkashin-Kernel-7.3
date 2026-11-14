@@ -1,0 +1,29 @@
+{
+  "scope": "actual-source ingress epoch/detach and queued RX tests; no physical RPMSG provider or firmware validation",
+  "glink_source_cases_passed": 9,
+  "native_qmi_cases_passed": 6,
+  "qrtr_local_packets_verified": 128,
+  "fixed": [
+    "Unpublish RPMSG association before waiting for module-lifetime ingress SRCU readers",
+    "Reject valid late RX with ENOTCONN and permit repeated detached remove",
+    "Cancel init work and drain already queued/in-flight RX before remove returns"
+  ],
+  "test_distinction": "One test holds ingress SRCU with no RX work, another blocks an actual client RX callback; both removal waits are checked",
+  "hardware_artifacts_unchanged": "artifacts/android73-pmic-ipc-stage25",
+  "vendor_glink_packaged": false,
+  "physical_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Retained provider references and managed link against provider unbind",
+    "Provider removal order, client registration/removal and orphan lifetime",
+    "Physical transport, remote services and charging/battery plus full-device criteria"
+  ],
+  "sha256": {
+    "reports/pmic-glink-source-lock.json": "85b2fe59e36c3d04bf7f9f38904312cec6d74a253db7ee339682b0a4d1ef3d41",
+    "reports/pmic-glink-stage27-final-build.log": "eadbcc936c15854144d46a8a9e6105eec0ab2a60e73a428ebcebed11146d9402",
+    "reports/pmic-glink-stage27-final-qemu.log": "ba14aed8bc252901a7e65502a4d74acf36a7393d596e95e6f49f7a7348836bc3",
+    "reports/pmic-glink-stage27-final-qemu.json": "f42518f31da70eabbc91ed4bafe28271ebb574f436339a7d9a581112615d19f2",
+    "reports/pmic-glink-stage27-import-crc.json": "5167b9114bf7477a5280ca7a316bebc5d514328147c5b4cb37051232f650cc46"
+  }
+}

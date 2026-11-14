@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-pmic-glink/qti_pmic_glink.ko",
+      "imports_checked": 72,
+      "mismatches": {}
+    }
+  ]
+}

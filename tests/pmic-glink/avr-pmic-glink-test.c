@@ -21,6 +21,7 @@ struct fixture {
 	struct platform_device *child;
 	struct pmic_glink_client *client;
 	struct device *parent;
+	struct rpmsg_device transport;
 	struct completion entered, release, unregister_started, unregister_done;
 	unsigned int messages, states;
 	bool block_rx, self_unregister, callback_timeout;
@@ -78,6 +79,7 @@ static int setup(struct kunit *test)
 	atomic_set(&f->provider.state, 1);
 	init_completion(&f->entered); init_completion(&f->release);
 	init_completion(&f->unregister_started); init_completion(&f->unregister_done);
+	dev_set_drvdata(&f->transport.dev, &f->provider);
 	pmic_glink_dev_add(&f->provider);
 	test->priv = f;
 	return 0;
@@ -210,10 +212,101 @@ static void unregister_waits_for_rx(struct kunit *test)
 	KUNIT_EXPECT_EQ(test, f->unregister_ret, 0);
 	KUNIT_EXPECT_FALSE(test, f->callback_timeout);
 }
+static void detached_transport_rejects_rx(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	struct pmic_glink_hdr header = { .owner = 32778, .type = 1, .opcode = 1 };
+	register_client(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
+	KUNIT_ASSERT_EQ(test, pmic_glink_rpmsg_callback(&f->transport, &header, sizeof(header), NULL, 0), 0);
+	pmic_glink_rpmsg_remove(&f->transport);
+	KUNIT_EXPECT_EQ(test, f->messages, 1U);
+	KUNIT_EXPECT_PTR_EQ(test, dev_get_drvdata(&f->transport.dev), NULL);
+	KUNIT_EXPECT_EQ(test, atomic_read(&f->provider.state), 0);
+	KUNIT_EXPECT_TRUE(test, list_empty(&f->provider.rx_list));
+	KUNIT_EXPECT_EQ(test, pmic_glink_rpmsg_callback(&f->transport, &header, sizeof(header), NULL, 0), -ENOTCONN);
+	/* Repeating an already detached remove must not touch provider resources. */
+	pmic_glink_rpmsg_remove(&f->transport);
+}
+static int detach_thread(void *private)
+{
+	struct fixture *f = private;
+	complete(&f->unregister_started);
+	pmic_glink_rpmsg_remove(&f->transport);
+	complete(&f->unregister_done);
+	while (!kthread_should_stop())
+		schedule_timeout_interruptible(HZ);
+	return 0;
+}
+static void detach_waits_for_ingress_and_rx(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	struct pmic_glink_hdr header = { .owner = 32778, .type = 1, .opcode = 1 };
+	struct task_struct *thread;
+	unsigned long early;
+	int index;
+	register_client(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
+	f->block_rx = true;
+	KUNIT_ASSERT_EQ(test, pmic_glink_rpmsg_callback(&f->transport, &header, sizeof(header), NULL, 0), 0);
+	KUNIT_ASSERT_NE(test, wait_for_completion_timeout(&f->entered, msecs_to_jiffies(1000)), 0UL);
+	/* Hold an ingress epoch to represent a callback that already saw pgdev. */
+	index = srcu_read_lock(&pmic_glink_ingress);
+	thread = kthread_run(detach_thread, f, "avr_glink_detach");
+	if (IS_ERR(thread)) {
+		srcu_read_unlock(&pmic_glink_ingress, index);
+		complete(&f->release);
+		KUNIT_FAIL(test, "detach thread allocation failed");
+		return;
+	}
+	wait_for_completion(&f->unregister_started);
+	early = wait_for_completion_timeout(&f->unregister_done, msecs_to_jiffies(20));
+	KUNIT_EXPECT_EQ(test, early, 0UL);
+	srcu_read_unlock(&pmic_glink_ingress, index);
+	/* Even with ingress unblocked, the actual RX callback still holds work. */
+	if (!early)
+		early = wait_for_completion_timeout(&f->unregister_done, msecs_to_jiffies(20));
+	complete(&f->release);
+	if (!early)
+		wait_for_completion(&f->unregister_done);
+	kthread_stop(thread);
+	KUNIT_EXPECT_EQ(test, early, 0UL);
+	KUNIT_EXPECT_FALSE(test, f->callback_timeout);
+	KUNIT_EXPECT_PTR_EQ(test, dev_get_drvdata(&f->transport.dev), NULL);
+	KUNIT_EXPECT_TRUE(test, list_empty(&f->provider.rx_list));
+}
+static void detach_waits_for_ingress_without_work(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	struct task_struct *thread;
+	unsigned long early, deadline;
+	int index = srcu_read_lock(&pmic_glink_ingress);
+
+	thread = kthread_run(detach_thread, f, "avr_glink_ingress");
+	if (IS_ERR(thread)) {
+		srcu_read_unlock(&pmic_glink_ingress, index);
+		KUNIT_FAIL(test, "detach thread allocation failed");
+		return;
+	}
+	wait_for_completion(&f->unregister_started);
+	deadline = jiffies + msecs_to_jiffies(1000);
+	while (READ_ONCE(f->transport.dev.driver_data) && time_before(jiffies, deadline))
+		usleep_range(100, 200);
+	KUNIT_EXPECT_PTR_EQ(test, READ_ONCE(f->transport.dev.driver_data), NULL);
+	/* There is no RX work to block removal: only the held ingress epoch. */
+	early = wait_for_completion_timeout(&f->unregister_done, msecs_to_jiffies(20));
+	srcu_read_unlock(&pmic_glink_ingress, index);
+	if (!early)
+		wait_for_completion(&f->unregister_done);
+	kthread_stop(thread);
+	KUNIT_EXPECT_EQ(test, early, 0UL);
+}
 static struct kunit_case cases[] = {
 	KUNIT_CASE(registration_and_framing), KUNIT_CASE(dispatch_and_state),
 	KUNIT_CASE(duplicate_owner_rejected), KUNIT_CASE(self_unregister_rx_rejected),
-	KUNIT_CASE(self_unregister_state_rejected), KUNIT_CASE(unregister_waits_for_rx), {}
+	KUNIT_CASE(self_unregister_state_rejected), KUNIT_CASE(unregister_waits_for_rx),
+	KUNIT_CASE(detached_transport_rejects_rx), KUNIT_CASE(detach_waits_for_ingress_and_rx),
+	KUNIT_CASE(detach_waits_for_ingress_without_work), {}
 };
 static struct kunit_suite suite = { .name = "avr-pmic-glink", .init = setup,
 	.exit = cleanup, .test_cases = cases };

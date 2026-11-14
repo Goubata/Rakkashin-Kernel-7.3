@@ -13,3 +13,4 @@ KBUILD_EXTRA_SYMBOLS += $(src)/../secure-buffer/Module.symvers $(src)/../qcom-sm
 ccflags-y += -include $(src)/avr-fence-compat.h
 
 ccflags-y += -include $(src)/avr-platform-deps.h
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-rproc-common/Module.symvers $(src)/../gunyah/Module.symvers

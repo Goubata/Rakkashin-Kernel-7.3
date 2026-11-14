@@ -1,0 +1,85 @@
+{
+  "scope": "static analysis of saved 6.12 binary and a public source candidate; not a working 7.3 implementation",
+  "input": "device-baseline/early-modules/0/lib/modules/qcom_q6v5_pas.ko",
+  "input_sha256": "f9ed9d450f607a44e529c7ff2fac725313ba264bfa12e25a8b5f410932f8cd1c",
+  "vermagic": "6.12.58-android16-6-maybe-dirty-4k SMP preempt mod_unload modversions aarch64",
+  "functions": {
+    "rproc_set_state": null
+  },
+  "exported_rproc_set_state": false,
+  "relocated_call_targets": [],
+  "relevant_binary_strings": [
+    "Unable to find the soccp config register",
+    "alias=of:N*T*Cqcom,alor-soccp-pas",
+    "alias=of:N*T*Cqcom,alor-soccp-pasC*",
+    "alias=of:N*T*Cqcom,canoe-soccp-pas",
+    "alias=of:N*T*Cqcom,canoe-soccp-pasC*",
+    "alias=of:N*T*Cqcom,seraph-soccp-pas",
+    "alias=of:N*T*Cqcom,seraph-soccp-pasC*",
+    "alias=of:N*T*Cqcom,sun-soccp-pas",
+    "alias=of:N*T*Cqcom,sun-soccp-pasC*",
+    "alor_soccp_resource",
+    "canoe_soccp_resource",
+    "qcom,alor-soccp-pas",
+    "qcom,canoe-soccp-pas",
+    "qcom,seraph-soccp-pas",
+    "qcom,sun-soccp-pas",
+    "qcom_pas_handover",
+    "seraph_soccp_resource",
+    "soccp",
+    "soccp-spare",
+    "soccp-tcsr",
+    "soccp.mbn",
+    "soccp_dtb.mbn",
+    "state changed in handover for soccp! TCSR val = %d",
+    "state not changed in handover TCSR val = %d",
+    "sun_soccp_resource",
+    "waking SOCCP from panic path"
+  ],
+  "candidate_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "candidate_source_sha256": "6b5604c4097481511e66661b461295fa2dea77fb06f68c31c210229c5c8bd79b",
+  "analysis_output": "artifacts/reverse-analysis/qcom_q6v5_pas-rproc_set_state.disassembly.txt",
+  "analysis_sha256": "8f4554a2bc18293372933e8aea15b22ede1c585e646ebad4017bb5bc3320ed85",
+  "must_preserve": [
+    "Reference-counted SOCCP power votes and SSR handling",
+    "V2 power payload, control queue, IPCC notification",
+    "Firmware acknowledgement and timeout/error handling"
+  ],
+  "not_equivalent": "Assigning rproc->state or returning success without a firmware transition",
+  "command": [
+    "chroot",
+    "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+    "/usr/bin/llvm-objdump",
+    "-dr",
+    "--disassemble-symbols=rproc_set_state",
+    "/work/avr-port/device-baseline/early-modules/0/lib/modules/qcom_q6v5_pas.ko"
+  ],
+  "observations": [
+    "Saved PAS binary does not export rproc_set_state"
+  ],
+  "stock_hw_fence": {
+    "sha256": "c7732edd77a507346e47002b510ba5eaf41bab32fede02e9ee505b72911a787f",
+    "imports_rproc_set_state": false,
+    "v2_present": true,
+    "relocated_call_targets": [
+      "__stack_chk_fail",
+      "_printk",
+      "_raw_spin_lock",
+      "_raw_spin_unlock",
+      "finish_wait",
+      "hw_fence_get_qtime",
+      "hw_fence_ipcc_get_signal_id",
+      "hw_fence_ipcc_trigger_signal",
+      "hw_fence_update_queue_helper",
+      "init_wait_entry",
+      "ktime_get",
+      "prepare_to_wait_event",
+      "schedule_timeout"
+    ],
+    "disassembly_sha256": "05f44018734eaba570bf3999f8d8ba2dd9e3da8b7286e6c41f91c495e9e4d8bd",
+    "disassembly": "artifacts/reverse-analysis/msm_hw_fence-soccp-power.disassembly.txt"
+  },
+  "interpretation": "The saved stock modules do not require the V1 rproc_set_state export. Review and preserve the real V2 queue/IPCC/ack path; do not invent an always-success V1 provider.",
+  "ported_v2_power_functions_unchanged": true,
+  "v2_source_region_sha256": "bfa4fc168dcb929a4d29935fb2b72abba7d0b8eb92ceacb73022463d258d9011"
+}

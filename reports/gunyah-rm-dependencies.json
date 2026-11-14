@@ -1,0 +1,23 @@
+{
+  "scope": "actual compiled RM object symbol coverage, not a linked module or a hardware test",
+  "c_sources_compiled": true,
+  "final_module_created": false,
+  "unresolved": [
+    "gunyah_rm_call",
+    "gunyah_rm_notifier_register",
+    "gunyah_rm_notifier_unregister",
+    "qcom_scm_assign_mem_notifier_register"
+  ],
+  "provides_for_hw_fence": [
+    "gh_rm_register_notifier",
+    "ghd_rm_get_vmid",
+    "ghd_rm_mem_share"
+  ],
+  "transport_source_commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+  "required_source_files": [
+    "drivers/virt/gunyah/rsc_mgr.c",
+    "drivers/virt/gunyah/rsc_mgr_rpc.c",
+    "drivers/firmware/qcom/qcom_scm.c"
+  ],
+  "scm_note": "Actual SRCU assign_mem notifier semantics must be ported and tested; no disabled modern memory-sharing path or success substitute"
+}

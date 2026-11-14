@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin支援の52モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin支援の56モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。最終.koは8個の依存シンボル不足で未完成。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-rakkashin-stage7/（52モジュール、2,095インポートCRC一致）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-ipc-stage8/（56モジュール、2,187インポートCRC一致）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -94,6 +94,14 @@ KernelSU-Nextは元ツリーに外部ディレクトリへのシンボリック�
 
 保存した実機の静的DTB/DTBOをDTSへ戻し、7.3側DTCで元とバイト単位で一致する再コンパイルに成功しました。適用後5,102ノードも維持しています。これは編集可能な基準の復元であり、7.3実機対応の完了ではありません。公開メインDTSのみの試験ビルドは1,289ノード不足するため、不完全として記録し、通常実行では失敗させます。詳細は [DT作業記録](ports/device-tree/README.md)。
 
-保存済み544種類のモジュールと7.3用52個をELF情報で比較したところ、同名候補47種類、同名候補のない旧モジュール497種類でした。内蔵化・名前変更・不要化もあり得るので、この数は必要な移植個数をそのまま示しません。52個の宣言済みモジュール依存はこのセット内で揃っていますが、ハード初期化・ROM側のロード順・残るドライバ・SELinuxの検証は別途必要です。`reports/module-deployment-readiness.json` に配置候補と不足を保存しています。boot/vendor_boot/DTBO/DLKMの起動用セットはまだ完成していません。
+保存済み544種類のモジュールと7.3用56個をELF情報で比較したところ、同名候補50種類、同名候補のない旧モジュール494種類でした。内蔵化・名前変更・不要化もあり得るので、この数は必要な移植個数をそのまま示しません。56個の宣言済みモジュール依存はこのセット内で揃っていますが、ハード初期化・ROM側のロード順・残るドライバ・SELinuxの検証は別途必要です。`reports/module-deployment-readiness.json` に配置候補と不足を保存しています。boot/vendor_boot/DTBO/DLKMの起動用セットはまだ完成していません。
 
 表示・音声componentを追加した159ファイルの試験合成では4,613ノードまで復元し、不足は489ノードになりました。合成順序とプロパティ差分は未検証です。カメラ用bindingヘッダが未解決で、GPU・映像・通信なども残ります。稼働中ROMのSELinuxはEnforcing/policy 33で、実際のGPU/ntsync/oplus_sync/synxラベルとpolicyハッシュを保存しました。policy変更はしていません。
+
+## SSR / Gunyahと実機モジュール解析
+
+7.3 nativeのremoteproc共通実装と、MotorolaのGunyah ARM64・doorbell・message queueを追加でリンクしました。通知の順序・分離・登録解除と、descriptor寿命・capability未配布時の失敗・仮想IRQ管理の9 KUnitが4コアQEMUで成功しました。実機輸送は未確認です。`python scripts/build_ipc_deps.py --tests` と `python scripts/run_qemu.py --test platform --cpus 4 --log reports/platform.log` で再実行します。
+
+保存済みPAS/hw_fenceの逆アセンブルから、実機モジュールはV1のrproc_set_state exportを必要としないことを確認しました。V2の実queue/IPCC/応答待ち処理を維持し、非対応V1は明示的に失敗させます。旧モジュールの流用・署名偽装・CRC書換えはしていません。
+
+hw_fenceの未解決依存は8から3へ減りました。対応するGunyah RM実装もCコンパイル済みですが、その先の実輸送APIとSCMメモリ割当通知が未移植で、最終モジュールにはなっていません。詳細は ports/gunyah-rm/README.md と reports/gunyah-rm-dependencies.json。カメラ・表示・通信・起動イメージ・実機検証を含め、常用版の完成にはまだ作業が必要です。

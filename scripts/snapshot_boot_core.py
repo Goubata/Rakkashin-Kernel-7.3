@@ -12,6 +12,7 @@ out=ROOT/'out/native-gki'
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--name',default='android73-boot-core-stage2')
 parser.add_argument("--gpu-deps",action="store_true")
+parser.add_argument("--ipc-deps",action="store_true")
 parser.add_argument("--rakkashin",action="store_true")
 args=parser.parse_args()
 if not args.name.replace('-','').replace('_','').isalnum():parser.error('invalid snapshot name')
@@ -24,6 +25,8 @@ ports=['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctr
 if args.gpu_deps:
     ports += ['qcom-hwspinlock','qcom-smem','qcom-socinfo','qcom-llcc','qcom-dcvs',
               'governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats']
+if args.ipc_deps:
+    ports += ['qcom-rproc-common','gunyah']
 if args.rakkashin:
     ports.append("rakkashin/adios")
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))

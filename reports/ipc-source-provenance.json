@@ -1,0 +1,311 @@
+{
+  "passed": true,
+  "scope": "staged source provenance only; not a runtime proof",
+  "files": [
+    {
+      "file": "ports/gunyah/arm64/gh_arm.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/gunyah/gh_arm.c",
+      "original_git_blob": "f18118f677621a757982a800fbda7d72a02d8d86",
+      "port_changes": [],
+      "sha256": "86e4188905ab0131e0b0aba85e5ffe7f7635ddf48ce61f73c3b1232014fb22f9"
+    },
+    {
+      "file": "ports/gunyah/arm64/irq.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/gunyah/irq.c",
+      "original_git_blob": "12bfa9ec78b7d8d20ae4aadf69efee3bee4e6f10",
+      "port_changes": [],
+      "sha256": "715d258645ae536e0569d77a125db872ffd61434410439212aae10617661f3a2"
+    },
+    {
+      "file": "ports/gunyah/arm64/reset.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/gunyah/reset.c",
+      "original_git_blob": "dce70d28614c474f4bf01c4690affc93ae46391a",
+      "port_changes": [
+        "Remove upstream extra blank line at EOF"
+      ],
+      "sha256": "b2c67e909156dffb7a28e75edf8a27b0668caf23153f836357b83968cf98bb6f"
+    },
+    {
+      "file": "ports/gunyah/arm64/reset.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/gunyah/reset.h",
+      "original_git_blob": "401d9546210fcc8cd045dd388189228015330e6d",
+      "port_changes": [],
+      "sha256": "a4090ebfdf65a275ba3df6dfb781b377251bb41908792ca3dfd663495cceff1f"
+    },
+    {
+      "file": "ports/gunyah/gh_dbl.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/gh_dbl.c",
+      "original_git_blob": "e41dee9a211659e7e979c45d0c86f4347f066986",
+      "port_changes": [],
+      "sha256": "c7449467f409a41b62a39dbc84f86340b7c43e377ef6fbce06be8cd9b3821846"
+    },
+    {
+      "file": "ports/gunyah/gh_msgq.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/gh_msgq.c",
+      "original_git_blob": "0ef5a5b06c1146cda75c1760229a715b0b176076",
+      "port_changes": [
+        "Scope file-local allocation helper static for target missing-prototype checking"
+      ],
+      "sha256": "36fd34969292a42d4e32ac993f51e3a350c5d4dc8ef6d9999adda9683293d0ad"
+    },
+    {
+      "file": "ports/gunyah/hcall_dbl.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/hcall_dbl.h",
+      "original_git_blob": "83dfb6a5310afe073bbf4346d371fd60029c1d2b",
+      "port_changes": [],
+      "sha256": "d08af876a3d37b8526b208d44f7d86879436c7fe8d3d28b46dba105c5e4ae347"
+    },
+    {
+      "file": "ports/gunyah/hcall_msgq.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/hcall_msgq.h",
+      "original_git_blob": "7541e0cb146b5f8c7406df17fb013af7f183df43",
+      "port_changes": [],
+      "sha256": "6fdf1eb168222983b255e62248d7a1a21c1ac529c6d7433ccb1579ebbe97fa8f"
+    },
+    {
+      "file": "ports/gunyah/include/asm/gunyah/hcall.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/include/asm/gunyah/hcall.h",
+      "original_git_blob": "125b51c09d204eedc8dd7a46aae2bd9d2b7cee2a",
+      "port_changes": [],
+      "sha256": "9deb6066351926dff56a7125246fa6f7177abee79fecde2c09464313e4fdb4b0"
+    },
+    {
+      "file": "ports/gunyah/include/asm/gunyah.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "arch/arm64/include/asm/gunyah.h",
+      "original_git_blob": "4adf24977fd18f963910bec1ca77c8b1eac70a88",
+      "port_changes": [],
+      "sha256": "e81aecda2cf5bd2160a786fb195329f10d97e8ac4bff50165b805527818a90bc"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_common.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_common.h",
+      "original_git_blob": "ee94c3245d0ad4a95aabd87f9e0f89f35dce7e74",
+      "port_changes": [],
+      "sha256": "9fb6fcdae831cae26610fa1255d643c8db6f5b8928287e2a2a493ca85d034449"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_ctrl.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_ctrl.h",
+      "original_git_blob": "b8a2eb010537d96e3635b12acbf9f6bfd4591191",
+      "port_changes": [],
+      "sha256": "7b4e96aa52371005a4b68e0afdb053943ea033ac29891c97d6700dbdd3ed0bbf"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_dbl.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_dbl.h",
+      "original_git_blob": "c55595eff2f34ffeaed1e7a87e14b8c7d5488992",
+      "port_changes": [],
+      "sha256": "004911a03ce3c1d913eab6a8b6f72bc80866cf51cdd5d4ffc63cd524254aef2e"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_errno.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_errno.h",
+      "original_git_blob": "b2fe40eadac3cb95192767f73e0f79bbc4950855",
+      "port_changes": [],
+      "sha256": "f9a68d76aa4c56a17fda7b5a14212e953a4c9cb53314c08a09e085d919d454fd"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_irq_lend.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_irq_lend.h",
+      "original_git_blob": "b4ee4df1292227a3eb93c86429f56a5afd3f3347",
+      "port_changes": [],
+      "sha256": "39d2c9a39a4752327ef9817b8951e317a51b30361fa6f456a3ac29a271efe6df"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_mem_notifier.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_mem_notifier.h",
+      "original_git_blob": "a7a3ef6fde49797827e40368384108751ff6b66b",
+      "port_changes": [],
+      "sha256": "a3f2e8962e56ea2cb68bd84a182bddbe7cb81583602309127a4aceb2249e04ef"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_msgq.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_msgq.h",
+      "original_git_blob": "af8fd5025e4f96e46304a67b5f84066792590d85",
+      "port_changes": [],
+      "sha256": "5319d95f9a4f10a731de580f7f21aee3283e064c27cce9d126e7d2cbb7be5bde"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_panic_notifier.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_panic_notifier.h",
+      "original_git_blob": "bfbbb916fa77b991863e91e2f88e2b31350da3b0",
+      "port_changes": [],
+      "sha256": "8483dd44dd2aa5619b0f55e6f50aafb5417a04d36f68e38d9c29ca7b334a259d"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_res_request.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_res_request.h",
+      "original_git_blob": "239382a5b63a2945339e94827ed67c6028cbd264",
+      "port_changes": [],
+      "sha256": "7017c302668b2a41133f9e0c0c03f9340fc4099adfaed5d5e6d72c2d8c3f5272"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_rm_drv.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_rm_drv.h",
+      "original_git_blob": "2fccc33c01fedad9179bb65827dffdbcd6efd895",
+      "port_changes": [],
+      "sha256": "baaf2c76a48710855a08c6129f95e67e584bfab7cac9a3375cf27c632a2aed95"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_rm_heap_manager.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_rm_heap_manager.h",
+      "original_git_blob": "ecd18a62a8ad5d796cce94bea3c7643439664ca9",
+      "port_changes": [],
+      "sha256": "ce634a6f733de97135fb95085377d35df3a93c25ef1eacf79750310d376d534d"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/gh_vm.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_vm.h",
+      "original_git_blob": "825183f6900ff05c550f0f2c792c318cfedebeb5",
+      "port_changes": [],
+      "sha256": "94c1b7d0edb80d932efee9f421562bf8bcbee3a1cf9bf886448e9e9ecbbaa08f"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah/hcall_common.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/hcall_common.h",
+      "original_git_blob": "847dcaeb2246d152f1db71d923c95fb1e1e5a788",
+      "port_changes": [],
+      "sha256": "5cdb6be093f410cfd75a232ed8081cf29affca3e9e16065bf4bf09a0d11f35a0"
+    },
+    {
+      "file": "ports/gunyah/include/linux/gunyah.h",
+      "source_repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "origin": "include/linux/gunyah.h",
+      "original_git_blob": "193d04fc3541ef0218d9f79fc50531d7fe423780",
+      "port_changes": [],
+      "sha256": "99aac1497e496a5a71c53e91cce2487aa465d4fdff25e1ef82cf9e8ac8bd718f"
+    },
+    {
+      "file": "ports/gunyah/include/uapi/linux/gunyah.h",
+      "source_repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "origin": "include/uapi/linux/gunyah.h",
+      "original_git_blob": "27e746d131dfa1a368ab8707f7e81797c41ed896",
+      "port_changes": [],
+      "sha256": "1bfb6039813c0a11729348bbf8988f245e2e3583d5ec26eddf9e1a80d94584de"
+    },
+    {
+      "file": "ports/qcom-rproc-common/qcom_common.c",
+      "source_repository": "android-7.3",
+      "commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+      "origin": "drivers/remoteproc/qcom_common.c",
+      "original_git_blob": "5294e327f1587efc917eb01dde59bd1e723c225e",
+      "port_changes": [],
+      "sha256": "59691a7bb2f24c88fd499f230f8fed9ed6dfee653a50025646e706a06adcee73"
+    },
+    {
+      "file": "ports/qcom-rproc-common/qcom_common.h",
+      "source_repository": "android-7.3",
+      "commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+      "origin": "drivers/remoteproc/qcom_common.h",
+      "original_git_blob": "b0e7e336d363ec444ef99d91e388b9106d856635",
+      "port_changes": [],
+      "sha256": "02601daee6453985b6d149a7787c7b0b66b02a423deeab8b62164322a6f5de1d"
+    },
+    {
+      "file": "ports/gunyah-rm/gh_rm_core.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/gh_rm_core.c",
+      "original_git_blob": "9df5499705a6d2ba27f5143424558650cc134b84",
+      "port_changes": [
+        "Use target OF firmware-node conversion API"
+      ],
+      "sha256": "1e4d9c6e77ae48f016000a24ef5729c2eb6632d9892db049206004d8be5f435e"
+    },
+    {
+      "file": "ports/gunyah-rm/gh_rm_iface.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/gh_rm_iface.c",
+      "original_git_blob": "40c7436a7f5ecc5eeddeb19cdbad455e94df0c64",
+      "port_changes": [],
+      "sha256": "20e9dd4cac7d4bc319141748c1ad8b0cb6616e1cfeb278ac2c406f1c7ff94762"
+    },
+    {
+      "file": "ports/gunyah-rm/gh_rm_drv_private.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/virt/gunyah/gh_rm_drv_private.h",
+      "original_git_blob": "f6684cfdc83453b972f5d9cde03817d25510bd6e",
+      "port_changes": [],
+      "sha256": "7684d3e32f2f99d457b5c0502200e4b47ffaf4680669603c806942347020b1e0"
+    },
+    {
+      "file": "ports/gunyah-rm/include/trace/events/gunyah.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/trace/events/gunyah.h",
+      "original_git_blob": "a35148210dbbfc278e4c2461545b128c5b30c31e",
+      "port_changes": [],
+      "sha256": "e0d44e218bda1090b3609ef43d4cdf68962dbb99704d66a223f84a98ffbd8fe0"
+    },
+    {
+      "file": "ports/gunyah-rm/include/linux/gunyah/gh_vm.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/linux/gunyah/gh_vm.h",
+      "original_git_blob": "825183f6900ff05c550f0f2c792c318cfedebeb5",
+      "port_changes": [
+        "Include QTVM-only header only for the QTVM build path"
+      ],
+      "sha256": "a6109619992232c8a5940fadc584e8000bfdd29929f66a6e618fc50347ed86dd"
+    },
+    {
+      "file": "ports/gunyah-rm/include/drivers/virt/gunyah/rsc_mgr.h",
+      "source_repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "origin": "drivers/virt/gunyah/rsc_mgr.h",
+      "original_git_blob": "af65801489bb6a5e21fd81464aafdb6b581a6410",
+      "port_changes": [],
+      "sha256": "acbf62f07156cb68bb3302c740b04de2701dcfc2fa49eed75d36613bd2df37cb"
+    }
+  ]
+}

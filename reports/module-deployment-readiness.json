@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-rakkashin-stage7",
+  "stage": "android73-ipc-stage8",
   "source_commit": "4b563b7618db434257288743d9b64d901db76773",
   "archived_unique_count": 544,
-  "staged_count": 52,
-  "same_name_candidate_count": 47,
-  "archived_names_without_same_name_candidate_count": 497,
-  "loaded_names_without_same_name_candidate_count": 482,
+  "staged_count": 56,
+  "same_name_candidate_count": 50,
+  "archived_names_without_same_name_candidate_count": 494,
+  "loaded_names_without_same_name_candidate_count": 479,
   "all_staged_module_dependencies_present": true,
   "image_packaging_ready": false,
   "blockers": [
@@ -106,6 +106,39 @@
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gh_arm_drv": {
+      "file": "modules/gunyah/gh_arm_drv.ko",
+      "sha256": "08654f4bc9b244a84fabbe76895ecb5eab8ae8a0d9535744bc581d624f369242",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gh_dbl": {
+      "file": "modules/gunyah/gh_dbl.ko",
+      "sha256": "aa6185a9a869b9945e238b89a5827e39750a2c9e8028d1aaf61863da27a719f8",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gh_msgq": {
+      "file": "modules/gunyah/gh_msgq.ko",
+      "sha256": "5b3c56768d8eb77cf93097e16aed570476b54e1353b0ffb59ae16898658853b8",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": []
@@ -622,6 +655,17 @@
         "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_common": {
+      "file": "modules/qcom-rproc-common/qcom_common.ko",
+      "sha256": "96bcf0126ee8f4d3f16e5d772651e2bf68921f92594e871286fbaf53890fd6c0",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "smem"
+      ],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
       "dependencies_absent_from_stage": []
     },
     "smem": {
@@ -1391,24 +1435,10 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "gh_arm_drv",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "gh_ctrl",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "gh_dbl",
-      "placements": [
-        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true
     },
@@ -1422,13 +1452,6 @@
     },
     {
       "name": "gh_mem_notifier",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "gh_msgq",
       "placements": [
         "vendor_boot:fragment-0"
       ],
@@ -4453,12 +4476,9 @@
     "frpc_adsprpc",
     "fsa4480_i2c",
     "ftdi_sio",
-    "gh_arm_drv",
     "gh_ctrl",
-    "gh_dbl",
     "gh_irq_lend",
     "gh_mem_notifier",
-    "gh_msgq",
     "gh_panic_notifier",
     "gh_rm_booster",
     "gh_rm_drv",

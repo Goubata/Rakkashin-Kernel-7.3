@@ -35,16 +35,18 @@ def versions(path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('module',type=Path,nargs='*')
+    parser.add_argument('--stage',type=Path,help='Recursively inspect every .ko under a staging directory')
     args=parser.parse_args()
+    if args.stage and args.module:parser.error('Choose --stage or explicit module files')
     tables=[ROOT/'out/native-gki/Module.symvers']
-    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats','rakkashin/adios']]
+    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats','rakkashin/adios','qcom-rproc-common','gunyah']]
     exports={}
     for table in tables:
         if not table.is_file():continue
         for line in table.read_text().splitlines():
             fields=line.split()
             if fields:exports[fields[1]]=int(fields[0],16)
-    paths=args.module or sorted((ROOT/'artifacts/android73-boot-core-stage2/modules').rglob('*.ko'))
+    paths=args.module or sorted((args.stage or ROOT/'artifacts/android73-boot-core-stage2/modules').rglob('*.ko'))
     if not paths:raise SystemExit("No module files selected")
     results=[]
     for path in paths:

@@ -725,6 +725,7 @@ void hw_fence_utils_update_power_payload(struct hw_fence_driver_data *drv_data,
 }
 
 #if (KERNEL_VERSION(6, 1, 25) <= LINUX_VERSION_CODE)
+#if IS_ENABLED(CONFIG_QCOM_Q6V5_PAS_SOCCP_V1)
 static int _set_soccp_fw_state_v1(struct hw_fence_driver_data *drv_data, u32 client_id, bool enable)
 {
 	struct hw_fence_soccp *soccp_props;
@@ -788,6 +789,8 @@ static int _clear_soccp_rproc_v1(struct hw_fence_soccp *soccp_props)
 
 	return 0;
 }
+
+#endif /* CONFIG_QCOM_Q6V5_PAS_SOCCP_V1 */
 
 static int _set_soccp_fw_state_v2(struct hw_fence_driver_data *drv_data, u32 client_id, bool enable)
 {
@@ -861,11 +864,17 @@ static int _clear_soccp_rproc_v2(struct hw_fence_soccp *soccp_props)
 static int _init_soccp_props_ops(struct hw_fence_driver_data *drv_data)
 {
 	if (drv_data->is_soccp_v1) {
+#if IS_ENABLED(CONFIG_QCOM_Q6V5_PAS_SOCCP_V1)
 		drv_data->soccp_props.ops = (struct hw_fence_soccp_funcs){
 			.set_fw_state = _set_soccp_fw_state_v1,
 			.set_rproc = _set_soccp_rproc_v1,
 			.clear_rproc = _clear_soccp_rproc_v1
 		};
+#else
+		/* AVR stock uses V2. Never report a V1 vote as successful without its provider. */
+		HWFNC_ERR("SOCCP V1 power provider is not enabled\n");
+		return -EOPNOTSUPP;
+#endif
 	} else { /* soccp v2 */
 		drv_data->soccp_props.ops = (struct hw_fence_soccp_funcs){
 			.set_fw_state = _set_soccp_fw_state_v2,

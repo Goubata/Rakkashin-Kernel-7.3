@@ -3,41 +3,28 @@
   "objects": {
     "synx-driver.o": {
       "import_count": 123,
-      "unresolved": [
-        "qcom_register_ssr_notifier"
-      ]
+      "unresolved": []
     },
     "ipclite.o": {
       "import_count": 53,
       "unresolved": []
     },
     "msm_hw_fence.o": {
-      "import_count": 150,
+      "import_count": 147,
       "unresolved": [
-        "gh_dbl_read_and_clean",
-        "gh_dbl_rx_register",
         "gh_rm_register_notifier",
         "ghd_rm_get_vmid",
-        "ghd_rm_mem_share",
-        "qcom_register_ssr_notifier",
-        "qcom_unregister_ssr_notifier",
-        "rproc_set_state"
+        "ghd_rm_mem_share"
       ]
     }
   },
   "unresolved": [
-    "gh_dbl_read_and_clean",
-    "gh_dbl_rx_register",
     "gh_rm_register_notifier",
     "ghd_rm_get_vmid",
-    "ghd_rm_mem_share",
-    "qcom_register_ssr_notifier",
-    "qcom_unregister_ssr_notifier",
-    "rproc_set_state"
+    "ghd_rm_mem_share"
   ],
   "required_providers": [
-    "qcom remoteproc SSR notifications",
-    "vendor SOCCP power votes",
-    "Gunyah resource manager and doorbell"
-  ]
+    "Gunyah resource manager"
+  ],
+  "soccp_variant": "AVR V2 queue/IPCC/firmware acknowledgement retained; unsupported V1 rejected without its provider"
 }

@@ -1,0 +1,21 @@
+{
+  "scope": "read-only native source finding and next implementation constraints; not a completed fix",
+  "native_source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "evidence_file": "drivers/rpmsg/rpmsg_core.c",
+  "function": "rpmsg_dev_remove",
+  "observed_order": [
+    "announce_destroy if present",
+    "rpdrv->remove(rpdev)",
+    "rpmsg_destroy_ept(rpdev->ept) if present"
+  ],
+  "implication": "An RX callback may still enter during the vendor remove callback; quiesce ingress explicitly before flushing or freeing provider state",
+  "planned": [
+    "Protect driver-data lookup/association with a module-lifetime SRCU ingress domain or equivalently synchronized mechanism",
+    "Unpublish the rpdev association and wait for ingress readers before draining RX work",
+    "Find provider by retained device reference; lock/verify it bound and create a managed consumer link before publishing transport",
+    "Unpublish global provider and cancel init work before stopping notifiers, draining RX, removing child clients, destroying queues/IDR and destroying IPC last",
+    "Verify late RX rejection, callback-in-flight detach wait and provider/consumer unbind ordering in actual-source tests"
+  ],
+  "physical_verified": false,
+  "vendor_glink_packaged": false
+}

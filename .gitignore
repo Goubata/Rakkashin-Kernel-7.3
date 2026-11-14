@@ -19,3 +19,12 @@ modules.order
 /tests/sysstats/sysstats-netlink-test
 
 .tmp_*/
+
+/tests/rakkashin/rakkashin-test
+/ports/rakkashin/ntsync-selftest
+
+/ports/rakkashin/probe/
+
+/ports/rakkashin/ntsync-selftest-original-O2
+/tests/rakkashin/ntsync-selftest.generated.c
+/tests/rakkashin/adios-io-test

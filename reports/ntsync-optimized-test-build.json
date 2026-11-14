@@ -1,0 +1,32 @@
+{
+  "upstream_source_sha256": "deb03a0339ca750a8182d59d0b62fd6f36cc8f97da4d2a3664fbd3332bda624c",
+  "test_source_sha256": "0193fe2ba55c4895401e148e21fca6ac7d8f57caffa10bf871e3f2a85f1d7ff2",
+  "binary_sha256": "3c4253da25fd13a3eb8ac8800fc2c908bbe0bb8f0d14d3712b37ab2af11655fa",
+  "command": [
+    "chroot",
+    "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+    "/usr/bin/env",
+    "-i",
+    "PATH=/usr/sbin:/usr/bin:/sbin:/bin",
+    "cc",
+    "-static",
+    "-O2",
+    "-pthread",
+    "-I/work/avr-port/out/native-gki/usr/include",
+    "-I/work/avr-src/tools/testing/selftests",
+    "-o",
+    "/work/avr-port/ports/rakkashin/ntsync-selftest",
+    "/work/avr-port/tests/rakkashin/ntsync-selftest.generated.c"
+  ],
+  "changes": [
+    "compiler fences after acquiring and before releasing kernel mutex",
+    "check wait/unlock/thread-creation errors"
+  ],
+  "unchanged": [
+    "all 13 test cases",
+    "four stress threads",
+    "10000 loops per thread",
+    "non-atomic stress counter",
+    "ntsync driver"
+  ]
+}

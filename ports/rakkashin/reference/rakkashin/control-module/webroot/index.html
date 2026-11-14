@@ -1,0 +1,624 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rakkashin Kernel</title>
+<style>
+  :root { --bg:#f5f5f7; --card:#fff; --fg:#1d1d1f; --sub:#6e6e73; --line:#d2d2d7; --acc:#e0457b; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#000; --card:#1c1c1e; --fg:#f5f5f7; --sub:#98989d; --line:#38383a; --acc:#ff5c93; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:16px; background:var(--bg); color:var(--fg);
+         font:15px/1.45 system-ui, -apple-system, "Noto Sans JP", sans-serif; }
+  header { margin:4px 0 16px; }
+  h1 { font-size:22px; margin:0; letter-spacing:.02em; }
+  h1 span { color:var(--acc); }
+  h2 { font-size:16px; margin:0 0 10px; }
+  .sub { color:var(--sub); font-size:13px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .modes { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  button.mode { text-align:left; padding:12px; border-radius:12px; border:2px solid var(--line);
+                background:transparent; color:var(--fg); font:inherit; cursor:pointer; }
+  button.mode b { display:block; font-size:16px; }
+  button.mode span { color:var(--sub); font-size:13px; }
+  button.mode.on { border-color:var(--acc); }
+  button.mode.extreme { grid-column:1 / -1; }
+  button.mode.extreme b { color:#e5484d; }
+  .row { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:6px 0; }
+  .row + .row { border-top:1px solid var(--line); }
+  input[type=number] { width:80px; font:inherit; color:var(--fg); background:var(--bg);
+                      border:1px solid var(--line); border-radius:8px; padding:4px 6px; }
+  input[type=checkbox] { width:22px; height:22px; flex:none; accent-color:var(--acc); }
+  #status { min-height:1.4em; margin:10px 0 0; }
+  .wl { font-size:13px; }
+  .wl .name { word-break:break-all; }
+  .wl .meta { color:var(--sub); font-variant-numeric:tabular-nums; }
+  button.link { background:none; border:0; color:var(--acc); font:inherit; padding:0; cursor:pointer; }
+  select { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line);
+           border-radius:8px; padding:4px 6px; flex:none; }
+  select.set { border-color:var(--acc); }
+  #now { margin:0 0 10px; }
+  #appfilter { width:100%; font:inherit; color:var(--fg); background:var(--bg);
+               border:1px solid var(--line); border-radius:10px; padding:8px 10px; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Rakkashin</span> Kernel</h1>
+  <div class="sub" id="ver"></div>
+</header>
+
+<div class="card">
+  <div class="row" style="padding:0">
+    <div><b data-i18n="pw_title"></b><div class="sub" data-i18n="pw_desc"></div></div>
+    <div style="text-align:right"><b id="pw_now" style="font-size:20px">-</b><div class="sub" id="pw_avg"></div></div>
+  </div>
+</div>
+
+<div class="card" id="plcard">
+  <div class="row" style="padding:0">
+    <div><b data-i18n="pl_title"></b><div class="sub" data-i18n="pl_desc"></div></div>
+    <div style="white-space:nowrap"><input type="number" id="pl" min="0" max="30" step="0.5"> W</div>
+  </div>
+  <p class="sub" id="plstate"></p>
+</div>
+
+<div class="card">
+  <h2 data-i18n="profile"></h2>
+  <p class="sub" id="now"></p>
+  <div class="modes" id="modes"></div>
+  <p class="sub" id="status"></p>
+  <p class="sub" id="caps"></p>
+  <div class="row">
+    <div><b data-i18n="sc_title"></b><div class="sub" data-i18n="sc_desc"></div></div>
+    <select id="smartcap">
+      <option value="70">70%</option><option value="75">75%</option>
+      <option value="80">80%</option><option value="85">85%</option>
+      <option value="90">90%</option><option value="100">OFF</option>
+    </select>
+  </div>
+  <div class="row" id="susrow">
+    <div><b data-i18n="sus_title"></b><div class="sub" data-i18n="sus_desc"></div></div>
+    <input type="checkbox" id="sustained">
+  </div>
+  <div class="row" id="sustemprow">
+    <div><b data-i18n="sust_title"></b><div class="sub" data-i18n="sust_desc"></div><div class="sub" id="susstate"></div></div>
+    <select id="sustemp">
+      <option value="36">36°C</option><option value="38">38°C</option>
+      <option value="40">40°C</option><option value="42">42°C</option>
+      <option value="44">44°C</option>
+    </select>
+  </div>
+</div>
+
+<div class="card">
+  <div class="row" style="padding-top:0">
+    <h2 data-i18n="apps_title" style="margin:0"></h2>
+    <input type="checkbox" id="perapp">
+  </div>
+  <p class="sub" data-i18n="apps_desc"></p>
+  <input id="appfilter" type="search">
+  <div id="apps"></div>
+</div>
+
+<div class="card">
+  <div class="row">
+    <div><b data-i18n="lb_title"></b><div class="sub" data-i18n="lb_desc"></div></div>
+    <input type="checkbox" id="lb">
+  </div>
+  <div class="row">
+    <div><b data-i18n="tb_title"></b><div class="sub" data-i18n="tb_desc"></div></div>
+    <input type="checkbox" id="tb">
+  </div>
+  <div class="row" id="gpurow">
+    <div><b data-i18n="gpu_title"></b><div class="sub" data-i18n="gpu_desc"></div></div>
+    <input type="checkbox" id="gpu">
+  </div>
+  <div class="row" id="fasrow">
+    <div><b data-i18n="fas_title"></b><div class="sub" data-i18n="fas_desc"></div><div class="sub" id="fasstate"></div></div>
+    <input type="checkbox" id="fas">
+  </div>
+  <div class="row">
+    <div><b data-i18n="io_title"></b><div class="sub" data-i18n="io_desc"></div></div>
+    <input type="checkbox" id="adios">
+  </div>
+  <div class="row">
+    <div><b data-i18n="lmk_title"></b><div class="sub" data-i18n="lmk_desc"></div></div>
+    <input type="checkbox" id="lmk">
+  </div>
+  <div class="row">
+    <div><b data-i18n="z_title"></b><div class="sub" data-i18n="z_desc"></div></div>
+    <input type="checkbox" id="zram2">
+  </div>
+  <div class="row">
+    <div><b>fsync</b><div class="sub" data-i18n="fsync_desc"></div></div>
+    <input type="checkbox" id="fsync">
+  </div>
+</div>
+
+<div class="card">
+  <div class="row" style="padding-top:0">
+    <h2 data-i18n="wl_title" style="margin:0"></h2>
+    <button class="link" id="wlreload" data-i18n="reload"></button>
+  </div>
+  <p class="sub" data-i18n="wl_desc"></p>
+  <div id="wl"></div>
+</div>
+
+<script>
+// Japanese UI only when the system language is Japanese; English otherwise.
+const LANG = (navigator.language || "en").toLowerCase().startsWith("ja") ? "ja" : "en";
+const T = {
+  ja: {
+    profile: "全体のプロファイル",
+    apps_title: "アプリごとのプロファイル",
+    apps_desc: "設定したアプリが前面にある間だけ、そのプロファイルに切り替わります。離れると全体のプロファイルに戻ります。",
+    filter: "アプリを検索",
+    use_global: "全体に従う",
+    now_global: "現在: 全体のプロファイル",
+    now_app: (m, a) => `現在: ${m}（${a} のアプリ設定）`,
+    saved: "保存しました",
+    battery: ["バッテリー", "効率の良い周波数まで・必要な分だけ・裏アプリを強く制限"],
+    pl_title: "パワーリミット",
+    pl_desc: "電池から出る電力がこの値を超えないよう、CPU の消費電力を 20ms ごとに予測して絞ります（実測で毎秒補正）。画面や通信の電力は絞れません。0 で無効。",
+    pl_state: (now, cap) => `測定値 ${now} W ・ CPU 上限 ${cap}%`,
+    pl_saved: "パワーリミットを保存しました",
+    caps: "バッテリーモードの上限周波数",
+    balanced: ["スマートバランス", "操作中は全開・それ以外は必要な周波数だけ（初期値）"],
+    sus_title: "持続パフォーマンス",
+    sus_desc: "バッテリーとスマートバランスで、本体が温まってきたら、画面に触れている間も CPU と GPU を必要な分だけに抑えます。涼しいうちは全開のままです。発熱による強制的な性能低下を防いで、長時間のゲームでもフレームレートを保ちます。",
+    sust_title: "抑え始める温度",
+    sust_desc: "本体の表面温度がこの温度になったら抑え始めます。熱くなるほど余裕を減らします（70% → 30%）。",
+    sust_saved: "抑え始める温度を変更しました",
+    sus_cool: (t) => `本体 ${t}°C：まだ涼しいので、操作中は全開です`,
+    sus_hot: (t, h) => `本体 ${t}°C：操作中も必要な分だけに抑えています（余裕 ${h}%）`,
+    sus_nosensor: (h) => `温度センサーがないため、常に抑えています（余裕 ${h}%）`,
+    sus_on: "持続パフォーマンスをオンにしました",
+    sus_off: "持続パフォーマンスをオフにしました",
+    sc_title: "スマートバランスの上限",
+    sc_desc: "画面に触れていない間の CPU 上限です。触れた瞬間に解除され、最後に触れてから1秒で戻ります。OFF にすると上限をかけません。",
+    sc_saved: "スマートバランスの上限を変更しました",
+    performance: ["パフォーマンス", "操作中は周波数下限30%・反応速め・スレッドブースト+15%"],
+    game: ["ゲーム", "下限50%・前面アプリ優先・スレッドブースト+25%"],
+    extreme: ["極限", "CPU・メモリ・GPU を常に最高速。性能だけを優先し、発熱と電池消費が大きく増えます。ベンチマークなど本当に必要なときだけ"],
+    pw_title: "消費電力",
+    pw_desc: "電池から出ている電力です。プロファイルを切り替えて見比べられます。",
+    pw_avg: (w) => `直近60秒の平均 ${w} W`,
+    pw_charging: "充電中",
+    gpu_title: "GPU 効率化",
+    gpu_desc: "バッテリーとスマートバランスで、GPU を今の描画に必要な周波数までに抑えます。画面に触れるとすぐ解除されます（持続パフォーマンスで本体が温まっているときは、触れている間も抑えます）。足りなかった周波数は覚えて、その下には戻しません。",
+    gpu_on: "GPU 効率化をオンにしました",
+    fas_title: "フレーム監視（Encore FAS）",
+    fas_desc: "前面のアプリが1枚描くたびに時刻を測り、カクつきや、目標のフレームレートを下回っているのをその場で見つけます。CPU や GPU の上限が原因なら、すぐに上げて、その周波数を下限として覚えます。上限が原因でなければ何もしないので、電池を無駄にしません。カクつかない間は余裕を少しずつ減らし、アプリごとにちょうどいい所を学習して覚えます。",
+    fas_on: "フレーム監視をオンにしました",
+    fas_off: "フレーム監視をオフにしました",
+    fas_watch: (fps, late, gpu, cpu, cut) => `監視中: ${fps ? fps + " fps" : "目標を判定中"} ・ カクつき ${late} 回 ・ 上限を上げた回数 GPU ${gpu} / CPU ${cpu}${cut !== null ? ` ・ 学習で減らした余裕 ${cut} ポイント` : ""}`,
+    fas_idle: "前面のアプリを待っています",
+    gpu_off: "GPU 効率化をオフにしました",
+    io_title: "ADIOS I/O スケジューラ",
+    io_desc: "ストレージの読み書きの順番を賢く決めて、アプリの起動や読み込みの待ち時間を短くします。",
+    io_on: "ADIOS に切り替えました",
+    io_off: "元のスケジューラに戻しました",
+    lmk_title: "アプリを RAM に多く残す",
+    lmk_desc: "16GB 向けにアプリの自動終了を控えめにし、裏に残すアプリを最大64個にします。アプリに戻ったときの再起動が減ります。",
+    lmk_on: "オンにしました",
+    lmk_off: "元の設定に戻しました",
+    z_title: "zram 2段圧縮",
+    z_desc: "普段は展開が速い lz4 で圧縮し、30分使われなかったデータだけ zstd で詰め直します。より多くのアプリを RAM に残せます。切り替えは再起動後に反映されます。",
+    z_saved: "保存しました（再起動後に反映されます）",
+    tb_title: "スレッドブースト",
+    tb_desc: "パフォーマンスとゲームで、前面アプリの重いスレッド4本に、負荷より多めの性能を先回りで保証します。",
+    switched: "切り替えました（再起動後も保持されます）",
+    failed: "失敗しました: ",
+    unsupported: "このカーネルは Rakkashin Kernel ではありません。",
+    lb_title: "アプリ起動ブースト",
+    lb_desc: "アプリの起動直後、起動処理が落ち着くまで（0.3〜2秒）CPU を全開にします。プロファイルを切り替えると、そのプロファイルの既定値に戻ります。",
+    fsync_desc: "オフにすると書き込みが速くなりますが、突然の電源断でデータが壊れることがあります。",
+    wl_title: "Wakelock",
+    wl_desc: "スリープを妨げている時間が長い順です。チェックした wakelock はブロックされます。通知や通信に必要なものを止めると不具合が出ることがあります。",
+    reload: "再読み込み",
+    blocked: "ブロック設定を保存しました",
+    count: "回",
+  },
+  en: {
+    profile: "Global profile",
+    apps_title: "Per-app profiles",
+    apps_desc: "While an app with its own profile is in the foreground, that profile applies. Leaving it returns to the global profile.",
+    filter: "Search apps",
+    use_global: "Use global",
+    now_global: "Now: global profile",
+    now_app: (m, a) => `Now: ${m} (app profile for ${a})`,
+    saved: "Saved",
+    battery: ["Battery", "Efficient frequencies, only as much as needed, background heavily limited"],
+    pl_title: "Power limit",
+    pl_desc: "Predicts CPU power every 20 ms and throttles it to keep battery drain under this (calibrated by a real reading each second). Screen and radio power can't be limited. 0 = off.",
+    pl_state: (now, cap) => `Measured ${now} W · CPU cap ${cap}%`,
+    pl_saved: "Power limit saved",
+    caps: "Battery mode frequency caps",
+    balanced: ["Smart Balanced", "Full speed while you touch, just the frequency needed otherwise (default)"],
+    sus_title: "Sustained performance",
+    sus_desc: "In Battery and Smart Balanced, once the phone warms up, CPU and GPU are kept at just what's needed even while you touch the screen. Full speed while it's cool. Prevents thermal throttling, so frame rates hold up in long gaming sessions.",
+    sust_title: "Start at",
+    sust_desc: "Skin temperature where it starts. The hotter it gets, the less headroom (70% → 30%).",
+    sust_saved: "Start temperature changed",
+    sus_cool: (t) => `Phone at ${t}°C: still cool, full speed while you play`,
+    sus_hot: (t, h) => `Phone at ${t}°C: just what's needed while you play (${h}% headroom)`,
+    sus_nosensor: (h) => `No temperature sensor: always on (${h}% headroom)`,
+    sus_on: "Sustained performance on",
+    sus_off: "Sustained performance off",
+    sc_title: "Smart Balanced cap",
+    sc_desc: "CPU cap while the screen isn't being touched. Lifted the instant you touch, restored 1 s after the last touch. OFF disables the cap.",
+    sc_saved: "Smart Balanced cap changed",
+    performance: ["Performance", "30% floor while you touch, faster response, thread boost +15%"],
+    game: ["Game", "50% floor, foreground first, thread boost +25%"],
+    extreme: ["Extreme", "CPU, memory and GPU pinned at top speed. Performance only: much more heat and battery drain. For benchmarks and when you truly need it"],
+    pw_title: "Power draw",
+    pw_desc: "Power drawn from the battery. Switch profiles to compare.",
+    pw_avg: (w) => `60 s average ${w} W`,
+    pw_charging: "Charging",
+    gpu_title: "GPU efficiency",
+    gpu_desc: "In Battery and Smart Balanced, holds the GPU to the frequency the current frames need. Lifted the instant you touch (with Sustained performance on a warm phone, it stays on while you touch). A frequency that proved too low is remembered and not used again.",
+    gpu_on: "GPU efficiency on",
+    fas_title: "Frame timing (Encore FAS)",
+    fas_desc: "Times every frame of the app in front and spots stutter or a frame rate below its target as it happens. If a CPU or GPU cap caused it, the cap is raised at once and that frequency is remembered as a floor. If not, nothing changes, so no battery is wasted. While frames stay on time the headroom is trimmed bit by bit, and each app's sweet spot is learned and remembered.",
+    fas_on: "Frame timing on",
+    fas_off: "Frame timing off",
+    fas_watch: (fps, late, gpu, cpu, cut) => `Watching: ${fps ? fps + " fps" : "finding the target"} · ${late} late frames · caps raised GPU ${gpu} / CPU ${cpu}${cut !== null ? ` · learned headroom trim ${cut} points` : ""}`,
+    fas_idle: "Waiting for an app in front",
+    gpu_off: "GPU efficiency off",
+    io_title: "ADIOS I/O scheduler",
+    io_desc: "Orders storage reads and writes smartly to cut wait times when apps start or load.",
+    io_on: "Switched to ADIOS",
+    io_off: "Restored the original scheduler",
+    lmk_title: "Keep more apps in RAM",
+    lmk_desc: "Kills background apps less eagerly (tuned for 16GB) and keeps up to 64 cached apps, so switching back doesn't restart them.",
+    lmk_on: "Enabled",
+    lmk_off: "Restored the original settings",
+    z_title: "Two-stage zram",
+    z_desc: "Swaps with fast-to-decompress lz4, then re-packs data untouched for 30 minutes with zstd, so more apps stay in RAM. Takes effect after a reboot.",
+    z_saved: "Saved (takes effect after a reboot)",
+    tb_title: "Thread boost",
+    tb_desc: "In Performance and Game, gives the 4 heaviest foreground threads more capacity than their current load, ahead of spikes.",
+    switched: "Switched (kept across reboots)",
+    failed: "Failed: ",
+    unsupported: "This kernel is not Rakkashin Kernel.",
+    lb_title: "App launch boost",
+    lb_desc: "Runs the CPU flat out right after an app starts, until its launch work settles (0.3–2 s). Switching profiles resets it to that profile's default.",
+    fsync_desc: "Off makes writes faster, but a sudden power loss can corrupt data.",
+    wl_title: "Wakelocks",
+    wl_desc: "Sorted by how long each kept the phone awake. Checked wakelocks are blocked. Blocking ones needed for notifications or networking can break things.",
+    reload: "Reload",
+    blocked: "Block list saved",
+    count: "x",
+  },
+}[LANG];
+document.documentElement.lang = LANG;
+document.querySelectorAll("[data-i18n]").forEach((e) => { e.textContent = T[e.dataset.i18n]; });
+document.getElementById("appfilter").placeholder = T.filter;
+
+const MODDIR = "/data/adb/modules/rakkashin";
+const STATE = "/data/adb/rakkashin";
+const NODE = "/sys/kernel/avr_profile";
+const FSYNC = "/sys/module/sync/parameters/fsync_enabled";
+const LB = "/sys/module/launch_boost/parameters/enabled";
+const TB = "/sys/module/rk_tboost/parameters/enabled";
+const WLB = "/sys/class/misc/boeffla_wakelock_blocker/wakelock_blocker";
+const MODES = ["battery", "balanced", "performance", "game", "extreme"];
+
+// KernelSU WebUI bridge: ksu.exec(cmd, optionsJson, callbackName)
+function exec(cmd) {
+  return new Promise((resolve) => {
+    const cb = "cb_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    window[cb] = (errno, stdout, stderr) => { delete window[cb]; resolve({ errno, stdout, stderr }); };
+    ksu.exec(cmd, "{}", cb);
+  });
+}
+const status = (t) => { document.getElementById("status").textContent = t; };
+const q = (s) => "'" + String(s).replace(/'/g, "'\\''") + "'";
+
+function renderModes(current) {
+  const box = document.getElementById("modes");
+  box.replaceChildren();
+  for (const id of MODES) {
+    const b = document.createElement("button");
+    b.className = "mode" + (id === "extreme" ? " extreme" : "") + (id === current ? " on" : "");
+    const t = document.createElement("b"); t.textContent = T[id][0];
+    const d = document.createElement("span"); d.textContent = T[id][1];
+    b.append(t, d);
+    b.onclick = () => setMode(id);
+    box.append(b);
+  }
+}
+
+// global (user-chosen) mode and what is in effect right now
+let uidToPkg = {};
+async function readMode() {
+  const r = await exec(`cat ${NODE}/status`);
+  const kv = Object.fromEntries(r.stdout.trim().split(" ").map((x) => x.split("=")));
+  const now = document.getElementById("now");
+  now.textContent = kv.app && kv.app !== "-"
+    ? T.now_app(T[kv.active][0], uidToPkg[kv.app] || kv.app)
+    : T.now_global;
+  return kv.global || null;
+}
+
+async function readToggles() {
+  const [f, l, tb] = await Promise.all([exec(`cat ${FSYNC}`), exec(`cat ${LB}`), exec(`cat ${TB}`)]);
+  document.getElementById("fsync").checked = f.stdout.trim() === "Y";
+  document.getElementById("lb").checked = l.stdout.trim() === "Y";
+  document.getElementById("tb").checked = tb.stdout.trim() === "Y";
+}
+
+async function setMode(id) {
+  const r = await exec(`sh ${MODDIR}/apply.sh ${id}`);
+  if (r.errno !== 0) { status(T.failed + r.stderr); return; }
+  renderModes(await readMode());
+  await readToggles();
+  status(T.switched);
+}
+
+function bindToggle(elId, node, stateFile) {
+  document.getElementById(elId).onchange = async (e) => {
+    const v = e.target.checked ? "Y" : "N";
+    await exec(`echo ${v} > ${node} && mkdir -p ${STATE} && echo ${v} > ${STATE}/${stateFile}`);
+  };
+}
+
+async function loadWakelocks() {
+  const list = await exec(
+    `for d in /sys/class/wakeup/*; do printf '%s\\t%s\\t%s\\n' "$(cat $d/name)" "$(cat $d/total_time_ms)" "$(cat $d/active_count)"; done 2>/dev/null | sort -t "$(printf '\\t')" -k2,2nr | head -40`);
+  const cur = (await exec(`cat ${WLB}`)).stdout.trim();
+  const blocked = new Set(cur.split(";").filter(Boolean));
+  const box = document.getElementById("wl");
+  box.replaceChildren();
+  for (const line of list.stdout.split("\n")) {
+    const [name, ms, cnt] = line.split("\t");
+    if (!name) continue;
+    const row = document.createElement("label");
+    row.className = "row wl";
+    const left = document.createElement("div");
+    const n = document.createElement("div"); n.className = "name"; n.textContent = name;
+    const m = document.createElement("div"); m.className = "meta";
+    m.textContent = `${(Number(ms) / 1000).toFixed(1)} s · ${cnt}${T.count}`;
+    left.append(n, m);
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = blocked.has(name);
+    cb.onchange = async () => {
+      cb.checked ? blocked.add(name) : blocked.delete(name);
+      const v = [...blocked].join(";");
+      await exec(`echo ${q(v)} > ${WLB} && mkdir -p ${STATE} && echo ${q(v)} > ${STATE}/wl_block`);
+      status(T.blocked);
+    };
+    row.append(left, cb);
+    box.append(row);
+  }
+}
+
+// ---- per-app profiles ----
+let profiles = new Map();	// uid -> mode
+async function saveProfiles() {
+  const v = [...profiles].map(([u, m]) => `${u}:${m}`).join(" ");
+  const r = await exec(`echo ${q(v)} > ${NODE}/app_profiles && mkdir -p ${STATE} && echo ${q(v)} > ${STATE}/app_profiles`);
+  status(r.errno === 0 ? T.saved : T.failed + r.stderr);
+  readMode();
+}
+
+async function loadApps() {
+  const [pk, cur, pa] = await Promise.all([
+    exec("pm list packages -3 -U"), exec(`cat ${NODE}/app_profiles`), exec(`cat ${NODE}/per_app`)]);
+  document.getElementById("perapp").checked = pa.stdout.trim() === "1";
+  profiles = new Map(cur.stdout.trim().split(/\s+/).filter(Boolean).map((t) => t.split(":")));
+  const apps = [];
+  for (const line of pk.stdout.split("\n")) {
+    const m = line.match(/^package:(\S+) uid:(\d+)/);
+    if (m) { apps.push({ pkg: m[1], uid: m[2] }); uidToPkg[m[2]] = m[1]; }
+  }
+  // apps with a profile first, then alphabetical
+  apps.sort((a, b) => (profiles.has(b.uid) - profiles.has(a.uid)) || a.pkg.localeCompare(b.pkg));
+  const box = document.getElementById("apps");
+  box.replaceChildren();
+  for (const a of apps) {
+    const row = document.createElement("div");
+    row.className = "row wl"; row.dataset.pkg = a.pkg;
+    const n = document.createElement("div"); n.className = "name"; n.textContent = a.pkg;
+    const sel = document.createElement("select");
+    for (const v of ["", ...MODES]) {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = v ? T[v][0] : T.use_global;
+      sel.append(o);
+    }
+    sel.value = profiles.get(a.uid) || "";
+    sel.classList.toggle("set", !!sel.value);
+    sel.onchange = () => {
+      sel.value ? profiles.set(a.uid, sel.value) : profiles.delete(a.uid);
+      sel.classList.toggle("set", !!sel.value);
+      saveProfiles();
+    };
+    row.append(n, sel);
+    box.append(row);
+  }
+  readMode();
+}
+
+async function init() {
+  const v = await exec(`cat ${NODE}/version`);
+  if (v.errno !== 0) { status(T.unsupported); return; }
+  document.getElementById("ver").textContent = v.stdout.trim();
+  renderModes(await readMode());
+  await readToggles();
+  const pl = document.getElementById("pl");
+  const plr = await exec(`cat ${NODE}/power_limit`);
+  if (plr.errno === 0) {
+    const showPl = (txt) => {
+      const kv = Object.fromEntries(txt.trim().split(" ").map((x) => x.split("=")));
+      document.getElementById("plstate").textContent =
+        Number(kv.limit) ? T.pl_state((kv.now / 1000).toFixed(2), kv.cpu_cap) : "";
+      return kv;
+    };
+    pl.value = (showPl(plr.stdout).limit / 1000).toString();
+    pl.onchange = async () => {
+      const mw = Math.round(Math.max(0, Number(pl.value) || 0) * 1000);
+      const v = mw && mw < 500 ? 500 : Math.min(mw, 30000);
+      const r = await exec(`echo ${v} > ${NODE}/power_limit && mkdir -p ${STATE} && echo ${v} > ${STATE}/power_limit`);
+      status(r.errno === 0 ? T.pl_saved : T.failed + r.stderr);
+    };
+    setInterval(async () => {
+      if (!document.hidden) showPl((await exec(`cat ${NODE}/power_limit`)).stdout);
+    }, 2000);
+  } else {
+    document.getElementById("plcard").style.display = "none";
+  }
+  const sus = document.getElementById("sustained");
+  const susv = await exec(`cat ${NODE}/sustained`);
+  if (susv.errno === 0) {
+    sus.checked = susv.stdout.trim() === "1";
+    sus.onchange = async () => {
+      const v = sus.checked ? 1 : 0;
+      await exec(`echo ${v} > ${NODE}/sustained && mkdir -p ${STATE} && echo ${v} > ${STATE}/sustained`);
+      status(sus.checked ? T.sus_on : T.sus_off);
+    };
+  } else {
+    document.getElementById("susrow").style.display = "none";
+  }
+  const st = document.getElementById("sustemp");
+  const stv = await exec(`cat ${NODE}/sustained_temp`);
+  if (stv.errno === 0 && susv.errno === 0) {
+    st.value = stv.stdout.trim();
+    st.onchange = async () => {
+      await exec(`echo ${st.value} > ${NODE}/sustained_temp && mkdir -p ${STATE} && echo ${st.value} > ${STATE}/sustained_temp`);
+      status(T.sust_saved);
+    };
+    const showSus = async () => {
+      const el = document.getElementById("susstate");
+      if (!sus.checked) { el.textContent = ""; return; }
+      const m = (await exec(`cat ${NODE}/sustained_state`)).stdout
+        .match(/skin=(-|-?\d+) engaged=(\d) headroom=(\d+)/);
+      if (!m) { el.textContent = ""; return; }
+      if (m[1] === "-") el.textContent = m[2] === "1" ? T.sus_nosensor(m[3]) : "";
+      else {
+        const t = (Number(m[1]) / 1000).toFixed(1);
+        el.textContent = m[2] === "1" ? T.sus_hot(t, m[3]) : T.sus_cool(t);
+      }
+    };
+    showSus();
+    setInterval(() => { if (!document.hidden) showSus(); }, 2000);
+  } else {
+    document.getElementById("sustemprow").style.display = "none";
+  }
+  const sc = document.getElementById("smartcap");
+  const scv = await exec(`cat ${NODE}/smart_cap`);
+  if (scv.errno === 0) {
+    sc.value = scv.stdout.trim();
+    sc.onchange = async () => {
+      await exec(`echo ${sc.value} > ${NODE}/smart_cap && mkdir -p ${STATE} && echo ${sc.value} > ${STATE}/smart_cap`);
+      status(T.sc_saved);
+    };
+  } else {
+    sc.closest(".row").style.display = "none";
+  }
+  const caps = await exec(`cat ${NODE}/battery_caps`);
+  if (caps.errno === 0)
+    document.getElementById("caps").textContent = T.caps + ": " +
+      caps.stdout.trim().split("\n").map((l) => {
+        const m = l.match(/^(cpu\d+): (\d+)\/(\d+) kHz \((\S+)\)/);
+        return m ? `${m[1]} ${(m[2] / 1e6).toFixed(2)}/${(m[3] / 1e6).toFixed(2)} GHz${m[4] === "fallback" ? " (70%)" : ""}` : l;
+      }).join(" · ");
+  bindToggle("fsync", FSYNC, "fsync");
+  bindToggle("lb", LB, "launch_boost");
+  bindToggle("tb", TB, "tboost");
+  const gpu = document.getElementById("gpu");
+  const gpuOk = (await exec(`[ -e ${NODE}/demand_active ] && [ -w /sys/kernel/gpu/gpu_max_clock ]`)).errno === 0;
+  // gpud.sh restarts rk_gpud with both settings; SIGTERM makes it restore
+  // the GPU max clock first
+  const gpud = (file, on) =>
+    exec(`mkdir -p ${STATE} && echo ${on ? 1 : 0} > ${STATE}/${file}; sh ${MODDIR}/gpud.sh restart`);
+  if (!gpuOk) {
+    document.getElementById("gpurow").style.display = "none";
+  } else {
+    gpu.checked = (await exec(`cat ${STATE}/gpu 2>/dev/null`)).stdout.trim() !== "0";
+    gpu.onchange = async () => {
+      await gpud("gpu", gpu.checked);
+      status(gpu.checked ? T.gpu_on : T.gpu_off);
+    };
+  }
+  const fas = document.getElementById("fas");
+  const fasOk = (await exec(`[ -e /dev/encore_fas ] && [ -e ${NODE}/top_pid ]`)).errno === 0;
+  if (!fasOk) {
+    document.getElementById("fasrow").style.display = "none";
+  } else {
+    fas.checked = (await exec(`cat ${STATE}/fas 2>/dev/null`)).stdout.trim() !== "0";
+    fas.onchange = async () => {
+      await gpud("fas", fas.checked);
+      status(fas.checked ? T.fas_on : T.fas_off);
+    };
+    const showFas = async () => {
+      const el = document.getElementById("fasstate");
+      if (!fas.checked) { el.textContent = ""; return; }
+      const r = (await exec(`cat ${STATE}/fas_state 2>/dev/null; cat ${NODE}/frame_state`)).stdout;
+      const m = r.match(/pid=(\d+) fps=(\d+) degraded=\d late=(\d+) gpu_lifts=(\d+)/);
+      const k = r.match(/janks=(\d+)(?: cut=(\d+))?/);
+      el.textContent = m && m[1] !== "0" ? T.fas_watch(Number(m[2]), m[3], m[4], k ? k[1] : "0", k && k[2] !== undefined ? k[2] : null) : T.fas_idle;
+    };
+    showFas();
+    setInterval(() => { if (!document.hidden) showFas(); }, 3000);
+  }
+  const io = document.getElementById("adios");
+  io.checked = (await exec(`cat ${STATE}/adios 2>/dev/null`)).stdout.trim() !== "0";
+  io.onchange = async () => {
+    const on = io.checked;
+    await exec(`mkdir -p ${STATE} && echo ${on ? 1 : 0} > ${STATE}/adios && sh ${MODDIR}/io.sh ${on ? "apply" : "revert"}`);
+    status(on ? T.io_on : T.io_off);
+  };
+  const lmk = document.getElementById("lmk");
+  lmk.checked = (await exec(`cat ${STATE}/lmk 2>/dev/null`)).stdout.trim() !== "0";
+  lmk.onchange = async () => {
+    const on = lmk.checked;
+    await exec(`mkdir -p ${STATE} && echo ${on ? 1 : 0} > ${STATE}/lmk && sh ${MODDIR}/lmk.sh ${on ? "apply" : "revert"}`);
+    status(on ? T.lmk_on : T.lmk_off);
+  };
+  const z = document.getElementById("zram2");
+  z.checked = (await exec(`cat ${STATE}/zram2 2>/dev/null`)).stdout.trim() !== "0";
+  z.onchange = async () => {
+    await exec(`mkdir -p ${STATE} && echo ${z.checked ? 1 : 0} > ${STATE}/zram2`);
+    status(T.z_saved);
+  };
+  document.getElementById("perapp").onchange = async (e) => {
+    const v = e.target.checked ? 1 : 0;
+    await exec(`echo ${v} > ${NODE}/per_app && mkdir -p ${STATE} && echo ${v} > ${STATE}/per_app`);
+    readMode();
+  };
+  document.getElementById("appfilter").oninput = (e) => {
+    const f = e.target.value.toLowerCase();
+    for (const r of document.querySelectorAll("#apps .row"))
+      r.style.display = r.dataset.pkg.toLowerCase().includes(f) ? "" : "none";
+  };
+  loadApps();
+  document.getElementById("wlreload").onclick = loadWakelocks;
+  loadWakelocks();
+}
+// ---- power meter (runs only while the WebUI is visible) ----
+const BAT = "/sys/class/power_supply/battery";
+const samples = [];
+async function samplePower() {
+  if (document.hidden) return;
+  const r = await exec(`cat ${BAT}/current_now ${BAT}/voltage_now ${BAT}/status`);
+  const [i, v, st] = r.stdout.trim().split("\n");
+  if (!i || !v) return;
+  const w = Math.abs(Number(i) * Number(v)) / 1e12;	// uA * uV -> W
+  const now = document.getElementById("pw_now");
+  if (st === "Charging") { now.textContent = T.pw_charging; samples.length = 0; return; }
+  now.textContent = w.toFixed(2) + " W";
+  samples.push(w);
+  if (samples.length > 60) samples.shift();
+  const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
+  document.getElementById("pw_avg").textContent = T.pw_avg(avg.toFixed(2));
+}
+setInterval(samplePower, 1000);
+samplePower();
+
+init();
+</script>
+</body>
+</html>

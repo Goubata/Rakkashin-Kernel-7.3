@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携の50モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin支援の52モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。最終.koは8個の依存シンボル不足で未完成。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-sysstats-stage6/（50モジュール、1,980インポートCRC一致）。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-rakkashin-stage7/（52モジュール、2,095インポートCRC一致）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -79,3 +79,13 @@ msm_sysstatsも実装を移植しました。GPUコールバックの解除をSR
 ## SYNXの移植中
 
 SYNX・IPCLite・Qualcommハードウェアフェンスの全対象Cソースがコンパイルを通過しました。最終リンクには、remoteprocの通知・SOCCP電源制御・Gunyahの8依存が残っています。これらは成功済み50モジュールには含めていません。ALL/ANYの待機と重複通知のエラー動作を保つ互換処理は5件のKUnitに成功しました。ports/qti-fence/README.md と reports/qti-fence-dependencies.json に残作業を記録しています。
+
+## Rakkashin独自機能の移植
+
+5段階のプロファイル、UID別・top-app連携、起動ブースト、前景スレッドのheadroom、PELT倍率、Encore FAS、wakelock制御を7.3本体へ組み込みました。ADIOSは7.3用モジュールとしてリンク。ntsyncは7.3標準実装に旧Rakkashinの作成ioctlを追加し、古い呼び出しと新しい待機機能を両立しています。BBR/fq_codel、電力効率workqueue、suspend同期、LZ4 zramの設定も移しました。
+
+最終Imageで、Rakkashin実動作122チェック、ntsync 13セルフテスト、wakelock 5 KUnit、既存clock/RCU/共有メモリ35 KUnitが成功。ADIOSはRAM上のディスクで4並列のデータ照合を3回行い、深度変更・切替・アンロードまで成功しました。これらはAndroid実機の性能や全機能の確認ではありません。
+
+KernelSU-Nextは元ツリーに外部ディレクトリへのシンボリックリンクしかなく、まだ移植していません。GPU/ファームウェア依存、Android側制御サービス、SELinux、実機での電力・温度・フレーム制御も残っています。詳細は ports/rakkashin/README.md。再ビルドは `python scripts/build_native.py --gpu-deps --qemu-tests --rakkashin`。
+
+次に実機ダンプを基に、vendor_boot・DLKM・DTB/DTBOの配置と依存を整合させます。DTはavrの実構成とMotorolaの一致ソースを優先し、7.3 bindingとの差を検証します。別SoCのDTSをそのまま置き換えたり、旧6.12モジュールを名前だけ変えて使ったりする工程はありません。イメージはファイル上で作成し、実機書き込みや再起動は行っていません。

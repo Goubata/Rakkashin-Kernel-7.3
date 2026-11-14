@@ -63,3 +63,5 @@ static struct kunit_case cases[]={KUNIT_CASE(any_poll),KUNIT_CASE(any_callback),
 static struct kunit_suite suite={.name="avr-fence-compat",.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");
+
+MODULE_DESCRIPTION("DMA fence ALL/ANY and signaling compatibility tests");

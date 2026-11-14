@@ -1,0 +1,5153 @@
+diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+index 2989e42d0..333ffee1e 100644
+--- a/drivers/base/power/Makefile
++++ b/drivers/base/power/Makefile
+@@ -7,3 +7,5 @@ obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+ obj-$(CONFIG_PM_RUNTIME_KUNIT_TEST) += runtime-test.o
+ 
+ ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
++
++obj-$(CONFIG_BOEFFLA_WL_BLOCKER) += boeffla_wl_blocker.o
+diff --git a/drivers/base/power/boeffla_wl_blocker.c b/drivers/base/power/boeffla_wl_blocker.c
+new file mode 100644
+index 000000000..5954c6b07
+--- /dev/null
++++ b/drivers/base/power/boeffla_wl_blocker.c
+@@ -0,0 +1,230 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Boeffla generic wakelock blocker
++ *
++ * Original driver by andip71 (v1.1.0, 2017), as carried by AGNi and NGK.
++ * Reworked for 6.12: the block list is published through RCU so that
++ * wakeup_source_report_event(), which runs with ws->lock held and IRQs
++ * off, never reads a half-written string.
++ *
++ * sysfs, unchanged from the original:
++ *   /sys/class/misc/boeffla_wakelock_blocker/wakelock_blocker
++ *   /sys/class/misc/boeffla_wakelock_blocker/wakelock_blocker_default
++ *	semicolon separated wakelock names; both lists are blocked
++ *   /sys/class/misc/boeffla_wakelock_blocker/debug
++ *	write 0/1 to log every request/block to dmesg, read for internals
++ *   /sys/class/misc/boeffla_wakelock_blocker/version
++ */
++
++#include <linux/init.h>
++#include <linux/miscdevice.h>
++#include <linux/mutex.h>
++#include <linux/pm_wakeup.h>
++#include <linux/rcupdate.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/sysfs.h>
++
++#include "power.h"
++
++#define BOEFFLA_WL_BLOCKER_VERSION	"1.1.0-7.3"
++
++#define LIST_WL_DEFAULT		"qcom_rx_wakelock;wlan;wlan_wow_wl;wlan_extscan_wl;netmgr_wl;NETLINK"
++
++#define LENGTH_LIST_WL		255
++#define LENGTH_LIST_WL_DEFAULT	100
++/* wakelocks with longer names are never blocked, as in the original */
++#define MAX_WL_NAME		50
++
++struct wl_search {
++	struct rcu_head rcu;
++	/* ";default;user;" so a lookup is a single strstr() for ";name;" */
++	char str[];
++};
++
++static struct wl_search __rcu *wl_search;
++static DEFINE_MUTEX(wl_lock);
++static char list_wl[LENGTH_LIST_WL + 1];
++static char list_wl_default[LENGTH_LIST_WL_DEFAULT + 1] = LIST_WL_DEFAULT;
++static bool wl_blocker_debug;
++
++/* Called with wl_lock held. */
++static int rebuild_search(void)
++{
++	struct wl_search *new = NULL, *old;
++	size_t len = strlen(list_wl_default) + strlen(list_wl) + 4;
++
++	/* Both lists empty: publish NULL so the hot path bails out early. */
++	if (list_wl_default[0] || list_wl[0]) {
++		new = kmalloc(sizeof(*new) + len, GFP_KERNEL);
++		if (!new)
++			return -ENOMEM;
++		snprintf(new->str, len, ";%s;%s;", list_wl_default, list_wl);
++	}
++
++	old = rcu_replace_pointer(wl_search, new, lockdep_is_held(&wl_lock));
++	if (old)
++		kfree_rcu(old, rcu);
++	return 0;
++}
++
++bool boeffla_wl_blocked(struct wakeup_source *ws)
++{
++	struct wl_search *s;
++	char needle[MAX_WL_NAME + 3];
++	size_t len;
++	bool blocked = false;
++
++	if (unlikely(READ_ONCE(wl_blocker_debug)))
++		pr_info("Boeffla WL blocker: %s requested\n", ws->name);
++
++	if (likely(!rcu_access_pointer(wl_search)))
++		return false;
++
++	len = strlen(ws->name);
++	if (len < 1 || len > MAX_WL_NAME)
++		return false;
++	snprintf(needle, sizeof(needle), ";%s;", ws->name);
++
++	rcu_read_lock();
++	s = rcu_dereference(wl_search);
++	if (s)
++		blocked = strstr(s->str, needle) != NULL;
++	rcu_read_unlock();
++
++	if (unlikely(READ_ONCE(wl_blocker_debug)) && blocked)
++		pr_info("Boeffla WL blocker: %s blocked\n", ws->name);
++
++	return blocked;
++}
++
++static ssize_t store_list(char *dst, size_t size, const char *buf, size_t n)
++{
++	char old[LENGTH_LIST_WL + 1], next[LENGTH_LIST_WL + 1];
++	int ret;
++
++	if (n > size - 1)
++		return -EINVAL;
++	if (sscanf(buf, "%255s", next) != 1)
++		next[0] = '\0';
++	if (strlen(next) >= size)
++		return -EINVAL;
++	mutex_lock(&wl_lock);
++	strscpy(old, dst, sizeof(old));
++	strscpy(dst, next, size);
++	ret = rebuild_search();
++	if (ret)
++		strscpy(dst, old, size);
++	mutex_unlock(&wl_lock);
++	return ret ? ret : n;
++}
++
++static ssize_t wakelock_blocker_show(struct device *dev,
++				     struct device_attribute *attr, char *buf)
++{
++	ssize_t ret;
++	mutex_lock(&wl_lock);
++	ret = sysfs_emit(buf, "%s\n", list_wl);
++	mutex_unlock(&wl_lock);
++	return ret;
++}
++
++static ssize_t wakelock_blocker_store(struct device *dev,
++				      struct device_attribute *attr,
++				      const char *buf, size_t n)
++{
++	return store_list(list_wl, sizeof(list_wl), buf, n);
++}
++
++static ssize_t wakelock_blocker_default_show(struct device *dev,
++					     struct device_attribute *attr,
++					     char *buf)
++{
++	ssize_t ret;
++	mutex_lock(&wl_lock);
++	ret = sysfs_emit(buf, "%s\n", list_wl_default);
++	mutex_unlock(&wl_lock);
++	return ret;
++}
++
++static ssize_t wakelock_blocker_default_store(struct device *dev,
++					      struct device_attribute *attr,
++					      const char *buf, size_t n)
++{
++	return store_list(list_wl_default, sizeof(list_wl_default), buf, n);
++}
++
++static ssize_t debug_show(struct device *dev, struct device_attribute *attr,
++			  char *buf)
++{
++	struct wl_search *s;
++	ssize_t ret;
++
++	mutex_lock(&wl_lock);
++	rcu_read_lock();
++	s = rcu_dereference(wl_search);
++	ret = sysfs_emit(buf,
++			 "Debug status: %d\n\nUser list: %s\nDefault list: %s\nSearch list: %s\nActive: %d\n",
++			 READ_ONCE(wl_blocker_debug), list_wl, list_wl_default,
++			 s ? s->str : "", !!s);
++	rcu_read_unlock();
++	mutex_unlock(&wl_lock);
++	return ret;
++}
++
++static ssize_t debug_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
++{
++	unsigned int val;
++
++	if (kstrtouint(buf, 10, &val))
++		return -EINVAL;
++	WRITE_ONCE(wl_blocker_debug, val == 1);
++	return count;
++}
++
++static ssize_t version_show(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	return sysfs_emit(buf, "%s\n", BOEFFLA_WL_BLOCKER_VERSION);
++}
++
++static DEVICE_ATTR_RW(wakelock_blocker);
++static DEVICE_ATTR_RW(wakelock_blocker_default);
++static DEVICE_ATTR(debug, 0664, debug_show, debug_store);
++static DEVICE_ATTR_RO(version);
++
++static struct attribute *boeffla_wl_blocker_attrs[] = {
++	&dev_attr_wakelock_blocker.attr,
++	&dev_attr_wakelock_blocker_default.attr,
++	&dev_attr_debug.attr,
++	&dev_attr_version.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(boeffla_wl_blocker);
++
++static struct miscdevice boeffla_wl_blocker_device = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "boeffla_wakelock_blocker",
++	.groups = boeffla_wl_blocker_groups,
++};
++
++static int __init boeffla_wl_blocker_init(void)
++{
++	int ret;
++
++	mutex_lock(&wl_lock);
++	ret = rebuild_search();
++	mutex_unlock(&wl_lock);
++	if (ret)
++		return ret;
++
++	ret = misc_register(&boeffla_wl_blocker_device);
++	if (ret)
++		return ret;
++
++	pr_info("Boeffla WL blocker: driver version %s started\n",
++		BOEFFLA_WL_BLOCKER_VERSION);
++	return 0;
++}
++late_initcall(boeffla_wl_blocker_init);
+diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+index 8823aceea..1f07e330d 100644
+--- a/drivers/base/power/power.h
++++ b/drivers/base/power/power.h
+@@ -175,3 +175,8 @@ struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void);
+ void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock);
+ void *bpf_wakeup_sources_get_head(void);
+ #endif
++
++#ifdef CONFIG_BOEFFLA_WL_BLOCKER
++struct wakeup_source;
++bool boeffla_wl_blocked(struct wakeup_source *ws);
++#endif
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 53dcb6a28..4d4471500 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -583,6 +583,15 @@ static void wakeup_source_activate(struct wakeup_source *ws)
+  */
+ static void wakeup_source_report_event(struct wakeup_source *ws, bool hard)
+ {
++#ifdef CONFIG_BOEFFLA_WL_BLOCKER
++	if (boeffla_wl_blocked(ws)) {
++		/* Hard wakeups still abort suspend, as in the source kernel. */
++		if (hard)
++			pm_system_wakeup();
++		return;
++	}
++#endif
++
+ 	ws->event_count++;
+ 	/* This is racy, but the counter is approximate anyway. */
+ 	if (events_check_enabled)
+@@ -881,7 +890,10 @@ void pm_print_active_wakeup_sources(void)
+ 	list_for_each_entry_rcu_locked(ws, &wakeup_sources, entry) {
+ 		if (ws->active) {
+ 			pm_pr_dbg("active wakeup source: %s\n", ws->name);
+-			active = 1;
++#ifdef CONFIG_BOEFFLA_WL_BLOCKER
++			if (!boeffla_wl_blocked(ws))
++#endif
++				active = 1;
+ 		} else if (!active &&
+ 			   (!last_activity_ws ||
+ 			    ktime_to_ns(ws->last_time) >
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index ca2439bd5..a918a8858 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -595,3 +595,5 @@ source "drivers/misc/amd-sbi/Kconfig"
+ source "drivers/misc/rp1/Kconfig"
+ source "drivers/misc/issei/Kconfig"
+ endmenu
++
++source "drivers/misc/encore_fas/Kconfig"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index 28689c5fb..7a93e6dd6 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -72,3 +72,5 @@ obj-$(CONFIG_UID_SYS_STATS)	+= uid_sys_stats.o
+ obj-y				+= amd-sbi/
+ obj-$(CONFIG_MISC_RP1)		+= rp1/
+ obj-$(CONFIG_INTEL_SSEI)	+= issei/
++
++obj-$(CONFIG_ENCORE_FAS) += encore_fas/
+diff --git a/drivers/misc/encore_fas/Kconfig b/drivers/misc/encore_fas/Kconfig
+new file mode 100644
+index 000000000..f42f034d6
+--- /dev/null
++++ b/drivers/misc/encore_fas/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++config ENCORE_FAS
++	tristate "Encore FAS frame telemetry (/dev/encore_fas)"
++	depends on ARM64 && UPROBES
++	default n
++	help
++	  Frame aware scheduling telemetry from Encore Tweaks
++	  (rem01project/encore_fas). A uprobe on Surface::queueBuffer of the
++	  foreground app times every frame and reports late frames, a low
++	  frame rate and pauses to a daemon, and (Rakkashin) to avr_profile,
++	  which lifts the demand-matched CPU caps that held a frame back.
+diff --git a/drivers/misc/encore_fas/Makefile b/drivers/misc/encore_fas/Makefile
+new file mode 100644
+index 000000000..2154230f3
+--- /dev/null
++++ b/drivers/misc/encore_fas/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Encore FAS (https://github.com/rem01project/encore_fas, commit f408a00),
++# Android 7.3: uprobe API 3, hrtimer_setup, soft hrtimer modes.
++obj-$(CONFIG_ENCORE_FAS) += encore_fas.o
++encore_fas-y := encore_fas_main.o \
++                encore_fas_ctx.o \
++                encore_fas_evq.o \
++                encore_fas_time.o
++
++ccflags-y += -I$(src)/include -DFAS_VERSION=9 -DFAS_BRANCH=\"main-f408a00\"
++ccflags-y += -DFAS_UPROBE_API=3 -DFAS_HAVE_HRTIMER_SOFT
+diff --git a/drivers/misc/encore_fas/encore_fas_compat.h b/drivers/misc/encore_fas/encore_fas_compat.h
+new file mode 100644
+index 000000000..f6a4a9955
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_compat.h
+@@ -0,0 +1,140 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#ifndef ENCORE_FAS_COMPAT_H
++#define ENCORE_FAS_COMPAT_H
++
++#include <linux/err.h>
++#include <linux/fs.h>
++#include <linux/hrtimer.h>
++#include <linux/poll.h>
++#include <linux/uprobes.h>
++#include <linux/version.h>
++
++#ifndef CONFIG_ARM64
++#error "encore_fas supports arm64 only."
++#endif
++
++/*
++ * Kernel v6.11 and earlier: Register and unregister use an inode and an offset.
++ * Kernel v6.12: Register returns a struct uprobe pointer.
++ * Kernel v6.13 and later: The handler also uses a cookie pointer.
++ */
++#ifndef FAS_UPROBE_API
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)
++#define FAS_UPROBE_API 3
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(6, 12, 0)
++#define FAS_UPROBE_API 2
++#else
++#define FAS_UPROBE_API 1
++#endif
++#endif
++
++#if FAS_UPROBE_API >= 3
++#define FAS_UPROBE_HANDLER_ARGS \
++	struct uprobe_consumer *uc, struct pt_regs *regs, __u64 *cookie
++#else
++#define FAS_UPROBE_HANDLER_ARGS struct uprobe_consumer *uc, struct pt_regs *regs
++#endif
++
++#if FAS_UPROBE_API >= 2
++#define FAS_UPROBE_FILTER_ARGS struct uprobe_consumer *uc, struct mm_struct *mm
++#else
++#define FAS_UPROBE_FILTER_ARGS                                    \
++	struct uprobe_consumer *uc, enum uprobe_filter_ctx fctx, \
++		struct mm_struct *mm
++#endif
++
++/**
++ * @brief Handle for one registered uprobe.
++ */
++struct fas_probe {
++	/** Inode of probed file. The old API uses it to unregister. */
++	struct inode *inode;
++	/** File offset of probe. The old API uses it to unregister. */
++	loff_t offset;
++	/** Handle returned by the new API. */
++	struct uprobe *uprobe;
++};
++
++/**
++ * @brief Attaches a consumer to a file offset.
++ *
++ * @param probe Handle to set.
++ * @param inode Inode of probed file.
++ * @param offset File offset of probed instruction.
++ * @param uc Consumer structure.
++ * @return 0 on success, or a negative error code.
++ */
++static inline int fas_uprobe_register(struct fas_probe *probe,
++				      struct inode *inode, loff_t offset,
++				      struct uprobe_consumer *uc)
++{
++	probe->inode = inode;
++	probe->offset = offset;
++	probe->uprobe = NULL;
++
++#if FAS_UPROBE_API >= 2
++	probe->uprobe = uprobe_register(inode, offset, 0, uc);
++	if (IS_ERR(probe->uprobe)) {
++		int ret = PTR_ERR(probe->uprobe);
++
++		probe->uprobe = NULL;
++		return ret;
++	}
++	return 0;
++#else
++	return uprobe_register(inode, offset, uc);
++#endif
++}
++
++/**
++ * @brief Detaches a consumer and waits for its handlers to stop.
++ *
++ * @param probe Handle from fas_uprobe_register().
++ * @param uc Consumer structure.
++ * @note No handler of @uc runs when this function returns.
++ */
++static inline void fas_uprobe_unregister(struct fas_probe *probe,
++					 struct uprobe_consumer *uc)
++{
++#if FAS_UPROBE_API >= 2
++	uprobe_unregister_nosync(probe->uprobe, uc);
++	uprobe_unregister_sync();
++#else
++	uprobe_unregister(probe->inode, probe->offset, uc);
++#endif
++}
++
++#if defined(FAS_HAVE_HRTIMER_SETUP) || \
++	LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0)
++#define fas_hrtimer_setup(timer, fn, clock, mode) \
++	hrtimer_setup((timer), (fn), (clock), (mode))
++#else
++#define fas_hrtimer_setup(timer, fn, clock, mode)       \
++	do {                                            \
++		hrtimer_init((timer), (clock), (mode)); \
++		(timer)->function = (fn);               \
++	} while (0)
++#endif
++
++/*
++ * The watchdog callback runs in softirq context when softirq timers exist
++ * (kernel v4.16 and later). It can wake a reader without a hardirq spinlock
++ * wait. This behavior is also correct on real-time kernels.
++ */
++#if defined(FAS_HAVE_HRTIMER_SOFT) || \
++	LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
++#define FAS_TIMER_MODE HRTIMER_MODE_REL_PINNED_SOFT
++#else
++#define FAS_TIMER_MODE HRTIMER_MODE_REL_PINNED
++#endif
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 16, 0)
++typedef unsigned int fas_poll_t;
++#define FAS_POLLIN (POLLIN | POLLRDNORM)
++#else
++typedef __poll_t fas_poll_t;
++#define FAS_POLLIN ((__force __poll_t)(EPOLLIN | EPOLLRDNORM))
++#endif
++
++#endif
+diff --git a/drivers/misc/encore_fas/encore_fas_ctx.c b/drivers/misc/encore_fas/encore_fas_ctx.c
+new file mode 100644
+index 000000000..48306b020
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_ctx.c
+@@ -0,0 +1,537 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/avr_profile.h>
++#include <linux/hrtimer.h>
++#include <linux/ktime.h>
++#include <linux/mutex.h>
++#include <linux/namei.h>
++#include <linux/path.h>
++#include <linux/pid.h>
++#include <linux/rcupdate.h>
++#include <linux/sched.h>
++#include <linux/sched/signal.h>
++#include <linux/spinlock.h>
++#include <linux/uprobes.h>
++#include <linux/workqueue.h>
++
++#include "encore_fas_compat.h"
++#include "encore_fas_ctx.h"
++#include "encore_fas_det.h"
++#include "encore_fas_evq.h"
++#include "encore_fas_time.h"
++
++struct fas_ctx {
++	raw_spinlock_t lock ____cacheline_aligned;
++	/** Thread group ID of target process. The handler compares it to current. */
++	u32 tgid;
++	/** Detector state. Lock, @tgid, and this member fill one cache line. */
++	struct fas_hot hot;
++
++	/** Listener ID used by daemon. */
++	u32 id ____cacheline_aligned;
++	/** Detector settings. */
++	struct fas_cfg cfg;
++
++	struct hrtimer wd ____cacheline_aligned;
++	/** Uprobe consumer structure. */
++	struct uprobe_consumer uc;
++	/** Uprobe handle. */
++	struct fas_probe probe;
++	/** Path to probed file. */
++	struct path path;
++	/** PID structure of thread group leader. */
++	struct pid *pid;
++	/** Cleanup work item for stopped process. */
++	struct work_struct work;
++	/** Set to true if slot is active. Only fas_mutex changes this value. */
++	bool in_use;
++};
++
++static struct fas_ctx fas_slots[FAS_MAX_LISTENERS];
++static DEFINE_MUTEX(fas_mutex);
++static u32 fas_next_id;
++
++/**
++ * @brief Checks if target process is active.
++ *
++ * @param ctx Listener structure.
++ * @return true if process is active, false otherwise.
++ */
++static bool fas_ctx_alive(const struct fas_ctx *ctx)
++{
++	struct task_struct *task;
++	struct signal_struct *sig;
++	bool alive;
++
++	rcu_read_lock();
++	task = pid_task(ctx->pid, PIDTYPE_PID);
++	sig = task ? READ_ONCE(task->signal) : NULL;
++	alive = task && (!READ_ONCE(task->exit_state) ||
++			 (sig && atomic_read(&sig->live) > 0));
++	rcu_read_unlock();
++
++	return alive;
++}
++
++/**
++ * Maximum timer slack of the watchdog in nanoseconds. The watchdog restarts on
++ * every frame, so a large slack only delays the boost events.
++ */
++#define FAS_WD_SLACK_MAX_NS (500 * NSEC_PER_USEC)
++
++/**
++ * @brief Starts watchdog timer.
++ *
++ * @param ctx Listener structure.
++ * @param ticks Delay duration in ticks.
++ */
++static void fas_ctx_arm(struct fas_ctx *ctx, u64 ticks)
++{
++	u64 ns = fas_ticks_to_ns(ticks);
++	u64 slack = min_t(u64, ns >> 4, FAS_WD_SLACK_MAX_NS);
++
++	hrtimer_start_range_ns(&ctx->wd, ns_to_ktime(ns), slack,
++			       FAS_TIMER_MODE);
++}
++
++/*
++ * Rakkashin: how badly a frame is late, for avr_profile: 1 for a hitch of
++ * one or two slots or a frame overdue, 2 for a big hitch, a long overdue
++ * frame or a sustained frame rate deficit.
++ */
++static u32 fas_jank_level(u32 type)
++{
++	switch (type) {
++	case FAS_EVENT_SMALL_JANK:
++	case FAS_EVENT_BOOST_SOFT:
++		return 1;
++	case FAS_EVENT_BIG_JANK:
++	case FAS_EVENT_BOOST_HARD:
++	case FAS_EVENT_DEGRADED:
++		return 2;
++	default:
++		return 0;
++	}
++}
++
++/**
++ * @brief Converts and queues detector events.
++ *
++ * @param ctx Listener structure. Caller must hold ctx->lock.
++ * @param out Output container with detector events.
++ * @return The highest fas_jank_level() of the events.
++ */
++static u32 fas_ctx_publish(struct fas_ctx *ctx, const struct fas_out *out)
++{
++	u64 ts = ktime_get_ns();
++	u32 pressure = fas_det_pressure(&ctx->hot);
++	u32 i, level = 0;
++
++	for (i = 0; i < out->n; i++) {
++		const struct fas_ev *e = &out->ev[i];
++		struct fas_event ev = {
++			.ctx_id = (s32)ctx->id,
++			.type = e->type,
++			.timestamp_ns = ts,
++			.frametime_ns = fas_ticks_to_ns(e->ticks),
++			.fps = e->fps,
++			.missed = e->missed,
++			.flags = e->flags,
++			.pressure_q16 = pressure,
++			.seq = ++ctx->hot.seq,
++		};
++
++		fas_evq_push(&ev);
++		level = max(level, fas_jank_level(e->type));
++	}
++	return level;
++}
++
++/**
++ * @brief Handles probe execution on Surface::queueBuffer calls.
++ *
++ * @return Always 0.
++ */
++static int fas_uprobe_handler(FAS_UPROBE_HANDLER_ARGS)
++{
++	struct fas_ctx *ctx = container_of(uc, struct fas_ctx, uc);
++	struct fas_out out;
++	unsigned long flags;
++	u32 level = 0;
++	u64 delay;
++
++	if (unlikely(current->tgid != ctx->tgid))
++		return 0;
++
++	avr_profile_frame_seen();
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	delay = fas_det_frame(&ctx->hot, &ctx->cfg, fas_ticks(), &out);
++	if (unlikely(out.n))
++		level = fas_ctx_publish(ctx, &out);
++	if (delay)
++		fas_ctx_arm(ctx, delay);
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++
++	if (unlikely(out.n)) {
++		fas_evq_wake();
++		if (level)
++			avr_profile_frame_event(level);
++	}
++
++	return 0;
++}
++
++/**
++ * @brief Filters uprobe events by process memory space.
++ *
++ * @return true if @mm matches target process.
++ */
++static bool fas_uprobe_filter(FAS_UPROBE_FILTER_ARGS)
++{
++	const struct fas_ctx *ctx = container_of(uc, struct fas_ctx, uc);
++	struct task_struct *task;
++	bool match;
++
++	rcu_read_lock();
++	task = pid_task(ctx->pid, PIDTYPE_PID);
++	match = task && task->mm == mm;
++	rcu_read_unlock();
++
++	return match;
++}
++
++/**
++ * @brief Handles watchdog timer expiration.
++ *
++ * @return Always HRTIMER_NORESTART.
++ */
++static enum hrtimer_restart fas_wd_fn(struct hrtimer *timer)
++{
++	struct fas_ctx *ctx = container_of(timer, struct fas_ctx, wd);
++	struct fas_out out;
++	unsigned long flags;
++	u32 level = 0;
++	u64 delay;
++
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	delay = fas_det_wd_fire(&ctx->hot, &ctx->cfg, fas_ticks(), &out);
++	if (out.n)
++		level = fas_ctx_publish(ctx, &out);
++	if (out.idle && !fas_ctx_alive(ctx)) {
++		queue_work(system_unbound_wq, &ctx->work);
++		delay = 0;
++	}
++	if (delay)
++		fas_ctx_arm(ctx, delay);
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++
++	if (out.n) {
++		fas_evq_wake();
++		if (level)
++			avr_profile_frame_event(level);
++	}
++
++	return HRTIMER_NORESTART;
++}
++
++/**
++ * @brief Detaches a listener.
++ *
++ * @param ctx Listener structure.
++ */
++static void fas_ctx_teardown(struct fas_ctx *ctx)
++{
++	if (!ctx->in_use)
++		return;
++
++	fas_uprobe_unregister(&ctx->probe, &ctx->uc);
++	hrtimer_cancel(&ctx->wd);
++	path_put(&ctx->path);
++	put_pid(ctx->pid);
++	ctx->pid = NULL;
++	ctx->in_use = false;
++}
++
++static void fas_ctx_work_fn(struct work_struct *work)
++{
++	struct fas_ctx *ctx = container_of(work, struct fas_ctx, work);
++
++	mutex_lock(&fas_mutex);
++	if (ctx->in_use && !fas_ctx_alive(ctx))
++		fas_ctx_teardown(ctx);
++	mutex_unlock(&fas_mutex);
++}
++
++static struct fas_ctx *fas_ctx_find(s32 ctx_id)
++{
++	u32 i;
++
++	for (i = 0; i < FAS_MAX_LISTENERS; i++)
++		if (fas_slots[i].in_use && fas_slots[i].id == (u32)ctx_id)
++			return &fas_slots[i];
++	return NULL;
++}
++
++static int fas_cfg_build(struct fas_cfg *c, struct fas_hot *h,
++			 const struct fas_config *cfg)
++{
++	u64 vsync = cfg->vsync_ns ? fas_ns_to_ticks(cfg->vsync_ns) : 0;
++
++	if (cfg->flags & ~FAS_CFG_LOCK_DOWN)
++		return -EINVAL;
++
++	return fas_det_setup(c, h, fas_clk.freq, cfg->fps, cfg->count, vsync,
++			     cfg->flags & FAS_CFG_LOCK_DOWN);
++}
++
++/**
++ * @brief Initializes listener slots and work items.
++ */
++void fas_ctx_init(void)
++{
++	u32 i;
++
++	BUILD_BUG_ON(sizeof(struct fas_register_args) != 320);
++	BUILD_BUG_ON(sizeof(struct fas_config) != 48);
++	BUILD_BUG_ON(sizeof(struct fas_state) != 40);
++	BUILD_BUG_ON(sizeof(struct fas_hot) != 56);
++#if L1_CACHE_BYTES == 64 && !defined(CONFIG_DEBUG_SPINLOCK) && \
++	!defined(CONFIG_LOCKDEP)
++	BUILD_BUG_ON(offsetof(struct fas_ctx, id) != L1_CACHE_BYTES);
++#endif
++
++	for (i = 0; i < FAS_MAX_LISTENERS; i++)
++		INIT_WORK(&fas_slots[i].work, fas_ctx_work_fn);
++}
++
++/**
++ * @brief Detaches all listeners.
++ */
++void fas_ctx_exit(void)
++{
++	u32 i;
++
++	mutex_lock(&fas_mutex);
++	for (i = 0; i < FAS_MAX_LISTENERS; i++)
++		fas_ctx_teardown(&fas_slots[i]);
++	mutex_unlock(&fas_mutex);
++
++	/* Wait for pending work items to stop. */
++	for (i = 0; i < FAS_MAX_LISTENERS; i++)
++		cancel_work_sync(&fas_slots[i].work);
++}
++
++/**
++ * @brief Attaches probe to target process.
++ *
++ * @param req Registration parameters. Function updates @req->ctx_id.
++ * @return 0 on success, or a negative error code.
++ */
++int fas_ctx_register(struct fas_register_args *req)
++{
++	struct fas_ctx *ctx = NULL;
++	struct task_struct *task;
++	struct inode *inode;
++	struct pid *pid = NULL;
++	u32 tgid = 0;
++	u32 i;
++	int ret;
++
++	req->path[FAS_MAX_PATH_LEN - 1] = '\0';
++
++	rcu_read_lock();
++	task = pid_task(find_vpid(req->pid), PIDTYPE_PID);
++	if (task) {
++		tgid = task->tgid;
++		pid = get_pid(task_tgid(task));
++	}
++	rcu_read_unlock();
++	if (!pid)
++		return -ESRCH;
++
++	mutex_lock(&fas_mutex);
++
++	for (i = 0; i < FAS_MAX_LISTENERS; i++) {
++		if (fas_slots[i].in_use && fas_slots[i].tgid == tgid) {
++			ret = -EEXIST;
++			goto err_pid;
++		}
++		if (!ctx && !fas_slots[i].in_use)
++			ctx = &fas_slots[i];
++	}
++	if (!ctx) {
++		ret = -ENOSPC;
++		goto err_pid;
++	}
++
++	ret = fas_cfg_build(&ctx->cfg, &ctx->hot, &req->cfg);
++	if (ret)
++		goto err_pid;
++
++	ret = kern_path(req->path, LOOKUP_FOLLOW, &ctx->path);
++	if (ret)
++		goto err_pid;
++
++	inode = d_inode(ctx->path.dentry);
++	if (!S_ISREG(inode->i_mode) || (req->offset & 3) ||
++	    req->offset >= (u64)i_size_read(inode)) {
++		ret = -EINVAL;
++		goto err_path;
++	}
++
++	raw_spin_lock_init(&ctx->lock);
++	ctx->tgid = tgid;
++	ctx->pid = pid;
++	ctx->id = ++fas_next_id & INT_MAX;
++	if (!ctx->id)
++		ctx->id = (++fas_next_id) & INT_MAX;
++	memset(&ctx->uc, 0, sizeof(ctx->uc));
++	ctx->uc.handler = fas_uprobe_handler;
++	ctx->uc.filter = fas_uprobe_filter;
++	fas_hrtimer_setup(&ctx->wd, fas_wd_fn, CLOCK_MONOTONIC, FAS_TIMER_MODE);
++	fas_ctx_arm(ctx, ctx->cfg.win_min * FAS_IDLE_POLL_WINS);
++
++	ret = fas_uprobe_register(&ctx->probe, inode, req->offset, &ctx->uc);
++	if (ret) {
++		hrtimer_cancel(&ctx->wd);
++		goto err_path;
++	}
++
++	ctx->in_use = true;
++	req->ctx_id = (s32)ctx->id;
++	mutex_unlock(&fas_mutex);
++	return 0;
++
++err_path:
++	path_put(&ctx->path);
++err_pid:
++	put_pid(pid);
++	mutex_unlock(&fas_mutex);
++	return ret;
++}
++
++/**
++ * @brief Removes listener by ID.
++ *
++ * @param ctx_id Listener ID.
++ * @return 0 on success, or -ENOENT if not found.
++ */
++int fas_ctx_remove(s32 ctx_id)
++{
++	struct fas_ctx *ctx;
++	int ret = -ENOENT;
++
++	mutex_lock(&fas_mutex);
++	ctx = fas_ctx_find(ctx_id);
++	if (ctx) {
++		fas_ctx_teardown(ctx);
++		ret = 0;
++	}
++	mutex_unlock(&fas_mutex);
++
++	return ret;
++}
++
++/**
++ * @brief Updates configuration targets for a listener.
++ *
++ * @param ctx_id Listener ID.
++ * @param cfg New configuration settings.
++ * @return 0 on success, or a negative error code.
++ */
++int fas_ctx_set_config(s32 ctx_id, const struct fas_config *cfg)
++{
++	struct fas_ctx *ctx;
++	struct fas_cfg c;
++	struct fas_hot h;
++	unsigned long flags;
++	int ret;
++
++	ret = fas_cfg_build(&c, &h, cfg);
++	if (ret)
++		return ret;
++
++	mutex_lock(&fas_mutex);
++	ctx = fas_ctx_find(ctx_id);
++	if (!ctx) {
++		mutex_unlock(&fas_mutex);
++		return -ENOENT;
++	}
++
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	ctx->cfg = c;
++	h.seq = ctx->hot.seq;
++	ctx->hot = h;
++	fas_ctx_arm(ctx, c.win_min * FAS_IDLE_POLL_WINS);
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++	mutex_unlock(&fas_mutex);
++
++	return 0;
++}
++
++/**
++ * @brief Reads status information for a listener.
++ *
++ * @param state Output status structure.
++ * @return 0 on success, or -ENOENT if not found.
++ */
++int fas_ctx_get_state(struct fas_state *state)
++{
++	struct fas_ctx *ctx;
++	unsigned long flags;
++	u64 ref, margin, vsync;
++	s32 id = state->ctx_id;
++
++	memset(state, 0, sizeof(*state));
++	state->ctx_id = id;
++
++	mutex_lock(&fas_mutex);
++	ctx = fas_ctx_find(id);
++	if (!ctx) {
++		mutex_unlock(&fas_mutex);
++		return -ENOENT;
++	}
++
++	raw_spin_lock_irqsave(&ctx->lock, flags);
++	state->fps = ctx->cfg.tgt[ctx->cfg.active].fps;
++	state->flags = (ctx->hot.acquiring ? FAS_STATE_ACQUIRING : 0) |
++		       (ctx->hot.degraded ? FAS_STATE_DEGRADED : 0) |
++		       (ctx->hot.paused ? FAS_STATE_PAUSED : 0);
++	state->pressure_q16 = fas_det_pressure(&ctx->hot);
++	state->seq = ctx->hot.seq;
++	ref = fas_ref(&ctx->cfg, &ctx->hot);
++	margin = fas_margin(&ctx->cfg, &ctx->hot, ref);
++	vsync = ctx->cfg.vsync;
++	raw_spin_unlock_irqrestore(&ctx->lock, flags);
++	mutex_unlock(&fas_mutex);
++
++	state->ref_ns = min_t(u64, fas_ticks_to_ns(ref), U32_MAX);
++	state->margin_ns = min_t(u64, fas_ticks_to_ns(margin), U32_MAX);
++	state->vsync_ns = min_t(u64, fas_ticks_to_ns(vsync), U32_MAX);
++	state->dropped = fas_evq_dropped();
++	return 0;
++}
++
++/**
++ * @brief Gets list of active listeners.
++ *
++ * @param list Output structure for listener details.
++ */
++void fas_ctx_list(struct fas_listener_list *list)
++{
++	u32 i;
++
++	memset(list, 0, sizeof(*list));
++
++	mutex_lock(&fas_mutex);
++	for (i = 0; i < FAS_MAX_LISTENERS; i++) {
++		struct fas_ctx *ctx = &fas_slots[i];
++
++		if (!ctx->in_use)
++			continue;
++		list->listeners[list->count].ctx_id = (s32)ctx->id;
++		list->listeners[list->count].pid = pid_vnr(ctx->pid);
++		list->count++;
++	}
++	mutex_unlock(&fas_mutex);
++}
+diff --git a/drivers/misc/encore_fas/encore_fas_ctx.h b/drivers/misc/encore_fas/encore_fas_ctx.h
+new file mode 100644
+index 000000000..525314570
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_ctx.h
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#ifndef ENCORE_FAS_CTX_H
++#define ENCORE_FAS_CTX_H
++
++#include "uapi/encore_fas_uapi.h"
++
++void fas_ctx_init(void);
++void fas_ctx_exit(void);
++
++int fas_ctx_register(struct fas_register_args *req);
++int fas_ctx_remove(s32 ctx_id);
++int fas_ctx_set_config(s32 ctx_id, const struct fas_config *cfg);
++int fas_ctx_get_state(struct fas_state *state);
++void fas_ctx_list(struct fas_listener_list *list);
++
++#endif
+diff --git a/drivers/misc/encore_fas/encore_fas_det.h b/drivers/misc/encore_fas/encore_fas_det.h
+new file mode 100644
+index 000000000..9c2f646b2
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_det.h
+@@ -0,0 +1,726 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#ifndef ENCORE_FAS_DET_H
++#define ENCORE_FAS_DET_H
++
++#include <linux/compiler.h>
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/math64.h>
++#include <linux/string.h>
++#include <linux/types.h>
++
++#include "uapi/encore_fas_uapi.h"
++
++#define FAS_Q 16
++#define FAS_Q_ONE (1LL << FAS_Q)
++
++/* Tolerance of a deficit and half-width of a rate band, in percent. */
++#define FAS_TOL_PCT 5
++#define FAS_TOL_Q (FAS_Q_ONE * FAS_TOL_PCT / 100)
++
++/* CUSUM alarm limit and single interval limit, in periods. */
++#define FAS_CUSUM_LIMIT_Q FAS_Q_ONE
++#define FAS_CUSUM_CLIP_Q (FAS_Q_ONE / 2)
++#define FAS_RECIP_SHIFT 48
++
++/* Minimum slot loss count for a large hitch. */
++#define FAS_MISS_BIG 3
++
++/* Minimum period difference between two frame rates, in percent. */
++#define FAS_MIN_RATIO_PCT 112
++
++/*
++ * The margin follows a decaying scale s of the frame deviation |d - c|. For
++ * each normal interval, s grows by 2^-FAS_SCALE_UP_SHIFT if the deviation is
++ * above s. Otherwise s shrinks by 2^-FAS_SCALE_DOWN_SHIFT. In equilibrium, s is
++ * the 1 - 1 / (1 + 2^(DOWN - UP)) quantile of |d - c|, which is 0.94 for the
++ * default values. A step is a fixed part of s, so one large interval changes s
++ * by at most 2^-FAS_SCALE_UP_SHIFT.
++ *
++ * s falls by a factor of e in about 2^FAS_SCALE_DOWN_SHIFT quiet frames. A
++ * noisy period does not keep the margin high. The margin is
++ * FAS_SCALE_MULT * s before the limits of fas_margin() apply.
++ */
++#ifndef FAS_SCALE_UP_SHIFT
++#define FAS_SCALE_UP_SHIFT 3
++#endif
++#ifndef FAS_SCALE_DOWN_SHIFT
++#define FAS_SCALE_DOWN_SHIFT 7
++#endif
++#ifndef FAS_SCALE_MULT
++#define FAS_SCALE_MULT 3
++#endif
++
++/* Smallest value of the scale, in Q16 ticks (one sixteenth of a tick). */
++#define FAS_SCALE_MIN_Q (FAS_Q_ONE >> 4)
++
++/*
++ * The hitch margin H never exceeds ref * (1 - 2^-FAS_MARGIN_CAP_SHIFT), which
++ * is 0.75 * ref by default.
++ *
++ * The scale only sees frames below ref + H. Jank that stays below that
++ * threshold is learned as noise, which raises the scale and H until H reaches
++ * its old cap, ref. At H = ref a single missed frame slot (interval 2P) sits on
++ * the threshold, and jitter decides whether it is reported. With this cap the
++ * threshold stays below 1.75 * ref, so a missed slot is always reported. H is
++ * still at least V / 2. Use a larger shift for a higher cap.
++ */
++#ifndef FAS_MARGIN_CAP_SHIFT
++#define FAS_MARGIN_CAP_SHIFT 2
++#endif
++
++#define FAS_WIN_PERIODS 8
++#define FAS_OK_WINDOWS 2
++#define FAS_UP_WINDOWS 2
++#define FAS_DOWN_WINDOWS 4
++#define FAS_PAUSE_PERIODS 10
++
++/* Idle poll period in minimum window units (2 seconds). */
++#define FAS_IDLE_POLL_WINS 8
++#define FAS_NONE 0xffu
++#define FAS_OUT_MAX 4
++
++/* Watchdog states. */
++#define FAS_WD_ARMED 0
++#define FAS_WD_SOFT_SENT 1
++#define FAS_WD_HARD_SENT 2
++#define FAS_WD_IDLE 3
++
++/**
++ * @brief Frame rate target parameters.
++ */
++struct fas_target {
++	/** Target period in ticks. */
++	u32 period;
++	/** Half-width of tolerance band in ticks. */
++	u32 band;
++	/** Frame rate in frames per second. */
++	u32 fps;
++};
++
++/**
++ * @brief Configuration settings for detector.
++ */
++struct fas_cfg {
++	/** Active target period in ticks. */
++	u64 period;
++	/** Value 2^48 divided by active period. */
++	u64 recip;
++	/** Display vsync period in ticks. */
++	u64 vsync;
++	/** Frame interval threshold for pause state. */
++	u64 pause;
++	/** Minimum window length (250 ms). */
++	u64 win_min;
++	/** Required window length for active target. */
++	u64 win_need;
++	/** Index of active target. */
++	u8 active;
++	/** Total count of configured targets. */
++	u8 count;
++	/** Flag to prevent switching to lower frame rates. */
++	u8 lock_down;
++	u8 pad[5];
++	/** Configured targets ordered from fastest to slowest rate. */
++	struct fas_target tgt[FAS_MAX_TARGETS];
++};
++
++/**
++ * @brief Detector state updated per frame.
++ */
++struct fas_hot {
++	/** Timestamp of last frame. */
++	u64 last;
++	/** Start timestamp of current window. */
++	u64 win_start;
++	/** Moving average frame period, multiplied by 16. */
++	u64 cadence_q4;
++	/** Decaying scale of frame deviation in Q16 ticks. */
++	u64 scale_q;
++	/** Accumulated CUSUM deficit in Q16 format. */
++	s64 cusum_q;
++	/** Frame count in current window. */
++	u32 win_n;
++	/** Set to 1 when first frame is recorded. */
++	u8 have_last;
++	/** Set to 1 while initial target rate is selected. */
++	u8 acquiring;
++	/** Set to 1 when performance is below active target. */
++	u8 degraded;
++	/** Set to 1 when watchdog detects pause state. */
++	u8 paused;
++	/** Current watchdog state (FAS_WD_*). */
++	u8 wd_stage;
++	/** Count of consecutive normal windows. */
++	u8 ok_windows;
++	/** Candidate target index matching recent windows, or FAS_NONE. */
++	u8 pending;
++	/** Consecutive window count matching pending target. */
++	u8 pending_windows;
++	/** Sequence number of last event. */
++	u32 seq;
++};
++
++/**
++ * @brief Single event generated by detector.
++ */
++struct fas_ev {
++	/** Event type (enum fas_event_type). */
++	u32 type;
++	/** Event flags (FAS_EVF_*). */
++	u32 flags;
++	/** Count of missed frame slots. */
++	u32 missed;
++	/** Active frame rate target. */
++	u32 fps;
++	/** Measured interval or elapsed time in ticks. */
++	u64 ticks;
++};
++
++/**
++ * @brief Event output container from detector call.
++ */
++struct fas_out {
++	/** Event count in ev array. */
++	u32 n;
++	/** Set to true if process check is required. */
++	bool idle;
++	/** Array of generated events. */
++	struct fas_ev ev[FAS_OUT_MAX];
++};
++
++static __always_inline u64 fas_abs_diff(u64 a, u64 b)
++{
++	return a > b ? a - b : b - a;
++}
++
++/**
++ * @brief Calculates reference interval.
++ *
++ * @param c Configuration settings.
++ * @param h Detector state.
++ * @return Reference interval in ticks.
++ */
++static __always_inline u64 fas_ref(const struct fas_cfg *c,
++				   const struct fas_hot *h)
++{
++	u64 p = c->period;
++
++	return min_t(u64, max_t(u64, p, h->cadence_q4 >> 4), p << 1);
++}
++
++/**
++ * @brief Calculates hitch threshold margin.
++ *
++ * Uses FAS_SCALE_MULT times the decaying deviation scale.
++ * The result is at least V / 2 and at most 0.75 * ref (see FAS_MARGIN_CAP_SHIFT).
++ *
++ * @param c Configuration settings.
++ * @param h Detector state.
++ * @param ref Reference interval in ticks.
++ * @return Margin value in ticks.
++ */
++static __always_inline u64 fas_margin(const struct fas_cfg *c,
++				      const struct fas_hot *h, u64 ref)
++{
++	u64 adaptive = (h->scale_q * FAS_SCALE_MULT) >> FAS_Q;
++	u64 cap = max_t(u64, c->vsync >> 1, ref - (ref >> FAS_MARGIN_CAP_SHIFT));
++
++	adaptive = max_t(u64, c->vsync >> 1, adaptive);
++	return min_t(u64, min_t(u64, adaptive, cap), ref);
++}
++
++/**
++ * @brief Calculates delay to soft watchdog timer expiration.
++ *
++ * @param c Configuration settings.
++ * @param h Detector state.
++ * @return Delay value in ticks.
++ */
++static __always_inline u64 fas_soft_ticks(const struct fas_cfg *c,
++					  const struct fas_hot *h)
++{
++	u64 ref = fas_ref(c, h);
++
++	return ref + fas_margin(c, h, ref);
++}
++
++/**
++ * @brief Calculates delay to hard watchdog timer expiration.
++ *
++ * @param c Configuration settings.
++ * @param h Detector state.
++ * @return Delay value in ticks.
++ */
++static __always_inline u64 fas_hard_ticks(const struct fas_cfg *c,
++					  const struct fas_hot *h)
++{
++	u64 ref = fas_ref(c, h);
++
++	return ref * FAS_MISS_BIG + fas_margin(c, h, ref);
++}
++
++/**
++ * @brief Adds an event to output buffer.
++ *
++ * @param c Configuration settings.
++ * @param out Output container.
++ * @param type Event type ID.
++ * @param flags Event flags.
++ * @param missed Count of missed frame slots.
++ * @param ticks Interval or timestamp in ticks.
++ */
++static inline void fas_emit(const struct fas_cfg *c, struct fas_out *out,
++			    u32 type, u32 flags, u32 missed, u64 ticks)
++{
++	struct fas_ev *ev;
++
++	if (unlikely(out->n >= FAS_OUT_MAX))
++		return;
++
++	ev = &out->ev[out->n++];
++	ev->type = type;
++	ev->flags = flags;
++	ev->missed = missed;
++	ev->fps = c->tgt[c->active].fps;
++	ev->ticks = ticks;
++}
++
++/**
++ * @brief Sets active target rate and updates timing parameters.
++ *
++ * @param c Configuration settings.
++ * @param idx Index of target rate.
++ */
++static inline void fas_det_set_active(struct fas_cfg *c, u32 idx)
++{
++	c->active = idx;
++	c->period = c->tgt[idx].period;
++	c->recip = div64_u64(1ULL << FAS_RECIP_SHIFT, c->period);
++	c->win_need = max_t(u64, c->win_min, c->period * FAS_WIN_PERIODS);
++}
++
++/**
++ * @brief Validates frame rates and initializes detector state.
++ *
++ * Modifies parameters only if inputs are valid.
++ *
++ * @param c Output configuration structure.
++ * @param h Output detector state structure.
++ * @param freq Timer counter frequency in Hz.
++ * @param fps Array of frame rate targets.
++ * @param count Number of frame rate targets (1 to FAS_MAX_TARGETS).
++ * @param vsync Display vsync period in ticks, or 0 for fastest target period.
++ *              A value longer than the fastest target period is rejected.
++ * @param lock_down Set to true to disable switching to lower frame rates.
++ * @return 0 on success, or -EINVAL if arguments are invalid.
++ */
++static int fas_det_setup(struct fas_cfg *c, struct fas_hot *h, u64 freq,
++			 const u32 *fps, u32 count, u64 vsync, bool lock_down)
++{
++	struct fas_cfg tmp;
++	u32 sorted[FAS_MAX_TARGETS];
++	u32 i, j;
++
++	if (!count || count > FAS_MAX_TARGETS)
++		return -EINVAL;
++
++	for (i = 0; i < count; i++) {
++		u32 key = fps[i];
++
++		if (key == 0 || key > 1000)
++			return -EINVAL;
++		for (j = i; j > 0 && sorted[j - 1] < key; j--)
++			sorted[j] = sorted[j - 1];
++		sorted[j] = key;
++	}
++
++	memset(&tmp, 0, sizeof(tmp));
++	for (i = 0; i < count; i++) {
++		struct fas_target *t = &tmp.tgt[i];
++
++		t->fps = sorted[i];
++		t->period = (u32)div_u64(freq + (sorted[i] >> 1), sorted[i]);
++		t->band = t->period * FAS_TOL_PCT / 100;
++		if (i && (u64)t->period * 100 <
++				 (u64)tmp.tgt[i - 1].period * FAS_MIN_RATIO_PCT)
++			return -EINVAL;
++	}
++
++	if (vsync && (vsync < freq / 1000 || vsync > freq / 10 ||
++		      vsync > tmp.tgt[0].period))
++		return -EINVAL;
++
++	tmp.count = count;
++	tmp.lock_down = lock_down;
++	tmp.vsync = vsync ? vsync : tmp.tgt[0].period;
++	tmp.win_min = freq / 4;
++	tmp.pause = max_t(u64, freq,
++			  (u64)tmp.tgt[count - 1].period * FAS_PAUSE_PERIODS);
++	fas_det_set_active(&tmp, 0);
++
++	*c = tmp;
++	memset(h, 0, sizeof(*h));
++	h->acquiring = 1;
++	h->scale_q = div_u64((c->vsync >> 1) << FAS_Q, FAS_SCALE_MULT);
++	h->pending = FAS_NONE;
++	h->wd_stage = FAS_WD_IDLE;
++	return 0;
++}
++
++static __always_inline int fas_band_index(const struct fas_cfg *c, u64 mean)
++{
++	u32 i;
++
++	for (i = 0; i < c->count; i++)
++		if (fas_abs_diff(mean, c->tgt[i].period) <= c->tgt[i].band)
++			return (int)i;
++	return -1;
++}
++
++/**
++ * @brief Switches active target rate and resets deficit metrics.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param idx Index of new target rate.
++ * @param out Output container.
++ */
++static noinline void fas_det_switch(struct fas_hot *h, struct fas_cfg *c,
++				    u32 idx, struct fas_out *out)
++{
++	fas_det_set_active(c, idx);
++	h->cadence_q4 = c->period << 4;
++	h->pending = FAS_NONE;
++	h->pending_windows = 0;
++	h->degraded = 0;
++	h->ok_windows = 0;
++	h->cusum_q = 0;
++	fas_emit(c, out, FAS_EVENT_RATE_SWITCH, 0, 0, 0);
++}
++
++/**
++ * @brief Selects initial target rate during acquisition window.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param span Acquisition window duration in ticks.
++ * @param out Output container.
++ */
++static noinline void fas_det_acquire(struct fas_hot *h, struct fas_cfg *c,
++				     u64 span, struct fas_out *out)
++{
++	u64 mean = div_u64(span, h->win_n);
++	int k = fas_band_index(c, mean);
++	u32 i;
++
++	if (k < 0) {
++		k = 0;
++		for (i = 0; i < c->count; i++)
++			if (c->tgt[i].period <= mean)
++				k = (int)i;
++	}
++
++	h->acquiring = 0;
++	h->wd_stage = FAS_WD_ARMED;
++	fas_det_switch(h, c, (u32)k, out);
++	h->win_start = h->last;
++	h->win_n = 0;
++}
++
++/**
++ * @brief Evaluates window frame rate against candidate target.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param mean Mean frame interval in ticks.
++ * @param out Output container.
++ */
++static noinline void fas_det_rate_track(struct fas_hot *h, struct fas_cfg *c,
++					u64 mean, struct fas_out *out)
++{
++	int k = fas_band_index(c, mean);
++	bool slower;
++	u32 need;
++
++	if (k < 0 || (u32)k == c->active) {
++		h->pending = FAS_NONE;
++		h->pending_windows = 0;
++		return;
++	}
++
++	if ((u32)k != h->pending) {
++		h->pending = (u8)k;
++		h->pending_windows = 0;
++	}
++	if (h->pending_windows < 255)
++		h->pending_windows++;
++
++	slower = c->tgt[k].period > c->period;
++	if (slower && c->lock_down)
++		return;
++
++	need = slower ? FAS_DOWN_WINDOWS : FAS_UP_WINDOWS;
++	if (h->pending_windows >= need)
++		fas_det_switch(h, c, (u32)k, out);
++}
++
++/**
++ * @brief Process evaluation at end of measurement window.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param now Current timestamp in ticks.
++ * @param out Output container.
++ */
++static noinline void fas_det_window_close(struct fas_hot *h, struct fas_cfg *c,
++					  u64 now, struct fas_out *out)
++{
++	u64 span = now - h->win_start;
++	u64 mean = div_u64(span, h->win_n);
++
++	if (h->degraded) {
++		u64 rho_q = div64_u64(span << FAS_Q, (u64)h->win_n * c->period);
++
++		if (rho_q <= (u64)(FAS_Q_ONE + FAS_TOL_Q)) {
++			if (++h->ok_windows >= FAS_OK_WINDOWS) {
++				h->degraded = 0;
++				h->ok_windows = 0;
++				h->cusum_q = 0;
++				fas_emit(c, out, FAS_EVENT_RECOVERED, 0, 0, mean);
++			}
++		} else {
++			h->ok_windows = 0;
++		}
++	}
++
++	fas_det_rate_track(h, c, mean, out);
++	h->win_start = now;
++	h->win_n = 0;
++}
++
++/**
++ * @brief Reports frame hitch event.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param delta Measured frame interval in ticks.
++ * @param ref Reference interval in ticks.
++ * @param margin Hitch margin threshold in ticks.
++ * @param flags Event flags.
++ * @param out Output container.
++ */
++static noinline void fas_det_hitch(const struct fas_hot *h,
++				   const struct fas_cfg *c, u64 delta, u64 ref,
++				   u64 margin, u32 flags, struct fas_out *out)
++{
++	u64 missed = div64_u64(delta - margin, ref);
++	u32 type = missed >= FAS_MISS_BIG ? FAS_EVENT_BIG_JANK :
++					    FAS_EVENT_SMALL_JANK;
++
++	if (h->degraded && type != FAS_EVENT_BIG_JANK)
++		return;
++
++	fas_emit(c, out, type, flags, (u32)min_t(u64, missed, 0xffff), delta);
++}
++
++/**
++ * @brief Resets detector state after pause or frame gap.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param now Current timestamp in ticks.
++ * @param out Output container.
++ */
++static noinline void fas_det_resync(struct fas_hot *h, const struct fas_cfg *c,
++				    u64 now, struct fas_out *out)
++{
++	if (h->paused)
++		fas_emit(c, out, FAS_EVENT_RESUMED, 0, 0, 0);
++
++	h->paused = 0;
++	h->degraded = 0;
++	h->ok_windows = 0;
++	h->cusum_q = 0;
++	h->pending = FAS_NONE;
++	h->pending_windows = 0;
++	h->win_start = now;
++	h->win_n = 0;
++	if (!h->acquiring) {
++		h->wd_stage = FAS_WD_ARMED;
++		h->cadence_q4 = c->period << 4;
++	}
++}
++
++/*
++ * Updates cadence and deviation scale.
++ *
++ * The scale moves by a fixed part of its value, up or down, so one large
++ * interval has a limited effect. The scale decays when frames are quiet.
++ */
++static __always_inline void fas_det_noise_update(struct fas_hot *h, u64 delta)
++{
++	u64 cadence = h->cadence_q4 >> 4;
++	u64 dev_q = fas_abs_diff(delta, cadence) << FAS_Q;
++	u64 s = h->scale_q;
++
++	h->cadence_q4 = (u64)((s64)h->cadence_q4 +
++			      ((((s64)delta << 4) - (s64)h->cadence_q4) >> 3));
++	if (dev_q > s)
++		s += max_t(u64, 1, s >> FAS_SCALE_UP_SHIFT);
++	else
++		s -= max_t(u64, 1, s >> FAS_SCALE_DOWN_SHIFT);
++	h->scale_q = max_t(u64, s, FAS_SCALE_MIN_Q);
++}
++
++/**
++ * @brief Adds frame interval to CUSUM deficit tracking.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param delta Measured frame interval in ticks.
++ * @return true if CUSUM exceeds alarm limit, false otherwise.
++ */
++static __always_inline bool fas_det_cusum(struct fas_hot *h,
++					  const struct fas_cfg *c, u64 delta)
++{
++	u64 p = c->period;
++	s64 x = ((s64)min_t(u64, delta, p + (p >> 1)) - (s64)p) *
++			(s64)c->recip >> (FAS_RECIP_SHIFT - FAS_Q);
++	s64 s = h->cusum_q + x - FAS_TOL_Q;
++
++	h->cusum_q = s > 0 ? s : 0;
++	return unlikely(h->cusum_q >= FAS_CUSUM_LIMIT_Q);
++}
++
++/**
++ * @brief Processes a single frame event.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param now Frame timestamp in ticks.
++ * @param out Output container for generated events.
++ * @return Watchdog timer delay in ticks, or 0 if timer state is unchanged.
++ */
++static u64 fas_det_frame(struct fas_hot *h, struct fas_cfg *c, u64 now,
++			 struct fas_out *out)
++{
++	u64 delta, ref, margin;
++	u32 flags;
++
++	out->n = 0;
++	out->idle = false;
++
++	if (unlikely(!h->have_last)) {
++		h->have_last = 1;
++		h->acquiring = 1;
++		h->last = now;
++		h->win_start = now;
++		h->win_n = 0;
++		return 0;
++	}
++
++	/* Ignore frames arriving out of order across CPUs. */
++	delta = now - h->last;
++	if (unlikely((s64)delta <= 0))
++		return 0;
++	h->last = now;
++
++	if (unlikely(h->paused || delta >= c->pause)) {
++		fas_det_resync(h, c, now, out);
++		return h->acquiring ? 0 : fas_soft_ticks(c, h);
++	}
++
++	if (unlikely(h->acquiring)) {
++		h->win_n++;
++		if (now - h->win_start < c->win_min)
++			return 0;
++		fas_det_acquire(h, c, now - h->win_start, out);
++		return fas_soft_ticks(c, h);
++	}
++
++	flags = h->wd_stage ? FAS_EVF_WATCHDOG : 0;
++	h->wd_stage = FAS_WD_ARMED;
++
++	ref = fas_ref(c, h);
++	margin = fas_margin(c, h, ref);
++	if (unlikely(delta >= ref + margin))
++		fas_det_hitch(h, c, delta, ref, margin, flags, out);
++	else
++		fas_det_noise_update(h, delta);
++
++	if (likely(!h->degraded) && fas_det_cusum(h, c, delta)) {
++		fas_emit(c, out, FAS_EVENT_DEGRADED, 0, 0, delta);
++		h->degraded = 1;
++		h->cusum_q = 0;
++	}
++
++	h->win_n++;
++	if (unlikely(now - h->win_start >= c->win_need))
++		fas_det_window_close(h, c, now, out);
++
++	return fas_soft_ticks(c, h);
++}
++
++/**
++ * @brief Processes watchdog timer callback.
++ *
++ * @param h Detector state.
++ * @param c Configuration settings.
++ * @param now Current timestamp in ticks.
++ * @param out Output container for generated events.
++ * @return Delay to next watchdog state in ticks.
++ */
++static u64 fas_det_wd_fire(struct fas_hot *h, const struct fas_cfg *c, u64 now,
++			   struct fas_out *out)
++{
++	u64 elapsed = (s64)(now - h->last) > 0 ? now - h->last : 0;
++	u64 limit;
++
++	out->n = 0;
++	out->idle = false;
++
++	switch (h->wd_stage) {
++	case FAS_WD_ARMED:
++	limit = fas_soft_ticks(c, h);
++	if (elapsed < limit)
++		return 0;
++	h->wd_stage = FAS_WD_SOFT_SENT;
++	fas_emit(c, out, FAS_EVENT_BOOST_SOFT, 0, 0, elapsed);
++	limit = fas_hard_ticks(c, h);
++	return limit > elapsed ? limit - elapsed : 1;
++	case FAS_WD_SOFT_SENT:
++		limit = fas_hard_ticks(c, h);
++		if (elapsed < limit)
++			return limit - elapsed;
++		h->wd_stage = FAS_WD_HARD_SENT;
++		fas_emit(c, out, FAS_EVENT_BOOST_HARD, 0, 0, elapsed);
++		return c->pause > elapsed ? c->pause - elapsed : 1;
++	case FAS_WD_HARD_SENT:
++		if (elapsed < c->pause)
++			return c->pause - elapsed;
++		h->wd_stage = FAS_WD_IDLE;
++		h->paused = 1;
++		fas_emit(c, out, FAS_EVENT_PAUSED, 0, 0, elapsed);
++		break;
++	default:
++		break;
++	}
++
++	out->idle = true;
++	return c->win_min * FAS_IDLE_POLL_WINS;
++}
++
++/**
++ * @brief Gets normalized deficit pressure metric.
++ *
++ * @param h Detector state.
++ * @return CUSUM value scaled to Q16 format (maximum 65536).
++ */
++static __always_inline u32 fas_det_pressure(const struct fas_hot *h)
++{
++	return (u32)min_t(s64, h->cusum_q, FAS_Q_ONE);
++}
++
++#endif
+diff --git a/drivers/misc/encore_fas/encore_fas_evq.c b/drivers/misc/encore_fas/encore_fas_evq.c
+new file mode 100644
+index 000000000..d61083e43
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_evq.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/errno.h>
++#include <linux/kernel.h>
++#include <linux/spinlock.h>
++#include <linux/mutex.h>
++#include <linux/uaccess.h>
++#include <linux/wait.h>
++
++#include "encore_fas_evq.h"
++
++#define FAS_EVQ_SIZE 512
++#define FAS_EVQ_MASK (FAS_EVQ_SIZE - 1)
++#define FAS_READ_BATCH 8
++
++static struct {
++	raw_spinlock_t lock;
++	struct mutex read_lock;
++	wait_queue_head_t wq;
++	u32 head;
++	u32 tail;
++	u32 dropped;
++	struct fas_event buf[FAS_EVQ_SIZE];
++} evq;
++
++/**
++ * @brief Initializes event queue data structures.
++ */
++void fas_evq_init(void)
++{
++	BUILD_BUG_ON(sizeof(struct fas_event) != 48);
++	BUILD_BUG_ON(FAS_EVQ_SIZE & FAS_EVQ_MASK);
++
++	raw_spin_lock_init(&evq.lock);
++	mutex_init(&evq.read_lock);
++	init_waitqueue_head(&evq.wq);
++	evq.head = 0;
++	evq.tail = 0;
++	evq.dropped = 0;
++}
++
++/**
++ * @brief Copies pending events without removal from queue.
++ *
++ * @param out Output buffer for copied events.
++ * @param max Maximum events to copy.
++ * @return Count of events copied.
++ */
++static u32 fas_evq_peek(struct fas_event *out, u32 max)
++{
++	unsigned long flags;
++	u32 n, i;
++
++	raw_spin_lock_irqsave(&evq.lock, flags);
++	n = min_t(u32, evq.head - evq.tail, max);
++	for (i = 0; i < n; i++)
++		out[i] = evq.buf[(evq.tail + i) & FAS_EVQ_MASK];
++	raw_spin_unlock_irqrestore(&evq.lock, flags);
++
++	return n;
++}
++
++/**
++ * @brief Removes read events from queue.
++ *
++ * @param n Count of events to remove.
++ */
++static void fas_evq_release(u32 n)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&evq.lock, flags);
++	/* Clamp event count to available queue size. */
++	evq.tail += min_t(u32, n, evq.head - evq.tail);
++	raw_spin_unlock_irqrestore(&evq.lock, flags);
++}
++
++/**
++ * @brief Adds event to queue.
++ *
++ * @param ev Event structure to add.
++ */
++void fas_evq_push(const struct fas_event *ev)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&evq.lock, flags);
++	if (unlikely(evq.head - evq.tail == FAS_EVQ_SIZE)) {
++		evq.tail++;
++		evq.dropped++;
++	}
++	evq.buf[evq.head & FAS_EVQ_MASK] = *ev;
++	evq.head++;
++	raw_spin_unlock_irqrestore(&evq.lock, flags);
++}
++
++/**
++ * @brief Wakes processes waiting to read events.
++ */
++void fas_evq_wake(void)
++{
++	wake_up_interruptible(&evq.wq);
++}
++
++/**
++ * @brief Gets count of dropped events.
++ *
++ * @return Total count of dropped events.
++ */
++u32 fas_evq_dropped(void)
++{
++	return READ_ONCE(evq.dropped);
++}
++
++static bool fas_evq_nonempty(void)
++{
++	return READ_ONCE(evq.head) != READ_ONCE(evq.tail);
++}
++
++/**
++ * @brief Implements character device read operation.
++ *
++ * @param file File structure pointer.
++ * @param buf User buffer pointer.
++ * @param count User buffer size in bytes.
++ * @param ppos File position offset (unused).
++ * @return Bytes copied on success, or negative error code.
++ */
++ssize_t fas_evq_read(struct file *file, char __user *buf, size_t count,
++		     loff_t *ppos)
++{
++	struct fas_event batch[FAS_READ_BATCH];
++	u32 n;
++	ssize_t ret;
++
++	if (count < sizeof(struct fas_event))
++		return -EINVAL;
++
++	if (mutex_lock_interruptible(&evq.read_lock))
++		return -ERESTARTSYS;
++
++	for (;;) {
++		n = fas_evq_peek(batch,
++				 min_t(size_t, count / sizeof(*batch), FAS_READ_BATCH));
++		if (n)
++			break;
++
++		if (file->f_flags & O_NONBLOCK) {
++			ret = -EAGAIN;
++			goto out;
++		}
++
++		if (wait_event_interruptible(evq.wq, fas_evq_nonempty())) {
++			ret = -ERESTARTSYS;
++			goto out;
++		}
++	}
++
++	if (copy_to_user(buf, batch, n * sizeof(*batch))) {
++		ret = -EFAULT;   /* Retain events in queue if copy fails. */
++		goto out;
++	}
++
++	fas_evq_release(n);
++	ret = n * sizeof(*batch);
++
++out:
++	mutex_unlock(&evq.read_lock);
++	return ret;
++}
++
++/**
++ * @brief Implements poll operation for read readiness.
++ *
++ * @param file File structure pointer.
++ * @param wait Poll table pointer.
++ * @return Poll event mask indicating read availability.
++ */
++fas_poll_t fas_evq_poll(struct file *file, poll_table *wait)
++{
++	poll_wait(file, &evq.wq, wait);
++	return fas_evq_nonempty() ? FAS_POLLIN : 0;
++}
+diff --git a/drivers/misc/encore_fas/encore_fas_evq.h b/drivers/misc/encore_fas/encore_fas_evq.h
+new file mode 100644
+index 000000000..8b36f9aa4
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_evq.h
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#ifndef ENCORE_FAS_EVQ_H
++#define ENCORE_FAS_EVQ_H
++
++#include <linux/fs.h>
++#include <linux/poll.h>
++
++#include "encore_fas_compat.h"
++#include "uapi/encore_fas_uapi.h"
++
++void fas_evq_init(void);
++void fas_evq_push(const struct fas_event *ev);
++void fas_evq_wake(void);
++u32 fas_evq_dropped(void);
++
++ssize_t fas_evq_read(struct file *file, char __user *buf, size_t count,
++		     loff_t *ppos);
++fas_poll_t fas_evq_poll(struct file *file, poll_table *wait);
++
++#endif
+diff --git a/drivers/misc/encore_fas/encore_fas_main.c b/drivers/misc/encore_fas/encore_fas_main.c
+new file mode 100644
+index 000000000..fb11781c1
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_main.c
+@@ -0,0 +1,175 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/cred.h>
++#include <linux/fs.h>
++#include <linux/init.h>
++#include <linux/miscdevice.h>
++#include <linux/module.h>
++#include <linux/uaccess.h>
++
++#include "encore_fas_compat.h"
++#include "encore_fas_ctx.h"
++#include "encore_fas_evq.h"
++#include "encore_fas_time.h"
++
++#ifndef FAS_VERSION
++#define FAS_VERSION 0
++#endif
++#ifndef FAS_BRANCH
++#define FAS_BRANCH "-"
++#endif
++
++static bool fas_caller_is_root(void)
++{
++	return uid_eq(current_euid(), GLOBAL_ROOT_UID);
++}
++
++static int fas_open(struct inode *inode, struct file *file)
++{
++	if (!fas_caller_is_root())
++		return -EPERM;
++
++	return nonseekable_open(inode, file);
++}
++
++static long fas_ioctl_register(void __user *uarg)
++{
++	struct fas_register_args req;
++	long ret;
++
++	if (copy_from_user(&req, uarg, sizeof(req)))
++		return -EFAULT;
++
++	ret = fas_ctx_register(&req);
++	if (ret)
++		return ret;
++
++	if (put_user(req.ctx_id,
++		     &((struct fas_register_args __user *)uarg)->ctx_id)) {
++		fas_ctx_remove(req.ctx_id);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++static long fas_ioctl_get_state(void __user *uarg)
++{
++	struct fas_state state;
++	long ret;
++
++	if (copy_from_user(&state, uarg, sizeof(state)))
++		return -EFAULT;
++
++	ret = fas_ctx_get_state(&state);
++	if (ret)
++		return ret;
++
++	return copy_to_user(uarg, &state, sizeof(state)) ? -EFAULT : 0;
++}
++
++/**
++ * @brief Handles ioctl control commands. Restricted to root callers.
++ *
++ * @param file File structure pointer.
++ * @param cmd Ioctl command ID.
++ * @param arg Command argument pointer.
++ * @return 0 on success, or a negative error code.
++ */
++static long fas_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
++{
++	void __user *uarg = (void __user *)arg;
++
++	if (!fas_caller_is_root())
++		return -EPERM;
++
++	if (_IOC_TYPE(cmd) != FAS_IOC_MAGIC || _IOC_NR(cmd) > FAS_IOC_MAXNR)
++		return -ENOTTY;
++
++	switch (cmd) {
++	case FAS_IOC_GET_VERSION: {
++		struct fas_version ver = {
++			.version = FAS_VERSION,
++			.abi = FAS_ABI_VERSION,
++			.counter_hz = (u32)fas_clk.freq,
++		};
++
++		return copy_to_user(uarg, &ver, sizeof(ver)) ? -EFAULT : 0;
++	}
++	case FAS_IOC_REGISTER:
++		return fas_ioctl_register(uarg);
++	case FAS_IOC_REMOVE: {
++		struct fas_remove_args req;
++
++		if (copy_from_user(&req, uarg, sizeof(req)))
++			return -EFAULT;
++		return fas_ctx_remove(req.ctx_id);
++	}
++	case FAS_IOC_SET_CONFIG: {
++		struct fas_config_args req;
++
++		if (copy_from_user(&req, uarg, sizeof(req)))
++			return -EFAULT;
++		return fas_ctx_set_config(req.ctx_id, &req.cfg);
++	}
++	case FAS_IOC_GET_STATE:
++		return fas_ioctl_get_state(uarg);
++	case FAS_IOC_LIST: {
++		struct fas_listener_list list;
++
++		fas_ctx_list(&list);
++		return copy_to_user(uarg, &list, sizeof(list)) ? -EFAULT : 0;
++	}
++	default:
++		return -ENOTTY;
++	}
++}
++
++static const struct file_operations fas_fops = {
++	.owner = THIS_MODULE,
++	.open = fas_open,
++	.unlocked_ioctl = fas_ioctl,
++	.read = fas_evq_read,
++	.poll = fas_evq_poll,
++};
++
++static struct miscdevice fas_miscdev = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "encore_fas",
++	.fops = &fas_fops,
++	.mode = 0600,
++};
++
++static int __init encore_fas_init(void)
++{
++	int ret;
++
++	ret = fas_time_init();
++	if (ret) {
++		pr_err("encore_fas: the counter frequency is not usable\n");
++		return ret;
++	}
++
++	fas_evq_init();
++	fas_ctx_init();
++
++	ret = misc_register(&fas_miscdev);
++	if (ret)
++		return ret;
++
++	pr_info("encore_fas: version %u, branch %s, counter %llu Hz\n",
++		FAS_VERSION, FAS_BRANCH, fas_clk.freq);
++	return 0;
++}
++
++static void __exit encore_fas_exit(void)
++{
++	misc_deregister(&fas_miscdev);
++	fas_ctx_exit();
++}
++
++module_init(encore_fas_init);
++module_exit(encore_fas_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Encore Frame Aware Scheduling module");
+diff --git a/drivers/misc/encore_fas/encore_fas_time.c b/drivers/misc/encore_fas/encore_fas_time.c
+new file mode 100644
+index 000000000..76904c27f
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_time.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/cache.h>
++#include <linux/delay.h>
++#include <linux/ktime.h>
++#include <linux/errno.h>
++
++#include "encore_fas_time.h"
++
++static u64 fas_abs_diff(u64 a, u64 b)
++{
++	return a > b ? a - b : b - a;
++}
++
++struct fas_clock fas_clk __read_mostly;
++
++#define FAS_MIN_FREQ 1000000ULL
++#define FAS_MAX_FREQ 4000000000ULL
++#define FAS_MAX_SECONDS 60
++
++/**
++ * @brief Reads counter frequency and calculates conversion constants.
++ *
++ * @return 0 on success, or -ENODEV if counter frequency is invalid.
++ */
++int fas_time_init(void)
++{
++	u64 freq, measured, t0, t1, c0, c1;
++	u32 shift;
++
++	asm volatile("mrs %0, cntfrq_el0" : "=r"(freq));
++
++	t0 = ktime_get_ns();
++	c0 = fas_ticks();
++	usleep_range(4000, 5000);
++	c1 = fas_ticks();
++	t1 = ktime_get_ns();
++	measured = div64_u64((c1 - c0) * NSEC_PER_SEC, t1 - t0);
++
++	if (freq < FAS_MIN_FREQ || freq > FAS_MAX_FREQ ||
++	    fas_abs_diff(freq, measured) > freq / 10) {
++		pr_warn("encore_fas: CNTFRQ_EL0 is %llu Hz, measured %llu Hz\n", freq,
++			measured);
++		freq = round_up(measured, 10000);
++	}
++
++	if (freq < FAS_MIN_FREQ || freq > FAS_MAX_FREQ)
++		return -ENODEV;
++
++	fas_clk.freq = freq;
++	fas_clk.max_ticks = freq * FAS_MAX_SECONDS;
++
++	/*
++	 * Find maximum bit shift where max_ticks * mult fits in 64 bits.
++	 * Larger shift reduces calculation rounding errors.
++	 */
++	for (shift = 32; shift > 0; shift--) {
++		u64 mult = div64_u64((u64)NSEC_PER_SEC << shift, freq);
++
++		if (mult <= U64_MAX / fas_clk.max_ticks) {
++			fas_clk.mult = mult;
++			fas_clk.shift = shift;
++			return 0;
++		}
++	}
++
++	return -ENODEV;
++}
++
++/**
++ * @brief Converts nanosecond value to timer ticks.
++ *
++ * @param ns Time duration in nanoseconds.
++ * @return Equivalent duration in timer ticks.
++ */
++u64 fas_ns_to_ticks(u64 ns)
++{
++	u32 rem;
++	u64 sec = div_u64_rem(ns, NSEC_PER_SEC, &rem);
++
++	return sec * fas_clk.freq + div_u64((u64)rem * fas_clk.freq, NSEC_PER_SEC);
++}
+diff --git a/drivers/misc/encore_fas/encore_fas_time.h b/drivers/misc/encore_fas/encore_fas_time.h
+new file mode 100644
+index 000000000..0501301d3
+--- /dev/null
++++ b/drivers/misc/encore_fas/encore_fas_time.h
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#ifndef ENCORE_FAS_TIME_H
++#define ENCORE_FAS_TIME_H
++
++#include <linux/kernel.h>
++#include <linux/math64.h>
++#include <linux/time64.h>
++#include <linux/types.h>
++
++/**
++ * @brief System counter frequency parameters.
++ */
++struct fas_clock {
++	/** Counter frequency in Hz. */
++	u64 freq;
++	/** Multiplier for tick-to-nanosecond conversion. */
++	u64 mult;
++	/** Maximum tick value to prevent calculation overflow. */
++	u64 max_ticks;
++	/** Shift count for tick-to-nanosecond conversion. */
++	u32 shift;
++};
++
++extern struct fas_clock fas_clk;
++
++/**
++ * @brief Reads current virtual counter value.
++ *
++ * @return Counter value in ticks.
++ */
++static __always_inline u64 fas_ticks(void)
++{
++	u64 val;
++
++	asm volatile("mrs %0, cntvct_el0" : "=r"(val));
++	return val;
++}
++
++/**
++ * @brief Converts timer ticks to nanoseconds.
++ *
++ * @param ticks Input value in ticks. Clamped to max_ticks.
++ * @return Equivalent duration in nanoseconds.
++ */
++static __always_inline u64 fas_ticks_to_ns(u64 ticks)
++{
++	return (min(ticks, fas_clk.max_ticks) * fas_clk.mult) >> fas_clk.shift;
++}
++
++int fas_time_init(void);
++u64 fas_ns_to_ticks(u64 ns);
++
++#endif
+diff --git a/drivers/misc/encore_fas/include/uapi/encore_fas_uapi.h b/drivers/misc/encore_fas/include/uapi/encore_fas_uapi.h
+new file mode 100644
+index 000000000..ab13900de
+--- /dev/null
++++ b/drivers/misc/encore_fas/include/uapi/encore_fas_uapi.h
+@@ -0,0 +1,172 @@
++// SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note
++
++#ifndef _UAPI_ENCORE_FAS_H
++#define _UAPI_ENCORE_FAS_H
++
++#include <linux/types.h>
++#include <linux/ioctl.h>
++
++#define FAS_ABI_VERSION 3
++
++#define FAS_MAX_PATH_LEN 256
++#define FAS_MAX_TARGETS 8
++#define FAS_MAX_LISTENERS 16
++
++/* Configuration flag definitions. */
++#define FAS_CFG_LOCK_DOWN (1u << 0)
++
++/* Status flags for struct fas_state. */
++#define FAS_STATE_ACQUIRING (1u << 0)
++#define FAS_STATE_DEGRADED (1u << 1)
++#define FAS_STATE_PAUSED (1u << 2)
++
++/* Event flags for struct fas_event. */
++#define FAS_EVF_WATCHDOG (1u << 0)
++
++/**
++ * @brief Module version information.
++ */
++struct fas_version {
++	// Git commit count at build time.
++	__u32 version;
++	// Header ABI version (must equal FAS_ABI_VERSION).
++	__u32 abi;
++	// Frequency of system counter in Hz.
++	__u32 counter_hz;
++	// Reserved field.
++	__u32 reserved;
++};
++
++/**
++ * @brief Target configuration for listener.
++ */
++struct fas_config {
++	// Configuration flags (FAS_CFG_*).
++	__u32 flags;
++	// Display vsync period in nanoseconds.
++	__u32 vsync_ns;
++	// Count of valid frame rates in fps array (1 to FAS_MAX_TARGETS).
++	__u32 count;
++
++	// Reserved field.
++	__u32 reserved;
++
++	// Configured frame rates in fps.
++	__u32 fps[FAS_MAX_TARGETS];
++};
++
++/**
++ * @brief Input structure for FAS_IOC_REGISTER command.
++ */
++struct fas_register_args {
++	// Target process ID.
++	__s32 pid;
++	// Output listener ID assigned by module.
++	__s32 ctx_id;
++	// File offset of probed function.
++	__u64 offset;
++	// Initial configuration targets.
++	struct fas_config cfg;
++	// Path to target binary file.
++	char path[FAS_MAX_PATH_LEN];
++};
++
++struct fas_remove_args {
++	__s32 ctx_id;
++};
++
++struct fas_config_args {
++	__s32 ctx_id;
++	__u32 reserved;
++	struct fas_config cfg;
++};
++
++/**
++ * @brief Output structure for FAS_IOC_GET_STATE command.
++ */
++struct fas_state {
++	// Listener ID.
++	__s32 ctx_id;
++	// Active target frame rate in fps.
++	__u32 fps;
++	// Status flags (FAS_STATE_*).
++	__u32 flags;
++	// Deficit pressure in Q16 format.
++	__u32 pressure_q16;
++	// Sequence number of last event.
++	__u32 seq;
++	// Count of dropped events due to full queue.
++	__u32 dropped;
++	// Reference interval of the hitch threshold in nanoseconds.
++	__u32 ref_ns;
++	// Hitch margin in nanoseconds. The soft watchdog fires at ref_ns + margin_ns.
++	__u32 margin_ns;
++	// Effective display vsync period in nanoseconds.
++	__u32 vsync_ns;
++
++	// Reserved field.
++	__u32 reserved;
++};
++
++struct fas_listener_info {
++	__s32 ctx_id;
++	__s32 pid;
++};
++
++struct fas_listener_list {
++	__u32 count;
++	__u32 reserved;
++	struct fas_listener_info listeners[FAS_MAX_LISTENERS];
++};
++
++enum fas_event_type {
++	FAS_EVENT_NONE = 0,
++	FAS_EVENT_SMALL_JANK = 1,
++	FAS_EVENT_BIG_JANK = 2,
++	FAS_EVENT_BOOST_SOFT = 3,
++	FAS_EVENT_BOOST_HARD = 4,
++	FAS_EVENT_DEGRADED = 5,
++	FAS_EVENT_RECOVERED = 6,
++	FAS_EVENT_PAUSED = 7,
++	FAS_EVENT_RESUMED = 8,
++	FAS_EVENT_RATE_SWITCH = 9,
++};
++
++/**
++ * @brief Event record returned by read operations.
++ */
++struct fas_event {
++	// Listener ID.
++	__s32 ctx_id;
++	// Event type (enum fas_event_type).
++	__u32 type;
++	// Event timestamp using CLOCK_MONOTONIC.
++	__u64 timestamp_ns;
++	// Frame interval in nanoseconds.
++	__u64 frametime_ns;
++	// Active frame rate target when event occurred.
++	__u32 fps;
++	// Count of missed frame slots.
++	__u32 missed;
++	// Event flags (FAS_EVF_*).
++	__u32 flags;
++	// Deficit pressure in Q16 format.
++	__u32 pressure_q16;
++	// Event sequence counter for listener.
++	__u32 seq;
++	// Reserved field.
++	__u32 reserved;
++} __attribute__((aligned(8)));
++
++#define FAS_IOC_MAGIC 'F'
++
++#define FAS_IOC_GET_VERSION _IOR(FAS_IOC_MAGIC, 0, struct fas_version)
++#define FAS_IOC_REGISTER _IOWR(FAS_IOC_MAGIC, 1, struct fas_register_args)
++#define FAS_IOC_REMOVE _IOW(FAS_IOC_MAGIC, 2, struct fas_remove_args)
++#define FAS_IOC_SET_CONFIG _IOW(FAS_IOC_MAGIC, 3, struct fas_config_args)
++#define FAS_IOC_GET_STATE _IOWR(FAS_IOC_MAGIC, 4, struct fas_state)
++#define FAS_IOC_LIST _IOR(FAS_IOC_MAGIC, 5, struct fas_listener_list)
++
++#define FAS_IOC_MAXNR 5
++
++#endif
+diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
+index 4a805919b..b741607c4 100644
+--- a/drivers/misc/ntsync.c
++++ b/drivers/misc/ntsync.c
+@@ -754,6 +754,37 @@ static int ntsync_create_sem(struct ntsync_device *dev, void __user *argp)
+ 	return fd;
+ }
+ 
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Added after ntsync_create_sem() in the 7.3 driver. */
++static int ntsync_legacy_create_sem(struct ntsync_device *dev, void __user *argp)
++{
++ struct ntsync_legacy_sem_args args;
++ struct ntsync_obj *sem;
++
++ if (copy_from_user(&args, argp, sizeof(args)))
++  return -EFAULT;
++ if (args.count > args.max)
++  return -EINVAL;
++ sem = ntsync_alloc_obj(dev, NTSYNC_TYPE_SEM);
++ if (!sem)
++  return -ENOMEM;
++ sem->u.sem.count = args.count;
++ sem->u.sem.max = args.max;
++ FD_PREPARE(fdf, O_CLOEXEC,
++            anon_inode_getfile("ntsync", &ntsync_obj_fops, sem, O_RDWR));
++ if (fdf.err) {
++  ntsync_free_obj(sem);
++  return fdf.err;
++ }
++ sem->file = fd_prepare_file(fdf);
++ /* Copy out before publication: failure closes the prepared file and fd. */
++ if (put_user(fd_prepare_fd(fdf),
++              &((struct ntsync_legacy_sem_args __user *)argp)->sem))
++  return -EFAULT;
++ fd_publish(fdf);
++ return 0;
++}
++
+ static int ntsync_create_mutex(struct ntsync_device *dev, void __user *argp)
+ {
+ 	struct ntsync_mutex_args args;
+@@ -1178,6 +1209,8 @@ static long ntsync_char_ioctl(struct file *file, unsigned int cmd,
+ 	void __user *argp = (void __user *)parm;
+ 
+ 	switch (cmd) {
++	case NTSYNC_IOC_LEGACY_CREATE_SEM:
++		return ntsync_legacy_create_sem(dev, argp);
+ 	case NTSYNC_IOC_CREATE_EVENT:
+ 		return ntsync_create_event(dev, argp);
+ 	case NTSYNC_IOC_CREATE_MUTEX:
+diff --git a/include/linux/avr_profile.h b/include/linux/avr_profile.h
+new file mode 100644
+index 000000000..0b2fac0bd
+--- /dev/null
++++ b/include/linux/avr_profile.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_AVR_PROFILE_H
++#define _LINUX_AVR_PROFILE_H
++
++struct cgroup_subsys_state;
++struct task_struct;
++
++#ifdef CONFIG_AVR_PROFILE
++void avr_profile_cpuset_attach(struct cgroup_subsys_state *css,
++			       struct task_struct *task);
++void avr_profile_kick(void);
++int sched_pelt_set_multiplier(unsigned int mult);
++unsigned long rk_cpu_util(int cpu);
++/* a frame of the foreground app was late (1) or badly late (2), from FAS */
++void avr_profile_frame_event(unsigned int level);
++void avr_profile_frame_seen(void);
++#else
++static inline void avr_profile_cpuset_attach(struct cgroup_subsys_state *css,
++					     struct task_struct *task) { }
++static inline void avr_profile_kick(void) { }
++static inline void avr_profile_frame_event(unsigned int level) { }
++static inline void avr_profile_frame_seen(void) { }
++#endif
++
++#endif /* _LINUX_AVR_PROFILE_H */
+diff --git a/include/linux/launch_boost.h b/include/linux/launch_boost.h
+new file mode 100644
+index 000000000..b05067b23
+--- /dev/null
++++ b/include/linux/launch_boost.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_LAUNCH_BOOST_H
++#define _LINUX_LAUNCH_BOOST_H
++
++#include <linux/types.h>
++
++#ifdef CONFIG_LAUNCH_BOOST
++void launch_boost_setuid(uid_t old_uid, uid_t new_uid);
++void launch_boost_set(unsigned int uclamp);
++#else
++static inline void launch_boost_setuid(uid_t old_uid, uid_t new_uid) { }
++static inline void launch_boost_set(unsigned int uclamp) { }
++#endif
++
++#endif /* _LINUX_LAUNCH_BOOST_H */
+diff --git a/include/linux/rk_tboost.h b/include/linux/rk_tboost.h
+new file mode 100644
+index 000000000..64e581e7d
+--- /dev/null
++++ b/include/linux/rk_tboost.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_RK_TBOOST_H
++#define _LINUX_RK_TBOOST_H
++
++struct cgroup_subsys_state;
++
++#ifdef CONFIG_RK_TBOOST
++void rk_tboost_set_top_app(struct cgroup_subsys_state *css);
++void rk_tboost_set_headroom(unsigned int pct);
++#else
++static inline void rk_tboost_set_top_app(struct cgroup_subsys_state *css) { }
++static inline void rk_tboost_set_headroom(unsigned int pct) { }
++#endif
++
++#endif /* _LINUX_RK_TBOOST_H */
+diff --git a/include/trace/hooks/sched.h b/include/trace/hooks/sched.h
+index de07e3a74..6774996a9 100644
+--- a/include/trace/hooks/sched.h
++++ b/include/trace/hooks/sched.h
+@@ -342,6 +342,10 @@ DECLARE_HOOK(android_vh_cpu_cgroup_css_free,
+ 	TP_PROTO(struct cgroup_subsys_state *css),
+ 	TP_ARGS(css));
+ 
++DECLARE_HOOK(android_vh_sched_pelt_multiplier,
++	TP_PROTO(unsigned int old, unsigned int cur, int *ret),
++	TP_ARGS(old, cur, ret));
++
+ /* macro versions of hooks are no longer required */
+ 
+ #endif /* _TRACE_HOOK_SCHED_H */
+diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
+index 6d0679351..3b923372e 100644
+--- a/include/uapi/linux/ntsync.h
++++ b/include/uapi/linux/ntsync.h
+@@ -15,6 +15,15 @@ struct ntsync_sem_args {
+ 	__u32 max;
+ };
+ 
++/* Early Rakkashin ABI: returns the descriptor in args.sem. */
++struct ntsync_legacy_sem_args {
++	__u32 sem;
++	__u32 count;
++	__u32 max;
++};
++#define NTSYNC_IOC_LEGACY_CREATE_SEM _IOWR('N', 0x80, struct ntsync_legacy_sem_args)
++#define NTSYNC_IOC_SEM_POST NTSYNC_IOC_SEM_RELEASE
++
+ struct ntsync_mutex_args {
+ 	__u32 owner;
+ 	__u32 count;
+diff --git a/init/Kconfig b/init/Kconfig
+index 7a7177603..0436f8120 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -2374,3 +2374,27 @@ config ARCH_HAS_SYSCALL_WRAPPER
+ 	def_bool n
+ 
+ source "init/Kconfig.gki"
++
++config LAUNCH_BOOST
++	bool "Boost apps while zygote launches them"
++	depends on UCLAMP_TASK
++	help
++	  Give a freshly specialized app process (setresuid from root to an
++	  app UID) a temporary uclamp.min floor so cold starts run fast.
++	  Tunables in /sys/module/launch_boost/parameters/.
++
++config AVR_PROFILE
++	bool "avr performance profiles"
++	depends on CPU_FREQ && SYSCTL && SMP && CPUSETS
++	help
++	  /sys/kernel/avr_profile/mode switches cpufreq floors/caps (via
++	  frequency QoS), PELT half-life, launch boost and writeback interval
++	  together: battery, balanced, performance, game.
++
++config RK_TBOOST
++	bool "Rakkashin foreground thread headroom boost"
++	depends on AVR_PROFILE && UCLAMP_TASK
++	help
++	  In the performance and game profiles, periodically give the heaviest
++	  foreground threads a uclamp.min of their utilization plus headroom,
++	  so frequency is already up when frame work spikes.
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 1e1a31673..a31e2140b 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -207,3 +207,7 @@ $(obj)/kheaders.md5: $(obj)/kheaders-srclist FORCE
+ 	$(call filechk,kheaders_md5sum)
+ 
+ clean-files := kheaders.md5 kheaders-srclist kheaders-objlist
++
++obj-$(CONFIG_LAUNCH_BOOST) += launch_boost.o
++obj-$(CONFIG_AVR_PROFILE) += avr_profile.o
++obj-$(CONFIG_RK_TBOOST) += rk_tboost.o
+diff --git a/kernel/avr_profile.c b/kernel/avr_profile.c
+new file mode 100644
+index 000000000..0a2d1ac19
+--- /dev/null
++++ b/kernel/avr_profile.c
+@@ -0,0 +1,1786 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Rakkashin kernel: avr performance profiles.
++ *
++ * One switch that moves several kernel knobs together:
++ *
++ *   echo game > /sys/kernel/avr_profile/mode
++ *   cat /sys/kernel/avr_profile/mode        # "battery [balanced] performance game"
++ *
++ *   mode         cpufreq floor/cap  PELT   launch boost  writeback  thread boost  slice
++ *   battery      efficiency cap     32 ms  uclamp 640    30 s       off           200%
++ *   balanced     smart cap (below)  16 ms  uclamp 1024   15 s       off           100%
++ *   performance  floor 30% of max   8 ms   uclamp 1024   15 s       +15%          70%
++ *   game         floor 50% of max   8 ms   uclamp 1024   15 s       +25%          70%
++ *   extreme      pinned at max      8 ms   uclamp 1024   15 s       +50%          100%
++ *
++ * Per-app profiles: "mode" is the global profile. app_profiles maps app UIDs
++ * to their own mode; when a task of such a UID is moved into the top-app
++ * cpuset (the framework does that when the app comes to the foreground) its
++ * mode takes effect, and once top-app no longer holds any of its tasks the
++ * global mode returns. No polling: decisions run off cpuset attach. Mode
++ * changes sysfs_notify() "mode" so userspace can follow with inotify.
++ *
++ *   echo "10234:game 10077:battery" > /sys/kernel/avr_profile/app_profiles
++ *   echo 0 > /sys/kernel/avr_profile/per_app    # ignore app_profiles
++ *
++ * Battery caps each cluster at its efficiency knee, read from the Energy
++ * Model: the highest frequency whose cost (energy per unit of work) is
++ * within 25% of the cluster's most efficient state, kept within 50..85% of
++ * max. Without a real (non-artificial) EM it falls back to 70%. The caps in
++ * use are shown in battery_caps. (Voltage itself is set by firmware/CPR on
++ * this SoC and is not reachable from the kernel.)
++ *
++ * Smart Balanced: in balanced, CPUs are capped at smart_cap percent of max
++ * (default 80) while nobody touches the screen, and the cap is lifted the
++ * moment a touch event arrives (in-kernel input handler) or an app launches,
++ * held for SMART_HOLD_MS after the last touch (WAKE_HOLD_MS after the power
++ * key, so waking the phone and the unlock animation before the first touch
++ * aren't capped). The top of the frequency
++ * range is where energy per unit of work is worst; this trims it during
++ * passive use (reading, video, background work) without touching interactive
++ * performance. smart_cap=100 restores plain balanced.
++ *
++ * Sustained performance (sustained=1): long sessions slow down because the
++ * phone heats up until thermal mitigation throttles it. So while the skin
++ * is cool nothing changes (full speed on touch); once the skin temperature
++ * (front/back virtual sensors) reaches sustained_temp, the demand-matched
++ * caps stay on while the screen is touched too. Their headroom shrinks from
++ * 70% at sustained_temp to 30% SUST_SPAN_C degrees above it, so the device
++ * runs only as fast as the work needs exactly when heat is building up.
++ * While touched the caps start from the top, jump to the top when a CPU is
++ * saturated, and only come down after a second of lower load, so frame
++ * bursts are never squeezed. The fixed smart_cap is still lifted on touch.
++ *
++ * Frame-aware (encore_fas): the foreground app's frames are timed by a
++ * uprobe on Surface::queueBuffer (drivers/misc/encore_fas, registered by
++ * the control module's rk_gpud for top_pid). A late frame, an overdue frame
++ * or a frame rate deficit lifts the demand cap of every cluster whose cap
++ * was actually holding it back (running at it within the last
++ * JANK_BOUND_TICKS) and leaves a learned floor there: held for 10 s, held
++ * twice as long each time it is hit again (up to 2 min), then probed 5% of
++ * max lower every 5 s while frames stay on time. So the caps settle just
++ * above what each game really needs instead of hunting around it, and a
++ * jank that our caps didn't cause costs no power at all.
++ *
++ * While frames are timed, a late one is caught within a frame, so the
++ * headroom is trimmed adaptively (additive increase, multiplicative
++ * decrease): one point less after every 5 s with no cap-caused jank, up to
++ * FAS_CUT_MAX, and FAS_CUT_BACK points back at once when our caps held a
++ * frame back. Each app converges to the least headroom its frames tolerate.
++ * A floor learned in a heavy scene is released quickly once the need stays
++ * well below it for 2 s (SCENE_LIGHT_*), instead of waiting out its hold.
++ * The learned floors and the trim are remembered for the last APP_MEMORY
++ * apps (by UID), so returning to a game starts where it left off.
++ *
++ * The demand cap is rounded up to the next real OPP (a QoS max between two
++ * OPPs means the one below, which would eat the headroom) and never set
++ * below the policy's most energy-efficient OPP (lowest EM cost: running
++ * slower than that costs more energy per unit of work, not less).
++ *
++ * CPU frequency is steered only through cpufreq's frequency QoS, the same
++ * mechanism thermal mitigation uses. QoS takes the lowest max request and
++ * the highest min request, and the policy max always wins over min, so a
++ * thermal cap is never overridden by a floor set here.
++ */
++
++#include <linux/avr_profile.h>
++#include <linux/cgroup.h>
++#include <linux/cpufreq.h>
++#include <linux/cred.h>
++#include <linux/energy_model.h>
++#include <linux/input.h>
++#include <linux/kobject.h>
++#include <linux/launch_boost.h>
++#include <linux/mutex.h>
++#include <linux/pm_qos.h>
++#include <linux/power_supply.h>
++#include <linux/rk_tboost.h>
++#include <linux/sched/sysctl.h>
++#include <linux/string.h>
++#include <linux/slab.h>
++#include <linux/sysfs.h>
++#include <linux/thermal.h>
++#include <linux/workqueue.h>
++#include <linux/writeback.h>
++
++#define RAKKASHIN_VERSION	"Rakkashin v3.2 features (avr, Android 7.3 port)"
++
++extern unsigned int sysctl_sched_base_slice;
++static unsigned int stock_slice;	/* captured before the first change */
++
++enum avr_mode {
++	AVR_BATTERY,
++	AVR_BALANCED,
++	AVR_PERFORMANCE,
++	AVR_GAME,
++	AVR_EXTREME,
++	AVR_NR_MODES,
++};
++
++struct avr_mode_params {
++	const char *name;
++	unsigned int min_pct;		/* cpufreq floor, % of cpuinfo max; 0 = none */
++	unsigned int max_pct;		/* cpufreq cap, % of cpuinfo max; 100 = none */
++	bool eff_cap;			/* use the EM efficiency knee instead of max_pct */
++	unsigned int pelt_mult;		/* 1: 32ms, 2: 16ms, 4: 8ms half-life */
++	unsigned int launch_uclamp;	/* launch boost floor, 0 = off */
++	unsigned int writeback_cs;	/* dirty_writeback_interval, centiseconds */
++	unsigned int tboost_pct;	/* foreground thread headroom boost, 0 = off */
++	unsigned int slice_pct;		/* EEVDF base slice, % of the stock value */
++	bool smart;			/* touch-aware smart_cap applies */
++	bool demand;			/* cap at measured demand + headroom when idle */
++	bool floor_touch;		/* min_pct only while the screen is touched */
++};
++
++static const char * const mode_names[AVR_NR_MODES] = {
++	[AVR_BATTERY]	  = "battery",
++	[AVR_BALANCED]	  = "balanced",
++	[AVR_PERFORMANCE] = "performance",
++	[AVR_GAME]	  = "game",
++	[AVR_EXTREME]	  = "extreme",
++};
++
++static const struct avr_mode_params modes[AVR_NR_MODES] = {
++	/*                                 min max  eff   pelt launch  wb   tb  slice smart  demand floor_touch */
++	[AVR_BATTERY]	  = { "battery",	 0,  70, true,  1,  640, 3000,  0, 200, false, true,  false },
++	[AVR_BALANCED]	  = { "balanced",	 0, 100, false, 2, 1024, 1500,  0, 100, true,  true,  false },
++	[AVR_PERFORMANCE] = { "performance",	30, 100, false, 4, 1024, 1500, 15,  70, false, false, true  },
++	[AVR_GAME]	  = { "game",		50, 100, false, 4, 1024, 1500, 25,  70, false, false, false },
++	/*
++	 * extreme: benchmark-grade, heat be damned. CPUs pinned at max (no
++	 * ramp-up between benchmark runs), heaviest threads boosted +50%,
++	 * launch boost and fastest PELT. Thermal caps (QoS max) still win.
++	 */
++	[AVR_EXTREME]	  = { "extreme",	100, 100, false, 4, 1024, 1500, 50, 100, false, false, false },
++};
++
++struct avr_policy_reqs {
++	bool added;
++	struct freq_qos_request min;
++	struct freq_qos_request max;
++	s32 dcap;		/* demand cap in kHz, 0 = start from measured need,
++				   DCAP_TOP = start from the top (touch) */
++	unsigned int low_ticks;	/* consecutive ticks the need sat well below dcap */
++	unsigned int bound_age;	/* ticks since a CPU last ran at dcap */
++	unsigned int sat_age;	/* ticks since a CPU was saturated at the limit */
++	s32 jfloor;		/* learned from late frames, kHz; 0 = none */
++	unsigned int jticks;	/* ticks until the floor is probed lower */
++	unsigned int jhold;	/* hold of the floor, doubles on repeat */
++	unsigned int light_ticks; /* ticks the need sat well below the floor */
++	unsigned int eff_khz;	/* most energy-efficient OPP, 0 = not known yet */
++};
++
++/* indexed by policy->cpu, the policy's owning CPU */
++#ifndef NO_UID
++#define NO_UID			((uid_t)-1)
++#endif
++static struct avr_policy_reqs reqs[NR_CPUS];
++/* per-CPU idle time at the last demand tick, for windowed busy */
++static u64 win_wall[NR_CPUS], win_idle[NR_CPUS];
++static bool applied;				/* a mode was applied at least once */
++
++/* Smart Balanced state */
++#define SMART_HOLD_MS	1000
++#define WAKE_HOLD_MS	2000	/* caps stay lifted this long after the power key */
++static unsigned long wake_until;		/* jiffies; lifted at least until then */
++static unsigned int smart_cap = 80;		/* % of max while idle; 100 = off */
++/*
++ * Sustained performance: keep the demand-matched caps (CPU here, GPU in
++ * rk_gpud via demand_active) while the screen is touched too, with more
++ * headroom, so long gaming sessions run cooler and throttle less.
++ */
++static bool sustained;
++#define SUST_TEMP_DEFAULT	40	/* skin degrees C where the touched caps engage */
++#define SUST_HYST_MC		1500	/* ...and release this much below it */
++#define SUST_SPAN_C		5	/* headroom tightens over this many degrees */
++#define SUST_HEADROOM_COOL	70	/* touched headroom at sustained_temp */
++#define SUST_HEADROOM_HOT	30	/* ...and SUST_SPAN_C degrees above it */
++#define NO_TEMP			INT_MIN
++static unsigned int sustained_temp = SUST_TEMP_DEFAULT;
++static int skin_mc = NO_TEMP;			/* last skin reading, milli-degC */
++static bool skin_read;				/* skin_mc is a fresh reading */
++static unsigned int temp_tick;			/* gov ticks since sustained was set */
++static bool sustained_hot;			/* skin reached sustained_temp */
++static bool smart_active;			/* the mode in effect uses it */
++static bool smart_lifted;			/* cap currently lifted */
++static bool smart_armed;			/* first touch seen: boot is over */
++static unsigned long last_kick;			/* jiffies of the last touch/launch */
++
++/* demand cap and power limit, re-evaluated by gov_work */
++#define GOV_MS			20
++#define DEMAND_HEADROOM_PCT	25	/* above measured utilization */
++#define DEMAND_TOUCH_HEADROOM_PCT 40	/* touched, sustained, no skin sensor */
++#define DEMAND_TOUCH_FALL_TICKS	50	/* touched: hold a peak for a second */
++#define DEMAND_WIN_MAX_US	200000	/* idle-time windows longer than this are stale */
++#define DCAP_TOP		S32_MAX
++#define TEMP_EVERY		50	/* read the skin temperature every 1s */
++/* frame events (encore_fas) */
++#define JANK_BOUND_TICKS	5	/* a cap at work this recently held the frame */
++#define JANK_STALE_MS		100	/* older events no longer describe the caps */
++#define JFLOOR_HOLD_TICKS	500	/* 10 s */
++#define JFLOOR_HOLD_MAX_TICKS	6000	/* 2 min */
++#define JFLOOR_PROBE_TICKS	250	/* then 5% lower every 5 s */
++#define SCENE_LIGHT_PCT		70	/* need below this share of the floor... */
++#define SCENE_LIGHT_TICKS	100	/* ...for 2 s: the scene got lighter */
++#define SCENE_PROBE_TICKS	50	/* then probe every 1 s, hold forgotten */
++static atomic_t fas_pending = ATOMIC_INIT(0);	/* worst level since the last tick */
++static unsigned long fas_pending_at;		/* jiffies of that event */
++static unsigned int fas_janks;			/* late frames that lifted a cap */
++static bool fas_reset;				/* foreground app changed: forget floors */
++static pid_t top_pid;				/* foreground app process */
++static unsigned long fas_seen;			/* jiffies of the last timed frame */
++#define FAS_SEEN_MS		1000	/* frames timed this recently: timing is live */
++#define FAS_HEADROOM_MIN	10	/* never trim headroom below this */
++#define FAS_CUT_START		5	/* headroom trim for an app we haven't seen */
++#define FAS_CUT_MAX		20
++#define FAS_CUT_BACK		10	/* given back when our caps held a frame */
++#define FAS_CUT_STEP_TICKS	250	/* 5 s of on-time frames per point */
++static unsigned int fas_cut = FAS_CUT_START;	/* headroom trim, points */
++static unsigned int fas_clean_ticks;
++static uid_t top_uid = NO_UID;			/* UID of top_pid */
++static uid_t frame_uid = NO_UID;		/* UID whose frames are being timed */
++static uid_t frame_cand = NO_UID;		/* a new one, not yet confirmed */
++static unsigned int frame_cand_n;
++#define FRAME_UID_CONFIRM	30	/* frames before the learned state switches */
++static uid_t mem_uid = NO_UID;			/* UID whose state is live */
++#define APP_MEMORY		8
++static struct {
++	uid_t uid;				/* NO_UID = free */
++	unsigned int cut;
++	unsigned long used;			/* jiffies, for LRU */
++	s32 jfloor[NR_CPUS];			/* by policy owner CPU */
++} app_mem[APP_MEMORY] = { [0 ... APP_MEMORY - 1] = { .uid = NO_UID } };
++#define DEMAND_FLOOR_PCT	30	/* never cap below this share of max */
++#define DEMAND_FALL_TICKS	5	/* need must stay low this long before lowering */
++#define DEMAND_SAT_PCT		90	/* a CPU this busy at the cap is saturated */
++#define POWER_EVERY		50	/* measure battery power every POWER_EVERY ticks (1s) */
++#define POWER_MIN_PCT		30
++static unsigned int power_limit_mw;		/* 0 = off */
++static unsigned int power_pct = 100;		/* CPU cap from the power loop */
++static unsigned int power_now_mw;		/* last measurement */
++static unsigned int power_base_mw;		/* non-CPU power, from measurements */
++static bool power_discharging;			/* last measurement was on battery */
++static unsigned int power_tick;			/* gov ticks since the limit was set */
++
++static enum avr_mode cur_mode = AVR_BALANCED;	/* in effect */
++static enum avr_mode base_mode = AVR_BALANCED;	/* chosen by the user */
++static DEFINE_MUTEX(avr_lock);
++static struct kobject *avr_kobj;
++
++#define MAX_APP_PROFILES	64
++/* each entry is (uid << 8 | mode), so lockless readers see whole entries */
++static u64 app_profiles[MAX_APP_PROFILES];
++static unsigned int nr_app_profiles;
++static bool per_app = true;
++static uid_t active_uid = NO_UID;		/* app whose profile is in effect */
++static uid_t pending_uid = NO_UID;		/* handed from cpuset attach to work */
++static struct cgroup_subsys_state *top_app_css;	/* cached, never released */
++
++static s32 pct_of(unsigned int max_freq, unsigned int pct)
++{
++	return (s32)div_u64((u64)max_freq * pct, 100);
++}
++
++#define EFF_SLACK_PCT	25	/* accepted cost above the most efficient state */
++#define EFF_MIN_PCT	50	/* never cap below this share of max */
++#define EFF_MAX_PCT	85	/* ...nor above it */
++
++/*
++ * Highest frequency (kHz) whose cost is within EFF_SLACK_PCT of the cluster's
++ * most efficient state, or 0 if there is no usable Energy Model.
++ */
++static unsigned int efficiency_knee_khz(int cpu)
++{
++	struct em_perf_domain *pd = em_cpu_get(cpu);
++	struct em_perf_state *table;
++	unsigned long best = ULONG_MAX, knee = 0;
++	int i, n;
++
++	if (!pd || em_is_artificial(pd))
++		return 0;
++
++	rcu_read_lock();
++	table = em_perf_state_from_pd(pd);
++	n = em_pd_nr_perf_states(pd);
++	for (i = 0; i < n; i++)
++		if (table[i].cost && table[i].cost < best)
++			best = table[i].cost;
++	for (i = 0; i < n; i++)
++		if (table[i].cost &&
++		    table[i].cost * 100 <= best * (100 + EFF_SLACK_PCT))
++			knee = max(knee, table[i].frequency);
++	rcu_read_unlock();
++
++	return knee;
++}
++
++/* battery cap in kHz for this policy; *from_em tells whether the EM set it */
++static s32 battery_cap(struct cpufreq_policy *policy, unsigned int pct,
++		       bool *from_em)
++{
++	unsigned int fmax = policy->cpuinfo.max_freq;
++	unsigned int knee = efficiency_knee_khz(policy->cpu);
++
++	*from_em = knee;
++	if (!knee)
++		return pct_of(fmax, pct);
++	return clamp_t(s32, knee, pct_of(fmax, EFF_MIN_PCT), pct_of(fmax, EFF_MAX_PCT));
++}
++
++/*
++ * Frequency (kHz) of the policy's lowest-cost Energy Model state: the most
++ * work per joule. 0 without a usable EM. Cached; the EM doesn't change.
++ */
++static unsigned int efficient_khz(struct cpufreq_policy *policy)
++{
++	struct avr_policy_reqs *r = &reqs[policy->cpu];
++	struct em_perf_domain *pd;
++	struct em_perf_state *table;
++	unsigned long best = ULONG_MAX, f = 0;
++	int i, n;
++
++	if (r->eff_khz)
++		return r->eff_khz == UINT_MAX ? 0 : r->eff_khz;
++	pd = em_cpu_get(policy->cpu);
++	if (!pd || em_is_artificial(pd)) {
++		r->eff_khz = UINT_MAX;		/* remember: none */
++		return 0;
++	}
++	rcu_read_lock();
++	table = em_perf_state_from_pd(pd);
++	n = em_pd_nr_perf_states(pd);
++	for (i = 0; i < n; i++)
++		if (table[i].cost && table[i].cost < best) {
++			best = table[i].cost;
++			f = table[i].frequency;
++		}
++	rcu_read_unlock();
++	r->eff_khz = f ? f : UINT_MAX;
++	return f;
++}
++
++/* lowest real OPP >= khz, so a QoS max between two OPPs isn't rounded down */
++static s32 opp_ceil(struct cpufreq_policy *policy, s32 khz)
++{
++	int idx;
++
++	if (!policy->freq_table || khz <= 0)
++		return khz;
++	idx = cpufreq_table_find_index_al(policy, khz, false);
++	return idx >= 0 ? (s32)policy->freq_table[idx].frequency : khz;
++}
++
++/* touched with sustained performance and the cap engaged */
++static bool sustained_engaged(void)
++{
++	/* until the first reading: not yet; without a sensor: always */
++	return sustained && skin_read && (skin_mc == NO_TEMP || sustained_hot);
++}
++
++/* headroom above the measured need while touched (sustained performance) */
++static unsigned int touch_headroom(void)
++{
++	int over;
++
++	if (skin_mc == NO_TEMP)
++		return DEMAND_TOUCH_HEADROOM_PCT;
++	over = clamp(skin_mc - (int)sustained_temp * 1000, 0, SUST_SPAN_C * 1000);
++	return SUST_HEADROOM_COOL -
++	       (SUST_HEADROOM_COOL - SUST_HEADROOM_HOT) * over / (SUST_SPAN_C * 1000);
++}
++
++/*
++ * Demand cap, re-evaluated every GOV_MS while it is tracked.
++ *
++ * need = frequency the busiest CPU of the policy needs for its current load
++ * plus headroom, from two measurements:
++ *  - PELT utilization (frequency-invariant, so util/capacity of max), which
++ *    remembers recent load,
++ *  - the busy share of the last tick from idle time, times the frequency it
++ *    ran at, which sees a load step within one tick (PELT takes ~100ms).
++ * A CPU that was busy for the whole tick while running at the cap is
++ * saturated: its real demand is unknown, so the cap jumps (to the top while
++ * touched, by half otherwise). The cap
++ *  - rises at once when need exceeds it,
++ *  - falls only after need stayed below 85% of it for DEMAND_FALL_TICKS
++ *    (a whole second while touched, so the peaks of periodic frame work
++ *    set the cap, not its average), and then gradually.
++ * The vendor governor can't overshoot it, so the same work runs at lower
++ * frequency and voltage.
++ */
++static void demand_update(struct cpufreq_policy *policy, unsigned int jank)
++{
++	struct avr_policy_reqs *r = &reqs[policy->cpu];
++	unsigned int fmax = policy->cpuinfo.max_freq;
++	unsigned int khz = READ_ONCE(policy->cur);
++	bool touched = smart_lifted;
++	/* the cap is in force (untouched, or touched with Sustained engaged) */
++	bool applied = !touched || sustained_engaged();
++	/* never below the most efficient OPP (clamped to a sane share of max) */
++	s32 floor = max_t(s32, pct_of(fmax, DEMAND_FLOOR_PCT),
++			  min_t(s32, efficient_khz(policy), pct_of(fmax, 60)));
++	s32 cur, limit;
++	unsigned long need = 0;
++	bool saturated = false;
++	unsigned int cpu, headroom;
++	s32 want;
++
++	if (!fmax)
++		return;
++	if (r->dcap == DCAP_TOP) {	/* touch: start from the top */
++		r->dcap = fmax;
++		r->low_ticks = 0;
++	}
++	cur = r->dcap ? r->dcap : (s32)fmax;
++	/* the limit actually in force, which may be below our own cap */
++	limit = min_t(s32, cur, READ_ONCE(policy->max));
++	if (!r->dcap) {
++		/* fresh start: never ran at a cap yet */
++		r->bound_age = UINT_MAX;
++		r->sat_age = UINT_MAX;
++	} else if (applied && r->dcap < (s32)fmax && cur <= (s32)READ_ONCE(policy->max) &&
++		   (u64)khz * 100 >= (u64)cur * 95) {
++		/*
++		 * Our cap (not thermal or another limit) is what the CPUs ran
++		 * into. Only while it is applied: while touched with Sustained
++		 * still cool, dcap is tracked but not in force, and a CPU above
++		 * it is simply running free.
++		 */
++		r->bound_age = 0;
++	} else if (r->bound_age < UINT_MAX) {
++		r->bound_age++;
++	}
++
++	for_each_cpu(cpu, policy->cpus) {
++		unsigned long cap = max(arch_scale_cpu_capacity(cpu), 1UL);
++		unsigned long u = min(rk_cpu_util(cpu), cap);
++		u64 wall, idle = get_cpu_idle_time(cpu, &wall, 0);
++		u64 dw = wall - win_wall[cpu], di = idle - win_idle[cpu];
++
++		need = max(need, u * fmax / cap);
++		/* capacity available at the cap: cap * dcap / fmax */
++		if (u * 100 >= DEMAND_SAT_PCT * (cap * (unsigned long)cur / fmax))
++			saturated = true;
++
++		if (win_wall[cpu] && dw && dw <= DEMAND_WIN_MAX_US) {
++			unsigned int busy = di < dw ?
++				(unsigned int)div64_u64((dw - di) * 100, dw) : 0;
++
++			need = max(need, (unsigned long)khz * busy / 100);
++			if (busy >= DEMAND_SAT_PCT &&
++			    (u64)khz * 100 >= (u64)limit * 95)
++				saturated = true;
++		}
++		win_wall[cpu] = wall;
++		win_idle[cpu] = idle;
++	}
++	headroom = touched ? touch_headroom() : DEMAND_HEADROOM_PCT;
++	if (time_before(jiffies, READ_ONCE(fas_seen) + msecs_to_jiffies(FAS_SEEN_MS)))
++		headroom = headroom > FAS_HEADROOM_MIN + fas_cut ?
++			   headroom - fas_cut :
++			   min_t(unsigned int, headroom, FAS_HEADROOM_MIN);
++	want = clamp_t(s32, need * (100 + headroom) / 100, floor, fmax);
++
++	if (saturated && applied && r->bound_age == 0)
++		r->sat_age = 0;
++	else if (r->sat_age < UINT_MAX)
++		r->sat_age++;
++
++	/*
++	 * A late frame while this cap held the CPUs back: a CPU was running at
++	 * our cap *and* busy for the whole tick (running at the cap alone is
++	 * normal in a game, and its own hitches - shader compiles, loading -
++	 * aren't ours). Lift, and raise the floor in small steps so it settles
++	 * at the least that keeps frames on time.
++	 */
++	if (jank && r->dcap && r->dcap < (s32)fmax &&
++	    r->sat_age <= JANK_BOUND_TICKS) {
++		s32 f = min_t(s32, fmax, r->dcap + fmax / (jank > 1 ? 10 : 20));
++
++		r->jhold = r->jfloor ? min_t(unsigned int, r->jhold * 2,
++					     JFLOOR_HOLD_MAX_TICKS) :
++				       JFLOOR_HOLD_TICKS;
++		r->jfloor = max(r->jfloor, f);
++		r->jticks = r->jhold;
++		r->light_ticks = 0;
++		r->dcap = jank > 1 ? (s32)fmax : max(r->dcap, f);
++		r->low_ticks = 0;
++		fas_janks++;
++	} else if (r->jfloor) {
++		/*
++		 * Scene change: a floor learned in a heavy scene shouldn't keep
++		 * the clocks up once the load is clearly lighter. When the need
++		 * stays well below the floor for SCENE_LIGHT_TICKS, drop the
++		 * hold and probe down every SCENE_PROBE_TICKS; a late frame
++		 * puts the floor right back.
++		 */
++		bool light;
++
++		if ((u64)want * 100 < (u64)r->jfloor * SCENE_LIGHT_PCT) {
++			if (r->light_ticks < SCENE_LIGHT_TICKS)
++				r->light_ticks++;
++		} else {
++			r->light_ticks = 0;
++		}
++		light = r->light_ticks >= SCENE_LIGHT_TICKS;
++		if (light) {
++			r->jhold = JFLOOR_HOLD_TICKS;
++			r->jticks = min_t(unsigned int, r->jticks, SCENE_PROBE_TICKS);
++		}
++		/* frames on time: try a little lower now and then */
++		if (r->jticks) {
++			r->jticks--;
++		} else {
++			r->jfloor -= fmax / 20;
++			r->jticks = light ? SCENE_PROBE_TICKS : JFLOOR_PROBE_TICKS;
++			if (r->jfloor <= floor)
++				r->jfloor = 0;
++		}
++	}
++	want = max(want, r->jfloor);
++
++	if (!r->dcap) {			/* fresh start: take the need as is */
++		r->dcap = want;
++		r->low_ticks = 0;
++	} else if (saturated && r->dcap < (s32)fmax) {
++		r->dcap = touched ? (s32)fmax :
++			  min_t(s32, fmax, r->dcap + r->dcap / 2);
++		r->low_ticks = 0;
++	} else if (want > r->dcap) {
++		r->dcap = want;
++		r->low_ticks = 0;
++	} else if (want < r->dcap * 85 / 100) {
++		if (++r->low_ticks >= (touched ? DEMAND_TOUCH_FALL_TICKS :
++					DEMAND_FALL_TICKS))
++			/* step down by at most 5% (touched) or 10% of max per tick */
++			r->dcap = max_t(s32, want, r->dcap -
++					(s32)(fmax / (touched ? 20 : 10)));
++	} else {
++		r->low_ticks = 0;
++	}
++}
++
++/* Called with avr_lock held. */
++static void apply_policy(struct cpufreq_policy *policy,
++			 const struct avr_mode_params *m)
++{
++	struct avr_policy_reqs *r = &reqs[policy->cpu];
++	unsigned int fmax = policy->cpuinfo.max_freq;
++	bool idle = smart_armed && !smart_lifted;	/* no touch right now */
++	/* demand cap live: untouched, or touched with sustained engaged */
++	bool demand_on = smart_armed && (!smart_lifted || sustained_engaged());
++	s32 min = FREQ_QOS_MIN_DEFAULT_VALUE;
++	s32 max = fmax;
++	bool from_em;
++
++	if (m->min_pct && (!m->floor_touch || !idle))
++		min = pct_of(fmax, m->min_pct);
++
++	if (m->eff_cap)
++		max = battery_cap(policy, m->max_pct, &from_em);
++	else if (m->max_pct < 100)
++		max = pct_of(fmax, m->max_pct);
++	if (m->smart && idle && smart_cap < 100)
++		max = min(max, pct_of(fmax, smart_cap));
++	if (m->demand && demand_on && r->dcap && r->dcap != DCAP_TOP)
++		max = min(max, opp_ceil(policy, r->dcap));
++	if (power_pct < 100)
++		max = min(max, pct_of(fmax, power_pct));
++	if (max >= (s32)fmax)
++		max = FREQ_QOS_MAX_DEFAULT_VALUE;
++
++	if (!r->added) {
++		if (freq_qos_add_request(&policy->constraints, &r->min,
++					 FREQ_QOS_MIN, min) < 0)
++			return;
++		if (freq_qos_add_request(&policy->constraints, &r->max,
++					 FREQ_QOS_MAX, max) < 0) {
++			freq_qos_remove_request(&r->min);
++			return;
++		}
++		r->added = true;
++		return;
++	}
++
++	/*
++	 * Only call into QoS on a real change: the loop runs every GOV_MS and
++	 * freq_qos_update_request() fires a vendor hook even when nothing moved.
++	 */
++	if (r->min.pnode.prio != min)
++		freq_qos_update_request(&r->min, min);
++	/*
++	 * Caps are re-evaluated every GOV_MS: skip *lowering* them by less than
++	 * ~3% of max so load jitter doesn't churn cpufreq limit updates. Any
++	 * raise goes through at once, so performance is never held back.
++	 */
++	if (max < r->max.pnode.prio &&
++	    r->max.pnode.prio - max < (s32)(fmax / 32))
++		return;
++	if (r->max.pnode.prio != max)
++		freq_qos_update_request(&r->max, max);
++}
++
++static void gov_fn(struct work_struct *work);
++static DECLARE_DEFERRABLE_WORK(gov_work, gov_fn);
++
++/* the demand-matched cap is live: a demand mode, booted, screen not touched */
++static bool demand_live(void)
++{
++	return modes[cur_mode].demand && smart_armed &&
++	       (!smart_lifted || sustained_engaged());
++}
++
++/*
++ * The demand cap is measured (not necessarily applied): also while touched
++ * with sustained performance on but the skin still cool, so the cap is
++ * already settled when it engages.
++ */
++static bool demand_tracked(void)
++{
++	return modes[cur_mode].demand && smart_armed &&
++	       (!smart_lifted || sustained);
++}
++
++/* demand_active: 0 off, 1 live and untouched, 2 live while touched */
++static int demand_state(void)
++{
++	if (!demand_live())
++		return 0;
++	return smart_lifted ? 2 : 1;
++}
++
++/*
++ * Tell userspace (the control module's GPU governor) when demand_live()
++ * flips, so it can lift or restore its own caps at once. Called with
++ * avr_lock held after any state change.
++ */
++static void demand_notify(void)
++{
++	static int last;
++	int now = demand_state();
++
++	if (now != last && avr_kobj) {
++		last = now;
++		sysfs_notify(avr_kobj, NULL, "demand_active");
++	}
++}
++
++/* the loop is needed while a demand cap is live or a power limit is set */
++static bool gov_needed(void)
++{
++	return demand_tracked() || READ_ONCE(power_limit_mw);
++}
++
++static void gov_kick(void)
++{
++	mod_delayed_work(system_unbound_wq, &gov_work, msecs_to_jiffies(GOV_MS));
++}
++
++/* Called with avr_lock held. */
++static void apply_policies(const struct avr_mode_params *m)
++{
++	unsigned int cpu;
++
++	for_each_possible_cpu(cpu) {
++		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++
++		if (!policy)
++			continue;
++		if (policy->cpu == cpu)
++			apply_policy(policy, m);
++		cpufreq_cpu_put(policy);
++	}
++	demand_notify();
++}
++
++/* Called with avr_lock held. */
++static void apply_mode(enum avr_mode mode)
++{
++	const struct avr_mode_params *m = &modes[mode];
++
++	applied = true;
++	WRITE_ONCE(smart_active, m->smart || m->demand || m->floor_touch);
++	apply_policies(m);
++	gov_kick();
++
++	sched_pelt_set_multiplier(m->pelt_mult);
++	launch_boost_set(m->launch_uclamp);
++
++	/*
++	 * EEVDF base slice, relative to whatever the system set up (a vendor
++	 * scheduler may tune it): longer slices mean fewer context switches
++	 * and less cache churn, shorter ones mean quicker wakeup preemption.
++	 */
++	if (m->slice_pct != 100 && !stock_slice)
++		/* captured late (first real change), after vendor init tuned it */
++		stock_slice = READ_ONCE(sysctl_sched_base_slice);
++	if (stock_slice)
++		WRITE_ONCE(sysctl_sched_base_slice, stock_slice / 100 * m->slice_pct);
++	WRITE_ONCE(dirty_writeback_interval, m->writeback_cs);
++	rk_tboost_set_headroom(m->tboost_pct);
++
++	if (cur_mode != mode) {
++		cur_mode = mode;
++		if (avr_kobj)
++			sysfs_notify(avr_kobj, NULL, "mode");
++	}
++}
++
++static int avr_policy_notifier(struct notifier_block *nb, unsigned long event,
++			       void *data)
++{
++	struct cpufreq_policy *policy = data;
++	struct avr_policy_reqs *r = &reqs[policy->cpu];
++
++	mutex_lock(&avr_lock);
++	if (event == CPUFREQ_CREATE_POLICY) {
++		/* a policy (re)appeared: bring it in line with the current mode */
++		if (!r->added && applied)
++			apply_policy(policy, &modes[cur_mode]);
++	} else if (event == CPUFREQ_REMOVE_POLICY && r->added) {
++		freq_qos_remove_request(&r->min);
++		freq_qos_remove_request(&r->max);
++		r->added = false;
++	}
++	mutex_unlock(&avr_lock);
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block avr_policy_nb = {
++	.notifier_call = avr_policy_notifier,
++};
++
++/* ---- demand cap and power limit loop ---------------------------------- */
++
++/* Battery discharge power in mW, or 0 if unknown or charging. May sleep. */
++static unsigned int battery_mw(void)
++{
++	struct power_supply *psy = power_supply_get_by_name("battery");
++	union power_supply_propval i, v, st;
++	unsigned int mw = 0;
++
++	if (!psy)
++		return 0;
++	if (!power_supply_get_property(psy, POWER_SUPPLY_PROP_STATUS, &st) &&
++	    st.intval != POWER_SUPPLY_STATUS_CHARGING &&
++	    st.intval != POWER_SUPPLY_STATUS_FULL &&
++	    !power_supply_get_property(psy, POWER_SUPPLY_PROP_CURRENT_NOW, &i) &&
++	    !power_supply_get_property(psy, POWER_SUPPLY_PROP_VOLTAGE_NOW, &v))
++		/* uA * uV = pW; / 1e9 = mW */
++		mw = div_u64((u64)abs(i.intval) * (u64)abs(v.intval), 1000000000);
++	power_supply_put(psy);
++	return mw;
++}
++
++/*
++ * Power model: predicted CPU power of a policy, in uW, if its CPUs ran at
++ * the highest OPP <= @khz (or at policy->cur when @khz is 0) with their
++ * current load. From the Energy Model: power(OPP) times the busy fraction,
++ * util / (capacity at that OPP), per CPU. Returns -1 without a usable EM.
++ */
++static s64 cpu_power_uw(struct cpufreq_policy *policy, unsigned int khz)
++{
++	struct em_perf_domain *pd = em_cpu_get(policy->cpu);
++	unsigned int fmax = policy->cpuinfo.max_freq;
++	struct em_perf_state *table;
++	unsigned long f, pw;
++	unsigned int cpu;
++	s64 total = 0;
++	int i, n;
++
++	if (!pd || em_is_artificial(pd) || !(pd->flags & EM_PERF_DOMAIN_MICROWATTS))
++		return -1;
++	if (!khz)
++		khz = READ_ONCE(policy->cur);
++
++	rcu_read_lock();
++	table = em_perf_state_from_pd(pd);
++	n = em_pd_nr_perf_states(pd);
++	f = table[0].frequency;
++	pw = table[0].power;
++	for (i = 1; i < n && table[i].frequency <= khz; i++) {
++		f = table[i].frequency;
++		pw = table[i].power;
++	}
++	rcu_read_unlock();
++
++	for_each_cpu(cpu, policy->cpus) {
++		unsigned long cap = max(arch_scale_cpu_capacity(cpu), 1UL);
++		unsigned long u = min(rk_cpu_util(cpu), cap);
++		/* busy share at f, in permille: util / (cap * f / fmax) */
++		unsigned long busy = min(1000UL, u * fmax * 1000 / (cap * max(f, 1UL)));
++
++		total += (s64)pw * busy / 1000;
++	}
++	return total;
++}
++
++/* Sum of cpu_power_uw() over all policies; -1 if any lacks a model. */
++static s64 cpus_power_uw(unsigned int pct)
++{
++	unsigned int cpu;
++	s64 total = 0;
++
++	for_each_possible_cpu(cpu) {
++		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++		s64 p;
++
++		if (!policy)
++			continue;
++		p = policy->cpu != cpu ? 0 :
++		    cpu_power_uw(policy, pct ? pct_of(policy->cpuinfo.max_freq, pct) : 0);
++		cpufreq_cpu_put(policy);
++		if (p < 0)
++			return -1;
++		total += p;
++	}
++	return total;
++}
++
++/*
++ * Power limit, called every GOV_MS with avr_lock held. With an Energy Model
++ * it is predictive: budget = limit - non-CPU power (calibrated each second
++ * from a real battery reading), and the CPU cap is the highest 5% step whose
++ * predicted CPU power fits the budget, so a load spike is answered within
++ * one tick instead of after the next measurement. Without a usable EM it
++ * steps the cap from the 1s measurements alone.
++ */
++static void power_update(unsigned int limit, bool measured, unsigned int mw)
++{
++	s64 now_uw;
++	unsigned int pct;
++
++	if (!limit) {
++		power_pct = 100;
++		return;
++	}
++
++	if (measured) {
++		power_now_mw = mw;
++		power_discharging = mw;
++		now_uw = cpus_power_uw(0);
++		if (mw && now_uw >= 0) {
++			unsigned int base = mw > now_uw / 1000 ? mw - now_uw / 1000 : 0;
++
++			/* smooth, but follow a fresh calibration quickly */
++			power_base_mw = power_base_mw ? (power_base_mw + base) / 2 : base;
++		}
++	}
++	if (!power_discharging) {	/* charging or unknown: nothing to limit */
++		power_pct = 100;
++		return;
++	}
++
++	if (cpus_power_uw(100) < 0) {
++		/* no model: measured stepping */
++		if (!measured)
++			return;
++		if (mw > limit)
++			power_pct = max_t(int, POWER_MIN_PCT, (int)power_pct -
++					  (int)clamp_t(unsigned int, (mw - limit) * 50 / limit, 5, 20));
++		else if (mw < limit * 85 / 100)
++			power_pct = min(100U, power_pct + 5);
++		return;
++	}
++
++	for (pct = 100; pct > POWER_MIN_PCT; pct -= 5) {
++		s64 budget_uw = ((s64)limit - power_base_mw) * 1000;
++
++		if (cpus_power_uw(pct) <= budget_uw)
++			break;
++	}
++	/* drop at once, rise by at most 10% per tick to avoid see-sawing */
++	power_pct = pct < power_pct ? pct : min(pct, power_pct + 10);
++}
++
++/*
++ * Adaptive headroom trim, once per tick with avr_lock held: a point less per
++ * FAS_CUT_STEP_TICKS of timed frames without a cap-caused jank, FAS_CUT_BACK
++ * back when our caps held a frame back (@lifted).
++ */
++static void fas_trim(bool lifted)
++{
++	if (lifted) {
++		fas_cut = fas_cut > FAS_CUT_BACK ? fas_cut - FAS_CUT_BACK : 0;
++		fas_clean_ticks = 0;
++		return;
++	}
++	if (!time_before(jiffies, READ_ONCE(fas_seen) + msecs_to_jiffies(FAS_SEEN_MS)))
++		return;			/* not timing frames: nothing learned */
++	if (++fas_clean_ticks >= FAS_CUT_STEP_TICKS) {
++		fas_clean_ticks = 0;
++		if (fas_cut < FAS_CUT_MAX)
++			fas_cut++;
++	}
++}
++
++/*
++ * The app in front changed (avr_lock held): keep what was learned for the
++ * one leaving, restore what we know of the one arriving.
++ */
++static void app_mem_switch(uid_t uid)
++{
++	int i, slot = -1, lru = 0;
++	unsigned int cpu;
++
++	if (mem_uid != NO_UID) {
++		for (i = 0; i < APP_MEMORY; i++)
++			if (app_mem[i].uid == mem_uid)
++				slot = i;
++		if (slot < 0) {
++			for (i = 0; i < APP_MEMORY; i++) {
++				if (app_mem[i].uid == NO_UID) {
++					lru = i;
++					break;
++				}
++				if (time_before(app_mem[i].used, app_mem[lru].used))
++					lru = i;
++			}
++			slot = lru;
++		}
++		app_mem[slot].uid = mem_uid;
++		app_mem[slot].cut = fas_cut;
++		app_mem[slot].used = jiffies;
++		for_each_possible_cpu(cpu)
++			app_mem[slot].jfloor[cpu] = reqs[cpu].jfloor;
++	}
++
++	mem_uid = uid;
++	fas_cut = FAS_CUT_START;
++	fas_clean_ticks = 0;
++	for_each_possible_cpu(cpu) {
++		reqs[cpu].jfloor = 0;
++		reqs[cpu].jhold = 0;
++	}
++	if (uid == NO_UID)
++		return;
++	for (i = 0; i < APP_MEMORY; i++) {
++		if (app_mem[i].uid != uid)
++			continue;
++		fas_cut = app_mem[i].cut;
++		app_mem[i].used = jiffies;
++		for_each_possible_cpu(cpu) {
++			reqs[cpu].jfloor = app_mem[i].jfloor[cpu];
++			/* a fresh hold: the scene may differ from when it was saved */
++			reqs[cpu].jticks = JFLOOR_HOLD_TICKS;
++			reqs[cpu].jhold = JFLOOR_HOLD_TICKS;
++		}
++		break;
++	}
++}
++
++/*
++ * Skin temperature in milli-degC: the hotter of the front and back virtual
++ * sensors, or NO_TEMP if there are none. May sleep; once a second at most.
++ */
++static int skin_temp(void)
++{
++	static const char * const zones[] = { "front_temp", "back_temp" };
++	int best = NO_TEMP;
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(zones); i++) {
++		struct thermal_zone_device *tz = thermal_zone_get_zone_by_name(zones[i]);
++		int t;
++
++		if (!IS_ERR(tz) && !thermal_zone_get_temp(tz, &t) &&
++		    t > -40000 && t < 150000)
++			best = max(best, t);
++	}
++	return best;
++}
++
++static void gov_fn(struct work_struct *work)
++{
++	unsigned int limit = READ_ONCE(power_limit_mw);
++	unsigned int mw = 0, cpu, jank, janks_before;
++	/* tick 1 after a (re)set measures at once, then every POWER_EVERY */
++	bool measure = limit && ++power_tick % POWER_EVERY == 1;
++	bool tmeasure = READ_ONCE(sustained) && temp_tick++ % TEMP_EVERY == 0;
++	int temp = NO_TEMP;
++
++	/* outside avr_lock: the battery driver may talk to firmware */
++	if (measure)
++		mw = battery_mw();
++	if (tmeasure)
++		temp = skin_temp();
++
++	jank = atomic_xchg(&fas_pending, 0);
++	if (jank && time_after(jiffies, READ_ONCE(fas_pending_at) +
++			       msecs_to_jiffies(JANK_STALE_MS)))
++		jank = 0;
++
++	mutex_lock(&avr_lock);
++	if (READ_ONCE(fas_reset)) {
++		WRITE_ONCE(fas_reset, false);
++		app_mem_switch(READ_ONCE(frame_uid));
++	}
++	if (tmeasure) {
++		skin_mc = temp;
++		skin_read = true;
++		if (temp == NO_TEMP || temp >= (int)sustained_temp * 1000)
++			sustained_hot = temp != NO_TEMP;
++		else if (temp < (int)sustained_temp * 1000 - SUST_HYST_MC)
++			sustained_hot = false;
++	}
++	janks_before = fas_janks;
++	for_each_possible_cpu(cpu) {
++		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++
++		if (!policy)
++			continue;
++		if (policy->cpu == cpu) {
++			if (demand_tracked())
++				demand_update(policy, jank);
++			else {
++				reqs[cpu].dcap = 0;	/* re-measure when capping resumes */
++				reqs[cpu].bound_age = UINT_MAX;
++				reqs[cpu].sat_age = UINT_MAX;
++			}
++		}
++		cpufreq_cpu_put(policy);
++	}
++	fas_trim(fas_janks != janks_before);
++	power_update(limit, measure, mw);
++	apply_policies(&modes[cur_mode]);
++	if (gov_needed())
++		gov_kick();
++	mutex_unlock(&avr_lock);
++}
++
++/* ---- Smart Balanced ----------------------------------------------------- */
++
++static void smart_drop_fn(struct work_struct *work);
++static DECLARE_DEFERRABLE_WORK(smart_drop_work, smart_drop_fn);
++
++static void smart_lift_fn(struct work_struct *work)
++{
++	mutex_lock(&avr_lock);
++	if (smart_active && !smart_lifted) {
++		unsigned int cpu;
++
++		smart_lifted = true;
++		/*
++		 * A touch is about to bring work, which the load measured
++		 * before it can't show: touched demand caps start from the
++		 * top and come down only once the load after the touch says so.
++		 */
++		for_each_possible_cpu(cpu)
++			reqs[cpu].dcap = DCAP_TOP;
++		apply_policies(&modes[cur_mode]);
++		/* with sustained performance the loop keeps running while touched */
++		if (gov_needed())
++			gov_kick();
++	}
++	mutex_unlock(&avr_lock);
++	mod_delayed_work(system_unbound_wq, &smart_drop_work,
++			 msecs_to_jiffies(SMART_HOLD_MS));
++}
++static DECLARE_WORK(smart_lift_work, smart_lift_fn);
++
++/* Re-cap once SMART_HOLD_MS passed without a touch; deferrable, so idle CPUs stay idle. */
++static void smart_drop_fn(struct work_struct *work)
++{
++	unsigned long hold = msecs_to_jiffies(SMART_HOLD_MS);
++	unsigned long since = jiffies - READ_ONCE(last_kick);
++	unsigned long wake = READ_ONCE(wake_until);
++
++	if (since < hold) {
++		mod_delayed_work(system_unbound_wq, &smart_drop_work, hold - since);
++		return;
++	}
++	if (time_before(jiffies, wake)) {
++		mod_delayed_work(system_unbound_wq, &smart_drop_work, wake - jiffies);
++		return;
++	}
++
++	mutex_lock(&avr_lock);
++	if (smart_lifted) {
++		smart_lifted = false;
++		if (smart_active)
++			apply_policies(&modes[cur_mode]);
++		if (gov_needed())
++			gov_kick();
++	}
++	mutex_unlock(&avr_lock);
++}
++
++/* every frame of a timed app (encore_fas uprobe handler): timing is live */
++void avr_profile_frame_seen(void)
++{
++	unsigned long now = jiffies;
++	uid_t uid = from_kuid(&init_user_ns, current_uid());
++
++	if (READ_ONCE(fas_seen) != now)
++		WRITE_ONCE(fas_seen, now);
++	/*
++	 * The app that actually draws decides whose learned state is live, not
++	 * whatever joined top-app last (a bound ad service, a shell child).
++	 * Racy counters are fine: one drawing app at a time in practice.
++	 */
++	if (likely(uid == READ_ONCE(frame_uid)))
++		return;
++	if (uid != READ_ONCE(frame_cand)) {
++		WRITE_ONCE(frame_cand, uid);
++		WRITE_ONCE(frame_cand_n, 0);
++		return;
++	}
++	if (READ_ONCE(frame_cand_n) + 1 >= FRAME_UID_CONFIRM) {
++		WRITE_ONCE(frame_uid, uid);
++		WRITE_ONCE(fas_reset, true);
++	} else {
++		WRITE_ONCE(frame_cand_n, READ_ONCE(frame_cand_n) + 1);
++	}
++}
++
++/*
++ * A frame of the foreground app was late, from encore_fas: uprobe handler
++ * (process context, after its spinlock) or its watchdog hrtimer (softirq).
++ * Lock-free; the demand loop runs at once and lifts the caps that held the
++ * frame back. Without a demand cap there is nothing to lift.
++ */
++void avr_profile_frame_event(unsigned int level)
++{
++	int old = atomic_read(&fas_pending);
++
++	if (!READ_ONCE(smart_armed) || !modes[READ_ONCE(cur_mode)].demand)
++		return;
++	while (old < (int)level &&
++	       !atomic_try_cmpxchg(&fas_pending, &old, (int)level))
++		;
++	WRITE_ONCE(fas_pending_at, jiffies);
++	mod_delayed_work(system_unbound_wq, &gov_work, 0);
++}
++
++/* Touch or app launch: cheap enough to call from input event context. */
++void avr_profile_kick(void)
++{
++	WRITE_ONCE(last_kick, jiffies);
++	if (READ_ONCE(smart_active) && !READ_ONCE(smart_lifted))
++		queue_work(system_highpri_wq, &smart_lift_work);
++}
++
++static void smart_input_event(struct input_handle *handle, unsigned int type,
++			      unsigned int code, int value)
++{
++	if (type == EV_ABS || (type == EV_KEY && code == BTN_TOUCH)) {
++		/* nobody touches the screen while booting: start capping now */
++		if (unlikely(!READ_ONCE(smart_armed)))
++			WRITE_ONCE(smart_armed, true);
++		avr_profile_kick();
++	} else if (type == EV_KEY && code == KEY_POWER && value == 1) {
++		/* waking up: lift for the unlock before anything is touched */
++		WRITE_ONCE(wake_until, jiffies + msecs_to_jiffies(WAKE_HOLD_MS));
++		avr_profile_kick();
++	}
++}
++
++static int smart_input_connect(struct input_handler *handler,
++			       struct input_dev *dev,
++			       const struct input_device_id *id)
++{
++	struct input_handle *handle;
++	int ret;
++
++	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
++	if (!handle)
++		return -ENOMEM;
++
++	handle->dev = dev;
++	handle->handler = handler;
++	handle->name = "rakkashin_smart";
++
++	ret = input_register_handle(handle);
++	if (ret)
++		goto err_free;
++	ret = input_open_device(handle);
++	if (ret)
++		goto err_unregister;
++	return 0;
++
++err_unregister:
++	input_unregister_handle(handle);
++err_free:
++	kfree(handle);
++	return ret;
++}
++
++static void smart_input_disconnect(struct input_handle *handle)
++{
++	input_close_device(handle);
++	input_unregister_handle(handle);
++	kfree(handle);
++}
++
++/* touchscreens only: multitouch position axes */
++static const struct input_device_id smart_input_ids[] = {
++	{
++		.flags = INPUT_DEVICE_ID_MATCH_EVBIT | INPUT_DEVICE_ID_MATCH_ABSBIT,
++		.evbit = { BIT_MASK(EV_ABS) },
++		.absbit = { [BIT_WORD(ABS_MT_POSITION_X)] = BIT_MASK(ABS_MT_POSITION_X) },
++	},
++	{	/* the power key (PMIC pwrkey, gpio-keys) */
++		.flags = INPUT_DEVICE_ID_MATCH_EVBIT | INPUT_DEVICE_ID_MATCH_KEYBIT,
++		.evbit = { BIT_MASK(EV_KEY) },
++		.keybit = { [BIT_WORD(KEY_POWER)] = BIT_MASK(KEY_POWER) },
++	},
++	{ },
++};
++
++static struct input_handler smart_input_handler = {
++	.event		= smart_input_event,
++	.connect	= smart_input_connect,
++	.disconnect	= smart_input_disconnect,
++	.name		= "rakkashin_smart",
++	.id_table	= smart_input_ids,
++};
++
++/* ---- per-app profiles ------------------------------------------------- */
++
++/* Returns the app's mode, or -1 if it has none. Lockless. */
++static int app_mode(uid_t uid)
++{
++	unsigned int i, n = READ_ONCE(nr_app_profiles);
++
++	for (i = 0; i < n; i++) {
++		u64 e = READ_ONCE(app_profiles[i]);
++
++		if ((uid_t)(e >> 8) == uid)
++			return e & 0xff;
++	}
++	return -1;
++}
++
++static void app_enter_fn(struct work_struct *work)
++{
++	uid_t uid = READ_ONCE(pending_uid);
++	int m;
++
++	mutex_lock(&avr_lock);
++	m = app_mode(uid);
++	if (per_app && m >= 0 && active_uid != uid) {
++		active_uid = uid;
++		apply_mode(m);
++	}
++	mutex_unlock(&avr_lock);
++}
++static DECLARE_WORK(app_enter_work, app_enter_fn);
++
++/* Fall back to the global mode once the active app has left top-app. */
++static void app_check_fn(struct work_struct *work)
++{
++	struct css_task_iter it;
++	struct task_struct *t;
++	uid_t uid = READ_ONCE(active_uid);
++	bool still = false;
++
++	if (uid == NO_UID || !top_app_css)
++		return;
++
++	css_task_iter_start(top_app_css, 0, &it);
++	while ((t = css_task_iter_next(&it))) {
++		if (from_kuid(&init_user_ns, task_uid(t)) == uid) {
++			still = true;
++			break;
++		}
++	}
++	css_task_iter_end(&it);
++
++	mutex_lock(&avr_lock);
++	if (!still && active_uid == uid) {
++		active_uid = NO_UID;
++		apply_mode(base_mode);
++	}
++	mutex_unlock(&avr_lock);
++}
++static DECLARE_DELAYED_WORK(app_check_work, app_check_fn);
++
++/*
++ * Called from cpuset_attach_task() with cpuset_mutex held: only look and
++ * queue work here, the mode switch itself takes cpufreq locks.
++ */
++static void top_pid_fn(struct work_struct *work)
++{
++	if (avr_kobj)
++		sysfs_notify(avr_kobj, NULL, "top_pid");
++}
++static DECLARE_WORK(top_pid_work, top_pid_fn);
++
++void avr_profile_cpuset_attach(struct cgroup_subsys_state *css,
++			       struct task_struct *task)
++{
++	uid_t uid;
++
++	if (css != READ_ONCE(top_app_css)) {
++		if (top_app_css || strcmp(css->cgroup->kn->name, "top-app"))
++			return;
++		/* first sight of top-app: cache it for good (thread boost too) */
++		css_get(css);
++		WRITE_ONCE(top_app_css, css);
++		rk_tboost_set_top_app(css);
++	}
++
++	uid = from_kuid(&init_user_ns, task_uid(task));
++	if (uid % 100000 < 10000)	/* system UIDs never decide this */
++		return;
++
++	/*
++	 * The app process now in front, for frame timing (encore_fas): a
++	 * regular app UID only, not an isolated or SDK sandbox process (a
++	 * browser's renderer joins top-app too but draws through another).
++	 */
++	if (uid % 100000 <= 19999 && thread_group_leader(task) &&
++	    task->tgid != READ_ONCE(top_pid)) {
++		WRITE_ONCE(top_pid, task->tgid);
++		WRITE_ONCE(top_uid, uid);
++		queue_work(system_unbound_wq, &top_pid_work);
++	}
++
++	if (!READ_ONCE(per_app) || !READ_ONCE(nr_app_profiles))
++		return;
++
++	if (app_mode(uid) >= 0) {
++		if (uid != READ_ONCE(active_uid)) {
++			WRITE_ONCE(pending_uid, uid);
++			queue_work(system_unbound_wq, &app_enter_work);
++		}
++		cancel_delayed_work(&app_check_work);
++	} else if (READ_ONCE(active_uid) != NO_UID) {
++		/* let a transient (shade, dialog) settle before deciding */
++		mod_delayed_work(system_unbound_wq, &app_check_work, HZ);
++	}
++}
++
++static ssize_t mode_show(struct kobject *kobj, struct kobj_attribute *attr,
++			 char *buf)
++{
++	int i, len = 0;
++
++	for (i = 0; i < AVR_NR_MODES; i++)
++		len += sysfs_emit_at(buf, len, i == cur_mode ? "[%s] " : "%s ",
++				     modes[i].name);
++	buf[len - 1] = '\n';
++	return len;
++}
++
++static ssize_t mode_store(struct kobject *kobj, struct kobj_attribute *attr,
++			  const char *buf, size_t count)
++{
++	int i = sysfs_match_string(mode_names, buf);
++
++	if (i < 0)
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	base_mode = i;
++	/* an explicit choice wins until the next per-app switch */
++	active_uid = NO_UID;
++	apply_mode(i);
++	mutex_unlock(&avr_lock);
++
++	return count;
++}
++
++static struct kobj_attribute mode_attr = __ATTR_RW(mode);
++
++static ssize_t per_app_show(struct kobject *kobj, struct kobj_attribute *attr,
++			    char *buf)
++{
++	return sysfs_emit(buf, "%d\n", READ_ONCE(per_app));
++}
++
++static ssize_t per_app_store(struct kobject *kobj, struct kobj_attribute *attr,
++			     const char *buf, size_t count)
++{
++	bool on;
++
++	if (kstrtobool(buf, &on))
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	WRITE_ONCE(per_app, on);
++	if (!on && active_uid != NO_UID) {
++		active_uid = NO_UID;
++		apply_mode(base_mode);
++	}
++	mutex_unlock(&avr_lock);
++	return count;
++}
++
++static struct kobj_attribute per_app_attr = __ATTR_RW(per_app);
++
++/* "global=<mode> active=<mode> app=<uid|->" for the control UI */
++static ssize_t status_show(struct kobject *kobj, struct kobj_attribute *attr,
++			   char *buf)
++{
++	ssize_t len;
++
++	mutex_lock(&avr_lock);
++	if (active_uid == NO_UID)
++		len = sysfs_emit(buf, "global=%s active=%s app=-\n",
++				 mode_names[base_mode], mode_names[cur_mode]);
++	else
++		len = sysfs_emit(buf, "global=%s active=%s app=%u\n",
++				 mode_names[base_mode], mode_names[cur_mode],
++				 active_uid);
++	mutex_unlock(&avr_lock);
++	return len;
++}
++
++static struct kobj_attribute status_attr = __ATTR_RO(status);
++
++static ssize_t smart_cap_show(struct kobject *kobj, struct kobj_attribute *attr,
++			      char *buf)
++{
++	return sysfs_emit(buf, "%u\n", READ_ONCE(smart_cap));
++}
++
++/* 50..100; 100 turns Smart Balanced off */
++static ssize_t smart_cap_store(struct kobject *kobj, struct kobj_attribute *attr,
++			       const char *buf, size_t count)
++{
++	unsigned int v;
++
++	if (kstrtouint(buf, 10, &v) || v < 50 || v > 100)
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	WRITE_ONCE(smart_cap, v);
++	if (smart_active)
++		apply_policies(&modes[cur_mode]);
++	mutex_unlock(&avr_lock);
++	return count;
++}
++
++static struct kobj_attribute smart_cap_attr = __ATTR_RW(smart_cap);
++
++/*
++ * 0 off, 1 while the demand-matched cap is live, 2 while it is live during
++ * a touch (sustained performance engaged); pollable (sysfs_notify on change)
++ */
++static ssize_t demand_active_show(struct kobject *kobj,
++				  struct kobj_attribute *attr, char *buf)
++{
++	int state;
++
++	mutex_lock(&avr_lock);
++	state = demand_state();
++	mutex_unlock(&avr_lock);
++	return sysfs_emit(buf, "%d\n", state);
++}
++
++static struct kobj_attribute demand_active_attr = __ATTR_RO(demand_active);
++
++static ssize_t sustained_show(struct kobject *kobj, struct kobj_attribute *attr,
++			      char *buf)
++{
++	return sysfs_emit(buf, "%d\n", READ_ONCE(sustained));
++}
++
++static ssize_t sustained_store(struct kobject *kobj, struct kobj_attribute *attr,
++			       const char *buf, size_t count)
++{
++	bool on;
++
++	if (kstrtobool(buf, &on))
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	WRITE_ONCE(sustained, on);
++	/* judge by a reading taken from now on, starting with the next tick */
++	skin_read = false;
++	temp_tick = 0;
++	apply_policies(&modes[cur_mode]);	/* also notifies demand_active */
++	if (gov_needed())
++		gov_kick();
++	mutex_unlock(&avr_lock);
++	return count;
++}
++
++static struct kobj_attribute sustained_attr = __ATTR_RW(sustained);
++
++/* skin degrees C where sustained performance starts capping touched work */
++static ssize_t sustained_temp_show(struct kobject *kobj,
++				   struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", READ_ONCE(sustained_temp));
++}
++
++static ssize_t sustained_temp_store(struct kobject *kobj,
++				    struct kobj_attribute *attr,
++				    const char *buf, size_t count)
++{
++	unsigned int v;
++
++	if (kstrtouint(buf, 10, &v) || v < 30 || v > 50)
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	WRITE_ONCE(sustained_temp, v);
++	/* re-judge with the next reading */
++	if (skin_mc != NO_TEMP)
++		sustained_hot = skin_mc >= (int)v * 1000;
++	apply_policies(&modes[cur_mode]);
++	if (gov_needed())
++		gov_kick();
++	mutex_unlock(&avr_lock);
++	return count;
++}
++
++static struct kobj_attribute sustained_temp_attr = __ATTR_RW(sustained_temp);
++
++/* "skin=<milli-degC|-> engaged=<0|1> headroom=<%>" */
++static ssize_t sustained_state_show(struct kobject *kobj,
++				    struct kobj_attribute *attr, char *buf)
++{
++	int t, engaged;
++	unsigned int hr;
++
++	mutex_lock(&avr_lock);
++	t = skin_mc;
++	engaged = sustained_engaged();
++	hr = touch_headroom();
++	mutex_unlock(&avr_lock);
++	if (t == NO_TEMP)
++		return sysfs_emit(buf, "skin=- engaged=%d headroom=%u\n", engaged, hr);
++	return sysfs_emit(buf, "skin=%d engaged=%d headroom=%u\n", t, engaged, hr);
++}
++
++static struct kobj_attribute sustained_state_attr = __ATTR_RO(sustained_state);
++
++/* the foreground app's process; pollable (sysfs_notify on change) */
++static ssize_t top_pid_show(struct kobject *kobj, struct kobj_attribute *attr,
++			    char *buf)
++{
++	return sysfs_emit(buf, "%d\n", READ_ONCE(top_pid));
++}
++
++static struct kobj_attribute top_pid_attr = __ATTR_RO(top_pid);
++
++/* "janks=<n> cut=<points> floors=cpu0:<kHz>,cpu6:<kHz>": frame-aware state */
++static ssize_t frame_state_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	unsigned int cpu;
++	int len;
++	bool first = true;
++
++	mutex_lock(&avr_lock);
++	len = sysfs_emit(buf, "janks=%u cut=%u floors=", fas_janks, fas_cut);
++	for_each_possible_cpu(cpu) {
++		if (!reqs[cpu].added)
++			continue;
++		len += sysfs_emit_at(buf, len, "%scpu%u:%d", first ? "" : ",",
++				     cpu, reqs[cpu].jfloor);
++		first = false;
++	}
++	mutex_unlock(&avr_lock);
++	len += sysfs_emit_at(buf, len, "\n");
++	return len;
++}
++
++static struct kobj_attribute frame_state_attr = __ATTR_RO(frame_state);
++
++/* "limit=<mW> now=<mW> cpu_cap=<%>"; write a limit in mW, 0 = off */
++static ssize_t power_limit_show(struct kobject *kobj,
++				struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "limit=%u now=%u cpu_cap=%u\n",
++			  READ_ONCE(power_limit_mw), READ_ONCE(power_now_mw),
++			  READ_ONCE(power_pct));
++}
++
++static ssize_t power_limit_store(struct kobject *kobj,
++				 struct kobj_attribute *attr,
++				 const char *buf, size_t count)
++{
++	unsigned int v;
++
++	if (kstrtouint(buf, 10, &v) || (v && v < 500) || v > 30000)
++		return -EINVAL;
++
++	mutex_lock(&avr_lock);
++	WRITE_ONCE(power_limit_mw, v);
++	/* calibrate afresh: measure on the next tick, forget the old baseline */
++	power_tick = 0;
++	power_base_mw = 0;
++	power_discharging = false;
++	if (!v) {
++		power_pct = 100;
++		power_now_mw = 0;
++		apply_policies(&modes[cur_mode]);
++	}
++	gov_kick();
++	mutex_unlock(&avr_lock);
++	return count;
++}
++
++static struct kobj_attribute power_limit_attr = __ATTR_RW(power_limit);
++
++/* per cluster: "cpuN: <cap kHz>/<max kHz> (energy-model|fallback)" */
++static ssize_t battery_caps_show(struct kobject *kobj,
++				 struct kobj_attribute *attr, char *buf)
++{
++	unsigned int cpu;
++	int len = 0;
++
++	for_each_possible_cpu(cpu) {
++		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++		bool from_em;
++		s32 cap;
++
++		if (!policy)
++			continue;
++		if (policy->cpu == cpu) {
++			cap = battery_cap(policy, modes[AVR_BATTERY].max_pct, &from_em);
++			len += sysfs_emit_at(buf, len, "cpu%u: %d/%u kHz (%s)\n", cpu,
++					     cap, policy->cpuinfo.max_freq,
++					     from_em ? "energy-model" : "fallback");
++		}
++		cpufreq_cpu_put(policy);
++	}
++	return len;
++}
++
++static struct kobj_attribute battery_caps_attr = __ATTR_RO(battery_caps);
++
++static ssize_t app_profiles_show(struct kobject *kobj,
++				 struct kobj_attribute *attr, char *buf)
++{
++	unsigned int i;
++	int len = 0;
++
++	mutex_lock(&avr_lock);
++	for (i = 0; i < nr_app_profiles; i++)
++		len += sysfs_emit_at(buf, len, "%u:%s ",
++				     (uid_t)(app_profiles[i] >> 8),
++				     mode_names[app_profiles[i] & 0xff]);
++	mutex_unlock(&avr_lock);
++	len += sysfs_emit_at(buf, len, "\n");
++	return len;
++}
++
++/* "uid:mode" tokens separated by spaces/commas/newlines; replaces the table */
++static ssize_t app_profiles_store(struct kobject *kobj,
++				  struct kobj_attribute *attr,
++				  const char *buf, size_t count)
++{
++	u64 new[MAX_APP_PROFILES];
++	unsigned int n = 0, i;
++	char *dup, *s, *tok;
++	int ret = count;
++
++	dup = kstrndup(buf, count, GFP_KERNEL);
++	if (!dup)
++		return -ENOMEM;
++
++	s = dup;
++	while ((tok = strsep(&s, " ,\n\t"))) {
++		char *colon = strchr(tok, ':');
++		int m;
++		u32 uid;
++
++		if (!*tok)
++			continue;
++		if (!colon || n == MAX_APP_PROFILES)
++			goto inval;
++		*colon = '\0';
++		m = match_string(mode_names, AVR_NR_MODES, colon + 1);
++		if (m < 0 || kstrtou32(tok, 10, &uid))
++			goto inval;
++		new[n++] = (u64)uid << 8 | m;
++	}
++
++	mutex_lock(&avr_lock);
++	/* shrink first so lockless readers never see half-updated slots */
++	WRITE_ONCE(nr_app_profiles, 0);
++	for (i = 0; i < n; i++)
++		WRITE_ONCE(app_profiles[i], new[i]);
++	WRITE_ONCE(nr_app_profiles, n);
++	/* the active app may have lost or changed its profile */
++	if (active_uid != NO_UID) {
++		int m = app_mode(active_uid);
++
++		if (m < 0) {
++			active_uid = NO_UID;
++			m = base_mode;
++		}
++		apply_mode(m);
++	}
++	mutex_unlock(&avr_lock);
++	goto out;
++inval:
++	ret = -EINVAL;
++out:
++	kfree(dup);
++	return ret;
++}
++
++static struct kobj_attribute app_profiles_attr = __ATTR_RW(app_profiles);
++
++/* lets the control UI tell it is running on this kernel, and which build */
++static ssize_t version_show(struct kobject *kobj, struct kobj_attribute *attr,
++			    char *buf)
++{
++	return sysfs_emit(buf, "%s\n", RAKKASHIN_VERSION);
++}
++
++static struct kobj_attribute version_attr = __ATTR_RO(version);
++
++static struct attribute *avr_profile_attrs[] = {
++	&mode_attr.attr,
++	&version_attr.attr,
++	&per_app_attr.attr,
++	&app_profiles_attr.attr,
++	&status_attr.attr,
++	&battery_caps_attr.attr,
++	&smart_cap_attr.attr,
++	&demand_active_attr.attr,
++	&sustained_attr.attr,
++	&sustained_temp_attr.attr,
++	&sustained_state_attr.attr,
++	&top_pid_attr.attr,
++	&frame_state_attr.attr,
++	&power_limit_attr.attr,
++	NULL
++};
++
++static const struct attribute_group avr_profile_group = {
++	.attrs = avr_profile_attrs,
++};
++
++static int __init avr_profile_init(void)
++{
++	struct kobject *kobj;
++	int ret;
++
++	kobj = kobject_create_and_add("avr_profile", kernel_kobj);
++	if (!kobj)
++		return -ENOMEM;
++	ret = sysfs_create_group(kobj, &avr_profile_group);
++	if (ret)
++		goto put_kobj;
++	ret = cpufreq_register_notifier(&avr_policy_nb, CPUFREQ_POLICY_NOTIFIER);
++	if (ret)
++		goto remove_group;
++	ret = input_register_handler(&smart_input_handler);
++	if (ret)
++		goto remove_notifier;
++	avr_kobj = kobj;
++	mutex_lock(&avr_lock);
++	apply_mode(AVR_BALANCED);
++	mutex_unlock(&avr_lock);
++	pr_info("%s\n", RAKKASHIN_VERSION);
++	return 0;
++
++remove_notifier:
++	cpufreq_unregister_notifier(&avr_policy_nb, CPUFREQ_POLICY_NOTIFIER);
++remove_group:
++	sysfs_remove_group(kobj, &avr_profile_group);
++put_kobj:
++	kobject_put(kobj);
++	return ret;
++}
++late_initcall(avr_profile_init);
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index afe4a8364..b1cca2cff 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -19,6 +19,7 @@
+  *       by Max Krasnyansky
+  */
+ #include "cpuset-internal.h"
++#include <linux/avr_profile.h>
+ 
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+@@ -3321,6 +3322,7 @@ static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
+ 	 * fail.  TODO: have a better way to handle failure here
+ 	 */
+ 	WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
++	avr_profile_cpuset_attach(&cs->css, task);
+ 
+ 	if (cpuset_v2() && !attach_ctx.mems_updated)
+ 		return;
+diff --git a/kernel/launch_boost.c b/kernel/launch_boost.c
+new file mode 100644
+index 000000000..e0ace38fa
+--- /dev/null
++++ b/kernel/launch_boost.c
+@@ -0,0 +1,171 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * App launch boost (avr).
++ *
++ * When zygote specializes a fork into an app (setresuid from root to an
++ * app UID), give that first thread a uclamp.min floor so the cold start runs
++ * on fast cores at high frequency from the first instruction, before the
++ * framework's own hints arrive.
++ *
++ * The window is adaptive: after min_ms the thread's PELT utilization is
++ * polled every POLL_MS, and the boost ends once it stays below settle_util
++ * for two polls in a row (launch work done), or at max_ms at the latest.
++ * Heavy apps keep it for as long as they need, light apps give it back early.
++ *
++ * The boost is not inherited: SCHED_FLAG_RESET_ON_FORK is set for the
++ * window, so threads created during launch (RenderThread, binder threads,
++ * ...) start unclamped. When the window ends the original clamp and
++ * reset-on-fork state are restored, unless something else changed the
++ * clamp meanwhile, in which case it is left alone.
++ *
++ *   /sys/module/launch_boost/parameters/enabled      (default Y)
++ *   /sys/module/launch_boost/parameters/min_ms       (default 300)
++ *   /sys/module/launch_boost/parameters/max_ms       (default 2000)
++ *   /sys/module/launch_boost/parameters/settle_util  (0..1024, default 150)
++ *   /sys/module/launch_boost/parameters/uclamp_min   (0..1024, default 1024)
++ */
++
++#include <linux/avr_profile.h>
++#include <linux/launch_boost.h>
++#include <linux/moduleparam.h>
++#include <linux/sched.h>
++#include <linux/sched/task.h>
++#include <linux/sched/types.h>
++#include <uapi/linux/sched/types.h>
++#include <linux/slab.h>
++#include <linux/workqueue.h>
++
++#undef MODULE_PARAM_PREFIX
++#define MODULE_PARAM_PREFIX "launch_boost."
++
++#define AID_APP_START	10000	/* first app UID */
++#define AID_APP_END	19999	/* last app UID; above are sandboxes/isolated */
++#define AID_USER_OFFSET	100000	/* per-user UID range */
++
++static bool enabled = true;
++module_param(enabled, bool, 0644);
++
++#define POLL_MS		100
++
++static unsigned int min_ms = 300;
++module_param(min_ms, uint, 0644);
++
++static unsigned int max_ms = 2000;
++module_param(max_ms, uint, 0644);
++
++static unsigned int settle_util = 150;
++module_param(settle_util, uint, 0644);
++
++static unsigned int uclamp_min = SCHED_CAPACITY_SCALE;
++module_param(uclamp_min, uint, 0644);
++
++/* for avr_profile: 0 disables, otherwise the uclamp.min floor to use */
++void launch_boost_set(unsigned int uclamp)
++{
++	WRITE_ONCE(enabled, uclamp != 0);
++	if (uclamp)
++		WRITE_ONCE(uclamp_min, min_t(unsigned int, uclamp, SCHED_CAPACITY_SCALE));
++}
++
++struct launch_boost {
++	struct delayed_work work;
++	struct task_struct *p;
++	unsigned int boost;
++	unsigned int orig_min;
++	bool orig_reset_on_fork;
++	unsigned long start;	/* jiffies */
++	unsigned int quiet;	/* consecutive polls below settle_util */
++};
++
++static int set_clamp(struct task_struct *p, unsigned int min, bool reset_on_fork)
++{
++	struct sched_attr attr = {
++		.size		= sizeof(attr),
++		/* explicit policy: with KEEP_POLICY, reset_on_fork is ignored */
++		.sched_policy	= p->policy,
++		.sched_nice	= task_nice(p),
++		.sched_priority	= p->rt_priority,
++		.sched_flags	= SCHED_FLAG_KEEP_PARAMS | SCHED_FLAG_UTIL_CLAMP_MIN |
++				  (reset_on_fork ? SCHED_FLAG_RESET_ON_FORK : 0),
++		.sched_util_min	= min,
++	};
++
++	return sched_setattr_nocheck(p, &attr);
++}
++
++static void launch_boost_poll(struct work_struct *work)
++{
++	struct launch_boost *lb = container_of(to_delayed_work(work),
++					       struct launch_boost, work);
++	struct task_struct *p = lb->p;
++	unsigned long age = jiffies - lb->start;
++	/* uclamp_req is a bitfield; a racy read only risks a late decision */
++	bool ours = p->uclamp_req[UCLAMP_MIN].value == lb->boost;
++
++	if (ours && !(p->flags & PF_EXITING) &&
++	    age < msecs_to_jiffies(READ_ONCE(max_ms))) {
++		if (age < msecs_to_jiffies(READ_ONCE(min_ms)) ||
++		    READ_ONCE(p->se.avg.util_avg) >= READ_ONCE(settle_util))
++			lb->quiet = 0;
++		else
++			lb->quiet++;
++
++		if (lb->quiet < 2) {
++			queue_delayed_work(system_unbound_wq, &lb->work,
++					   msecs_to_jiffies(POLL_MS));
++			return;
++		}
++	}
++
++	if (ours && !(p->flags & PF_EXITING))
++		set_clamp(p, lb->orig_min, lb->orig_reset_on_fork);
++
++	put_task_struct(p);
++	kfree(lb);
++}
++
++static bool is_app_uid(uid_t uid)
++{
++	uid_t appid = uid % AID_USER_OFFSET;
++
++	return appid >= AID_APP_START && appid <= AID_APP_END;
++}
++
++void launch_boost_setuid(uid_t old_uid, uid_t new_uid)
++{
++	struct task_struct *p = current;
++	struct launch_boost *lb;
++	unsigned int boost = min_t(unsigned int, READ_ONCE(uclamp_min),
++				   SCHED_CAPACITY_SCALE);
++
++	if (!READ_ONCE(enabled) || old_uid != 0 || !is_app_uid(new_uid) ||
++	    !p->mm || (p->flags & PF_KTHREAD) || !boost)
++		return;
++
++	/* already at or above the floor, e.g. set by the framework */
++	if (p->uclamp_req[UCLAMP_MIN].value >= boost)
++		return;
++
++	lb = kmalloc(sizeof(*lb), GFP_KERNEL);
++	if (!lb)
++		return;
++
++	lb->orig_min = p->uclamp_req[UCLAMP_MIN].value;
++	lb->orig_reset_on_fork = p->sched_reset_on_fork;
++	lb->boost = boost;
++
++	if (set_clamp(p, boost, true)) {
++		kfree(lb);
++		return;
++	}
++
++	/* Smart Balanced: lift the idle cap for the launch too */
++	avr_profile_kick();
++
++	get_task_struct(p);
++	lb->p = p;
++	lb->start = jiffies;
++	lb->quiet = 0;
++	INIT_DELAYED_WORK(&lb->work, launch_boost_poll);
++	queue_delayed_work(system_unbound_wq, &lb->work, msecs_to_jiffies(POLL_MS));
++}
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 71165e7f0..3bcd6fbdd 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -412,3 +412,9 @@ config ENERGY_MODEL
+ 	  The exact usage of the energy model is subsystem-dependent.
+ 
+ 	  If in doubt, say N.
++
++config BOEFFLA_WL_BLOCKER
++	bool "Boeffla generic wakelock blocker"
++	depends on PM_SLEEP
++	help
++	  Control named wakeup sources through the original Rakkashin sysfs ABI.
+diff --git a/kernel/rk_tboost.c b/kernel/rk_tboost.c
+new file mode 100644
+index 000000000..ff8221ddd
+--- /dev/null
++++ b/kernel/rk_tboost.c
+@@ -0,0 +1,224 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Rakkashin Kernel: foreground thread headroom boost.
++ *
++ * cpufreq follows utilization after the fact, so when a game's frame work
++ * jumps, the frame that jumps runs at the old, too-low frequency. While the
++ * profile asks for it (performance, game), every period this finds the
++ * heaviest threads of the foreground app (top-app cpuset) by their PELT
++ * utilization (or util_est, if higher) and gives each a uclamp.min of
++ * util + headroom, so frequency
++ * and core placement already have spare capacity when the spike lands.
++ *
++ * Boosted threads get SCHED_FLAG_RESET_ON_FORK so threads they spawn don't
++ * inherit the floor; a thread that falls out of the top set, or every thread
++ * when the profile no longer asks for boosting, gets its own clamp back
++ * (unless something else changed it meanwhile).
++ *
++ *   /sys/module/rk_tboost/parameters/enabled      master switch (default Y)
++ *   /sys/module/rk_tboost/parameters/nr_threads   threads boosted (default 4)
++ *   /sys/module/rk_tboost/parameters/period_ms    rescan period (default 50)
++ *   /sys/module/rk_tboost/parameters/min_util     ignore lighter threads (64)
++ */
++
++#include <linux/cgroup.h>
++#include <linux/moduleparam.h>
++#include <linux/rk_tboost.h>
++#include <linux/sched.h>
++#include <linux/sched/task.h>
++#include <linux/sched/types.h>
++#include <uapi/linux/sched/types.h>
++#include <linux/workqueue.h>
++
++#undef MODULE_PARAM_PREFIX
++#define MODULE_PARAM_PREFIX "rk_tboost."
++
++#define MAX_SLOTS	8
++
++static bool enabled = true;
++module_param(enabled, bool, 0644);
++
++static unsigned int nr_threads = 4;
++module_param(nr_threads, uint, 0644);
++
++static unsigned int period_ms = 50;
++module_param(period_ms, uint, 0644);
++
++static unsigned int min_util = 64;
++module_param(min_util, uint, 0644);
++
++struct slot {
++	struct task_struct *p;	/* holds a task reference while set */
++	unsigned int boost;	/* the clamp we set */
++	unsigned int orig_min;
++	bool orig_reset_on_fork;
++};
++
++static struct slot slots[MAX_SLOTS];	/* touched only by the work below */
++static unsigned int headroom_pct;	/* 0 = off; set by the profile */
++static struct cgroup_subsys_state *top_app;
++
++static int set_clamp(struct task_struct *p, unsigned int min, bool reset_on_fork)
++{
++	struct sched_attr attr = {
++		.size		= sizeof(attr),
++		/* explicit policy: with KEEP_POLICY, reset_on_fork is ignored */
++		.sched_policy	= p->policy,
++		.sched_nice	= task_nice(p),
++		.sched_priority	= p->rt_priority,
++		.sched_flags	= SCHED_FLAG_KEEP_PARAMS | SCHED_FLAG_UTIL_CLAMP_MIN |
++				  (reset_on_fork ? SCHED_FLAG_RESET_ON_FORK : 0),
++		.sched_util_min	= min,
++	};
++
++	return sched_setattr_nocheck(p, &attr);
++}
++
++static void release(struct slot *s)
++{
++	struct task_struct *p = s->p;
++
++	/* only undo our own clamp; someone else may have set one since */
++	if (!(p->flags & PF_EXITING) &&
++	    p->uclamp_req[UCLAMP_MIN].value == s->boost)
++		set_clamp(p, s->orig_min, s->orig_reset_on_fork);
++	put_task_struct(p);
++	s->p = NULL;
++}
++
++static void release_all(void)
++{
++	unsigned int i;
++
++	for (i = 0; i < MAX_SLOTS; i++)
++		if (slots[i].p)
++			release(&slots[i]);
++}
++
++/*
++ * Load of a thread: the larger of PELT's running average and its util_est
++ * (the peak of recent activations), so a thread that just went idle between
++ * frames still counts with the load it will bring back next frame.
++ */
++static unsigned long thread_util(struct task_struct *t)
++{
++	unsigned long avg = READ_ONCE(t->se.avg.util_avg);
++	unsigned long est = READ_ONCE(t->se.avg.util_est) & ~UTIL_AVG_UNCHANGED;
++
++	return max(avg, est);
++}
++
++static unsigned int target_of(unsigned long util, unsigned int headroom)
++{
++	unsigned long t = util + util * headroom / 100;
++
++	return min_t(unsigned long, t, SCHED_CAPACITY_SCALE);
++}
++
++static void tboost_fn(struct work_struct *work);
++static DECLARE_DELAYED_WORK(tboost_work, tboost_fn);
++
++static void tboost_fn(struct work_struct *work)
++{
++	struct task_struct *top[MAX_SLOTS] = { };
++	unsigned long top_util[MAX_SLOTS] = { };
++	unsigned int headroom = READ_ONCE(headroom_pct);
++	unsigned int n = min_t(unsigned int, READ_ONCE(nr_threads), MAX_SLOTS);
++	unsigned int i, j;
++	struct css_task_iter it;
++	struct task_struct *t;
++
++	if (!headroom) {
++		release_all();
++		return;
++	}
++	if (!READ_ONCE(enabled) || !n || !READ_ONCE(top_app)) {
++		/* idle but wanted: check back slowly for re-enable / top-app */
++		release_all();
++		queue_delayed_work(system_unbound_wq, &tboost_work, HZ);
++		return;
++	}
++
++	/* pick the n heaviest foreground threads */
++	css_task_iter_start(top_app, 0, &it);
++	while ((t = css_task_iter_next(&it))) {
++		unsigned long u = thread_util(t);
++
++		if (u < READ_ONCE(min_util) || (t->flags & (PF_EXITING | PF_KTHREAD)))
++			continue;
++		for (i = 0; i < n; i++) {
++			if (u > top_util[i])
++				break;
++		}
++		if (i == n)
++			continue;
++		if (top[n - 1])
++			put_task_struct(top[n - 1]);
++		for (j = n - 1; j > i; j--) {
++			top[j] = top[j - 1];
++			top_util[j] = top_util[j - 1];
++		}
++		get_task_struct(t);
++		top[i] = t;
++		top_util[i] = u;
++	}
++	css_task_iter_end(&it);
++
++	/* drop slots whose thread is no longer among the heaviest */
++	for (i = 0; i < MAX_SLOTS; i++) {
++		bool keep = false;
++
++		if (!slots[i].p)
++			continue;
++		for (j = 0; j < n; j++)
++			keep |= top[j] == slots[i].p;
++		if (!keep)
++			release(&slots[i]);
++	}
++
++	/* boost the current top set, re-targeting existing slots */
++	for (j = 0; j < n && top[j]; j++) {
++		unsigned int want = target_of(top_util[j], headroom);
++		struct slot *s = NULL, *free = NULL;
++
++		for (i = 0; i < MAX_SLOTS; i++) {
++			if (slots[i].p == top[j])
++				s = &slots[i];
++			else if (!slots[i].p && !free)
++				free = &slots[i];
++		}
++
++		if (s) {
++			/* still ours? then follow the thread's load (with hysteresis) */
++			if (top[j]->uclamp_req[UCLAMP_MIN].value == s->boost &&
++			    abs((int)want - (int)s->boost) > 32 &&
++			    !set_clamp(top[j], want, true))
++				s->boost = want;
++		} else if (free && top[j]->uclamp_req[UCLAMP_MIN].value < want) {
++			free->orig_min = top[j]->uclamp_req[UCLAMP_MIN].value;
++			free->orig_reset_on_fork = top[j]->sched_reset_on_fork;
++			if (!set_clamp(top[j], want, true)) {
++				get_task_struct(top[j]);
++				free->p = top[j];
++				free->boost = want;
++			}
++		}
++		put_task_struct(top[j]);
++	}
++
++	queue_delayed_work(system_unbound_wq, &tboost_work,
++			   msecs_to_jiffies(max(READ_ONCE(period_ms), 10U)));
++}
++
++void rk_tboost_set_top_app(struct cgroup_subsys_state *css)
++{
++	WRITE_ONCE(top_app, css);
++}
++
++/* headroom in percent above current utilization; 0 stops boosting */
++void rk_tboost_set_headroom(unsigned int pct)
++{
++	WRITE_ONCE(headroom_pct, pct);
++	/* starts the loop, or lets a running one notice and clean up */
++	mod_delayed_work(system_unbound_wq, &tboost_work, 0);
++}
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 047732dcf..c74189cdb 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -943,7 +943,7 @@ static void update_rq_clock_task(struct rq *rq, s64 delta)
+ 	if ((irq_delta + steal) && sched_feat(NONTASK_CAPACITY))
+ 		update_irq_load_avg(rq, irq_delta + steal);
+ #endif
+-	update_rq_clock_pelt(rq, delta);
++	update_rq_clock_task_mult(rq, delta);
+ }
+ 
+ void update_rq_clock(struct rq *rq)
+diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
+index 3947dde63..2011c0d99 100644
+--- a/kernel/sched/pelt.c
++++ b/kernel/sched/pelt.c
+@@ -513,3 +513,70 @@ bool update_other_load_avgs(struct rq *rq)
+ 		update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure) |
+ 		update_irq_load_avg(rq, 0);
+ }
++
++#ifdef CONFIG_AVR_PROFILE
++#include <linux/avr_profile.h>
++#include <linux/sysctl.h>
++#include <trace/hooks/sched.h>
++static DEFINE_MUTEX(avr_pelt_mutex);
++__read_mostly unsigned int sched_pelt_lshift = 1;
++static unsigned int sysctl_sched_pelt_multiplier = 2;
++
++unsigned long rk_cpu_util(int cpu)
++{
++	struct rq *rq;
++	unsigned long cfs;
++
++	if (cpu < 0 || cpu >= nr_cpu_ids)
++		return 0;
++	rq = cpu_rq(cpu);
++	cfs = max_t(unsigned long, READ_ONCE(rq->cfs.avg.util_avg),
++		    READ_ONCE(rq->cfs.avg.util_est));
++	return cfs + READ_ONCE(rq->avg_rt.util_avg);
++}
++
++int sched_pelt_set_multiplier(unsigned int mult)
++{
++	unsigned int old;
++	int ret = 0;
++
++	if (mult != 1 && mult != 2 && mult != 4)
++		return -EINVAL;
++	mutex_lock(&avr_pelt_mutex);
++	old = READ_ONCE(sysctl_sched_pelt_multiplier);
++	if (old != mult) {
++		trace_android_vh_sched_pelt_multiplier(old, mult, &ret);
++		if (!ret) {
++			WRITE_ONCE(sysctl_sched_pelt_multiplier, mult);
++			WRITE_ONCE(sched_pelt_lshift, mult >> 1);
++		}
++	}
++	mutex_unlock(&avr_pelt_mutex);
++	return ret;
++}
++
++static int avr_pelt_sysctl(const struct ctl_table *table, int write,
++			   void *buffer, size_t *lenp, loff_t *ppos)
++{
++	unsigned int value = READ_ONCE(sysctl_sched_pelt_multiplier);
++	struct ctl_table local = *table;
++	int ret;
++
++	local.data = &value;
++	ret = proc_douintvec(&local, write, buffer, lenp, ppos);
++	if (ret || !write)
++		return ret;
++	return sched_pelt_set_multiplier(value);
++}
++
++static const struct ctl_table avr_pelt_sysctls[] = {
++	{ .procname = "sched_pelt_multiplier", .data = &sysctl_sched_pelt_multiplier,
++	  .maxlen = sizeof(unsigned int), .mode = 0644, .proc_handler = avr_pelt_sysctl },
++};
++static int __init avr_pelt_sysctl_init(void)
++{
++	register_sysctl_init("kernel", avr_pelt_sysctls);
++	return 0;
++}
++late_initcall(avr_pelt_sysctl_init);
++#endif
+diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
+index e976a41fc..ef2dffdd7 100644
+--- a/kernel/sched/pelt.h
++++ b/kernel/sched/pelt.h
+@@ -67,6 +67,17 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
+ 	WRITE_ONCE(avg->util_est, enqueued);
+ }
+ 
++static inline u64 rq_clock_task_mult(struct rq *rq)
++{
++#ifdef CONFIG_AVR_PROFILE
++	lockdep_assert_rq_held(rq);
++	assert_clock_updated(rq);
++	return rq->clock_task_mult;
++#else
++	return rq_clock_task(rq);
++#endif
++}
++
+ static inline u64 rq_clock_pelt(struct rq *rq)
+ {
+ 	lockdep_assert_rq_held(rq);
+@@ -78,7 +89,7 @@ static inline u64 rq_clock_pelt(struct rq *rq)
+ /* The rq is idle, we can sync to clock_task */
+ static inline void _update_idle_rq_clock_pelt(struct rq *rq)
+ {
+-	rq->clock_pelt  = rq_clock_task(rq);
++	rq->clock_pelt = rq_clock_task_mult(rq);
+ 
+ 	u64_u32_store(rq->clock_idle, rq_clock(rq));
+ 	/* Paired with smp_rmb in migrate_se_pelt_lag() */
+@@ -133,6 +144,18 @@ static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
+ 	rq->clock_pelt += delta;
+ }
+ 
++#ifdef CONFIG_AVR_PROFILE
++extern unsigned int sched_pelt_lshift;
++#endif
++static inline void update_rq_clock_task_mult(struct rq *rq, s64 delta)
++{
++#ifdef CONFIG_AVR_PROFILE
++	delta <<= READ_ONCE(sched_pelt_lshift);
++	rq->clock_task_mult += delta;
++#endif
++	update_rq_clock_pelt(rq, delta);
++}
++
+ /*
+  * When rq becomes idle, we have to check if it has lost idle time
+  * because it was fully busy. A rq is fully used when the /Sum util_sum
+@@ -159,7 +182,7 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
+ 	 * rq's clock_task.
+ 	 */
+ 	if (util_sum >= divider)
+-		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
++		rq->lost_idle_time += rq_clock_task_mult(rq) - rq->clock_pelt;
+ 
+ 	_update_idle_rq_clock_pelt(rq);
+ }
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 177166fbb..2fc5e3005 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1266,6 +1266,9 @@ struct rq {
+ 	 * and updated together, and should go on their own cache line.
+ 	 */
+ 	u64			clock_task ____cacheline_aligned;
++#ifdef CONFIG_AVR_PROFILE
++	u64			clock_task_mult;
++#endif
+ 	u64			clock_pelt;
+ 	u64			clock;
+ 	unsigned long		lost_idle_time;
+diff --git a/kernel/sched/vendor_hooks.c b/kernel/sched/vendor_hooks.c
+index 6d1abb1f5..72c56372e 100644
+--- a/kernel/sched/vendor_hooks.c
++++ b/kernel/sched/vendor_hooks.c
+@@ -92,4 +92,5 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_scheduler_tick);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_set_wake_flags);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_setscheduler_uclamp);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_update_topology_flags_workfn);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_sched_pelt_multiplier);
+ /* keep-sorted end */
+diff --git a/kernel/sys.c b/kernel/sys.c
+index a99683c3d..479940229 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -47,6 +47,7 @@
+ 
+ #include <linux/compat.h>
+ #include <linux/syscalls.h>
++#include <linux/launch_boost.h>
+ #include <linux/kprobes.h>
+ #include <linux/user_namespace.h>
+ #include <linux/time_namespace.h>
+@@ -715,6 +716,7 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
+ 	int retval;
+ 	kuid_t kruid, keuid, ksuid;
+ 	bool ruid_new, euid_new, suid_new;
++	uid_t old_uid, new_uid;
+ 
+ 	kruid = make_kuid(ns, ruid);
+ 	keuid = make_kuid(ns, euid);
+@@ -775,7 +777,12 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
+ 		goto error;
+ 
+ 	flag_nproc_exceeded(new);
+-	return commit_creds(new);
++	old_uid = from_kuid(&init_user_ns, old->uid);
++	new_uid = from_kuid(&init_user_ns, new->uid);
++	retval = commit_creds(new);
++	if (!retval)
++		launch_boost_setuid(old_uid, new_uid);
++	return retval;
+ 
+ error:
+ 	abort_creds(new);

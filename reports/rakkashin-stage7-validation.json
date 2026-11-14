@@ -1,0 +1,18 @@
+{
+  "source_commit": "4b563b761",
+  "image_sha256": "4a25217c3f85d1302125c9a89c125680282c452ec3e49e7aef11782f57d46a9b",
+  "module_count": 52,
+  "matched_import_crcs": 2095,
+  "rakkashin_checks": 122,
+  "ntsync_cases": 13,
+  "wakelock_cases": 5,
+  "clock_rcu_memory_cases": 35,
+  "adios_rounds": 3,
+  "adios_workers": 4,
+  "core_build_exit_code": 0,
+  "consolidated_build_exit_code": 0,
+  "physical_boot": false,
+  "kernel_su_ported": false,
+  "boot_image_created": false,
+  "scope": "software guest tests; not phone hardware, Android service or efficiency validation"
+}

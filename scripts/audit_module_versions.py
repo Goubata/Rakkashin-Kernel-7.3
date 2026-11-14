@@ -37,7 +37,7 @@ def main():
     parser.add_argument('module',type=Path,nargs='*')
     args=parser.parse_args()
     tables=[ROOT/'out/native-gki/Module.symvers']
-    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats']]
+    tables += [ROOT/'ports'/n/'Module.symvers' for n in ['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync','qcom-smem','qcom-socinfo','qcom-hwspinlock','qcom-llcc','qcom-dcvs','governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats','rakkashin/adios']]
     exports={}
     for table in tables:
         if not table.is_file():continue

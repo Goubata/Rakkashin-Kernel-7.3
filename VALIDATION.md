@@ -131,3 +131,39 @@ requires a concrete restoration plan and authorization for that operation.
 - reports/qti-fence-dependencies.json inventories aggregate exports using both
   old __ksymtab and current __export_symbol metadata. Its eight missing names
   agree with actual modpost. There are no synthesized successful providers.
+
+## Stage7 Rakkashin core and scheduler evidence
+
+- Core source commit 4b563b761; replay patch patches/rakkashin-features-7.3.patch.
+  Source diff/reverse-apply checks pass. Incremental consolidated native build
+  with --gpu-deps --qemu-tests --rakkashin completed successfully; a fresh clean
+  checkout and official Kleaf certification remain unverified.
+- The final 7.3 Image boots four CPUs with the profile, FAS and wake filters.
+  reports/qemu-rakkashin-final-features.log: 122 checks cover all five modes,
+  PELT/writeback settings and invalid-input preservation, per-UID foreground
+  selection, actual heavy-thread uclamp headroom and restoration, launch boost
+  expiry/fork isolation, both ntsync creation ABIs and no fd leak on copyout
+  fault, a real file-backed ARM64 uprobe and watchdog events, and FAS root-only
+  access. Poll/read checks contribute to this count; it is not 122 features.
+- reports/qemu-rakkashin-final-ntsync.log: thirteen upstream cases pass, including
+  40,000 mutex-protected non-atomic increments by four threads. The checked -O2
+  fixture has explicit compiler fences and checks syscall/thread creation errors.
+  The original -O2 test cached its counter before the loop and failed 12/13;
+  original -O0 and checked -O2 both pass 13/13. Assembly evidence, hashes and
+  failure logs are retained in reports/ntsync-stress-investigation.json.
+- reports/qemu-rakkashin-final-wakelock.log: five KUnit cases use real wakeup
+  sources and PM activation paths for user/default filters, unmatched, prefix
+  and long names. These do not prove phone notification/suspend behavior.
+- ADIOS originally generated a slab_mutex/elevator_lock lockdep cycle during
+  selection. Slab caches now live at module scope, outside queue locks.
+  reports/qemu-rakkashin-final-adios.log: three 4-worker direct-I/O rounds,
+  6 MiB total written and read back, depth 64/128/64, scheduler changes and
+  unload pass with no warnings. The test disk is guest RAM only, not phone UFS.
+- reports/qemu-rakkashin-clock-rcu-memory-regression.log: all 35 existing cases
+  pass on the new Image, including proxy-exec Tasks RCU and real guest-zram
+  shmem reclaim/readback.
+- artifacts/android73-rakkashin-stage7/: 52 modules, 2,095 matching import CRCs;
+  all SHA256 values checked. This is a test/partial-port artifact, not boot.img.
+- KernelSU-Next's external source/commit is absent from the reference and has
+  not been ported. Actual Android services, GPU/firmware, all hardware, SELinux
+  enforcing, performance and idle drain remain pending. No partition writes.

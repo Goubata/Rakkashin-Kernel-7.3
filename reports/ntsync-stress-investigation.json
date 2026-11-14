@@ -1,0 +1,26 @@
+{
+  "driver_source_sha256": "5a213cc6491222b93265505861d5ce51ddebb10e5941e5942036f6179bef57dd",
+  "original_optimized_binary_sha256": "9ba1078440506971dfa380c159231fe1527ad9aa5d6c207f8172573c5a123cfc",
+  "original_optimized_result": {
+    "pass": 12,
+    "fail": 1,
+    "stress_expected": 40000,
+    "stress_observed": 10000,
+    "log": "qemu-ntsync-upstream-selftests.log"
+  },
+  "assembly_evidence": "stress_counter loaded before loop at 0x401b44; loop starts 0x401b60 and stores register-derived values at 0x401b74 in the preserved binary",
+  "unmodified_O0_result": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0,
+    "log": "qemu-ntsync-upstream-O0-diagnostic.log"
+  },
+  "checked_O2_result": {
+    "pass": 13,
+    "fail": 0,
+    "skip": 0,
+    "log": "qemu-ntsync-checked-O2.log"
+  },
+  "changes": "compiler memory fences around kernel-mutex critical section; check syscall/thread-creation errors; counter remains non-atomic",
+  "scope": "guest software synchronization tests, not Android app integration or physical power/performance validation"
+}

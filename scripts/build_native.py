@@ -5,6 +5,7 @@ import argparse
 import os
 import shlex
 import subprocess
+import sys
 
 PORT = Path(__file__).resolve().parents[1]
 HOME_DIR = PORT.parent
@@ -21,7 +22,10 @@ def main():
     parser.add_argument("--boot-core", action="store_true", help="Apply core patches and build clock/RPMh/IRQ/pinctrl and OxygenOS sync modules")
     parser.add_argument("--qemu-tests", action="store_true", help="Build boot-core plus isolated clock/RCU and fence test fixtures")
     parser.add_argument("--gpu-deps", action="store_true", help="Build ported GPU support modules; KGSL and physical SMMU bring-up remain incomplete")
+    parser.add_argument("--rakkashin", action="store_true", help="Port Rakkashin profiles, boosts, FAS, wake filters, legacy ntsync and ADIOS")
     args = parser.parse_args()
+    if args.rakkashin:
+        args.boot_core = True
     if args.gpu_deps:
         args.boot_core = True
     if args.qemu_tests:
@@ -29,7 +33,10 @@ def main():
     if args.boot_core:
         args.platform = True
         args.pinctrl = True
-        for patch in [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch']:
+        patches = [PORT/'ports/ccf-hold-state/hold-state-7.3.patch', PORT/'patches/irq-routing-7.3.patch', PORT/'patches/rcu-proxy-holdout-7.3.patch', PORT/'patches/shmem-folio-provider-7.3.patch', PORT/'patches/scm-gpu-dcvs-7.3.patch', PORT/'patches/scm-memory-batch-7.3.patch']
+        if args.rakkashin:
+            patches.append(PORT/'patches/rakkashin-features-7.3.patch')
+        for patch in patches:
             command=['git','-C',str(SOURCE),'apply']
             if subprocess.run(command+['--reverse','--check',str(patch)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0:
                 continue
@@ -61,6 +68,14 @@ def main():
                   '/work/avr-port/out/native-gki/.config',
                   '/work/avr-port/configs/avr-platform.fragment'])
         root_run(base + ['olddefconfig'])
+    if args.rakkashin:
+        root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                  'PATH=/usr/sbin:/usr/bin:/sbin:/bin', '/bin/bash',
+                  '/work/avr-src/scripts/kconfig/merge_config.sh', '-m',
+                  '-O', '/work/avr-port/out/native-gki',
+                  '/work/avr-port/out/native-gki/.config',
+                  '/work/avr-port/configs/rakkashin.fragment'])
+        root_run(base + ['olddefconfig'])
     if args.qemu_tests:
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
                   'PATH=/usr/sbin:/usr/bin:/sbin:/bin', '/bin/bash',
@@ -81,9 +96,22 @@ def main():
                      'qcom-dcvs', 'governor-adreno-ro', 'governor-gpubw',
                      'governor-adreno-tz', 'qcom-iommu-util', 'secure-buffer', 'iommu-logger', 'arm-smmu-vendor','msm-sysstats']:
             root_run(base + ["M=/work/avr-port/ports/"+name, "-j"+os.environ.get('BUILD_JOBS','4'), "modules"])
+    if args.rakkashin:
+        root_run(base + ["M=/work/avr-port/ports/rakkashin/adios", "-j2", "modules"])
     if args.qemu_tests:
         if args.gpu_deps:
             root_run(base + ["M=/work/avr-port/tests/iommu", "-j2", "modules"])
+        if args.rakkashin:
+            root_run(base + ["headers"])
+            root_run(base + ["M=/work/avr-port/tests/rakkashin-power", "-j2", "modules"])
+            for name in ['rakkashin-test', 'adios-io-test']:
+                root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',
+                          'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'cc', '-static', '-O2',
+                          '-pthread', '-Wall', '-Wextra', '-Werror', '-fno-pie', '-no-pie',
+                          '-I/work/avr-port/out/native-gki/usr/include',
+                          '/work/avr-port/tests/rakkashin/'+name+'.c',
+                          '-o', '/work/avr-port/tests/rakkashin/'+name])
+            subprocess.run([sys.executable, str(PORT/'scripts/build_ntsync_selftest.py')], check=True)
         for suite in ["clock", "memory", "secure-buffer", "sysstats", "fence-compat"]:
             root_run(base + ["M=/work/avr-port/tests/"+suite, "-j2", "modules"])
         root_run(['chroot', ROOTFS, '/usr/bin/env', '-i',

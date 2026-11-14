@@ -754,6 +754,37 @@ static int ntsync_create_sem(struct ntsync_device *dev, void __user *argp)
 	return fd;
 }
 
+/* SPDX-License-Identifier: GPL-2.0-only */
+/* Added after ntsync_create_sem() in the 7.3 driver. */
+static int ntsync_legacy_create_sem(struct ntsync_device *dev, void __user *argp)
+{
+ struct ntsync_legacy_sem_args args;
+ struct ntsync_obj *sem;
+
+ if (copy_from_user(&args, argp, sizeof(args)))
+  return -EFAULT;
+ if (args.count > args.max)
+  return -EINVAL;
+ sem = ntsync_alloc_obj(dev, NTSYNC_TYPE_SEM);
+ if (!sem)
+  return -ENOMEM;
+ sem->u.sem.count = args.count;
+ sem->u.sem.max = args.max;
+ FD_PREPARE(fdf, O_CLOEXEC,
+            anon_inode_getfile("ntsync", &ntsync_obj_fops, sem, O_RDWR));
+ if (fdf.err) {
+  ntsync_free_obj(sem);
+  return fdf.err;
+ }
+ sem->file = fd_prepare_file(fdf);
+ /* Copy out before publication: failure closes the prepared file and fd. */
+ if (put_user(fd_prepare_fd(fdf),
+              &((struct ntsync_legacy_sem_args __user *)argp)->sem))
+  return -EFAULT;
+ fd_publish(fdf);
+ return 0;
+}
+
 static int ntsync_create_mutex(struct ntsync_device *dev, void __user *argp)
 {
 	struct ntsync_mutex_args args;
@@ -1178,6 +1209,8 @@ static long ntsync_char_ioctl(struct file *file, unsigned int cmd,
 	void __user *argp = (void __user *)parm;
 
 	switch (cmd) {
+	case NTSYNC_IOC_LEGACY_CREATE_SEM:
+		return ntsync_legacy_create_sem(dev, argp);
 	case NTSYNC_IOC_CREATE_EVENT:
 		return ntsync_create_event(dev, argp);
 	case NTSYNC_IOC_CREATE_MUTEX:

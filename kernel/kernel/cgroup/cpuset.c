@@ -19,6 +19,7 @@
  *       by Max Krasnyansky
  */
 #include "cpuset-internal.h"
+#include <linux/avr_profile.h>
 
 #include <linux/init.h>
 #include <linux/interrupt.h>
@@ -3321,6 +3322,7 @@ static void cpuset_attach_task(struct cpuset *cs, struct task_struct *task)
 	 * fail.  TODO: have a better way to handle failure here
 	 */
 	WARN_ON_ONCE(set_cpus_allowed_ptr(task, cpus_attach));
+	avr_profile_cpuset_attach(&cs->css, task);
 
 	if (cpuset_v2() && !attach_ctx.mems_updated)
 		return;

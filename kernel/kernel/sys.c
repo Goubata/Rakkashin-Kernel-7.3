@@ -47,6 +47,7 @@
 
 #include <linux/compat.h>
 #include <linux/syscalls.h>
+#include <linux/launch_boost.h>
 #include <linux/kprobes.h>
 #include <linux/user_namespace.h>
 #include <linux/time_namespace.h>
@@ -715,6 +716,7 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 	int retval;
 	kuid_t kruid, keuid, ksuid;
 	bool ruid_new, euid_new, suid_new;
+	uid_t old_uid, new_uid;
 
 	kruid = make_kuid(ns, ruid);
 	keuid = make_kuid(ns, euid);
@@ -775,7 +777,12 @@ long __sys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 		goto error;
 
 	flag_nproc_exceeded(new);
-	return commit_creds(new);
+	old_uid = from_kuid(&init_user_ns, old->uid);
+	new_uid = from_kuid(&init_user_ns, new->uid);
+	retval = commit_creds(new);
+	if (!retval)
+		launch_boost_setuid(old_uid, new_uid);
+	return retval;
 
 error:
 	abort_creds(new);

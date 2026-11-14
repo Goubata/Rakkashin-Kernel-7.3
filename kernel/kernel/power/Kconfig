@@ -412,3 +412,9 @@ config ENERGY_MODEL
 	  The exact usage of the energy model is subsystem-dependent.
 
 	  If in doubt, say N.
+
+config BOEFFLA_WL_BLOCKER
+	bool "Boeffla generic wakelock blocker"
+	depends on PM_SLEEP
+	help
+	  Control named wakeup sources through the original Rakkashin sysfs ABI.

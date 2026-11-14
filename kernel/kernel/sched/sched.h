@@ -1266,6 +1266,9 @@ struct rq {
 	 * and updated together, and should go on their own cache line.
 	 */
 	u64			clock_task ____cacheline_aligned;
+#ifdef CONFIG_AVR_PROFILE
+	u64			clock_task_mult;
+#endif
 	u64			clock_pelt;
 	u64			clock;
 	unsigned long		lost_idle_time;

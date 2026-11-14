@@ -175,3 +175,8 @@ struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void);
 void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock);
 void *bpf_wakeup_sources_get_head(void);
 #endif
+
+#ifdef CONFIG_BOEFFLA_WL_BLOCKER
+struct wakeup_source;
+bool boeffla_wl_blocked(struct wakeup_source *ws);
+#endif

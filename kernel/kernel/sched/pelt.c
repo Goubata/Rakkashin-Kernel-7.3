@@ -513,3 +513,70 @@ bool update_other_load_avgs(struct rq *rq)
 		update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure) |
 		update_irq_load_avg(rq, 0);
 }
+
+#ifdef CONFIG_AVR_PROFILE
+#include <linux/avr_profile.h>
+#include <linux/sysctl.h>
+#include <trace/hooks/sched.h>
+static DEFINE_MUTEX(avr_pelt_mutex);
+__read_mostly unsigned int sched_pelt_lshift = 1;
+static unsigned int sysctl_sched_pelt_multiplier = 2;
+
+unsigned long rk_cpu_util(int cpu)
+{
+	struct rq *rq;
+	unsigned long cfs;
+
+	if (cpu < 0 || cpu >= nr_cpu_ids)
+		return 0;
+	rq = cpu_rq(cpu);
+	cfs = max_t(unsigned long, READ_ONCE(rq->cfs.avg.util_avg),
+		    READ_ONCE(rq->cfs.avg.util_est));
+	return cfs + READ_ONCE(rq->avg_rt.util_avg);
+}
+
+int sched_pelt_set_multiplier(unsigned int mult)
+{
+	unsigned int old;
+	int ret = 0;
+
+	if (mult != 1 && mult != 2 && mult != 4)
+		return -EINVAL;
+	mutex_lock(&avr_pelt_mutex);
+	old = READ_ONCE(sysctl_sched_pelt_multiplier);
+	if (old != mult) {
+		trace_android_vh_sched_pelt_multiplier(old, mult, &ret);
+		if (!ret) {
+			WRITE_ONCE(sysctl_sched_pelt_multiplier, mult);
+			WRITE_ONCE(sched_pelt_lshift, mult >> 1);
+		}
+	}
+	mutex_unlock(&avr_pelt_mutex);
+	return ret;
+}
+
+static int avr_pelt_sysctl(const struct ctl_table *table, int write,
+			   void *buffer, size_t *lenp, loff_t *ppos)
+{
+	unsigned int value = READ_ONCE(sysctl_sched_pelt_multiplier);
+	struct ctl_table local = *table;
+	int ret;
+
+	local.data = &value;
+	ret = proc_douintvec(&local, write, buffer, lenp, ppos);
+	if (ret || !write)
+		return ret;
+	return sched_pelt_set_multiplier(value);
+}
+
+static const struct ctl_table avr_pelt_sysctls[] = {
+	{ .procname = "sched_pelt_multiplier", .data = &sysctl_sched_pelt_multiplier,
+	  .maxlen = sizeof(unsigned int), .mode = 0644, .proc_handler = avr_pelt_sysctl },
+};
+static int __init avr_pelt_sysctl_init(void)
+{
+	register_sysctl_init("kernel", avr_pelt_sysctls);
+	return 0;
+}
+late_initcall(avr_pelt_sysctl_init);
+#endif

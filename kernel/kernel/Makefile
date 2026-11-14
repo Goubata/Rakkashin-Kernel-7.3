@@ -207,3 +207,7 @@ $(obj)/kheaders.md5: $(obj)/kheaders-srclist FORCE
 	$(call filechk,kheaders_md5sum)
 
 clean-files := kheaders.md5 kheaders-srclist kheaders-objlist
+
+obj-$(CONFIG_LAUNCH_BOOST) += launch_boost.o
+obj-$(CONFIG_AVR_PROFILE) += avr_profile.o
+obj-$(CONFIG_RK_TBOOST) += rk_tboost.o

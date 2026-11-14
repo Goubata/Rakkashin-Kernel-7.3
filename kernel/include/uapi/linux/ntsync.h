@@ -15,6 +15,15 @@ struct ntsync_sem_args {
 	__u32 max;
 };
 
+/* Early Rakkashin ABI: returns the descriptor in args.sem. */
+struct ntsync_legacy_sem_args {
+	__u32 sem;
+	__u32 count;
+	__u32 max;
+};
+#define NTSYNC_IOC_LEGACY_CREATE_SEM _IOWR('N', 0x80, struct ntsync_legacy_sem_args)
+#define NTSYNC_IOC_SEM_POST NTSYNC_IOC_SEM_RELEASE
+
 struct ntsync_mutex_args {
 	__u32 owner;
 	__u32 count;

@@ -1,0 +1,475 @@
+--- a/ports/qcom-spmi/spmi-pmic-arb.c
++++ b/ports/qcom-spmi/spmi-pmic-arb.c
+@@ -13,6 +13,7 @@
+ #include <linux/irq.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+@@ -2030,6 +2031,18 @@
+ 	.translate = qpnpint_irq_domain_translate,
+ };
+ 
++/* Publish a fully initialized arbiter, and exclude mapping calls from teardown. */
++static DEFINE_MUTEX(pmic_arb_publish_lock);
++
++static void spmi_pmic_arb_unpublish(void *data)
++{
++	struct platform_device *pdev = data;
++
++	mutex_lock(&pmic_arb_publish_lock);
++	platform_set_drvdata(pdev, NULL);
++	mutex_unlock(&pmic_arb_publish_lock);
++}
++
+ static int _spmi_pmic_arb_map_address(struct spmi_pmic_arb_bus *bus,
+ 				u32 spmi_address, struct resource *res_out)
+ {
+@@ -2062,42 +2075,43 @@
+ 	struct spmi_pmic_arb_bus *bus;
+ 	struct device_node *bus_node;
+ 	struct platform_device *pdev;
+-	int i;
+-
+-	if (!dev || !dev->of_node || !res_out) {
+-		pr_err("%s: Invalid pointer\n", __func__);
++	int i, ret = -EPROBE_DEFER;
++
++	if (!dev || !dev->of_node || !res_out)
+ 		return -EINVAL;
+-	}
+-
++	if (spmi_address & ~GENMASK(20, 0))
++		return -EINVAL;
+ 	bus_node = of_parse_phandle(dev->of_node, "qcom,pmic-arb", 0);
+-	if (!bus_node) {
+-		pr_err("%s: Could not find PMIC arbiter bus node via qcom,pmic-arb property\n",
+-			__func__);
++	if (!bus_node)
+ 		return -ENODEV;
+-	}
+ 
+ 	if (of_device_is_compatible(bus_node, "qcom,spmi-pmic-arb"))
+ 		pdev = of_find_device_by_node(bus_node);
+ 	else
+ 		pdev = of_find_device_by_node(bus_node->parent);
+-	of_node_put(bus_node);
+ 	if (!pdev)
+-		return -EPROBE_DEFER;
+-
++		goto out_node;
++
++	mutex_lock(&pmic_arb_publish_lock);
+ 	pmic_arb = platform_get_drvdata(pdev);
+ 	if (!pmic_arb)
+-		return -EPROBE_DEFER;
+-
++		goto out_unlock;
++	ret = -ENODEV;
+ 	for (i = 0; i < pmic_arb->buses_available; i++) {
+ 		bus = pmic_arb->buses[i];
+-
+-		if (bus->spmic->dev.of_node == bus_node)
+-			return _spmi_pmic_arb_map_address(bus, spmi_address,
+-							  res_out);
+-	}
+-
+-	return -ENODEV;
+-}
++		if (bus->spmic->dev.of_node == bus_node) {
++			ret = _spmi_pmic_arb_map_address(bus, spmi_address, res_out);
++			break;
++		}
++	}
++out_unlock:
++	mutex_unlock(&pmic_arb_publish_lock);
++	put_device(&pdev->dev);
++out_node:
++	of_node_put(bus_node);
++	return ret;
++}
++
+ EXPORT_SYMBOL(spmi_pmic_arb_map_address);
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -2204,10 +2218,38 @@
+ 	return;
+ error:
+ 	debugfs_remove_recursive(bus->debugfs);
++	bus->debugfs = NULL;
+ }
+ #else
+ static void spmi_pmic_arb_debugfs_init(struct spmi_pmic_arb_bus *bus) { }
+ #endif
++
++static void spmi_pmic_arb_put_node(void *data)
++{
++	of_node_put(data);
++}
++
++static void spmi_pmic_arb_irq_cleanup(void *data)
++{
++	struct spmi_pmic_arb_bus *bus = data;
++
++	if (bus->irq > 0) {
++		irq_set_chained_handler_and_data(bus->irq, NULL, NULL);
++		synchronize_irq(bus->irq);
++	}
++	if (bus->domain) {
++		irq_domain_remove(bus->domain);
++		bus->domain = NULL;
++	}
++}
++
++static void spmi_pmic_arb_debugfs_cleanup(void *data)
++{
++	struct spmi_pmic_arb_bus *bus = data;
++
++	debugfs_remove_recursive(bus->debugfs);
++	bus->debugfs = NULL;
++}
+ 
+ static int spmi_pmic_arb_bus_init(struct platform_device *pdev,
+ 				  struct device_node *node,
+@@ -2223,6 +2265,13 @@
+ 	int index, ret;
+ 	int irq = 0;
+ 
++	if (bus_index >= ARRAY_SIZE(pmic_arb->buses))
++		return -ENOSPC;
++	/* Registered controller and IRQ cleanup run before this node is put. */
++	ret = devm_add_action_or_reset(dev, spmi_pmic_arb_put_node, of_node_get(node));
++	if (ret)
++		return ret;
++
+ 	ctrl = devm_spmi_controller_alloc(dev, sizeof(*bus));
+ 	if (IS_ERR(ctrl))
+ 		return PTR_ERR(ctrl);
+@@ -2298,7 +2347,7 @@
+ 	if (irq > 0) {
+ 		dev_dbg(&pdev->dev, "adding irq domain for bus %d\n", bus_index);
+ 
+-		bus->domain = irq_domain_add_tree(node,
++		bus->domain = irq_domain_create_tree(of_fwnode_handle(node),
+ 						  &pmic_arb_irq_domain_ops, bus);
+ 		if (!bus->domain) {
+ 			dev_err(&pdev->dev, "unable to create irq_domain\n");
+@@ -2311,14 +2360,22 @@
+ 		dev_dbg(&pdev->dev, "not supporting PMIC interrupts\n");
+ 	}
+ 
++	/* Keep the core's globally unique controller name. Hardware bus ID is
++	 * carried separately in bus->id.
++	 */
+ 	ctrl->dev.of_node = node;
+-	dev_set_name(&ctrl->dev, "spmi-%d", bus_index);
++	ret = devm_add_action_or_reset(dev, spmi_pmic_arb_irq_cleanup, bus);
++	if (ret)
++		return ret;
+ 
+ 	ret = devm_spmi_controller_add(dev, ctrl);
+ 	if (ret)
+ 		return ret;
+ 
+ 	spmi_pmic_arb_debugfs_init(bus);
++	ret = devm_add_action_or_reset(dev, spmi_pmic_arb_debugfs_cleanup, bus);
++	if (ret)
++		return ret;
+ 
+ 	pmic_arb->buses_available++;
+ 
+@@ -2340,28 +2397,14 @@
+ 	for_each_available_child_of_node(node, child) {
+ 		if (of_node_name_eq(child, "spmi")) {
+ 			ret = spmi_pmic_arb_bus_init(pdev, child, pmic_arb);
+-			if (ret)
++			if (ret) {
++				of_node_put(child);
+ 				return ret;
++			}
+ 		}
+ 	}
+ 
+ 	return ret;
+-}
+-
+-static void spmi_pmic_arb_deregister_buses(struct spmi_pmic_arb *pmic_arb)
+-{
+-	int i;
+-
+-	for (i = 0; i < pmic_arb->buses_available; i++) {
+-		struct spmi_pmic_arb_bus *bus = pmic_arb->buses[i];
+-
+-		debugfs_remove_recursive(bus->debugfs);
+-		if (bus->irq > 0) {
+-			irq_set_chained_handler_and_data(bus->irq,
+-							 NULL, NULL);
+-			irq_domain_remove(bus->domain);
+-		}
+-	}
+ }
+ 
+ static int spmi_pmic_arb_probe(struct platform_device *pdev)
+@@ -2387,7 +2430,6 @@
+ 
+ 	pmic_arb->core_size = resource_size(res);
+ 
+-	platform_set_drvdata(pdev, pmic_arb);
+ 
+ 	hw_ver = readl_relaxed(core + PMIC_ARB_VERSION);
+ 
+@@ -2438,14 +2480,17 @@
+ 
+ 	pmic_arb->ee = ee;
+ 
+-	return spmi_pmic_arb_register_buses(pmic_arb, pdev);
+-}
+-
+-static void spmi_pmic_arb_remove(struct platform_device *pdev)
+-{
+-	struct spmi_pmic_arb *pmic_arb = platform_get_drvdata(pdev);
+-
+-	spmi_pmic_arb_deregister_buses(pmic_arb);
++	err = spmi_pmic_arb_register_buses(pmic_arb, pdev);
++	if (err)
++		return err;
++	/* Added last: unpublish mappings before any bus resource is removed. */
++	err = devm_add_action_or_reset(dev, spmi_pmic_arb_unpublish, pdev);
++	if (err)
++		return err;
++	mutex_lock(&pmic_arb_publish_lock);
++	platform_set_drvdata(pdev, pmic_arb);
++	mutex_unlock(&pmic_arb_publish_lock);
++	return 0;
+ }
+ 
+ static const struct of_device_id spmi_pmic_arb_match_table[] = {
+@@ -2458,7 +2503,6 @@
+ 
+ static struct platform_driver spmi_pmic_arb_driver = {
+ 	.probe		= spmi_pmic_arb_probe,
+-	.remove_new	= spmi_pmic_arb_remove,
+ 	.driver		= {
+ 		.name	= "spmi_pmic_arb",
+ 		.of_match_table = spmi_pmic_arb_match_table,
+--- a/ports/qcom-spmi/spmi-pmic-arb-debug.c
++++ b/ports/qcom-spmi/spmi-pmic-arb-debug.c
+@@ -273,6 +273,11 @@
+ 	return rc;
+ }
+ 
++static void spmi_pmic_arb_debug_put_node(void *data)
++{
++	of_node_put(data);
++}
++
+ static int spmi_pmic_arb_debug_bus_init(struct spmi_pmic_arb_debug *pa,
+ 					struct device *parent,
+ 					struct device_node *node,
+@@ -280,10 +285,15 @@
+ {
+ 	struct spmi_pmic_arb_debug_bus *bus;
+ 	struct spmi_controller *ctrl;
+-
++	int ret;
++
++	ret = devm_add_action_or_reset(parent, spmi_pmic_arb_debug_put_node,
++				       of_node_get(node));
++	if (ret)
++		return ret;
+ 	ctrl = devm_spmi_controller_alloc(parent, sizeof(*bus));
+-	if (!ctrl)
+-		return -ENOMEM;
++	if (IS_ERR(ctrl))
++		return PTR_ERR(ctrl);
+ 
+ 	bus = spmi_controller_get_drvdata(ctrl);
+ 	bus->pmic_arb = pa;
+@@ -314,17 +324,21 @@
+ 			ret = of_property_read_reg(child, 0, &id, NULL);
+ 			if (ret < 0) {
+ 				dev_err(&pdev->dev, "no reg property specified\n");
++				of_node_put(child);
+ 				return -EINVAL;
+ 			}
+ 
+ 			if (id >= pa->data->bus_count) {
+ 				dev_err(&pdev->dev, "Unsupported bus index %llu\n", id);
++				of_node_put(child);
+ 				return -EINVAL;
+ 			}
+ 
+ 			ret = spmi_pmic_arb_debug_bus_init(pa, dev, child, (u8)id);
+-			if (ret)
++			if (ret) {
++				of_node_put(child);
+ 				return ret;
++			}
+ 
+ 			num++;
+ 		}
+@@ -451,3 +465,5 @@
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:spmi_pmic_arb_debug");
++
++MODULE_DESCRIPTION("Qualcomm SPMI PMIC arbiter debug controller");
+--- a/ports/qcom-spmi/qti-regmap-debugfs.c
++++ b/ports/qcom-spmi/qti-regmap-debugfs.c
+@@ -24,6 +24,7 @@
+ 	struct device		*dev;
+ 	unsigned int		dump_address;
+ 	unsigned int		dump_count;
++	struct dentry *files[3];
+ };
+ 
+ static DEFINE_MUTEX(regmap_qti_debugfs_lock);
+@@ -456,6 +457,7 @@
+ #endif
+ 
+ static const struct file_operations regmap_data_fops = {
++	.owner = THIS_MODULE,
+ 	.open = simple_open,
+ 	.read = regmap_data_read_file,
+ 	.write = regmap_data_write_file,
+@@ -511,8 +513,12 @@
+ 	debugfs_create_u32("count", 0600, regmap->debugfs,
+ 			   &debug_map->dump_count);
+ 
+-	debugfs_create_file_unsafe("data", QTI_DEBUGFS_FILE_MODE,
++	debugfs_create_file("data", QTI_DEBUGFS_FILE_MODE,
+ 				regmap->debugfs, debug_map, &regmap_data_fops);
++	/* Keep lookup references until after removal drains all operations. */
++	debug_map->files[0] = debugfs_lookup("address", regmap->debugfs);
++	debug_map->files[1] = debugfs_lookup("count", regmap->debugfs);
++	debug_map->files[2] = debugfs_lookup("data", regmap->debugfs);
+ 
+ done:
+ 	mutex_unlock(&regmap_qti_debugfs_lock);
+@@ -540,20 +546,12 @@
+ /* regmap_qti_debugfs_lock must be held by caller. */
+ static void regmap_qti_debugfs_remove(struct regmap_qti_debugfs *debug_map)
+ {
+-	struct dentry *file;
+-
+-	file = debugfs_lookup("address", debug_map->regmap->debugfs);
+-	dput(file);
+-	debugfs_remove(file);
+-
+-	file = debugfs_lookup("count", debug_map->regmap->debugfs);
+-	dput(file);
+-	debugfs_remove(file);
+-
+-	file = debugfs_lookup("data", debug_map->regmap->debugfs);
+-	dput(file);
+-	debugfs_remove(file);
+-
++	unsigned int i;
++
++	for (i = 0; i < ARRAY_SIZE(debug_map->files); i++) {
++		debugfs_remove(debug_map->files[i]);
++		dput(debug_map->files[i]);
++	}
+ 	list_del(&debug_map->list);
+ 	kfree(debug_map);
+ }
+@@ -673,6 +671,7 @@
+ void devm_regmap_qti_debugfs_unregister(struct regmap *regmap)
+ {
+ 	struct regmap_qti_debugfs *debug_map, *temp;
++	void *res;
+ 
+ 	if (IS_ERR_OR_NULL(regmap)) {
+ 		pr_err("%s: invalid regmap pointer\n", __func__);
+@@ -682,10 +681,18 @@
+ 	mutex_lock(&regmap_qti_debugfs_lock);
+ 	list_for_each_entry_safe(debug_map, temp, &regmap_qti_debugfs_list,
+ 				 list) {
+-		if (debug_map->regmap == regmap)
+-			devres_release(debug_map->dev,
+-				_devm_regmap_qti_debugfs_release,
+-				devm_regmap_qti_debugfs_match, debug_map);
++		if (debug_map->regmap != regmap)
++			continue;
++		/* Match the actual registration key. Remove the devres record,
++		 * then release it with the list lock already held; invoking the
++		 * locking wrapper here would recursively acquire that mutex.
++		 */
++		res = devres_remove(debug_map->dev, devm_regmap_qti_debugfs_release,
++				    devm_regmap_qti_debugfs_match, debug_map);
++		if (res) {
++			_devm_regmap_qti_debugfs_release(debug_map->dev, res);
++			devres_free(res);
++		}
+ 	}
+ 	mutex_unlock(&regmap_qti_debugfs_lock);
+ }
+--- a/ports/qcom-spmi/qcom-spmi-pmic.c
++++ b/ports/qcom-spmi/qcom-spmi-pmic.c
+@@ -262,6 +262,15 @@
+ 	.fast_io	= false,
+ };
+ 
++static void pmic_spmi_unpublish(void *data)
++{
++	struct spmi_device *sdev = data;
++
++	mutex_lock(&pmic_spmi_revid_lock);
++	spmi_device_set_drvdata(sdev, NULL);
++	mutex_unlock(&pmic_spmi_revid_lock);
++}
++
+ static int pmic_spmi_probe(struct spmi_device *sdev)
+ {
+ 	struct device_node *root = sdev->dev.of_node;
+@@ -282,6 +291,8 @@
+ 		return -ENOMEM;
+ 
+ 	ctx->num_usids = (uintptr_t)device_get_match_data(&sdev->dev);
++	if (ctx->num_usids <= 0)
++		return -EINVAL;
+ 
+ 	/* Only the first slave id for a PMIC contains this information */
+ 	if (sdev->usid % ctx->num_usids == 0) {
+@@ -294,6 +305,12 @@
+ 			return ret;
+ 	}
+ 
++	/* Installed before child population: children leave before unpublishing
++	 * their parent's revision metadata, then managed storage can be freed.
++	 */
++	ret = devm_add_action_or_reset(&sdev->dev, pmic_spmi_unpublish, sdev);
++	if (ret)
++		return ret;
+ 	mutex_lock(&pmic_spmi_revid_lock);
+ 	spmi_device_set_drvdata(sdev, ctx);
+ 	mutex_unlock(&pmic_spmi_revid_lock);
+@@ -303,18 +320,10 @@
+ 	return devm_of_platform_populate(&sdev->dev);
+ }
+ 
+-static void pmic_spmi_remove(struct spmi_device *sdev)
+-{
+-	mutex_lock(&pmic_spmi_revid_lock);
+-	spmi_device_set_drvdata(sdev, NULL);
+-	mutex_unlock(&pmic_spmi_revid_lock);
+-}
+-
+ MODULE_DEVICE_TABLE(of, pmic_spmi_id_table);
+ 
+ static struct spmi_driver pmic_spmi_driver = {
+ 	.probe = pmic_spmi_probe,
+-	.remove = pmic_spmi_remove,
+ 	.driver = {
+ 		.name = "pmic-spmi",
+ 		.of_match_table = pmic_spmi_id_table,
+--- a/ports/qcom-spmi/Makefile
++++ b/ports/qcom-spmi/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += spmi-pmic-arb.o spmi-pmic-arb-debug.o
++ccflags-y += -I$(src)/include -DCONFIG_SPMI_MSM_PMIC_ARB_MODULE=1
++obj-m += qti-regmap-debugfs.o qcom-spmi-pmic.o
++ccflags-y += -I$(srctree) -DCONFIG_REGMAP_QTI_DEBUGFS_MODULE=1

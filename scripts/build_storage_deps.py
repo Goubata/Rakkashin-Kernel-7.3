@@ -24,8 +24,11 @@ def main():
     parser.add_argument('--regulators-tests',action='store_true')
     parser.add_argument('--interconnect',action='store_true')
     parser.add_argument('--interconnect-tests',action='store_true')
+    parser.add_argument('--spmi',action='store_true')
+    parser.add_argument('--spmi-tests',action='store_true')
     args=parser.parse_args()
     if args.ufs_host:args.ice=True
+    if args.spmi_tests:args.spmi=True
     if args.interconnect_tests:args.interconnect=True
     if args.regulators_tests:args.regulators=True
     if args.ufs_host or args.diagnostics_tests or args.regulators:args.diagnostics=True
@@ -67,6 +70,10 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_interconnect_sources.py')],check=True)
         targets.append('ports/qcom-interconnect')
         if args.interconnect_tests:targets.append('tests/interconnect')
+    if args.spmi:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_spmi_sources.py')],check=True)
+        targets.append('ports/qcom-spmi')
+        if args.spmi_tests:targets.append('tests/spmi')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

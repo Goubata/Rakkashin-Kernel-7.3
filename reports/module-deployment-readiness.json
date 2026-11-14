@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-interconnect-stage18",
+  "stage": "android73-spmi-stage19",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
-  "staged_count": 85,
-  "same_name_candidate_count": 72,
-  "archived_names_without_same_name_candidate_count": 472,
-  "loaded_names_without_same_name_candidate_count": 457,
+  "staged_count": 89,
+  "same_name_candidate_count": 76,
+  "archived_names_without_same_name_candidate_count": 468,
+  "loaded_names_without_same_name_candidate_count": 453,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -273,6 +273,14 @@
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
     },
     {
+      "name": "qti_regmap_debugfs",
+      "file": "modules/qcom-spmi/qti-regmap-debugfs.ko"
+    },
+    {
+      "name": "qcom_spmi_pmic",
+      "file": "modules/qcom-spmi/qcom-spmi-pmic.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -315,6 +323,14 @@
     {
       "name": "qnoc_alor",
       "file": "modules/qcom-interconnect/qnoc-alor.ko"
+    },
+    {
+      "name": "spmi_pmic_arb",
+      "file": "modules/qcom-spmi/spmi-pmic-arb.ko"
+    },
+    {
+      "name": "spmi_pmic_arb_debug",
+      "file": "modules/qcom-spmi/spmi-pmic-arb-debug.ko"
     },
     {
       "name": "stub_regulator",
@@ -616,6 +632,14 @@
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
     },
     {
+      "name": "qti_regmap_debugfs",
+      "file": "modules/qcom-spmi/qti-regmap-debugfs.ko"
+    },
+    {
+      "name": "qcom_spmi_pmic",
+      "file": "modules/qcom-spmi/qcom-spmi-pmic.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -658,6 +682,14 @@
     {
       "name": "qnoc_alor",
       "file": "modules/qcom-interconnect/qnoc-alor.ko"
+    },
+    {
+      "name": "spmi_pmic_arb",
+      "file": "modules/qcom-spmi/spmi-pmic-arb.ko"
+    },
+    {
+      "name": "spmi_pmic_arb_debug",
+      "file": "modules/qcom-spmi/spmi-pmic-arb-debug.ko"
     },
     {
       "name": "stub_regulator",
@@ -1823,6 +1855,61 @@
       "depends": [
         "smem"
       ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_spmi_pmic": {
+      "file": "modules/qcom-spmi/qcom-spmi-pmic.ko",
+      "sha256": "4eada75613ac09d9877da2f6006a89ddc857587c53033bb574b533eb3aa02a83",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qti_regmap_debugfs"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qti_regmap_debugfs": {
+      "file": "modules/qcom-spmi/qti-regmap-debugfs.ko",
+      "sha256": "d1c807eeb3001f8fbe43f80846ed08c7b517590d72fa98fa0709aa5cdddba60a",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "spmi_pmic_arb_debug": {
+      "file": "modules/qcom-spmi/spmi-pmic-arb-debug.ko",
+      "sha256": "10786c1c9c547865982a1632589b41446c2bf8871fe94df484d64f792170e605",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "spmi_pmic_arb": {
+      "file": "modules/qcom-spmi/spmi-pmic-arb.ko",
+      "sha256": "869c69acba6f1219d4657cb94638da1deb38a6788b66b9c77af33f5f9a0523f7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
@@ -4253,13 +4340,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_spmi_pmic",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_spmi_temp_alarm",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4580,13 +4660,6 @@
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qti_regmap_debugfs",
-      "placements": [
-        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true
     },
@@ -4988,21 +5061,6 @@
     },
     {
       "name": "spi_msm_geni",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "spmi_pmic_arb",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "spmi_pmic_arb_debug",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
@@ -5780,7 +5838,6 @@
     "qcom_smd",
     "qcom_soc_wdt",
     "qcom_spmi_adc5_gen3",
-    "qcom_spmi_pmic",
     "qcom_spmi_temp_alarm",
     "qcom_spmi_wled",
     "qcom_spss",
@@ -5823,7 +5880,6 @@
     "qti_ptd_share",
     "qti_qmi_cdev",
     "qti_qmi_sensor_v2",
-    "qti_regmap_debugfs",
     "qti_thermal_vendor_hooks",
     "qti_userspace_cdev",
     "r8152",
@@ -5877,8 +5933,6 @@
     "spi_cnss_proto",
     "spi_geni_qcom",
     "spi_msm_geni",
-    "spmi_pmic_arb",
-    "spmi_pmic_arb_debug",
     "spmi_pmic_err_debug",
     "sps_drv",
     "stm_console",

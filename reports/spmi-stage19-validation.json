@@ -1,0 +1,55 @@
+{
+  "stage": "android73-spmi-stage19",
+  "scope": "actual linked vendor providers; RAM-only QTI/native-SPMI software checks; baseline DT order compatibility; no physical 7.3 acceptance",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "module_count": 89,
+  "imports_checked": 4567,
+  "all_import_crcs_match": true,
+  "guest_kunit_cases_passed": 5,
+  "software_tests_passed": true,
+  "test_backend_scope": "recording SPMI controller and RAM regmap; excluded from hardware artifacts",
+  "manual_release_bug_reproduced_and_fixed": true,
+  "strict_dt_validation_passed": false,
+  "dt_errors": [
+    {
+      "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+      "reason": "Duplicate active SID on one bus"
+    }
+  ],
+  "static_pmic_nodes": 23,
+  "static_irq_references": 28,
+  "max_selected_sid": 13,
+  "candidate_first_selection_matches_running": true,
+  "baseline_sid4_sysfs_node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+  "candidate_dt": "artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb",
+  "candidate_node_and_property_values_preserved": true,
+  "saved_gpu_and_memory_preserved": true,
+  "physical_v8_transactions_verified": false,
+  "physical_pmic_probe_verified": false,
+  "physical_irq_delivery_verified": false,
+  "hardware_registers_accessed_by_tests": false,
+  "daily_use_ready": false,
+  "packaging_allowed": false,
+  "partition_written": false,
+  "pending": [
+    "Duplicate SID4 remains; silicon identity/DT definition reconciliation required",
+    "Actual V8 APID/EE/ownership, secure access, transactions and IRQ delivery",
+    "Mapping resource consumer links and concurrent cleanup/metadata/debug controls",
+    "Remaining PMIC/GPIO/thermal/charging dependencies and other hardware drivers",
+    "Full boot/DT/images/DLKM/SELinux/ROM integration and physical daily-use acceptance"
+  ],
+  "sha256": {
+    "reports/spmi-source-lock.json": "d108fd2b79982a071379fa55ce0374ec87bbe19d28906d362d2f2d91c102f488",
+    "reports/module-crc-stage19.json": "432010a762debe3f6fef1564d65fed59f3aa75a0c2e99648707daafd37016fea",
+    "reports/qemu-spmi-stage19.log": "26ade5c36aaefcb05e7e88715ad3edaffea6389525a39e5aa4de4425d8267d36",
+    "reports/qemu-spmi-stage19.json": "8877abb9146f9ac05c29a0bb915d611b813bf236e061201f475617d3f9ad05f6",
+    "reports/spmi-stage19-build.log": "b681ba6fa982184d67b7f14c50335a29f3e1a666bec4c043d4ea39c2bf640eef",
+    "reports/spmi-dt-validation.json": "78206bdd3f0e933a7077eb0ace5360fb56ae0aa58b5e37c232a2c4e23c32b43a",
+    "reports/spmi-dt-order-repair.json": "f955e1d8e073e86a917e571494ab630c5fe468ae1c2d2c0f6ee51055fe40c579",
+    "reports/spmi-baseline-evidence.json": "886a1fd9b595bc9181e3ad92a12f3ccb5ba9bed056c404650fe01aa7dd88c115",
+    "reports/qemu-spmi-stage19-before-manual-release-fix.log": "2dca24a471bf4a675300ff7987113588af746912004b98c34a69ab5b72478d1d",
+    "reports/gpu-dt-reconstruction.json": "29fb465a39c7bd838868dbd4e0147cf3cb0e26b85c254ae902c1920b8ead7615",
+    "reports/memory-dt-reconstruction.json": "c6eb0e0259fb0f3516ed268ad85e8a7d0010df9f26122bedb9e8b7404279145f"
+  }
+}

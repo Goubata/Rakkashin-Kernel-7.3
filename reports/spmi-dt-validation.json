@@ -1,0 +1,1343 @@
+{
+  "scope": "active compatible, bus/device ID and IRQ shape checks only; no PMIC probe, MMIO, transactions or interrupt delivery",
+  "physical_verified": false,
+  "inputs": {
+    "saved": {
+      "controllers": {
+        "/soc/arbiter@c400000": [
+          "qcom,canoe-spmi-pmic-arb"
+        ],
+        "/soc/pmic-arb-debug@11314000": [
+          "qcom,spmi-pmic-arb-debug-v8"
+        ]
+      },
+      "bus_count": 3,
+      "active_pmic_count": 23,
+      "max_selected_sid": 13,
+      "native_16_sid_enumeration_sufficient": true,
+      "pmics": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+          "sid": 7,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+          "sid": 13,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+          "sid": 12,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+          "sid": 10,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+          "sid": 8,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+          "sid": 6,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+          "sid": 5,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+          "sid": 3,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+          "sid": 1,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+          "sid": 0,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7",
+          "sid": 7,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+          "sid": 4,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+          "sid": 0,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+          "sid": 1,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+          "sid": 3,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+          "sid": 5,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+          "sid": 6,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+          "sid": 8,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+          "sid": 10,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+          "sid": 12,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d",
+          "sid": 13,
+          "can_sleep": true
+        }
+      ],
+      "first_selected_by_bus_sid": {
+        "/soc/arbiter@c400000/spmi@c426000:4": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+        "/soc/arbiter@c400000/spmi@c426000:7": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+        "/soc/arbiter@c400000/spmi@c426000:13": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+        "/soc/arbiter@c400000/spmi@c426000:12": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+        "/soc/arbiter@c400000/spmi@c426000:10": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+        "/soc/arbiter@c400000/spmi@c426000:8": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+        "/soc/arbiter@c400000/spmi@c426000:6": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+        "/soc/arbiter@c400000/spmi@c426000:5": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+        "/soc/arbiter@c400000/spmi@c426000:3": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+        "/soc/arbiter@c400000/spmi@c426000:1": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+        "/soc/arbiter@c400000/spmi@c426000:0": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+        "/soc/pmic-arb-debug@11314000/spmi@0:7": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7",
+        "/soc/pmic-arb-debug@11314000/spmi@0:4": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+        "/soc/pmic-arb-debug@11314000/spmi@0:0": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+        "/soc/pmic-arb-debug@11314000/spmi@0:1": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+        "/soc/pmic-arb-debug@11314000/spmi@0:3": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+        "/soc/pmic-arb-debug@11314000/spmi@0:5": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+        "/soc/pmic-arb-debug@11314000/spmi@0:6": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+        "/soc/pmic-arb-debug@11314000/spmi@0:8": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+        "/soc/pmic-arb-debug@11314000/spmi@0:10": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+        "/soc/pmic-arb-debug@11314000/spmi@0:12": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+        "/soc/pmic-arb-debug@11314000/spmi@0:13": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d"
+      },
+      "irq_reference_count": 28,
+      "irq_references": [
+        {
+          "path": "/soc/regulator-ocp-notifier",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            113,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            124,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            125,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            152,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pmd802x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/qcom,hv-haptics@f000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            240,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm-lite@c00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            12,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d/pm8010n-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            13,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c/pm8010m-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            12,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4/pm8010e-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pmr735d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            10,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            8,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            6,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            5,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            3,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            144,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            145,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/rtc@6100",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            98,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/resin",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            6,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/pwrkey",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            7,
+            3
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+          "reason": "Duplicate active SID on one bus"
+        }
+      ]
+    },
+    "candidate": {
+      "controllers": {
+        "/soc/arbiter@c400000": [
+          "qcom,canoe-spmi-pmic-arb"
+        ],
+        "/soc/pmic-arb-debug@11314000": [
+          "qcom,spmi-pmic-arb-debug-v8"
+        ]
+      },
+      "bus_count": 3,
+      "active_pmic_count": 23,
+      "max_selected_sid": 13,
+      "native_16_sid_enumeration_sufficient": true,
+      "pmics": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+          "sid": 0,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+          "sid": 1,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+          "sid": 3,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+          "sid": 5,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+          "sid": 6,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+          "sid": 8,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+          "sid": 10,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+          "sid": 12,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+          "sid": 13,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+          "sid": 7,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7",
+          "sid": 7,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+          "sid": 4,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+          "sid": 0,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+          "sid": 1,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+          "sid": 3,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+          "sid": 5,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+          "sid": 6,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+          "sid": 8,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+          "sid": 10,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+          "sid": 12,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d",
+          "sid": 13,
+          "can_sleep": true
+        }
+      ],
+      "first_selected_by_bus_sid": {
+        "/soc/arbiter@c400000/spmi@c426000:0": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+        "/soc/arbiter@c400000/spmi@c426000:1": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+        "/soc/arbiter@c400000/spmi@c426000:3": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+        "/soc/arbiter@c400000/spmi@c426000:5": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+        "/soc/arbiter@c400000/spmi@c426000:6": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+        "/soc/arbiter@c400000/spmi@c426000:8": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+        "/soc/arbiter@c400000/spmi@c426000:10": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+        "/soc/arbiter@c400000/spmi@c426000:4": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+        "/soc/arbiter@c400000/spmi@c426000:12": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+        "/soc/arbiter@c400000/spmi@c426000:13": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+        "/soc/arbiter@c400000/spmi@c426000:7": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+        "/soc/pmic-arb-debug@11314000/spmi@0:7": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7",
+        "/soc/pmic-arb-debug@11314000/spmi@0:4": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+        "/soc/pmic-arb-debug@11314000/spmi@0:0": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+        "/soc/pmic-arb-debug@11314000/spmi@0:1": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+        "/soc/pmic-arb-debug@11314000/spmi@0:3": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+        "/soc/pmic-arb-debug@11314000/spmi@0:5": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+        "/soc/pmic-arb-debug@11314000/spmi@0:6": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+        "/soc/pmic-arb-debug@11314000/spmi@0:8": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+        "/soc/pmic-arb-debug@11314000/spmi@0:10": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+        "/soc/pmic-arb-debug@11314000/spmi@0:12": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+        "/soc/pmic-arb-debug@11314000/spmi@0:13": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d"
+      },
+      "irq_reference_count": 28,
+      "irq_references": [
+        {
+          "path": "/soc/regulator-ocp-notifier",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            113,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            144,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            145,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/rtc@6100",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            98,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/resin",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            6,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/pwrkey",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            7,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            3,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            5,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            6,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            8,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pmr735d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            10,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4/pm8010e-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c/pm8010m-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            12,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d/pm8010n-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            13,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/qcom,hv-haptics@f000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            240,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm-lite@c00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            12,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            124,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            125,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            152,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pmd802x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            10,
+            0,
+            3
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+          "reason": "Duplicate active SID on one bus"
+        }
+      ]
+    },
+    "running": {
+      "controllers": {
+        "/soc/arbiter@c400000": [
+          "qcom,canoe-spmi-pmic-arb"
+        ],
+        "/soc/pmic-arb-debug@11314000": [
+          "qcom,spmi-pmic-arb-debug-v8"
+        ]
+      },
+      "bus_count": 3,
+      "active_pmic_count": 23,
+      "max_selected_sid": 13,
+      "native_16_sid_enumeration_sufficient": true,
+      "pmics": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+          "sid": 0,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+          "sid": 1,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+          "sid": 3,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+          "sid": 5,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+          "sid": 6,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+          "sid": 8,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+          "sid": 10,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+          "sid": 12,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+          "sid": 13,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+          "sid": 7,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+          "sid": 4,
+          "can_sleep": false
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+          "sid": 0,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+          "sid": 1,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+          "sid": 3,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+          "sid": 5,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+          "sid": 6,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+          "sid": 8,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+          "sid": 10,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+          "sid": 12,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d",
+          "sid": 13,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+          "sid": 4,
+          "can_sleep": true
+        },
+        {
+          "path": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7",
+          "sid": 7,
+          "can_sleep": true
+        }
+      ],
+      "first_selected_by_bus_sid": {
+        "/soc/arbiter@c400000/spmi@c426000:0": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+        "/soc/arbiter@c400000/spmi@c426000:1": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+        "/soc/arbiter@c400000/spmi@c426000:3": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+        "/soc/arbiter@c400000/spmi@c426000:5": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+        "/soc/arbiter@c400000/spmi@c426000:6": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+        "/soc/arbiter@c400000/spmi@c426000:8": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+        "/soc/arbiter@c400000/spmi@c426000:10": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+        "/soc/arbiter@c400000/spmi@c426000:4": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+        "/soc/arbiter@c400000/spmi@c426000:12": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+        "/soc/arbiter@c400000/spmi@c426000:13": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+        "/soc/arbiter@c400000/spmi@c426000:7": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+        "/soc/pmic-arb-debug@11314000/spmi@0:0": "/soc/pmic-arb-debug@11314000/spmi@0/pmk8850@0",
+        "/soc/pmic-arb-debug@11314000/spmi@0:1": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550@1",
+        "/soc/pmic-arb-debug@11314000/spmi@0:3": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@3",
+        "/soc/pmic-arb-debug@11314000/spmi@0:5": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@5",
+        "/soc/pmic-arb-debug@11314000/spmi@0:6": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@6",
+        "/soc/pmic-arb-debug@11314000/spmi@0:8": "/soc/pmic-arb-debug@11314000/spmi@0/pm8550ve@8",
+        "/soc/pmic-arb-debug@11314000/spmi@0:10": "/soc/pmic-arb-debug@11314000/spmi@0/pmr735d@a",
+        "/soc/pmic-arb-debug@11314000/spmi@0:12": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@c",
+        "/soc/pmic-arb-debug@11314000/spmi@0:13": "/soc/pmic-arb-debug@11314000/spmi@0/pm8010@d",
+        "/soc/pmic-arb-debug@11314000/spmi@0:4": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmd802x-debug@4",
+        "/soc/pmic-arb-debug@11314000/spmi@0:7": "/soc/pmic-arb-debug@11314000/spmi@0/qcom,pmih010x-debug@7"
+      },
+      "irq_reference_count": 28,
+      "irq_references": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/pwrkey",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            7,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/resin",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            19,
+            6,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/rtc@6100",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            98,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            144,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/vadc@9000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            145,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/pm8550-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            1,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3/pm8550ve-d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            3,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5/pm8550ve-f-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            5,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6/pm8550ve-g-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            6,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8/pm8550ve-i-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            8,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a/pmr735d-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            10,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4/pm8010e-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c/pm8010m-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            12,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d/pm8010n-temp-alarm@2400",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            13,
+            36,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/pmih010x-temp-alarm-lite@c00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            12,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/qcom,hv-haptics@f000",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            240,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            0,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            1,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            7,
+            71,
+            2,
+            0
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/pmd802x-temp-alarm@a00",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            4,
+            10,
+            0,
+            3
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            124,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            125,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            152,
+            1,
+            1
+          ]
+        },
+        {
+          "path": "/soc/regulator-ocp-notifier",
+          "domain": "/soc/arbiter@c400000/spmi@c426000",
+          "args": [
+            0,
+            113,
+            1,
+            1
+          ]
+        }
+      ],
+      "errors": [
+        {
+          "path": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4",
+          "reason": "Duplicate active SID on one bus"
+        }
+      ]
+    }
+  },
+  "first_selection_matches_running": {
+    "saved": false,
+    "candidate": true
+  },
+  "passed": false
+}

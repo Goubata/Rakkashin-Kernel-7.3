@@ -291,3 +291,33 @@ This is no proof of physical USB/IPA, NoC/CRM/RPMh, QoS, firmware or performance
 Voter handle/removal races, static BCM probe rollback, QoS error/vote rollback,
 consumer-list concurrency, whole DT/boot/DLKM/ROM alignment and all real-device
 acceptance still remain. Candidate DT is separate and not approved for packaging.
+
+## Stage19: SPMI/PMIC providers and QTI diagnostics
+
+Four real vendor modules link, giving 89 modules / 4,567 matching imports on the
+unchanged Stage16 Image. IRQ APIs, managed teardown order, mapping publication,
+OF/device references, controller names and PMIC metadata lifetime are adapted.
+The actual QTI manual unregister used the wrong release key and did not remove
+files; a retained-fd test reproduced that and now confirms removal. Custom data
+access uses the full debugfs proxy, and only owned files/references are removed.
+
+Five SMP4 KUnit cases execute RAM regmap operations/bounds, mapping validation
+and the native SPMI framework against a recording test controller, including
+length rejection and status propagation. Actual QTI diagnostic reads/offsets,
+readonly rejection, retained-fd rejection, preservation of core regmap files and
+four-module unload pass. No physical PMIC register was touched by those tests.
+No recording controller/RAM test backend is packaged as a hardware provider.
+
+The strict DT audit deliberately remains failed: SID4 is duplicated in the saved,
+running and candidate trees. Reconstructed child order initially selected a
+different node than running. Read-only 6.12 sysfs matches the running selection.
+An exact raw-subtree permutation preserves running order without changing any
+node/property bytes, header/reserve map/strings, GPU21 or memory definitions.
+Native DTC accepts it. The duplicate is not hidden or guessed away. Selected DT
+shapes include 23 PMIC nodes, max SID13 and 28 IRQ references; these are not
+physical probe counts. Native 16-SID child enumeration covers those selected IDs.
+
+Pending: silicon/APID/EE/security ownership, actual transactions/IRQ delivery,
+returned mapping consumer ownership, concurrent PMIC/metadata/debug teardown,
+duplicate SID resolution, charging/thermal/GPIO dependencies and whole-device
+boot, ROM, stability, performance and power acceptance. No flashable image exists.

@@ -1,0 +1,11 @@
+{
+  "scope": "read-only current 6.12 enumeration and saved module feature evidence; not a 7.3 hardware test",
+  "baseline_release": "6.12.113-android16-6-g18b507169406-ab14630870-4k",
+  "sid4_sysfs_node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+  "saved_debug_module_sha256": "e93b7b59de7cc76d16cde4819ef3f6550bedaf3af578274f6bc45b107335d02f",
+  "saved_regmap_read_symbol_present": true,
+  "saved_regmap_write_symbol_present": false,
+  "selected_write_support": false,
+  "hardware_registers_read": false,
+  "system_settings_changed": false
+}

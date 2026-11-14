@@ -21,7 +21,9 @@ parser.add_argument('--ice',action='store_true')
 parser.add_argument('--ufs-host',action='store_true')
 parser.add_argument('--regulators',action='store_true')
 parser.add_argument('--interconnect',action='store_true')
+parser.add_argument('--spmi',action='store_true')
 args=parser.parse_args()
+if args.spmi:args.interconnect=True
 if args.interconnect:args.regulators=True
 if args.regulators:args.ufs_host=True
 if args.ufs_host:args.ice=True;args.gpu_deps=True
@@ -53,6 +55,8 @@ if args.regulators:
     ports.append('qcom-regulators')
 if args.interconnect:
     ports.append('qcom-interconnect')
+if args.spmi:
+    ports.append('qcom-spmi')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

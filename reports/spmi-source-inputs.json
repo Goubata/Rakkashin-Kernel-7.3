@@ -1,0 +1,35 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-spmi/spmi-pmic-arb.c",
+      "source": "drivers/spmi/spmi-pmic-arb.c",
+      "original_sha256": "350382773d0fe0d9a72ce74ca3fd3929c5427c30f9b42caa68564ed065b8bc1f"
+    },
+    {
+      "file": "ports/qcom-spmi/spmi-pmic-arb-debug.c",
+      "source": "drivers/spmi/spmi-pmic-arb-debug.c",
+      "original_sha256": "76b72d5951773bef6d7347849171c8901fddb0dde1ddee8145efdcd7b9470266"
+    },
+    {
+      "file": "ports/qcom-spmi/include/linux/soc/qcom/spmi-pmic-arb.h",
+      "source": "include/linux/soc/qcom/spmi-pmic-arb.h",
+      "original_sha256": "c21a198ab9aed32d1dd7ac48d7e0dbe1a33af0a55fe7eb642ac6335ecb724822"
+    },
+    {
+      "file": "ports/qcom-spmi/qti-regmap-debugfs.c",
+      "source": "drivers/base/regmap/qti-regmap-debugfs.c",
+      "original_sha256": "8afcf2e78d7dbf3bf903a99adc228593e48749616ef5363e71f7b17107d81c25"
+    },
+    {
+      "file": "ports/qcom-spmi/include/linux/qti-regmap-debugfs.h",
+      "source": "include/linux/qti-regmap-debugfs.h",
+      "original_sha256": "92f541421966c25689ec454806e5b01164fd99481431fe5e3bd37de90e9f2a69"
+    },
+    {
+      "file": "ports/qcom-spmi/qcom-spmi-pmic.c",
+      "source": "drivers/mfd/qcom-spmi-pmic.c",
+      "original_sha256": "5539c4c0c99a3d9812c23649b86fc36755271303cc1598964f9068671c0d18ab"
+    }
+  ]
+}

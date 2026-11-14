@@ -1,0 +1,69 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-spmi/spmi-pmic-arb.c",
+      "source": "drivers/spmi/spmi-pmic-arb.c",
+      "original_sha256": "350382773d0fe0d9a72ce74ca3fd3929c5427c30f9b42caa68564ed065b8bc1f",
+      "sha256": "7ace0e48f10e0e31a11148f5eeef2b3e30eab6aa863ef30d7c841230c167ebd6"
+    },
+    {
+      "file": "ports/qcom-spmi/spmi-pmic-arb-debug.c",
+      "source": "drivers/spmi/spmi-pmic-arb-debug.c",
+      "original_sha256": "76b72d5951773bef6d7347849171c8901fddb0dde1ddee8145efdcd7b9470266",
+      "sha256": "f4d6be8101ad59264da2088aac107d18ae4c6ef820839bad379538471a7b512d"
+    },
+    {
+      "file": "ports/qcom-spmi/include/linux/soc/qcom/spmi-pmic-arb.h",
+      "source": "include/linux/soc/qcom/spmi-pmic-arb.h",
+      "original_sha256": "c21a198ab9aed32d1dd7ac48d7e0dbe1a33af0a55fe7eb642ac6335ecb724822",
+      "sha256": "c21a198ab9aed32d1dd7ac48d7e0dbe1a33af0a55fe7eb642ac6335ecb724822"
+    },
+    {
+      "file": "ports/qcom-spmi/qti-regmap-debugfs.c",
+      "source": "drivers/base/regmap/qti-regmap-debugfs.c",
+      "original_sha256": "8afcf2e78d7dbf3bf903a99adc228593e48749616ef5363e71f7b17107d81c25",
+      "sha256": "20211c6d3da15f1d169e1f3e4cfcc6830d71b0dfc20adec57e59506f2be55b49"
+    },
+    {
+      "file": "ports/qcom-spmi/include/linux/qti-regmap-debugfs.h",
+      "source": "include/linux/qti-regmap-debugfs.h",
+      "original_sha256": "92f541421966c25689ec454806e5b01164fd99481431fe5e3bd37de90e9f2a69",
+      "sha256": "92f541421966c25689ec454806e5b01164fd99481431fe5e3bd37de90e9f2a69"
+    },
+    {
+      "file": "ports/qcom-spmi/qcom-spmi-pmic.c",
+      "source": "drivers/mfd/qcom-spmi-pmic.c",
+      "original_sha256": "5539c4c0c99a3d9812c23649b86fc36755271303cc1598964f9068671c0d18ab",
+      "sha256": "c03d89d966a6d027a864aa0f88d37aa795356ddc97c2552f896242e582cee2c2"
+    },
+    {
+      "file": "ports/qcom-spmi/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "940a582ee301143a1a4d582a6aa13c09d9a3ea1655eca541d0ae62f5e7b7b712"
+    }
+  ],
+  "patch_sha256": "4b2fc46af9b3e6a36cb13c39be3155136177f9a84b3034dcc70116f37109ef90",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "reviewed_changes": [
+    "Native fwnode IRQ domain API; preserve real V1 through V8 hardware operations",
+    "Managed debug/controller/IRQ teardown in dependency order, including failed probe",
+    "Hold bus OF references and bound the controller bus array",
+    "Preserve globally unique core controller names rather than hardware-local IDs",
+    "Publish only initialized arbiters; serialize mapping queries with unpublish",
+    "Balance mapping device/node references and validate address high bits",
+    "Fix debug-controller ERR_PTR allocation handling and iterator error cleanup",
+    "Keep PMIC revision metadata until managed children and debug resources leave",
+    "Track QTI owned dentries; full proxy and module owner for custom data access",
+    "Match actual devres release key for manual QTI unregister without recursive lock"
+  ],
+  "known_open_items": [
+    "Physical V8 APID/EE/ownership, secure accesses, transactions and interrupt delivery",
+    "Consumer ownership after receiving physical mapping resources",
+    "IRQ domain/mapping lifetime and concurrent PMIC probe/removal stress",
+    "PMIC metadata getter lifetime and QTI dump control/cache concurrency",
+    "Duplicate active SID4 in saved/running DT remains; candidate preserves running first selection",
+    "Native child enumeration is 16-SID; selected DT max SID13, broader eSPMI not validated"
+  ]
+}

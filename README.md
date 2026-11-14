@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnectを含む85モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMICを含む89モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -207,3 +207,26 @@ python scripts/snapshot_boot_core.py --name android73-interconnect-stage18 --gpu
 
 候補DTは `artifacts/dt-interconnect-stage18/avr-interconnect-candidate.dtb`。
 Stage18の本体ImageはStage16と同一です。`reports/interconnect-stage18-validation.json` に範囲を記録しています。実機7.3の起動と全機能動作は未確認で、boot.imgや常用版はまだありません。
+
+## Stage19: Canoe/V8 SPMI、PMIC、診断の接続
+
+固定MotorolaソースからSPMI arbiter、V8対応診断コントローラ、PMIC MFD、QTI regmap診断の4モジュールを移植しました。7.3のfwnode IRQ domainへ対応し、debugfs→子デバイス/コントローラ→IRQ→OF参照の終了順を管理します。初期化済みのarbiterだけを公開し、mapping APIと解除を排他し、device/node参照を釣り合わせました。SPMI名にはcoreのグローバルな番号を使い、ハードウェア内bus番号の重複で衝突しないようにしました。
+
+PMIC子デバイスが終了するまでrevision metadataを保持します。QTIの独自data操作はdebugfsの保護を使い、自分のファイルだけを除去して参照を解放します。元の手動解除APIが誤ったdevres識別子で実際には解除できない問題も、RAM上の試験で再現して修正しました。保存済みモジュールに合わせて診断dataの書込みは無効のままです。
+
+4コアQEMUで5項目（RAM regmap往復/範囲、mapping引数、native SPMI引渡し、長さ/エラー伝播）が通過しました。実QTI診断からRAM値を読み、解除後の保持fd読取りを拒否し、core所有ファイルを残したまま全4モジュールを解放する試験も通過しました。記録用のSPMI test doubleとRAM backendは試験モジュールだけに存在し、成果物へは含めません。実V8トランザクション・割り込み・PMIC probeの証明ではありません。
+
+DT検査で、同じbus/SID4を持つPMICノード2つの順序が、静的な再構成DTと保存running DTで逆になっていると分かりました。実機6.12のsysfsが選択しているノードも読み取り確認し、17個のSPMI子サブツリーを保存running順へ並べ替えた候補DTを作りました。予約マップ・ヘッダ・文字列・全ノード/プロパティ値は変えず、GPU21段階と保存メモリも維持しています。bootloaderの動的ノード/値はコピーしていません。
+
+**重複SID定義自体は残っており、厳密なDT検証は未通過です。** 候補は現在のrunning DTと同じ先行選択を維持しますが、どちらかを推測で無効化していません。候補の23 PMICノード・最大SID13・28 IRQ参照は静的記述の検査であり、実機で23個がprobeしたという意味ではありません。
+
+```sh
+python scripts/build_storage_deps.py --spmi-tests
+python scripts/run_qemu.py --test spmi --cpus 4 --log reports/spmi.log
+python scripts/preserve_spmi_dt_order.py
+python scripts/audit_spmi_dt.py  # 現存する重複SIDのためexit 1、未解決事項として記録
+python scripts/snapshot_boot_core.py --name android73-spmi-stage19 --gpu-driver --rakkashin --spmi
+```
+
+候補DT: `artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb`。
+本体ImageはStage16と同じです。常用・実機起動・充電/温度/IRQ・ROM全体の確認は未完了で、パーティションへの書込みはしていません。`reports/spmi-stage19-validation.json` に検証範囲を記録します。

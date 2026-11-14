@@ -23,8 +23,8 @@
     {
       "area": "Gunyah common transport lifetime",
       "file": "ports/gunyah-core/rsc_mgr.c",
-      "status": "open",
-      "finding": "Audit PM notifier, IRQ/wake, auxiliary device and allocated context cleanup through all init failures and exit paths."
+      "status": "PM notifier rollback/unregister fixed and shared helper tested; broader ownership audit open",
+      "finding": "Common RM now unregisters its real PM notifier on later init failure and exit. Nine helper cases include actual global PM chain registration. IRQ/wake, auxiliary device, context ownership and hibernation concurrency remain unverified."
     },
     {
       "area": "GPU firmware/Android runtime",

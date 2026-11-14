@@ -1,10 +1,13 @@
 {
+  "kind": "common-core",
   "scope": "source provenance and patch replay only; not runtime or complete lifecycle validation",
   "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
-  "patch_sha256": "891895aa4054342c446c321e0fa3c912ff0277db38a555d1dc90eee666a91d1c",
+  "patch_sha256": "6ce6f68426c1e4af92b4f9d4d38c6611b17e28cdbf9fb88c484ca5507653f452",
   "files": [
     {
       "file": "ports/gunyah-core/gunyah.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah.c",
       "original_git_blob": "48d754b3621bc01ad2996100d0259b1bc78fe7d8",
       "original_sha256": "e3f7c145e17882b7def3bfa37fca9e8d1412cf57afd5c6865405219ad2ab689c",
@@ -13,6 +16,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_hypercall.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "arch/arm64/gunyah/gunyah_hypercall.c",
       "original_git_blob": "896f9259515e19392fc60b692282ccb45bd41dea",
       "original_sha256": "db4be47bd8f02467d13d3f8e6b74c50fb02c821a2c2fdfc0c26d206a2b449afd",
@@ -21,6 +26,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_ioeventfd.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_ioeventfd.c",
       "original_git_blob": "894d303968c4c48254a3e920b6d48f5d19d65f30",
       "original_sha256": "f4d04777d1e9883c9c193f8a1635a92c363f7580d2824eac076b8893aec7c2cf",
@@ -29,6 +36,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_irqfd.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_irqfd.c",
       "original_git_blob": "f00f6833794c80b86366f5954120d70b2e569d2c",
       "original_sha256": "221a46a37790630f11b24dc2f1ff00a7aa5034fb4fee0af816ad8f8afb9c8f77",
@@ -37,6 +46,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_platform_hooks.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_platform_hooks.c",
       "original_git_blob": "b03795df0014414c6f6a5e9c015bd112ee8f780e",
       "original_sha256": "aa1b536c521991275e886250509aecf08d6b121d22f820ecc8af302922927250",
@@ -45,6 +56,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_qcom.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_qcom.c",
       "original_git_blob": "622d6a07db02c47d031fd2fea75226143382d6e0",
       "original_sha256": "6330ac6bef50e336967eac0d45243db644fd1284fa5de017a8f7da8a6501703d",
@@ -53,6 +66,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_qtvm.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_qtvm.c",
       "original_git_blob": "17b5625e4155cbe181783c31e8ad50988ecf5e39",
       "original_sha256": "773ffdebe55a2cb471e20c493c262b0597561acacaf05d0b571d811335d5e8dd",
@@ -61,6 +76,8 @@
     },
     {
       "file": "ports/gunyah-core/gunyah_vcpu.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/gunyah_vcpu.c",
       "original_git_blob": "a473070f977906ab53db5ef46a084797af40ee9b",
       "original_sha256": "379a270ea9bea3e23e9abc29a9f4985db7e895281163b306ea9c74525a8aaeba",
@@ -69,6 +86,8 @@
     },
     {
       "file": "ports/gunyah-core/include/trace/hooks/gunyah.h",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "include/trace/hooks/gunyah.h",
       "original_git_blob": "abc238066454a7b1f682892d25133b1f85fc9b6b",
       "original_sha256": "3f17ed05e80c23f2181eefc18afcf6b85370c849444bacd7c25c987f242b9c1e",
@@ -77,14 +96,18 @@
     },
     {
       "file": "ports/gunyah-core/rsc_mgr.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/rsc_mgr.c",
       "original_git_blob": "6fd544ce5e7d7a57cc485a519c1d12673f120a51",
       "original_sha256": "b195e6bac5b8c09ebccf77c9677c3ab2995da46d20feefbda5c6d730f61964eb",
-      "sha256": "bde229998d85d9323e051ffb413614f945e80405efc36c7bdef2aa4f38307676",
+      "sha256": "cda0ae7dc74c15b9a60c94cd9ce6905700cb398b3e34e0b10b1ff640a9266edc",
       "changed": true
     },
     {
       "file": "ports/gunyah-core/rsc_mgr.h",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/rsc_mgr.h",
       "original_git_blob": "af65801489bb6a5e21fd81464aafdb6b581a6410",
       "original_sha256": "acbf62f07156cb68bb3302c740b04de2701dcfc2fa49eed75d36613bd2df37cb",
@@ -93,6 +116,8 @@
     },
     {
       "file": "ports/gunyah-core/rsc_mgr_rpc.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/rsc_mgr_rpc.c",
       "original_git_blob": "172796faaa327b3b4582398c0d83cfebab0383cf",
       "original_sha256": "ad4ccea1a2748867538039b1c72256e94fb59e379c49a8e063bb7439c81d9c9b",
@@ -101,6 +126,8 @@
     },
     {
       "file": "ports/gunyah-core/vm_mgr.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/vm_mgr.c",
       "original_git_blob": "db1b16981e9dc0c0a4294cae707e92d3ca119070",
       "original_sha256": "075bced8d4abe642bf5de46aadfbf76f5fef96a6f013759bcf56de900415a763",
@@ -109,6 +136,8 @@
     },
     {
       "file": "ports/gunyah-core/vm_mgr.h",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/vm_mgr.h",
       "original_git_blob": "6919d36d4682da49c8d4b7b99911d58b63ea020a",
       "original_sha256": "dba995b4ba276abdb2052551b35a4837738f114df0097dc6c2294aaa2de72a96",
@@ -117,6 +146,8 @@
     },
     {
       "file": "ports/gunyah-core/vm_mgr_cma_mem.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/vm_mgr_cma_mem.c",
       "original_git_blob": "1de6c1bdb1fd1ff5159e7d61d64cb0c2a791474b",
       "original_sha256": "0ed2d3f05e6338e40fb079b8d54b7f8dfb334c7909cc067305d07896cb05c460",
@@ -125,6 +156,8 @@
     },
     {
       "file": "ports/gunyah-core/vm_mgr_mem.c",
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
       "origin": "drivers/virt/gunyah/vm_mgr_mem.c",
       "original_git_blob": "b469069711f85a5e0a8b2afb1fca67641bdbc3be",
       "original_sha256": "2474920ebfb6a835b665d94287f39203aed3d363b5da14c18bf0e0e71a0850c6",
@@ -137,6 +170,7 @@
     "Target file mapping lookup and inclusive folio range",
     "Scope file-local VM failure helper static",
     "Physical PFN iteration for CMA pages",
-    "Target void platform remove callback"
+    "Target void platform remove callback",
+    "Track and unwind common transport PM notifier ownership"
   ]
 }

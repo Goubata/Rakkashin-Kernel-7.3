@@ -37,3 +37,13 @@ component DTSの合成順序と製品選択の復元、各ドライバの7.3対�
 `python scripts/capture_selinux_baseline.py` により、稼働中6.12 ROMがEnforcing・policy version 33であること、実際のpolicyハッシュ、GPU/ntsync/oplus_sync/synxのデバイスラベルを読み取りました。`reports/selinux-port-baseline.json` に保存しています。OnePlus連携ノードは `/dev/oplus_sync` です。モジュールの名前とデバイスの名前を混同しません。
 
 この観測は7.3でのアクセス許可を証明しません。サービスのdomain、必要なioctl/xperm、ueventdによる所有者・ラベル、実機で発生するAVCの確認が必要です。現行policyは変更していません。
+
+## 拡張componentとユーザーGPU設定の復元
+
+`python scripts/prepare_dt_sources.py --components --camera-reference --extended-platform` は公開固定入力にGPU・フェンス・HFI・IPCLite・映像・BT・WLAN・AVR NXP NFCを追加します。カメラの不足ヘッダはVantageの固定参照を明示して使い、AVRカメラドライバとの互換性は未確認です。IPCLiteの不足ヘッダは復元データで、実装上のslot番号と実機ダンプのhardware signal番号を別々に検証しています。42ノードのmailbox/interrupt/provider/client整合を確認し、元vendorヘッダを回収したとは主張しません。
+
+`python scripts/build_dt_components.py --camera-reference --extended-platform` は189ソースファイルから5,063ノードを試験合成。不足39ノードに加え、プロパティ差があります。特に公開ソースの予約領域は保存実機と異なり、未解決です。OEM合成順序・7.3 binding・実機ドライバを検証するまでpackagingは禁止です。
+
+ユーザーの低電圧化・クロック・段数変更は公開標準値へ置き換えません。`python scripts/reconstruct_gpu_dt.py --write` は保存した静的DTと稼働中DTのGPU表が一致することを確認し、21段階の周波数・電圧corner・ACD・bus設定と初期段を `recovered/avr-saved-gpu-pwrlevels.dtso` に復元します。新しいチューニング値は生成しません。移植ドライバの32段階上限内、index連続、周波数順序、bus範囲を確認しますが、これは7.3での電圧/firmware動作の検証ではありません。
+
+`python scripts/build_dt_components.py --camera-reference --extended-platform --saved-gpu-table` は別の研究出力にこの表を最後に適用します。適用後の22ノード（表親と21段）の全プロパティがダンプと完全一致することを確認し、一致しなければ失敗します。出力は `artifacts/dt-avr-platform-gpu-saved-build/`、照合は `reports/gpu-dt-reconstruction.json` です。全体5,069ノード、不足33ノードで、完成DTBや常用動作の証明ではありません。

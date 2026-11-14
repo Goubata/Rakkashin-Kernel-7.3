@@ -80,7 +80,8 @@ def main():
                                        'Target file mapping lookup and inclusive folio range',
                                        'Scope file-local VM failure helper static',
                                        'Physical PFN iteration for CMA pages',
-                                       'Target void platform remove callback'] if not args.vendor_rm else [
+                                       'Target void platform remove callback',
+                                       'Track and unwind common transport PM notifier ownership'] if not args.vendor_rm else [
                       'Target OF firmware-node and scoped DT references',
                       'Transactional SCM/hyp and RM/QTVM notifier registration',
                       'Probe failure and remove detach callbacks and drain work',

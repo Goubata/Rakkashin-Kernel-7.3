@@ -1,0 +1,206 @@
+{
+  "scope": "exact saved GPU table reproduction and driver index capacity, not voltage safety, firmware or GPU execution",
+  "saved_dtb_sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+  "saved_running_dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+  "static_and_saved_running_table_match": true,
+  "output": "ports/device-tree/recovered/avr-saved-gpu-pwrlevels.dtso",
+  "output_sha256": "5debad445307541a45aeadee01df560c49dfa9d4bf75a134b516ae2680e27121",
+  "driver_capacity_header_sha256": "1423ad3765523f0af2d9c268a27e514b00f25a0edba3cad2ce7289a6988a4867",
+  "driver_max_levels": 32,
+  "level_count": 21,
+  "levels": {
+    "0": {
+      "reg": 0,
+      "qcom,acd-level": 2284412925,
+      "qcom,bus-max": 10,
+      "qcom,bus-min": 10,
+      "qcom,bus-freq": 10,
+      "qcom,level": 423,
+      "qcom,gpu-freq": 1238000000
+    },
+    "1": {
+      "reg": 1,
+      "qcom,acd-level": 2284412925,
+      "qcom,bus-max": 10,
+      "qcom,bus-min": 10,
+      "qcom,bus-freq": 10,
+      "qcom,level": 423,
+      "qcom,gpu-freq": 1225000000
+    },
+    "2": {
+      "reg": 2,
+      "qcom,acd-level": 2821283837,
+      "qcom,bus-max": 10,
+      "qcom,bus-min": 10,
+      "qcom,bus-freq": 10,
+      "qcom,level": 416,
+      "qcom,gpu-freq": 1150000000
+    },
+    "3": {
+      "reg": 3,
+      "qcom,acd-level": 2284478461,
+      "qcom,bus-max": 8,
+      "qcom,bus-min": 6,
+      "qcom,bus-freq": 8,
+      "qcom,level": 384,
+      "qcom,gpu-freq": 1075000000
+    },
+    "4": {
+      "reg": 4,
+      "qcom,acd-level": 2821349373,
+      "qcom,bus-max": 8,
+      "qcom,bus-min": 6,
+      "qcom,bus-freq": 8,
+      "qcom,level": 376,
+      "qcom,gpu-freq": 1025000000
+    },
+    "5": {
+      "reg": 5,
+      "qcom,acd-level": 2284543997,
+      "qcom,bus-max": 8,
+      "qcom,bus-min": 5,
+      "qcom,bus-freq": 8,
+      "qcom,level": 336,
+      "qcom,gpu-freq": 975000000
+    },
+    "6": {
+      "reg": 6,
+      "qcom,acd-level": 2821414909,
+      "qcom,bus-max": 7,
+      "qcom,bus-min": 5,
+      "qcom,bus-freq": 7,
+      "qcom,level": 298,
+      "qcom,gpu-freq": 891000000
+    },
+    "7": {
+      "reg": 7,
+      "qcom,acd-level": 2284675069,
+      "qcom,bus-max": 7,
+      "qcom,bus-min": 5,
+      "qcom,bus-freq": 7,
+      "qcom,level": 227,
+      "qcom,gpu-freq": 795000000
+    },
+    "8": {
+      "reg": 8,
+      "qcom,acd-level": 2284740605,
+      "qcom,bus-max": 6,
+      "qcom,bus-min": 3,
+      "qcom,bus-freq": 5,
+      "qcom,level": 200,
+      "qcom,gpu-freq": 732000000
+    },
+    "9": {
+      "reg": 9,
+      "qcom,acd-level": 2284806141,
+      "qcom,bus-max": 6,
+      "qcom,bus-min": 3,
+      "qcom,bus-freq": 3,
+      "qcom,level": 167,
+      "qcom,gpu-freq": 714000000
+    },
+    "10": {
+      "reg": 10,
+      "qcom,acd-level": 2284806141,
+      "qcom,bus-max": 6,
+      "qcom,bus-min": 3,
+      "qcom,bus-freq": 3,
+      "qcom,level": 112,
+      "qcom,gpu-freq": 660000000
+    },
+    "11": {
+      "reg": 11,
+      "qcom,acd-level": 3224068093,
+      "qcom,bus-max": 4,
+      "qcom,bus-min": 2,
+      "qcom,bus-freq": 3,
+      "qcom,level": 86,
+      "qcom,gpu-freq": 589000000
+    },
+    "12": {
+      "reg": 12,
+      "qcom,acd-level": 3358154749,
+      "qcom,bus-max": 3,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 2,
+      "qcom,level": 68,
+      "qcom,gpu-freq": 496000000
+    },
+    "13": {
+      "reg": 13,
+      "qcom,acd-level": 3358154749,
+      "qcom,bus-max": 3,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 2,
+      "qcom,level": 68,
+      "qcom,gpu-freq": 456000000
+    },
+    "14": {
+      "reg": 14,
+      "qcom,acd-level": 3358154749,
+      "qcom,bus-max": 3,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 2,
+      "qcom,level": 58,
+      "qcom,gpu-freq": 403000000
+    },
+    "15": {
+      "reg": 15,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 2,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 2,
+      "qcom,level": 52,
+      "qcom,gpu-freq": 301000000
+    },
+    "16": {
+      "reg": 16,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 2,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 2,
+      "qcom,level": 52,
+      "qcom,gpu-freq": 250000000
+    },
+    "17": {
+      "reg": 17,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 2,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 1,
+      "qcom,level": 50,
+      "qcom,gpu-freq": 195000000
+    },
+    "18": {
+      "reg": 18,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 2,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 1,
+      "qcom,level": 38,
+      "qcom,gpu-freq": 150000000
+    },
+    "19": {
+      "reg": 19,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 1,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 1,
+      "qcom,level": 1,
+      "qcom,gpu-freq": 100000000
+    },
+    "20": {
+      "reg": 20,
+      "qcom,acd-level": 3358547965,
+      "qcom,bus-max": 1,
+      "qcom,bus-min": 1,
+      "qcom,bus-freq": 1,
+      "qcom,level": 1,
+      "qcom,gpu-freq": 72000000
+    }
+  },
+  "runtime_verified": false,
+  "packaging_allowed": false,
+  "merged_exact_match": true,
+  "merged_sha256": "55b5b81ae749a0764a16d903fbe4cb3d8dcad1dc97f0a8a10657211d62904e89"
+}

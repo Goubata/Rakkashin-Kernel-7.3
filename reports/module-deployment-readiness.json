@@ -1,6 +1,6 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-gpu-stage10",
+  "stage": "android73-gpu-stage11",
   "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
   "archived_unique_count": 544,
   "staged_count": 71,
@@ -781,7 +781,7 @@
     },
     "gunyah_rsc_mgr": {
       "file": "modules/gunyah-core/gunyah_rsc_mgr.ko",
-      "sha256": "b5c984bb8c714c1abcfd87a69e77ff26757b843dece8927c55405ba8b204f4b3",
+      "sha256": "aff9b8161223aaa7c70f44c787594c4080ff0af113e7859d62b8774e4394f1c8",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "gunyah",

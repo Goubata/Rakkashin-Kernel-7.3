@@ -21,6 +21,7 @@
 
 #include "rsc_mgr.h"
 #include "vm_mgr.h"
+#include "../gunyah-rm/avr-rm-notifiers.h"
 
 /* clang-format off */
 #define RM_RPC_API_VERSION_MASK		GENMASK(3, 0)
@@ -159,6 +160,7 @@ struct gunyah_rm {
 	struct fwnode_handle *parent_fwnode;
 
 	struct notifier_block pm_nb;
+	struct avr_rm_notifiers pm_notifiers;
 };
 
 /**
@@ -867,6 +869,11 @@ err:
 	return NOTIFY_BAD;
 }
 
+static const struct avr_rm_notifier_ops pm_notifier_ops = {
+	.register_first = register_pm_notifier,
+	.unregister_first = unregister_pm_notifier,
+};
+
 static struct gunyah_rm *__rm;
 
 static int __init gunyah_rm_init(void)
@@ -896,6 +903,8 @@ static int __init gunyah_rm_init(void)
 	mutex_init(&rm->send_lock);
 	init_completion(&rm->send_ready);
 	BLOCKING_INIT_NOTIFIER_HEAD(&rm->nh);
+	rm->pm_notifiers.ops = &pm_notifier_ops;
+	rm->pm_notifiers.first = &rm->pm_nb;
 	xa_init_flags(&rm->call_xarray, XA_FLAGS_ALLOC);
 
 	ret = gunyah_rm_probe_info_area(rm);
@@ -903,19 +912,19 @@ static int __init gunyah_rm_init(void)
 		ret = gunyah_rm_get_of_info(rm);
 	} else if (!ret) {
 		rm->pm_nb.notifier_call = gunyah_rm_hibernation_restore;
-		ret = register_pm_notifier(&rm->pm_nb);
+		ret = avr_rm_notifiers_register(&rm->pm_notifiers);
 		if (ret)
 			pr_err("Failed to register pm notifier\n");
 	}
 	if (ret)
-		return ret;
+		goto unregister_pm;
 
 	enable_irq_wake(rm->tx_ghrsc.irq);
 	ret = request_threaded_irq(rm->tx_ghrsc.irq, NULL,
 					 gunyah_rm_tx, IRQF_ONESHOT,
 					 "gunyah_rm_tx", rm);
 	if (ret)
-		return ret;
+		goto unregister_pm;
 	/* assume RM is ready to receive messages from us */
 	complete(&rm->send_ready);
 
@@ -954,6 +963,8 @@ free_rx_irq:
 	free_irq(rm->rx_ghrsc.irq, rm);
 free_tx_irq:
 	free_irq(rm->tx_ghrsc.irq, rm);
+unregister_pm:
+	avr_rm_notifiers_unregister(&rm->pm_notifiers);
 	return ret;
 }
 module_init(gunyah_rm_init);
@@ -967,6 +978,7 @@ static void __exit gunyah_rm_exit(void)
 	if (!rm)
 		return;
 
+	avr_rm_notifiers_unregister(&rm->pm_notifiers);
 	gunyah_cma_mem_exit();
 	auxiliary_device_delete(&rm->adev);
 	misc_deregister(&rm->miscdev);

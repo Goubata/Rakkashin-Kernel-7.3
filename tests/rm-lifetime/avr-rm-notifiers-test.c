@@ -4,6 +4,7 @@
 #include <linux/delay.h>
 #include <linux/kthread.h>
 #include <linux/module.h>
+#include <linux/suspend.h>
 #include "../../ports/gunyah-rm/avr-rm-notifiers.h"
 
 struct fixture;
@@ -232,11 +233,30 @@ static void cleanup_waits_for_inflight_callback(struct kunit *test)
 	KUNIT_EXPECT_FALSE(test, f->state.first_registered);
 	KUNIT_EXPECT_FALSE(test, f->state.second_registered);
 }
+static void actual_pm_notifier_is_detached(struct kunit *test)
+{
+	static const struct avr_rm_notifier_ops pm_ops = {
+		.register_first = register_pm_notifier,
+		.unregister_first = unregister_pm_notifier,
+	};
+	struct fixture *f = test->priv;
+	struct avr_rm_notifiers state = {
+		.ops = &pm_ops, .first = &f->observers[0].nb,
+	};
+
+	KUNIT_ASSERT_EQ(test, avr_rm_notifiers_register(&state), 0);
+	KUNIT_EXPECT_EQ(test, avr_rm_notifiers_register(&state), -EALREADY);
+	avr_rm_notifiers_unregister(&state);
+	KUNIT_EXPECT_FALSE(test, state.first_registered);
+	/* Query the real PM chain: removal must have occurred, not just a flag change. */
+	KUNIT_EXPECT_EQ(test, unregister_pm_notifier(state.first), -ENOENT);
+}
 static struct kunit_case cases[] = {
 	KUNIT_CASE(successful_pair_and_reverse_cleanup), KUNIT_CASE(first_registration_failure),
 	KUNIT_CASE(second_failure_unwinds_first), KUNIT_CASE(reject_duplicate_without_changes),
 	KUNIT_CASE(optional_second_handler), KUNIT_CASE(cleanup_is_idempotent),
-	KUNIT_CASE(retry_after_rollback), KUNIT_CASE(cleanup_waits_for_inflight_callback), {}
+	KUNIT_CASE(retry_after_rollback), KUNIT_CASE(cleanup_waits_for_inflight_callback),
+	KUNIT_CASE(actual_pm_notifier_is_detached), {}
 };
 static struct kunit_suite suite = {
 	.name = "avr-rm-notifier-lifetime", .init = init, .exit = exit_test, .test_cases = cases,

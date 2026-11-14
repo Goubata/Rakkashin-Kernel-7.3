@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-gpu-stage10/（71モジュール、3,622インポートCRC一致）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-gpu-stage11/（71モジュール、3,623インポートCRC一致）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -119,3 +119,11 @@ hw_fenceの旧8依存は実装へリンク済みです。現在の課題は実�
 ## 通知登録の寿命管理
 
 Gunyah vendor RMのSCM/hyp・RM/QTVM通知に、登録失敗時の巻き戻しと終了時の解除・work排出を追加しました。OFノードの二重putと借用参照の扱いも修正。共通helperの8 KUnitがSMP4 QEMUで成功し、実行中コールバックが終わるまで解除が待つことも確認しました。Stage10の71モジュールは3,622インポートCRCが一致しています。実ハイパーバイザの終了、共有メモリ回収、サスペンドを検証した証明ではありません。reports/gpu-stage10-validation.json と ports/gunyah-rm/README.md を参照。
+
+## PM通知と拡張DTの継続検証
+
+共通Gunyah RMのPM通知は、後続初期化失敗・終了時に登録を解除するよう修正しました。実際のPM通知チェーンへの登録・解除を含む9件の共通helper試験がSMP4 QEMUで成功。実サスペンド、IRQや共有資源の全寿命は未確認です。`reports/gpu-stage11-validation.json` に対象と証拠を記録しています。
+
+拡張component DTはGPU・フェンス・映像・IPCLite・BT・WLAN・AVRのNXP NFCを追加し、公開ソース189ファイルから5,063ノードを合成しました。不足39ノードのほか、GPU表・予約メモリ・未解釈の参照値等のプロパティ差が残ります。ノード数は動作率ではありません。カメラbindingは明示したVantage参照で、ドライバ互換性は未確認です。
+
+ユーザーGPU設定は保存実機DT（静的画像と稼働中DTで一致）の21段階を復元しました。`--saved-gpu-table` の別出力ではGPU表の全プロパティ一致を確認し、全体5,069ノード、不足33ノードです。低電圧化やクロックの新しい値は生成していません。7.3でのGPU実動作・温度・安定性は未検証です。

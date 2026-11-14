@@ -1,0 +1,22 @@
+{
+  "scope": "Common RM PM notifier ownership fix, real notifier helper execution and module consistency; not full IRQ/auxiliary/context lifetime, suspend, physical probe or daily-use proof",
+  "stage": "android73-gpu-stage11",
+  "module_count": 71,
+  "imports_checked": 3623,
+  "image_sha256": "47b5ddb0f1e7e52e21599ddb1c24c69400b441c1c43083bc0dcbacc6619c9cae",
+  "source_commit": "417e64607d9817fab946b55893b66418cecdb65b",
+  "passed": true,
+  "lifetime_kunit_cases": 9,
+  "new_case": "Register/unregister with the real global PM notifier chain, then verify another unregister returns ENOENT; no suspend event sent",
+  "prior_base_validation": "gpu-stage9-validation.json",
+  "prior_lifetime_validation": "gpu-stage10-validation.json",
+  "physical_probe_verified": false,
+  "sha256": {
+    "reports/qemu-rm-pm-lifetime-stage11.log": "e3c3d47f52dd54f3f1868f3ea985440e9cf2baa339dc2027b5b68d673f488ae3",
+    "reports/qemu-rm-pm-lifetime-stage11.json": "f3f0118e462dbe7136ec1b0eeb3d377b1f7abdcc80a414d57bac17a654634875",
+    "reports/module-crc-stage11.json": "22311b3f64ae8606a18100099e6f6b1b1339943721f6cbeaaa44dfa4ae18949a",
+    "ports/gunyah-core/rsc_mgr.c": "cda0ae7dc74c15b9a60c94cd9ce6905700cb398b3e34e0b10b1ff640a9266edc",
+    "ports/gunyah-rm/avr-rm-notifiers.h": "d0baa7e88f0771b435d8aa4dbb6e6cb995a18d6ae143d249868af9db7e70a946",
+    "tests/rm-lifetime/avr-rm-notifiers-test.c": "4edccabdd545e03d3811ac962382f23424b8587b379d2815911319d4ab6dd82e"
+  }
+}

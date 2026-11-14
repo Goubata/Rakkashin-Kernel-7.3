@@ -77,9 +77,11 @@ def compare(left,right):
             'changed_node_count_excluding_chosen':len(changes),'changed_property_names':changes}
 
 def semantic_compare(left,right):
+    """Normalize only known reference formats; keep unknown/malformed data raw."""
     def handles(nodes):
         result={}
         for path,props in nodes.items():
+            if path.startswith('/__'):continue
             raw=props.get('phandle',props.get('linux,phandle',b''))
             if len(raw)==4:
                 number=int.from_bytes(raw,'big')
@@ -88,24 +90,59 @@ def semantic_compare(left,right):
         return result
     lm,rm=handles(left),handles(right)
     raw=compare(left,right);renumbered=[];references=[];semantic={}
-    def resolve(raw,mapping):
-        if raw is None or len(raw)%4:return None
-        values=struct.unpack('>'+'I'*(len(raw)//4),raw)
-        if any(v not in mapping for v in values):return None
-        return [mapping[v] for v in values]
+    variable={'clocks':'#clock-cells','resets':'#reset-cells',
+              'iommus':'#iommu-cells','power-domains':'#power-domain-cells',
+              'mboxes':'#mbox-cells','dmas':'#dma-cells','phys':'#phy-cells',
+              'pwms':'#pwm-cells','interconnects':'#interconnect-cells',
+              'interrupts-extended':'#interrupt-cells','io-channels':'#io-channel-cells',
+              'thermal-sensors':'#thermal-sensor-cells','cooling-device':'#cooling-cells',
+              'qcom,smem-states':'#qcom,smem-state-cells'}
+    lists={'nvmem-cells','memory-region','operating-points-v2','interrupt-affinity','cpu-idle-states'}
+    singles={'interrupt-parent','remote-endpoint','target','qcom,wsa-macro-handle','soccp_controller'}
+    def resolve(name,data,nodes,mapping):
+        if data is None or len(data)%4:return None
+        cells=variable.get(name)
+        if name=='gpios' or name.endswith('-gpios'):cells='#gpio-cells'
+        single=name in singles or name.endswith('-supply')
+        fixed=single or name in lists or re.fullmatch(r'pinctrl-\d+',name)
+        if not cells and not fixed:return None
+        values=struct.unpack('>'+'I'*(len(data)//4),data)
+        if single and len(values)!=1:return None
+        result=[];pos=0
+        while pos<len(values):
+            handle=values[pos];pos+=1
+            if not handle and not single:
+                result.append((None,()));continue
+            if handle not in mapping:return None
+            target=mapping[handle];argc=0
+            if cells:
+                count=nodes[target].get(cells)
+                if count is None or len(count)!=4:return None
+                argc=int.from_bytes(count,'big')
+                if argc>32:return None
+            if pos+argc>len(values):return None
+            result.append((target,tuple(values[pos:pos+argc])));pos+=argc
+        return result
     for path,names in raw['changed_property_names'].items():
         if path=='/__symbols__':continue
         changed=[]
         for name in names:
-            if name in ('phandle','linux,phandle'):
-                renumbered.append({'node':path,'property':name});continue
-            if re.fullmatch(r'pinctrl-\d+',name) or name=='qcom,wsa-macro-handle':
-                lv=resolve(left[path].get(name),lm);rv=resolve(right[path].get(name),rm)
-                if lv is not None and lv==rv:
-                    references.append({'node':path,'property':name,'targets':lv});continue
+            lv=left[path].get(name);rv=right[path].get(name)
+            if not path.startswith('/__') and name in ('phandle','linux,phandle'):
+                if lv is not None and rv is not None and len(lv)==len(rv)==4:
+                    ln=int.from_bytes(lv,'big');rn=int.from_bytes(rv,'big')
+                    if 0<ln<0xffffffff and 0<rn<0xffffffff and lm.get(ln)==rm.get(rn)==path:
+                        renumbered.append({'node':path,'property':name});continue
+            if not path.startswith('/__'):
+                left_ref=resolve(name,lv,left,lm);right_ref=resolve(name,rv,right,rm)
+                if left_ref is not None and left_ref==right_ref:
+                    references.append({'node':path,'property':name,
+                                       'targets':[target for target,args in left_ref],
+                                       'argument_cells':[len(args) for target,args in left_ref]});continue
             changed.append(name)
         if changed:semantic[path]=changed
-    return {'left_only_nodes':raw['left_only_nodes'],'right_only_nodes':raw['right_only_nodes'],
+    return {'scope':'known reference encodings with exact argument comparison only; not DT schema or driver compatibility validation',
+            'left_only_nodes':raw['left_only_nodes'],'right_only_nodes':raw['right_only_nodes'],
             'renumbered_phandles':renumbered,'equivalent_reference_properties':references,
             'changed_properties_excluding_chosen_and_symbol_metadata':semantic}
 

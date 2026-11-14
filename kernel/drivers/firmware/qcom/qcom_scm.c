@@ -11,6 +11,7 @@
 #include <linux/completion.h>
 #include <linux/cpumask.h>
 #include <linux/dma-mapping.h>
+#include <linux/delay.h>
 #include <linux/err.h>
 #include <linux/export.h>
 #include <linux/firmware/qcom/qcom_pas.h>
@@ -37,6 +38,7 @@
 #include <dt-bindings/interrupt-controller/arm-gic.h>
 
 #include "qcom_pas.h"
+#include "qcom_pas_retry.h"
 #include "qcom_scm.h"
 #include "qcom_tzmem.h"
 
@@ -1017,6 +1019,19 @@ int qcom_scm_pas_shutdown(u32 pas_id)
 	return __qcom_scm_pas_shutdown(__scm->dev, pas_id);
 }
 EXPORT_SYMBOL_GPL(qcom_scm_pas_shutdown);
+
+static unsigned int pas_shutdown_retry_delay_ms = 5000;
+module_param(pas_shutdown_retry_delay_ms, uint, 0644);
+MODULE_PARM_DESC(pas_shutdown_retry_delay_ms, "Delay before one PAS shutdown retry; 0 disables retry");
+
+int qcom_scm_pas_shutdown_retry(u32 pas_id)
+{
+	if (!__scm)
+		return -EPROBE_DEFER;
+	return qcom_pas_retry(pas_id, READ_ONCE(pas_shutdown_retry_delay_ms),
+			      qcom_scm_pas_shutdown, msleep);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_pas_shutdown_retry);
 
 static bool __qcom_scm_pas_supported(struct device *dev, u32 pas_id)
 {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify pinned Canoe UFS PHY sources and build against configured 7.3; no device access."""
+"""Build pinned AVR storage, diagnostic, regulator and interconnect ports; no device writes."""
 import argparse
 import hashlib
 import json
@@ -22,8 +22,11 @@ def main():
     parser.add_argument('--diagnostics-tests',action='store_true')
     parser.add_argument('--regulators',action='store_true')
     parser.add_argument('--regulators-tests',action='store_true')
+    parser.add_argument('--interconnect',action='store_true')
+    parser.add_argument('--interconnect-tests',action='store_true')
     args=parser.parse_args()
     if args.ufs_host:args.ice=True
+    if args.interconnect_tests:args.interconnect=True
     if args.regulators_tests:args.regulators=True
     if args.ufs_host or args.diagnostics_tests or args.regulators:args.diagnostics=True
     if args.tests and not args.ice:parser.error('--tests requires --ice')
@@ -60,6 +63,10 @@ def main():
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_regulators_sources.py')],check=True)
         targets.append('ports/qcom-regulators')
         if args.regulators_tests:targets.append('tests/regulators')
+    if args.interconnect:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_interconnect_sources.py')],check=True)
+        targets.append('ports/qcom-interconnect')
+        if args.interconnect_tests:targets.append('tests/interconnect')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

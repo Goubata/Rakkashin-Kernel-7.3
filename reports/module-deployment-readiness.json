@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-regulators-stage17",
+  "stage": "android73-interconnect-stage18",
   "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
   "archived_unique_count": 544,
-  "staged_count": 80,
-  "same_name_candidate_count": 67,
-  "archived_names_without_same_name_candidate_count": 477,
-  "loaded_names_without_same_name_candidate_count": 462,
+  "staged_count": 85,
+  "same_name_candidate_count": 72,
+  "archived_names_without_same_name_candidate_count": 472,
+  "loaded_names_without_same_name_candidate_count": 457,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -91,6 +91,10 @@
     {
       "name": "gunyah_vcpu",
       "file": "modules/gunyah-core/gunyah_vcpu.ko"
+    },
+    {
+      "name": "icc_debug",
+      "file": "modules/qcom-interconnect/icc-debug.ko"
     },
     {
       "name": "iommu_logger",
@@ -221,6 +225,10 @@
       "file": "modules/qcom-dcvs/dcvs_fp.ko"
     },
     {
+      "name": "icc_bcm_voter",
+      "file": "modules/qcom-interconnect/icc-bcm-voter.ko"
+    },
+    {
       "name": "qcom_dcvs",
       "file": "modules/qcom-dcvs/qcom-dcvs.ko"
     },
@@ -261,6 +269,10 @@
       "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
     },
     {
+      "name": "qnoc_qos",
+      "file": "modules/qcom-interconnect/qnoc-qos.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -295,6 +307,14 @@
     {
       "name": "socinfo",
       "file": "modules/qcom-socinfo/socinfo.ko"
+    },
+    {
+      "name": "icc_rpmh",
+      "file": "modules/qcom-interconnect/icc-rpmh.ko"
+    },
+    {
+      "name": "qnoc_alor",
+      "file": "modules/qcom-interconnect/qnoc-alor.ko"
     },
     {
       "name": "stub_regulator",
@@ -416,6 +436,10 @@
       "file": "modules/gunyah-core/gunyah_vcpu.ko"
     },
     {
+      "name": "icc_debug",
+      "file": "modules/qcom-interconnect/icc-debug.ko"
+    },
+    {
       "name": "iommu_logger",
       "file": "modules/iommu-logger/iommu_logger.ko"
     },
@@ -544,6 +568,10 @@
       "file": "modules/qcom-dcvs/dcvs_fp.ko"
     },
     {
+      "name": "icc_bcm_voter",
+      "file": "modules/qcom-interconnect/icc-bcm-voter.ko"
+    },
+    {
       "name": "qcom_dcvs",
       "file": "modules/qcom-dcvs/qcom-dcvs.ko"
     },
@@ -584,6 +612,10 @@
       "file": "modules/qcom-irq/qcom-pdc.ko"
     },
     {
+      "name": "qnoc_qos",
+      "file": "modules/qcom-interconnect/qnoc-qos.ko"
+    },
+    {
       "name": "secure_buffer",
       "file": "modules/secure-buffer/secure_buffer.ko"
     },
@@ -618,6 +650,14 @@
     {
       "name": "socinfo",
       "file": "modules/qcom-socinfo/socinfo.ko"
+    },
+    {
+      "name": "icc_rpmh",
+      "file": "modules/qcom-interconnect/icc-rpmh.ko"
+    },
+    {
+      "name": "qnoc_alor",
+      "file": "modules/qcom-interconnect/qnoc-alor.ko"
     },
     {
       "name": "stub_regulator",
@@ -1486,6 +1526,82 @@
       "depends": [
         "qcom_scm"
       ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "icc_bcm_voter": {
+      "file": "modules/qcom-interconnect/icc-bcm-voter.ko",
+      "sha256": "e26aeb0bc8f0774a50d4837737b03a85c8c0d435c569792e768822d7233490a2",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "crm_v2",
+        "qcom_rpmh"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "icc_debug": {
+      "file": "modules/qcom-interconnect/icc-debug.ko",
+      "sha256": "8964ee2f76844bc12e3ff7a8232ad7b78019d3d8e2ea9f00437f49bebaa1c65b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "icc_rpmh": {
+      "file": "modules/qcom-interconnect/icc-rpmh.ko",
+      "sha256": "6ce7c10e69a91480e78c8e645cd870b0ccf2eedee85870a28547928ecc0e5c83",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "cmd_db",
+        "icc_bcm_voter",
+        "icc_debug",
+        "socinfo"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qnoc_alor": {
+      "file": "modules/qcom-interconnect/qnoc-alor.ko",
+      "sha256": "7df2ddf85add0a98fa80dd30010071ceb7ad8ec2ffa5b38ef07ec8493a4dc046",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "icc_rpmh",
+        "qnoc_qos"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qnoc_qos": {
+      "file": "modules/qcom-interconnect/qnoc-qos.ko",
+      "sha256": "b4845cf7a3cd6b989e3e3f81a7a3a10273731343cc146cb00e5c19a73175e290",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
@@ -2788,28 +2904,7 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "icc_bcm_voter",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "icc_clk",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "icc_debug",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "icc_rpmh",
       "placements": [
         "vendor_boot:fragment-0"
       ],
@@ -4265,13 +4360,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qnoc_alor",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qnoc_canoe",
       "placements": [
         "vendor_boot:fragment-0"
@@ -4280,13 +4368,6 @@
     },
     {
       "name": "qnoc_chora",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qnoc_qos",
       "placements": [
         "vendor_boot:fragment-0"
       ],
@@ -5521,10 +5602,7 @@
     "i2c_msm_geni",
     "i2c_qcom_geni",
     "i3c_master_msm_geni",
-    "icc_bcm_voter",
     "icc_clk",
-    "icc_debug",
-    "icc_rpmh",
     "icnss2",
     "ieee802154",
     "ieee802154_6lowpan",
@@ -5716,10 +5794,8 @@
     "qcrypto_msm_dlkm",
     "qmi_helpers",
     "qmp_dlkm",
-    "qnoc_alor",
     "qnoc_canoe",
     "qnoc_chora",
-    "qnoc_qos",
     "qnoc_ravelin",
     "qpnp_adaptive_charge",
     "qpnp_lcdb_regulator",

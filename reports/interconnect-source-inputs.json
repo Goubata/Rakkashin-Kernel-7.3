@@ -1,0 +1,89 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-interconnect/alor.c",
+      "source": "drivers/interconnect/qcom/alor.c",
+      "original_sha256": "dfd40bf8bbaa7959f13eb0c63805ad76f33be121f0711efbc42da4f179af8003",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/bcm-voter.c",
+      "source": "drivers/interconnect/qcom/bcm-voter.c",
+      "original_sha256": "adae86d4cef6905d20c2ac577b0e388a8aa20439dca6bee631ad30f6356db72d",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/bcm-voter.h",
+      "source": "drivers/interconnect/qcom/bcm-voter.h",
+      "original_sha256": "531abfbccb996b563deb20a2ef14ea8b16c17cd94e6aa3c982a47c5deae05c46",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-rpmh.c",
+      "source": "drivers/interconnect/qcom/icc-rpmh.c",
+      "original_sha256": "b3cfab5c9d96c4d8260f697485b605304fb51395e73fcaa3728f65a2aeb7c274",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-rpmh.h",
+      "source": "drivers/interconnect/qcom/icc-rpmh.h",
+      "original_sha256": "d96b4869a17486bf1e8526a91c9bb2c3f4eee4ccabf2022619f7aee812c81da0",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/qnoc-qos.c",
+      "source": "drivers/interconnect/qcom/qnoc-qos.c",
+      "original_sha256": "588e89710017fcda14f59a844828ec9a30d70178c5757eed78bfb8cbe5e99b05",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/qnoc-qos.h",
+      "source": "drivers/interconnect/qcom/qnoc-qos.h",
+      "original_sha256": "edfc9d987adee0d39bdeb144cc93c52fc6f69f4d3a949062afee2003ba8c93f3",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-debug.c",
+      "source": "drivers/interconnect/qcom/icc-debug.c",
+      "original_sha256": "0126a3101f1f15082788f5653f85d97a005d0415a83f25ed587cff598130cf56",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-debug.h",
+      "source": "drivers/interconnect/qcom/icc-debug.h",
+      "original_sha256": "5fa8c44dbe7c81721749e37692d9e3b6e76896705c2526418429101cc655b3fe",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/trace.h",
+      "source": "drivers/interconnect/qcom/trace.h",
+      "original_sha256": "88f776cca441bbe5ec0a7168b7d2a42dabede59f6ad78fe452c1df9e4a1f4739",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/include/dt-bindings/interconnect/qcom,alor.h",
+      "source": "include/dt-bindings/interconnect/qcom,alor.h",
+      "original_sha256": "eba2ed57b511355abb15c7c423d4d20d321e7139d8f265a34e9075e4aff276dc",
+      "repo": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1"
+    },
+    {
+      "file": "ports/qcom-interconnect/include/dt-bindings/interconnect/qcom,icc.h",
+      "source": "include/dt-bindings/interconnect/qcom,icc.h",
+      "original_sha256": "52e95d158b1f9381e707f8e9e93722cafe83b366b136e08331fba43e5dd0523d",
+      "repo": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4"
+    }
+  ]
+}

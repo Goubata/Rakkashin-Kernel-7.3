@@ -1,0 +1,18 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/interconnect/qcom,alor.h>
+/* Saved DT incorrectly selects config_noc slot523, which is NULL in the
+ * saved qnoc-alor.ko. Saved cnoc_main slot523 resolves to qhs_ipa.
+ * Preserve all IDs and the other two paths; change only that endpoint provider.
+ * This is a candidate repair, pending real USB/IPA validation.
+ */
+/ {
+ fragment@0 {
+  target-path = "/soc/ssusb@a600000";
+  __overlay__ {
+   interconnects = <&aggre1_noc MASTER_USB3 &mc_virt SLAVE_EBI1>,
+                   <&aggre1_noc MASTER_USB3 &cnoc_main SLAVE_IPA_CFG>,
+                   <&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3>;
+  };
+ };
+};

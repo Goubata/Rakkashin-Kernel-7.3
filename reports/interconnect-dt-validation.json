@@ -1,0 +1,6053 @@
+{
+  "scope": "static node IDs, binding indices and reference encoding only; not route discovery, probe, votes or hardware",
+  "supported_provider_compatibles": [
+    "qcom,alor-aggre1_noc",
+    "qcom,alor-aggre2_noc",
+    "qcom,alor-clk_virt",
+    "qcom,alor-cnoc_cfg",
+    "qcom,alor-cnoc_main",
+    "qcom,alor-gem_noc",
+    "qcom,alor-lpass_ag_noc",
+    "qcom,alor-lpass_lpiaon_noc",
+    "qcom,alor-lpass_lpicx_noc",
+    "qcom,alor-mc_virt",
+    "qcom,alor-mmss_noc",
+    "qcom,alor-nsp_noc",
+    "qcom,alor-pcie_anoc",
+    "qcom,alor-system_noc"
+  ],
+  "usb_ipa_topology_path_ids": [
+    54,
+    543,
+    8,
+    547,
+    31,
+    546,
+    16,
+    523
+  ],
+  "source_nodes": 231,
+  "source_ids": 231,
+  "unresolved_source_links": [],
+  "max_bcms_per_node": 2,
+  "node_bcm_capacity_exceeded": [],
+  "inputs": {
+    "saved": {
+      "providers": {
+        "/soc/interconnect@0": "qcom,alor-clk_virt",
+        "/soc/interconnect@1": "qcom,alor-mc_virt",
+        "/soc/interconnect@16e0000": "qcom,alor-aggre1_noc",
+        "/soc/interconnect@1700000": "qcom,alor-aggre2_noc",
+        "/soc/interconnect@1600000": "qcom,alor-cnoc_cfg",
+        "/soc/interconnect@1500000": "qcom,alor-cnoc_main",
+        "/soc/interconnect@31100000": "qcom,alor-gem_noc",
+        "/soc/interconnect@7f40000": "qcom,alor-lpass_ag_noc",
+        "/soc/interconnect@7400000": "qcom,alor-lpass_lpiaon_noc",
+        "/soc/interconnect@7420000": "qcom,alor-lpass_lpicx_noc",
+        "/soc/interconnect@1780000": "qcom,alor-mmss_noc",
+        "/soc/interconnect@260c0000": "qcom,alor-nsp_noc",
+        "/soc/interconnect@16c0000": "qcom,alor-pcie_anoc",
+        "/soc/interconnect@1680000": "qcom,alor-system_noc"
+      },
+      "provider_count": 14,
+      "references_checked": 425,
+      "invalid_node_references": [
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1600000",
+          "args": [
+            523
+          ]
+        }
+      ],
+      "unparsed_properties": [],
+      "references": [
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 49,
+          "node": "xm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 556,
+          "node": "qns_pcie_gemnoc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@31100000",
+          "id": 30,
+          "node": "qnm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 0,
+          "node": "alm_gpu_tcu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000/gpu_qtb@3de8000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 0,
+          "node": "alm_gpu_tcu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000/gpu_qtb@3de8000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_1_qtb@16f2000",
+          "provider": "/soc/interconnect@1680000",
+          "id": 8,
+          "node": "qnm_aggre1_noc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_1_qtb@16f2000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_2_qtb@171e000",
+          "provider": "/soc/interconnect@1680000",
+          "id": 9,
+          "node": "qnm_aggre2_noc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_2_qtb@171e000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/cam_hf_qtb@17f7000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/cam_hf_qtb@17f7000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/nsp_qtb@7d3000",
+          "provider": "/soc/interconnect@260c0000",
+          "id": 28,
+          "node": "qnm_nsp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/nsp_qtb@7d3000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/lpass_qtb@7b3000",
+          "provider": "/soc/interconnect@7420000",
+          "id": 22,
+          "node": "qnm_lpinoc_dsp_qns4m",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/lpass_qtb@7b3000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/pcie_qtb@16cd000",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 49,
+          "node": "xm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/pcie_qtb@16cd000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/sf_qtb@17ba000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 33,
+          "node": "qnm_video_eva",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/sf_qtb@17ba000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/mdp_hf_qtb@17f6000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 23,
+          "node": "qnm_mdp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/mdp_hf_qtb@17f6000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/pcie@1c00000",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 4003,
+          "node": "xm_pcie_pcie_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/pcie@1c00000",
+          "provider": "/soc/interconnect@1",
+          "id": 4512,
+          "node": "ebi_pcie_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/clock-controller@956d000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/clock-controller@956d000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddr/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddr/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/llcc/sp",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/llcc/sp",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddrqos/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddrqos/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 52,
+          "node": "xm_sdc2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 534,
+          "node": "qhs_sdc2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcedev@1de0000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcedev@1de0000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 53,
+          "node": "xm_ufs_mem",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 539,
+          "node": "qhs_ufs_mem_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@7420000",
+          "id": 22,
+          "node": "qnm_lpinoc_dsp_qns4m",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@260c0000",
+          "id": 28,
+          "node": "qnm_nsp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 47,
+          "node": "qxm_soccp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1500000",
+          "id": 535,
+          "node": "qhs_soccp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,kgsl-3d0@3d00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 18,
+          "node": "qnm_gpu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,kgsl-3d0@3d00000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 54,
+          "node": "xm_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 54,
+          "node": "xm_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 540,
+          "node": "qhs_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ddr-cdev",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ddr-cdev",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 23,
+          "node": "qnm_mdp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 519,
+          "node": "qhs_display_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 6001,
+          "node": "qnm_mdp_disp_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 6512,
+          "node": "ebi_disp_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 7001,
+          "node": "qnm_mdp_disp_crm_hw_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 7512,
+          "node": "ebi_disp_crm_hw_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 8001,
+          "node": "qnm_mdp_disp_crm_hw_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 8512,
+          "node": "ebi_disp_crm_hw_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 9001,
+          "node": "qnm_mdp_disp_crm_hw_3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 9512,
+          "node": "ebi_disp_crm_hw_3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 10001,
+          "node": "qnm_mdp_disp_crm_hw_4",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 10512,
+          "node": "ebi_disp_crm_hw_4",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11001,
+          "node": "qnm_mdp_disp_crm_hw_5",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 11512,
+          "node": "ebi_disp_crm_hw_5",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 12001,
+          "node": "qnm_mdp_disp_crm_hw_6",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 12512,
+          "node": "ebi_disp_crm_hw_6",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 13001,
+          "node": "qnm_mdp_disp_crm_hw_7",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 13512,
+          "node": "ebi_disp_crm_hw_7",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 14001,
+          "node": "qnm_mdp_disp_crm_hw_8",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 14512,
+          "node": "ebi_disp_crm_hw_8",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 5001,
+          "node": "qnm_mdp_disp_crm_sw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 5512,
+          "node": "ebi_disp_crm_sw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 516,
+          "node": "qhs_camera_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 1001,
+          "node": "qnm_camnoc_hf_cam_ife_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 1512,
+          "node": "ebi_cam_ife_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 2001,
+          "node": "qnm_camnoc_hf_cam_ife_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 2512,
+          "node": "ebi_cam_ife_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 3001,
+          "node": "qnm_camnoc_hf_cam_ife_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 3512,
+          "node": "ebi_cam_ife_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 14,
+          "node": "qnm_camnoc_sf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 12,
+          "node": "qnm_camnoc_nrt_icp_sf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 46,
+          "node": "qxm_ipa",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1500000",
+          "id": 523,
+          "node": "qhs_ipa",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_cnoc",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_cnoc",
+          "provider": "/soc/interconnect@1600000",
+          "id": 520,
+          "node": "qhs_eva_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+          "provider": "/soc/interconnect@1780000",
+          "id": 33,
+          "node": "qnm_video_eva",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 541,
+          "node": "qhs_venus_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 34,
+          "node": "qnm_video_mvp0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        }
+      ]
+    },
+    "candidate": {
+      "providers": {
+        "/soc/interconnect@0": "qcom,alor-clk_virt",
+        "/soc/interconnect@1": "qcom,alor-mc_virt",
+        "/soc/interconnect@16e0000": "qcom,alor-aggre1_noc",
+        "/soc/interconnect@1700000": "qcom,alor-aggre2_noc",
+        "/soc/interconnect@1600000": "qcom,alor-cnoc_cfg",
+        "/soc/interconnect@1500000": "qcom,alor-cnoc_main",
+        "/soc/interconnect@31100000": "qcom,alor-gem_noc",
+        "/soc/interconnect@7f40000": "qcom,alor-lpass_ag_noc",
+        "/soc/interconnect@7400000": "qcom,alor-lpass_lpiaon_noc",
+        "/soc/interconnect@7420000": "qcom,alor-lpass_lpicx_noc",
+        "/soc/interconnect@1780000": "qcom,alor-mmss_noc",
+        "/soc/interconnect@260c0000": "qcom,alor-nsp_noc",
+        "/soc/interconnect@16c0000": "qcom,alor-pcie_anoc",
+        "/soc/interconnect@1680000": "qcom,alor-system_noc"
+      },
+      "provider_count": 14,
+      "references_checked": 426,
+      "invalid_node_references": [],
+      "unparsed_properties": [],
+      "references": [
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 49,
+          "node": "xm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 556,
+          "node": "qns_pcie_gemnoc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@31100000",
+          "id": 30,
+          "node": "qnm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,wcn7750",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+          "provider": "/soc/interconnect@1780000",
+          "id": 33,
+          "node": "qnm_video_eva",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_bus_ddr",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_cnoc",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cvp@2400000/cvp_cnoc",
+          "provider": "/soc/interconnect@1600000",
+          "id": 520,
+          "node": "qhs_eva_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 46,
+          "node": "qxm_ipa",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ipa@3e00000",
+          "provider": "/soc/interconnect@1500000",
+          "id": 523,
+          "node": "qhs_ipa",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 541,
+          "node": "qhs_venus_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 34,
+          "node": "qnm_video_mvp0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,vidc@2000000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 516,
+          "node": "qhs_camera_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 1001,
+          "node": "qnm_camnoc_hf_cam_ife_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 1512,
+          "node": "ebi_cam_ife_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 2001,
+          "node": "qnm_camnoc_hf_cam_ife_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 2512,
+          "node": "ebi_cam_ife_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 3001,
+          "node": "qnm_camnoc_hf_cam_ife_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 3512,
+          "node": "ebi_cam_ife_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 14,
+          "node": "qnm_camnoc_sf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 12,
+          "node": "qnm_camnoc_nrt_icp_sf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,cam-cpas@900B000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 6001,
+          "node": "qnm_mdp_disp_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 6512,
+          "node": "ebi_disp_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 7001,
+          "node": "qnm_mdp_disp_crm_hw_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 7512,
+          "node": "ebi_disp_crm_hw_1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 8001,
+          "node": "qnm_mdp_disp_crm_hw_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 8512,
+          "node": "ebi_disp_crm_hw_2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 9001,
+          "node": "qnm_mdp_disp_crm_hw_3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 9512,
+          "node": "ebi_disp_crm_hw_3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 10001,
+          "node": "qnm_mdp_disp_crm_hw_4",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 10512,
+          "node": "ebi_disp_crm_hw_4",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11001,
+          "node": "qnm_mdp_disp_crm_hw_5",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 11512,
+          "node": "ebi_disp_crm_hw_5",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 12001,
+          "node": "qnm_mdp_disp_crm_hw_6",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 12512,
+          "node": "ebi_disp_crm_hw_6",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 13001,
+          "node": "qnm_mdp_disp_crm_hw_7",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 13512,
+          "node": "ebi_disp_crm_hw_7",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 14001,
+          "node": "qnm_mdp_disp_crm_hw_8",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 14512,
+          "node": "ebi_disp_crm_hw_8",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 5001,
+          "node": "qnm_mdp_disp_crm_sw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,sde_cesta@0x9bd8000",
+          "provider": "/soc/interconnect@1",
+          "id": 5512,
+          "node": "ebi_disp_crm_sw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 23,
+          "node": "qnm_mdp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,mdss_mdp@9800000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 519,
+          "node": "qhs_display_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 0,
+          "node": "alm_gpu_tcu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000/gpu_qtb@3de8000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 0,
+          "node": "alm_gpu_tcu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/kgsl-smmu@3da0000/gpu_qtb@3de8000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_1_qtb@16f2000",
+          "provider": "/soc/interconnect@1680000",
+          "id": 8,
+          "node": "qnm_aggre1_noc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_1_qtb@16f2000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_2_qtb@171e000",
+          "provider": "/soc/interconnect@1680000",
+          "id": 9,
+          "node": "qnm_aggre2_noc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/anoc_2_qtb@171e000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/cam_hf_qtb@17f7000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/cam_hf_qtb@17f7000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/nsp_qtb@7d3000",
+          "provider": "/soc/interconnect@260c0000",
+          "id": 28,
+          "node": "qnm_nsp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/nsp_qtb@7d3000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/lpass_qtb@7b3000",
+          "provider": "/soc/interconnect@7420000",
+          "id": 22,
+          "node": "qnm_lpinoc_dsp_qns4m",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/lpass_qtb@7b3000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/pcie_qtb@16cd000",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 49,
+          "node": "xm_pcie",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/pcie_qtb@16cd000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/sf_qtb@17ba000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 33,
+          "node": "qnm_video_eva",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/sf_qtb@17ba000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/mdp_hf_qtb@17f6000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 23,
+          "node": "qnm_mdp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/apps-smmu@15000000/mdp_hf_qtb@17f6000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/pcie@1c00000",
+          "provider": "/soc/interconnect@16c0000",
+          "id": 4003,
+          "node": "xm_pcie_pcie_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/pcie@1c00000",
+          "provider": "/soc/interconnect@1",
+          "id": 4512,
+          "node": "ebi_pcie_crm_hw_0",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/clock-controller@956d000",
+          "provider": "/soc/interconnect@1780000",
+          "id": 11,
+          "node": "qnm_camnoc_hf",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/clock-controller@956d000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddr/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddr/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/llcc/sp",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/llcc/sp",
+          "provider": "/soc/interconnect@31100000",
+          "id": 548,
+          "node": "qns_llcc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddrqos/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,dcvs/ddrqos/sp",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 52,
+          "node": "xm_sdc2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/sdhci@8804000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 534,
+          "node": "qhs_sdc2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcedev@1de0000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcedev@1de0000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 53,
+          "node": "xm_ufs_mem",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ufshc@1d84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 539,
+          "node": "qhs_ufs_mem_cfg",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-mss@04080000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@7420000",
+          "id": 22,
+          "node": "qnm_lpinoc_dsp_qns4m",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-adsp@06800000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@260c0000",
+          "id": 28,
+          "node": "qnm_nsp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 45,
+          "node": "qxm_crypto",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-cdsp@26300000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 47,
+          "node": "qxm_soccp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/remoteproc-soccp@a3380000",
+          "provider": "/soc/interconnect@1500000",
+          "id": 535,
+          "node": "qhs_soccp",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,kgsl-3d0@3d00000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 18,
+          "node": "qnm_gpu",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,kgsl-3d0@3d00000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a80000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a84000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a88000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a88000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a8c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i3c-master@a90000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a98000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a98000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@0",
+          "id": 42,
+          "node": "qup1_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@0",
+          "id": 563,
+          "node": "qup1_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 531,
+          "node": "qhs_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 5,
+          "node": "qhm_qup1",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/qcom,qup_uart@a9c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@880000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@884000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@888000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@88c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@890000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@890000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@894000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@894000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/qcom,qup_uart@898000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/spi@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 43,
+          "node": "qup2_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@0",
+          "id": 564,
+          "node": "qup2_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 532,
+          "node": "qhs_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 6,
+          "node": "qhm_qup2",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_2_geni_se@8c0000/i3c-master@89c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1980000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1984000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1988000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1988000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@198c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@198c000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/spi@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 44,
+          "node": "qup3_core_master",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@0",
+          "id": 565,
+          "node": "qup3_core_slave",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 533,
+          "node": "qhs_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1700000",
+          "id": 7,
+          "node": "qhm_qup3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,qupv3_3_geni_se@19c0000/i3c-master@1990000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 54,
+          "node": "xm_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@16e0000",
+          "id": 54,
+          "node": "xm_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1500000",
+          "id": 523,
+          "node": "qhs_ipa",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@31100000",
+          "id": 2,
+          "node": "chm_apps",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/ssusb@a600000",
+          "provider": "/soc/interconnect@1600000",
+          "id": 540,
+          "node": "qhs_usb3",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ddr-cdev",
+          "provider": "/soc/interconnect@1",
+          "id": 3,
+          "node": "llcc_mc",
+          "tag": null
+        },
+        {
+          "consumer": "/soc/qcom,ddr-cdev",
+          "provider": "/soc/interconnect@1",
+          "id": 512,
+          "node": "ebi",
+          "tag": null
+        }
+      ]
+    }
+  },
+  "packaging_allowed": false,
+  "saved_bindings_passed": false,
+  "candidate_bindings_passed": true,
+  "passed": true
+}

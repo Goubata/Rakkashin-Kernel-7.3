@@ -1,0 +1,60 @@
+{
+  "stage": "android73-interconnect-stage18",
+  "scope": "linked actual vendor modules; isolated aggregation/module tests; static DT indices and saved ELF evidence; no physical hardware acceptance",
+  "source_commit": "3684f35f174dea465dc44627d2af8ce6f33a74e1",
+  "image_sha256": "45a406686d69d1ea93385196cc557d829c1fab27bec27f962fcc23d00af8aa3e",
+  "module_count": 85,
+  "imports_checked": 4405,
+  "all_import_crcs_match": true,
+  "guest_kunit_cases_passed": 9,
+  "resident_original_modules": [
+    "qnoc_alor",
+    "icc_bcm_voter"
+  ],
+  "guest_lifecycle_verified": [
+    "icc_rpmh",
+    "qnoc_qos",
+    "icc_debug"
+  ],
+  "source_topology_nodes": 231,
+  "source_link_targets_complete": true,
+  "candidate_dt_reference_count": 426,
+  "candidate_provider_count": 14,
+  "candidate_dt_indices_valid": true,
+  "saved_dt_indices_valid": false,
+  "saved_dt_errors": [
+    {
+      "consumer": "/soc/ssusb@a600000",
+      "provider": "/soc/interconnect@1600000",
+      "args": [
+        523
+      ]
+    }
+  ],
+  "candidate_dt": "artifacts/dt-interconnect-stage18/avr-interconnect-candidate.dtb",
+  "saved_gpu_and_memory_preserved": true,
+  "physical_noc_rpmh_crm_verified": false,
+  "physical_usb_ipa_verified": false,
+  "daily_use_ready": false,
+  "packaging_allowed": false,
+  "partition_written": false,
+  "pending": [
+    "Voter handle/removal lifetime and static BCM probe rollback",
+    "QoS error propagation and vote rollback",
+    "Consumer-list and trace-control concurrency",
+    "Physical NoC/CRM/RPMh, USB/IPA and bandwidth/power behavior",
+    "Whole DT/image/module/SELinux/ROM alignment and physical daily-use acceptance"
+  ],
+  "sha256": {
+    "reports/interconnect-source-lock.json": "505ac8f1501c250535b00cba79b19176b53b1ededfe4f8c1bca88cf0e21b46bc",
+    "reports/module-crc-stage18.json": "cd2097f3ab31670664dfee9e2d851958e2a6aa63de2bd0159b4646dda7792300",
+    "reports/qemu-interconnect-stage18.log": "8b11ef2bbeeb7838ea190f3be4f4f444be01dccdb22105d4fa0a017f02f1c377",
+    "reports/qemu-interconnect-stage18.json": "03b4b30c671abb876fdc265bedebf3adf58384e523401cc1ba092584e3feebfe",
+    "reports/interconnect-stage18-build.log": "4b375319417f2d29ce46c438b710c64c4642b995a0f922205c7014290c529915",
+    "reports/interconnect-dt-validation.json": "d06a5637a57a916b58a8d9ec9ae2a207f658658dc15fbad0447cf3069c7f8c09",
+    "reports/interconnect-dt-repair.json": "135ffce2ebc98499378199ebc1258ae599cb89472fd6a891857f99989c59cbb9",
+    "reports/interconnect-saved-module-evidence.json": "1f1e2ed5255f6142f30bd1c762b2aec91e1ed26e7ca7ec4c8fe3f32f6b271189",
+    "reports/gpu-dt-reconstruction.json": "ef9c97a9ab2a45fb32ca91edaafba54500442e78f5de8faa98b8a42c30c18caf",
+    "reports/memory-dt-reconstruction.json": "3fceda4b61f9898fe37016b6acb1699418278a87b7956373472a8164033fa2f1"
+  }
+}

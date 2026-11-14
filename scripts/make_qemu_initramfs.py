@@ -22,6 +22,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--interconnect-tests", action="store_true")
     group.add_argument("--regulators-tests", action="store_true")
     group.add_argument("--storage-host-tests", action="store_true")
     group.add_argument("--diagnostics-tests", action="store_true")
@@ -191,6 +192,36 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         commands += ['/bin/busybox rmmod adios || { echo AVR_ADIOS_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.interconnect_tests:
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko'] + [ROOT/'ports'/name for name in [
+            'qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-socinfo/socinfo.ko',
+            'qcom-clock-core/crm-v2.ko','qcom-rpmh/cmd-db.ko','qcom-rpmh/qcom_rpmh.ko',
+            'qcom-interconnect/icc-debug.ko','qcom-interconnect/icc-bcm-voter.ko',
+            'qcom-interconnect/qnoc-qos.ko','qcom-interconnect/icc-rpmh.ko','qcom-interconnect/qnoc-alor.ko',
+        ]] + [ROOT/'tests/interconnect/avr-interconnect-test.ko']
+        commands=[]
+        for source in sources:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            if source.name!='qnoc-alor.ko':
+                commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_INTERCONNECT_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands += [
+            '/bin/busybox rmmod avr_interconnect_test || { echo AVR_INTERCONNECT_TEST_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox mkdir -p /sys/kernel/debug',
+            '/bin/busybox mount -t debugfs debugfs /sys/kernel/debug || { echo AVR_INTERCONNECT_DEBUGFS_FAIL; /bin/busybox poweroff -f; }',
+            'echo 1 > /sys/kernel/debug/interconnect/debug_suspend || { echo AVR_INTERCONNECT_TRACE_ENABLE_FAIL; /bin/busybox poweroff -f; }',
+            'echo 0 > /sys/kernel/debug/interconnect/debug_suspend || { echo AVR_INTERCONNECT_TRACE_DISABLE_FAIL; /bin/busybox poweroff -f; }']
+        for name in ['icc_rpmh','qnoc_qos','icc_debug']:
+            commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_INTERCONNECT_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
+        # Firmware Alor and BCM drivers have no module_exit: test other teardown
+        # first, then load the intentionally resident hardware provider.
+        for name in ['icc-debug','qnoc-qos','icc-rpmh','qnoc-alor']:
+            commands.append(f'/bin/busybox insmod /modules/{name}.ko || {{ echo AVR_INTERCONNECT_RELOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands += ['if /bin/busybox rmmod icc_bcm_voter; then echo AVR_INTERCONNECT_BCM_RESIDENT_GUARD_FAIL; /bin/busybox poweroff -f; fi',
+                     'test -d /sys/module/qnoc_alor || { echo AVR_INTERCONNECT_ALOR_STATE_FAIL; /bin/busybox poweroff -f; }',
+                     'if /bin/busybox rmmod qnoc_alor; then echo AVR_INTERCONNECT_RESIDENT_GUARD_FAIL; /bin/busybox poweroff -f; fi',
+                     'echo AVR_INTERCONNECT_TESTS_PASS scope=aggregation-and-module-lifecycle-only']
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.regulators_tests:
         sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko'] + [ROOT/'ports'/name for name in [
@@ -367,7 +398,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

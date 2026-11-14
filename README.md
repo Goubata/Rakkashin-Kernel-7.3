@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系を含む80モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnectを含む85モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新成果物は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -186,3 +186,24 @@ python scripts/snapshot_boot_core.py --name android73-regulators-stage17 --gpu-d
 ```
 
 Stage17は80モジュール・4,285インポートCRC一致です。新しい本体変更はなくImageはStage16と同じです。常用版や実機起動可能なboot.imgではありません。詳細は `reports/regulators-stage17-validation.json`。
+
+## Stage18: Alor interconnectとUSB/IPA参照の候補修正
+
+BCM voter・RPMh interconnect・帯域診断・QoS・Alorの5モジュールを固定Motorolaソースからリンクしました。Motorola commonの5状態のbinding headerを先に読み込み、標準の3状態のheaderとの混在を防ぎます。クロック用倍率は64bitのローカル値へ適用し、frameworkの集計値を繰り返し変更しません。rate/commit、BCM初期化、リンク/診断登録のエラーを伝播し、管理されたclockの二重解放と子デバイスの終了順も修正しました。
+
+4コアQEMUで実集計・5状態・性能タグ・初期値・リセット・倍率の非破壊性・commitエラー・native xlateの9項目が通過しました。依存3モジュールの終了/再登録とtrace制御も確認しました。元のAlor/BCM voterにはmodule_exitがないため常駐を維持し、アンロード可能とは主張しません。実NoC/RPMh/CRMやQoS MMIOは未検証です。
+
+静的照合では231ノードのリンク先に欠落がなく、BCM最大所属数は2（容量3以内）でした。保存DTにはUSB usb-ipaがcnoc_cfgの空スロット523を指す不整合があり、保存済みqnoc-alor.koのELF relocationでも空であることを確認しました。同じ保存モジュールのcnoc_main slot523はqhs_ipaへ解決します。この根拠に基づき、IDを保ったままその参照先providerだけを変更する候補DTを別ファイルへ生成しました。実機のUSB/IPA修正成功を意味しません。
+
+候補DTの14 providers / 426 interconnect参照は全て表内に解決します。元の保存DTの不整合は監査結果に残しています。変更はUSBの1プロパティだけで、保存GPU21段階と安定メモリ設定は完全維持されています。全DT binding・他ハードウェア・画像パッケージ・実機常用確認は未完了です。
+
+```sh
+python scripts/build_storage_deps.py --interconnect-tests
+python scripts/run_qemu.py --test interconnect --cpus 4 --log reports/interconnect.log
+python scripts/build_interconnect_dt.py
+python scripts/audit_interconnect_dt.py
+python scripts/snapshot_boot_core.py --name android73-interconnect-stage18 --gpu-driver --rakkashin --interconnect
+```
+
+候補DTは `artifacts/dt-interconnect-stage18/avr-interconnect-candidate.dtb`。
+Stage18の本体ImageはStage16と同一です。`reports/interconnect-stage18-validation.json` に範囲を記録しています。実機7.3の起動と全機能動作は未確認で、boot.imgや常用版はまだありません。

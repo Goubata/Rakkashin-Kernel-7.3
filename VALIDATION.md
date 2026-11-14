@@ -266,3 +266,28 @@ Physical RPMh acknowledgement/aggregation/rollback, voltage levels, proxy votes,
 suspend, concurrent teardown and all whole-device acceptance remain pending.
 A diagnostic consumer holds its regulator provider module until device unbind;
 the runner explicitly tests this reference rather than forcing module removal.
+
+## Stage18: Alor interconnect software and candidate DT route
+
+Five additional real modules link; the unchanged Stage16 Image now has an
+85-module partial snapshot / 4,405 matching imports. The fixed Motorola common
+binding supplies five private vote buckets rather than silently using three.
+Nine SMP4 KUnit cases execute actual aggregation, boot floors/reset, performance
+tags, local scaling, commit error propagation and native xlate. Diagnostic trace
+controls and unload/reload of the three removable libraries pass. Original Alor
+and BCM voter modules have no module_exit and remain resident; their expected
+unload rejection is tested, not bypassed.
+
+Static source checks find 231 node IDs, no missing link IDs and a maximum of two
+BCMs per node (capacity three). The saved DT contains one USB usb-ipa reference
+to cnoc_cfg[523], and the saved ELF has no relocation and a zero pointer in that
+slot. Its cnoc_main[523] resolves to qhs_ipa. An explicit candidate overlay changes
+only that endpoint provider, keeping IDs/other paths intact. Source topology has
+a path from MASTER_USB3 to SLAVE_IPA_CFG. All 426 candidate references across 14
+providers are in the selected tables; original saved inconsistencies remain in
+the report. The one-property repair preserves the saved GPU21 table and memory.
+
+This is no proof of physical USB/IPA, NoC/CRM/RPMh, QoS, firmware or performance.
+Voter handle/removal races, static BCM probe rollback, QoS error/vote rollback,
+consumer-list concurrency, whole DT/boot/DLKM/ROM alignment and all real-device
+acceptance still remain. Candidate DT is separate and not approved for packaging.

@@ -1,0 +1,20 @@
+{
+  "scope": "one candidate endpoint-provider repair only; not USB/IPA hardware acceptance",
+  "changes": [
+    {
+      "node": "/soc/ssusb@a600000",
+      "property": "interconnects"
+    }
+  ],
+  "node_count": 5102,
+  "saved_gpu_and_memory_preserved": true,
+  "hardware_verified": false,
+  "packaging_allowed": false,
+  "sha256": {
+    "artifacts/dt-avr-dump-aligned-build/avr-experimental-merged.dtb": "f7e6c9a9aef15dfda317dedec0e6796ecd9b5f5f15bb81630bc499e7859d0f22",
+    "ports/device-tree/recovered/avr-usb-ipa-interconnect.dtso": "6265db24cbce20b2fce05c52cf2cb4d5e3ad644662c2a21db58d5b207570ab4c",
+    "artifacts/dt-interconnect-stage18/avr-usb-ipa.preprocessed.dts": "c3eb51053593ce2743f8137d30697feeed0e354020ed29e138313652801e7854",
+    "artifacts/dt-interconnect-stage18/avr-usb-ipa.dtbo": "deb48a0c3a31dd1d25e1a7f982c7139268d24a0e4b6c29d21bab91f809b03b39",
+    "artifacts/dt-interconnect-stage18/avr-interconnect-candidate.dtb": "8a9b69027de4d4b5a93c67bb4501c9ee989945f6b23f7a6c6f3739969200a285"
+  }
+}

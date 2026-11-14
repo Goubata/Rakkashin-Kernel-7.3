@@ -1,0 +1,103 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-interconnect/alor.c",
+      "source": "drivers/interconnect/qcom/alor.c",
+      "original_sha256": "dfd40bf8bbaa7959f13eb0c63805ad76f33be121f0711efbc42da4f179af8003",
+      "sha256": "dfd40bf8bbaa7959f13eb0c63805ad76f33be121f0711efbc42da4f179af8003"
+    },
+    {
+      "file": "ports/qcom-interconnect/bcm-voter.c",
+      "source": "drivers/interconnect/qcom/bcm-voter.c",
+      "original_sha256": "adae86d4cef6905d20c2ac577b0e388a8aa20439dca6bee631ad30f6356db72d",
+      "sha256": "adae86d4cef6905d20c2ac577b0e388a8aa20439dca6bee631ad30f6356db72d"
+    },
+    {
+      "file": "ports/qcom-interconnect/bcm-voter.h",
+      "source": "drivers/interconnect/qcom/bcm-voter.h",
+      "original_sha256": "531abfbccb996b563deb20a2ef14ea8b16c17cd94e6aa3c982a47c5deae05c46",
+      "sha256": "531abfbccb996b563deb20a2ef14ea8b16c17cd94e6aa3c982a47c5deae05c46"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-rpmh.c",
+      "source": "drivers/interconnect/qcom/icc-rpmh.c",
+      "original_sha256": "b3cfab5c9d96c4d8260f697485b605304fb51395e73fcaa3728f65a2aeb7c274",
+      "sha256": "b5bf3eebe5d56a65a2de06d4f3b1d34d23e70700bba24b259fc0480a5b5244d1"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-rpmh.h",
+      "source": "drivers/interconnect/qcom/icc-rpmh.h",
+      "original_sha256": "d96b4869a17486bf1e8526a91c9bb2c3f4eee4ccabf2022619f7aee812c81da0",
+      "sha256": "d96b4869a17486bf1e8526a91c9bb2c3f4eee4ccabf2022619f7aee812c81da0"
+    },
+    {
+      "file": "ports/qcom-interconnect/qnoc-qos.c",
+      "source": "drivers/interconnect/qcom/qnoc-qos.c",
+      "original_sha256": "588e89710017fcda14f59a844828ec9a30d70178c5757eed78bfb8cbe5e99b05",
+      "sha256": "cd9a8ed4b8e399ab64375904da282319b7037485bbd3d2c1c45faae390e73b40"
+    },
+    {
+      "file": "ports/qcom-interconnect/qnoc-qos.h",
+      "source": "drivers/interconnect/qcom/qnoc-qos.h",
+      "original_sha256": "edfc9d987adee0d39bdeb144cc93c52fc6f69f4d3a949062afee2003ba8c93f3",
+      "sha256": "edfc9d987adee0d39bdeb144cc93c52fc6f69f4d3a949062afee2003ba8c93f3"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-debug.c",
+      "source": "drivers/interconnect/qcom/icc-debug.c",
+      "original_sha256": "0126a3101f1f15082788f5653f85d97a005d0415a83f25ed587cff598130cf56",
+      "sha256": "b3ee7d2fe2e9704e0dab67bae1055cf49db39e29d5ba884e23163cde3bf95fc4"
+    },
+    {
+      "file": "ports/qcom-interconnect/icc-debug.h",
+      "source": "drivers/interconnect/qcom/icc-debug.h",
+      "original_sha256": "5fa8c44dbe7c81721749e37692d9e3b6e76896705c2526418429101cc655b3fe",
+      "sha256": "5fa8c44dbe7c81721749e37692d9e3b6e76896705c2526418429101cc655b3fe"
+    },
+    {
+      "file": "ports/qcom-interconnect/trace.h",
+      "source": "drivers/interconnect/qcom/trace.h",
+      "original_sha256": "88f776cca441bbe5ec0a7168b7d2a42dabede59f6ad78fe452c1df9e4a1f4739",
+      "sha256": "88f776cca441bbe5ec0a7168b7d2a42dabede59f6ad78fe452c1df9e4a1f4739"
+    },
+    {
+      "file": "ports/qcom-interconnect/include/dt-bindings/interconnect/qcom,alor.h",
+      "source": "include/dt-bindings/interconnect/qcom,alor.h",
+      "original_sha256": "eba2ed57b511355abb15c7c423d4d20d321e7139d8f265a34e9075e4aff276dc",
+      "sha256": "eba2ed57b511355abb15c7c423d4d20d321e7139d8f265a34e9075e4aff276dc"
+    },
+    {
+      "file": "ports/qcom-interconnect/include/dt-bindings/interconnect/qcom,icc.h",
+      "source": "include/dt-bindings/interconnect/qcom,icc.h",
+      "original_sha256": "52e95d158b1f9381e707f8e9e93722cafe83b366b136e08331fba43e5dd0523d",
+      "sha256": "52e95d158b1f9381e707f8e9e93722cafe83b366b136e08331fba43e5dd0523d"
+    },
+    {
+      "file": "ports/qcom-interconnect/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "c107cf2d723d0ea434286bbe4f5182c23b2ef289d7b5bc77d5f477e6a79362e9"
+    }
+  ],
+  "patch_sha256": "c7048dccc3707b9e2ed5e928c906d8fd9ded346edd1d1c53428c5f0645a02cb4",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "additional_source_commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+  "reviewed_changes": [
+    "Use exact five-bucket common binding header before native include guard",
+    "Preserve real RPMh/CRM voting and the unmodified Alor topology",
+    "Keep clock scaling local with 64-bit intermediates; propagate rate/commit failures",
+    "Validate full BCM auxiliary data and node capacity before publishing its address",
+    "Propagate BCM/link/debug registration failure instead of claiming probe success",
+    "Fix devm clock double release and map allocation failure handling",
+    "Remove children before the parent provider; manage populate rollback",
+    "Hold debug provider list during walks, put lookup dentry and drain trace unregister"
+  ],
+  "known_open_items": [
+    "Physical NoC/BCM/CRM/RPMh acknowledgement and actual bandwidth/power behavior",
+    "BCM static-state/probe rollback, removal and voter-handle lifetime races",
+    "QoS MMIO error propagation and dependency-vote rollback",
+    "Consumer-request list locking and concurrent debug trace controls",
+    "Alor and BCM voter have no original module_exit and are intentionally resident"
+  ]
+}

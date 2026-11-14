@@ -1,0 +1,31 @@
+{
+  "scope": "saved ELF slot/relocation evidence only; not USB/IPA hardware execution",
+  "module": "device-baseline/early-modules/0/lib/modules/qnoc-alor.ko",
+  "sha256": "04464c1bf3e73f28093dcebe9f360df4dd320fed1ba4b9096caabfea27c82ba0",
+  "entries": [
+    {
+      "array": "cnoc_cfg_nodes",
+      "index": 523,
+      "raw_pointer_slot_zero": true,
+      "relocation_target_names": []
+    },
+    {
+      "array": "cnoc_main_nodes",
+      "index": 523,
+      "raw_pointer_slot_zero": true,
+      "relocation_target_names": [
+        "qhs_ipa"
+      ]
+    },
+    {
+      "array": "cnoc_cfg_nodes",
+      "index": 540,
+      "raw_pointer_slot_zero": true,
+      "relocation_target_names": [
+        "qhs_usb3"
+      ]
+    }
+  ],
+  "finding": "Saved USB usb-ipa endpoint points at an empty cnoc_cfg slot; the saved cnoc_main slot with the same ID resolves to qhs_ipa",
+  "physical_route_verified": false
+}

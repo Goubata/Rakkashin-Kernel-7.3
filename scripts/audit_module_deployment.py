@@ -14,7 +14,7 @@ def normalize(name):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--stage', default='android73-regulators-stage17')
+    parser.add_argument('--stage', default='android73-interconnect-stage18')
     args = parser.parse_args()
     stage = ROOT / 'artifacts' / args.stage
     metadata = json.loads((stage / 'metadata.json').read_text())

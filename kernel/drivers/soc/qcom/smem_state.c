@@ -9,10 +9,12 @@
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/slab.h>
+#include <linux/srcu.h>
 #include <linux/soc/qcom/smem_state.h>
 
 static LIST_HEAD(smem_states);
 static DEFINE_MUTEX(list_lock);
+DEFINE_STATIC_SRCU(state_callbacks);
 
 /**
  * struct qcom_smem_state - state context
@@ -47,13 +49,17 @@ int qcom_smem_state_update_bits(struct qcom_smem_state *state,
 				u32 mask,
 				u32 value)
 {
-	if (state->orphan)
-		return -ENXIO;
+	int idx, ret;
 
-	if (!state->ops.update_bits)
-		return -ENOTSUPP;
-
-	return state->ops.update_bits(state->priv, mask, value);
+	idx = srcu_read_lock(&state_callbacks);
+	if (READ_ONCE(state->orphan))
+		ret = -ENXIO;
+	else if (!state->ops.update_bits)
+		ret = -ENOTSUPP;
+	else
+		ret = state->ops.update_bits(state->priv, mask, value);
+	srcu_read_unlock(&state_callbacks, idx);
+	return ret;
 }
 EXPORT_SYMBOL_GPL(qcom_smem_state_update_bits);
 
@@ -110,7 +116,7 @@ struct qcom_smem_state *qcom_smem_state_get(struct device *dev,
 		return ERR_PTR(ret);
 	}
 
-	if (args.args_count != 1) {
+	if (args.args_count != 1 || args.args[0] >= 32) {
 		dev_err(dev, "invalid #qcom,smem-state-cells\n");
 		state = ERR_PTR(-EINVAL);
 		goto put;
@@ -218,10 +224,19 @@ EXPORT_SYMBOL_GPL(qcom_smem_state_register);
 /**
  * qcom_smem_state_unregister() - unregister a registered state
  * @state:	state handle to be unregistered
+ *
+ * Removes the state from lookup and waits for in-flight updates before returning.
+ * Must run in sleepable context, outside any state update callback.
  */
 void qcom_smem_state_unregister(struct qcom_smem_state *state)
 {
-	state->orphan = true;
+	mutex_lock(&list_lock);
+	WRITE_ONCE(state->orphan, true);
+	list_del_init(&state->list);
+	mutex_unlock(&list_lock);
+
+	/* Clients may retain an orphan handle, but provider-private data can go. */
+	synchronize_srcu(&state_callbacks);
 	qcom_smem_state_put(state);
 }
 EXPORT_SYMBOL_GPL(qcom_smem_state_unregister);

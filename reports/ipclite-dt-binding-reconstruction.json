@@ -1,0 +1,189 @@
+{
+  "scope": "observed signal-slot contract only; not firmware IPC operation or recovery of the absent vendor header",
+  "passed": true,
+  "vendor_header_recovered": false,
+  "constants": {
+    "IPCLITE_MSG_SIGNAL": 0,
+    "IPCLITE_MEM_INIT_SIGNAL": 1,
+    "IPCLITE_VERSION_SIGNAL": 2,
+    "IPCLITE_TEST_SIGNAL": 3,
+    "IPCLITE_SSR_SIGNAL": 4,
+    "IPCLITE_DEBUG_SIGNAL": 5,
+    "MAX_CHANNEL_SIGNALS": 6
+  },
+  "driver_header_sha256": "a505334208e062a1a6e5f339a522e70e1bbc9282d6c780fb526e198998a67975",
+  "saved_dtb_sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+  "saved_signal_entries": [
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/apss/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/soccp/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/cdsp/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/cvp/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/cam/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/cam1/ipclite_signal_5",
+      "index": 5
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_0",
+      "index": 0
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_1",
+      "index": 1
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_2",
+      "index": 2
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_3",
+      "index": 3
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_4",
+      "index": 4
+    },
+    {
+      "node": "/soc/ipclite/gpu/ipclite_signal_5",
+      "index": 5
+    }
+  ],
+  "output": "ports/device-tree/compat/dt-bindings/ipclite-signals.h",
+  "output_sha256": "adc18374aaaf3c83b3c511c32833f98b1d18d2fe8f320a4d5031374e0dee4424",
+  "hardware_ipcc_signal_ids": "Use the pinned qcom-ipcc-canoe.h; do not infer them from the 0..5 slot indices"
+}

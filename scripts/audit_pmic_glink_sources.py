@@ -50,12 +50,15 @@ def main():
                       'Validate client-data pointer and representable nonzero IDR IDs',
                       'Reject unterminated rpmsg channel name length and initialize device before notifier registration',
                       'Unregister platform driver if rpmsg registration fails',
+                      'Acquire per-client SRCU while holding the lookup mutex and drain it before client free',
+                      'Serialize RX/state callbacks outside the registry mutex and reject self-unregister with EDEADLK',
+                      'Initialize and unwind each client SRCU before/after registry publication',
                   ],
                   'pending': [
-                      'RX callback versus client unregister use-after-free and state callback reentry',
                       'Provider/rpmsg/global registry references and unbind serialization',
                       'Remove/init work ordering and child/notifier/IPC/IDR cleanup',
-                      'Actual-code transport/client tests and all remote firmware/charging acceptance',
+                      'Broader callback/register/unregister churn and all remote firmware/charging acceptance',
+                      'Callers must stop concurrent TX before unregister and schedule unregister outside callbacks',
                   ]}
         lock.write_text(json.dumps(report, indent=2) + '\n')
     report = json.loads(lock.read_text())

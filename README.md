@@ -319,3 +319,21 @@ Motorola qti_pmic_glinkの草稿はリンクしたが、RX/client解除・provid
 後始末に未修正の競合があるため、この成果物には含めない。
 リモートサービス、実充電、電池表示、物理7.3起動と常用判定は未完。
 `reports/pmic-ipc-stage25-validation.json`。
+
+## Stage26: GLINK受信・クライアント解除
+
+実MotorolaソースのクライアントにSRCUとcallback mutexを追加。IDR検索中に保護を
+取得し、公開を外した後にRX/state callbackの終了を待って解放する。
+callback呼出しはIDR mutexの外で行い、自己解除は-EDEADLKとして別workerへの
+解除依頼を必要とする。TXとunregisterは呼出側で直列化する契約を明示した。
+実ソースをdriver初期化なしでコンパイルするsoftware fixtureで6項目が通過。
+QMI6項目・QRTR128packetと合わせて警告なし。実provider/rpmsgのprobeや解除は
+このfixtureに含まない。実vendorモジュールのインポートCRCも一致するが、
+提供側の寿命と後始末はまだ未完のため、成果物はStage25の99モジュールのまま。
+
+```sh
+python scripts/build_storage_deps.py --pmic-glink-tests
+python scripts/run_qemu.py --test pmic-glink --cpus 4 --log reports/pmic-glink-stage26-final-qemu.log
+```
+
+`reports/pmic-glink-stage26-validation.json`。実充電、物理7.3起動、常用版完成は未達。

@@ -413,3 +413,18 @@ Firmware-pinned vendor GLINK source compiles but is explicitly a draft excluded
 from artifacts until client/provider/receive/removal lifetime issues are fixed
 and tested. GLINK transport, remoteproc/PDR services, battery/charging, QMI schema
 stress and all physical safety/boot/whole-phone acceptance remain open.
+
+## Stage26: vendor GLINK client callback lifetime
+
+Six actual vendor-source fixture cases pass alongside six native QMI cases and
+128 local QRTR packets. Driver init/exit are suppressed only in the test TU;
+no physical firmware provider is registered. Per-client SRCU is acquired under
+the IDR mutex and drained before free; RX/state callbacks run outside that mutex
+and serialize on a callback mutex. Self-unregister returns EDEADLK. Tests cover
+input/disconnected-TX handling, dispatch/state, duplicate IDs, RX/state self
+unregister and external unregister waiting for an in-flight RX callback.
+
+The real module links and its import CRCs match, but provider/rpmsg references,
+init/notifier/RX/child/IPC teardown and physical transport remain unaccepted.
+Hardware artifacts stay at Stage25 (99 modules); vendor GLINK is excluded.
+Caller TX/unregister serialization and all charging/full-phone criteria remain.

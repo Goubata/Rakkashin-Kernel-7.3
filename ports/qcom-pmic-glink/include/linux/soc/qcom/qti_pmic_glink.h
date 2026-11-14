@@ -50,6 +50,9 @@ struct pmic_glink_hdr {
 #if IS_ENABLED(CONFIG_QTI_PMIC_GLINK)
 struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
 			const struct pmic_glink_client_data *client_data);
+/* Caller stops concurrent writes before unregister. Unregister waits for RX/
+ * state callbacks; calling it inside one's own callback returns -EDEADLK.
+ */
 int pmic_glink_unregister_client(struct pmic_glink_client *client);
 int pmic_glink_write(struct pmic_glink_client *client, void *data,
 			size_t len);

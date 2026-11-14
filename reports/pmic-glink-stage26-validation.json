@@ -1,0 +1,37 @@
+{
+  "stage": "pmic-glink-client-lifetime-stage26",
+  "scope": "actual vendor source compiled in test translation unit with module driver initialization suppressed; private software fixture and actual native IPC only",
+  "hardware_artifacts_unchanged": "artifacts/android73-pmic-ipc-stage25",
+  "staged_modules": 99,
+  "staged_imports_checked": 4975,
+  "vendor_glink_packaged": false,
+  "vendor_glink_production_probe_tested": false,
+  "vendor_glink_client_cases_passed": 6,
+  "native_qmi_cases_passed": 6,
+  "qrtr_local_packets_verified": 128,
+  "vendor_glink_import_crcs_match": true,
+  "vendor_glink_imports_checked": 70,
+  "verified": [
+    "Message/client input bounds and disconnected TX error",
+    "Actual queued RX dispatch and state callback delivery",
+    "Duplicate owner registration rejection",
+    "Self-unregister from RX and state callback returns EDEADLK",
+    "External unregister waits for a blocked RX callback before freeing client"
+  ],
+  "daily_use_ready": false,
+  "physical_boot_verified": false,
+  "partition_written": false,
+  "pending": [
+    "Global provider/rpmsg references and device-link unbind synchronization",
+    "Cancel init work and drain notifiers/RX before removing child clients and IPC/IDR",
+    "Client TX/unregister caller serialization and callback scheduling contracts",
+    "Live firmware transport/service, charging/battery and all full-device acceptance"
+  ],
+  "sha256": {
+    "reports/pmic-glink-source-lock.json": "af7e1a2b62881e18184f473681d94e4085ac665b1ace371f2d1862610145e573",
+    "reports/pmic-glink-stage26-final-build.log": "92aaaa95fb906399ac63b71e2a77a5379be89dc1f840634f50f7d5dadb01f0d1",
+    "reports/pmic-glink-stage26-final-qemu.log": "3303e476f8b1b357a8534542f131f0572ea0058dcdeb0762994551f1f5bd5b8e",
+    "reports/pmic-glink-stage26-final-qemu.json": "4dc00ce4ab66073a17f3701db556d0714cf64af0bcc7974baf58cd690e4b05c7",
+    "reports/pmic-glink-stage26-import-crc.json": "087ac8b7135f2b50cf7b2ea64d4f5a21fc48ffd0c12113cbe0604089e0cf1fa1"
+  }
+}

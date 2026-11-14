@@ -1,6 +1,6 @@
 --- a/ports/qcom-pmic-glink/qti_pmic_glink.c
 +++ b/ports/qcom-pmic-glink/qti_pmic_glink.c
-@@ -12,6 +12,7 @@
+@@ -12,11 +12,14 @@
  #include <linux/ipc_logging.h>
  #include <linux/list.h>
  #include <linux/module.h>
@@ -8,7 +8,64 @@
  #include <linux/of_platform.h>
  #include <linux/platform_device.h>
  #include <linux/rpmsg.h>
-@@ -248,8 +249,10 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/srcu.h>
++#include <linux/sched.h>
+ #include <linux/workqueue.h>
+ #include <linux/remoteproc/qcom_rproc.h>
+ #include <linux/soc/qcom/pdr.h>
+@@ -113,6 +116,9 @@
+ 	const char		*name;
+ 	u32			id;
+ 	struct mutex		lock;
++	struct mutex		callback_lock;
++	struct srcu_struct	callbacks;
++	struct task_struct	*callback_task;
+ 	void			*priv;
+ 	int			(*msg_cb)(void *priv, void *data, size_t len);
+ 	struct list_head	node;
+@@ -132,18 +138,30 @@
+ static void pmic_glink_notify_clients(struct pmic_glink_dev *pgdev,
+ 					enum pmic_glink_state state)
+ {
+-	struct pmic_glink_client *pos;
++	struct pmic_glink_client *client;
++	int id = 0, index;
+ 
+ 	pm_stay_awake(pgdev->dev);
+-
+-	mutex_lock(&pgdev->client_lock);
+-	list_for_each_entry(pos, &pgdev->client_dev_list, node)
+-		pos->state_cb(pos->priv, state);
+-	mutex_unlock(&pgdev->client_lock);
+-
++	for (;;) {
++		mutex_lock(&pgdev->client_lock);
++		client = idr_get_next(&pgdev->client_idr, &id);
++		if (!client) {
++			mutex_unlock(&pgdev->client_lock);
++			break;
++		}
++		index = srcu_read_lock(&client->callbacks);
++		mutex_unlock(&pgdev->client_lock);
++		mutex_lock(&client->callback_lock);
++		WRITE_ONCE(client->callback_task, current);
++		if (client->state_cb)
++			client->state_cb(client->priv, state);
++		WRITE_ONCE(client->callback_task, NULL);
++		mutex_unlock(&client->callback_lock);
++		srcu_read_unlock(&client->callbacks, index);
++		if (++id == INT_MAX)
++			break;
++	}
+ 	pm_relax(pgdev->dev);
+-
+-	pmic_glink_dbg(pgdev, "state_cb done %d\n", state);
+ }
+ 
+ static int pmic_glink_ssr_notifier_cb(struct notifier_block *nb,
+@@ -248,8 +266,10 @@
  {
  	int rc;
  
@@ -20,7 +77,7 @@
  
  	down_read(&client->pgdev->rpdev_sem);
  
-@@ -306,7 +309,8 @@
+@@ -306,7 +326,8 @@
  	if (!dev || !dev->parent)
  		return ERR_PTR(-ENODEV);
  
@@ -30,7 +87,96 @@
  		return ERR_PTR(-EINVAL);
  
  	pgdev = get_pmic_glink_from_dev(dev->parent);
-@@ -452,7 +456,7 @@
+@@ -334,7 +355,15 @@
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
++	rc = init_srcu_struct(&client->callbacks);
++	if (rc) {
++		kfree(client->name);
++		kfree(client);
++		return ERR_PTR(rc);
++	}
+ 	mutex_init(&client->lock);
++	mutex_init(&client->callback_lock);
++	INIT_LIST_HEAD(&client->node);
+ 	client->id = client_data->id;
+ 	client->msg_cb = client_data->msg_cb;
+ 	client->priv = client_data->priv;
+@@ -348,6 +377,7 @@
+ 		pr_err("Error in allocating idr for client %s, rc=%d\n",
+ 			client->name, rc);
+ 		mutex_unlock(&pgdev->client_lock);
++		cleanup_srcu_struct(&client->callbacks);
+ 		kfree(client->name);
+ 		kfree(client);
+ 		return ERR_PTR(rc);
+@@ -376,20 +406,20 @@
+  */
+ int pmic_glink_unregister_client(struct pmic_glink_client *client)
+ {
+-	struct pmic_glink_client *pos, *tmp;
+-
+-	if (!client || !client->pgdev)
++	if (IS_ERR_OR_NULL(client) || !client->pgdev)
+ 		return -ENODEV;
++	/* A client may schedule unregister elsewhere, but cannot wait for itself. */
++	if (READ_ONCE(client->callback_task) == current)
++		return -EDEADLK;
+ 
+ 	mutex_lock(&client->pgdev->client_lock);
+-	list_for_each_entry_safe(pos, tmp, &client->pgdev->client_dev_list,
+-				node) {
+-		if (pos == client)
+-			list_del(&client->node);
+-	}
++	list_del_init(&client->node);
+ 	idr_remove(&client->pgdev->client_idr, client->id);
+ 	mutex_unlock(&client->pgdev->client_lock);
+ 
++	/* Lookup acquires SRCU under the same lock before publishing a callback. */
++	synchronize_srcu(&client->callbacks);
++	cleanup_srcu_struct(&client->callbacks);
+ 	pmic_glink_dbg(client->pgdev, "Unregistered client %s\n", client->name);
+ 	kfree(client->name);
+ 	kfree(client);
+@@ -402,17 +432,20 @@
+ {
+ 	struct pmic_glink_client *client;
+ 	struct pmic_glink_hdr *hdr;
++	int index;
+ 
+ 	hdr = (struct pmic_glink_hdr *)pbuf->buf;
+ 
+ 	mutex_lock(&pgdev->client_lock);
+ 	client = idr_find(&pgdev->client_idr, hdr->owner);
+-	mutex_unlock(&pgdev->client_lock);
+-
+ 	if (!client || !client->msg_cb) {
++		mutex_unlock(&pgdev->client_lock);
+ 		pr_err("No client present for %u\n", hdr->owner);
+ 		return;
+ 	}
++
++	index = srcu_read_lock(&client->callbacks);
++	mutex_unlock(&pgdev->client_lock);
+ 
+ 	if (pgdev->log_enable) {
+ 		if (pgdev->log_filter == hdr->owner)
+@@ -422,7 +455,12 @@
+ 				(int)pbuf->len, pbuf->buf);
+ 	}
+ 
++	mutex_lock(&client->callback_lock);
++	WRITE_ONCE(client->callback_task, current);
+ 	client->msg_cb(client->priv, pbuf->buf, pbuf->len);
++	WRITE_ONCE(client->callback_task, NULL);
++	mutex_unlock(&client->callback_lock);
++	srcu_read_unlock(&client->callbacks, index);
+ }
+ 
+ static void pmic_glink_rx_work(struct work_struct *work)
+@@ -452,7 +490,7 @@
  	struct pmic_glink_buf *pbuf;
  	unsigned long flags;
  
@@ -39,7 +185,7 @@
  		pr_err("Received length %d less than header size: %zu\n", len,
  			sizeof(struct pmic_glink_hdr));
  		return -EINVAL;
-@@ -604,6 +608,7 @@
+@@ -604,6 +642,7 @@
  	pgdev = devm_kzalloc(dev, sizeof(*pgdev), GFP_KERNEL);
  	if (!pgdev)
  		return -ENOMEM;
@@ -47,7 +193,7 @@
  
  	rc = of_property_read_string(dev->of_node, "qcom,pmic-glink-channel",
  					&pgdev->channel_name);
-@@ -612,7 +617,7 @@
+@@ -612,7 +651,7 @@
  		return rc;
  	}
  
@@ -56,7 +202,7 @@
  		pr_err("pmic glink channel name %s exceeds length\n",
  			pgdev->channel_name);
  		return -EINVAL;
-@@ -769,7 +774,10 @@
+@@ -769,7 +808,10 @@
  	if (rc < 0)
  		return rc;
  
@@ -68,6 +214,18 @@
  }
  module_init(pmic_glink_init);
  
+--- a/ports/qcom-pmic-glink/include/linux/soc/qcom/qti_pmic_glink.h
++++ b/ports/qcom-pmic-glink/include/linux/soc/qcom/qti_pmic_glink.h
+@@ -50,6 +50,9 @@
+ #if IS_ENABLED(CONFIG_QTI_PMIC_GLINK)
+ struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
+ 			const struct pmic_glink_client_data *client_data);
++/* Caller stops concurrent writes before unregister. Unregister waits for RX/
++ * state callbacks; calling it inside one's own callback returns -EDEADLK.
++ */
+ int pmic_glink_unregister_client(struct pmic_glink_client *client);
+ int pmic_glink_write(struct pmic_glink_client *client, void *data,
+ 			size_t len);
 --- a/ports/qcom-pmic-glink/Makefile
 +++ b/ports/qcom-pmic-glink/Makefile
 @@ -0,0 +1,5 @@

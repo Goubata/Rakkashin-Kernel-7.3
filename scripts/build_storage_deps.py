@@ -31,7 +31,9 @@ def main():
     parser.add_argument('--adc-thermal',action='store_true')
     parser.add_argument('--adc-thermal-tests',action='store_true')
     parser.add_argument('--pmic-ipc-tests',action='store_true')
+    parser.add_argument('--pmic-glink-tests',action='store_true')
     args=parser.parse_args()
+    if args.pmic_glink_tests:args.pmic_ipc_tests=True;args.diagnostics=True
     if args.adc_thermal_tests:args.adc_thermal=True
     if args.adc_thermal:args.diagnostics=True
     if args.ufs_host:args.ice=True
@@ -94,6 +96,9 @@ def main():
         from native_module_inventory import pmic_ipc_modules
         pmic_ipc_modules()
         targets.append('tests/pmic-ipc')
+    if args.pmic_glink_tests:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_pmic_glink_sources.py')],check=True)
+        targets += ['ports/qcom-rproc-common','ports/qcom-pmic-glink','tests/pmic-glink']
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

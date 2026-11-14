@@ -118,7 +118,7 @@ struct pmic_glink_client {
 	struct mutex		lock;
 	struct mutex		callback_lock;
 	struct srcu_struct	callbacks;
-	struct task_struct	*callback_task;
+	struct device		*dev;
 	void			*priv;
 	int			(*msg_cb)(void *priv, void *data, size_t len);
 	struct list_head	node;
@@ -139,10 +139,49 @@ static DEFINE_MUTEX(pmic_glink_dev_lock);
  */
 DEFINE_STATIC_SRCU(pmic_glink_ingress);
 
+struct pmic_glink_callback_scope {
+	struct list_head node;
+	struct task_struct *task;
+};
+static LIST_HEAD(pmic_glink_callback_tasks);
+static DEFINE_SPINLOCK(pmic_glink_callback_lock);
+
+static void pmic_glink_callback_enter(struct pmic_glink_callback_scope *scope)
+{
+	unsigned long flags;
+	scope->task = current;
+	spin_lock_irqsave(&pmic_glink_callback_lock, flags);
+	list_add(&scope->node, &pmic_glink_callback_tasks);
+	spin_unlock_irqrestore(&pmic_glink_callback_lock, flags);
+}
+static void pmic_glink_callback_leave(struct pmic_glink_callback_scope *scope)
+{
+	unsigned long flags;
+	spin_lock_irqsave(&pmic_glink_callback_lock, flags);
+	list_del(&scope->node);
+	spin_unlock_irqrestore(&pmic_glink_callback_lock, flags);
+}
+static bool pmic_glink_in_callback(void)
+{
+	struct pmic_glink_callback_scope *scope;
+	unsigned long flags;
+	bool found = false;
+	spin_lock_irqsave(&pmic_glink_callback_lock, flags);
+	list_for_each_entry(scope, &pmic_glink_callback_tasks, node) {
+		if (scope->task == current) {
+			found = true;
+			break;
+		}
+	}
+	spin_unlock_irqrestore(&pmic_glink_callback_lock, flags);
+	return found;
+}
+
 static void pmic_glink_notify_clients(struct pmic_glink_dev *pgdev,
 					enum pmic_glink_state state)
 {
 	struct pmic_glink_client *client;
+	struct pmic_glink_callback_scope scope;
 	int id = 0, index;
 
 	pm_stay_awake(pgdev->dev);
@@ -156,10 +195,11 @@ static void pmic_glink_notify_clients(struct pmic_glink_dev *pgdev,
 		index = srcu_read_lock(&client->callbacks);
 		mutex_unlock(&pgdev->client_lock);
 		mutex_lock(&client->callback_lock);
-		WRITE_ONCE(client->callback_task, current);
-		if (client->state_cb)
+		if (client->state_cb) {
+			pmic_glink_callback_enter(&scope);
 			client->state_cb(client->priv, state);
-		WRITE_ONCE(client->callback_task, NULL);
+			pmic_glink_callback_leave(&scope);
+		}
 		mutex_unlock(&client->callback_lock);
 		srcu_read_unlock(&client->callbacks, index);
 		if (++id == INT_MAX)
@@ -271,7 +311,7 @@ static struct pmic_glink_dev *pmic_glink_link_provider(struct device *consumer,
 		pgdev = ERR_PTR(-EPROBE_DEFER);
 		goto out;
 	}
-	if (strcmp(channel, pgdev->channel_name)) {
+	if (channel && strcmp(channel, pgdev->channel_name)) {
 		pgdev = ERR_PTR(-ENODEV);
 		goto out;
 	}
@@ -398,6 +438,7 @@ static struct pmic_glink_client *__pmic_glink_register_client(struct device *dev
 	client->msg_cb = client_data->msg_cb;
 	client->priv = client_data->priv;
 	client->pgdev = pgdev;
+	client->dev = dev;
 	client->state_cb = client_data->state_cb;
 
 	mutex_lock(&pgdev->client_lock);
@@ -422,16 +463,36 @@ static struct pmic_glink_client *__pmic_glink_register_client(struct device *dev
 	pmic_glink_dbg(pgdev, "Registered client %s\n", client->name);
 	return client;
 }
+static void pmic_glink_client_release(void *data);
+
 struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
 			const struct pmic_glink_client_data *client_data)
 {
 	struct pmic_glink_client *client;
-	int index = srcu_read_lock(&pmic_glink_ingress);
+	struct pmic_glink_dev *pgdev;
+	int index, ret;
 
-	/* Provider removal unpublishes its registry entry and waits out all
-	 * registrations before tearing down child clients and the IDR.
+	if (!dev || !dev->parent)
+		return ERR_PTR(-ENODEV);
+	if (!client_data || !client_data->id || client_data->id >= INT_MAX ||
+	    !client_data->msg_cb || !client_data->name)
+		return ERR_PTR(-EINVAL);
+	if (READ_ONCE(dev->links.status) != DL_DEV_PROBING)
+		return ERR_PTR(-EINVAL);
+	/* Clients register during probe. The link makes their driver removal
+	 * and managed unregister precede supplier teardown, including non-OF clients.
 	 */
+	pgdev = pmic_glink_link_provider(dev, dev->parent, NULL);
+	if (IS_ERR(pgdev))
+		return ERR_CAST(pgdev);
+
+	index = srcu_read_lock(&pmic_glink_ingress);
 	client = __pmic_glink_register_client(dev, client_data);
+	if (!IS_ERR(client)) {
+		ret = devm_add_action_or_reset(dev, pmic_glink_client_release, client);
+		if (ret)
+			client = ERR_PTR(ret);
+	}
 	srcu_read_unlock(&pmic_glink_ingress, index);
 	return client;
 }
@@ -447,12 +508,12 @@ EXPORT_SYMBOL(pmic_glink_register_client);
  * This function should be called by a client when it wants to unregister from
  * pmic_glink driver. Messages will not be routed to client after this is done.
  */
-int pmic_glink_unregister_client(struct pmic_glink_client *client)
+static int __pmic_glink_unregister_client(struct pmic_glink_client *client)
 {
 	if (IS_ERR_OR_NULL(client) || !client->pgdev)
 		return -ENODEV;
-	/* A client may schedule unregister elsewhere, but cannot wait for itself. */
-	if (READ_ONCE(client->callback_task) == current)
+	/* Also reject cross-client waits, which can form callback dependency cycles. */
+	if (pmic_glink_in_callback())
 		return -EDEADLK;
 
 	mutex_lock(&client->pgdev->client_lock);
@@ -468,6 +529,21 @@ int pmic_glink_unregister_client(struct pmic_glink_client *client)
 	kfree(client);
 	return 0;
 }
+static void pmic_glink_client_release(void *data)
+{
+	__pmic_glink_unregister_client(data);
+}
+
+int pmic_glink_unregister_client(struct pmic_glink_client *client)
+{
+	if (IS_ERR_OR_NULL(client) || !client->pgdev)
+		return -ENODEV;
+	if (pmic_glink_in_callback())
+		return -EDEADLK;
+	/* Explicit callers and managed fallback use the same release operation. */
+	devm_remove_action_nowarn(client->dev, pmic_glink_client_release, client);
+	return __pmic_glink_unregister_client(client);
+}
 EXPORT_SYMBOL(pmic_glink_unregister_client);
 
 static void pmic_glink_rx_callback(struct pmic_glink_dev *pgdev,
@@ -475,6 +551,7 @@ static void pmic_glink_rx_callback(struct pmic_glink_dev *pgdev,
 {
 	struct pmic_glink_client *client;
 	struct pmic_glink_hdr *hdr;
+	struct pmic_glink_callback_scope scope;
 	int index;
 
 	hdr = (struct pmic_glink_hdr *)pbuf->buf;
@@ -499,9 +576,9 @@ static void pmic_glink_rx_callback(struct pmic_glink_dev *pgdev,
 	}
 
 	mutex_lock(&client->callback_lock);
-	WRITE_ONCE(client->callback_task, current);
+	pmic_glink_callback_enter(&scope);
 	client->msg_cb(client->priv, pbuf->buf, pbuf->len);
-	WRITE_ONCE(client->callback_task, NULL);
+	pmic_glink_callback_leave(&scope);
 	mutex_unlock(&client->callback_lock);
 	srcu_read_unlock(&client->callbacks, index);
 }

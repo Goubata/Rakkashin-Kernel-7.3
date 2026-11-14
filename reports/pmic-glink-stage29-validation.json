@@ -1,0 +1,43 @@
+{
+  "stage": "android73-pmic-glink-stage29",
+  "scope": "experimental linked vendor module, actual-source software lifecycle cases, real framework links and native local IPC; no physical firmware or charging acceptance",
+  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "image_sha256": "919ed4fc3189a0d1e888d795f843637363a0e1c099d0591c0727d0e9a6f09001",
+  "module_count": 100,
+  "imports_checked": 5054,
+  "all_import_crcs_match": true,
+  "glink_source_cases_passed": 13,
+  "native_qmi_cases_passed": 6,
+  "qrtr_local_packets_verified": 128,
+  "production_module_registration_unregistration_passed": true,
+  "hardware_probe_exercised": false,
+  "managed_client_fallback_verified": true,
+  "explicit_release_no_double_free_verified": true,
+  "cross_client_callback_unregister_rejected": true,
+  "selected_dt_channels_pass": true,
+  "selected_dt_provider_count": 2,
+  "selected_dt_active_child_count": 8,
+  "vendor_glink_packaged": true,
+  "native_alor_soccp_remoteproc_compatible_present": false,
+  "whole_dt_validation_passed": false,
+  "physical_boot_verified": false,
+  "charging_or_battery_verified": false,
+  "daily_use_ready": false,
+  "partition_written": false,
+  "pending": [
+    "Actual alor SOCCP remoteproc/PAS/early-boot handover and GLINK SMEM transport",
+    "Eight active child services including Motorola/QTI charging and USB-C clients",
+    "Client allocation/devres failure injection, schema/stress and native RPMSG bus probe",
+    "Real OF/notifier/remote service behavior and all phone/ROM/stability/power acceptance",
+    "Original duplicate SID4 and missing hardware driver families"
+  ],
+  "sha256": {
+    "reports/pmic-glink-source-lock.json": "cb922401e7b64662003d0b21cca52184d52940ff88994e82b14134c8c15ff479",
+    "reports/pmic-glink-stage29-final-build.log": "e33bedf71da473cff9f3e5070a4a1b21d6e207a5d2ed914be7355db8309c9c99",
+    "reports/pmic-glink-stage29-final-qemu.log": "17d1db8dcc4102a04ff2281f3b94fcfceb2c941aec82ac1d908cedb4f603b16e",
+    "reports/pmic-glink-stage29-final-qemu.json": "4c39b841dec6f91a6b182a54a6d7de54994eda6cf2a25c3d49f668895e6d0b21",
+    "reports/module-crc-stage29.json": "ebaf77ef24ebdbe1484f76a1baa1691760291afa329a97aa5934069455afae09",
+    "reports/pmic-glink-dt-validation.json": "e34decb6b58f6dca686eccac227af12554b552b6ec0914c61dc5f54f5197aaa7"
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lock and replay the draft firmware PMIC GLINK source; this does not accept its runtime lifecycle against pinned Motorola source."""
+"""Lock and replay the firmware PMIC GLINK source against pinned Motorola; hardware acceptance is separate."""
 import argparse
 import difflib
 import hashlib
@@ -43,7 +43,8 @@ def main():
         patch.write_text(changes)
         report = {'source_commit': COMMIT, 'files': rows, 'patch_sha256': sha(patch.read_bytes()),
                   'scope': 'source and reviewed patch replay only; module link is recorded separately; physical acceptance pending',
-                  'draft_not_packaged': True,
+                  'experimental_packaged': True,
+                  'hardware_runtime_accepted': False,
                   'reviewed_changes': [
                       'Explicit native OF header and real SSR/PDR/IPC imports',
                       'Validate message data, minimum header length and integer length before sending',
@@ -58,10 +59,13 @@ def main():
                       'Retain supplier devices, verify binding under device lock, and link RPMSG consumers before transport publication',
                       'Protect client registration with the provider registry epoch and drain before child teardown',
                       'Unpublish provider/cancel init, stop notifiers, drain RX, remove children, then destroy IDR and IPC last',
+                      'Link client consumers during public probe-time registration and install managed release fallback',
+                      'Explicit unregister removes the exact managed action before releasing its client',
+                      'Track active callback tasks independently of client publication and reject cross-client unregister waits',
                   ],
                   'pending': [
-                      'Provider/rpmsg/global registry references and unbind serialization',
-                      'Remove/init work ordering and child/notifier/IPC/IDR cleanup',
+                      'Native RPMSG bus and physical OF/notifier/firmware probe/removal integration',
+                      'Fault injection for client allocation/action setup and broader concurrent bind/unbind churn',
                       'Broader callback/register/unregister churn and all remote firmware/charging acceptance',
                       'Callers must stop concurrent TX before unregister and schedule unregister outside callbacks',
                   ]}

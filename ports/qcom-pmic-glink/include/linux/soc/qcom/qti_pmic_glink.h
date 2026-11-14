@@ -48,10 +48,13 @@ struct pmic_glink_hdr {
 };
 
 #if IS_ENABLED(CONFIG_QTI_PMIC_GLINK)
+/* Register during child driver probe; a managed link and release action order
+ * teardown before the provider. Explicit unregister is still supported.
+ */
 struct pmic_glink_client *pmic_glink_register_client(struct device *dev,
 			const struct pmic_glink_client_data *client_data);
 /* Caller stops concurrent writes before unregister. Unregister waits for RX/
- * state callbacks; calling it inside one's own callback returns -EDEADLK.
+ * state callbacks; calling it inside any GLINK callback returns -EDEADLK.
  */
 int pmic_glink_unregister_client(struct pmic_glink_client *client);
 int pmic_glink_write(struct pmic_glink_client *client, void *data,

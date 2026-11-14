@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-pmic-ipc-stage25",
+  "stage": "android73-pmic-glink-stage29",
   "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
   "archived_unique_count": 544,
-  "staged_count": 99,
-  "same_name_candidate_count": 86,
-  "archived_names_without_same_name_candidate_count": 458,
-  "loaded_names_without_same_name_candidate_count": 443,
+  "staged_count": 100,
+  "same_name_candidate_count": 87,
+  "archived_names_without_same_name_candidate_count": 457,
+  "loaded_names_without_same_name_candidate_count": 442,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -347,6 +347,10 @@
     {
       "name": "qcom_ipc_logging",
       "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
+    },
+    {
+      "name": "qti_pmic_glink",
+      "file": "modules/qcom-pmic-glink/qti_pmic_glink.ko"
     },
     {
       "name": "rpmh_regulator",
@@ -746,6 +750,10 @@
     {
       "name": "qcom_ipc_logging",
       "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
+    },
+    {
+      "name": "qti_pmic_glink",
+      "file": "modules/qcom-pmic-glink/qti_pmic_glink.ko"
     },
     {
       "name": "rpmh_regulator",
@@ -1967,6 +1975,23 @@
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qti_pmic_glink": {
+      "file": "modules/qcom-pmic-glink/qti_pmic_glink.ko",
+      "sha256": "28213459891091169c8d7184ae31878ceea995ce77350f5f05f0faba318de8de",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "pdr_interface",
+        "qcom_common"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
@@ -4773,14 +4798,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qti_pmic_glink",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qti_power_telemetry",
       "placements": [
         "vendor_boot:fragment-0",
@@ -6014,7 +6031,6 @@
     "qti_glink_adc",
     "qti_glink_charger_v2",
     "qti_ocp_notifier",
-    "qti_pmic_glink",
     "qti_power_telemetry",
     "qti_ptd_share",
     "qti_qmi_cdev",

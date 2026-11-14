@@ -20,7 +20,7 @@ if markers[a.test] not in s:failures.append('missing success marker')
 if 'reboot: Power down' not in s:failures.append('guest did not shut down')
 result={'log':str(a.log),'test':a.test,'passed':not failures,'failures':failures}
 if a.test in ('pmic-glink','pmic-ipc','adc-thermal','pmic-gpio','spmi','interconnect','regulators','storage-host','diagnostics','debug-symbol','ufs','ice','clock','iommu','secure','sysstats','fence','power','platform','scm','gpu-policy','rm-lifetime'):
-    expected=16 if a.test=='pmic-glink' else 6 if a.test=='pmic-ipc' else 24 if a.test=='adc-thermal' else 7 if a.test=='pmic-gpio' else 5 if a.test=='spmi' else 9 if a.test=='interconnect' else 7 if a.test=='regulators' else 8 if a.test in ('storage-host','diagnostics') else 5 if a.test=='debug-symbol' else 3 if a.test=='ufs' else 10 if a.test=='ice' else 9 if a.test=='rm-lifetime' else 8 if a.test=='gpu-policy' else 13 if a.test=='scm' else 10 if a.test=='platform' else a.clock_count if a.test=='clock' else 5 if a.test in ('secure','fence','power') else 4 if a.test=='sysstats' else 3
+    expected=19 if a.test=='pmic-glink' else 6 if a.test=='pmic-ipc' else 24 if a.test=='adc-thermal' else 7 if a.test=='pmic-gpio' else 5 if a.test=='spmi' else 9 if a.test=='interconnect' else 7 if a.test=='regulators' else 8 if a.test in ('storage-host','diagnostics') else 5 if a.test=='debug-symbol' else 3 if a.test=='ufs' else 10 if a.test=='ice' else 9 if a.test=='rm-lifetime' else 8 if a.test=='gpu-policy' else 13 if a.test=='scm' else 10 if a.test=='platform' else a.clock_count if a.test=='clock' else 5 if a.test in ('secure','fence','power') else 4 if a.test=='sysstats' else 3
     # KUnit omits Totals lines for single-case suites; count leaf KTAP
     # assertions at one indentation level, excluding suite result lines.
     passes=len(re.findall(r'\] {5}ok \d+ ',s))
@@ -30,6 +30,8 @@ if a.test in ('pmic-glink','pmic-ipc','adc-thermal','pmic-gpio','spmi','intercon
         failures.append(f'expected all {expected} KTAP cases')
 if a.test in ('pmic-ipc','pmic-glink') and 'AVR_QRTR_LOCAL_PASS packets=128 scope=native-local-sockets-only' not in s:
     failures.append('missing actual QRTR local socket exchange')
+if a.test=='pmic-glink' and 'AVR_PMIC_GLINK_REAL_DRIVER_LIFECYCLE_PASS' not in s:
+    failures.append('missing production driver registration/unregistration check')
 if a.test=='ufs' and 'AVR_UFS_IO_PASS rounds=2 bytes_written=8388608 bytes_read=8388608' not in s:
     failures.append('missing real emulated-UFS direct I/O checks')
 if a.test=='storage-phy' and 'AVR_STORAGE_PHY_LOADED count=2' not in s:

@@ -25,7 +25,9 @@ parser.add_argument('--spmi',action='store_true')
 parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
 parser.add_argument('--pmic-ipc',action='store_true')
+parser.add_argument('--pmic-glink',action='store_true')
 args=parser.parse_args()
+if args.pmic_glink:args.pmic_ipc=True;args.ipc_deps=True
 if args.pmic_ipc:args.adc_thermal=True
 if args.adc_thermal:args.pmic_pinctrl=True
 if args.pmic_pinctrl:args.spmi=True
@@ -67,6 +69,8 @@ if args.pmic_pinctrl:
     ports.append('pmic-pinctrl')
 if args.adc_thermal:
     ports.append('qcom-adc-thermal')
+if args.pmic_glink:
+    ports.append('qcom-pmic-glink')
 if args.storage_phy:
     ports.append('ufs-phy-canoe')
 if args.rakkashin:

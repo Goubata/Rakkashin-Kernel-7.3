@@ -451,3 +451,20 @@ unpublishes/drains registrations, cancels init, stops notifiers, drains RX,
 removes children while IDR/logging live, and destroys IPC last. Managed public
 client release and real OF/notifier/firmware behavior remain pending; no new
 hardware module is packaged yet.
+
+## Stage29: managed clients and experimental GLINK module
+
+Public probe-time registration installs both dependency and managed release.
+Explicit unregister removes the managed action, preventing double free. Active
+callback task scopes reject cross-client synchronous unregister as well as self
+unregister. Thirteen vendor-source cases plus six native QMI cases and 128 real
+local QRTR packets pass; the production module then registers/unregisters with
+native platform/RPMSG buses in the hardware-free guest. Hardware probe is not
+exercised. Managed platform consumers verify fallback release before supplier
+remove, and explicit release followed by managed teardown.
+
+Stage29 now includes the experimental module: 100 modules / 5,054 import CRCs
+match. Saved/candidate DT has two covered SOCCP channels and eight active child
+services. Native has no alor SOCCP PAS compatible; firmware handover, SMEM
+transport, child services, physical OF/notifier/charging behavior, allocation
+fault injection, stress and all full-phone criteria remain incomplete.

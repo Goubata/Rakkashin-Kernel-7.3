@@ -1,0 +1,190 @@
+{
+  "scope": "selected DT strings/compatible coverage only; no firmware boot, IRQ, communication or charging proof",
+  "inputs": {
+    "saved": {
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "provider_count": 2,
+      "active_child_count": 8,
+      "providers": [
+        {
+          "node": "/soc/pmic-glink",
+          "channels": [
+            "PMIC_RTR_SOCCP_APPS"
+          ],
+          "subsystems": [
+            "soccp"
+          ],
+          "protection_domain": [],
+          "active_children": [
+            {
+              "node": "/soc/pmic-glink/mmi,qti-glink-charger",
+              "compatible": [
+                "mmi,qti-glink-charger"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/battery-charger",
+              "compatible": [
+                "qcom,battery-charger"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/ucsi-glink",
+              "compatible": [
+                "qcom,ucsi-glink"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/altmode-glink",
+              "compatible": [
+                "qcom,altmode-glink"
+              ]
+            }
+          ],
+          "inactive_children": []
+        },
+        {
+          "node": "/soc/pmic-glink-log",
+          "channels": [
+            "PMIC_LOGS_SOCCP_APPS"
+          ],
+          "subsystems": [],
+          "protection_domain": [],
+          "active_children": [
+            {
+              "node": "/soc/pmic-glink-log/qcom,bm_adsp_ulog",
+              "compatible": [
+                "qcom,bm-adsp-ulog"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/battery-debug",
+              "compatible": [
+                "qcom,battery-debug"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/pmic-glink-debug",
+              "compatible": [
+                "qcom,pmic-glink-debug"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/glink-adc",
+              "compatible": [
+                "qcom,glink-adc"
+              ]
+            }
+          ],
+          "inactive_children": [
+            "/soc/pmic-glink-log/charger-ulog-glink"
+          ]
+        }
+      ],
+      "remoteproc_dependencies": [
+        {
+          "node": "/soc/remoteproc-soccp@a3380000",
+          "compatible": "qcom,alor-soccp-pas",
+          "native_match_present": false,
+          "vendor_match_present": true,
+          "port_or_equivalent_hardware_implementation_required": true
+        }
+      ],
+      "errors": []
+    },
+    "candidate": {
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "provider_count": 2,
+      "active_child_count": 8,
+      "providers": [
+        {
+          "node": "/soc/pmic-glink",
+          "channels": [
+            "PMIC_RTR_SOCCP_APPS"
+          ],
+          "subsystems": [
+            "soccp"
+          ],
+          "protection_domain": [],
+          "active_children": [
+            {
+              "node": "/soc/pmic-glink/mmi,qti-glink-charger",
+              "compatible": [
+                "mmi,qti-glink-charger"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/battery-charger",
+              "compatible": [
+                "qcom,battery-charger"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/ucsi-glink",
+              "compatible": [
+                "qcom,ucsi-glink"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink/altmode-glink",
+              "compatible": [
+                "qcom,altmode-glink"
+              ]
+            }
+          ],
+          "inactive_children": []
+        },
+        {
+          "node": "/soc/pmic-glink-log",
+          "channels": [
+            "PMIC_LOGS_SOCCP_APPS"
+          ],
+          "subsystems": [],
+          "protection_domain": [],
+          "active_children": [
+            {
+              "node": "/soc/pmic-glink-log/qcom,bm_adsp_ulog",
+              "compatible": [
+                "qcom,bm-adsp-ulog"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/battery-debug",
+              "compatible": [
+                "qcom,battery-debug"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/pmic-glink-debug",
+              "compatible": [
+                "qcom,pmic-glink-debug"
+              ]
+            },
+            {
+              "node": "/soc/pmic-glink-log/glink-adc",
+              "compatible": [
+                "qcom,glink-adc"
+              ]
+            }
+          ],
+          "inactive_children": [
+            "/soc/pmic-glink-log/charger-ulog-glink"
+          ]
+        }
+      ],
+      "remoteproc_dependencies": [
+        {
+          "node": "/soc/remoteproc-soccp@a3380000",
+          "compatible": "qcom,alor-soccp-pas",
+          "native_match_present": false,
+          "vendor_match_present": true,
+          "port_or_equivalent_hardware_implementation_required": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  "physical_verified": false,
+  "selected_channel_validation_passed": true,
+  "whole_board_ready": false
+}

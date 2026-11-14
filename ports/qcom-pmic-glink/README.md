@@ -1,23 +1,28 @@
-# Firmware PMIC GLINK work in progress
+# Firmware PMIC GLINK experimental port
 
-Pinned Motorola source with real native PDR/QMI/QRTR, RPMSG, existing SSR and IPC
-logging. Client RX/state callbacks use per-client SRCU and a callback mutex;
-unregister removes publication then waits for callbacks. Self-unregister returns
--EDEADLK; clients must schedule removal elsewhere and stop concurrent TX first.
+Pinned Motorola source with real native PDR/QMI/QRTR, RPMSG, SSR and IPC logging.
+Per-client SRCU drains callbacks before release. A module-wide callback context
+check rejects unregister from any GLINK callback (including cross-client waits).
+Callers must stop concurrent TX and schedule unregister outside callbacks.
+Public registration is restricted to consumer probe, links the consumer to its
+bound provider and installs managed release; explicit unregister consumes that
+same managed action before freeing the client.
 
-Six actual-source software-fixture cases pass: framing/input validation, dispatch
-and state, duplicate owner rejection, self-unregister from RX/state, and external
-unregister waiting for a blocked RX callback. Native QMI/QRTR tests run alongside.
-No firmware endpoint or physical provider is used by these tests.
+Transport ingress uses module-lifetime SRCU. Remove unpublishes driver data,
+waits for ingress, cancels init and drains RX. Supplier lookup retains devices;
+locked binding/channel checks and managed links order transport/client removal
+before provider teardown. Provider removes children while IDR/logging are live.
 
-This driver remains excluded from hardware artifacts until global provider/rpmsg
-references, unbind serialization and removal ordering (init work, notifiers, RX
-queue, children, IPC and IDR) are resolved and tested. Live GLINK transport,
-remote services and battery/charging clients are still missing.
+Thirteen actual-source software cases, six native QMI cases and 128 real local
+QRTR packets pass. Real platform-driver bindings exercise dependency ordering
+and managed release. The production module also registers/unregisters in QEMU.
+The source fixture's callback-only cases call the internal registration body;
+public registration/managed behavior is tested with actual bound platform
+consumers. No physical firmware provider is emulated or claimed.
 
-Stage27 resolves the native default-endpoint constraint: RX loads the transport
-association under a module-lifetime SRCU epoch. Remove clears that association,
-waits for ingress readers, cancels init work and drains RX. Separate tests hold
-an ingress epoch without work and block an actual RX callback, and verify late
-RX is rejected. Remaining provider references/managed links, registration and
-parent removal ordering must still be resolved before packaging.
+Stage29 includes this module experimentally (100 modules). Saved/candidate DT
+channel names match both SOCCP channels and eight active child nodes. Native
+7.3 has no qcom,alor-soccp-pas match: actual early-boot SOCCP/PAS handover, GLINK
+SMEM transport, child charging/USB services, fault/stress tests and all physical
+safety/boot acceptance remain incomplete. This is not a flashable boot image or
+a daily-use kernel.

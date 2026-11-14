@@ -19,12 +19,13 @@
 struct fixture {
 	struct pmic_glink_dev provider;
 	struct platform_device *child;
-	struct pmic_glink_client *client;
+	struct pmic_glink_client *client, *other_client, *unregister_target;
 	struct device *parent;
 	struct rpmsg_device transport;
 	struct platform_device *bound_provider, *bound_consumer;
 	struct pmic_glink_dev *linked_provider;
 	bool provider_driver_registered, consumer_driver_registered, provider_stopped;
+	bool managed_client, clients_left_at_provider_remove;
 	unsigned int remove_event, provider_removed_at, consumer_removed_at;
 	struct completion entered, release, unregister_started, unregister_done;
 	unsigned int messages, states;
@@ -36,7 +37,7 @@ static int receive(void *private, void *data, size_t len)
 	struct fixture *f = private;
 	f->messages++;
 	if (f->self_unregister)
-		f->self_ret = pmic_glink_unregister_client(f->client);
+		f->self_ret = pmic_glink_unregister_client(f->unregister_target ?: f->client);
 	if (f->block_rx) {
 		complete(&f->entered);
 		f->callback_timeout = !wait_for_completion_timeout(&f->release, msecs_to_jiffies(2000));
@@ -48,7 +49,7 @@ static void state_changed(void *private, enum pmic_glink_state state)
 	struct fixture *f = private;
 	f->states++;
 	if (f->self_unregister)
-		f->self_ret = pmic_glink_unregister_client(f->client);
+		f->self_ret = pmic_glink_unregister_client(f->unregister_target ?: f->client);
 }
 static int setup(struct kunit *test)
 {
@@ -105,12 +106,24 @@ static void provider_remove(struct platform_device *pdev)
 {
 	struct fixture *f = *(struct fixture **)dev_get_platdata(&pdev->dev);
 	f->provider_removed_at = ++f->remove_event;
+	f->clients_left_at_provider_remove = !idr_is_empty(&f->provider.client_idr);
 	pmic_glink_remove(pdev);
+	if (f->managed_client)
+		f->client = NULL;
 	f->provider_stopped = true;
 }
 static int consumer_probe(struct platform_device *pdev)
 {
 	struct fixture *f = *(struct fixture **)dev_get_platdata(&pdev->dev);
+	if (f->managed_client) {
+		struct pmic_glink_client_data config = { .name = "avr-managed", .id = 32778,
+			.msg_cb = receive, .state_cb = state_changed, .priv = f };
+		f->client = pmic_glink_register_client(&pdev->dev, &config);
+		if (IS_ERR(f->client))
+			return PTR_ERR(f->client);
+		f->linked_provider = f->client->pgdev;
+		return 0;
+	}
 	f->linked_provider = pmic_glink_link_provider(&pdev->dev,
 		&f->bound_provider->dev, f->provider.channel_name);
 	return PTR_ERR_OR_ZERO(f->linked_provider);
@@ -141,6 +154,8 @@ static void cleanup(struct kunit *test)
 		platform_driver_unregister(&provider_driver);
 	if (!f->provider_stopped) {
 		flush_workqueue(f->provider.rx_wq);
+		if (!IS_ERR_OR_NULL(f->other_client) && idr_find(&f->provider.client_idr, 32779))
+			pmic_glink_unregister_client(f->other_client);
 		if (!IS_ERR_OR_NULL(f->client))
 			pmic_glink_unregister_client(f->client);
 		pmic_glink_dev_remove(&f->provider);
@@ -155,7 +170,7 @@ static void register_client(struct kunit *test)
 	struct fixture *f = test->priv;
 	struct pmic_glink_client_data config = { .name = "avr-test", .id = 32778,
 		.msg_cb = receive, .state_cb = state_changed, .priv = f };
-	f->client = pmic_glink_register_client(&f->child->dev, &config);
+	f->client = __pmic_glink_register_client(&f->child->dev, &config);
 	KUNIT_ASSERT_FALSE(test, IS_ERR(f->client));
 }
 static int enqueue(struct fixture *f, u32 owner)
@@ -172,6 +187,8 @@ static void registration_and_framing(struct kunit *test)
 	struct rpmsg_device rpdev = {};
 	u8 short_frame[sizeof(struct pmic_glink_hdr)] = {};
 	KUNIT_EXPECT_EQ(test, PTR_ERR(pmic_glink_register_client(&f->child->dev, NULL)), -EINVAL);
+	/* Valid parameters cannot attach an unbound/non-probing consumer. */
+	KUNIT_EXPECT_EQ(test, PTR_ERR(pmic_glink_register_client(&f->child->dev, &config)), -EINVAL);
 	config.id = U32_MAX;
 	KUNIT_EXPECT_EQ(test, PTR_ERR(pmic_glink_register_client(&f->child->dev, &config)), -EINVAL);
 	register_client(test);
@@ -203,7 +220,7 @@ static void duplicate_owner_rejected(struct kunit *test)
 	struct pmic_glink_client *other;
 	register_client(test);
 	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
-	other = pmic_glink_register_client(&f->child->dev, &config);
+	other = __pmic_glink_register_client(&f->child->dev, &config);
 	KUNIT_EXPECT_TRUE(test, IS_ERR(other));
 	if (!IS_ERR(other))
 		pmic_glink_unregister_client(other);
@@ -391,13 +408,80 @@ static void linked_provider_unbind_orders_transport_first(struct kunit *test)
 	KUNIT_EXPECT_EQ(test, PTR_ERR(pmic_glink_link_provider(f->parent,
 		&f->bound_provider->dev, f->provider.channel_name)), -EPROBE_DEFER);
 }
+static void bind_managed_client_pair(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	f->managed_client = true;
+	KUNIT_ASSERT_EQ(test, platform_driver_register(&provider_driver), 0);
+	f->provider_driver_registered = true;
+	KUNIT_ASSERT_EQ(test, platform_driver_register(&consumer_driver), 0);
+	f->consumer_driver_registered = true;
+	f->bound_provider = platform_device_register_data(NULL, "avr-glink-provider-unit",
+		PLATFORM_DEVID_AUTO, &f, sizeof(f));
+	KUNIT_ASSERT_FALSE(test, IS_ERR(f->bound_provider));
+	KUNIT_ASSERT_TRUE(test, device_is_bound(&f->bound_provider->dev));
+	f->bound_consumer = platform_device_register_data(&f->bound_provider->dev,
+		"avr-glink-link-unit", PLATFORM_DEVID_AUTO, &f, sizeof(f));
+	KUNIT_ASSERT_FALSE(test, IS_ERR(f->bound_consumer));
+}
+static void managed_client_released_before_provider(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	bind_managed_client_pair(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->bound_consumer));
+	KUNIT_ASSERT_TRUE(test, device_is_bound(&f->bound_consumer->dev));
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
+	KUNIT_EXPECT_FALSE(test, idr_is_empty(&f->provider.client_idr));
+	device_release_driver(&f->bound_provider->dev);
+	KUNIT_EXPECT_EQ(test, f->consumer_removed_at, 1U);
+	KUNIT_EXPECT_EQ(test, f->provider_removed_at, 2U);
+	KUNIT_EXPECT_FALSE(test, f->clients_left_at_provider_remove);
+	KUNIT_EXPECT_TRUE(test, f->provider_stopped);
+}
+static void explicit_release_consumes_managed_action(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	bind_managed_client_pair(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->bound_consumer));
+	KUNIT_ASSERT_TRUE(test, device_is_bound(&f->bound_consumer->dev));
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
+	KUNIT_ASSERT_EQ(test, pmic_glink_unregister_client(f->client), 0);
+	f->client = NULL;
+	KUNIT_EXPECT_TRUE(test, idr_is_empty(&f->provider.client_idr));
+	/* Managed teardown must not free the already-released client again. */
+	device_release_driver(&f->bound_consumer->dev);
+	KUNIT_EXPECT_TRUE(test, device_is_bound(&f->bound_provider->dev));
+	KUNIT_EXPECT_TRUE(test, idr_is_empty(&f->provider.client_idr));
+}
+static void cross_client_unregister_from_callback_rejected(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	struct pmic_glink_client_data config = { .name = "other-client", .id = 32779,
+		.msg_cb = receive, .priv = f };
+	register_client(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->client));
+	f->other_client = __pmic_glink_register_client(&f->child->dev, &config);
+	KUNIT_ASSERT_FALSE(test, IS_ERR(f->other_client));
+	f->unregister_target = f->other_client; f->self_unregister = true;
+	KUNIT_ASSERT_EQ(test, enqueue(f, f->client->id), 0);
+	flush_workqueue(f->provider.rx_wq);
+	KUNIT_EXPECT_EQ(test, f->self_ret, -EDEADLK);
+	KUNIT_EXPECT_PTR_EQ(test, idr_find(&f->provider.client_idr, 32779), f->other_client);
+	pmic_glink_notify_clients(&f->provider, PMIC_GLINK_STATE_DOWN);
+	KUNIT_EXPECT_EQ(test, f->self_ret, -EDEADLK);
+	KUNIT_EXPECT_PTR_EQ(test, idr_find(&f->provider.client_idr, 32779), f->other_client);
+	f->self_unregister = false;
+}
 static struct kunit_case cases[] = {
 	KUNIT_CASE(registration_and_framing), KUNIT_CASE(dispatch_and_state),
 	KUNIT_CASE(duplicate_owner_rejected), KUNIT_CASE(self_unregister_rx_rejected),
 	KUNIT_CASE(self_unregister_state_rejected), KUNIT_CASE(unregister_waits_for_rx),
 	KUNIT_CASE(detached_transport_rejects_rx), KUNIT_CASE(detach_waits_for_ingress_and_rx),
 	KUNIT_CASE(detach_waits_for_ingress_without_work),
-	KUNIT_CASE(linked_provider_unbind_orders_transport_first), {}
+	KUNIT_CASE(linked_provider_unbind_orders_transport_first),
+	KUNIT_CASE(managed_client_released_before_provider),
+	KUNIT_CASE(explicit_release_consumes_managed_action),
+	KUNIT_CASE(cross_client_unregister_from_callback_rejected), {}
 };
 static struct kunit_suite suite = { .name = "avr-pmic-glink", .init = setup,
 	.exit = cleanup, .test_cases = cases };

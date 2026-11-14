@@ -218,6 +218,11 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         commands += ['/bin/qrtr-local-test || { echo AVR_PMIC_IPC_SOCKET_FAIL; /bin/busybox poweroff -f; }']
         if args.pmic_glink_tests:
             commands.append('/bin/busybox rmmod avr_pmic_glink_test || { echo AVR_PMIC_GLINK_UNLOAD_FAIL; /bin/busybox poweroff -f; }')
+            source=ROOT/'ports/qcom-pmic-glink/qti_pmic_glink.ko'
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            commands += ['/bin/busybox insmod /modules/qti_pmic_glink.ko || { echo AVR_PMIC_GLINK_REAL_LOAD_FAIL; /bin/busybox poweroff -f; }',
+                         '/bin/busybox rmmod qti_pmic_glink || { echo AVR_PMIC_GLINK_REAL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+                         'echo AVR_PMIC_GLINK_REAL_DRIVER_LIFECYCLE_PASS']
         for name in ['avr_qmi_test','pdr_interface','qcom_pdr_msg','qmi_helpers','qrtr_smd','qrtr']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_PMIC_IPC_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands += ['echo AVR_PMIC_GLINK_TESTS_PASS scope=source-callbacks-and-native-local-ipc-only' if args.pmic_glink_tests else 'echo AVR_PMIC_IPC_TESTS_PASS scope=native-local-ipc-only']

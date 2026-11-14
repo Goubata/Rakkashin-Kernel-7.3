@@ -7510,6 +7510,8 @@ static irqreturn_t ufshcd_intr(int irq, void *__hba)
 	int retries = hba->nutrs;
 
 	last_intr_status = intr_status = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+	WRITE_ONCE(hba->ufs_stats.last_intr_status, intr_status);
+	WRITE_ONCE(hba->ufs_stats.last_intr_ts, local_clock());
 
 	/*
 	 * There could be max of hba->nutrs reqs in flight and in worst case

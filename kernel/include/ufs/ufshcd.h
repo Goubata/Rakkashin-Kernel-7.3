@@ -605,6 +605,8 @@ struct ufs_event_hist {
  * @event: array with event history.
  */
 struct ufs_stats {
+	u32 last_intr_status;
+	u64 last_intr_ts;
 	u32 hibern8_exit_cnt;
 	u64 last_hibern8_exit_tstamp;
 	struct ufs_event_hist event[UFS_EVT_CNT];

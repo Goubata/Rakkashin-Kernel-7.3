@@ -89,3 +89,11 @@ SYNX・IPCLite・Qualcommハードウェアフェンスの全対象Cソースが
 KernelSU-Nextは元ツリーに外部ディレクトリへのシンボリックリンクしかなく、まだ移植していません。GPU/ファームウェア依存、Android側制御サービス、SELinux、実機での電力・温度・フレーム制御も残っています。詳細は ports/rakkashin/README.md。再ビルドは `python scripts/build_native.py --gpu-deps --qemu-tests --rakkashin`。
 
 次に実機ダンプを基に、vendor_boot・DLKM・DTB/DTBOの配置と依存を整合させます。DTはavrの実構成とMotorolaの一致ソースを優先し、7.3 bindingとの差を検証します。別SoCのDTSをそのまま置き換えたり、旧6.12モジュールを名前だけ変えて使ったりする工程はありません。イメージはファイル上で作成し、実機書き込みや再起動は行っていません。
+
+## DTB / DTBOとモジュール配置の棚卸し
+
+保存した実機の静的DTB/DTBOをDTSへ戻し、7.3側DTCで元とバイト単位で一致する再コンパイルに成功しました。適用後5,102ノードも維持しています。これは編集可能な基準の復元であり、7.3実機対応の完了ではありません。公開メインDTSのみの試験ビルドは1,289ノード不足するため、不完全として記録し、通常実行では失敗させます。詳細は [DT作業記録](ports/device-tree/README.md)。
+
+保存済み544種類のモジュールと7.3用52個をELF情報で比較したところ、同名候補47種類、同名候補のない旧モジュール497種類でした。内蔵化・名前変更・不要化もあり得るので、この数は必要な移植個数をそのまま示しません。52個の宣言済みモジュール依存はこのセット内で揃っていますが、ハード初期化・ROM側のロード順・残るドライバ・SELinuxの検証は別途必要です。`reports/module-deployment-readiness.json` に配置候補と不足を保存しています。boot/vendor_boot/DTBO/DLKMの起動用セットはまだ完成していません。
+
+表示・音声componentを追加した159ファイルの試験合成では4,613ノードまで復元し、不足は489ノードになりました。合成順序とプロパティ差分は未検証です。カメラ用bindingヘッダが未解決で、GPU・映像・通信なども残ります。稼働中ROMのSELinuxはEnforcing/policy 33で、実際のGPU/ntsync/oplus_sync/synxラベルとpolicyハッシュを保存しました。policy変更はしていません。

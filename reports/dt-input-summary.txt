@@ -1,0 +1,27 @@
+{
+  "vendor_ramdisk_fragments": 1,
+  "base_dtbs": 1,
+  "dtbo_entries": 1,
+  "running": {
+    "node_count": 5110,
+    "compatible_node_count": 1050,
+    "reserved_memory_nodes": 63,
+    "model": [
+      "avr"
+    ],
+    "compatible": [
+      "qcom,alor-qrd",
+      "qcom,alor",
+      "qcom,qrd"
+    ],
+    "qcom,msm-id": [
+      685,
+      65536
+    ],
+    "qcom,board-id": [
+      70,
+      36864
+    ]
+  },
+  "artifacts": "/data/data/com.termux/files/home/avr-kernel-7.3/artifacts/dt-input-audit"
+}

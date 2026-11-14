@@ -1,0 +1,97 @@
+{
+  "scope": "exact static-input reconstruction using 7.3 DTC; not a phone boot or DT-schema result",
+  "passed": true,
+  "trees": [
+    {
+      "name": "base",
+      "node_count": 3777,
+      "all_properties_identical": true,
+      "reservation_map_identical": true,
+      "input_sha256": "73dbbbc4eab4a794c7c7d6be34b91dd35f27e5c682d8cd1c7ee8edd08d8144a1",
+      "output_sha256": "73dbbbc4eab4a794c7c7d6be34b91dd35f27e5c682d8cd1c7ee8edd08d8144a1"
+    },
+    {
+      "name": "overlay",
+      "node_count": 1943,
+      "all_properties_identical": true,
+      "reservation_map_identical": true,
+      "input_sha256": "181713f38067548f3b8a5aae315c40d84152a251f627acef19396b9193e75e97",
+      "output_sha256": "181713f38067548f3b8a5aae315c40d84152a251f627acef19396b9193e75e97"
+    }
+  ],
+  "merged_node_count": 5102,
+  "merged_all_properties_identical": true,
+  "runtime_metadata": "DRAM, bootargs, SCM and hypervisor updates remain bootloader-owned; runtime FDT is not baked into these files",
+  "outputs": "artifacts/dt-dump-reconstruction",
+  "commands": {
+    "base_decompile": [
+      "chroot",
+      "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+      "/work/avr-port/out/native-gki/scripts/dtc/dtc",
+      "-I",
+      "dtb",
+      "-O",
+      "dts",
+      "-o",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-base.dts",
+      "/work/avr-port/artifacts/dt-input-audit/vendor-base-0.dtb"
+    ],
+    "base_compile": [
+      "chroot",
+      "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+      "/work/avr-port/out/native-gki/scripts/dtc/dtc",
+      "-@",
+      "-H",
+      "epapr",
+      "-b",
+      "0",
+      "-I",
+      "dts",
+      "-O",
+      "dtb",
+      "-o",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-base.dtb",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-base.dts"
+    ],
+    "overlay_decompile": [
+      "chroot",
+      "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+      "/work/avr-port/out/native-gki/scripts/dtc/dtc",
+      "-I",
+      "dtb",
+      "-O",
+      "dts",
+      "-o",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-overlay.dts",
+      "/work/avr-port/artifacts/dt-input-audit/overlay-0.dtbo"
+    ],
+    "overlay_compile": [
+      "chroot",
+      "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+      "/work/avr-port/out/native-gki/scripts/dtc/dtc",
+      "-@",
+      "-H",
+      "epapr",
+      "-b",
+      "0",
+      "-I",
+      "dts",
+      "-O",
+      "dtb",
+      "-o",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-overlay.dtbo",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-overlay.dts"
+    ],
+    "overlay_apply": [
+      "chroot",
+      "/data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs",
+      "/work/avr-port/out/native-gki/scripts/dtc/fdtoverlay",
+      "-i",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-base.dtb",
+      "-o",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-merged.dtb",
+      "/work/avr-port/artifacts/dt-dump-reconstruction/avr-overlay.dtbo"
+    ]
+  },
+  "flashable_image_created": false
+}

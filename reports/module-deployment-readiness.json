@@ -1,0 +1,4847 @@
+{
+  "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
+  "stage": "android73-rakkashin-stage7",
+  "source_commit": "4b563b7618db434257288743d9b64d901db76773",
+  "archived_unique_count": 544,
+  "staged_count": 52,
+  "same_name_candidate_count": 47,
+  "archived_names_without_same_name_candidate_count": 497,
+  "loaded_names_without_same_name_candidate_count": 482,
+  "all_staged_module_dependencies_present": true,
+  "image_packaging_ready": false,
+  "blockers": [
+    "Missing hardware drivers and providers",
+    "Same-name candidates require probe and hardware validation",
+    "Init load order, softdeps, signing and ROM policy review pending",
+    "Old 6.12 modules cannot be carried over as 7.3 modules"
+  ],
+  "staged_modules": {
+    "arm_smmu": {
+      "file": "modules/arm-smmu-vendor/arm_smmu.ko",
+      "sha256": "8ecb9f5841e39fe88254def98bd9082b612a24cd814466922a94f0029737f582",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "iommu_logger",
+        "qcom_iommu_util",
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "avr_oplus_sync": {
+      "file": "modules/avr-oplus-sync/avr_oplus_sync.ko",
+      "sha256": "786f96f216b9a75cc78396a07c2e3adc2943468a94eefb585100a83b38c65c60",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_scm": {
+      "file": "modules/firmware/qcom-scm.ko",
+      "sha256": "18c819309bfce8fa841bda9825be91ade2e7b6c6e567eedbae7aeea32cd0718d",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_pas",
+        "qcom_tzmem"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_pas": {
+      "file": "modules/firmware/qcom_pas.ko",
+      "sha256": "d21baf333ceb644cb81f28c462ed9616896c24232528fff164c628e52d713e4f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_tzmem": {
+      "file": "modules/firmware/qcom_tzmem.ko",
+      "sha256": "430a14789f1e77c8c6678aa68bd2306f8109d4da2147e8652b34a6bdc6050a6e",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": []
+    },
+    "governor_msm_adreno_ro": {
+      "file": "modules/governor-adreno-ro/governor_msm_adreno_ro.ko",
+      "sha256": "b3a842c8df45449cf28300b68794bb8edfa5fbf5ef2fcebed8bcfac1e39614a9",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "governor_msm_adreno_tz": {
+      "file": "modules/governor-adreno-tz/governor_msm_adreno_tz.ko",
+      "sha256": "5789d3744d4c4e07dfc6ed2b5ec558d89279075a8c445a45bc328ee7599bf812",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "governor_gpubw_mon": {
+      "file": "modules/governor-gpubw/governor_gpubw_mon.ko",
+      "sha256": "4192afea4b18f6ab1c0ad11e0d474cc82cb46d985da06d9c53c87a8b7815283b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "iommu_logger": {
+      "file": "modules/iommu-logger/iommu_logger.ko",
+      "sha256": "43a4f13f93e5333ad27399062d468ac7affa9db62bad1fc832f2edb953e533a9",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "msm_sysstats": {
+      "file": "modules/msm-sysstats/msm_sysstats.ko",
+      "sha256": "587dc79a294819ced87529471f5324dc22cd34763d54dddaff02b2951ebb1d04",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "ntsync": {
+      "file": "modules/ntsync/ntsync.ko",
+      "sha256": "698af99ae49535dce0456851c880120c17735daf40a5754b6f6d25399a00372c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "pinctrl_alor": {
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-alor.ko",
+      "sha256": "afff5d9c48c524652b2557ea7b40ace5bae4b5487c8508631f0968c9965ea3dc",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "pinctrl_msm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "pinctrl_msm": {
+      "file": "modules/pinctrl-alor-vendor-core/pinctrl-msm.ko",
+      "sha256": "ef9376e2b3e9cdfd17e90a20e5ac202979c8babb9e8e54997d024492b005711e",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "cambistmclkcc_canoe": {
+      "file": "modules/qcom-clock-controllers/cambistmclkcc-canoe.ko",
+      "sha256": "3b35ef6cf7075f78811b51ff996630f05b4ed142772fc733253e703fefff0e34",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "camcc_alor": {
+      "file": "modules/qcom-clock-controllers/camcc-alor.ko",
+      "sha256": "c678e85a6c75bea1368dfb5c7e5e5b28488df8de9d2425b2ed7d3749e992d606",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "camcc_canoe": {
+      "file": "modules/qcom-clock-controllers/camcc-canoe.ko",
+      "sha256": "655008708a22c92a00a366b1beaeb678e9ef515c34f536182983552acdbce2d1",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "camcc_chora": {
+      "file": "modules/qcom-clock-controllers/camcc-chora.ko",
+      "sha256": "db0b3d065b67c00424fa7c1fb9c8f625aba17b37fd9f06c4521d1a11bbaa52ea",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "clk_dummy": {
+      "file": "modules/qcom-clock-controllers/clk-dummy.ko",
+      "sha256": "5361198dc5b34d60016fa5b6cf40a5f6aeeef580482753294559aef6580a0875",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "clk_rpmh": {
+      "file": "modules/qcom-clock-controllers/clk-rpmh.ko",
+      "sha256": "d1b8dc999e12d242ceecc88edc11f57f59a89b1fe8e460261a1d8aff6964dfac",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom",
+        "cmd_db",
+        "qcom_rpmh"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "debugcc_alor": {
+      "file": "modules/qcom-clock-controllers/debugcc-alor.ko",
+      "sha256": "fadc50a93f82731a3a7e4d409822b4c1bf6a8b1517df28af9254d27dfdbd1702",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_dummy",
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "debugcc_canoe": {
+      "file": "modules/qcom-clock-controllers/debugcc-canoe.ko",
+      "sha256": "0e051c67db4197087057222d4552cdd508908bbdc5e8ade1a5c53252029c131d",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_dummy",
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "debugcc_chora": {
+      "file": "modules/qcom-clock-controllers/debugcc-chora.ko",
+      "sha256": "fec34a51f4a38e42d6d4a9e98e0e7aff09d95009fd4202f297935a1ae9fe09b5",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_dummy",
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "dispcc_canoe": {
+      "file": "modules/qcom-clock-controllers/dispcc-canoe.ko",
+      "sha256": "960baa31a8a9c509832bc85339b115a9e35693fca2152d69846f538e488d9c5a",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "dispcc_chora": {
+      "file": "modules/qcom-clock-controllers/dispcc-chora.ko",
+      "sha256": "d61b779dfbddb805df56236c9c9f8f2ea33b7be63213084377879d70f8c280f7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "evacc_canoe": {
+      "file": "modules/qcom-clock-controllers/evacc-canoe.ko",
+      "sha256": "e9aa9dbf3ce84caadddc8f00c7370be262a95c1e6930c2d72a09d1979b41fbfd",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gcc_alor": {
+      "file": "modules/qcom-clock-controllers/gcc-alor.ko",
+      "sha256": "331bdd125ba6637437bd15c7638ca48043221e9511b3e031ecff50a866365a3f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gcc_canoe": {
+      "file": "modules/qcom-clock-controllers/gcc-canoe.ko",
+      "sha256": "3d585c74d751b883c1c3d0c55443cb59414b81020cf629a9f2e53c5d06194c3f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gcc_chora": {
+      "file": "modules/qcom-clock-controllers/gcc-chora.ko",
+      "sha256": "15b5420959298fe82168bf822d0d8500033c2d164e429464524043647956c33b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gpucc_canoe": {
+      "file": "modules/qcom-clock-controllers/gpucc-canoe.ko",
+      "sha256": "6d5cb01f8c61621d0bafbb41efeceeabf20611ccb2dacb0d143d1a2879638ec9",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gpucc_chora": {
+      "file": "modules/qcom-clock-controllers/gpucc-chora.ko",
+      "sha256": "f87945c8818118e4ad5dce957803878c04cb174aeaee3ce91f423928c8cc8e10",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "tcsrcc_canoe": {
+      "file": "modules/qcom-clock-controllers/tcsrcc-canoe.ko",
+      "sha256": "f9fcd28acee34e794eb905db0c144f91a826331f1a66ba9a65ee5583b0a73c05",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "tcsrcc_chora": {
+      "file": "modules/qcom-clock-controllers/tcsrcc-chora.ko",
+      "sha256": "9a13ec8579bd53c3bf6ecdab03c36ee6e91db5fb87f285cfd3e38a6dd02f9e5e",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "videocc_canoe": {
+      "file": "modules/qcom-clock-controllers/videocc-canoe.ko",
+      "sha256": "008eba357d3b6a79710d8a066172d76afcd2e3968430a68a84f37bf3d367d76e",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "videocc_chora": {
+      "file": "modules/qcom-clock-controllers/videocc-chora.ko",
+      "sha256": "1a6a3975333627f9ba4604dae4163c5c38606118407077b2fd04ea1e91421c57",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "clk_qcom"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "clk_qcom": {
+      "file": "modules/qcom-clock-core/clk-qcom.ko",
+      "sha256": "a273326e2c0c759335ae62f4b70238c2ee344ef559dec52a109b260a014822af",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "crm_v2",
+        "gdsc_regulator"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "crm_v2": {
+      "file": "modules/qcom-clock-core/crm-v2.ko",
+      "sha256": "6c912fc106e9910ac10fc56b75774043a1560a3df86958cc74e12dfaf22d577a",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gdsc_regulator": {
+      "file": "modules/qcom-clock-core/gdsc-regulator.ko",
+      "sha256": "ab8c19afd0589f86e4bc5cbd7c39a29b3a66e057cc4afb4aae6d8ea02b6b8810",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "proxy_consumer"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "proxy_consumer": {
+      "file": "modules/qcom-clock-core/proxy-consumer.ko",
+      "sha256": "368caf81a1971e89fe446aad0e2c75afdaf02dd743b9866c234106738aef3c0c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "dcvs_fp": {
+      "file": "modules/qcom-dcvs/dcvs_fp.ko",
+      "sha256": "858fdc7dd71cd608b17dd4f3deb1b8c4bce5034b0482968927153a3cc992ee5b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "cmd_db",
+        "qcom_rpmh"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_dcvs": {
+      "file": "modules/qcom-dcvs/qcom-dcvs.ko",
+      "sha256": "c7159a0ac6b6010a79f59ee025074ca497d0d234a18201092a6be016b2a5c49f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "dcvs_fp"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_hwspinlock": {
+      "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko",
+      "sha256": "ef19828018e07edd4a62948a1cff4a617b95300cb7c2fd5bfc46cdcf2928b3dc",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_iommu_util": {
+      "file": "modules/qcom-iommu-util/qcom_iommu_util.ko",
+      "sha256": "bd4ee84b78d0f59a80f23a67e4827b24d60811f9220a897c922962a2b7a5bd1c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "cpu_phys_log_map": {
+      "file": "modules/qcom-irq/cpu_phys_log_map.ko",
+      "sha256": "9a2655762db3ff59cdaf324c71630e1501b715e295fe36632eb7f96c72e49432",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "gic_intr_routing": {
+      "file": "modules/qcom-irq/gic_intr_routing.ko",
+      "sha256": "6aa8b3b1736ef40824256afbff0592236a783f16134192f32fc4b49a4f300134",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "cpu_phys_log_map",
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_pdc": {
+      "file": "modules/qcom-irq/qcom-pdc.ko",
+      "sha256": "d8d1f4a5df8522dc2e3cdf2ac4cbda083d3a0143aa129f2229adaabadfeb569b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "llcc_qcom": {
+      "file": "modules/qcom-llcc/llcc-qcom.ko",
+      "sha256": "cd206c6f9d21bb681e35590acc846cbdfa50a0fbeb1244af1e393bba1a625096",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "cmd_db": {
+      "file": "modules/qcom-rpmh/cmd-db.ko",
+      "sha256": "ee894edcde2a401b49e76fd90cbc908ca4f19194ccbfff57c335ba05e1c506d7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "qcom_rpmh": {
+      "file": "modules/qcom-rpmh/qcom_rpmh.ko",
+      "sha256": "dc46c92bcae404b59aa94feaaaea31cafb2f53a5c4df887a6426a1fd4fdf1ecd",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "cmd_db",
+        "crm_v2"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "smem": {
+      "file": "modules/qcom-smem/smem.ko",
+      "sha256": "4ace3ba0f44b1b645b5cdfa88cb0fc7c693281126a20196c2dd60ee10d27845b",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "socinfo": {
+      "file": "modules/qcom-socinfo/socinfo.ko",
+      "sha256": "e4339279ccfc24cb3fdb5978aebfd299ec36382d8bb1a2f8c56a99a5e00664e7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "smem"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    },
+    "adios": {
+      "file": "modules/rakkashin/adios/adios.ko",
+      "sha256": "092d75ebecfd1dc81747f7c166a5592dd25b0ba063e0e41eb3f65a2cc1d901c7",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "archived_placement_candidates": [],
+      "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": []
+    },
+    "secure_buffer": {
+      "file": "modules/secure-buffer/secure_buffer.ko",
+      "sha256": "0bfe99b19d0c33a8607ee7c994241d05308dec6063f2aa8ac01c026fa18d095d",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_scm"
+      ],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": []
+    }
+  },
+  "archived_without_same_name_candidate": [
+    {
+      "name": "6lowpan",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "8021q",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "9pnet",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "9pnet_fd",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "adsp_loader_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "adsp_sleepmon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "altmode_glink",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "anc_fps_mmi",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "aqc111",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "arm_smmu_pmu",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "asix",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "audio_pkt_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "audio_prm_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "audpkt_ion_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "aw882xx_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "awinic_sar",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ax88179_178a",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bam_dma",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bcl_pmic5",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bcl_soc",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bluetooth",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bm_adsp_ulog",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "boot_stats",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bsd_comp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bt_fm_swr",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btbcm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btfm_slim_codec",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btfmcodec",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btpower",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btqca",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "btsdio",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "bwmon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cam_aw37004",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "camera",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "can",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "can_bcm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "can_dev",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "can_gw",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "can_raw",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "cctrng",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cdc_acm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cdc_eem",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cdc_ether",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cdc_ncm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cdsprm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cfg80211",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "charger_ulog_glink",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "clk_gate_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "clk_kunit_helpers",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "clk_scmi",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "clk_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cnss2",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "cnss_nl",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cnss_plat_ipc_qmi_svc",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cnss_prealloc",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cnss_utils",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "core_hang_detect",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_csr",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_cti",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_dummy",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_funnel",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_qmi",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_remote_etm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_replicator",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_stm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_tgu",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_tmc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_tmc_sec",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_tpda",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_tpdm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_trace_noc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "coresight_uetm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cpu_hotplug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cpu_mpam",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cpucp_fast",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cpucp_log",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cpuss_telemetry",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "cqhci",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "dcc_v2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ddr_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "debug_regulator",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "debug_symbol",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "deferred_free_helper",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "dev_addr_lists_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "dmesg_dumper",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "drm_display_helper",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "dwc3_msm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "eom_driver",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "eud",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ext4_inode_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "exynos_hvm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "f_fs_ipc_log",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "fat_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "frpc_adsprpc",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "fsa4480_i2c",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ftdi_sio",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_arm_drv",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_ctrl",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_dbl",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_irq_lend",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_mem_notifier",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_msgq",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_panic_notifier",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_rm_booster",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_rm_drv",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_rm_heap_manager",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_tlmm_vm_mem_access",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gh_vcpu_mgr",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "glink_pkt",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "glink_probe",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gnss",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "goodix_brl_thp",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "goodix_fod_mmi",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "gpr_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gsim",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gunyah_trace",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "gzvm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hall_phone_case",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hci_uart",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hdcp_qseecom_dlkm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hdmi_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "heap_mem_ext_v01",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hid_uclogic_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hidp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hung_task_enh",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hvc_gunyah",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "hwmon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "i2c_msm_geni",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "i2c_qcom_geni",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "i3c_master_msm_geni",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "icc_bcm_voter",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "icc_clk",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "icc_debug",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "icc_rpmh",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "icnss2",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ieee802154",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ieee802154_6lowpan",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ieee802154_socket",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "iio_test_format",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "input_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ipam",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ipanetm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ipclite",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ipclite_test",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "kheaders",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "kryo_arm64_edac",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "kunit",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "kunit_example_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "kunit_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "l2tp_core",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "l2tp_ppp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "leds_qcom_flash",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "leds_qcom_lpg",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "leds_qpnp_vibrator_ldo",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ledtrig_pattern",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lib_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "libarc4",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "llcc_heuristics",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lmh_stats",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_bt_swr_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_rx_macro_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_tx_macro_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_va_macro_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_wsa2_macro_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lpass_cdc_wsa_macro_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "lt9611uxc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mac80211",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mac802154",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "machine_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "macsec",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mbhc_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mdt_loader",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_buf",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_buf_dev",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_buf_msgq",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_hooks",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_offline",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mem_prot",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "memlat",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "memory_dump_v2",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mhi",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mhi_dev_satellite",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mhi_dev_uci",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "microdump_collector",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mii",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "minidump",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mmi_annotate",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mmi_glink_charger",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mmi_info",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mmi_relay",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mmi_sys_temp",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_binder",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_f_usbnet",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_mmap_fault",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_reboot_reason",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_sched",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "moto_swap5",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "mpam",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mpam_msc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "mpam_msc_slc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_dma_iommu_mapping",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_drm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_eva",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_ext_display",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_geni_serial",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_gpi",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_hfi_core",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_hw_fence",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_kgsl",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_memshare",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_mmrm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_performance",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_qmp",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_sharedmem",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_show_epoch",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_show_resume_irq",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "msm_video",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nb7vpq904m",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "netfs",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nfc",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_dest",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_fragment",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_hop",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_ipv6",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_mobility",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_routing",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nhc_udp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nvmem_qcom_spmi_sdam",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nvmem_qfprom",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "nxp_nci",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "of_kunit_helpers",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "open_dice",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "panel_event_notifier",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pci_msm_drv",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pci_phy_access",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pcie_pdc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pdr_interface",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_generic",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_msm_m31_eusb2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_msm_snps_eusb2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_msm_snps_hs",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_msm_ssusb_qmp",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_emu",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_eusb2_repeater",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_m31_eusb2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_qmp_combo",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_ufs",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_ufs_qmp_v4_canoe",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_ufs_qmp_v4_crow",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "phy_qcom_ufs_qrbtc_sdm845",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_canoe",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_chora",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_lpi_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_ravelin",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_spmi_gpio",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pinctrl_spmi_mpp",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "platform_mpam",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "platform_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pm8941_pwrkey",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pmic_glink_debug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pmic_pon_log",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ppp_deflate",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ppp_generic",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ppp_mppe",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pppox",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pps_core",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "pptp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ps5169",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ptp",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ptp_kvm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "pwrseq_core",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "q6_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "q6_notifier_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "q6_pdr_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qbt_handler",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qca_cld3_wcn7750",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qce50_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcedev_mod_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_amoled_regulator",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_aoss",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cache_allocation",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpu_vendor_hooks",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpucp",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpufreq_hw",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpufreq_hw_debug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpuss_sleep_stats",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_cpuss_sleep_stats_v4",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_dload_mode",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_dma_heaps",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_dynamic_ramoops",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_edac",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_fdcvs",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_glink",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_glink_smem",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_glink_spss",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_hv_haptics",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_i2c_pmic",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_ice",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_iommu_debug",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_ipc_logging",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_ipcc",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_llcc_pmu",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_logbuf_boot_log",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_logbuf_vendor_hooks",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_lpm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_lpm_monitor",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pd_mapper",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pdr_msg",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pil_info",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pmic_ecid",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pmu_lib",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_pon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_q6v5",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_q6v5_pas",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_ramdump",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_reboot_reason",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_rng",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_scmi_client",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_scmi_vendor",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_sdei",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_smd",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_soc_wdt",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_spmi_adc5_gen3",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_spmi_pmic",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_spmi_temp_alarm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_spmi_wled",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_spss",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_stats",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_sysmon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_tsens",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_va_minidump",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_vadc_common",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_voltage_adj",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcom_wdt_core",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qcrypto_msm_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qmi_helpers",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qmp_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qnoc_alor",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qnoc_canoe",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qnoc_chora",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qnoc_qos",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qnoc_ravelin",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qpnp_adaptive_charge",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qpnp_lcdb_regulator",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qptf",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qrng_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qrtr",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qrtr_gunyah",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qrtr_mhi",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qrtr_smd",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qsee_ipc_irq_bridge",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qseecom_proxy",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_amoled_ecm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_battery_charger",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_battery_debug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_btl",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_cpufreq_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_devfreq_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_dynamic_hw_trip",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_fixed_regulator",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_glink_adc",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_glink_charger_v2",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_ocp_notifier",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_pmic_glink",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_power_telemetry",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_ptd_share",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_qmi_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_qmi_sensor_v2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_regmap_debugfs",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_thermal_vendor_hooks",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "qti_userspace_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "r8152",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "r8153_ecm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "radio_i2c_rtc6226_qca",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rdbg",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "reboot_mode",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "redriver",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "regmap_kunit",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "regmap_ram",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "regmap_raw_ram",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "repeater",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "repeater_qti_pmic_eusb2",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rfcomm",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rfkill",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_aps",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_core",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_ctl",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_mem",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_offload",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_perf",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_perf_tether",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_sch",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_shs",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rmnet_wlan",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rpmh_regulator",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rproc_qcom_common",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rtc_pm8xxx",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rtl8150",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "rust_binder",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "sched_walt",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sdca_registers_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sdhci_msm",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sensors_class",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sg",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "si_core_module",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "simple_amp_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "slc_mpam",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "slc_perfmon",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "slcan",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "slhc",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "slim_qcom_ngd_ctrl",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "slimbus",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "smcinvoke_dlkm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "smem_mailbox",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "smmu_proxy_dlkm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "smp2p",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "smp2p_sleepstate",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "snd_event_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "snd_usb_audio_qmi",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "soc_topology_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "soc_utils_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spf_core_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spi_cnss_proto",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spi_geni_qcom",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spi_msm_geni",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spmi_pmic_arb",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spmi_pmic_arb_debug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "spmi_pmic_err_debug",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sps_drv",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_console",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_core",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_ftrace",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_heartbeat",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_nfc_i2c",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_p_ost",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stm_st54se_gpio",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stub_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "stub_regulator",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "swr_ctrl_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "swr_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "swr_dmic_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "swr_haptics_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sx937x_sar",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sync_fence",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "synx_driver",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sys_pm_vx",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "sysmon_subsystem_stats",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "thermal_config",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "thermal_pause",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "time_test",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "tipc",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "tipc_diag",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "tls",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "tmecom_intf_dlkm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "touchscreen_mmi",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "tz_log_dlkm",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ucsi_qti_glink",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ufs_qcom",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "ufshcd_crypto_qti",
+      "placements": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usb_f_ccid",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usb_f_cdev",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usb_f_gsi",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usb_f_qdss",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usbmon",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usbnet",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "usbserial",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "utags",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "vcan",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "vcpu_stall_detector",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_balloon",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_blk",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_console",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_pci",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_pci_legacy_dev",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "virtio_pci_modern_dev",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "vmw_vsock_virtio_transport",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "watchdogtest",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "wcd9378_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd9378_slave_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd937x_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd937x_slave_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd938x_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd938x_slave_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd939x_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd939x_slave_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd9xxx_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd_core_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wcd_usbss_i2c",
+      "placements": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wlan_firmware_service",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wsa883x_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wsa884x_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wsa885x_i2c_dlkm",
+      "placements": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "wwan",
+      "placements": [
+        "system_dlkm"
+      ],
+      "loaded_on_baseline": true
+    },
+    {
+      "name": "zram",
+      "placements": [
+        "system_dlkm",
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    },
+    {
+      "name": "zsmalloc",
+      "placements": [
+        "system_dlkm",
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": false
+    }
+  ],
+  "loaded_without_same_name_candidate": [
+    "6lowpan",
+    "8021q",
+    "9pnet",
+    "adsp_loader_dlkm",
+    "adsp_sleepmon",
+    "altmode_glink",
+    "anc_fps_mmi",
+    "aqc111",
+    "arm_smmu_pmu",
+    "asix",
+    "audio_pkt_dlkm",
+    "audio_prm_dlkm",
+    "audpkt_ion_dlkm",
+    "aw882xx_dlkm",
+    "awinic_sar",
+    "ax88179_178a",
+    "bam_dma",
+    "bcl_pmic5",
+    "bcl_soc",
+    "bluetooth",
+    "bm_adsp_ulog",
+    "boot_stats",
+    "bsd_comp",
+    "bt_fm_swr",
+    "btbcm",
+    "btfm_slim_codec",
+    "btfmcodec",
+    "btpower",
+    "btqca",
+    "btsdio",
+    "bwmon",
+    "cam_aw37004",
+    "camera",
+    "can",
+    "can_dev",
+    "cctrng",
+    "cdc_acm",
+    "cdc_eem",
+    "cdc_ether",
+    "cdc_ncm",
+    "cdsprm",
+    "cfg80211",
+    "charger_ulog_glink",
+    "clk_gate_test",
+    "clk_kunit_helpers",
+    "clk_scmi",
+    "clk_test",
+    "cnss_nl",
+    "cnss_plat_ipc_qmi_svc",
+    "cnss_prealloc",
+    "cnss_utils",
+    "core_hang_detect",
+    "coresight",
+    "coresight_csr",
+    "coresight_cti",
+    "coresight_dummy",
+    "coresight_funnel",
+    "coresight_qmi",
+    "coresight_remote_etm",
+    "coresight_replicator",
+    "coresight_stm",
+    "coresight_tgu",
+    "coresight_tmc",
+    "coresight_tmc_sec",
+    "coresight_tpda",
+    "coresight_tpdm",
+    "coresight_trace_noc",
+    "coresight_uetm",
+    "cpu_hotplug",
+    "cpu_mpam",
+    "cpucp_fast",
+    "cpucp_log",
+    "cpuss_telemetry",
+    "cqhci",
+    "dcc_v2",
+    "ddr_cdev",
+    "debug_regulator",
+    "debug_symbol",
+    "deferred_free_helper",
+    "dev_addr_lists_test",
+    "dmesg_dumper",
+    "drm_display_helper",
+    "dwc3_msm",
+    "eom_driver",
+    "eud",
+    "ext4_inode_test",
+    "exynos_hvm",
+    "f_fs_ipc_log",
+    "fat_test",
+    "frpc_adsprpc",
+    "fsa4480_i2c",
+    "ftdi_sio",
+    "gh_arm_drv",
+    "gh_ctrl",
+    "gh_dbl",
+    "gh_irq_lend",
+    "gh_mem_notifier",
+    "gh_msgq",
+    "gh_panic_notifier",
+    "gh_rm_booster",
+    "gh_rm_drv",
+    "gh_rm_heap_manager",
+    "gh_tlmm_vm_mem_access",
+    "gh_vcpu_mgr",
+    "glink_pkt",
+    "glink_probe",
+    "gnss",
+    "goodix_brl_thp",
+    "gpr_dlkm",
+    "gsim",
+    "gunyah_trace",
+    "gzvm",
+    "hall_phone_case",
+    "hci_uart",
+    "hdcp_qseecom_dlkm",
+    "hdmi_dlkm",
+    "heap_mem_ext_v01",
+    "hid_uclogic_test",
+    "hidp",
+    "hung_task_enh",
+    "hvc_gunyah",
+    "hwmon",
+    "i2c_msm_geni",
+    "i2c_qcom_geni",
+    "i3c_master_msm_geni",
+    "icc_bcm_voter",
+    "icc_clk",
+    "icc_debug",
+    "icc_rpmh",
+    "icnss2",
+    "ieee802154",
+    "ieee802154_6lowpan",
+    "ieee802154_socket",
+    "iio_test_format",
+    "input_test",
+    "ipam",
+    "ipanetm",
+    "ipclite",
+    "kryo_arm64_edac",
+    "kunit",
+    "kunit_example_test",
+    "kunit_test",
+    "l2tp_core",
+    "l2tp_ppp",
+    "leds_qcom_flash",
+    "leds_qcom_lpg",
+    "leds_qpnp_vibrator_ldo",
+    "ledtrig_pattern",
+    "lib_test",
+    "libarc4",
+    "llcc_heuristics",
+    "lmh_stats",
+    "lpass_bt_swr_dlkm",
+    "lpass_cdc_dlkm",
+    "lpass_cdc_rx_macro_dlkm",
+    "lpass_cdc_tx_macro_dlkm",
+    "lpass_cdc_va_macro_dlkm",
+    "lpass_cdc_wsa2_macro_dlkm",
+    "lpass_cdc_wsa_macro_dlkm",
+    "lt9611uxc",
+    "mac80211",
+    "mac802154",
+    "machine_dlkm",
+    "macsec",
+    "mbhc_dlkm",
+    "mdt_loader",
+    "mem_buf",
+    "mem_buf_dev",
+    "mem_buf_msgq",
+    "mem_hooks",
+    "mem_offline",
+    "mem_prot",
+    "memlat",
+    "memory_dump_v2",
+    "mhi",
+    "mhi_dev_satellite",
+    "mhi_dev_uci",
+    "microdump_collector",
+    "mii",
+    "minidump",
+    "mmi_annotate",
+    "mmi_glink_charger",
+    "mmi_info",
+    "mmi_relay",
+    "mmi_sys_temp",
+    "moto_binder",
+    "moto_f_usbnet",
+    "moto_mmap_fault",
+    "moto_reboot_reason",
+    "moto_sched",
+    "mpam",
+    "mpam_msc",
+    "mpam_msc_slc",
+    "msm_dma_iommu_mapping",
+    "msm_drm",
+    "msm_eva",
+    "msm_ext_display",
+    "msm_geni_serial",
+    "msm_gpi",
+    "msm_hfi_core",
+    "msm_hw_fence",
+    "msm_kgsl",
+    "msm_memshare",
+    "msm_mmrm",
+    "msm_performance",
+    "msm_qmp",
+    "msm_sharedmem",
+    "msm_show_epoch",
+    "msm_show_resume_irq",
+    "msm_video",
+    "nb7vpq904m",
+    "netfs",
+    "nfc",
+    "nhc_dest",
+    "nhc_fragment",
+    "nhc_hop",
+    "nhc_ipv6",
+    "nhc_mobility",
+    "nhc_routing",
+    "nhc_udp",
+    "nvmem_qcom_spmi_sdam",
+    "nvmem_qfprom",
+    "nxp_nci",
+    "of_kunit_helpers",
+    "open_dice",
+    "panel_event_notifier",
+    "pci_msm_drv",
+    "pci_phy_access",
+    "pcie_pdc",
+    "pdr_interface",
+    "phy_generic",
+    "phy_msm_m31_eusb2",
+    "phy_msm_snps_eusb2",
+    "phy_msm_snps_hs",
+    "phy_msm_ssusb_qmp",
+    "phy_qcom_emu",
+    "phy_qcom_eusb2_repeater",
+    "phy_qcom_m31_eusb2",
+    "phy_qcom_qmp_combo",
+    "phy_qcom_ufs",
+    "phy_qcom_ufs_qmp_v4_canoe",
+    "phy_qcom_ufs_qmp_v4_crow",
+    "phy_qcom_ufs_qrbtc_sdm845",
+    "pinctrl_canoe",
+    "pinctrl_chora",
+    "pinctrl_lpi_dlkm",
+    "pinctrl_ravelin",
+    "pinctrl_spmi_gpio",
+    "pinctrl_spmi_mpp",
+    "platform_mpam",
+    "platform_test",
+    "pm8941_pwrkey",
+    "pmic_glink_debug",
+    "pmic_pon_log",
+    "ppp_deflate",
+    "ppp_generic",
+    "ppp_mppe",
+    "pppox",
+    "pps_core",
+    "pptp",
+    "ps5169",
+    "ptp",
+    "pwrseq_core",
+    "q6_dlkm",
+    "q6_notifier_dlkm",
+    "q6_pdr_dlkm",
+    "qbt_handler",
+    "qca_cld3_wcn7750",
+    "qce50_dlkm",
+    "qcedev_mod_dlkm",
+    "qcom_amoled_regulator",
+    "qcom_aoss",
+    "qcom_cache_allocation",
+    "qcom_cpu_vendor_hooks",
+    "qcom_cpucp",
+    "qcom_cpufreq_hw",
+    "qcom_cpufreq_hw_debug",
+    "qcom_cpuss_sleep_stats",
+    "qcom_cpuss_sleep_stats_v4",
+    "qcom_dload_mode",
+    "qcom_dma_heaps",
+    "qcom_dynamic_ramoops",
+    "qcom_edac",
+    "qcom_fdcvs",
+    "qcom_glink",
+    "qcom_glink_smem",
+    "qcom_glink_spss",
+    "qcom_hv_haptics",
+    "qcom_i2c_pmic",
+    "qcom_ice",
+    "qcom_iommu_debug",
+    "qcom_ipc_logging",
+    "qcom_ipcc",
+    "qcom_llcc_pmu",
+    "qcom_logbuf_boot_log",
+    "qcom_logbuf_vendor_hooks",
+    "qcom_lpm",
+    "qcom_lpm_monitor",
+    "qcom_pd_mapper",
+    "qcom_pdr_msg",
+    "qcom_pil_info",
+    "qcom_pmic_ecid",
+    "qcom_pmu_lib",
+    "qcom_pon",
+    "qcom_q6v5",
+    "qcom_q6v5_pas",
+    "qcom_ramdump",
+    "qcom_reboot_reason",
+    "qcom_rng",
+    "qcom_scmi_client",
+    "qcom_scmi_vendor",
+    "qcom_sdei",
+    "qcom_smd",
+    "qcom_soc_wdt",
+    "qcom_spmi_adc5_gen3",
+    "qcom_spmi_pmic",
+    "qcom_spmi_temp_alarm",
+    "qcom_spmi_wled",
+    "qcom_spss",
+    "qcom_stats",
+    "qcom_sysmon",
+    "qcom_tsens",
+    "qcom_va_minidump",
+    "qcom_vadc_common",
+    "qcom_voltage_adj",
+    "qcom_wdt_core",
+    "qcrypto_msm_dlkm",
+    "qmi_helpers",
+    "qmp_dlkm",
+    "qnoc_alor",
+    "qnoc_canoe",
+    "qnoc_chora",
+    "qnoc_qos",
+    "qnoc_ravelin",
+    "qpnp_adaptive_charge",
+    "qpnp_lcdb_regulator",
+    "qptf",
+    "qrng_dlkm",
+    "qrtr",
+    "qrtr_gunyah",
+    "qrtr_mhi",
+    "qrtr_smd",
+    "qsee_ipc_irq_bridge",
+    "qseecom_proxy",
+    "qti_amoled_ecm",
+    "qti_battery_charger",
+    "qti_battery_debug",
+    "qti_btl",
+    "qti_cpufreq_cdev",
+    "qti_devfreq_cdev",
+    "qti_dynamic_hw_trip",
+    "qti_fixed_regulator",
+    "qti_glink_adc",
+    "qti_glink_charger_v2",
+    "qti_ocp_notifier",
+    "qti_pmic_glink",
+    "qti_power_telemetry",
+    "qti_ptd_share",
+    "qti_qmi_cdev",
+    "qti_qmi_sensor_v2",
+    "qti_regmap_debugfs",
+    "qti_thermal_vendor_hooks",
+    "qti_userspace_cdev",
+    "r8152",
+    "r8153_ecm",
+    "radio_i2c_rtc6226_qca",
+    "rdbg",
+    "reboot_mode",
+    "redriver",
+    "regmap_kunit",
+    "regmap_ram",
+    "regmap_raw_ram",
+    "repeater",
+    "repeater_qti_pmic_eusb2",
+    "rfcomm",
+    "rfkill",
+    "rmnet_aps",
+    "rmnet_core",
+    "rmnet_ctl",
+    "rmnet_mem",
+    "rmnet_offload",
+    "rmnet_perf",
+    "rmnet_perf_tether",
+    "rmnet_sch",
+    "rmnet_shs",
+    "rmnet_wlan",
+    "rpmh_regulator",
+    "rproc_qcom_common",
+    "rtc_pm8xxx",
+    "rtl8150",
+    "sched_walt",
+    "sdca_registers_dlkm",
+    "sdhci_msm",
+    "sensors_class",
+    "sg",
+    "si_core_module",
+    "simple_amp_dlkm",
+    "slc_mpam",
+    "slcan",
+    "slhc",
+    "slim_qcom_ngd_ctrl",
+    "slimbus",
+    "smcinvoke_dlkm",
+    "smem_mailbox",
+    "smmu_proxy_dlkm",
+    "smp2p",
+    "smp2p_sleepstate",
+    "snd_event_dlkm",
+    "snd_usb_audio_qmi",
+    "soc_topology_test",
+    "soc_utils_test",
+    "spf_core_dlkm",
+    "spi_cnss_proto",
+    "spi_geni_qcom",
+    "spi_msm_geni",
+    "spmi_pmic_arb",
+    "spmi_pmic_arb_debug",
+    "spmi_pmic_err_debug",
+    "sps_drv",
+    "stm_console",
+    "stm_core",
+    "stm_ftrace",
+    "stm_heartbeat",
+    "stm_nfc_i2c",
+    "stm_p_ost",
+    "stm_st54se_gpio",
+    "stub_dlkm",
+    "stub_regulator",
+    "swr_ctrl_dlkm",
+    "swr_dlkm",
+    "swr_dmic_dlkm",
+    "swr_haptics_dlkm",
+    "sx937x_sar",
+    "sync_fence",
+    "synx_driver",
+    "sys_pm_vx",
+    "sysmon_subsystem_stats",
+    "thermal_config",
+    "thermal_pause",
+    "time_test",
+    "tipc",
+    "tipc_diag",
+    "tls",
+    "tmecom_intf_dlkm",
+    "touchscreen_mmi",
+    "tz_log_dlkm",
+    "ucsi_qti_glink",
+    "ufs_qcom",
+    "ufshcd_crypto_qti",
+    "usb_f_ccid",
+    "usb_f_cdev",
+    "usb_f_gsi",
+    "usb_f_qdss",
+    "usbmon",
+    "usbnet",
+    "usbserial",
+    "utags",
+    "vcan",
+    "vcpu_stall_detector",
+    "virtio_balloon",
+    "virtio_blk",
+    "virtio_console",
+    "virtio_pci",
+    "virtio_pci_legacy_dev",
+    "virtio_pci_modern_dev",
+    "vmw_vsock_virtio_transport",
+    "wcd9378_dlkm",
+    "wcd9378_slave_dlkm",
+    "wcd937x_dlkm",
+    "wcd937x_slave_dlkm",
+    "wcd938x_dlkm",
+    "wcd938x_slave_dlkm",
+    "wcd939x_dlkm",
+    "wcd939x_slave_dlkm",
+    "wcd9xxx_dlkm",
+    "wcd_core_dlkm",
+    "wcd_usbss_i2c",
+    "wlan_firmware_service",
+    "wsa883x_dlkm",
+    "wsa884x_dlkm",
+    "wsa885x_i2c_dlkm",
+    "wwan"
+  ]
+}

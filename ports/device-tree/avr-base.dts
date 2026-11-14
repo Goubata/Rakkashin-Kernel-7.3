@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* avr hardware baseline. Driver-specific 7.3 changes must be justified against
+ * the saved DT and binding contract before being added here. */
+#include "alor-avr-base.dts"

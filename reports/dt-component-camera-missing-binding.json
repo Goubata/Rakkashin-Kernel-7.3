@@ -1,0 +1,419 @@
+{
+  "status": "incomplete",
+  "error": "missing firmware binding dt-bindings/msm-camera.h",
+  "files": [
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-base.dts",
+      "git_blob": "85884ddcfdf91d1eaabfded75e5e88a86741554b",
+      "sha256": "3820d715408e0447b2e37b2db5cba6c5502d1514fa4055a889ce133a90b6dc79"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-evb-overlay.dtso",
+      "git_blob": "7205a13f151ef254b7c507cf1062aa9c1fa7149b",
+      "sha256": "37e5f0226738a69db394b22cacdf82f3d31ded4ef4768ddc49c9b156b6d60601"
+    },
+    {
+      "repository": "kernel-display-devicetree",
+      "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a",
+      "path": "display/alor-sde.dts",
+      "git_blob": "1c9fc06d4724babcf02e24a105ed9b80539fda53",
+      "sha256": "a591748903a62bcea1e08589cda870495e458a777e1f9c71cd849be0943bda60"
+    },
+    {
+      "repository": "kernel-display-devicetree",
+      "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a",
+      "path": "display/alor-sde-display-avr-evb-overlay.dts",
+      "git_blob": "761be2aa577900f74f0f325746d52b6a3c36e1e7",
+      "sha256": "1806713f1c2bbe1c39e2e393e9eacbc9c096b1388d919fa8472b636dbcecebc7"
+    },
+    {
+      "repository": "kernel-camera-devicetree",
+      "commit": "61996ea046dc3cf03bcad3e2a23ca8fe08761370",
+      "path": "alor-camera.dts",
+      "git_blob": "8a0f89323a80bb6f7485c6c387aef7f94b8c117d",
+      "sha256": "be9afadeff03e8aefb1e00794e5b349ab16d313c4b8f98491aaf39e726c6ab60"
+    },
+    {
+      "repository": "kernel-camera-devicetree",
+      "commit": "61996ea046dc3cf03bcad3e2a23ca8fe08761370",
+      "path": "alor-camera-sensor-avr-evb.dts",
+      "git_blob": "31b1f74d1ee23b541e488b52f5aa025dce9cfe3a",
+      "sha256": "4c7b5ee36361ab57be0ea3bf63397b1953291f97f607abc8686f1377e9b952db"
+    },
+    {
+      "repository": "kernel-audio-devicetree",
+      "commit": "0b013232e692a8449b6dee5323808033bac8032c",
+      "path": "alor-audio.dts",
+      "git_blob": "5e73587bd73cf94ad6dff8e9667b6181f7963362",
+      "sha256": "4bdc06db7e7ffdf9f9a2e4cdb7072a2eb1f879e98ffcf37b7f37bb17dccbb975"
+    },
+    {
+      "repository": "kernel-audio-devicetree",
+      "commit": "0b013232e692a8449b6dee5323808033bac8032c",
+      "path": "alor-audio-moto-avr-evb.dts",
+      "git_blob": "1189e5987e482da2eda0ed55ca002bd586d18d18",
+      "sha256": "0d05cf1b24aafd2d99fd178c5289af138a95671b463013a42b634c5f0c773fe2"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-common-base.dtsi",
+      "git_blob": "a8ba7db5ebce7a68dec828fb0b07ce2ee2937061",
+      "sha256": "4d3872d54c5ac737fd1477c0bd4643c5a7e2a96db813ebe43749f333b31239f2"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-products-common-overlay.dtsi",
+      "git_blob": "b16dac37ca8c0081c829616c4ec69de30da72ead",
+      "sha256": "0e5cc40794b4ce0fa0944736639c06615ce9b64d691aeafe475f0eb42ba0979b"
+    },
+    {
+      "repository": "kernel-display-devicetree",
+      "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a",
+      "path": "display/alor-sde.dtsi",
+      "git_blob": "28d4a0fcf0a96d64cba7f08a431305d27c382bda",
+      "sha256": "0937bb0795be8303a879f975656c0766585af5d030135de3b0bc7857f88feab5"
+    },
+    {
+      "repository": "kernel-display-devicetree",
+      "commit": "f088523dfba85c95c15f43726fcf972c0c7a957a",
+      "path": "display/alor-sde-display-avr.dtsi",
+      "git_blob": "f8e2a95a99e235b566b8587de3772e1b6432908e",
+      "sha256": "a5211325dd35efe6c9975fff9352d653f233569f108ec8c241bb91b04412c934"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,alor-gcc.h",
+      "git_blob": "754168e7939fa17123909e10b8923ecbb1650a73",
+      "sha256": "8d2de75796fde2fdf1a4c8e63b2fa976d67316606ab6610c138e29dd7011a9f3"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,alor-camcc.h",
+      "git_blob": "6ffbb456a8ca5d972330848827c4f5ac7bad4c97",
+      "sha256": "d3c1276ab01991fce9414b79895ebe500ffbedf31454b02b238f6a5876e18fcf"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/interconnect/qcom,alor.h",
+      "git_blob": "4a90b7bf441c7242ea8e19ca152fe4f30f2035ad",
+      "sha256": "eba2ed57b511355abb15c7c423d4d20d321e7139d8f265a34e9075e4aff276dc"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/interrupt-controller/arm-gic.h",
+      "git_blob": "887f53363e8a633ba85c8a459313c37b71a729a5",
+      "sha256": "80dc56e8aa61b3681ee42fb0bfd34bf35ea2578ac6d82f1fa972b963667e8ff7"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "git_blob": "68d4d4957ffeaed6b441c92d52c107e9e982005e",
+      "sha256": "94546b40ca36e977acbdadf2e8d4c8b93aede34ffc51a273a6dd92eb4b95b0b3"
+    },
+    {
+      "repository": "kernel-camera-devicetree",
+      "commit": "61996ea046dc3cf03bcad3e2a23ca8fe08761370",
+      "path": "alor-camera.dtsi",
+      "git_blob": "244329bdbf4521314026e5dc54326fd9f2292975",
+      "sha256": "68e7ad233eb580068c291890975fbc029050c4ae2856d6ebcda2175f47dfd937"
+    }
+  ],
+  "include_edges": [
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-base.dts",
+      "include": "alor-moto-common-base.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-base.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-evb-overlay.dtso",
+      "include": "alor-avr-products-common-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dts",
+      "include": "alor-sde.dtsi",
+      "to": "kernel-display-devicetree:display/alor-sde.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr-evb-overlay.dts",
+      "include": "alor-sde-display-avr.dtsi",
+      "to": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "dt-bindings/clock/qcom,alor-camcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-camcc.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "dt-bindings/interconnect/qcom,alor.h",
+      "to": "qcom-soc:include/dt-bindings/interconnect/qcom,alor.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera.dts",
+      "include": "alor-camera.dtsi",
+      "to": "kernel-camera-devicetree:alor-camera.dtsi"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/clock/qcom,alor-camcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-camcc.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/clock/qcom,cambistmclkcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,cambistmclkcc-canoe.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/interconnect/qcom,alor.h",
+      "to": "qcom-soc:include/dt-bindings/interconnect/qcom,alor.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-camera-devicetree:alor-camera-sensor-avr-evb.dts",
+      "include": "alor-camera-sensor-avr-common.dtsi",
+      "to": "kernel-camera-devicetree:alor-camera-sensor-avr-common.dtsi"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio.dts",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio.dts",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio.dts",
+      "include": "dt-bindings/interconnect/qcom,alor.h",
+      "to": "qcom-soc:include/dt-bindings/interconnect/qcom,alor.h"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio.dts",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio.dts",
+      "include": "alor-audio.dtsi",
+      "to": "kernel-audio-devicetree:alor-audio.dtsi"
+    },
+    {
+      "from": "kernel-audio-devicetree:alor-audio-moto-avr-evb.dts",
+      "include": "alor-audio-moto-avr-common.dtsi",
+      "to": "kernel-audio-devicetree:alor-audio-moto-avr-common.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-common-base.dtsi",
+      "include": "alor.dtsi",
+      "to": "kernel-devicetree:qcom/alor.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-overlay-base.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-overlay-base.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "moto-alor-avr-pmic.dtsi",
+      "to": "kernel-devicetree:qcom/moto-alor-avr-pmic.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-charger.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-charger.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-charger-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-charger-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-touchscreen-thp-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-touchscreen-thp-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-fingerprint-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-fingerprint-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-haptics-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-haptics-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-sensors-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-sensors-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-thermal-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-thermal-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-moto_uimem.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-moto_uimem.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/soc/qcom,ipcc.h",
+      "to": "qcom-soc:include/dt-bindings/soc/qcom,ipcc.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/interconnect/qcom,alor.h",
+      "to": "qcom-soc:include/dt-bindings/interconnect/qcom,alor.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/clock/qcom,dispcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,dispcc-canoe.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/clock/qcom,tcsrcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,tcsrcc-canoe.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/clock/qcom,rpmh.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,rpmh.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/arm/msm/qti-smmu-proxy-dt-ids.h",
+      "to": "qcom-soc:include/dt-bindings/arm/msm/qti-smmu-proxy-dt-ids.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde.dtsi",
+      "include": "alor-sde-common.dtsi",
+      "to": "kernel-display-devicetree:display/alor-sde-common.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "alor-sde-display.dtsi",
+      "to": "kernel-display-devicetree:display/alor-sde-display.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-dummy-qhd-video-dsi1.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-dummy-qhd-video-dsi1.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v1.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v1.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v2.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v2.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v3.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v3.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v4.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97680A-678-1264x2780-dsc-cmd-common_vantage_v4.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v0.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v0.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v1.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v1.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v2.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v2.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v3.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v3.dtsi"
+    },
+    {
+      "from": "kernel-display-devicetree:display/alor-sde-display-avr.dtsi",
+      "include": "dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v4.dtsi",
+      "to": "kernel-display-devicetree:display/dsi-panel-mot-boe-ili97701A-682-1440x3168-dsc-cmd-common_v4.dtsi"
+    },
+    {
+      "from": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    }
+  ]
+}

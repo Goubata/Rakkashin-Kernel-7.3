@@ -1,0 +1,27 @@
+{
+  "scope": "running 6.12 port ROM only; not a 7.3 SELinux validation",
+  "captured_at_utc": "2026-11-14T04:51:32.378591+00:00",
+  "mode": "Enforcing",
+  "policy_version": "33",
+  "device_labels": {
+    "/dev/kgsl-3d0": "u:object_r:gpu_device:s0",
+    "/dev/ntsync": "u:object_r:ntsync_device:s0",
+    "/dev/oplus_sync": "u:object_r:oplus_sync_device:s0",
+    "/dev/synx_device": "u:object_r:vendor_synx_device:s0"
+  },
+  "baseline_sha256": "7dbbeb702d72c9041947a189164f3a3d32fb524055a3eeef8c8ec9ac8298f1d9",
+  "query_exit_codes": {
+    "mode": 0,
+    "policy_version": 0,
+    "policy_sha256": 0,
+    "device_labels": 0
+  },
+  "policy_modified": false,
+  "runtime_73_verified": false,
+  "pending": [
+    "Preserve labels through new ramdisk/ueventd configuration",
+    "Check actual Android service domains and ioctl/xperm requirements",
+    "Diagnose 7.3 AVCs during approved physical tests; no blanket permissive change"
+  ],
+  "running_policy_sha256": "92817d4da4572570fcda7f7504365908165f18f7d0f524817cc73062df724447"
+}

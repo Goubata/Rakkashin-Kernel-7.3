@@ -1,0 +1,1149 @@
+{
+  "status": "include graph materialized",
+  "roots": [
+    "kernel-devicetree:qcom/alor-avr-base.dts",
+    "kernel-devicetree:qcom/alor-avr-evb-overlay.dtso"
+  ],
+  "repositories": {
+    "motorola-kernel-modules": "a24357771fe451d829a2f78f8986ecd53522085e",
+    "kernel-devicetree": "82d6411232808183ce951d87a277781cbfb5d6a2",
+    "qcom-soc": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+    "kernel-common": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4"
+  },
+  "files": [
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-base.dts",
+      "git_blob": "85884ddcfdf91d1eaabfded75e5e88a86741554b",
+      "sha256": "3820d715408e0447b2e37b2db5cba6c5502d1514fa4055a889ce133a90b6dc79"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-evb-overlay.dtso",
+      "git_blob": "7205a13f151ef254b7c507cf1062aa9c1fa7149b",
+      "sha256": "37e5f0226738a69db394b22cacdf82f3d31ded4ef4768ddc49c9b156b6d60601"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-common-base.dtsi",
+      "git_blob": "a8ba7db5ebce7a68dec828fb0b07ce2ee2937061",
+      "sha256": "4d3872d54c5ac737fd1477c0bd4643c5a7e2a96db813ebe43749f333b31239f2"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-products-common-overlay.dtsi",
+      "git_blob": "b16dac37ca8c0081c829616c4ec69de30da72ead",
+      "sha256": "0e5cc40794b4ce0fa0944736639c06615ce9b64d691aeafe475f0eb42ba0979b"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor.dtsi",
+      "git_blob": "633985bd8f488ec8d11853e03e4adef8ecb6c126",
+      "sha256": "905eb4a1634d6684df71b1612bdb6377e924134abc29ebae3b43b09e94e6daa0"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-common-overlay-base.dtsi",
+      "git_blob": "08d5c1762a5f81c6b0caaed7409ffe830a784eaf",
+      "sha256": "012908856b29682f04ad6c1b37d1982176eb354d3df846befb9b1a686965586a"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-common-overlay.dtsi",
+      "git_blob": "46767efbf5d3b0c76956f74a05f14b44e5ec7279",
+      "sha256": "a575fe437b7d4a8374eb59c3134a4d8643d1e8c063ced8212944fd0d86ceb56c"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/moto-alor-avr-pmic.dtsi",
+      "git_blob": "79afd3f60fe1d8ca7067a7e0b7ce509d733a87f9",
+      "sha256": "4fea3d84ecffb170966a9efa9d1539ecd9a00fe460d15eb1e93cb3b9e415cf33"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-common-charger.dtsi",
+      "git_blob": "e4068b51ef46d3d1e7dfaf7ac226e518815a3881",
+      "sha256": "2513e01d006db430f7a0f6e4f0f216d571329763d5069aeb5e15d5d16b8f76aa"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-charger-overlay.dtsi",
+      "git_blob": "08e3c5bb05b9d14bfae9ce06d93841cc9e5fafb4",
+      "sha256": "d782535e1b0ef9d7eb658084b95332f6ee9f4c42650d917faa76a95dac0856a5"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-touchscreen-thp-overlay.dtsi",
+      "git_blob": "f7fda55ffbbb0603b7c7c7186487fef32f3c2576",
+      "sha256": "a9b691fd84c897c7e4eddc1af7f7aef33f45fea9830def0967884452869d5e15"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-fingerprint-overlay.dtsi",
+      "git_blob": "2ede73b67ad4b48be6923342b797cd42691f5ea6",
+      "sha256": "53db7750fae3ffbb062b0793af7eac118f9bccd1f50fd683ab7fc48901052e73"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-haptics-overlay.dtsi",
+      "git_blob": "664188b35b4a1671eda839e05f5b11bbd16f8a1b",
+      "sha256": "5c8ab08a0127002e645a3230821966f201da472c7df55999a596843f2e896b30"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-sensors-overlay.dtsi",
+      "git_blob": "a516274099ef62b466bba3581af6756a6054b062",
+      "sha256": "05c290f9313f169da3b521ef912828a4b0ec5fa334b90baf917b0f7d1015729c"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-thermal-overlay.dtsi",
+      "git_blob": "a6b6784a213e3c7eabd654fe988c77c129a5f076",
+      "sha256": "636d50e71071dff4cdd9109989bcead36b301289a6e692ebd0ec0fcef4241e38"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-avr-moto_uimem.dtsi",
+      "git_blob": "d0c8df07ee244dd5eb464287f9202f5639db1e22",
+      "sha256": "fdf5da3d094af471b24363c937372e5db1adc191195d6f166b3dea3f9a2894ed"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/arm/msm/qti-smmu-proxy-dt-ids.h",
+      "git_blob": "aafdf9625590cdb43c18b10df27893b51ac735f0",
+      "sha256": "5622628e7eb064831627557b48cb43d63ab93c9131ed334b494aa9fcf5cb7e3b"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,cambistmclkcc-canoe.h",
+      "git_blob": "a00fbe825dfb156fc371e01f1bb2b4779a7d9dd1",
+      "sha256": "01721b005ddabeaf3fde412c320555095eb22fad313050ab4fc7646c06e289b8"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,alor-camcc.h",
+      "git_blob": "6ffbb456a8ca5d972330848827c4f5ac7bad4c97",
+      "sha256": "d3c1276ab01991fce9414b79895ebe500ffbedf31454b02b238f6a5876e18fcf"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,dispcc-canoe.h",
+      "git_blob": "4d2718a947d86d4f981408fbebe9afe0c9d2ebee",
+      "sha256": "c1f23f9dd7f183ef61c1e3914c5f0ab8d5802c939091c0699d654ff7c94f9f0a"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,evacc-canoe.h",
+      "git_blob": "5cc19ecc8b882eac589ab4987e9b67c53dbacc98",
+      "sha256": "db4b37e338a82d7113975294a49ff55fe64561606d3baefa36a9f315b881d44d"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,alor-gcc.h",
+      "git_blob": "754168e7939fa17123909e10b8923ecbb1650a73",
+      "sha256": "8d2de75796fde2fdf1a4c8e63b2fa976d67316606ab6610c138e29dd7011a9f3"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,gpucc-canoe.h",
+      "git_blob": "6c958d4cb7b0a9c8b674280b1bdf521865268958",
+      "sha256": "986b44e8da919c838d103688e5080e0b8ec9a16f005eee3e07ee10ef63ec1f1b"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,gxclkctl-canoe.h",
+      "git_blob": "d87e0e65b5a85ced283f5743cadfa2fd81265a05",
+      "sha256": "beb18c4032122435b5d0900cf5689a05206557ca6b46428352314bb92ce7d703"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,tcsrcc-canoe.h",
+      "git_blob": "4e8ec4540a69f849ff191d846c0d2dabc789b30c",
+      "sha256": "fdf9505e04b15ecc8886ebbc833ecc0e59c1fe20aa361c6d16e122f677889fda"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,videocc-canoe.h",
+      "git_blob": "1263e1d1ff6376191c6d1143e616fce187da1504",
+      "sha256": "c55be654b1e0c9bbd60ad1e6e216d280802a8e9580c07654418eb53ef0d882f4"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,rpmh.h",
+      "git_blob": "49b488d719e232baab903b48a01ed2e809ed8a7c",
+      "sha256": "e81ee3010a423fc125756f21cfcf48dab246980da48a5ea112ba0ca13058a3a3"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/interrupt-controller/arm-gic.h",
+      "git_blob": "887f53363e8a633ba85c8a459313c37b71a729a5",
+      "sha256": "80dc56e8aa61b3681ee42fb0bfd34bf35ea2578ac6d82f1fa972b963667e8ff7"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/soc/qcom,rpmh-rsc.h",
+      "git_blob": "221049d6edac303ca35bf5f49e4e76856ebf4279",
+      "sha256": "6810c83419f95e8908c1de201ccd40022c9d149ab77f54e2bb12590585370b2d"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/interconnect/qcom,icc.h",
+      "git_blob": "f7f11a1e7dff3d66a7f74594e0ff4f61abbf0089",
+      "sha256": "52e95d158b1f9381e707f8e9e93722cafe83b366b136e08331fba43e5dd0523d"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/interconnect/qcom,alor.h",
+      "git_blob": "4a90b7bf441c7242ea8e19ca152fe4f30f2035ad",
+      "sha256": "eba2ed57b511355abb15c7c423d4d20d321e7139d8f265a34e9075e4aff276dc"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/soc/qcom,ipcc.h",
+      "git_blob": "47f6ef4ea1c0faa7ec4ceb1a5a95aff59f14e9ca",
+      "sha256": "6f9ff44c71dd3eee08db80ff0ee096b4e3ed5798762a325824ea4ba1e0ff0323"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/mailbox/qcom-ipcc-canoe.h",
+      "git_blob": "b546cc8e418e383bc0cb518a76da971ee880b1da",
+      "sha256": "10a56acec385c88c946bb759bde0d032c4d3dd509cd732cd690b2cae598738e7"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/spmi/spmi.h",
+      "git_blob": "ad4a43481de4f6a47cd3f622ffa1ab7e93d28dd3",
+      "sha256": "c2952b040e5c24726c423e52ba939d389141ff27eb2307fb3888657b455e2b9b"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/gpio/gpio.h",
+      "git_blob": "b5d531237448241f1870e7d8d4cf1a6411877562",
+      "sha256": "5423b3866877ead0920ec978b5b072f06087443033a72445b39faed8f288ddc1"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "git_blob": "68d4d4957ffeaed6b441c92d52c107e9e982005e",
+      "sha256": "94546b40ca36e977acbdadf2e8d4c8b93aede34ffc51a273a6dd92eb4b95b0b3"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/clock/qcom,aop-qmp.h",
+      "git_blob": "d4e310d27a1fea566f1d71367bcbcd591ec3b569",
+      "sha256": "084a4cbfe9f82a9d2941232415307b6dad3097368c98d3e211e59b01f812f716"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-reserved-memory.dtsi",
+      "git_blob": "6c80821f56066755b006c44378baf587e72ed701",
+      "sha256": "f2bc968087777123b6463e3fc3f1fd15789ffb483ec93c96973fba6d77f71b8b"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/msm-arm-smmu-alor.dtsi",
+      "git_blob": "4f797c108e0b024f62bb859a164e18caaf9206a7",
+      "sha256": "0676a99aae124892c8057e9b8231f4d80e41a2bd4f0f6c46c1627385a5b572ad"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-dma-heaps.dtsi",
+      "git_blob": "0e9b80df739ff0654ae6623d42144423ce3e9fb9",
+      "sha256": "d51a29733c2bce04300b48887dc792af82553b2f69dc2c3fbab5a4224e5de004"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-pcie.dtsi",
+      "git_blob": "a30deb71e3d193b42f1161d7adb98a9eedef9421",
+      "sha256": "511a164f5bd3f1f96837a4e62f93cbcab2833c5ea00a4ad50ae9b9b0e243c6e8"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-debug.dtsi",
+      "git_blob": "7699f04954e9c672c9c5e12f4ec952dfd28799c5",
+      "sha256": "ae73cba614410bda0af61165ed0d391afd68d63df40a1b5a36504f27e7d41512"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-coresight.dtsi",
+      "git_blob": "548d30ddf41156dc9d37c365c417d84cb346399a",
+      "sha256": "2b2eba7649a98b0601fff6570102f1dcc4fd30a833fae595eab053f9769d4743"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-pinctrl.dtsi",
+      "git_blob": "e937c36977bcc2d5efcb46c0372dbb9784a12d9f",
+      "sha256": "e32f9b9370842d4c0d0ac02dfa2aebfc947b4746e202861562ce5762745e1dd4"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-regulators.dtsi",
+      "git_blob": "cbf355f41eb46dad092cd34d0e3b07990803ffa4",
+      "sha256": "cf33887046664aa63a51734aa0882a7f04074a4ebcc428eca19929530c280826"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-qupv3.dtsi",
+      "git_blob": "a1d8fc5b2db039eab1dcb919c24dd9af75c68856",
+      "sha256": "ba7b7e29ca38f05bfb75a713490e8f609386fe70e8296c028312a57ea2e7a236"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-usb.dtsi",
+      "git_blob": "99b005dffd4a11021a9b959b69f715fc810c91d4",
+      "sha256": "fffd05a97a49b4f06f8f23b0d1a658b8555ef304f4a4d329d31340d8944278f4"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-walt.dtsi",
+      "git_blob": "0af3b2c6a14e26279092ab230d332a31109b8e2a",
+      "sha256": "982dcc9095ebc09cc45b121c36afeeed6fab5d089a5331e4f729ca1de15a7a43"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-thermal.dtsi",
+      "git_blob": "1f660deed093b3a81a96946a0157702cb361e928",
+      "sha256": "a0dcf83dccf65fb15baf2bff093f2372354fceb80eebed1d82c90c42c39d459c"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/ipcc-test-canoe.dtsi",
+      "git_blob": "16bd15412f71b053d6591970406b904eff5b02de",
+      "sha256": "ca8645cadd596d9e3dbc15a1f8bfe512c691f31c2cb890161efc20c173c4acd8"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/msm-rdbg.dtsi",
+      "git_blob": "ac83935478ad694054ba56c572c57784dc88981c",
+      "sha256": "33715a9314d5bbb0790e02ace689f092b52bd767f565774bea7dae2f693c006d"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-moto-overlay-base-qrd.dtsi",
+      "git_blob": "24777a92d009c98b84f410ee45e95dc8c15236bd",
+      "sha256": "4e05c00c041975f36ef753be7f8fee85f2c030b387e57538915201e5c717fb10"
+    },
+    {
+      "repository": "motorola-kernel-modules",
+      "commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+      "path": "drivers/channel_id/carrier-channel-ids.dtsi",
+      "git_blob": "a6a473b803874f644dd3bbaa075e7a614c1e9f6d",
+      "sha256": "062c4fce83adfb41d19e5134b4200504b22aa3b0e7be3bdaad4dd6abe300a75a"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmk8850.h",
+      "git_blob": "9be9859da0104acf8ae91435ce3f5c125c6b4e70",
+      "sha256": "4802ffb879a570a4c1e7cae3d936a196522ff3be6b1ac99cbf08424c08ad4cd9"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/interrupt-controller/irq.h",
+      "git_blob": "9e3d183e138191fe5227cb5ffc5ff52d81036b15",
+      "sha256": "392400a309a54ea5b1a2ac2e52773d3ab68e07323109b9aed88a69fedc74e082"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/linux/qcom_dma_heap_dt_constants.h",
+      "git_blob": "89dc83c10d96cd4fcbbb7d6a55a04ec50a2b8b1e",
+      "sha256": "6c52de923ea87f08405f53edd1dd68057df9152c8f38e6c35d0f7572616e7221"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/soc/qcom,dcc_v2.h",
+      "git_blob": "9d5ab3c4bb30bfb73774cc3a36ab931b523a4a37",
+      "sha256": "985a3a1ad566d39164cd3d21dd171b1ce479158d127863ffecdf5c2179a47cd8"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/phy/qcom,usb3-3nm-qmp-combo.h",
+      "git_blob": "3cf660d55cde6a727b29771114b6a8c61c9e9d57",
+      "sha256": "cd7a81092717ab31c77aee7c6c3d01f23cba193ff5a2e692f218040180414d0b"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/thermal/thermal_qti.h",
+      "git_blob": "b98c87422c624c0c270aefa7264adb86074efad4",
+      "sha256": "21e0ae3695f54b61354e3456fcb14ed1615ab59c1ee11bd1a3e970b1680e62ac"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/canoe-thermal-modem.dtsi",
+      "git_blob": "ef35142488e21542190e72d1bb8717f1522490e7",
+      "sha256": "b864f8d8008731f2f4ecaa42ee978aa780501b9c2b7754b8cede987fdf111d48"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-pmic-overlay.dtsi",
+      "git_blob": "06289a57c479cd2c07433cb4ade41d16ba6f7017",
+      "sha256": "ed883b70c7747d59a82d64bf328a29bf87a0c163662eb470340fac23940e2fdf"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-pmih010x-pmd802x.dtsi",
+      "git_blob": "9289c8bcc90e602a94c0faf8512abf1a7984d7c9",
+      "sha256": "c9bc97050964c1a473a0c2713d3a15758bac55a8277531a495c1a0d9b972ab7f"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/alor-thermal-overlay.dtsi",
+      "git_blob": "8247ec99a266d3884c34e3c7b95d62353c1cb29f",
+      "sha256": "c32216c11ba9452504ef60fd7753e8ca17aa4786a9ab7c7f253262e2f05b738f"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-vadc.h",
+      "git_blob": "3a81cef22c0d57f907596309618b1caaaaf7fd71",
+      "sha256": "e45da5c631b3d6993614f8b64dce2c06e3b9ceaf1318a7a484bdfd1506eb6453"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/thermal/thermal.h",
+      "git_blob": "bc7babb1a67cd4910f3bc9c54eefff2a574591b7",
+      "sha256": "d74d498871c3bf3d6aa985ad01c15dfa916614369dbcd832bdcb9d2d45b15e08"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pmk8550.dtsi",
+      "git_blob": "9bdb9d08e94c05676088d55c7371b92792869c70",
+      "sha256": "a88c2edb5bd388bf33ffa4c31938feef93dcacbc2e44e179f874e1eadcc76e1f"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pm8550.dtsi",
+      "git_blob": "928bf32b4eaf0ff17099ccefef0b605fb6e55d55",
+      "sha256": "56e803d66d66ce7f7c421dc5b3734395185dd419bfdb3f2f83e45202299189bf"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pm8550ve.dtsi",
+      "git_blob": "64fb7dc40ed7c7281e7313cacf5764f535aab65c",
+      "sha256": "c9081e80097138cf15d42f7923f16da52da7ea9ddf29dbae68b1201afaa6dabb"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pmr735d.dtsi",
+      "git_blob": "d2bfb3088d02b0b6fafd57765cb93f6be6c8306b",
+      "sha256": "a3d43df4bb920fcfae600254e9334f2f2361015be0d35cfb37088d7da6347303"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pm8010.dtsi",
+      "git_blob": "03f14c18b693d2c0690bdf18ea78243a76249bfb",
+      "sha256": "9ccf4d08d711d9add9b55348d20b5ab3be2e5ff64bba90a163baf1871a4451c1"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h",
+      "git_blob": "5ff44e2ecff3eb456997c7fa726e0a1b53aac33c",
+      "sha256": "7285cb2cef7411bda95eae1db73eeab185a943f1add24def4649ba541caed59c"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pmih010x.dtsi",
+      "git_blob": "1ee1645fdb1fc51fb7da68499549682852b0e12d",
+      "sha256": "8f750307508d5d526aa7dc342c1a5194c0f969d16bb91785ab60c7fd4b8e6d73"
+    },
+    {
+      "repository": "kernel-devicetree",
+      "commit": "82d6411232808183ce951d87a277781cbfb5d6a2",
+      "path": "qcom/pmd802x.dtsi",
+      "git_blob": "277908c9035a63b8cba0e03f01d1033a80d2c5e7",
+      "sha256": "aea2c78e328f26733951027f1b858df57c36b5ebd426864baa9bb00a71c5448e"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/input/input.h",
+      "git_blob": "bcf0ae100f21af8cfe0afc49d0a9107d4dfa62d7",
+      "sha256": "2f7ae2ec64f1b033e9c3d34d9128c0851f86cfffa010a890b46ac49aae4f17ea"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen3-pmk8550.h",
+      "git_blob": "c90212ef1bfb70dee8188be934f40e11f9bdb5a3",
+      "sha256": "40e83a9094d4edad3a66d85b5faa71ef1665bcd3612b603427e96f3f56fc4bf5"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550.h",
+      "git_blob": "83776d7fa4785d294560f819fe7d720fc9190fae",
+      "sha256": "b8de83214228204880afbd53d338263e7106429e453113d85a31a8be0d0a87e0"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550b.h",
+      "git_blob": "52fe8645577aad771d24e9c45cff28a205e165c5",
+      "sha256": "767ace31b997165b81457b795bf20fc15ed7e89a0c6923141e87146d25eea000"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550vx.h",
+      "git_blob": "bc6f8ff04ffea3b55a62df11658194daf06b47f0",
+      "sha256": "41c91619f962a210dc7595ebc696676d96f563ff908122c09e4127d954e6ada4"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/dt-bindings/leds/common.h",
+      "git_blob": "4f017bea01233f008a9dcb24af250b9723769ce4",
+      "sha256": "d947046ba0607ffb2954dd2d0641add3edeec92752e1dedf95913a81c5956492"
+    },
+    {
+      "repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "path": "include/dt-bindings/input/qcom,hv-haptics.h",
+      "git_blob": "edc59e078f6384d6463cff6f4360ab156d40f1b9",
+      "sha256": "066539566a38c465ad5c55ea3717bae5310820b23e4d2e6aaa5b148289e083e1"
+    },
+    {
+      "repository": "kernel-common",
+      "commit": "479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4",
+      "path": "include/uapi/linux/input-event-codes.h",
+      "git_blob": "5a199f3d4a26a22a94e51d4b53aeed3767c97bce",
+      "sha256": "b80e5fca567aca455c6a7ecd53cd162c49f8c774fc49543139333e2fc57dc74b"
+    }
+  ],
+  "include_edges": [
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-base.dts",
+      "include": "alor-moto-common-base.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-base.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-evb-overlay.dtso",
+      "include": "alor-avr-products-common-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-common-base.dtsi",
+      "include": "alor.dtsi",
+      "to": "kernel-devicetree:qcom/alor.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-overlay-base.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-overlay-base.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "moto-alor-avr-pmic.dtsi",
+      "to": "kernel-devicetree:qcom/moto-alor-avr-pmic.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-moto-common-charger.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-common-charger.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-charger-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-charger-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-touchscreen-thp-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-touchscreen-thp-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-fingerprint-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-fingerprint-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-haptics-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-haptics-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-sensors-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-sensors-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-thermal-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-thermal-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-products-common-overlay.dtsi",
+      "include": "alor-avr-moto_uimem.dtsi",
+      "to": "kernel-devicetree:qcom/alor-avr-moto_uimem.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/arm/msm/qti-smmu-proxy-dt-ids.h",
+      "to": "qcom-soc:include/dt-bindings/arm/msm/qti-smmu-proxy-dt-ids.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,cambistmclkcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,cambistmclkcc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-camcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-camcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,dispcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,dispcc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,evacc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,evacc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,gpucc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,gpucc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,gxclkctl-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,gxclkctl-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,tcsrcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,tcsrcc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,videocc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,videocc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,rpmh.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,rpmh.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/soc/qcom,rpmh-rsc.h",
+      "to": "qcom-soc:include/dt-bindings/soc/qcom,rpmh-rsc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/interconnect/qcom,icc.h",
+      "to": "kernel-common:include/dt-bindings/interconnect/qcom,icc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/interconnect/qcom,alor.h",
+      "to": "qcom-soc:include/dt-bindings/interconnect/qcom,alor.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/soc/qcom,ipcc.h",
+      "to": "qcom-soc:include/dt-bindings/soc/qcom,ipcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/mailbox/qcom-ipcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/mailbox/qcom-ipcc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/gpio/gpio.h",
+      "to": "kernel-common:include/dt-bindings/gpio/gpio.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "dt-bindings/clock/qcom,aop-qmp.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,aop-qmp.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-reserved-memory.dtsi",
+      "to": "kernel-devicetree:qcom/alor-reserved-memory.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "msm-arm-smmu-alor.dtsi",
+      "to": "kernel-devicetree:qcom/msm-arm-smmu-alor.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-dma-heaps.dtsi",
+      "to": "kernel-devicetree:qcom/alor-dma-heaps.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-pcie.dtsi",
+      "to": "kernel-devicetree:qcom/alor-pcie.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-debug.dtsi",
+      "to": "kernel-devicetree:qcom/alor-debug.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-coresight.dtsi",
+      "to": "kernel-devicetree:qcom/alor-coresight.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-pinctrl.dtsi",
+      "to": "kernel-devicetree:qcom/alor-pinctrl.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-regulators.dtsi",
+      "to": "kernel-devicetree:qcom/alor-regulators.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-qupv3.dtsi",
+      "to": "kernel-devicetree:qcom/alor-qupv3.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-usb.dtsi",
+      "to": "kernel-devicetree:qcom/alor-usb.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-walt.dtsi",
+      "to": "kernel-devicetree:qcom/alor-walt.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "alor-thermal.dtsi",
+      "to": "kernel-devicetree:qcom/alor-thermal.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "ipcc-test-canoe.dtsi",
+      "to": "kernel-devicetree:qcom/ipcc-test-canoe.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor.dtsi",
+      "include": "msm-rdbg.dtsi",
+      "to": "kernel-devicetree:qcom/msm-rdbg.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-common-overlay-base.dtsi",
+      "include": "alor-moto-overlay-base-qrd.dtsi",
+      "to": "kernel-devicetree:qcom/alor-moto-overlay-base-qrd.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-common-overlay.dtsi",
+      "include": "carrier-channel-ids.dtsi",
+      "to": "motorola-kernel-modules:drivers/channel_id/carrier-channel-ids.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-touchscreen-thp-overlay.dtsi",
+      "include": "dt-bindings/gpio/gpio.h",
+      "to": "kernel-common:include/dt-bindings/gpio/gpio.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-touchscreen-thp-overlay.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen4-pmk8850.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmk8850.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-avr-fingerprint-overlay.dtsi",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/msm-arm-smmu-alor.dtsi",
+      "include": "dt-bindings/interrupt-controller/arm-gic.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/arm-gic.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-dma-heaps.dtsi",
+      "include": "dt-bindings/arm/msm/qcom_dma_heap_dt_constants.h",
+      "to": "qcom-soc:include/linux/qcom_dma_heap_dt_constants.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pcie.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pcie.dtsi",
+      "include": "dt-bindings/gpio/gpio.h",
+      "to": "kernel-common:include/dt-bindings/gpio/gpio.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-debug.dtsi",
+      "include": "dt-bindings/soc/qcom,dcc_v2.h",
+      "to": "qcom-soc:include/dt-bindings/soc/qcom,dcc_v2.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-regulators.dtsi",
+      "include": "dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+      "to": "qcom-soc:include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-usb.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-usb.dtsi",
+      "include": "dt-bindings/phy/qcom,usb3-3nm-qmp-combo.h",
+      "to": "qcom-soc:include/dt-bindings/phy/qcom,usb3-3nm-qmp-combo.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-thermal.dtsi",
+      "include": "dt-bindings/thermal/thermal_qti.h",
+      "to": "qcom-soc:include/dt-bindings/thermal/thermal_qti.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-thermal.dtsi",
+      "include": "canoe-thermal-modem.dtsi",
+      "to": "kernel-devicetree:qcom/canoe-thermal-modem.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/ipcc-test-canoe.dtsi",
+      "include": "dt-bindings/soc/qcom,ipcc.h",
+      "to": "qcom-soc:include/dt-bindings/soc/qcom,ipcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/ipcc-test-canoe.dtsi",
+      "include": "dt-bindings/mailbox/qcom-ipcc-canoe.h",
+      "to": "qcom-soc:include/dt-bindings/mailbox/qcom-ipcc-canoe.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-overlay-base-qrd.dtsi",
+      "include": "alor-pmic-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-overlay-base-qrd.dtsi",
+      "include": "alor-pmih010x-pmd802x.dtsi",
+      "to": "kernel-devicetree:qcom/alor-pmih010x-pmd802x.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-overlay-base-qrd.dtsi",
+      "include": "dt-bindings/clock/qcom,alor-gcc.h",
+      "to": "qcom-soc:include/dt-bindings/clock/qcom,alor-gcc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-moto-overlay-base-qrd.dtsi",
+      "include": "alor-thermal-overlay.dtsi",
+      "to": "kernel-devicetree:qcom/alor-thermal-overlay.dtsi"
+    },
+    {
+      "from": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmk8850.h",
+      "include": "dt-bindings/iio/qcom,spmi-vadc.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-vadc.h"
+    },
+    {
+      "from": "qcom-soc:include/dt-bindings/thermal/thermal_qti.h",
+      "include": "dt-bindings/thermal/thermal.h",
+      "to": "kernel-common:include/dt-bindings/thermal/thermal.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/canoe-thermal-modem.dtsi",
+      "include": "dt-bindings/thermal/thermal_qti.h",
+      "to": "qcom-soc:include/dt-bindings/thermal/thermal_qti.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "dt-bindings/gpio/gpio.h",
+      "to": "kernel-common:include/dt-bindings/gpio/gpio.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "pmk8550.dtsi",
+      "to": "kernel-devicetree:qcom/pmk8550.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "pm8550.dtsi",
+      "to": "kernel-devicetree:qcom/pm8550.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "pm8550ve.dtsi",
+      "to": "kernel-devicetree:qcom/pm8550ve.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "pmr735d.dtsi",
+      "to": "kernel-devicetree:qcom/pmr735d.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmic-overlay.dtsi",
+      "include": "pm8010.dtsi",
+      "to": "kernel-devicetree:qcom/pm8010.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmih010x-pmd802x.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-vadc.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-vadc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmih010x-pmd802x.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmih010x-pmd802x.dtsi",
+      "include": "pmih010x.dtsi",
+      "to": "kernel-devicetree:qcom/pmih010x.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-pmih010x-pmd802x.dtsi",
+      "include": "pmd802x.dtsi",
+      "to": "kernel-devicetree:qcom/pmd802x.dtsi"
+    },
+    {
+      "from": "kernel-devicetree:qcom/alor-thermal-overlay.dtsi",
+      "include": "dt-bindings/thermal/thermal_qti.h",
+      "to": "qcom-soc:include/dt-bindings/thermal/thermal_qti.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/input/input.h",
+      "to": "kernel-common:include/dt-bindings/input/input.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen3-pmk8550.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen3-pmk8550.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550b.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550b.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmk8550.dtsi",
+      "include": "dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550vx.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550vx.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8550.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8550.dtsi",
+      "include": "dt-bindings/leds/common.h",
+      "to": "kernel-common:include/dt-bindings/leds/common.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8550.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8550ve.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8550ve.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmr735d.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmr735d.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8010.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pm8010.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen4-pmih010x.h",
+      "include": "dt-bindings/iio/qcom,spmi-vadc.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-vadc.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmih010x.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmih010x.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmih010x.dtsi",
+      "include": "dt-bindings/input/qcom,hv-haptics.h",
+      "to": "qcom-soc:include/dt-bindings/input/qcom,hv-haptics.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmd802x.dtsi",
+      "include": "dt-bindings/interrupt-controller/irq.h",
+      "to": "kernel-common:include/dt-bindings/interrupt-controller/irq.h"
+    },
+    {
+      "from": "kernel-devicetree:qcom/pmd802x.dtsi",
+      "include": "dt-bindings/spmi/spmi.h",
+      "to": "kernel-common:include/dt-bindings/spmi/spmi.h"
+    },
+    {
+      "from": "kernel-common:include/dt-bindings/input/input.h",
+      "include": "linux-event-codes.h",
+      "to": "kernel-common:include/uapi/linux/input-event-codes.h"
+    },
+    {
+      "from": "qcom-soc:include/dt-bindings/iio/qcom,spmi-adc5-gen3-pm8550vx.h",
+      "include": "dt-bindings/iio/qcom,spmi-vadc.h",
+      "to": "qcom-soc:include/dt-bindings/iio/qcom,spmi-vadc.h"
+    }
+  ],
+  "symlink_aliases": {
+    "kernel-devicetree:qcom/carrier-channel-ids.dtsi": {
+      "source_git_blob": "4db837342b50c0c156041939531458721d81c231",
+      "target": "motorola-kernel-modules:drivers/channel_id/carrier-channel-ids.dtsi"
+    },
+    "qcom-soc:include/dt-bindings/arm/msm/qcom_dma_heap_dt_constants.h": {
+      "source_git_blob": "eaa1e5dbaf2b95a5c69fe8a587e60676e1843805",
+      "target": "qcom-soc:include/linux/qcom_dma_heap_dt_constants.h"
+    },
+    "kernel-common:include/dt-bindings/input/linux-event-codes.h": {
+      "source_git_blob": "693bbcd2670a41ce72418214217c613d8ad52037",
+      "target": "kernel-common:include/uapi/linux/input-event-codes.h"
+    }
+  },
+  "scope": "pinned source inputs only; not a compiled or validated 7.3 DTB"
+}

@@ -1,0 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/* The stock overlay and running tree both identify SoC 685:0x10000 and board
+ * 0x46:0x9000. Preserve those selectors and the original peripheral graph. */
+#include "alor-avr-evb-overlay.dtso"

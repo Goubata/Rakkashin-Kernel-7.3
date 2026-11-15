@@ -1,0 +1,37 @@
+{
+  "stage": 73,
+  "scope": "Native GENI wrapper plus extracted production SPI clock/chip-select helpers with real CCF and fixed guest clock; no physical SPI waveform acceptance",
+  "checks": {
+    "log": "reports/geni-spi-clock-stage73-qemu.log",
+    "test": "geni-bus",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      7,
+      0,
+      0,
+      7
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Actual controller speed table, parent clock/pinctrl/firmware and SPI transactions",
+    "I2C/SPI DMA/FIFO and complete probe/remove/PM lifetimes",
+    "DMA IRQ/terminate/peer-abort modes and SMEM firmware mapping",
+    "Other mandatory drivers and whole-board DT/boot/DLKM/SELinux/physical all-function acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-spi-clock-stage73-check.json": "eca680cd08c57371d8534e3f903dc3b927a5d5ce706f00993aac5ce51514d9d4",
+    "reports/geni-spi-clock-stage73-qemu.log": "a93e926037d101ba17823acef57feb3c30f6cb6899cdb22903542d23e29f80d1",
+    "reports/geni-spi-clock-stage73-qemu.json": "e6dd7ff7896c5ab73944d1d273583a8d2dd942fc10c8dbb1a5faa939c1eab7f4",
+    "reports/geni-spi-clock-stage73-build.log": "3075c386b1a88a0533162965e698bd34034ed61dcdf761d848e54e8ed68a1788",
+    "reports/geni-spi-clock-stage73-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "a46b011de1395d74fa36778fc5e93672b05d90560213839bc4c373b31dcad9da",
+    "patches/geni-bus-7.3.patch": "c5456f018a643c9495d38d1a0e80d20c77c9a817e2b7bd052b34bbd51a63ac72",
+    "tests/geni-bus/avr-geni-bus-test.c": "d66a2db65314371cacc9e3b0396762dd40670d8332bd631f9eff0ede726b4296"
+  }
+}

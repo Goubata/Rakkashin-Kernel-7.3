@@ -818,7 +818,15 @@
 +MODULE_DESCRIPTION("Qualcomm firmware-pinned GENI I2C controller for AVR");
 --- a/ports/geni-bus/spi-msm-geni.c
 +++ b/ports/geni-bus/spi-msm-geni.c
-@@ -170,7 +170,7 @@
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/overflow.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/soc/qcom/geni-se.h>
+@@ -170,7 +171,7 @@
  #define MAX_IPC_LOG_SIZE	30
  
  /* FTRACE Logging */
@@ -827,7 +835,7 @@
  {
  	struct va_format vaf = {
  		.fmt = fmt,
-@@ -315,7 +315,7 @@
+@@ -315,7 +316,7 @@
   *
   * Return:	None
   */
@@ -836,7 +844,47 @@
  				void *ipc)
  {
  	u32 m_cmd0 = 0;
-@@ -765,8 +765,8 @@
+@@ -697,12 +698,17 @@
+ 			int *clk_idx, int *clk_div)
+ {
+ 	unsigned long sclk_freq;
+-	unsigned long res_freq;
++	unsigned long res_freq, target, divider;
+ 	struct geni_se *se = &mas->spi_rsc;
+ 	int ret = 0;
+ 
++	if (!speed_hz || mas->oversampling <= 0 || !clk_idx || !clk_div)
++		return -EINVAL;
++	if (check_mul_overflow((unsigned long)speed_hz,
++			       (unsigned long)mas->oversampling, &target))
++		return -ERANGE;
+ 	ret = geni_se_clk_freq_match(&mas->spi_rsc,
+-				(speed_hz * mas->oversampling), clk_idx,
++				target, clk_idx,
+ 				&sclk_freq, false);
+ 	if (ret) {
+ 		dev_err(mas->dev, "%s: Failed(%d) to find src clk for 0x%x\n",
+@@ -710,13 +716,12 @@
+ 		return ret;
+ 	}
+ 
+-	*clk_div = DIV_ROUND_UP(sclk_freq,  (mas->oversampling*speed_hz));
+-
+-	if (!(*clk_div)) {
+-		dev_err(mas->dev, "%s:Err:sclk:%lu oversampling:%d speed:%u\n",
+-			__func__, sclk_freq, mas->oversampling, speed_hz);
+-		return -EINVAL;
+-	}
++	/* Avoid both target multiplication and round-up addition overflow. */
++	divider = sclk_freq / target + !!(sclk_freq % target);
++	if (!divider || divider > (CLK_DIV_MSK >> CLK_DIV_SHFT))
++		return -ERANGE;
++	*clk_div = divider;
++
+ 
+ 	res_freq = (sclk_freq / (*clk_div));
+ 
+@@ -765,8 +770,8 @@
  {
  	int j;
  
@@ -847,7 +895,7 @@
  		/* Geni SE doesn't support mutliple CS by same client, hence use only one CS */
  			*cs_num = spi_slv->chip_select[j];
  			return 0;
-@@ -2818,7 +2818,7 @@
+@@ -2818,7 +2823,7 @@
  	u8 idx;
  
  	if (spi_is_csgpiod(spi_slv)) {
@@ -856,7 +904,7 @@
  			if (spi_slv->cs_index_mask & BIT(idx)) {
  				struct gpio_desc *desc = spi_get_csgpiod(spi_slv, idx);
  
-@@ -3205,7 +3205,7 @@
+@@ -3205,7 +3210,7 @@
  	return 0;
  }
  
@@ -865,7 +913,7 @@
  {
  	char name[MAX_IPC_NAME_BUF];
  
-@@ -3919,3 +3919,5 @@
+@@ -3919,3 +3924,5 @@
  MODULE_LICENSE("GPL");
  MODULE_ALIAS("platform:spi_geni");
  

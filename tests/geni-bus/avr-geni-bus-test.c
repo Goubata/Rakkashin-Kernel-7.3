@@ -3,6 +3,8 @@
 #include <kunit/test.h>
 #include <linux/io.h>
 #include <linux/module.h>
+#include <linux/clk.h>
+#include <linux/overflow.h>
 #include <linux/of.h>
 #include <linux/of_platform.h>
 #include <linux/platform_device.h>
@@ -10,8 +12,10 @@
 #include <linux/soc/qcom/geni-se.h>
 #include <linux/qcom-geni-se-common.h>
 #define SPI_NUM_CHIPSELECT 4
+/* Reduced private field fixture; actual geni_se and CCF APIs are native. */
+struct spi_geni_master { struct geni_se spi_rsc;struct device *dev;int oversampling; };
 #include "generated.h"
-struct fixture {struct platform_device *pdev;struct geni_se se;void __iomem *base;};
+struct fixture {struct platform_device *pdev;struct geni_se se;void __iomem *base;struct clk *clk;};
 static int setup(struct kunit *test)
 {
  struct fixture *f=kunit_kzalloc(test,sizeof(*f),GFP_KERNEL);struct device_node *node;
@@ -22,7 +26,7 @@ static int setup(struct kunit *test)
  f->se.wrapper=dev_get_drvdata(&f->pdev->dev);f->base=geni_se_get_wrapper_base(&f->se);
  if(!f->base){put_device(&f->pdev->dev);return -ENODEV;}return 0;
 }
-static void cleanup(struct kunit *test){struct fixture *f=test->priv;put_device(&f->pdev->dev);}
+static void cleanup(struct kunit *test){struct fixture *f=test->priv;if(!IS_ERR_OR_NULL(f->clk))clk_put(f->clk);put_device(&f->pdev->dev);}
 static void accessor_uses_actual_native_wrapper(struct kunit *test)
 {
  struct fixture *f=test->priv;struct geni_se empty={};
@@ -53,7 +57,40 @@ static void spi_chip_select_uses_native_array_bounds(struct kunit *test)
  }
  memset(spi->chip_select,SPI_NUM_CHIPSELECT,sizeof(spi->chip_select));KUNIT_EXPECT_LT(test,spi_geni_get_chip_select_num(spi,&cs),0);
 }
-static struct kunit_case cases[]={KUNIT_CASE(accessor_uses_actual_native_wrapper),KUNIT_CASE(wrapper_test_bus_writes_correct_mapping),KUNIT_CASE(missing_wrapper_data_is_not_mmio),KUNIT_CASE(spi_chip_select_uses_native_array_bounds),{}};
+static int prepare_spi_clock(struct fixture *f,struct spi_geni_master *mas)
+{
+ f->clk=clk_get(&f->pdev->dev,"m-ahb");if(IS_ERR(f->clk))return PTR_ERR(f->clk);
+ mas->dev=&f->pdev->dev;mas->spi_rsc.dev=mas->dev;mas->spi_rsc.clk=f->clk;mas->oversampling=1;return 0;
+}
+static void spi_clock_rejects_zero_and_invalid_sampling(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct spi_geni_master mas={};int index=-1,div=-1;
+ KUNIT_ASSERT_EQ(test,prepare_spi_clock(f,&mas),0);
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(0,&mas,&index,&div),-EINVAL);
+ mas.oversampling=0;KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(400000,&mas,&index,&div),-EINVAL);
+ mas.oversampling=-1;KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(400000,&mas,&index,&div),-EINVAL);
+ KUNIT_EXPECT_EQ(test,clk_get_rate(f->clk),19200000ul);
+}
+static void spi_clock_uses_native_ccf_and_wide_product(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct spi_geni_master mas={};int index=-1,div=-1;
+ KUNIT_ASSERT_EQ(test,prepare_spi_clock(f,&mas),0);
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(400000,&mas,&index,&div),0);KUNIT_EXPECT_EQ(test,div,48);
+ mas.oversampling=2;KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(400000,&mas,&index,&div),0);KUNIT_EXPECT_EQ(test,div,24);
+ /* Old u32 product wraps to zero here and reaches native divide-by-zero. */
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(0x80000000u,&mas,&index,&div),0);KUNIT_EXPECT_EQ(test,div,1);
+ KUNIT_EXPECT_EQ(test,clk_get_rate(f->clk),19200000ul);
+}
+static void spi_clock_divider_fits_native_register(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct spi_geni_master mas={};int index=-1,div=-1;
+ KUNIT_ASSERT_EQ(test,prepare_spi_clock(f,&mas),0);
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(5000,&mas,&index,&div),0);KUNIT_EXPECT_EQ(test,div,3840);
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(4000,&mas,&index,&div),-ERANGE);
+ KUNIT_EXPECT_EQ(test,get_spi_clk_cfg(1,&mas,&index,&div),-ERANGE);
+ KUNIT_EXPECT_EQ(test,clk_get_rate(f->clk),19200000ul);
+}
+static struct kunit_case cases[]={KUNIT_CASE(accessor_uses_actual_native_wrapper),KUNIT_CASE(wrapper_test_bus_writes_correct_mapping),KUNIT_CASE(missing_wrapper_data_is_not_mmio),KUNIT_CASE(spi_chip_select_uses_native_array_bounds),KUNIT_CASE(spi_clock_rejects_zero_and_invalid_sampling),KUNIT_CASE(spi_clock_uses_native_ccf_and_wide_product),KUNIT_CASE(spi_clock_divider_fits_native_register),{}};
 static struct kunit_suite suite={.name="avr-geni-bus",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");

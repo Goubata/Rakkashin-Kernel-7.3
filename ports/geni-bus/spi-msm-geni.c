@@ -15,6 +15,7 @@
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/of_platform.h>
+#include <linux/overflow.h>
 #include <linux/platform_device.h>
 #include <linux/pm_runtime.h>
 #include <linux/soc/qcom/geni-se.h>
@@ -697,12 +698,17 @@ static int get_spi_clk_cfg(u32 speed_hz, struct spi_geni_master *mas,
 			int *clk_idx, int *clk_div)
 {
 	unsigned long sclk_freq;
-	unsigned long res_freq;
+	unsigned long res_freq, target, divider;
 	struct geni_se *se = &mas->spi_rsc;
 	int ret = 0;
 
+	if (!speed_hz || mas->oversampling <= 0 || !clk_idx || !clk_div)
+		return -EINVAL;
+	if (check_mul_overflow((unsigned long)speed_hz,
+			       (unsigned long)mas->oversampling, &target))
+		return -ERANGE;
 	ret = geni_se_clk_freq_match(&mas->spi_rsc,
-				(speed_hz * mas->oversampling), clk_idx,
+				target, clk_idx,
 				&sclk_freq, false);
 	if (ret) {
 		dev_err(mas->dev, "%s: Failed(%d) to find src clk for 0x%x\n",
@@ -710,13 +716,12 @@ static int get_spi_clk_cfg(u32 speed_hz, struct spi_geni_master *mas,
 		return ret;
 	}
 
-	*clk_div = DIV_ROUND_UP(sclk_freq,  (mas->oversampling*speed_hz));
+	/* Avoid both target multiplication and round-up addition overflow. */
+	divider = sclk_freq / target + !!(sclk_freq % target);
+	if (!divider || divider > (CLK_DIV_MSK >> CLK_DIV_SHFT))
+		return -ERANGE;
+	*clk_div = divider;
 
-	if (!(*clk_div)) {
-		dev_err(mas->dev, "%s:Err:sclk:%lu oversampling:%d speed:%u\n",
-			__func__, sclk_freq, mas->oversampling, speed_hz);
-		return -EINVAL;
-	}
 
 	res_freq = (sclk_freq / (*clk_div));
 

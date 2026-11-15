@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/geni-bus/msm_gpi.ko",
+      "imports_checked": 90,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/geni-bus/i2c-msm-geni.ko",
+      "imports_checked": 112,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/geni-bus/spi-msm-geni.ko",
+      "imports_checked": 121,
+      "mismatches": {}
+    }
+  ]
+}

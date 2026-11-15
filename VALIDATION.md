@@ -1290,3 +1290,26 @@ with matching imports. Evidence: reports/geni-completion-stage72-validation.json
 Peer-channel abort/cancellation, shared multi-descriptor modes, STOP/RESET/IRQ
 concurrency, physical buses/peripherals and whole-board completion remain pending.
 Drafts are archived separately from Stage57; no deployment promotion occurred.
+
+
+## Stage73: SPI clock target width and divider field limits
+
+Validate nonzero rate and positive sampling before entering native GENI clock
+matching. Widen checked target multiplication and compute ceiling division using
+quotient/remainder rather than overflow-prone addition. Reject divisors outside
+the native CLK_DIV_MSK field before register programming. Requests previously
+accepted with an unrepresentable divider now return -ERANGE; this is intentional
+instead of programming truncated/reserved bits. No DT clock/rate values changed.
+
+Seven SMP4 cases pass: four native wrapper/chip-select regressions and three
+clock cases. The exact production clock method is extracted into a reduced
+private-field fixture using real geni_se/CCF objects and a native 19.2MHz fixed
+clock. Cover zero/negative sampling, zero rate, 400kHz one/two-sample division,
+a target multiplication that formerly wrapped to zero, and valid/invalid divider
+field limits. The enormous test request demonstrates arithmetic behavior only;
+it does not claim that physical SPI can achieve that request. This does not
+exercise the complete SPI driver probe or actual signal timing.
+Reproduce `python scripts/build_geni_bus.py --tests` and QEMU mode `geni-bus`.
+Production modules build with matching imports; drafts stay outside Stage57.
+Evidence: reports/geni-spi-clock-stage73-validation.json. Actual AVR clock table,
+waveforms, FIFO/DMA/peripheral/PM and whole-board acceptance remain pending.

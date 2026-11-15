@@ -1,0 +1,70 @@
+{
+  "scope": "TRNG compatible/register/optional-clock shape and selected saved semantics only; not full schema, hardware availability or entropy-quality proof",
+  "passed": true,
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "nodes": {
+        "/soc/rng@10c3000": {
+          "compatible": "71636f6d2c74726e6700",
+          "reg": "00000000010c30000000000000001000",
+          "clock-providers": []
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/rng@10c3000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/rng@10c3000: one resource covering DATA_OUT/STATUS",
+          "passed": true
+        },
+        {
+          "check": "/soc/rng@10c3000: optional native core clock name",
+          "passed": true
+        },
+        {
+          "check": "exactly one active AVR TRNG",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "nodes": {
+        "/soc/rng@10c3000": {
+          "compatible": "71636f6d2c74726e6700",
+          "reg": "00000000010c30000000000000001000",
+          "clock-providers": []
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/rng@10c3000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/rng@10c3000: one resource covering DATA_OUT/STATUS",
+          "passed": true
+        },
+        {
+          "check": "/soc/rng@10c3000: optional native core clock name",
+          "passed": true
+        },
+        {
+          "check": "exactly one active AVR TRNG",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "source_sha256": "99eb44270ff8bfe80b97afe8907cd2f878cbf037c018492180396721b63cc5a0",
+  "saved_semantics_preserved": true,
+  "dt_modified": false,
+  "physical_verified": false,
+  "whole_board_accepted": false,
+  "errors": []
+}

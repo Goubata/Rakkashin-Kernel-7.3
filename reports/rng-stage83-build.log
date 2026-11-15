@@ -1,0 +1,22 @@
+Native patch replay: 18 patches, 64 exact files
+Verified pinned native Qualcomm RNG patch replay: 2 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-rng'
+  CC [M]  qcom-rng.o
+  MODPOST Module.symvers
+  CC [M]  qcom-rng.mod.o
+  CC [M]  .module-common.o
+  LD [M]  qcom-rng.ko
+  BTF [M] qcom-rng.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-rng'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/rng'
+  CC [M]  avr-rng-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-rng-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-rng-test.ko
+  BTF [M] avr-rng-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/rng'
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,31 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-rng/qcom-rng.c",
+      "source": "drivers/char/hw_random/qcom-rng.c",
+      "original_sha256": "4dde34ec796c120c3976421431159b247625b01ebfa1e15807fbc4a276aabf2b",
+      "sha256": "99eb44270ff8bfe80b97afe8907cd2f878cbf037c018492180396721b63cc5a0"
+    },
+    {
+      "file": "ports/qcom-rng/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "a9bf894da0851b6d440968b298503d0fafd214b009ad3677943ee9d7a4a61619"
+    }
+  ],
+  "patch_sha256": "20554ec1735306b77164379f559f0fc70f04c0e3b1d08019678d2332adf894af",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Source/patch replay only; unaccepted hardware RNG draft",
+  "reviewed_changes": [
+    "Build the pinned native 7.3 qcom,trng driver externally with native hwrng and optional clock APIs",
+    "Honor nonblocking reads without sleeping, leave zero-length requests inert and return already copied bytes when a later FIFO wait fails",
+    "Bound the size_t callback request by INT_MAX before narrowing; reject a nonempty NULL buffer"
+  ],
+  "pending": [
+    "Real entropy source/firmware/health and byte-stream quality; no private-RAM data fed to the kernel entropy pool",
+    "Physical hwrng registration, clock ownership, probe/remove and suspend/early boot behavior",
+    "All remaining drivers and whole-board DT/boot/DLKM/SELinux acceptance"
+  ]
+}

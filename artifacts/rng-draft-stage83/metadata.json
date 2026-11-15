@@ -1,0 +1,7 @@
+{
+  "scope": "Exact native-derived TRNG read methods with recorded FIFO/MMIO, native polling/CCF and production driver registration only; no entropy provider or statistical quality test",
+  "image_sha256": "d1fc48d77360166d54d5be44ce2044ecf9d04da0d9727d24abcf201738eac0c5",
+  "external_module": true,
+  "promoted": false,
+  "physical_verified": false
+}

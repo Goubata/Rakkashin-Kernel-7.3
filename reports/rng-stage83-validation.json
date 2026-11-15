@@ -1,0 +1,40 @@
+{
+  "stage": 83,
+  "scope": "Exact native-derived TRNG read methods with recorded FIFO/MMIO, native polling/CCF and production driver registration only; no entropy provider or statistical quality test",
+  "checks": {
+    "log": "reports/rng-stage83-qemu.log",
+    "test": "rng",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      11,
+      0,
+      0,
+      11
+    ]
+  },
+  "dt_passed": true,
+  "physical_verified": false,
+  "promoted": false,
+  "synthetic_entropy_provider_registered": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Physical entropy source, firmware state, availability, health and quality validation",
+    "Physical hwrng probe/clock lifecycle/remove/suspend and early boot integration",
+    "Remaining drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/rng-stage83-check.json": "7b46776f0be5247bbb422b38c27d7df517175bcf91ab4c148d9681ca8d4c4698",
+    "reports/rng-stage83-qemu.log": "55cf69e619defc60aa0664fe036e7d9eb4649ae010095d652f759a70b5af1da4",
+    "reports/rng-stage83-qemu.json": "d7d7ed1862b835614011fc92c5ae776e7af23b87d1ce5b01086e7482636a75b4",
+    "reports/rng-stage83-build.log": "92b91f00c91f8862963129e64a831f983fa4f94b5e546a1342252a6f4ea94b29",
+    "reports/rng-stage83-crc.json": "7077ed173cccf8fab42e51c392a0174f66db9aee038f5e40e7deff7253500f59",
+    "reports/rng-stage83-dt.json": "18f8cf7b9d7d9d18992a70c3b2d5102d1bfee3ffdeb706f12429b4df75dd4f68",
+    "reports/rng-source-lock.json": "4474cdf2139fe3fc504a03e739f8c34e88090ac005272a0d274ba22bb0f89795",
+    "reports/rng-source-inputs.json": "e1be60ff794ecb7a118ddb92246bc1b61b7606d5bb9efca328345f276498ce4d",
+    "patches/rng-7.3.patch": "20554ec1735306b77164379f559f0fc70f04c0e3b1d08019678d2332adf894af",
+    "tests/rng/avr-rng-test.c": "2678df9f684323b15eb4371f4186e8283228c1a865dd470a7a4199fefb44df4f"
+  }
+}

@@ -1560,3 +1560,28 @@ Evidence: reports/geni-pm-stage82-validation.json. Reproduce build_geni_bus.py
 --pm-tests and QEMU mode geni-pm (27 cases). Three production modules rebuild
 with 323 matching imports. Full suspend/remove/VM/DMA/firmware and whole-board
 acceptance remain pending. Stage57 stays unchanged; no partition writes occurred.
+
+## Stage83: native-derived AVR TRNG driver and DT resource audit
+
+Build pinned native 7.3 qcom-rng as an external draft matching the saved active
+qcom,trng node at /soc/rng@10c3000. Verify one TM resource covering data/status,
+the native true-random match entry, and the absent optional core-clock path.
+Selected saved/candidate normalized DT properties are equal. No DT was modified;
+this is a resource-shape audit, not full schema or entropy acceptance.
+
+Honor hwrng wait=false without sleeping, make zero-length requests inert,
+return copied bytes if a later FIFO wait fails, bound size_t requests before
+narrowing to an int-returning read, and reject nonempty NULL buffers. Preserve
+native registration/entropy quality and clock APIs. Eleven SMP4 cases pass
+without WARN/panic using exact full source, recorded FIFO MMIO, native polling
+and native absent/fixed-rate clock APIs. Cover tails 1..65 and unaligned guards,
+empty/nonblocking/partial/delayed FIFO, blocking timeout, copied prefix, a zero
+word, oversized request and clock lifetime. Actual production driver registration
+and unload also pass in the guest. No synthetic entropy provider is registered
+and no recorded bytes are fed to the kernel entropy pool.
+
+Reproduce build_rng.py --tests, audit_rng_dt.py and QEMU mode rng (11 cases).
+Imports match the current core. Evidence: reports/rng-stage83-validation.json.
+Physical source/firmware/entropy health and quality, probe/remove/suspend and
+whole-board daily-use acceptance remain pending. Draft archive is separate from
+Stage57; no phone MMIO/partition writes or physical 7.3 boot occurred.

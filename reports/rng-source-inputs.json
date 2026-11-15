@@ -1,0 +1,6 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": {
+    "ports/qcom-rng/qcom-rng.c": "drivers/char/hw_random/qcom-rng.c"
+  }
+}

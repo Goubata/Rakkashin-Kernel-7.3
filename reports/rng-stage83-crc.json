@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-rng/qcom-rng.ko",
+      "imports_checked": 22,
+      "mismatches": {}
+    }
+  ]
+}

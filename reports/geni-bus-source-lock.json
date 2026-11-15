@@ -5,7 +5,7 @@
       "file": "ports/geni-bus/msm_gpi.c",
       "source": "drivers/dma/qcom/msm_gpi.c",
       "original_sha256": "ad77b196d7d8a24d21f490fe697b329efc911602b12e1e219063b67ea19152d7",
-      "sha256": "3a07bf2e7f1a3f372c89d69d0f8e7e55b6b4ffb3fd3f202887a5c2f13e938b23"
+      "sha256": "aff7a71116686db30582476313c4fbaf9322f9812a1a93108d84b78797aed057"
     },
     {
       "file": "ports/geni-bus/msm_gpi_mmio.h",
@@ -56,7 +56,7 @@
       "sha256": "3fd839f7033685de98043702ddc35ea7faec4632cfce24baba6a1a035730b329"
     }
   ],
-  "patch_sha256": "95b2b86dbfc9de78326c53afb091992d1eb0b1d832f2095a5c70c575360d40b2",
+  "patch_sha256": "0210af97fd849c37f49acb1d7dc75bacad0391adc97687866cff457656c1be14",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted GENI bus driver drafts",
@@ -64,7 +64,8 @@
     "Keep non-exported implementation methods static and supply exact factory trace headers for external build",
     "Assert equality of 35 overlapping native register constants instead of silently overriding them",
     "Use the new native wrapper mapping accessor instead of casting private data to the wrong structure",
-    "Bound SPI chip-select scanning by the actual native array while preserving hardware four-CS limit"
+    "Bound SPI chip-select scanning by the actual native array while preserving hardware four-CS limit",
+    "Validate ring geometry before allocation, widen multiplication and bound power-of-two rounding; reject live-ring replacement and never DMA-free SMEM backing"
   ],
   "pending": [
     "GPI DMA rings, interrupt/completion and descriptor lifetime, remove/probe failures",

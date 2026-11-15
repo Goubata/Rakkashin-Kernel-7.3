@@ -1,0 +1,34 @@
+{
+  "stage": 69,
+  "scope": "Exact production ring allocation/queue/recycle/free methods using native coherent DMA on private guest RAM; synthetic SMEM arena only",
+  "checks": {
+    "log": "reports/geni-ring-stage69-qemu.log",
+    "test": "geni-ring",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      6,
+      0,
+      0,
+      6
+    ]
+  },
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Descriptor prep/submit/completion and real IRQ/DMA transactions",
+    "SMEM arena reclamation and initialized firmware DMA mapping; no hardware SMEM tests",
+    "Probe/remove/concurrent operation and peripheral/whole-board acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-ring-stage69-check.json": "d407efe7b40cd0bfde365b5809334d796bc97e1b8ff29c6dbc5f012812f499b5",
+    "reports/geni-ring-stage69-qemu.log": "ca2bda09f6f77c3edeee8ba387073ad498b81fa254e4b8a669959d071cbc29a0",
+    "reports/geni-ring-stage69-qemu.json": "97afbf5536c49a781e004883c7a7e53dd8ba6f5e7c0cddd5009230afcd9ed9cd",
+    "reports/geni-ring-stage69-build.log": "540b86efe9d1ead29c61b23db29d4c608bbd90e36b647f92349276e175ecc6de",
+    "reports/geni-ring-stage69-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "22eae300d726842873001b8f8572e3e7bdd1c476f4057fab9cfb3effd6d30b5c",
+    "patches/geni-bus-7.3.patch": "0210af97fd849c37f49acb1d7dc75bacad0391adc97687866cff457656c1be14"
+  }
+}

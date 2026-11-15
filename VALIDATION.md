@@ -1194,3 +1194,25 @@ artifacts/geni-drafts-stage68 separately from the main Stage57 bundle.
 Evidence: reports/geni-bus-stage68-validation.json. DMA rings/descriptor/IRQ
 lifecycle, physical transfers, other mandatory drivers and whole-board gates
 remain incomplete; no draft promotion or daily-use acceptance is claimed.
+
+
+## Stage69: GPI ring geometry, arithmetic and backing ownership
+
+Widen elements*element_size before multiplication, reject zero/one-slot and
+non-power-of-two element geometry, bound rounded length to the u32 ring field,
+and use defined power-of-two rounding. Reject reallocating a configured ring.
+Use subtraction bounds for private SMEM arena limits. Free only an actually
+owned coherent allocation; SMEM backing and repeated release never call the
+DMA free API with a NULL/unowned buffer. SMEM bump-arena reclamation and real
+firmware mapping remain unresolved; this is not complete SMEM support.
+
+Six SMP4 QEMU cases include exact production GPI source, with registration
+disabled only in the test translation unit. Native dma_alloc_coherent/free,
+not allocation mocks, exercise alignment/zeroing, 65-element rounding, duplicate
+allocation/idempotent free, reserved-slot/full/wrap behavior, recycle/translation
+and geometry/overflow rejection. A separate private synthetic SMEM arena tests
+carving/bounds/owner-free; no real shared firmware memory is accessed.
+Reproduce `python scripts/build_geni_bus.py --ring-tests` and QEMU mode
+`geni-ring`. All three production modules rebuild and import CRCs match.
+Evidence: reports/geni-ring-stage69-validation.json. Drafts remain excluded
+from the main bundle; descriptor/IRQ/actual transfer and whole-board gates remain.

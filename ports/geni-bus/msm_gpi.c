@@ -16,6 +16,7 @@
 #include <linux/interrupt.h>
 #include <linux/ipc_logging.h>
 #include <linux/kernel.h>
+#include <linux/log2.h>
 #include <linux/module.h>
 #include <linux/of.h>
 #include <linux/of_address.h>
@@ -3194,8 +3195,9 @@ static void gpi_ring_recycle_ev_element(struct gpi_ring *ring)
 static void gpi_free_ring(struct gpi_ring *ring,
 			  struct gpii *gpii)
 {
-	dma_free_coherent(gpii->gpi_dev->dev, ring->alloc_size,
-			  ring->pre_aligned, ring->dma_handle);
+	if (ring->pre_aligned)
+		dma_free_coherent(gpii->gpi_dev->dev, ring->alloc_size,
+				  ring->pre_aligned, ring->dma_handle);
 	memset(ring, 0, sizeof(*ring));
 }
 
@@ -3205,14 +3207,18 @@ static int gpi_alloc_ring(struct gpi_ring *ring,
 			  u32 el_size,
 			  struct gpii *gpii)
 {
-	u64 len = elements * el_size;
-	int bit;
+	u64 len = (u64)elements * el_size;
 
-	/* ring len must be power of 2 */
-	bit = find_last_bit((unsigned long *)&len, 32);
-	if (((1 << bit) - 1) & len)
-		bit++;
-	len = 1 << bit;
+	if (ring->configured)
+		return -EBUSY;
+	/* A ring reserves one slot; reject zero and invalid division geometry. */
+	if (elements < 2 || !is_power_of_2(el_size))
+		return -EINVAL;
+	/* The hardware and software ring length are u32; round without UB. */
+	if (len > BIT_ULL(31))
+		return -EOVERFLOW;
+	len = roundup_pow_of_two((unsigned long)len);
+
 	ring->alloc_size = (len + (len - 1));
 	GPII_INFO(gpii, GPI_DBG_COMMON,
 		  "#el:%u el_size:%u len:%u actual_len:%llu alloc_size:%lu\n",
@@ -3220,7 +3226,8 @@ static int gpi_alloc_ring(struct gpi_ring *ring,
 		  ring->alloc_size);
 
 	if (gpii->gpi_dev->is_use_smem_region) {
-		if ((gpii->gpi_dev->smem_base + len) > gpii->gpi_dev->smem_max_addr) {
+		if (gpii->gpi_dev->smem_base > gpii->gpi_dev->smem_max_addr ||
+		    len > gpii->gpi_dev->smem_max_addr - gpii->gpi_dev->smem_base) {
 			GPII_ERR(gpii, GPI_DBG_COMMON, "SMEM region exceeded for GPI driver\n");
 			return -ENOMEM;
 		} else if (len == TX_RX_RING_LEN || len == EVENT_RING_LEN) {

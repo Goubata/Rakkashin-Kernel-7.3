@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む114モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む116モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -610,3 +610,19 @@ callbackから別client登録・解除競合・不正cookie/NULL通知を8件確
 最新部分成果物はartifacts/android73-panel-event-stage52/の114モジュール。
 `reports/panel-event-stage52-validation.json`。実display/touch producer/consumer、
 全driver/boot/ROMのsoftware readinessは未完。callback内からの同期unregisterは禁止。
+
+
+## Stage53: Motorola touch依存・relay binding
+
+mmi_relayとsensors_classの実装を移植。relayを初期化完了後に公開し、削除時はSRCUで
+API/callbackを排出。通知中の全体mutexを取り除き、各native notifierのlockを使う。
+provider消失後のunregisterも進行中callbackを待つ。sensor classは20属性をgroupで
+まとめて公開し、途中失敗時のdevice core rollbackを使う。header/属性名/permissionは維持。
+実API・実platform probe/remove・実sensor device登録の9件がSMP4で成功。
+
+保存/稼働DTにはmmi,sys-relayがなく、実機もdriverにbound deviceがないことを読み取り確認。
+候補DTへ/soc/mmi-relayを1ノード追加。既存全property/順序/reservationとGPU21段階は不変。
+実OFでのpopulateとROM consumerの受入は別途必要。
+最新部分成果物はartifacts/android73-moto-touch-deps-stage53/の116モジュールとcandidate.dtb。
+これはflash可能な画像でもwhole-board受入済みDTでもない。
+`reports/moto-touch-deps-stage53-validation.json`。Goodix本体等とsoftware readinessは未完。

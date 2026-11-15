@@ -1,0 +1,49 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": [
+    {
+      "file": "ports/moto-touch-deps/mmi_relay.c",
+      "source": "drivers/mmi_relay/mmi_relay.c",
+      "original_sha256": "40c42959b69fdb24a4e792f3cf1bdd222c383b94c39ceb1aa847d96dfc7022c6",
+      "sha256": "03f23de5cf82ca2d130a591c972f045ca6497953e124c09010a12b069622099e"
+    },
+    {
+      "file": "ports/moto-touch-deps/sensors_class.c",
+      "source": "drivers/sensors/sensors_class.c",
+      "original_sha256": "8aadd97786b1859e27e416e707ab1973210b7b94f404aedd78a8b5d0ae1d42ea",
+      "sha256": "e905839fc01389c400c780c5061b5b37939bd2f51ddc9e01ca38418801dbc9fa"
+    },
+    {
+      "file": "ports/moto-touch-deps/include/linux/mmi_relay.h",
+      "source": "include/linux/mmi_relay.h",
+      "original_sha256": "ab0d81b94939fc2ac58d6e8cecfd2124483f99968c03c7b385aba58517c2ca4f",
+      "sha256": "e2903974992a92482f409bc8c6c06e8c5120dbaeb97eac0133b00ed416e94ae9"
+    },
+    {
+      "file": "ports/moto-touch-deps/include/linux/sensors.h",
+      "source": "include/linux/sensors.h",
+      "original_sha256": "ad14c9ed343e86d95b73d38e465bf6e2e0db891849e662d1bc4eba5dd9914532",
+      "sha256": "ad14c9ed343e86d95b73d38e465bf6e2e0db891849e662d1bc4eba5dd9914532"
+    },
+    {
+      "file": "ports/moto-touch-deps/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "b7cdf8957b26aabf51c7ff384e869c4c41267c36afaf671c5bec716d59618cb7"
+    }
+  ],
+  "patch_sha256": "23dc8c748df84ba85944750c1d3208637ef37d362920a4536dba499833dbcade",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Factory Motorola relay and sensors class with selected API/lifetime checks; partial packaging only",
+    "Publish fully initialized singleton relay, SRCU-unpublish/drain on remove, drain absent-provider unregister",
+    "Use real notifier head locking without global mutex held across callbacks; validate enum and notifier inputs",
+    "Use atomic device attribute groups for sensor class registration with framework rollback on failure; reject missing names and clear device after unregister; factory names/modes preserved"
+  ],
+  "pending": [
+    "Full consumer recursion constraints, reprobe coordination and sensor sysfs callbacks",
+    "Actual OF binding, touch/gesture/ROM integration and physical acceptance"
+  ]
+}

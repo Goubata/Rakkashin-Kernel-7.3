@@ -1,0 +1,23 @@
+{
+  "scope": "add one source-defined software relay provider binding only; not physical/whole-board DT acceptance",
+  "passed": true,
+  "base_file": "artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb",
+  "base_sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+  "overlay_source": "ports/device-tree/moto/avr-mmi-relay.dtso",
+  "overlay_source_sha256": "340ff85a2b47a6c7841cabc80d893a6e43f2c2504da90e35eae7bce77388ef6c",
+  "candidate_file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+  "candidate_sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+  "added_node": "/soc/mmi-relay",
+  "binding": "mmi,sys-relay",
+  "preexisting_node_properties_and_order_unchanged": true,
+  "reservation_map_unchanged": true,
+  "saved_gpu_levels_unchanged": 21,
+  "physical_verified": false,
+  "partition_written": false,
+  "whole_board_dt_accepted": false,
+  "reason": "Neither saved nor running AVR tree contains the factory relay compatible; loaded stock relay driver has no bound device. Candidate provides a broker instance instead of leaving all APIs uninitialized. Real framework probe/API behavior is tested separately on synthetic platform devices.",
+  "pending": [
+    "Actual OF platform population with this candidate and ROM consumers",
+    "Whole-board SID4 conflict and all existing DT/boot acceptance gaps"
+  ]
+}

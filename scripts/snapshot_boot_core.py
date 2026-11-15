@@ -26,11 +26,16 @@ parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
 parser.add_argument('--pmic-ipc',action='store_true')
 parser.add_argument('--pmic-glink',action='store_true')
+parser.add_argument('--moto-touch-deps',action='store_true')
 parser.add_argument('--panel-event',action='store_true')
 parser.add_argument('--power-key',action='store_true')
 parser.add_argument('--sdam',action='store_true')
 parser.add_argument('--rtc',action='store_true')
 args=parser.parse_args()
+if args.moto_touch_deps:
+    subprocess.run(['python',str(ROOT/'scripts/audit_moto_touch_deps_sources.py')],check=True)
+    subprocess.run(['python',str(ROOT/'scripts/build_moto_relay_dt.py')],check=True)
+    args.spmi=True
 if args.panel_event:
     subprocess.run(['python',str(ROOT/'scripts/audit_panel_event_sources.py')],check=True)
 if args.power_key:
@@ -59,6 +64,8 @@ dst=ROOT/'artifacts'/args.name
 dst.mkdir(parents=True,exist_ok=True)
 for path,name in [(out/'arch/arm64/boot/Image','Image'),(out/'.config','config'),(out/'Module.symvers','Module.symvers'),(out/'System.map','System.map')]:
     shutil.copyfile(path,dst/name)
+if args.moto_touch_deps:
+    shutil.copyfile(ROOT/'artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb',dst/'candidate.dtb')
 modules=[]
 ports=['qcom-clock-core','qcom-rpmh','qcom-clock-controllers','qcom-irq','pinctrl-alor-vendor-core','avr-oplus-sync']
 if args.gpu_deps:
@@ -86,6 +93,8 @@ if args.adc_thermal:
     ports.append('qcom-adc-thermal')
 if args.pmic_glink:
     ports.append('qcom-pmic-glink')
+if args.moto_touch_deps:
+    ports.append('moto-touch-deps')
 if args.panel_event:
     ports.append('qcom-panel-event')
 if args.power_key:
@@ -115,6 +124,8 @@ report={
     'module_count':len(modules),'modules':sorted(name for _,name in modules),
     'image_sha256':hashlib.sha256((dst/'Image').read_bytes()).hexdigest(),
 }
+if args.moto_touch_deps:
+    report['candidate_dtb']={'file':'candidate.dtb','sha256':hashlib.sha256((dst/'candidate.dtb').read_bytes()).hexdigest(),'whole_board_accepted':False,'scope':'stage19 candidate plus relay broker node; existing properties/order and saved GPU21 unchanged'}
 (dst/'metadata.json').write_text(json.dumps(report,indent=2)+'\n')
 files=sorted(p for p in dst.rglob('*') if p.is_file() and p.name!='SHA256SUMS')
 (dst/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.relative_to(dst).as_posix()+'\n' for p in files))

@@ -1,0 +1,10 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": {
+    "ports/moto-touch-deps/mmi_relay.c": "drivers/mmi_relay/mmi_relay.c",
+    "ports/moto-touch-deps/sensors_class.c": "drivers/sensors/sensors_class.c",
+    "ports/moto-touch-deps/include/linux/mmi_relay.h": "include/linux/mmi_relay.h",
+    "ports/moto-touch-deps/include/linux/sensors.h": "include/linux/sensors.h",
+    "ports/moto-touch-deps/Makefile": null
+  }
+}

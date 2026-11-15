@@ -800,3 +800,31 @@ physical display/touch acceptance. Stage52 partial snapshot contains 114 modules
 with matching import CRCs, complete hard/soft dependencies and an acyclic graph.
 It excludes Alor PAS draft and remains non-flashable/software-readiness false.
 Evidence: reports/panel-event-stage52-validation.json.
+
+
+## Stage53: actual Motorola relay and sensor class APIs
+
+Nine SMP4 cases pass: blocking payload, atomic-context atomic notifications,
+type/device isolation, invalid argument rejection, metadata callback registering
+another notifier type, client drain, provider removal plus absent-provider
+unregister drain/reprobe, real sensor registration and invalid sensor arguments.
+These exercise real exported modules and actual platform probe/remove, not copied
+test implementations. Relay is fully initialized before singleton publication,
+unpublished/SRCU-drained before free, and never holds a global mutex across
+notification callbacks. Native chain recursion rules still apply; modification
+of a chain from its own callback and callback unregister are forbidden.
+
+Sensor registration uses device attribute groups rather than ignoring individual
+attribute failures. The native device core supplies rollback; forced group failure
+and full sysfs/calibration operations are not tested. Sequential unregister clears
+the device/list linkage; concurrent unregister is not accepted. Header ABI and
+all 20 attribute names/modes/callbacks are preserved by selected static comparison.
+
+Saved/running stock DT has no relay node; live stock driver has no bound device.
+A new optional candidate adds exactly /soc/mmi-relay using factory compatible.
+Every existing node property/order, reserved map and saved 21-level GPU table is
+unchanged. Actual OF population/ROM consumers remain pending. The partial Stage53
+bundle has 116 modules and candidate.dtb, all imports match and hard/soft deps are
+present/acyclic. Whole-board DT (including existing SID4 conflict), boot packaging,
+Goodix/other drivers and physical/software-readiness gates remain open.
+Evidence: reports/moto-touch-deps-stage53-validation.json.

@@ -1,0 +1,77 @@
+{
+  "scope": "running stock driver/input metadata only; no SPI transfers, firmware commands, key injection or device writes",
+  "captured_utc": "2026-11-15T06:31:21.096509+00:00",
+  "writes": false,
+  "candidate_verified": false,
+  "relay_driver_present": true,
+  "relay_bound_devices": [],
+  "inputs": [
+    {
+      "path": "/sys/class/input/input0",
+      "name": "gpio-keys",
+      "phys": "gpio-keys/input0"
+    },
+    {
+      "path": "/sys/class/input/input1",
+      "name": "Moto CapSense Ch0",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input10",
+      "name": "gdix_input_agent",
+      "phys": "gdix_input_agent"
+    },
+    {
+      "path": "/sys/class/input/input11",
+      "name": "double-tap",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input2",
+      "name": "Moto CapSense Ch1",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input3",
+      "name": "Moto CapSense Ch2",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input4",
+      "name": "Moto CapSense Ch3",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input5",
+      "name": "Moto CapSense Ch4",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input6",
+      "name": "pmic_pwrkey",
+      "phys": "pmic_pwrkey/input0"
+    },
+    {
+      "path": "/sys/class/input/input7",
+      "name": "pmic_resin",
+      "phys": "pmic_resin/input0"
+    },
+    {
+      "path": "/sys/class/input/input8",
+      "name": "qcom-hv-haptics",
+      "phys": ""
+    },
+    {
+      "path": "/sys/class/input/input9",
+      "name": "goodix_stylus_input",
+      "phys": "goodix_stylus_input"
+    }
+  ],
+  "spi_devices": [
+    {
+      "path": "/sys/bus/spi/devices/spi4.0",
+      "driver": "/sys/bus/spi/drivers/goodix_thp_drvier",
+      "modalias": "spi:goodix_thp"
+    }
+  ]
+}

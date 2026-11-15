@@ -1,0 +1,443 @@
+--- a/ports/moto-touch-deps/mmi_relay.c
++++ b/ports/moto-touch-deps/mmi_relay.c
+@@ -13,6 +13,7 @@
+ #include <linux/mutex.h>
+ #include <linux/mmi_relay.h>
+ #include <linux/slab.h>
++#include <linux/srcu.h>
+ 
+ typedef struct _relay_node {
+     struct list_head list;
+@@ -31,172 +32,137 @@
+     relay_node nodes[NUM_TYPES][NUM_DEVS];
+     unsigned notifier_nums;
+ };
+-static struct mmi_relay_dev* relay_dev;
+-
+-/*
+- * Informs the registered notifiers about an event
+- * @type: notification type: atomic blocking
+- * @dev: notification sender
+- * @val: value passed to notifier function
+- */
+-
+-int relay_notifier_fire(notifier_t type, notifier_d dev, unsigned long val, void *v)
+-{
+-    int ret = 0;
+-
+-    if(!relay_dev) {
+-        pr_err("Device is not initialized\n");
++static struct mmi_relay_dev __rcu *relay_dev;
++static DEFINE_MUTEX(relay_provider_lock);
++DEFINE_STATIC_SRCU(relay_provider_srcu);
++
++enum relay_operation { RELAY_FIRE, RELAY_REGISTER, RELAY_UNREGISTER };
++
++static int relay_call(struct mmi_relay_dev *relay, notifier_t type,
++                      notifier_d dev, unsigned long val, void *data)
++{
++    if (type == ATOMIC)
++        return atomic_notifier_call_chain(&relay->nodes[type][dev].atomic_head,
++                                          val, data);
++    return blocking_notifier_call_chain(&relay->nodes[type][dev].blocking_head,
++                                        val, data);
++}
++
++static int relay_action(notifier_t type, notifier_d dev,
++                        struct notifier_block *nb, unsigned long val, void *data,
++                        enum relay_operation operation)
++{
++    struct mmi_relay_dev *relay;
++    bool missing;
++    int index, ret;
++
++    if ((unsigned int)type >= NUM_TYPES || (unsigned int)dev >= NUM_DEVS)
++        return -EPERM;
++    if (operation != RELAY_FIRE && (!nb || !nb->notifier_call))
+         return -EINVAL;
+-    }
+-
+-    if(type >= NUM_TYPES || dev >= NUM_DEVS) {
+-        pr_err("Relay error type or dev\n");
+-        return -EPERM;
+-    }
+-    switch(type) {
+-        case ATOMIC:
+-        {
+-            struct atomic_notifier_head* h = &relay_dev->nodes[type][dev].atomic_head;
+-            ret = atomic_notifier_call_chain(h, val, v);
+-            break;
++
++    index = srcu_read_lock(&relay_provider_srcu);
++    relay = srcu_dereference(relay_dev, &relay_provider_srcu);
++    missing = !relay;
++    if (missing) {
++        ret = -EINVAL;
++        goto out;
++    }
++    if (operation == RELAY_FIRE) {
++        ret = relay_call(relay, type, dev, val, data);
++        goto out;
++    }
++
++    /* Each real notifier head serializes itself. Never hold a provider mutex
++     * across callbacks or native notifier unregister's drain operation. */
++    if (type == ATOMIC) {
++        struct atomic_notifier_head *head = &relay->nodes[type][dev].atomic_head;
++        ret = operation == RELAY_REGISTER ?
++            atomic_notifier_chain_register(head, nb) :
++            atomic_notifier_chain_unregister(head, nb);
++    } else {
++        struct blocking_notifier_head *head = &relay->nodes[type][dev].blocking_head;
++        ret = operation == RELAY_REGISTER ?
++            blocking_notifier_chain_register(head, nb) :
++            blocking_notifier_chain_unregister(head, nb);
++    }
++    if (!ret)
++        relay_call(relay, type, MMI_RELAY,
++                   operation == RELAY_REGISTER ? RELAY_NOTIFY_REGISTER :
++                                                RELAY_NOTIFY_UNREGISTER, NULL);
++out:
++    srcu_read_unlock(&relay_provider_srcu, index);
++    /* A removed provider may still be draining a previously started callback.
++     * Even a missing-provider unregister must wait before caller data is freed. */
++    if (missing && operation == RELAY_UNREGISTER)
++        synchronize_srcu(&relay_provider_srcu);
++    return ret;
++}
++
++int relay_notifier_fire(notifier_t type, notifier_d dev, unsigned long val, void *data)
++{
++    return relay_action(type, dev, NULL, val, data, RELAY_FIRE);
++}
++EXPORT_SYMBOL_GPL(relay_notifier_fire);
++
++int relay_register_action(notifier_t type, notifier_d dev, struct notifier_block *nb)
++{
++    return relay_action(type, dev, nb, 0, NULL, RELAY_REGISTER);
++}
++EXPORT_SYMBOL_GPL(relay_register_action);
++
++int relay_unregister_action(notifier_t type, notifier_d dev, struct notifier_block *nb)
++{
++    return relay_action(type, dev, nb, 0, NULL, RELAY_UNREGISTER);
++}
++EXPORT_SYMBOL_GPL(relay_unregister_action);
++
++static int mmi_relay_probe(struct platform_device *pdev)
++{
++    struct mmi_relay_dev *relay;
++    unsigned int i, j;
++
++    relay = kzalloc(sizeof(*relay), GFP_KERNEL);
++    if (!relay)
++        return -ENOMEM;
++    relay->pdev = pdev;
++    relay->notifier_nums = NUM_DEVS * NUM_TYPES;
++    mutex_init(&relay->lock);
++    for (i = 0; i < NUM_TYPES; i++) {
++        for (j = 0; j < NUM_DEVS; j++) {
++            relay->nodes[i][j].type = i;
++            relay->nodes[i][j].dev = j;
++            relay->nodes[i][j].id = i << 16 | j;
++            INIT_LIST_HEAD(&relay->nodes[i][j].list);
++            if (i == ATOMIC)
++                ATOMIC_INIT_NOTIFIER_HEAD(&relay->nodes[i][j].atomic_head);
++            else
++                BLOCKING_INIT_NOTIFIER_HEAD(&relay->nodes[i][j].blocking_head);
+         }
+-        case BLOCKING:
+-        {
+-            struct blocking_notifier_head* h = &relay_dev->nodes[type][dev].blocking_head;
+-            ret  = blocking_notifier_call_chain(h, val, v);
+-            break;
+-        }
+-        default:
+-            BUG_ON(1);
+-    }
+-    return ret;
+-}
+-EXPORT_SYMBOL_GPL(relay_notifier_fire);
+-
+-/**
+- * Register an atomic or blocking notify to receive notifications from dev.
+- * @dev: notification sender
+- */
+-int relay_register_action(notifier_t type, notifier_d dev, struct notifier_block * nb)
+-{
+-    int ret = 0;
+-
+-    if(!relay_dev) {
+-        pr_err("Device is not initialized\n");
+-        return -EINVAL;
+-    }
+-
+-    if(type >= NUM_TYPES || dev >= NUM_DEVS) {
+-        pr_err("Relay error type or dev\n");
+-        return -EPERM;
+-    }
+-
+-    mutex_lock(&relay_dev->lock);
+-    switch(type) {
+-        case ATOMIC:
+-        {
+-            struct atomic_notifier_head* h = &relay_dev->nodes[type][dev].atomic_head;
+-            ret = atomic_notifier_chain_register(h, nb);
+-            if (!ret)
+-                relay_notifier_fire(ATOMIC, MMI_RELAY, RELAY_NOTIFY_REGISTER, NULL);
+-            break;
+-        }
+-        case BLOCKING:
+-        {
+-            struct blocking_notifier_head* h = &relay_dev->nodes[type][dev].blocking_head;
+-            ret = blocking_notifier_chain_register(h, nb);
+-            if (!ret)
+-                relay_notifier_fire(BLOCKING, MMI_RELAY, RELAY_NOTIFY_REGISTER, NULL);
+-
+-            break;
+-        }
+-        default:
+-            BUG_ON(1);
+-    }
+-    mutex_unlock(&relay_dev->lock);
+-
+-    return ret;
+-}
+-EXPORT_SYMBOL_GPL(relay_register_action);
+-
+-int relay_unregister_action(notifier_t type, notifier_d dev, struct notifier_block *nb)
+-{
+-    int ret = 0;
+-
+-    if(!relay_dev) {
+-        pr_err("Device is not initialized\n");
+-        return -EINVAL;
+-    }
+-
+-    if(type >= NUM_TYPES || dev >= NUM_DEVS) {
+-        pr_err("Relay error type or dev\n");
+-        return -EPERM;
+-    }
+-
+-    mutex_lock(&relay_dev->lock);
+-    switch(type) {
+-        case ATOMIC:
+-        {
+-            struct atomic_notifier_head* h = &relay_dev->nodes[type][dev].atomic_head;
+-            ret = atomic_notifier_chain_unregister(h, nb);
+-            if (!ret)
+-                relay_notifier_fire(ATOMIC, MMI_RELAY, RELAY_NOTIFY_UNREGISTER, NULL);
+-            break;
+-        }
+-        case BLOCKING:
+-        {
+-            struct blocking_notifier_head* h = &relay_dev->nodes[type][dev].blocking_head;
+-            ret = blocking_notifier_chain_unregister(h, nb);
+-            if (!ret)
+-                relay_notifier_fire(BLOCKING, MMI_RELAY, RELAY_NOTIFY_UNREGISTER, NULL);
+-            break;
+-        }
+-        default:
+-            BUG_ON(1);
+-    }
+-    mutex_unlock(&relay_dev->lock);
+-
+-    return ret;
+-}
+-EXPORT_SYMBOL_GPL(relay_unregister_action);
+-
+-static int mmi_relay_probe(struct platform_device *pdev)
+-{
+-    notifier_t i;
+-    notifier_d j;
+-
+-    relay_dev = kzalloc(sizeof(struct mmi_relay_dev), GFP_KERNEL);
+-    if (!relay_dev) {
+-        pr_err("Failed to allocate memory for relay_dev\n");
+-        return -ENOMEM;
+-    }
+-
+-    relay_dev->pdev = pdev;
+-    relay_dev->notifier_nums = NUM_DEVS * NUM_TYPES;
+-
+-    mutex_init(&relay_dev->lock);
+-
+-    for(i = (notifier_t)0; i < NUM_TYPES; i++) {
+-        for(j = (notifier_d)0; j < NUM_DEVS; j++) {
+-            relay_dev->nodes[i][j].type = i;
+-            relay_dev->nodes[i][j].dev= j;
+-            relay_dev->nodes[i][j].id = i << 16 | j;
+-            INIT_LIST_HEAD(&relay_dev->nodes[i][j].list);
+-
+-            if(i == ATOMIC) {
+-                ATOMIC_INIT_NOTIFIER_HEAD(&relay_dev->nodes[i][j].atomic_head);
+-            } else {
+-                BLOCKING_INIT_NOTIFIER_HEAD(&relay_dev->nodes[i][j].blocking_head);
+-            }
+-        }
+-    }
++    }
++    mutex_lock(&relay_provider_lock);
++    if (rcu_access_pointer(relay_dev)) {
++        mutex_unlock(&relay_provider_lock);
++        kfree(relay);
++        return -EBUSY;
++    }
++    platform_set_drvdata(pdev, relay);
++    rcu_assign_pointer(relay_dev, relay);
++    mutex_unlock(&relay_provider_lock);
+     return 0;
+ }
+ 
+ static void mmi_relay_remove(struct platform_device *pdev)
+ {
+-    kfree(relay_dev);
+-    return;
++    struct mmi_relay_dev *relay = platform_get_drvdata(pdev);
++
++    mutex_lock(&relay_provider_lock);
++    if (rcu_access_pointer(relay_dev) == relay)
++        RCU_INIT_POINTER(relay_dev, NULL);
++    platform_set_drvdata(pdev, NULL);
++    mutex_unlock(&relay_provider_lock);
++    synchronize_srcu(&relay_provider_srcu);
++    kfree(relay);
+ }
+ 
+ static const struct of_device_id mmi_relay_mt[] = {
+--- a/ports/moto-touch-deps/sensors_class.c
++++ b/ports/moto-touch-deps/sensors_class.c
+@@ -473,28 +473,30 @@
+ static DEVICE_ATTR(flush, 0660, sensors_flush_show, sensors_flush_store);
+ static DEVICE_ATTR(calibrate, 0664, sensors_calibrate_show,sensors_calibrate_store);
+ 
+-static struct device_attribute *sensors_class_attrs[] = {
+-	&dev_attr_name,
+-	&dev_attr_vendor,
+-	&dev_attr_version,
+-	&dev_attr_handle,
+-	&dev_attr_type,
+-	&dev_attr_max_range,
+-	&dev_attr_resolution,
+-	&dev_attr_sensor_power,
+-	&dev_attr_min_delay,
+-	&dev_attr_fifo_reserved_event_count,
+-	&dev_attr_fifo_max_event_count,
+-	&dev_attr_max_delay,
+-	&dev_attr_flags,
+-	&dev_attr_enable,
+-	&dev_attr_enable_wakeup,
+-	&dev_attr_poll_delay,
+-	&dev_attr_self_test,
+-	&dev_attr_max_latency,
+-	&dev_attr_flush,
+-	&dev_attr_calibrate
++static struct attribute *sensors_attrs[] = {
++	&dev_attr_name.attr,
++	&dev_attr_vendor.attr,
++	&dev_attr_version.attr,
++	&dev_attr_handle.attr,
++	&dev_attr_type.attr,
++	&dev_attr_max_range.attr,
++	&dev_attr_resolution.attr,
++	&dev_attr_sensor_power.attr,
++	&dev_attr_min_delay.attr,
++	&dev_attr_fifo_reserved_event_count.attr,
++	&dev_attr_fifo_max_event_count.attr,
++	&dev_attr_max_delay.attr,
++	&dev_attr_flags.attr,
++	&dev_attr_enable.attr,
++	&dev_attr_enable_wakeup.attr,
++	&dev_attr_poll_delay.attr,
++	&dev_attr_self_test.attr,
++	&dev_attr_max_latency.attr,
++	&dev_attr_flush.attr,
++	&dev_attr_calibrate.attr,
++	NULL,
+ };
++ATTRIBUTE_GROUPS(sensors);
+ /*add for sar sensor register zhanghaipeng.wt end*/
+ 
+ /**
+@@ -503,29 +505,22 @@
+  * @sensors_cdev: the sensors_classdev structure for this device.
+ */
+ int sensors_classdev_register(struct device *parent,
+-				struct sensors_classdev *sensors_cdev)
+-{
+-	int ret = 0;
+-	int i = 0;
+-	printk("sensors_classdev_register,%s\n",sensors_cdev->name);
+-	sensors_cdev->dev = device_create(sensors_class, parent, 0,
+-				      sensors_cdev, "%s", sensors_cdev->name);
+-	if (IS_ERR(sensors_cdev->dev))
+-		{
+-		printk("sensors_classdev_register fail\n");
+-		return PTR_ERR(sensors_cdev->dev);
+-		}
+-	down_write(&sensors_list_lock);
+-	list_add_tail(&sensors_cdev->node, &sensors_list);
+-	up_write(&sensors_list_lock);
+-	for (i = 0; i < ARRAY_SIZE(sensors_class_attrs); ++i) {
+-		ret = device_create_file(sensors_cdev->dev, sensors_class_attrs[i]);
+-		if (ret)
+-			printk("i = %d,device_create_file register fail\n",i);
+-		}
+-	printk("Registered sensors device: %s,ret = %d\n",
+-			sensors_cdev->name,ret);
+-	return 0;
++                             struct sensors_classdev *sensors_cdev)
++{
++    if (!sensors_cdev || !sensors_cdev->name || !sensors_cdev->name[0])
++        return -EINVAL;
++
++    /* The device core publishes all attributes together and rolls back the
++     * device on group creation failure; never claim a partially usable ABI. */
++    sensors_cdev->dev = device_create_with_groups(sensors_class, parent, 0,
++                              sensors_cdev, sensors_groups, "%s", sensors_cdev->name);
++    if (IS_ERR(sensors_cdev->dev))
++        return PTR_ERR(sensors_cdev->dev);
++
++    down_write(&sensors_list_lock);
++    list_add_tail(&sensors_cdev->node, &sensors_list);
++    up_write(&sensors_list_lock);
++    return 0;
+ }
+ EXPORT_SYMBOL(sensors_classdev_register);
+ 
+@@ -542,8 +537,9 @@
+ 		return;
+ 
+ 	device_unregister(sensors_cdev->dev);
++	sensors_cdev->dev = NULL;
+ 	down_write(&sensors_list_lock);
+-	list_del(&sensors_cdev->node);
++	list_del_init(&sensors_cdev->node);
+ 	up_write(&sensors_list_lock);
+ }
+ EXPORT_SYMBOL(sensors_classdev_unregister);
+@@ -574,3 +570,5 @@
+ subsys_initcall(sensors_init);
+ module_exit(sensors_exit);
+ MODULE_LICENSE("GPL v2");
++
++MODULE_DESCRIPTION("Motorola sensor class ABI");
+--- a/ports/moto-touch-deps/include/linux/mmi_relay.h
++++ b/ports/moto-touch-deps/include/linux/mmi_relay.h
+@@ -33,6 +33,9 @@
+ 
+ extern int relay_notifier_fire(notifier_t type, notifier_d dev, unsigned long val, void *v);
+ extern int relay_register_action(notifier_t type, notifier_d dev, struct notifier_block * nb);
++/* Registration/removal are process-context operations. Do not unregister
++ * from a relay callback or modify a notifier chain from its own callback.
++ * Caller data must remain alive until unregister returns. */
+ extern int relay_unregister_action(notifier_t type, notifier_d dev, struct notifier_block * nb);
+ 
+ #endif
+--- a/ports/moto-touch-deps/Makefile
++++ b/ports/moto-touch-deps/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += mmi_relay.o sensors_class.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-minidump/include -DCONFIG_QCOM_MINIDUMP_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers

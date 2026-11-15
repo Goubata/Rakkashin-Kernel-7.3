@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-touch-deps/mmi_relay.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-touch-deps/sensors_class.ko",
+      "imports_checked": 16,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/moto-touch-deps/avr-moto-touch-deps-test.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    }
+  ]
+}

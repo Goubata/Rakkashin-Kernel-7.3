@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-panel-event-stage52",
+  "stage": "android73-moto-touch-deps-stage53",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 114,
-  "same_name_candidate_count": 100,
-  "archived_names_without_same_name_candidate_count": 444,
-  "loaded_names_without_same_name_candidate_count": 429,
+  "staged_count": 116,
+  "same_name_candidate_count": 102,
+  "archived_names_without_same_name_candidate_count": 442,
+  "loaded_names_without_same_name_candidate_count": 427,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -103,6 +103,10 @@
     {
       "name": "llcc_qcom",
       "file": "modules/qcom-llcc/llcc-qcom.ko"
+    },
+    {
+      "name": "mmi_relay",
+      "file": "modules/moto-touch-deps/mmi_relay.ko"
     },
     {
       "name": "msm_sysstats",
@@ -371,6 +375,10 @@
     {
       "name": "gh_rm_drv",
       "file": "modules/gunyah-rm/gh_rm_drv.ko"
+    },
+    {
+      "name": "sensors_class",
+      "file": "modules/moto-touch-deps/sensors_class.ko"
     },
     {
       "name": "smem",
@@ -568,6 +576,10 @@
       "file": "modules/qcom-llcc/llcc-qcom.ko"
     },
     {
+      "name": "mmi_relay",
+      "file": "modules/moto-touch-deps/mmi_relay.ko"
+    },
+    {
       "name": "msm_sysstats",
       "file": "modules/msm-sysstats/msm_sysstats.ko"
     },
@@ -830,6 +842,10 @@
     {
       "name": "gh_rm_drv",
       "file": "modules/gunyah-rm/gh_rm_drv.ko"
+    },
+    {
+      "name": "sensors_class",
+      "file": "modules/moto-touch-deps/sensors_class.ko"
     },
     {
       "name": "smem",
@@ -1235,6 +1251,32 @@
       ],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "mmi_relay": {
+      "file": "modules/moto-touch-deps/mmi_relay.ko",
+      "sha256": "1c8a9070bb688447adfbdfe343749e8210ecda2bc4f0487d9fc9e9cc851d5c67",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "sensors_class": {
+      "file": "modules/moto-touch-deps/sensors_class.ko",
+      "sha256": "c31c196df7e2518b4d1176fea52ca379e4080fec3e11ec70f61575abf33793c6",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
@@ -3962,13 +4004,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "mmi_relay",
-      "placements": [
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "mmi_sys_temp",
       "placements": [
         "vendor_dlkm"
@@ -5288,13 +5323,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "sensors_class",
-      "placements": [
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "sg",
       "placements": [
         "vendor_boot:fragment-0"
@@ -6097,7 +6125,6 @@
     "mmi_annotate",
     "mmi_glink_charger",
     "mmi_info",
-    "mmi_relay",
     "mmi_sys_temp",
     "moto_binder",
     "moto_f_usbnet",
@@ -6272,7 +6299,6 @@
     "sched_walt",
     "sdca_registers_dlkm",
     "sdhci_msm",
-    "sensors_class",
     "sg",
     "si_core_module",
     "simple_amp_dlkm",

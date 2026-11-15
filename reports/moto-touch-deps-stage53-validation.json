@@ -1,0 +1,48 @@
+{
+  "stage": 53,
+  "scope": "real relay notifier APIs and provider platform probe/remove, sensor class registration, selected ABI/DT/read-only metadata audits; no real touch/display hardware IO",
+  "passed": true,
+  "qemu_cases_passed": 9,
+  "relay_fixes": [
+    "Fully initialize before singleton publication; reject competing providers",
+    "SRCU-unpublish/drain provider before free; missing-provider unregister also drains active callbacks",
+    "Use actual native per-head locks; do not hold global provider mutex across callbacks",
+    "Validate notifier pointers and unsigned enum bounds"
+  ],
+  "sensor_fixes": [
+    "Atomic attribute-group publication with device-core rollback on failure",
+    "Reject missing sensor/name; clear device and list linkage after unregister; sequential unregister safe"
+  ],
+  "selected_abi": [
+    "Sensor ABI header byte-identical",
+    "Relay declarations/enums unchanged apart from contract comments",
+    "All 20 sensor attribute names/modes/callbacks unchanged"
+  ],
+  "artifact": "artifacts/android73-moto-touch-deps-stage53",
+  "packaged_modules": 116,
+  "matching_imports": 5652,
+  "candidate_dtb": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+  "physical_candidate_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Actual OF population of new relay node and touch/gesture/display/ROM integration",
+    "Full sensor attribute read/write/calibration and attribute failure injection",
+    "Notifier chain recursion restrictions and cross-reprobe consumer coordination",
+    "Remaining mandatory drivers, SID4 DT conflict and complete boot/DLKM/SELinux artifacts"
+  ],
+  "evidence_sha256": {
+    "reports/moto-touch-deps-source-inputs.json": "c210c6342cc10ef3736294bff88a935605fa2564a7420e03a5c5463992193b96",
+    "reports/moto-touch-deps-source-lock.json": "113fcfac6b35667b180e2e9ae6573643f13bae001205a90c6caf1d40f64d119a",
+    "patches/moto-touch-deps-7.3.patch": "23dc8c748df84ba85944750c1d3208637ef37d362920a4536dba499833dbcade",
+    "reports/moto-touch-deps-stage53-abi.json": "2461a06a068a3dd35812c705b51885056943f1fc4e6c33beef2c129483cb2a22",
+    "reports/moto-touch-deps-stage53-dt.json": "51a50fab7fda6884eb1e3676d3bc9e3f8674da36281e54e5ae2bf03215f1e68d",
+    "reports/moto-touch-deps-stage53-live-readonly.json": "5e2bc04a182481e2149eaa14bb5d3a38fa5b00be94e117a977d75d46de084572",
+    "reports/moto-touch-deps-stage53-qemu.log": "4a1110c70f284ebb9f541725255492d1c696a5121fc47bf6eb21e1f1260f46e9",
+    "reports/moto-touch-deps-stage53-qemu.json": "cf2b6ed9a01daf88d7b583b9029d2934e37bd4e918d9bee57266b6a826e98efe",
+    "reports/moto-touch-deps-stage53-verified-build.log": "d5e736eb7dc85fe3adc4ba5d61aecac30ec9ede7dc34c131d50495a453f77f69",
+    "reports/moto-touch-deps-stage53-crc.json": "2ebe379c1a1cb05cb30a1acef83882f6b104dd06d072efc582fe1e8d49919056",
+    "reports/moto-touch-deps-stage53-packaged-crc.json": "89c73fbfd34916c7573c45a4b57d8ea733026ea8ab94de85b9231118b5593ea4",
+    "reports/module-deployment-stage53-summary.json": "1edae78b91e41240af1c684f8168d93fec165f5e120612335570c5bfcccbbf4c"
+  }
+}

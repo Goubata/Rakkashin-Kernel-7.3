@@ -14,6 +14,8 @@ ROOTFS = ROOT.parent / '.andronix/distros/ubuntu/rootfs'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--moto-touch-deps',action='store_true')
+    parser.add_argument('--moto-touch-deps-tests',action='store_true')
     parser.add_argument('--panel-event',action='store_true')
     parser.add_argument('--panel-event-tests',action='store_true')
     parser.add_argument('--power-key',action='store_true')
@@ -81,6 +83,10 @@ def main():
             raise ValueError('Staged PHY source differs; review and record port changes explicitly: ' + row['staged_path'])
     print('Verified five unmodified firmware-pinned UFS PHY source files', flush=True)
     targets=['ports/ufs-phy-canoe']
+    if args.moto_touch_deps or args.moto_touch_deps_tests:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_moto_touch_deps_sources.py')],check=True)
+        targets.append('ports/moto-touch-deps')
+        if args.moto_touch_deps_tests:targets.append('tests/moto-touch-deps')
     if args.panel_event or args.panel_event_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_panel_event_sources.py')],check=True)
         targets.append('ports/qcom-panel-event')

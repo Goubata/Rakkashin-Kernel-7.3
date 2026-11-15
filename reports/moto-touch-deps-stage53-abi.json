@@ -1,0 +1,136 @@
+{
+  "scope": "selected header declarations/struct layout source and 20 sensor attribute names/modes/callbacks; not full sysfs/consumer/hardware ABI proof",
+  "passed": true,
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "sensor_header_sha256": "ad14c9ed343e86d95b73d38e465bf6e2e0db891849e662d1bc4eba5dd9914532",
+  "factory_relay_header_sha256": "ab0d81b94939fc2ac58d6e8cecfd2124483f99968c03c7b385aba58517c2ca4f",
+  "sensor_attributes": [
+    [
+      "name",
+      "0444",
+      "sensors_name_show",
+      "NULL"
+    ],
+    [
+      "vendor",
+      "0444",
+      "sensors_vendor_show",
+      "NULL"
+    ],
+    [
+      "version",
+      "0444",
+      "sensors_version_show",
+      "NULL"
+    ],
+    [
+      "handle",
+      "0444",
+      "sensors_handle_show",
+      "NULL"
+    ],
+    [
+      "type",
+      "0444",
+      "sensors_type_show",
+      "NULL"
+    ],
+    [
+      "max_range",
+      "0444",
+      "sensors_max_range_show",
+      "NULL"
+    ],
+    [
+      "resolution",
+      "0444",
+      "sensors_resolution_show",
+      "NULL"
+    ],
+    [
+      "sensor_power",
+      "0444",
+      "sensors_power_show",
+      "NULL"
+    ],
+    [
+      "min_delay",
+      "0444",
+      "sensors_min_delay_show",
+      "NULL"
+    ],
+    [
+      "fifo_reserved_event_count",
+      "0444",
+      "sensors_fifo_event_show",
+      "NULL"
+    ],
+    [
+      "fifo_max_event_count",
+      "0444",
+      "sensors_fifo_max_show",
+      "NULL"
+    ],
+    [
+      "max_delay",
+      "0444",
+      "sensors_max_delay_show",
+      "NULL"
+    ],
+    [
+      "flags",
+      "0444",
+      "sensors_flags_show",
+      "NULL"
+    ],
+    [
+      "enable",
+      "0664",
+      "sensors_enable_show",
+      "sensors_enable_store"
+    ],
+    [
+      "enable_wakeup",
+      "0664",
+      "sensors_enable_wakeup_show",
+      "sensors_enable_wakeup_store"
+    ],
+    [
+      "poll_delay",
+      "0664",
+      "sensors_delay_show",
+      "sensors_delay_store"
+    ],
+    [
+      "self_test",
+      "0440",
+      "sensors_test_show",
+      "NULL"
+    ],
+    [
+      "max_latency",
+      "0660",
+      "sensors_max_latency_show",
+      "sensors_max_latency_store"
+    ],
+    [
+      "flush",
+      "0660",
+      "sensors_flush_show",
+      "sensors_flush_store"
+    ],
+    [
+      "calibrate",
+      "0664",
+      "sensors_calibrate_show",
+      "sensors_calibrate_store"
+    ]
+  ],
+  "sensor_device_attributes_grouped_atomically": true,
+  "physical_verified": false,
+  "pending": [
+    "Full sensor attribute read/write/calibration runtime checks and failure injection",
+    "Consumer lifecycle and complete touch/gesture/ROM integration",
+    "Actual OF provider binding and all physical acceptance gates"
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "scope": "Read-only live sysfs enumeration/driver binding compared to saved DT order; no SPMI transactions, kernel switch or physical 7.3 validation",
+  "current_kernel": "6.12.113-android16-6-g18b507169406-ab14630870-4k",
+  "saved_dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+  "devices": [
+    {
+      "name": "0-00",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-01",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-03",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-04",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+      "driver": null,
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-05",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-06",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-07",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-08",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0a",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0c",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+      "driver": null,
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0d",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+      "driver": null,
+      "matches_saved_first": true
+    },
+    {
+      "name": "2-07",
+      "node": "/soc/pmic-glink-log/pmic-glink-debug/spmi@0/qcom,pmih010x-debug@7",
+      "driver": "pmic-spmi"
+    }
+  ],
+  "main_bus_devices": [
+    {
+      "name": "0-00",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-01",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-03",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@3",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-04",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+      "driver": null,
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-05",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@5",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-06",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@6",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-07",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-08",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550ve@8",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0a",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmr735d@a",
+      "driver": "pmic-spmi",
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0c",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@c",
+      "driver": null,
+      "matches_saved_first": true
+    },
+    {
+      "name": "0-0d",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@d",
+      "driver": null,
+      "matches_saved_first": true
+    }
+  ],
+  "all_present_main_nodes_match_saved_first": true,
+  "saved_active_duplicate_sids": {
+    "4": [
+      "/soc/arbiter@c400000/spmi@c426000/qcom,pm8010@4",
+      "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4"
+    ]
+  },
+  "saved_first_nodes_not_observed": [],
+  "physical_73_verified": false,
+  "dt_modified": false,
+  "partition_written": false,
+  "conclusion": "Observed SID4 currently enumerates pm8010@4 with no bound driver if driver is null. Do not disable or promote alternative pmd802x@4 without proving the required PMIC subtree and probe behavior."
+}

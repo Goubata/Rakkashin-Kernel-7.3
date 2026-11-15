@@ -1068,3 +1068,18 @@ Production modules build and CRC/UAPI checks pass. The enlarged private buffer
 and maximum-frame behavior still need daemon/physical acceptance. Draft remains
 excluded; main partial bundle is Stage57. Evidence:
 reports/goodix-wire-stage63-validation.json.
+
+
+## Stage64: read-only current SPMI selection evidence
+
+Read current 6.12 sysfs device OF links/driver bindings, with no register access
+or bind/unbind. All observed main-bus PMIC nodes match the first active node for
+each SID in the saved running DT; no saved first node is absent. SID4 selects
+pm8010@4 and has no driver symlink, while the same-bus pmd802x@4 alternative is
+not separately enumerated. This confirms current enumeration order only. It
+does not prove either SID4 subtree is functional or that deleting either is
+valid. The candidate already preserves saved child order. Duplicate-SID and
+required PMIC subtree/probe acceptance remain unresolved for 7.3; do not mark
+the whole-board gate passed. Reproduce read-only with
+`python scripts/audit_spmi_runtime_selection.py` on this phone. Evidence:
+reports/spmi-runtime-stage64.json. No DT or partition modification occurred.

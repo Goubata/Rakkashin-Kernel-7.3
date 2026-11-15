@@ -1,0 +1,29 @@
+{
+  "stage": 62,
+  "selected_checks_passed": true,
+  "scope": "ESD initialization order and selected source branches only",
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "tests": {
+    "scope": "Selected ESD source methods with recorded read/write/power/work primitives and endpoint publication-order assertion; not native workqueue concurrency or physical ESD proof",
+    "passed": true,
+    "output": "PASS 10 ESD source-method assertions; recorded primitives only",
+    "init_before_misc_publication": true,
+    "source_sha256": "e3c0649c396dba37a1dd42e7c895e332472b4c1cb0b39cbe9b79a4178025e553",
+    "fixture_sha256": "bb57d81076ff5ffa11634efec2ddeefee23cf860a69e441de7861d25fbb48ed9"
+  },
+  "pending": [
+    "Concurrent ESD enable/disable/requeue and synchronous teardown",
+    "Power-cycle failure handling and native workqueue tests",
+    "Full core/open/remove/probe/IRQ lifetime and physical whole-device acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/goodix-esd-stage62-tests.json": "c978f1bb11b3e867ea9c2daf654fe08580ce54882ddb78847e4ec6ce19f05e7a",
+    "reports/goodix-esd-stage62-crc.json": "12911de27caa529e82ffb323f04f7efc231f7862f18f0a18c856cfb2191b16b0",
+    "reports/goodix-esd-stage62-build.log": "b9ba3b3179285e8be380010fe374c2fcf1ec194e9e7ae39b229ea8e8292516cd",
+    "reports/goodix-esd-stage62-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-touch-source-lock.json": "3def6f50e0357e961fa88569a75ded50b6cd4f5647e8ed93ed927718d401c31d",
+    "patches/goodix-touch-7.3.patch": "1d98e3671ba274176aa6647e3fed8936fe442c4d9aba202aaeab60b2be66f890"
+  }
+}

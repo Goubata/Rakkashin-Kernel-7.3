@@ -5,7 +5,7 @@
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.c",
       "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
       "original_sha256": "a8c11f382634b9edad9435b9643ceba11074c53c8ddf82e1320bc38916572ae7",
-      "sha256": "0ed75e8898273653d98caa9ed34c21483b73c415902056a5d62ddf0791f159d4"
+      "sha256": "e3c0649c396dba37a1dd42e7c895e332472b4c1cb0b39cbe9b79a4178025e553"
     },
     {
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.h",
@@ -110,7 +110,7 @@
       "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
     }
   ],
-  "patch_sha256": "6213c49755af1b7b76d4a4fc69ce4e7ab1f394e9dc80261a345aa3f7da379f39",
+  "patch_sha256": "1d98e3671ba274176aa6647e3fed8936fe442c4d9aba202aaeab60b2be66f890",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -125,7 +125,8 @@
     "Bound frame payloads to slot capacity, reject invalid ring indices, use atomic request IDs and zero-initialize frame ioctl output",
     "Bound TSC advertised length and version destination with NUL validation; clear old version tail and use bounded logging",
     "Allocate zeroed dedicated pages with failure checking; validate mmap offset and length before shift; insert refcounted pages and detach owner under frame mutex",
-    "Reject empty single-SPI requests and propagate ENOMEM/EFAULT instead of success or positive residual bytes"
+    "Reject empty single-SPI requests and propagate ENOMEM/EFAULT instead of success or positive residual bytes",
+    "Initialize ESD delayed work before misc publication even when disabled; do not inspect an unfilled ESD byte after SPI read failure"
   ],
   "pending": [
     "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",

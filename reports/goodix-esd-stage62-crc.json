@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/goodix-touch/touchscreen_mmi.ko",
+      "imports_checked": 85,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/goodix-touch/goodix_brl_thp.ko",
+      "imports_checked": 152,
+      "mismatches": {}
+    }
+  ]
+}

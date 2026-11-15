@@ -1031,3 +1031,18 @@ No physical/native-uaccess/daemon proof is inferred. Reproduce with
 Production modules link and import CRCs/UAPI checks pass. Main bundle remains
 Stage57, touch drafts unaccepted. Evidence:
 reports/goodix-spi-stage61-validation.json.
+
+
+## Stage62: ESD initialization order and failed read handling (draft)
+
+Initialize esd_work before publishing the misc endpoint, including disabled
+configurations. The prior order allowed ioctl/sysfs use before initialization.
+After SPI read failure, do not inspect the unfilled ESD byte or power-cycle on
+its value; retain the scheduled retry policy. Ten exact-source branch assertions
+with recorded primitives cover timeout/EIO, heartbeat writes, power-cycle branch,
+suspend/disabled conditions and disabled-config initialization. An executable
+source check asserts init precedes misc_register. Production modules rebuild and
+CRC/UAPI checks pass. Reproduce: `python tests/goodix-esd/run.py`.
+Concurrent enable/disable/requeue, synchronous remove draining, native workqueue
+execution and power-cycle failure handling are still pending. Evidence:
+reports/goodix-esd-stage62-validation.json. No draft promotion or physical proof.

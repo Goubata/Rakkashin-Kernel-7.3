@@ -1,0 +1,8 @@
+{
+  "scope": "Selected ESD source methods with recorded read/write/power/work primitives and endpoint publication-order assertion; not native workqueue concurrency or physical ESD proof",
+  "passed": true,
+  "output": "PASS 10 ESD source-method assertions; recorded primitives only",
+  "init_before_misc_publication": true,
+  "source_sha256": "e3c0649c396dba37a1dd42e7c895e332472b4c1cb0b39cbe9b79a4178025e553",
+  "fixture_sha256": "bb57d81076ff5ffa11634efec2ddeefee23cf860a69e441de7861d25fbb48ed9"
+}

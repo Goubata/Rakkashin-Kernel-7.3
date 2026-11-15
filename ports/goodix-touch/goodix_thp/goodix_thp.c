@@ -2773,12 +2773,17 @@ static void goodix_thp_esd_work(struct work_struct *work)
         struct thp_ts_device *ts_dev = core_data->ts_dev;
         u32 esd_addr = core_data->ts_dev->board_data.esd_addr;
         u8 esd_value;
+        int ret;
 
         if (!core_data->esd_on || esd_addr == 0)
                 return;
 
         if ((!core_data->suspended) && (!core_data->pm_suspend)) { /* Don't perform SPI operations while suspended */
-                ts_dev->hw_ops->read(ts_dev, esd_addr, &esd_value, 1);
+                ret = ts_dev->hw_ops->read(ts_dev, esd_addr, &esd_value, 1);
+                if (ret) {
+                        ts_err(ts_dev->dev, "esd read failed, ret %d", ret);
+                        goto requeue;
+                }
                 if (esd_value == GOODIX_ESD_TICK_WRITE_DATA) {
                         ts_err(ts_dev->dev, "esd check failed, 0x%x", esd_value);
                         goodix_thp_power_off(core_data);
@@ -2789,19 +2794,16 @@ static void goodix_thp_esd_work(struct work_struct *work)
                         ts_dev->hw_ops->write(ts_dev, esd_addr, &esd_value, 1);
                 }
 
+requeue:
                 schedule_delayed_work(dwork, GOODIX_ESD_CHECK_INTERVAL);
         }
 }
 
 static int goodix_thp_esd_init(struct goodix_thp_core *core_data)
 {
-        if (core_data->ts_dev->board_data.esd_enable) {
-                ts_info(core_data->ts_dev->dev, "ESD work init");
-                INIT_DELAYED_WORK(&core_data->esd_work, goodix_thp_esd_work);
-        } else {
-                ts_info(core_data->ts_dev->dev, "ESD function is not enabled");
-        }
-
+        /* Initialize before any misc/sysfs/notification endpoint is published,
+         * including disabled configurations, so cleanup may always drain it. */
+        INIT_DELAYED_WORK(&core_data->esd_work, goodix_thp_esd_work);
         return 0;
 }
 
@@ -3244,6 +3246,8 @@ static int goodix_thp_probe(struct platform_device *pdev)
         }
         core_data->custom_info[GOODIX_THP_CUSTOM_INFO_LEN] = '\0';
 
+        goodix_thp_esd_init(core_data);
+
         /* register misc dev */
         if (pdev->id == 0)
                 sprintf(core_data->thp_misc_name, "%s", GOODIX_THP_MISC_DEVICE_NAME);
@@ -3358,8 +3362,6 @@ static int goodix_thp_probe(struct platform_device *pdev)
             goto err_irq_setup;
         }
 #endif
-
-        goodix_thp_esd_init(core_data);
 
         return 0;
 

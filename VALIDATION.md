@@ -1738,3 +1738,37 @@ retains matching Image#25/config/native exports. Stage57 stays at 118 modules.
 Physical supplier/charging/CPU/cooling, forced supplier unbind, late-supplier
 probe wakeup, exhaustive PM/unbind races and whole-board boot/DLKM/SELinux
 acceptance remain pending. No phone partition writes or physical 7.3 boot.
+
+## Stage88: BCL recovery after late power-supply class registration
+
+Reproduce a startup gap with real native driver binding: register BCL while
+battery/USB are absent, then register the actual native private power-supply
+class devices. After their changed work and native deferred probes drain, BCL
+remains unbound; an explicit native driver_attach binds immediately. A supplier
+class event is not itself a guarantee of a successful supplier-driver bind.
+
+Add a module-level named-supply notifier and native work. A missing name sets
+an atomic retry-demand flag; events queue work only while that demand exists.
+Work atomically consumes the flag and invokes native driver_attach, which
+serializes probes/skips bound devices and preserves genuine probe failures.
+Missing suppliers restore the demand on each failed attempt. There is no timer
+polling, shared per-device supply pointer, fake provider or core API export.
+Register the notifier after the driver then queue an initial attempt to cover
+the missed-event window. On exit unregister the notifier, drain retry work and
+only then unregister the platform driver. Handle registration/attach errors.
+
+Twenty-five SMP4 cases pass without WARN/panic/skip. The previous twenty remain.
+Five new native driver-core cases cover the no-hook regression, battery-then-USB
+OF binding, repeated missing-USB retries without battery reference leaks,
+module-notifier failure after real binding with complete rollback, and queued
+retry teardown before late supplies appear. Native class registry, notifiers,
+driver binding, devres, OF thermal, QoS and work execute; CPU policy references,
+selected errors and physical cooling operations retain the recorded scopes.
+
+Evidence: reports/bcl-soc-stage88-validation.json. Build with build_bcl_soc.py
+--tests and run QEMU mode bcl-soc, SMP4 (25 cases). audit_bcl_soc_dt.py --guest
+--output reports/bcl-soc-stage88-dt.json preserves Stage87's historical report.
+The new draft retains matching Image#25/config/symbols and 39 matching imports;
+Stage57 remains unchanged at 118 modules. Physical behavior, supplier forced
+unbind, userspace force-unbind policy, exhaustive concurrent teardown/PM races,
+remaining drivers and whole-board acceptance remain pending. No phone writes.

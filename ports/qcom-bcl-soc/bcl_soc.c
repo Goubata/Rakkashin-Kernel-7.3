@@ -18,6 +18,8 @@
 #define BCL_DRIVER_NAME "bcl_soc_peripheral"
 #define RETRY_DELAY msecs_to_jiffies(1000)
 #define BOOT_SOCD_THRESHOLD 97
+/* Retry demand only: no per-device state or supply pointers are shared. */
+static atomic_t bcl_waiting_supplies = ATOMIC_INIT(0);
 static int boot_frequency = INT_MAX;
 module_param(boot_frequency, int, 0400);
 
@@ -259,8 +261,10 @@ static struct power_supply *bcl_get_supply(struct device *dev, const char *name)
 	struct power_supply *psy = power_supply_get_by_name(name);
 	int ret;
 
-	if (!psy)
+	if (!psy) {
+		atomic_set(&bcl_waiting_supplies, 1);
 		return ERR_PTR(-EPROBE_DEFER);
+	}
 	ret = devm_add_action_or_reset(dev, bcl_put_supply, psy);
 	return ret ? ERR_PTR(ret) : psy;
 }
@@ -343,6 +347,62 @@ static struct platform_driver bcl_driver = {
 	.probe = bcl_soc_probe, .remove = bcl_soc_remove,
 	.driver = { .name = BCL_DRIVER_NAME, .of_match_table = bcl_match },
 };
-module_platform_driver(bcl_driver);
+static void bcl_retry_suppliers(struct work_struct *work)
+{
+	int ret;
+
+	/* Native driver_attach serializes probes and skips already bound devices. */
+	if (!atomic_xchg(&bcl_waiting_supplies, 0))
+		return;
+	ret = driver_attach(&bcl_driver.driver);
+	if (ret) {
+		atomic_set(&bcl_waiting_supplies, 1);
+		pr_err_ratelimited("BCL supply retry failed: %d\n", ret);
+	}
+}
+static DECLARE_WORK(bcl_supplier_work, bcl_retry_suppliers);
+
+static int bcl_supply_available(struct notifier_block *nb, unsigned long event,
+				void *data)
+{
+	struct power_supply *psy = data;
+
+	if (event != PSY_EVENT_PROP_CHANGED || !psy ||
+	    (strcmp(psy->desc->name, "battery") && strcmp(psy->desc->name, "usb")))
+		return NOTIFY_DONE;
+	if (atomic_read(&bcl_waiting_supplies))
+		schedule_work(&bcl_supplier_work);
+	return NOTIFY_OK;
+}
+static struct notifier_block bcl_supplier_nb = {
+	.notifier_call = bcl_supply_available,
+};
+
+static int bcl_soc_driver_register(struct platform_driver *driver)
+{
+	int ret;
+
+	ret = platform_driver_register(driver);
+	if (ret)
+		return ret;
+	ret = power_supply_reg_notifier(&bcl_supplier_nb);
+	if (ret) {
+		platform_driver_unregister(driver);
+		atomic_set(&bcl_waiting_supplies, 0);
+		return ret;
+	}
+	/* Close the supply-registration window between probe and notifier setup. */
+	schedule_work(&bcl_supplier_work);
+	return 0;
+}
+
+static void bcl_soc_driver_unregister(struct platform_driver *driver)
+{
+	power_supply_unreg_notifier(&bcl_supplier_nb);
+	cancel_work_sync(&bcl_supplier_work);
+	platform_driver_unregister(driver);
+	atomic_set(&bcl_waiting_supplies, 0);
+}
+module_driver(bcl_driver, bcl_soc_driver_register, bcl_soc_driver_unregister);
 MODULE_DESCRIPTION("Qualcomm battery depletion thermal sensor");
 MODULE_LICENSE("GPL");

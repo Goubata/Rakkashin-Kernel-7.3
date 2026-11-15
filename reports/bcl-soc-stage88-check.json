@@ -1,0 +1,12 @@
+{
+  "log": "reports/bcl-soc-stage88-qemu.log",
+  "test": "bcl-soc",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    25,
+    0,
+    0,
+    25
+  ]
+}

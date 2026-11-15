@@ -17,7 +17,7 @@
  #include <linux/of.h>
  #include <linux/platform_device.h>
  #include <linux/mutex.h>
-@@ -18,359 +13,336 @@
+@@ -18,359 +13,396 @@
  #include <linux/thermal.h>
  #include <linux/cpufreq.h>
  #include <linux/pm_qos.h>
@@ -31,6 +31,8 @@
  #define BOOT_SOCD_THRESHOLD 97
 -#define MAX_STR_LEN 128
 -
++/* Retry demand only: no per-device state or supply pointers are shared. */
++static atomic_t bcl_waiting_supplies = ATOMIC_INIT(0);
  static int boot_frequency = INT_MAX;
  module_param(boot_frequency, int, 0400);
  
@@ -347,27 +349,6 @@
  		return;
 -
 -	if (bcl_read_soc(NULL, &battery_depletion) < 0)
--		return;
--
--	mutex_lock(&bcl_perph->state_trans_lock);
--	if (!bcl_perph->irq_enabled)
--		goto eval_exit;
--	if (battery_depletion < bcl_perph->trip_temp)
--		goto eval_exit;
--
--	bcl_perph->trip_val = battery_depletion;
--	mutex_unlock(&bcl_perph->state_trans_lock);
--	thermal_zone_device_update(bcl_perph->tz_dev,
--				THERMAL_TRIP_VIOLATED);
--
--	return;
--eval_exit:
--	mutex_unlock(&bcl_perph->state_trans_lock);
--}
--
--static int battery_supply_callback(struct notifier_block *nb,
--			unsigned long event, void *data)
--{
 +	mutex_lock(&bcl->state_trans_lock);
 +	notify = bcl->ready && !bcl->stopping && bcl->irq_enabled &&
 +		 depletion >= bcl->trip_temp;
@@ -401,12 +382,8 @@
 +static int battery_supply_callback(struct notifier_block *nb, unsigned long event, void *data)
 +{
 +	struct bcl_device *bcl = container_of(nb, struct bcl_device, psy_nb);
- 	struct power_supply *psy = data;
- 
--	if (strcmp(psy->desc->name, "battery"))
--		return NOTIFY_OK;
--	schedule_work(&bcl_perph->soc_eval_work);
--
++	struct power_supply *psy = data;
++
 +	if (event != PSY_EVENT_PROP_CHANGED || (psy != bcl->batt_psy && psy != bcl->usb_psy))
 +		return NOTIFY_DONE;
 +	mutex_lock(&bcl->state_trans_lock);
@@ -416,9 +393,9 @@
 +			mod_delayed_work(system_highpri_wq, &bcl->boot_work, 0);
 +	}
 +	mutex_unlock(&bcl->state_trans_lock);
- 	return NOTIFY_OK;
- }
- 
++	return NOTIFY_OK;
++}
++
 +static void bcl_soc_quiesce(void *data)
 +{
 +	struct bcl_device *bcl = data;
@@ -442,8 +419,10 @@
 +	struct power_supply *psy = power_supply_get_by_name(name);
 +	int ret;
 +
-+	if (!psy)
++	if (!psy) {
++		atomic_set(&bcl_waiting_supplies, 1);
 +		return ERR_PTR(-EPROBE_DEFER);
++	}
 +	ret = devm_add_action_or_reset(dev, bcl_put_supply, psy);
 +	return ret ? ERR_PTR(ret) : psy;
 +}
@@ -509,8 +488,76 @@
 +	return 0;
 +}
 +
- static void bcl_soc_remove(struct platform_device *pdev)
++static void bcl_soc_remove(struct platform_device *pdev)
++{
++	struct bcl_device *bcl = platform_get_drvdata(pdev);
++
++	if (bcl)
++		bcl_soc_quiesce(bcl);
++	platform_set_drvdata(pdev, NULL);
++}
++
++static const struct of_device_id bcl_match[] = {
++	{ .compatible = "qcom,msm-bcl-soc" }, {},
++};
++MODULE_DEVICE_TABLE(of, bcl_match);
++static struct platform_driver bcl_driver = {
++	.probe = bcl_soc_probe, .remove = bcl_soc_remove,
++	.driver = { .name = BCL_DRIVER_NAME, .of_match_table = bcl_match },
++};
++static void bcl_retry_suppliers(struct work_struct *work)
++{
++	int ret;
++
++	/* Native driver_attach serializes probes and skips already bound devices. */
++	if (!atomic_xchg(&bcl_waiting_supplies, 0))
+ 		return;
+-
+-	mutex_lock(&bcl_perph->state_trans_lock);
+-	if (!bcl_perph->irq_enabled)
+-		goto eval_exit;
+-	if (battery_depletion < bcl_perph->trip_temp)
+-		goto eval_exit;
+-
+-	bcl_perph->trip_val = battery_depletion;
+-	mutex_unlock(&bcl_perph->state_trans_lock);
+-	thermal_zone_device_update(bcl_perph->tz_dev,
+-				THERMAL_TRIP_VIOLATED);
+-
+-	return;
+-eval_exit:
+-	mutex_unlock(&bcl_perph->state_trans_lock);
+-}
+-
+-static int battery_supply_callback(struct notifier_block *nb,
+-			unsigned long event, void *data)
++	ret = driver_attach(&bcl_driver.driver);
++	if (ret) {
++		atomic_set(&bcl_waiting_supplies, 1);
++		pr_err_ratelimited("BCL supply retry failed: %d\n", ret);
++	}
++}
++static DECLARE_WORK(bcl_supplier_work, bcl_retry_suppliers);
++
++static int bcl_supply_available(struct notifier_block *nb, unsigned long event,
++				void *data)
  {
+ 	struct power_supply *psy = data;
+ 
+-	if (strcmp(psy->desc->name, "battery"))
+-		return NOTIFY_OK;
+-	schedule_work(&bcl_perph->soc_eval_work);
+-
++	if (event != PSY_EVENT_PROP_CHANGED || !psy ||
++	    (strcmp(psy->desc->name, "battery") && strcmp(psy->desc->name, "usb")))
++		return NOTIFY_DONE;
++	if (atomic_read(&bcl_waiting_supplies))
++		schedule_work(&bcl_supplier_work);
+ 	return NOTIFY_OK;
+ }
+-
+-static void bcl_soc_remove(struct platform_device *pdev)
+-{
 -	power_supply_unreg_notifier(&bcl_perph->psy_nb);
 -	flush_work(&bcl_perph->soc_eval_work);
 -}
@@ -629,24 +676,16 @@
 -	dev_set_drvdata(&pdev->dev, bcl_perph);
 -
 -	return 0;
-+	struct bcl_device *bcl = platform_get_drvdata(pdev);
-+
-+	if (bcl)
-+		bcl_soc_quiesce(bcl);
-+	platform_set_drvdata(pdev, NULL);
- }
- 
- static const struct of_device_id bcl_match[] = {
+-}
+-
+-static const struct of_device_id bcl_match[] = {
 -	{
 -		.compatible = "qcom,msm-bcl-soc",
 -	},
 -	{},
 -};
 -
-+	{ .compatible = "qcom,msm-bcl-soc" }, {},
-+};
-+MODULE_DEVICE_TABLE(of, bcl_match);
- static struct platform_driver bcl_driver = {
+-static struct platform_driver bcl_driver = {
 -	.probe  = bcl_soc_probe,
 -	.remove = bcl_soc_remove,
 -	.driver = {
@@ -655,10 +694,37 @@
 -	},
 -};
 -
-+	.probe = bcl_soc_probe, .remove = bcl_soc_remove,
-+	.driver = { .name = BCL_DRIVER_NAME, .of_match_table = bcl_match },
+-module_platform_driver(bcl_driver);
++static struct notifier_block bcl_supplier_nb = {
++	.notifier_call = bcl_supply_available,
 +};
- module_platform_driver(bcl_driver);
++
++static int bcl_soc_driver_register(struct platform_driver *driver)
++{
++	int ret;
++
++	ret = platform_driver_register(driver);
++	if (ret)
++		return ret;
++	ret = power_supply_reg_notifier(&bcl_supplier_nb);
++	if (ret) {
++		platform_driver_unregister(driver);
++		atomic_set(&bcl_waiting_supplies, 0);
++		return ret;
++	}
++	/* Close the supply-registration window between probe and notifier setup. */
++	schedule_work(&bcl_supplier_work);
++	return 0;
++}
++
++static void bcl_soc_driver_unregister(struct platform_driver *driver)
++{
++	power_supply_unreg_notifier(&bcl_supplier_nb);
++	cancel_work_sync(&bcl_supplier_work);
++	platform_driver_unregister(driver);
++	atomic_set(&bcl_waiting_supplies, 0);
++}
++module_driver(bcl_driver, bcl_soc_driver_register, bcl_soc_driver_unregister);
 +MODULE_DESCRIPTION("Qualcomm battery depletion thermal sensor");
  MODULE_LICENSE("GPL");
 --- a/ports/qcom-bcl-soc/Makefile

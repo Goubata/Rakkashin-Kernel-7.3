@@ -1,0 +1,54 @@
+{
+  "stage": 88,
+  "scope": "Unaccepted BCL SoC draft; late class supply registration retries via real native driver_attach, with notifier/work lifetime validation",
+  "checks": {
+    "log": "reports/bcl-soc-stage88-qemu.log",
+    "test": "bcl-soc",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      25,
+      0,
+      0,
+      25
+    ]
+  },
+  "imports_checked": 39,
+  "artifact": "artifacts/bcl-soc-draft-stage88",
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "regression_reproduced": "Real native platform driver without the new supplier retry remains unbound after late power_supply class registration; explicit native attach succeeds immediately",
+  "fix_verified": [
+    "New module-level notifier reacts only to named battery/usb changed events and only queues retry work when a lookup deferred",
+    "Native driver_attach skips bound devices, retries pending matches and preserves real probe errors; no per-device supply state shared",
+    "Initial work closes registration window after notifier setup; notifier unregister and work drain precede platform driver teardown",
+    "Native OF late battery then USB binds; repeated missing-USB retries release battery reference each time",
+    "Supplier notifier registration failure after real device binding fully unregisters driver and releases device resources",
+    "Unregister with queued retry leaves no work or registration; later class-supply events do not rebind the removed driver"
+  ],
+  "pending": [
+    "Physical supplier registration/order, charging firmware, CPU policies and cooling operation",
+    "Supplier forced unbind/device links, manually unbound device policy and exhaustive concurrent PM/unbind/notifier races",
+    "All remaining PMIC BCL and other drivers, full board DT/boot/vendor_boot/dtbo/DLKM/SELinux and physical daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/qcom-bcl-soc/bcl_soc.c": "04f59e40e3fec3544a33e893f20879b956807490cd5a089408561d0a5f5519ba",
+    "tests/bcl-soc/avr-bcl-soc-test.c": "5b97c77675dac6856a82511648d6191785fda3bf36426a383ac552e5952d7bb3",
+    "tests/bcl-soc/native-qos-test.h": "4a682e7f72fc1565b790e50decae87e9c08e1210f6797276dcafadebed547bb0",
+    "tests/bcl-soc/avr-bcl-soc-test.ko": "a420d0c02f8c1b69a9845def7a694d296b6cfdfc3be37cabb79240528567432a",
+    "tests/bcl-soc/qemu-bcl.dtso": "5d9926c67be024d821d7bfc4b229803ee718d2d8d6da2aa30b7e9e61b264495e",
+    "tests/qemu/bcl-soc-tests.cpio.gz": "5d52c0874ad31853049d072c42042bd904c35337e41435d3aa49cc77b1a034f5",
+    "reports/bcl-soc-source-lock.json": "a098af2ccdd16360efef9b18294582d967d82ab9ea7a8c1840e62f24dc1e4b85",
+    "patches/bcl-soc-7.3.patch": "d604f4e35b4a890cc5eafa7c65b46d2347293d0da9e867e86d12d157cd2bd0fc",
+    "reports/bcl-soc-stage88-build.log": "087f82accc7a8715ff14a22ce575d7b5dc0f8679b016816f953a101648c30a9d",
+    "reports/bcl-soc-stage88-check.json": "4a2157227a2f08d43537b6dafed19632d07f39841ffe66348626c6e9d9b42150",
+    "reports/bcl-soc-stage88-qemu.log": "14a3b68faef2403aec5890044c298276424b35b339c3b7bec42a0895e9917b82",
+    "reports/bcl-soc-stage88-qemu.json": "86b18b016006f5a788162d4016a33c5c386c82ce140e960c0198ec6c78f1a2f7",
+    "reports/bcl-soc-stage88-crc.json": "43f7fce9b8de6d98a584737264c3400eb6882ff921d85accce3fdc1c19ac9338",
+    "reports/bcl-soc-stage88-dt.json": "536d8d844ccce2f120aaa7df6b138a7fa3095d4ea694845661f09f9a225f7f1b",
+    "artifacts/bcl-soc-draft-stage88/SHA256SUMS": "0823bd465a58d98cea23e4105c87a2b1412ddcdb205431f1b735306e25502a71"
+  }
+}

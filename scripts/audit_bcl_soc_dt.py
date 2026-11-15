@@ -2,7 +2,7 @@
 """Check selected saved BCL depletion/cooling DT semantics; never write DT."""
 from pathlib import Path
 import argparse,hashlib,json,struct
-p=argparse.ArgumentParser(description=__doc__);p.add_argument("--guest",action="store_true");args=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument("--guest",action="store_true");p.add_argument("--output",type=Path,default=Path("reports/bcl-soc-stage87-dt.json"));args=p.parse_args()
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
 def cells(raw):
@@ -84,4 +84,4 @@ if args.guest:
  check(sorted(bounds)==sorted(saved_bounds),'three cooling bounds match saved AVR; provider hardware deliberately private')
  guest={'file':name,'sha256':hashlib.sha256(raw).hexdigest(),'checks':checks,'scope':'Private guest fixture matches selected scalar binding shape only; substitute cooling providers do not emulate physical cooling'}
 r={'passed':not errors,'scope':'Selected BCL SoC provider, zero-cell consumer, depletion trips and normalized cooling links only; not full DT schema or driver availability','inputs':inputs,'guest':guest,'saved_semantics_preserved':preserved,'dt_modified':False,'physical_verified':False,'whole_board_accepted':False,'errors':errors}
-(ROOT/'reports/bcl-soc-stage87-dt.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({'passed':r['passed'],'errors':errors},indent=2));raise SystemExit(bool(errors))
+(ROOT/args.output).write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({'passed':r['passed'],'errors':errors},indent=2));raise SystemExit(bool(errors))

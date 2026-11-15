@@ -5,7 +5,7 @@
       "file": "ports/qcom-bcl-soc/bcl_soc.c",
       "source": "drivers/thermal/qcom/bcl_soc.c",
       "original_sha256": "7c5483a207fd5114282861f214a07df92253a1db41bd0f034aeec617d52e49a5",
-      "sha256": "2a68a944de081801051d00389725827caf844e0c2a5ac4770c3dcaf31046938b"
+      "sha256": "04f59e40e3fec3544a33e893f20879b956807490cd5a089408561d0a5f5519ba"
     },
     {
       "file": "ports/qcom-bcl-soc/Makefile",
@@ -14,7 +14,7 @@
       "sha256": "1d114ec57f326a947bd7152d46ca8956fa6c84eae2abe3cfceb0e09a5fd9598e"
     }
   ],
-  "patch_sha256": "730adc336117f9df680516b2a99911351dae3c69f33d6deb7caa2cb466478e3f",
+  "patch_sha256": "d604f4e35b4a890cc5eafa7c65b46d2347293d0da9e867e86d12d157cd2bd0fc",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Pinned source and patch replay only; unaccepted BCL SoC draft",
@@ -22,11 +22,12 @@
     "Per-device power-supply references, notifier/work and thermal registration ownership with native 7.3 APIs",
     "Preserve depletion metric and boot policy with strict property validation and error propagation",
     "One owned QoS request/reference per shared CPU policy; rollback partial setup; drain work before managed zone/supply release",
-    "Use native cached thermal temperature for trend without recursive sensor reads"
+    "Use native cached thermal temperature for trend without recursive sensor reads",
+    "On named-supply notification retry native driver_attach only when a supply lookup deferred; register notifier after driver then close missed-event window with work; unregister and drain retry before driver teardown"
   ],
   "pending": [
     "Physical battery/USB/thermal/cooling behavior and actual OF registration",
-    "Supplier driver forced unbind, late supplier deferred-probe wakeup, exhaustive PM/unbind races",
+    "Supplier driver forced unbind and exhaustive PM/unbind races; arbitrary userspace force-unbind policy is not changed",
     "Whole-board drivers/DT/boot/DLKM/SELinux acceptance"
   ]
 }

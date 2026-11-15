@@ -14,8 +14,8 @@ static struct cpufreq_policy *test_policy_get(unsigned int);
 static void test_policy_put(struct cpufreq_policy *);
 static int test_qos_add(struct freq_constraints *, struct freq_qos_request *, enum freq_qos_req_type, s32);
 static int test_notifier(struct notifier_block *);
-#undef module_platform_driver
-#define module_platform_driver(driver)
+#undef module_driver
+#define module_driver(driver, register, unregister)
 #define devm_thermal_of_zone_register test_zone
 #define cpufreq_cpu_get test_policy_get
 #define cpufreq_cpu_put test_policy_put
@@ -34,6 +34,8 @@ struct fixture {
  struct cpufreq_policy policies[2];
  int refs[2], missing_cpu, add_calls, fail_add, zone_error, notifier_error;
  int present, capacity, usb_type, present_error, capacity_error, usb_error;
+ int notifier_calls, fail_notifier_call;
+ bool driver_registered, plain_driver;
  bool use_of;
  struct device_node *sensor_node;
  struct thermal_cooling_device *cdev[3];
@@ -74,7 +76,9 @@ static int test_qos_add(struct freq_constraints *q,struct freq_qos_request *req,
 }
 static int test_notifier(struct notifier_block *nb)
 {
- return backend->notifier_error ?: power_supply_reg_notifier(nb);
+ backend->notifier_calls++;
+ if(backend->notifier_error && (!backend->fail_notifier_call || backend->notifier_calls==backend->fail_notifier_call))return backend->notifier_error;
+ return power_supply_reg_notifier(nb);
 }
 static void drop_zone(void *data){thermal_zone_device_unregister(data);}
 static struct thermal_zone_device *test_zone(struct device *dev,int id,void *data,const struct thermal_zone_device_ops *ops)
@@ -111,7 +115,7 @@ static int setup(struct kunit *test)
  struct fixture *f=kunit_kzalloc(test,sizeof(*f),GFP_KERNEL);
  struct power_supply_config cfg={};int i;
  if(!f)return -ENOMEM;
- backend=f;test->priv=f;boot_frequency=INT_MAX;f->missing_cpu=-1;f->present=1;f->capacity=2;f->usb_type=POWER_SUPPLY_USB_TYPE_SDP;
+ backend=f;test->priv=f;atomic_set(&bcl_waiting_supplies,0);boot_frequency=INT_MAX;f->missing_cpu=-1;f->present=1;f->capacity=2;f->usb_type=POWER_SUPPLY_USB_TYPE_SDP;
  for(i=0;i<2;i++)local_freq_constraints_init(&f->policies[i].constraints);
  f->pdev=platform_device_register_simple("avr-bcl-private",PLATFORM_DEVID_AUTO,NULL,0);
  if(IS_ERR(f->pdev))return PTR_ERR(f->pdev);
@@ -127,7 +131,14 @@ fail:platform_device_unregister(f->pdev);return i;
 }
 static void cleanup(struct kunit *test)
 {
- struct fixture *f=test->priv;stop(f);
+ struct fixture *f=test->priv;
+ if(f->driver_registered){
+  if(f->plain_driver)platform_driver_unregister(&bcl_driver);
+  else bcl_soc_driver_unregister(&bcl_driver);
+  f->driver_registered=false;
+ }
+ bcl_driver.driver.name=BCL_DRIVER_NAME;
+ stop(f);
  KUNIT_EXPECT_EQ(test,f->refs[0],0);KUNIT_EXPECT_EQ(test,f->refs[1],0);
  if(f->usb){KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),1);power_supply_unregister(f->usb);}
  if(f->battery){KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);power_supply_unregister(f->battery);}
@@ -293,12 +304,89 @@ static void native_of_repeated_zone_lifetime(struct kunit *test)
  struct fixture *f=test->priv;int i;attach_of(test,f);KUNIT_ASSERT_NOT_NULL(test,f->sensor_node);
  for(i=0;i<3;i++){KUNIT_ASSERT_EQ(test,start(f),0);KUNIT_EXPECT_STREQ(test,thermal_zone_device_type(f->bcl->tz_dev),"avr-socd");stop(f);}
 }
+/* Real driver-core binding tests, including a late class supplier without a
+ * separate hardware driver's successful bind to kick native deferred probe. */
+static void remove_supplies(struct fixture *f)
+{
+ if(f->usb){power_supply_unregister(f->usb);f->usb=NULL;}
+ if(f->battery){power_supply_unregister(f->battery);f->battery=NULL;}
+}
+static int publish_supply(struct fixture *f,bool usb)
+{
+ struct power_supply_config cfg={.drv_data=f,.no_wakeup_source=true};
+ struct power_supply *psy=power_supply_register(&f->pdev->dev,usb ? &usb_desc : &battery_desc,&cfg);
+ if(IS_ERR(psy))return PTR_ERR(psy);
+ if(usb)f->usb=psy;else f->battery=psy;
+ flush_delayed_work(&psy->deferred_register_work);flush_work(&psy->changed_work);
+ return 0;
+}
+static int register_driver(struct fixture *f,bool plain)
+{
+ int ret;bcl_driver.driver.name="avr-bcl-private";f->plain_driver=plain;
+ ret=plain ? platform_driver_register(&bcl_driver) : bcl_soc_driver_register(&bcl_driver);
+ if(!ret)f->driver_registered=true;
+ return ret;
+}
+static void native_late_class_supply_needs_retry(struct kunit *test)
+{
+ struct fixture *f=test->priv;remove_supplies(f);KUNIT_ASSERT_EQ(test,register_driver(f,true),0);wait_for_device_probe();
+ KUNIT_ASSERT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);
+ KUNIT_ASSERT_EQ(test,publish_supply(f,false),0);KUNIT_ASSERT_EQ(test,publish_supply(f,true),0);wait_for_device_probe();
+ /* No supplier driver bound, so class registration alone did not retry BCL. */
+ KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);
+ /* A normal native attach can bind immediately with the now-present supplies. */
+ KUNIT_ASSERT_EQ(test,driver_attach(&bcl_driver.driver),0);KUNIT_EXPECT_NOT_NULL(test,platform_get_drvdata(f->pdev));
+}
+static void late_battery_then_usb_binds_native_of(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct bcl_device *bcl;
+ attach_of(test,f);KUNIT_ASSERT_NOT_NULL(test,f->sensor_node);remove_supplies(f);
+ KUNIT_ASSERT_EQ(test,register_driver(f,false),0);flush_work(&bcl_supplier_work);wait_for_device_probe();
+ KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);
+ KUNIT_ASSERT_EQ(test,publish_supply(f,false),0);flush_work(&bcl_supplier_work);
+ KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);
+ KUNIT_ASSERT_EQ(test,publish_supply(f,true),0);flush_work(&bcl_supplier_work);wait_for_device_probe();
+ bcl=platform_get_drvdata(f->pdev);KUNIT_ASSERT_NOT_NULL(test,bcl);flush_work(&bcl->soc_eval_work);
+ KUNIT_EXPECT_TRUE(test,bcl->ready);KUNIT_EXPECT_STREQ(test,thermal_zone_device_type(bcl->tz_dev),"avr-socd");
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),2);KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),2);
+ KUNIT_EXPECT_EQ(test,atomic_read(&bcl_waiting_supplies),0);
+}
+static void late_usb_after_multiple_retries(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;struct bcl_device *bcl;
+ power_supply_unregister(f->usb);f->usb=NULL;KUNIT_ASSERT_EQ(test,register_driver(f,false),0);flush_work(&bcl_supplier_work);
+ for(i=0;i<4;i++){
+  power_supply_changed(f->battery);flush_work(&f->battery->changed_work);flush_work(&bcl_supplier_work);
+  KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);
+ }
+ KUNIT_ASSERT_EQ(test,publish_supply(f,true),0);flush_work(&bcl_supplier_work);bcl=platform_get_drvdata(f->pdev);KUNIT_ASSERT_NOT_NULL(test,bcl);
+ flush_work(&bcl->soc_eval_work);KUNIT_EXPECT_TRUE(test,bcl->ready);KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),2);
+}
+static void supplier_notifier_failure_unwinds_bound_device(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->notifier_error=-EIO;f->fail_notifier_call=2;
+ KUNIT_EXPECT_EQ(test,register_driver(f,false),-EIO);KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),1);
+ KUNIT_EXPECT_PTR_EQ(test,driver_find("avr-bcl-private",&platform_bus_type),NULL);
+ KUNIT_EXPECT_FALSE(test,work_pending(&bcl_supplier_work));
+}
+static void unregister_drains_retry_before_late_supply(struct kunit *test)
+{
+ struct fixture *f=test->priv;remove_supplies(f);KUNIT_ASSERT_EQ(test,register_driver(f,false),0);
+ bcl_soc_driver_unregister(&bcl_driver);f->driver_registered=false;
+ KUNIT_EXPECT_FALSE(test,work_pending(&bcl_supplier_work));KUNIT_EXPECT_EQ(test,atomic_read(&bcl_waiting_supplies),0);
+ KUNIT_ASSERT_EQ(test,publish_supply(f,false),0);KUNIT_ASSERT_EQ(test,publish_supply(f,true),0);wait_for_device_probe();
+ KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);KUNIT_EXPECT_FALSE(test,work_pending(&bcl_supplier_work));
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),1);
+}
 static struct kunit_case cases[]={
  KUNIT_CASE(all_capacity_values),KUNIT_CASE(absent_battery),KUNIT_CASE(invalid_properties),KUNIT_CASE(property_errors_preserve_output),
  KUNIT_CASE(missing_battery_defers),KUNIT_CASE(missing_usb_unwinds_battery),KUNIT_CASE(zone_failure_unwinds),KUNIT_CASE(notifier_failure_unwinds),
  KUNIT_CASE(thresholds_and_native_cache),KUNIT_CASE(trend_hysteresis),KUNIT_CASE(real_notifier_and_remove),KUNIT_CASE(wrong_notifier_event),
  KUNIT_CASE(repeated_probe_remove),KUNIT_CASE(qos_shared_policies),KUNIT_CASE(qos_add_failure_rolls_back),KUNIT_CASE(missing_policy_rolls_back),
- KUNIT_CASE(boot_cap_retained_on_unknown),KUNIT_CASE(boot_cap_clears_on_known_recovery),KUNIT_CASE(native_of_depletion_and_cooling_links),KUNIT_CASE(native_of_repeated_zone_lifetime),{}
+ KUNIT_CASE(boot_cap_retained_on_unknown),KUNIT_CASE(boot_cap_clears_on_known_recovery),KUNIT_CASE(native_of_depletion_and_cooling_links),KUNIT_CASE(native_of_repeated_zone_lifetime),
+ KUNIT_CASE(native_late_class_supply_needs_retry),KUNIT_CASE(late_battery_then_usb_binds_native_of),KUNIT_CASE(late_usb_after_multiple_retries),
+ KUNIT_CASE(supplier_notifier_failure_unwinds_bound_device),KUNIT_CASE(unregister_drains_retry_before_late_supply),{}
 };
 static struct kunit_suite suite={.name="avr-bcl-soc",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);

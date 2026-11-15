@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "tests/moto-touch-of/avr-moto-touch-of-test.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    }
+  ]
+}

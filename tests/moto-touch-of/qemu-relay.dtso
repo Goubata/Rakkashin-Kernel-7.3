@@ -1,0 +1,19 @@
+/dts-v1/;
+/plugin/;
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			avr-test-bus {
+				compatible = "simple-bus";
+				#address-cells = <2>;
+				#size-cells = <2>;
+				ranges;
+				mmi-relay {
+					compatible = "mmi,sys-relay";
+					status = "okay";
+				};
+			};
+		};
+	};
+};

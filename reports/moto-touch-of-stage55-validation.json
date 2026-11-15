@@ -1,0 +1,30 @@
+{
+  "stage": 55,
+  "scope": "real OF platform population and provider probe/relay register/fire/unregister in synthetic SMP4 QEMU firmware tree; no direct platform-device registration in this test",
+  "passed": true,
+  "cases_passed": 1,
+  "candidate_node_properties_match_test_node": true,
+  "candidate_node": "/soc/mmi-relay",
+  "guest_node": "/avr-test-bus/mmi-relay",
+  "parent_bus_compatible_matches": "simple-bus",
+  "main_packaged_modules": 116,
+  "unaccepted_goodix_info_drafts": 4,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Actual AVR boot/OF timing and ROM/touch consumers",
+    "Annotation probe/remove/minidump and info init gaps recorded in Stage54",
+    "Touch ioctl/lifetime/firmware/SPI/display and other mandatory drivers",
+    "Whole-board DT SID4 conflict and complete boot/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "tests/moto-touch-of/qemu-relay.dtso": "a1a6d1b28031d100e866abc42062c8af0334c8be2f9d53af127624752eac72bc",
+    "tests/moto-touch-of/avr-moto-touch-of-test.c": "8f78736a539af2f3f5f3f15b8e8b2c2b60c043b48bd37eaee71de415ef29bf9c",
+    "reports/moto-touch-of-stage55-build.log": "3c5997ad62ab22c80ae1ba94ee3c2aae4cb4d72b722716975f3cda5f52db114b",
+    "reports/moto-touch-of-stage55-qemu.log": "c0125552942f7480da7f297fe494a1c84f5a02817ce82ae3ec2a760d4c750f07",
+    "reports/moto-touch-of-stage55-qemu.json": "ecdeacadecd2cbcb182bf34aab1a40708ed318bc190573b517b3428fb73247a1",
+    "reports/moto-touch-of-stage55-crc.json": "23c8d30efaefb0e349085b3a47072d09a312c6387d2fa95d12e7ba21ec2466c0",
+    "reports/moto-touch-deps-stage53-dt.json": "51a50fab7fda6884eb1e3676d3bc9e3f8674da36281e54e5ae2bf03215f1e68d"
+  }
+}

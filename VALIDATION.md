@@ -852,3 +852,22 @@ info init failure handling and full touch open/ioctl/compat/remove/probe lifetim
 remain. Physical SPI/IRQ/display/power/firmware/gesture/stylus and daemon/ROM
 acceptance also remain. No all-functions/software-readiness claim is made.
 See reports/goodix-touch-stage54-validation.json and draft artifacts directory.
+
+
+## Stage55: firmware DT population and real relay probe
+
+A synthetic QEMU firmware tree supplies a simple-bus child with exactly the
+candidate relay compatible/status properties. Native OF creates the platform
+device and the real provider driver binds. One SMP4 KUnit case locates that
+OF-created device (no direct platform registration in this test), checks driver
+data and round-trips registration/payload/unregister through actual exported APIs.
+Provider/test unload and guest powerdown succeed without warnings. Selected
+candidate/guest node properties and parent bus compatible are byte-identical.
+
+This closes the selected synthetic OF population/probe gap left by Stage53;
+actual AVR boot timing, full DT and consumers still require acceptance. Module
+counts remain main116 + unaccepted drafts4, with all Stage54 implementation
+gaps and whole-board/ROM/boot gates open. Evidence:
+reports/moto-touch-of-stage55-validation.json. Reproduce using
+`python scripts/build_goodix_touch.py --relay-of-tests` and
+`python scripts/run_qemu.py --test moto-touch-of --cpus 4 --log reports/relay-of.log`.

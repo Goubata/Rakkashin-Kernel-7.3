@@ -641,3 +641,12 @@ SMEM取得のerror pointer/size判定と、注釈のformat長/加算overflow/NUL
 注釈probe/remove/minidump lifetime、infoの初期化失敗処理、touch ioctl/終了/partial probeと
 実SPI/display/firmware/ROMの受入が残るため、4個を配布セットへ昇格していない。
 `reports/goodix-touch-stage54-validation.json`。software readinessは未達。
+
+
+## Stage55: relayの実OF populate/probe
+
+QEMU firmware DTのsimple-bus配下へcandidateと同じ2 propertyのrelay nodeを追加し、
+7.3のOFがplatform deviceを生成→本物のmmi_relay probeへbind→実register/fire/unregisterを
+通す試験が成功。試験コードからplatform deviceを直接生成していない。
+`reports/moto-touch-of-stage55-validation.json`。これは仮想DTによるframework確認で、
+AVR実機DT全体やROM/touchの動作確認ではない。主成果物116個・未受入draft4個のまま。

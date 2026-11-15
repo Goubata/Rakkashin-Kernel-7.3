@@ -545,3 +545,11 @@ image所有状態7・proxy8・rail8・実入力loader7の計30件がSMP4で成�
 image試験のshutdown/unmapは記録callbackであり、本番primitiveは実APIへ接続している。
 `reports/pas-images-stage44-validation.json`。driver全体への障害注入、critical分岐の実行、
 IOMMU partial unmapや未受入の非Alor終端失敗、実機secure ABIと全体software readinessは未完。
+
+## Stage45: ROM向けremoteproc名の維持
+
+Motorola元ソースはpdev->nameをremoteproc名へ渡し、実機は
+`a3380000.remoteproc-soccp`。nativeのsysmon名`soccp`をそのまま渡すとname属性が変わる。
+Alor descriptorでplatform名を使い、sysmon service名はsoccpのままにした。
+再ビルド/CRC/descriptorの静的照合を通過。これは実probeやROM daemonの動作確認ではない。
+`reports/pas-name-stage45-validation.json`。全sysfs/ioctl/ROM ABI照合とsoftware readinessは残る。

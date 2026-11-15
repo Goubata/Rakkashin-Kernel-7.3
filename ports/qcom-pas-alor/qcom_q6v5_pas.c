@@ -70,6 +70,7 @@ struct qcom_pas_data {
 	bool arc_rails;
 	bool uses_elf64;
 	bool critical_fw;
+	bool use_platform_name;
 };
 
 struct qcom_pas {
@@ -993,7 +994,9 @@ static int qcom_pas_probe(struct platform_device *pdev)
 	if (desc->minidump_id)
 		ops = &qcom_pas_minidump_ops;
 
-	rproc = devm_rproc_alloc(&pdev->dev, desc->sysmon_name, ops, fw_name, sizeof(*pas));
+	rproc = devm_rproc_alloc(&pdev->dev,
+				desc->use_platform_name ? pdev->name : desc->sysmon_name,
+				ops, fw_name, sizeof(*pas));
 
 	if (!rproc) {
 		dev_err(&pdev->dev, "unable to allocate remoteproc\n");
@@ -1936,6 +1939,7 @@ static const struct qcom_pas_data alor_soccp_resource = {
 	.arc_rails = true,
 	.uses_elf64 = true,
 	.critical_fw = true,
+	.use_platform_name = true,
 };
 
 static const struct qcom_pas_data kaanapali_soccp_resource = {

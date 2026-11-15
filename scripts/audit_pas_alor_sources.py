@@ -53,6 +53,7 @@ def main():
                       'Track acquired proxy resources, serialize handover, defer early handover until main authentication succeeds and retry incomplete release',
                       'Track main/DTB authentication attempts and owned mappings; stop images before unmap/metadata/proxy cleanup',
                       'Use pinned Motorola critical Alor authentication/shutdown failure-stop policy; retain state on unconfirmed quiesce',
+                      'Preserve stock platform remoteproc name for Alor instead of substituting the sysmon service name',
                   ],
                   'pending': ['Physical ARC votes, retained-error recovery and regulator framework fault injection',
                               'ELF64 minidump metadata and early-attach lifetime/failure cleanup',

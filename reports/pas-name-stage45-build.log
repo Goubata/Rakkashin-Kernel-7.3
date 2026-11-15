@@ -1,0 +1,8 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-pas-alor'
+  CC [M]  qcom_q6v5_pas.o
+  MODPOST Module.symvers
+  LD [M]  qcom_q6v5_pas.ko
+  BTF [M] qcom_q6v5_pas.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-pas-alor'
+make: Leaving directory '/work/avr-src'

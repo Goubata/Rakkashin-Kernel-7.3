@@ -10,17 +10,18 @@
  
  #define QCOM_PAS_DECRYPT_SHUTDOWN_DELAY_MS	100
  
-@@ -64,6 +67,9 @@
+@@ -64,6 +67,10 @@
  	int region_assign_vmid;
  	bool early_boot;
  	bool needs_tzmem;
 +	bool arc_rails;
 +	bool uses_elf64;
 +	bool critical_fw;
++	bool use_platform_name;
  };
  
  struct qcom_pas {
-@@ -77,6 +83,11 @@
+@@ -77,6 +84,11 @@
  
  	struct regulator *cx_supply;
  	struct regulator *px_supply;
@@ -32,7 +33,7 @@
  
  	struct device *proxy_pds[3];
  
-@@ -211,9 +222,64 @@
+@@ -211,9 +223,64 @@
  	return ret;
  }
  
@@ -97,7 +98,7 @@
  
  	/*
  	 * qcom_pas_load() did pass pas_metadata to the SCM driver for storing
-@@ -225,6 +291,7 @@
+@@ -225,6 +292,7 @@
  	if (pas->dtb_pas_id)
  		qcom_pas_metadata_release(pas->dtb_pas_ctx);
  
@@ -105,7 +106,7 @@
  	return 0;
  }
  
-@@ -232,6 +299,9 @@
+@@ -232,6 +300,9 @@
  {
  	struct qcom_pas *pas = rproc->priv;
  	int ret;
@@ -115,7 +116,7 @@
  
  	/* Store firmware handle to be used in qcom_pas_start() */
  	pas->firmware = fw;
-@@ -246,14 +316,19 @@
+@@ -246,14 +317,19 @@
  		if (ret) {
  			dev_err(pas->dev, "request_firmware failed for %s: %d\n",
  				pas->dtb_firmware_name, ret);
@@ -136,7 +137,7 @@
  			return ret;
  		}
  	}
-@@ -277,75 +352,128 @@
+@@ -277,75 +353,128 @@
  	return ret;
  }
  
@@ -299,7 +300,7 @@
  	}
  
  	qcom_pas_metadata_release(pas->pas_ctx);
-@@ -357,28 +485,22 @@
+@@ -357,28 +486,22 @@
  
  	return 0;
  
@@ -341,7 +342,7 @@
  disable_irqs:
  	qcom_q6v5_unprepare(&pas->q6v5);
  
-@@ -391,53 +513,39 @@
+@@ -391,53 +514,39 @@
  static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
  {
  	struct qcom_pas *pas = container_of(q6v5, struct qcom_pas, q6v5);
@@ -416,7 +417,7 @@
  
  	return ret;
  }
-@@ -567,6 +675,8 @@
+@@ -567,6 +676,8 @@
  		goto unroll_attach;
  	}
  
@@ -425,7 +426,7 @@
  	return 0;
  
  unroll_attach:
-@@ -630,8 +740,39 @@
+@@ -630,8 +741,39 @@
  	return 0;
  }
  
@@ -465,7 +466,18 @@
  	pas->cx_supply = devm_regulator_get_optional(pas->dev, "cx");
  	if (IS_ERR(pas->cx_supply)) {
  		if (PTR_ERR(pas->cx_supply) == -ENODEV)
-@@ -861,10 +1002,16 @@
+@@ -852,7 +994,9 @@
+ 	if (desc->minidump_id)
+ 		ops = &qcom_pas_minidump_ops;
+ 
+-	rproc = devm_rproc_alloc(&pdev->dev, desc->sysmon_name, ops, fw_name, sizeof(*pas));
++	rproc = devm_rproc_alloc(&pdev->dev,
++				desc->use_platform_name ? pdev->name : desc->sysmon_name,
++				ops, fw_name, sizeof(*pas));
+ 
+ 	if (!rproc) {
+ 		dev_err(&pdev->dev, "unable to allocate remoteproc\n");
+@@ -861,10 +1005,16 @@
  
  	rproc->has_iommu = of_property_present(pdev->dev.of_node, "iommus");
  	rproc->auto_boot = desc->auto_boot;
@@ -483,7 +495,7 @@
  	pas->rproc = rproc;
  	pas->minidump_id = desc->minidump_id;
  	pas->pas_id = desc->pas_id;
-@@ -967,6 +1114,17 @@
+@@ -967,6 +1117,17 @@
  		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
  
  	rproc_del(pas->rproc);
@@ -501,7 +513,7 @@
  
  	qcom_q6v5_deinit(&pas->q6v5);
  	qcom_pas_unassign_memory_region(pas);
-@@ -1763,6 +1921,23 @@
+@@ -1763,6 +1924,24 @@
  	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
  };
  
@@ -520,12 +532,13 @@
 +	.arc_rails = true,
 +	.uses_elf64 = true,
 +	.critical_fw = true,
++	.use_platform_name = true,
 +};
 +
  static const struct qcom_pas_data kaanapali_soccp_resource = {
  	.crash_reason_smem = 656,
  	.firmware_name = "soccp.mbn",
-@@ -1824,6 +1999,7 @@
+@@ -1824,6 +2003,7 @@
  };
  
  static const struct of_device_id qcom_pas_of_match[] = {

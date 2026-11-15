@@ -674,3 +674,12 @@ are not accepted. Full driver failure injection, secure-world ABI, physical
 attach/restart, all board services/remaining drivers and complete software-ready
 boot artifacts still remain. Draft excluded from packaged 108 modules. Evidence:
 `reports/pas-images-stage44-validation.json`.
+
+## Stage45: preserve the stock Alor remoteproc name source
+
+Pinned Motorola allocates remoteproc with pdev->name; the observed name is
+`a3380000.remoteproc-soccp`. Alor now retains that platform-name source rather
+than the native sysmon string `soccp`; the sysmon service string is unchanged.
+Other descriptors keep native naming. Build, CRC and descriptor/source-flow
+checks pass. No actual probe/daemon test or full ROM interface-equivalence claim
+is made. Evidence: `reports/pas-name-stage45-validation.json`.

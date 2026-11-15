@@ -1,0 +1,28 @@
+{
+  "stage": 45,
+  "scope": "pinned factory/platform-name source-flow comparison and compile/import CRC only; no userspace daemon or device probe execution",
+  "factory_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "factory_source_sha256": "6b5604c4097481511e66661b461295fa2dea77fb06f68c31c210229c5c8bd79b",
+  "observed_stock_remoteproc_name": "a3380000.remoteproc-soccp",
+  "native_sysmon_service_name": "soccp",
+  "alor_uses_platform_name": true,
+  "non_alor_native_name_selection_preserved": true,
+  "crc_passed": true,
+  "draft_module_count": 3,
+  "matching_imports": 133,
+  "software_readiness_target_complete": false,
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "115bfc993990cd355791d34c972fb4b6e011bf5df0c598c14e4323199114a9df",
+    "reports/pas-name-stage45-dt-validation.json": "a9e4232fc430793235ed4c1124fd59b08326fa0ff0630affe8db4a9ac0beb3d7",
+    "reports/pas-name-stage45-crc.json": "45020fa4f4fbf9ab7264feb69c8a3cfbe8d00608f4455aa08e6d05acabd4ecd5",
+    "reports/pas-name-stage45-build.log": "0edcdd7dadc1423784032baf5cc9a3eb778e08dcc35d28b94ec833653bceef60",
+    "reports/soccp-firmware-stage40-readonly.json": "c2981d66f03cd4f30aa14ba11df06a664602525ba14b747f91f9d07a0295b443"
+  },
+  "pending": [
+    "Actual driver probe/framework instantiation and ROM daemon behavior",
+    "Full ROM/sysfs/ioctl/module interfaces and all remaining driver/packaging/software-readiness gates"
+  ]
+}

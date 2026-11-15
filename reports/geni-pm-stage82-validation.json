@@ -1,0 +1,57 @@
+{
+  "stage": 82,
+  "scope": "Actual registered native SPI asynchronous queue and runtime PM with exact production prepare methods; master setup/pins/transfers recorded only",
+  "checks": {
+    "log": "reports/geni-pm-stage82-after-qemu.log",
+    "test": "geni-pm",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      27,
+      0,
+      0,
+      27
+    ]
+  },
+  "expected_baseline_failure": {
+    "log": "reports/geni-pm-stage82-before-qemu.log",
+    "test": "geni-pm",
+    "passed": false,
+    "failures": [
+      "\\bnot ok\\b",
+      "expected all 27 KTAP cases"
+    ],
+    "totals": [
+      25,
+      0,
+      0,
+      25
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Actual master setup/DMA/pinctrl/IRQ/firmware recovery and physical queued transfers; current master setup is a clean-result stub",
+    "Full suspend/remove/deep sleep and all VM modes; hardware shutdown failures are not proven recoverable",
+    "GPI peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Other drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-pm-stage82-before-check.json": "5146771c37a7b4975be84b3135d3de48078d41d88adf348059b41f02fc3d5f94",
+    "reports/geni-pm-stage82-after-check.json": "da758ee3cad339f3b5b9d29e6e586856e4cb7aa3488ea409c04f6fa5c1ea7fdc",
+    "reports/geni-pm-stage82-before-qemu.log": "12b6bc2ddc47ac9c08a1f71bb2705f9928261d9fa6f3e16ebd7add939a0d2528",
+    "reports/geni-pm-stage82-after-qemu.log": "af643a104b81c16e01fcfcb686cf1a1a1a5d6196981c0b584891ef7488b1c4f8",
+    "reports/geni-pm-stage82-before-qemu.json": "2bfad781e47c25c92f9db5bf5ed4f6bd2f6e354f1668f5e159e5fd3aaf0fe0de",
+    "reports/geni-pm-stage82-after-qemu.json": "b31df73e28be98a347eacbef6d26e65a7ccaf5988dbca34b039f99b6f9841fbb",
+    "reports/geni-pm-stage82-before-build.log": "e59edf0c896963570a38dde1b79f78de056c509f17f0ea0a0495ea244b3150a4",
+    "reports/geni-pm-stage82-after-build.log": "781f4573f224ebfee326544981285dce27468788966fe3658ad25e4aba450c5d",
+    "reports/geni-pm-stage82-crc.json": "e8e5773b1778b1bc94e315b47d0dcbf9ee42019ff0469c3e6df7ed1a5424647f",
+    "reports/geni-bus-source-lock.json": "8291308f8bd408c2504b9c5e4a3736a68ce97743d6dceb35a793eb1a5c7a6de1",
+    "patches/geni-bus-7.3.patch": "2ac9e93378e58676cb61094d52da5e1ee0bbb5fb400d0ad8c49e9813cb7a460a",
+    "tests/geni-pm/avr-geni-pm-test.c": "e94ca59d02d9c54c24ff5c07c68f89446242d601cf1b49a3292d12d30efdab03",
+    "tests/geni-pm/generated.h": "ea6decbc470e352d8d9d0d5962202df59b95d3e0228c40092b20c523785f0df1"
+  }
+}

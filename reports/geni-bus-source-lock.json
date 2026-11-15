@@ -35,7 +35,7 @@
       "file": "ports/geni-bus/spi-msm-geni.c",
       "source": "drivers/spi/spi-msm-geni.c",
       "original_sha256": "7b0494313ab100bd43b3c8fde9bc1884edf93bd2f7a1822b86befdbaab28598b",
-      "sha256": "a7e769552cbd16d037e8f1e0ae6c48ee627601b0ffda74db8d9ff1b877f0ec66"
+      "sha256": "b7685d17db10e400182431808d324eafe424701de6a8529774ce5c370f2142e0"
     },
     {
       "file": "ports/geni-bus/spi-qup-trace.h",
@@ -56,7 +56,7 @@
       "sha256": "3fd839f7033685de98043702ddc35ea7faec4632cfce24baba6a1a035730b329"
     }
   ],
-  "patch_sha256": "b2de73385b207944d22e34ee073e37219fce7c9270e8fba1dea69dafb3369900",
+  "patch_sha256": "2ac9e93378e58676cb61094d52da5e1ee0bbb5fb400d0ad8c49e9813cb7a460a",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted GENI bus driver drafts",
@@ -73,6 +73,7 @@
     "Initialize message DMA ownership sentinels before mapping, unwind every prior map on failure and clear each ownership token after release",
     "Keep SPI master DMA channels and devres allocations private until setup succeeds; propagate all request/allocation/config/version failures and release only newly acquired resources",
     "Propagate hardware prepare pinctrl failures, unwind acquired PM on setup errors and guard unprepare after failed preparation",
+    "Re-establish a failed hardware phase before the next queued message; release hardware-owned autosuspend references even after PM disable",
     "Persist exact successful-message PM and sequencer-lock ownership through unprepare; balance fallback resumes and disabled-PM teardown; reject duplicate prepare and make repeated unprepare inert",
     "Unwind SPI message-owned PM references and successful bus lock on prepare failure; preserve shared first-message reference handoff and remove WARN for ordinary resume errors"
   ],

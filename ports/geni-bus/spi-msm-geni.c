@@ -1940,6 +1940,8 @@ rollback:
 	return ret;
 }
 
+static int spi_geni_prepare_transfer_hardware(struct spi_controller *spi);
+
 static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_message *spi_msg)
 {
 	int ret = 0;
@@ -1955,6 +1957,15 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 	if (mas->msg_prepared) {
 		ret = -EBUSY;
 		goto exit_prepare_message;
+	}
+
+	/* After a failed hardware prepare, the native SPI queue can remain
+	 * busy and call prepare_message for the next message without another
+	 * hardware callback. Re-establish the phase before touching the SE. */
+	if (!mas->is_le_vm && !mas->is_xfer_in_progress) {
+		ret = spi_geni_prepare_transfer_hardware(spi);
+		if (ret)
+			goto exit_prepare_message;
 	}
 
 	if (mas->shared_ee) {
@@ -2509,8 +2520,7 @@ static int spi_geni_unprepare_transfer_hardware(struct spi_controller *spi)
 		if (count < 0)
 			SPI_LOG_ERR(mas->ipc, false, mas->dev,
 				"suspend usage count mismatch:%d", count);
-	} else if (!pm_runtime_status_suspended(mas->dev) &&
-			pm_runtime_enabled(mas->dev)) {
+	} else {
 		pm_runtime_mark_last_busy(mas->dev);
 		pm_runtime_put_autosuspend(mas->dev);
 	}

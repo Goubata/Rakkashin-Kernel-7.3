@@ -1,0 +1,7 @@
+{
+  "scope": "Actual registered native SPI asynchronous queue and runtime PM with exact production prepare methods; master setup/pins/transfers recorded only",
+  "image_required": true,
+  "image_sha256": "d1fc48d77360166d54d5be44ce2044ecf9d04da0d9727d24abcf201738eac0c5",
+  "promoted": false,
+  "physical_verified": false
+}

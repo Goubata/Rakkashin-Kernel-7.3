@@ -1534,3 +1534,29 @@ reports/geni-pm-stage81-validation.json. Draft archive includes matching Image
 #24; Stage57 remains unchanged. Full hardware-phase lifecycle, continuous queued
 failure recovery, physical DMA/SPI and all remaining board gates are pending.
 No physical 7.3 boot or partition writes occurred.
+
+## Stage82: native queued SPI hardware-phase recovery
+
+When hardware preparation fails, the native SPI worker may leave its queue busy
+and invoke prepare_message for subsequent messages without another hardware
+callback. If the driver's phase-progress flag is clear, explicitly prepare the
+hardware phase before message setup (LE remains client-managed). Successful
+normal phases are preserved. Also release the nonshared hardware-owned PM
+reference on unprepare even if runtime PM was disabled after acquisition.
+
+Reproduce both bugs on the old source: 25/27 cases pass; the queued case misses
+its second setup and continues with setup=false, and disabled-PM hardware cleanup
+leaves a reference. The same suite passes 27/27 after the fix without WARN/panic.
+Three messages are submitted via actual spi_async while holding the native SPI
+io_mutex to stage them in the same queue; the first setup fails once, the next
+reestablishes hardware preparation and two following messages complete. Flush
+the real native worker before checking zero PM references and idle state. The
+fixture uses real PM/SPI objects but records master initialization, pins and
+transfers, so physical recovery/full master setup is not claimed.
+
+Builder extraction now selects definitions rather than forward declarations and
+orders exact hardware methods before the message methods in the test header.
+Evidence: reports/geni-pm-stage82-validation.json. Reproduce build_geni_bus.py
+--pm-tests and QEMU mode geni-pm (27 cases). Three production modules rebuild
+with 323 matching imports. Full suspend/remove/VM/DMA/firmware and whole-board
+acceptance remain pending. Stage57 stays unchanged; no partition writes occurred.

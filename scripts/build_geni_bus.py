@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build pinned GENI DMA/I2C/SPI drafts with real dependencies; never phone IO."""
 from pathlib import Path
-import argparse,shlex,subprocess,sys
+import argparse,re,shlex,subprocess,sys
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--tests',action='store_true');p.add_argument('--ring-tests',action='store_true');p.add_argument('--map-tests',action='store_true');p.add_argument('--pm-tests',action='store_true');p.add_argument('--setup-tests',action='store_true');a=p.parse_args()
 for name in ['audit_core_patch_replay.py','audit_geni_bus_sources.py']:
@@ -18,8 +18,8 @@ if a.map_tests:
  (ROOT/'tests/geni-map/generated.h').write_text('/* Exact production SPI map/unmap. */\n'+'\n'.join(methods)+'\n')
 if a.pm_tests:
  s=(ROOT/'ports/geni-bus/spi-msm-geni.c').read_text();methods=[]
- for name in ['static int spi_geni_prepare_message(', 'static int spi_geni_unprepare_message(', 'static int spi_geni_prepare_transfer_hardware(', 'static int spi_geni_unprepare_transfer_hardware(']:
-  start=s.index(name);end=s.index('\n}',start)+2;methods.append(s[start:end])
+ for name in ['spi_geni_prepare_transfer_hardware', 'spi_geni_unprepare_transfer_hardware', 'spi_geni_prepare_message', 'spi_geni_unprepare_message']:
+  start=re.search(r'^static int '+name+r'\([^;]*?\)\n\{',s,re.M).start();end=s.index('\n}',start)+2;methods.append(s[start:end])
  (ROOT/'tests/geni-pm/generated.h').write_text('/* Exact production SPI message preparation. */\n'+'\n'.join(methods)+'\n')
 if a.setup_tests:
  s=(ROOT/'ports/geni-bus/spi-msm-geni.c').read_text();start=s.index('static int spi_geni_mas_setup(');end=s.index('\n}',start)+2

@@ -1,0 +1,15 @@
+{
+  "log": "reports/geni-pm-stage82-before-qemu.log",
+  "test": "geni-pm",
+  "passed": false,
+  "failures": [
+    "\\bnot ok\\b",
+    "expected all 27 KTAP cases"
+  ],
+  "totals": [
+    25,
+    0,
+    0,
+    25
+  ]
+}

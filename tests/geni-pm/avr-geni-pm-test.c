@@ -4,6 +4,7 @@
 #include <kunit/test.h>
 #include <linux/module.h>
 #include <linux/pm_runtime.h>
+#include <linux/kthread.h>
 #include <linux/spi/spi.h>
 #include <linux/soc/qcom/geni-se.h>
 #include <linux/qcom-geni-se-common.h>
@@ -22,7 +23,7 @@ struct fixture {
  struct device *dev;struct spi_controller *ctl;struct spi_geni_master *mas;struct spi_message msg;
  int mode,map_error,fifo_error,lock_error,resume_error,unlock_usage;
  unsigned int locks,unlocks,maps,unmaps,resumes,suspends;
- int pin_error,sleep_error,setup_error;unsigned int active_pins,sleep_pins,setups;
+ bool setup_fail_once;int pin_error,sleep_error,setup_error;unsigned int active_pins,sleep_pins,setups;
 };
 static struct fixture *backend;
 static int runtime_resume(struct device *dev){struct fixture *f=dev_get_drvdata(dev);f->resumes++;return f->resume_error;}
@@ -44,11 +45,12 @@ static int record_pinctrl(struct pinctrl *p,struct pinctrl_state *state)
 }
 static int spi_geni_mas_setup(struct spi_controller *ctl)
 {
- struct spi_geni_master *mas=spi_controller_get_devdata(ctl);backend->setups++;
+ struct spi_geni_master *mas=spi_controller_get_devdata(ctl);int ret=backend->setup_error;backend->setups++;
  /* Record only a clean setup result; production DMA setup partial failures
   * and firmware discovery are outside this fixture. */
- if(!backend->setup_error && !mas->shared_ee)mas->setup=true;
- return backend->setup_error;
+ if(!ret && !mas->shared_ee)mas->setup=true;
+ if(ret && backend->setup_fail_once)backend->setup_error=0;
+ return ret;
 }
 #define pinctrl_select_state record_pinctrl
 #define geni_se_select_mode record_select_mode
@@ -62,7 +64,8 @@ static int setup(struct kunit *test)
  f->dev->type=&pm_type;dev_set_drvdata(f->dev,f);f->ctl=spi_alloc_host(f->dev,sizeof(*f->mas));
  if(!f->ctl){root_device_unregister(f->dev);return -ENOMEM;}
  f->mas=spi_controller_get_devdata(f->ctl);f->mas->dev=f->dev;f->mas->spi_rsc.dev=f->dev;
- f->mas->shared_ee=f->mas->shared_se=f->mas->setup=f->mas->dis_autosuspend=true;f->mode=GENI_GPI_DMA;
+ f->mas->shared_ee=f->mas->shared_se=f->mas->setup=f->mas->dis_autosuspend=true;
+ f->mas->is_xfer_in_progress=true; /* Direct message tests start in a hardware phase. */f->mode=GENI_GPI_DMA;
  f->mas->geni_gpio_active=(struct pinctrl_state *)&f->active_pins;
  f->mas->geni_gpio_sleep=(struct pinctrl_state *)&f->sleep_pins;
  spi_message_init(&f->msg);backend=f;ret=pm_runtime_set_active(f->dev);
@@ -288,8 +291,38 @@ static void le_message_keeps_client_owned_reference(struct kunit *test)
  KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);spi_geni_unprepare_message(f->ctl,&f->msg);
  KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),1);pm_runtime_put_sync(f->dev);
 }
+static void signal_async_message(void *context){complete(context);}
+static void native_async_queue_recovers_hardware_before_following_messages(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct spi_device *spi;
+ struct spi_message messages[3];struct spi_transfer transfers[3]={0};struct completion done[3];int i,ret;
+ f->mas->shared_ee=f->mas->shared_se=false;f->mas->setup=false;
+ f->setup_error=-ENXIO;f->setup_fail_once=true;
+ spi=register_test_spi(test);KUNIT_ASSERT_NOT_NULL(test,spi);
+ /* Queue all three while the real native worker is held at io_mutex. */
+ mutex_lock(&f->ctl->io_mutex);
+ for(i=0;i<3;i++){
+  init_completion(&done[i]);spi_message_init(&messages[i]);transfers[i].bits_per_word=8;transfers[i].speed_hz=1000000;
+  spi_message_add_tail(&transfers[i],&messages[i]);messages[i].complete=signal_async_message;messages[i].context=&done[i];
+  ret=spi_async(spi,&messages[i]);KUNIT_EXPECT_EQ(test,ret,0);if(ret)complete(&done[i]);
+ }
+ mutex_unlock(&f->ctl->io_mutex);
+ for(i=0;i<3;i++)KUNIT_EXPECT_NE(test,wait_for_completion_timeout(&done[i],5*HZ),0ul);
+ kthread_flush_worker(f->ctl->kworker);
+ KUNIT_EXPECT_EQ(test,messages[0].status,-ENXIO);KUNIT_EXPECT_EQ(test,messages[1].status,0);KUNIT_EXPECT_EQ(test,messages[2].status,0);
+ KUNIT_EXPECT_EQ(test,f->setups,2u);KUNIT_EXPECT_TRUE(test,f->mas->setup);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);KUNIT_EXPECT_FALSE(test,f->mas->is_xfer_in_progress);
+ spi_unregister_device(spi);spi_unregister_controller(f->ctl);
+}
+static void hardware_autosuspend_reference_is_balanced_after_pm_disable(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->shared_ee=false;f->mas->dis_autosuspend=false;
+ KUNIT_ASSERT_EQ(test,spi_geni_prepare_transfer_hardware(f->ctl),0);pm_runtime_disable(f->dev);
+ spi_geni_unprepare_transfer_hardware(f->ctl);spi_geni_unprepare_transfer_hardware(f->ctl);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);pm_runtime_enable(f->dev);
+}
 static struct kunit_case cases[]={KUNIT_CASE(lock_failure_releases_pm_and_retry_succeeds),KUNIT_CASE(map_failure_unlocks_before_releasing_power),KUNIT_CASE(fifo_failure_releases_only_held_resources),KUNIT_CASE(mode_failure_unwinds_lock_and_pm),KUNIT_CASE(resume_failure_is_recoverable_without_warning),KUNIT_CASE(first_shared_message_consumes_inherited_reference),KUNIT_CASE(nonshared_hardware_reference_is_not_released),KUNIT_CASE(fallback_local_resume_unwinds_on_failure),
- KUNIT_CASE(disabled_pm_never_acquires_hardware_resources),KUNIT_CASE(active_pin_failure_stops_prepare_and_can_retry),KUNIT_CASE(hardware_resume_failure_restores_pins_without_double_put),KUNIT_CASE(setup_error_releases_hardware_reference_once),KUNIT_CASE(cleanup_pin_error_preserves_primary_error),KUNIT_CASE(nonshared_phase_sequence_balances_one_reference),KUNIT_CASE(first_shared_phase_sequence_balances_handoff),KUNIT_CASE(first_shared_hardware_setup_error_does_not_leak),KUNIT_CASE(le_vm_hardware_phase_keeps_client_reference),KUNIT_CASE(native_spi_core_unprepares_failed_hardware_safely),KUNIT_CASE(native_spi_core_message_failure_preserves_hardware_owner),KUNIT_CASE(successful_fallback_resume_is_released_exactly_once),KUNIT_CASE(message_lease_is_balanced_even_if_runtime_pm_disabled),KUNIT_CASE(autosuspend_message_lease_is_not_released_twice),KUNIT_CASE(duplicate_prepare_preserves_original_message_ownership),KUNIT_CASE(late_unprepare_after_failed_message_does_not_touch_borrowed_pm),KUNIT_CASE(le_message_keeps_client_owned_reference),{}};
+ KUNIT_CASE(disabled_pm_never_acquires_hardware_resources),KUNIT_CASE(active_pin_failure_stops_prepare_and_can_retry),KUNIT_CASE(hardware_resume_failure_restores_pins_without_double_put),KUNIT_CASE(setup_error_releases_hardware_reference_once),KUNIT_CASE(cleanup_pin_error_preserves_primary_error),KUNIT_CASE(nonshared_phase_sequence_balances_one_reference),KUNIT_CASE(first_shared_phase_sequence_balances_handoff),KUNIT_CASE(first_shared_hardware_setup_error_does_not_leak),KUNIT_CASE(le_vm_hardware_phase_keeps_client_reference),KUNIT_CASE(native_spi_core_unprepares_failed_hardware_safely),KUNIT_CASE(native_spi_core_message_failure_preserves_hardware_owner),KUNIT_CASE(successful_fallback_resume_is_released_exactly_once),KUNIT_CASE(message_lease_is_balanced_even_if_runtime_pm_disabled),KUNIT_CASE(autosuspend_message_lease_is_not_released_twice),KUNIT_CASE(duplicate_prepare_preserves_original_message_ownership),KUNIT_CASE(late_unprepare_after_failed_message_does_not_touch_borrowed_pm),KUNIT_CASE(le_message_keeps_client_owned_reference),KUNIT_CASE(native_async_queue_recovers_hardware_before_following_messages),KUNIT_CASE(hardware_autosuspend_reference_is_balanced_after_pm_disable),{}};
 static struct kunit_suite suite={.name="avr-geni-pm",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");MODULE_DESCRIPTION("SPI prepare error unwind with native runtime PM");

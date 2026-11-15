@@ -1,0 +1,38 @@
+{
+  "stage": 52,
+  "scope": "actual exported panel notification API and sleepable callback lifetime in SMP4 QEMU; selected stock ABI audit; no display/touch hardware access",
+  "passed": true,
+  "baseline_cases_passed": 6,
+  "baseline_cases_total": 7,
+  "baseline_failure": "unregister returns before blocked callback finishes; no freed memory was used in reproducer",
+  "final_cases_passed": 8,
+  "fix": "unpublish under registry mutex then SRCU-drain without holding it; reject slot reuse with EBUSY until drained; validate cookie bounds/alignment and NULL notifications",
+  "contract": [
+    "Unregister may sleep and must not be called from a panel notification callback",
+    "Caller unregisters a cookie once and frees private data only after unregister returns"
+  ],
+  "artifact": "artifacts/android73-panel-event-stage52",
+  "packaged_modules": 114,
+  "matching_imports": 5608,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Display producer and touch/charger consumer integration",
+    "All physical panel/input/wake/ROM acceptance",
+    "Remaining mandatory drivers and complete boot/DT/DLKM/SELinux artifacts"
+  ],
+  "evidence_sha256": {
+    "reports/panel-event-source-inputs.json": "6b30dfc4815125360b8fd4e76065fdc4687bcfe9c46563a9a6eb3f244a150578",
+    "reports/panel-event-source-lock.json": "c66f1b7aca26bd8eda4c9145af5e4a32cdcff4bf6f3e4668b5014a3f1273d210",
+    "reports/panel-event-stage52-abi.json": "d050fd20712d52710b32c26313d42a6182f9270fa669f5241ea7ba1983fa2b4a",
+    "patches/panel-event-7.3.patch": "a58cad4d467c49fd6b57a7d15f5c77da0f22c90ed6edd4ad71641a57d8ccdfbb",
+    "reports/panel-event-stage52-baseline-qemu.log": "38d883b4389e95e81e9a7aa076f5ece5f1bbb255ea9213492b16e50f0928318a",
+    "reports/panel-event-stage52-verified-qemu.log": "920f19fcf1425af1f9cc2273e3d30f8fb949982d79fd899533b3ebac7aeb8f49",
+    "reports/panel-event-stage52-verified-qemu.json": "acb716e0f2724b8d622fed09e6f66f210411ba379885a698939666f07a034038",
+    "reports/panel-event-stage52-verified-build.log": "f1256bca5c38c8469554f684abe31d119898df84e054de04818fc62456cf89bf",
+    "reports/panel-event-stage52-crc.json": "1b0a94c0d77cef381971fa9ea58194c52a306a96f15d2ca1e805808514a2e24b",
+    "reports/panel-event-stage52-packaged-crc.json": "326df2e7541ae97eedbdc6116d74399412cccfbe0f3c8518b88f166ed0c81e3e",
+    "reports/module-deployment-stage52-summary.json": "c5bf1d64de86fed9a65b222e4e013a9d468611de2c1cb4248f23f378851ef177"
+  }
+}

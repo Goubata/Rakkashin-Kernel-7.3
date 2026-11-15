@@ -779,3 +779,24 @@ Partial Stage51 has 113 modules, matching import CRCs and complete acyclic hard/
 soft dependencies. It excludes Alor PAS draft and is not a flashable boot image.
 Physical key IRQ/wake, other input devices/ROM consumers, reboot actions and full
 software readiness remain pending. reports/power-key-stage51-validation.json.
+
+
+## Stage52: actual panel notification API and callback drain
+
+Factory panel_event_notifier is ported with its three real exported APIs.
+Original unregister returns while a controlled callback is still blocked
+(6/7 cases pass); the reproducer retains callback data, avoiding a real UAF.
+The fix unpublishes under the registry mutex, SRCU-drains without that mutex,
+and blocks slot reuse with EBUSY while retiring. Final 8 SMP4 cases pass,
+including callback registration of another client, drain/reuse, routing,
+all five clients and invalid cookies/NULL notifications. Callback self-unregister
+is forbidden: unregister may sleep, callers release data only after return and
+must unregister each cookie once. Full consumer audit remains necessary.
+
+Archived stock static client array is 160 bytes (five ARM64 entries); the
+optional two-client MOT extension is absent. Selected header declarations,
+payloads and enum values agree with factory. This is not whole-driver ABI or
+physical display/touch acceptance. Stage52 partial snapshot contains 114 modules
+with matching import CRCs, complete hard/soft dependencies and an acyclic graph.
+It excludes Alor PAS draft and remains non-flashable/software-readiness false.
+Evidence: reports/panel-event-stage52-validation.json.

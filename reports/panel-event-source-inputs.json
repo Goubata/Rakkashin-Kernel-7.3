@@ -1,0 +1,8 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/qcom-panel-event/panel_event_notifier.c": "drivers/soc/qcom/panel_event_notifier.c",
+    "ports/qcom-panel-event/include/linux/soc/qcom/panel_event_notifier.h": "include/linux/soc/qcom/panel_event_notifier.h",
+    "ports/qcom-panel-event/Makefile": null
+  }
+}

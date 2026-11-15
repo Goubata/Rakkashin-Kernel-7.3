@@ -1,0 +1,138 @@
+--- a/ports/qcom-panel-event/panel_event_notifier.c
++++ b/ports/qcom-panel-event/panel_event_notifier.c
+@@ -7,6 +7,7 @@
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+ #include <linux/module.h>
++#include <linux/srcu.h>
+ #include <linux/soc/qcom/panel_event_notifier.h>
+ 
+ struct panel_event_notifier_entry {
+@@ -17,6 +18,8 @@
+ };
+ 
+ static DEFINE_MUTEX(panel_event_notifier_entries_lock);
++DEFINE_STATIC_SRCU(panel_event_notifier_srcu);
++static bool panel_event_retiring[PANEL_EVENT_NOTIFIER_CLIENT_MAX];
+ static struct panel_event_notifier_entry
+ 		panel_event_notifier_entries[PANEL_EVENT_NOTIFIER_CLIENT_MAX];
+ 
+@@ -73,6 +76,10 @@
+ 
+ 	mutex_lock(&panel_event_notifier_entries_lock);
+ 	entry = &panel_event_notifier_entries[client_handle];
++	if (panel_event_retiring[client_handle]) {
++		mutex_unlock(&panel_event_notifier_entries_lock);
++		return ERR_PTR(-EBUSY);
++	}
+ 	if (entry->handler) {
+ 		mutex_unlock(&panel_event_notifier_entries_lock);
+ 		return ERR_PTR(-EEXIST);
+@@ -95,16 +102,38 @@
+  */
+ void panel_event_notifier_unregister(void *cookie)
+ {
+-	struct panel_event_notifier_entry *entry = cookie;
++	struct panel_event_notifier_entry *entry;
++	unsigned long first = (unsigned long)panel_event_notifier_entries;
++	unsigned long address = (unsigned long)cookie;
++	unsigned int client;
+ 
+-	if (!cookie)
++	if (address < first || address - first >= sizeof(panel_event_notifier_entries) ||
++	    (address - first) % sizeof(*entry))
+ 		return;
++	client = (address - first) / sizeof(*entry);
++	entry = &panel_event_notifier_entries[client];
+ 
+ 	mutex_lock(&panel_event_notifier_entries_lock);
++	if (panel_event_retiring[client]) {
++		mutex_unlock(&panel_event_notifier_entries_lock);
++		synchronize_srcu(&panel_event_notifier_srcu);
++		return;
++	}
++	if (!entry->handler) {
++		mutex_unlock(&panel_event_notifier_entries_lock);
++		return;
++	}
+ 	entry->panel = NULL;
+ 	entry->handler = NULL;
+ 	entry->pvt_data = NULL;
+ 	entry->tag = PANEL_EVENT_NOTIFICATION_NONE;
++	panel_event_retiring[client] = true;
++	mutex_unlock(&panel_event_notifier_entries_lock);
++
++	/* Sleepable callbacks may acquire the registry lock; never drain under it. */
++	synchronize_srcu(&panel_event_notifier_srcu);
++	mutex_lock(&panel_event_notifier_entries_lock);
++	panel_event_retiring[client] = false;
+ 	mutex_unlock(&panel_event_notifier_entries_lock);
+ }
+ EXPORT_SYMBOL(panel_event_notifier_unregister);
+@@ -127,41 +156,25 @@
+ 		 struct panel_event_notification *notification)
+ {
+ 	struct panel_event_notifier_entry *entry;
+-	panel_event_notifier_handler handler = NULL;
++	panel_event_notifier_handler handler;
+ 	void *pvt_data;
+-	int i;
++	int i, index;
+ 
+-	if (!panel_event_notifier_tag_valid(tag)) {
+-		pr_err("Invalid panel notifier tag\n");
++	if (!panel_event_notifier_tag_valid(tag) || !notification)
+ 		return;
+-	}
+ 
+ 	for (i = 0; i < PANEL_EVENT_NOTIFIER_CLIENT_MAX; i++) {
++		index = srcu_read_lock(&panel_event_notifier_srcu);
+ 		mutex_lock(&panel_event_notifier_entries_lock);
+ 		entry = &panel_event_notifier_entries[i];
+-		if (notification->panel != entry->panel) {
+-			pr_debug("invalid panel found notification_panel\n");
+-			mutex_unlock(&panel_event_notifier_entries_lock);
+-			continue;
+-		}
+-
+-		/* skip client entries not subscribed to tag */
+-		if (entry->tag != tag) {
+-			pr_err("tag mismatch entry->tag:%d tag:%d\n", entry->tag, tag);
+-			mutex_unlock(&panel_event_notifier_entries_lock);
+-			continue;
+-		}
+-
+-		handler = entry->handler;
++		handler = entry->panel == notification->panel && entry->tag == tag ?
++			entry->handler : NULL;
+ 		pvt_data = entry->pvt_data;
+ 		mutex_unlock(&panel_event_notifier_entries_lock);
+ 
+-		pr_debug("triggering notification for tag:%d, type:%d\n",
+-				tag, notification->notif_type);
+-
+ 		if (handler)
+ 			handler(tag, notification, pvt_data);
+-
++		srcu_read_unlock(&panel_event_notifier_srcu, index);
+ 	}
+ }
+ EXPORT_SYMBOL(panel_event_notification_trigger);
+--- a/ports/qcom-panel-event/include/linux/soc/qcom/panel_event_notifier.h
++++ b/ports/qcom-panel-event/include/linux/soc/qcom/panel_event_notifier.h
+@@ -62,6 +62,9 @@
+ 		enum panel_event_notifier_client client_handle,
+ 		struct drm_panel *panel,
+ 		panel_event_notifier_handler notif_handler, void *pvt_data);
++/* May sleep; must not be called from a panel notification callback.
++ * Caller releases its private data only after this function returns.
++ * A cookie is registered/unregistered once; do not reuse a retired cookie. */
+ void panel_event_notifier_unregister(void *cookie);
+ void panel_event_notification_trigger(enum panel_event_notifier_tag tag,
+ 		 struct panel_event_notification *notification);
+--- a/ports/qcom-panel-event/Makefile
++++ b/ports/qcom-panel-event/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += panel_event_notifier.o
++ccflags-y += -I$(src)/include -DCONFIG_QCOM_PANEL_EVENT_NOTIFIER_MODULE=1

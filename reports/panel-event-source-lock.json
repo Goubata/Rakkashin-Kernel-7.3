@@ -1,0 +1,36 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-panel-event/panel_event_notifier.c",
+      "source": "drivers/soc/qcom/panel_event_notifier.c",
+      "original_sha256": "3ce4739d904445520033331ffeaabca59fa350a0bb7dc34a364795761e84f139",
+      "sha256": "baa12e4ac73dec989584df43494893d47dea8b6e8b08a76af363d9731f8b63f6"
+    },
+    {
+      "file": "ports/qcom-panel-event/include/linux/soc/qcom/panel_event_notifier.h",
+      "source": "include/linux/soc/qcom/panel_event_notifier.h",
+      "original_sha256": "2d25339fbfa5a9f110ae13da73feae3f682c6fef402098e9c9f7c5e19b06cab9",
+      "sha256": "fec943829582884b8f68cb7fd1b1711233c5be965fc152777968da55ca424fb6"
+    },
+    {
+      "file": "ports/qcom-panel-event/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "41d4cf0ac4e7c699e930015f18f5f3489843bf4b5c8d6421f0374b26cb5b8c93"
+    }
+  ],
+  "patch_sha256": "a58cad4d467c49fd6b57a7d15f5c77da0f22c90ed6edd4ad71641a57d8ccdfbb",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Preserve exact stock five-client panel notification ABI",
+    "Unpublish and SRCU-drain callbacks before unregister returns; block slot reuse while retiring",
+    "Reject invalid cookie/NULL notification without dereference"
+  ],
+  "pending": [
+    "Physical display producer and touch/charger consumer integration",
+    "Unregister may sleep and must not run inside a notification callback"
+  ]
+}

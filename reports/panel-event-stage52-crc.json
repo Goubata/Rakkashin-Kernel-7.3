@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-panel-event/panel_event_notifier.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/panel-event/avr-panel-event-test.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    }
+  ]
+}

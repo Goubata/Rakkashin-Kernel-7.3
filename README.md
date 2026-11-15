@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む113モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む114モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -598,3 +598,15 @@ PMK8350 power/resin descriptorと保存/候補DTのcode116/114・IRQ・HLOS/PBS�
 `reports/power-key-stage51-validation.json`。実probe/wake/ROMは未確認で、
 nativeのsuspend IRQ-wake経路とvendorのIRQ再取得方式の差も実機受入が必要。
 全体software readinessと常用版は引き続き未達。
+
+
+## Stage52: 表示・タッチ間のpanel通知基盤
+
+Motorolaのpanel_event_notifierを移植。登録解除が進行中callbackを待たない問題を
+再現し（旧6/7）、unpublish後にSRCUで待つ処理へ修正した。解除中slotの再利用を
+EBUSYで防ぎ、終了後の再登録も確認。実export APIでrouting・全5 client・重複拒否・
+callbackから別client登録・解除競合・不正cookie/NULL通知を8件確認。
+保存stock moduleの配列160byteから5 client構成を確認し、宣言・payload・enumを照合。
+最新部分成果物はartifacts/android73-panel-event-stage52/の114モジュール。
+`reports/panel-event-stage52-validation.json`。実display/touch producer/consumer、
+全driver/boot/ROMのsoftware readinessは未完。callback内からの同期unregisterは禁止。

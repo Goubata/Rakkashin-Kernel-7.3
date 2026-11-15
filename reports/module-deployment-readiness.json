@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-power-key-stage51",
+  "stage": "android73-panel-event-stage52",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 113,
-  "same_name_candidate_count": 99,
-  "archived_names_without_same_name_candidate_count": 445,
-  "loaded_names_without_same_name_candidate_count": 430,
+  "staged_count": 114,
+  "same_name_candidate_count": 100,
+  "archived_names_without_same_name_candidate_count": 444,
+  "loaded_names_without_same_name_candidate_count": 429,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -119,6 +119,10 @@
     {
       "name": "nvmem_qfprom",
       "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "panel_event_notifier",
+      "file": "modules/qcom-panel-event/panel_event_notifier.ko"
     },
     {
       "name": "phy_qcom_ufs",
@@ -578,6 +582,10 @@
     {
       "name": "nvmem_qfprom",
       "file": "modules/native/nvmem_qfprom.ko"
+    },
+    {
+      "name": "panel_event_notifier",
+      "file": "modules/qcom-panel-event/panel_event_notifier.ko"
     },
     {
       "name": "phy_qcom_ufs",
@@ -2136,6 +2144,20 @@
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "panel_event_notifier": {
+      "file": "modules/qcom-panel-event/panel_event_notifier.ko",
+      "sha256": "c26ae7bf425cae19a76d43d59d5cf2d56bb46188f758e73fdf557c66d39696ef",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
@@ -4227,14 +4249,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "panel_event_notifier",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "pci_msm_drv",
       "placements": [
         "vendor_boot:fragment-0",
@@ -6121,7 +6135,6 @@
     "nxp_nci",
     "of_kunit_helpers",
     "open_dice",
-    "panel_event_notifier",
     "pci_msm_drv",
     "pci_phy_access",
     "pcie_pdc",

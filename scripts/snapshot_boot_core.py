@@ -26,10 +26,13 @@ parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
 parser.add_argument('--pmic-ipc',action='store_true')
 parser.add_argument('--pmic-glink',action='store_true')
+parser.add_argument('--panel-event',action='store_true')
 parser.add_argument('--power-key',action='store_true')
 parser.add_argument('--sdam',action='store_true')
 parser.add_argument('--rtc',action='store_true')
 args=parser.parse_args()
+if args.panel_event:
+    subprocess.run(['python',str(ROOT/'scripts/audit_panel_event_sources.py')],check=True)
 if args.power_key:
     subprocess.run(['python',str(ROOT/'scripts/audit_power_key_sources.py')],check=True)
     args.spmi=True
@@ -83,6 +86,8 @@ if args.adc_thermal:
     ports.append('qcom-adc-thermal')
 if args.pmic_glink:
     ports.append('qcom-pmic-glink')
+if args.panel_event:
+    ports.append('qcom-panel-event')
 if args.power_key:
     ports.append('qcom-power-key')
 if args.sdam:

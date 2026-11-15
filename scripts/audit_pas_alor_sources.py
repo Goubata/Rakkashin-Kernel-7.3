@@ -54,6 +54,7 @@ def main():
                       'Track main/DTB authentication attempts and owned mappings; stop images before unmap/metadata/proxy cleanup',
                       'Use pinned Motorola critical Alor authentication/shutdown failure-stop policy; retain state on unconfirmed quiesce',
                       'Preserve stock platform remoteproc name for Alor instead of substituting the sysmon service name',
+                      'Use full-width device address differences and subtraction-based length bounds without signed narrowing or addition overflow',
                   ],
                   'pending': ['Physical ARC votes, retained-error recovery and regulator framework fault injection',
                               'ELF64 minidump metadata and early-attach lifetime/failure cleanup',

@@ -683,3 +683,34 @@ than the native sysmon string `soccp`; the sysmon service string is unchanged.
 Other descriptors keep native naming. Build, CRC and descriptor/source-flow
 checks pass. No actual probe/daemon test or full ROM interface-equivalence claim
 is made. Evidence: `reports/pas-name-stage45-validation.json`.
+
+
+## Stage46–48: actual PAS methods and remoteproc framework
+
+The original DA-to-VA conversion fails the +4GiB/SIZE_MAX regression (8/9
+cases pass). Replaced int narrowing and additive bounds checks with u64 offset
+and subtraction bounds. Final 13 cases pass with SMP4: actual driver error
+paths, startup failure matrix, retained ownership/retry, no-IOMMU Alor path,
+real remoteproc firmware requests and two boot/shutdown cycles, detached attach
+and an explicit second boot after not-ready fallback. Hardware IRQ/clock/rail/
+secure/MDT primitives are recording replacements only in the test translation
+unit. Firmware bytes are parsed by the real core; this is not firmware execution.
+
+Two separate guests execute real kernel panic branches for critical DTB auth
+and main shutdown failure, requiring exact armed/state/panic/termination markers
+and absence of cleanup. The phone was not rebooted or flashed. The harness now
+loads providers before the test and removes the dependent test first. All four
+production/test module import tables match current exports. Reproduction:
+
+```sh
+python scripts/build_storage_deps.py --pas-driver-tests
+python scripts/run_qemu.py --test pas-driver --cpus 4 --log reports/pas-driver.log
+python scripts/run_qemu.py --test pas-driver --pas-critical auth --cpus 4 --log reports/pas-auth.log
+python scripts/run_qemu.py --test pas-driver --pas-critical shutdown --cpus 4 --log reports/pas-shutdown.log
+```
+
+Evidence: `reports/pas-driver-stage48-validation.json`. Exact firmware inputs
+remain ignored local artifacts. Full probe, GLINK/sysmon children, ROM firmware
+timing, removal errors and physical firmware ABI are not proven. The not-ready
+case explicitly calls boot a second time; it does not prove automatic fallback.
+The draft stays excluded from packaged 108 modules. Software readiness is false.

@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--pmic-ipc-tests',action='store_true')
     parser.add_argument('--pmic-glink-tests',action='store_true')
     parser.add_argument('--rproc-gate-tests',action='store_true')
+    parser.add_argument('--pas-driver-tests',action='store_true')
     parser.add_argument('--pas-images-tests',action='store_true')
     parser.add_argument('--pas-proxy-tests',action='store_true')
     parser.add_argument('--mdt-loader-tests',action='store_true')
@@ -47,7 +48,7 @@ def main():
     parser.add_argument('--glink-transport',action='store_true')
     parser.add_argument('--glink-transport-tests',action='store_true')
     args=parser.parse_args()
-    if args.pas_rails_tests or args.mdt_loader_tests or args.pas_proxy_tests or args.pas_images_tests:args.remoteproc_services=True;args.glink_transport=True
+    if args.pas_rails_tests or args.mdt_loader_tests or args.pas_proxy_tests or args.pas_images_tests or args.pas_driver_tests:args.remoteproc_services=True;args.glink_transport=True
     if args.remoteproc_services_tests:args.remoteproc_services=True
     if args.smp2p_tests:args.smp2p=True
     if args.ipcc_tests:args.ipcc=True
@@ -138,7 +139,7 @@ def main():
     if args.rproc_gate_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ipc_sources.py')],check=True)
         targets += ['ports/qcom-rproc-common','tests/rproc-common']
-    if args.pas_rails_tests or args.mdt_loader_tests or args.pas_proxy_tests or args.pas_images_tests:
+    if args.pas_rails_tests or args.mdt_loader_tests or args.pas_proxy_tests or args.pas_images_tests or args.pas_driver_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ipc_sources.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_pas_alor_sources.py')],check=True)
         targets += ['ports/qcom-rproc-common','ports/qcom-pas-alor']
@@ -146,6 +147,7 @@ def main():
         if args.mdt_loader_tests:targets.append('tests/mdt-loader')
         if args.pas_proxy_tests:targets.append('tests/pas-proxy')
         if args.pas_images_tests:targets.append('tests/pas-images')
+        if args.pas_driver_tests:targets.append('tests/pas-driver')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

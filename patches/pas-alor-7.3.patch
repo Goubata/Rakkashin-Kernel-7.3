@@ -417,7 +417,23 @@
  
  	return ret;
  }
-@@ -567,6 +676,8 @@
+@@ -445,10 +554,12 @@
+ static void *qcom_pas_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem)
+ {
+ 	struct qcom_pas *pas = rproc->priv;
+-	int offset;
+-
++	u64 offset;
++
++	if (da < pas->mem_reloc)
++		return NULL;
+ 	offset = da - pas->mem_reloc;
+-	if (offset < 0 || offset + len > pas->mem_size)
++	if (offset > pas->mem_size || len > pas->mem_size - offset)
+ 		return NULL;
+ 
+ 	if (is_iomem)
+@@ -567,6 +678,8 @@
  		goto unroll_attach;
  	}
  
@@ -426,7 +442,7 @@
  	return 0;
  
  unroll_attach:
-@@ -630,8 +741,39 @@
+@@ -630,8 +743,39 @@
  	return 0;
  }
  
@@ -466,7 +482,7 @@
  	pas->cx_supply = devm_regulator_get_optional(pas->dev, "cx");
  	if (IS_ERR(pas->cx_supply)) {
  		if (PTR_ERR(pas->cx_supply) == -ENODEV)
-@@ -852,7 +994,9 @@
+@@ -852,7 +996,9 @@
  	if (desc->minidump_id)
  		ops = &qcom_pas_minidump_ops;
  
@@ -477,7 +493,7 @@
  
  	if (!rproc) {
  		dev_err(&pdev->dev, "unable to allocate remoteproc\n");
-@@ -861,10 +1005,16 @@
+@@ -861,10 +1007,16 @@
  
  	rproc->has_iommu = of_property_present(pdev->dev.of_node, "iommus");
  	rproc->auto_boot = desc->auto_boot;
@@ -495,7 +511,7 @@
  	pas->rproc = rproc;
  	pas->minidump_id = desc->minidump_id;
  	pas->pas_id = desc->pas_id;
-@@ -967,6 +1117,17 @@
+@@ -967,6 +1119,17 @@
  		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
  
  	rproc_del(pas->rproc);
@@ -513,7 +529,7 @@
  
  	qcom_q6v5_deinit(&pas->q6v5);
  	qcom_pas_unassign_memory_region(pas);
-@@ -1763,6 +1924,24 @@
+@@ -1763,6 +1926,24 @@
  	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
  };
  
@@ -538,7 +554,7 @@
  static const struct qcom_pas_data kaanapali_soccp_resource = {
  	.crash_reason_smem = 656,
  	.firmware_name = "soccp.mbn",
-@@ -1824,6 +2003,7 @@
+@@ -1824,6 +2005,7 @@
  };
  
  static const struct of_device_id qcom_pas_of_match[] = {

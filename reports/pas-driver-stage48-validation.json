@@ -1,0 +1,70 @@
+{
+  "stages": [
+    46,
+    47,
+    48
+  ],
+  "scope": "actual PAS driver methods and actual remoteproc framework with recorded hardware primitives; actual firmware source requested by core, no firmware execution",
+  "passed": true,
+  "checks": {
+    "normal": {
+      "log": "reports/pas-framework-stage48-final-qemu.log",
+      "test": "pas-driver",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        13,
+        0,
+        0,
+        13
+      ]
+    },
+    "critical_auth": {
+      "log": "reports/pas-critical-auth-stage48-qemu.log",
+      "test": "pas-driver",
+      "expected_critical_failure": "auth",
+      "scope": "expected guest-only kernel panic before cleanup with recorded primitives; no physical firmware operation",
+      "passed": true,
+      "failures": []
+    },
+    "critical_shutdown": {
+      "log": "reports/pas-critical-shutdown-stage48-qemu.log",
+      "test": "pas-driver",
+      "expected_critical_failure": "shutdown",
+      "scope": "expected guest-only kernel panic before cleanup with recorded primitives; no physical firmware operation",
+      "passed": true,
+      "failures": []
+    }
+  },
+  "draft_modules": 3,
+  "crc_modules_including_test": 4,
+  "crc_imports_checked": 178,
+  "baseline_regression": "8/9 original tests pass; DA +4GiB truncation and SIZE_MAX length wrap fail before production bounds fix",
+  "packaged_module_count": 108,
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Actual probe, secure-world ABI, physical clocks/regulators/IRQs and SoCCP execution",
+    "Actual ROM firmware fallback timing and GLINK/sysmon child integration",
+    "Automatic detached attach fallback: only explicit second rproc_boot tested; auto work retries not implemented",
+    "Full remove/subdevice-error paths, partial IOMMU cleanup and non-Alor terminal failures",
+    "Remaining board drivers, ROM/SELinux/DLKM/DT consistency, complete boot artifacts and all-functions acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/qcom-pas-alor/qcom_q6v5_pas.c": "e6e8206c39957b551936a0cbc6d9b69db86bd2faa6d31d2ef9c030816672bffb",
+    "tests/pas-driver/avr-pas-driver-test.c": "6646d892fe70679e59113eac49360c4bfb63eaf02fbf4fd16e2b7cff8eb4a34e",
+    "reports/pas-alor-source-lock.json": "900519cd99364a75754096083241ea00ccff6f060a70d73dc9cc541a3476cd05",
+    "reports/pas-driver-stage48-crc.json": "015cc152025bcae6eadaf9c7a25de3eb8a670aa7a5dc6ca9c9129a1057216e69",
+    "reports/pas-driver-stage48-dt.json": "8ccf0587b2baa4922e994022c7fd89569f3aee50596f99e7cf7fa881368d391b",
+    "reports/pas-driver-stage46-baseline-qemu.log": "8b07ea54f823e2abd12574e8e348a5802c783264903a7b85960b9ad154499a71",
+    "reports/pas-framework-stage48-final-build.log": "55ef43bc78414ea732d3d97e9129c4d287f6eeea1bce059e3acc378f05dfb700",
+    "reports/pas-framework-stage48-final-qemu.log": "f8c6e0705743a6e9931cb710d6fea9d43cceed61c6e440cf35bade2eb971096b",
+    "reports/pas-framework-stage48-final-qemu.json": "59d35d9acebc8cc7b61e320b31c3843b0df7c5667ef37f93ef33d709f14cdaf2",
+    "reports/pas-critical-auth-stage48-qemu.log": "e0cd165f00b3afa4c6ccd2288f0317cf370576d55cc3ed7c6e7b23bb4a13ef0e",
+    "reports/pas-critical-auth-stage48-qemu.json": "b45007c2ed777d4a8446838e2e0b4d16408e8fae681fd8004db91f1df9f94d78",
+    "reports/pas-critical-shutdown-stage48-qemu.log": "3a9e63abc7a0d4ca8a314e65a4bffee56a7bcf462b506c3bb00f444fed5fa70c",
+    "reports/pas-critical-shutdown-stage48-qemu.json": "4a895f0722d6cb35d524e01adfe4217b5fb27592c30ba44d5be2b3343aa934c1"
+  }
+}

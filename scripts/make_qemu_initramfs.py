@@ -24,6 +24,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--pas-driver-tests", action="store_true")
     group.add_argument("--pas-images-tests", action="store_true")
     group.add_argument("--pas-proxy-tests", action="store_true")
     group.add_argument("--mdt-loader-tests", action="store_true")
@@ -62,8 +63,10 @@ def main():
     group.add_argument("--oplus-tests", action="store_true")
     group.add_argument("--modules-tests", action="store_true")
     group.add_argument("--iommu-tests", action="store_true")
+    parser.add_argument("--pas-critical",choices=["auth","shutdown"])
     parser.add_argument("--ufs-mcq",action="store_true")
     args=parser.parse_args()
+    if args.pas_critical and not args.pas_driver_tests:parser.error("--pas-critical requires --pas-driver-tests")
     if args.ufs_mcq and not args.ufs_tests:parser.error("--ufs-mcq requires --ufs-tests")
     data=b'';ino=1
     def add(name,mode,body=b'',major=0,minor=0):
@@ -230,9 +233,18 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_MDT_LOADER_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands.append('echo AVR_MDT_LOADER_TESTS_PASS scope=actual-firmware-to-guarded-ram-only')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
-    if args.pas_rails_tests or args.pas_proxy_tests or args.pas_images_tests:
-        kind='pas-images' if args.pas_images_tests else 'pas-proxy' if args.pas_proxy_tests else 'pas-rails'
-        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests'/kind/('avr-'+kind+'-test.ko')]
+    if args.pas_rails_tests or args.pas_proxy_tests or args.pas_images_tests or args.pas_driver_tests:
+        kind='pas-driver' if args.pas_driver_tests else 'pas-images' if args.pas_images_tests else 'pas-proxy' if args.pas_proxy_tests else 'pas-rails'
+        if args.pas_driver_tests:
+            for directory in ['lib','lib/firmware','lib/firmware/avr-test']:
+                add(directory,stat.S_IFDIR|0o755)
+            manifest=json.loads((ROOT/'reports/soccp-loader-stage41-inputs.json').read_text())
+            for row in manifest['files']:
+                path=ROOT/row['file'];raw=path.read_bytes()
+                if hashlib.sha256(raw).hexdigest()!=row['sha256']:
+                    raise ValueError('Captured firmware changed: '+str(path))
+                add('lib/firmware/avr-test/'+path.name,stat.S_IFREG|0o644,raw)
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']
         sources += firmware_modules()
         sources += [ROOT/'out/native-gki'/p for p in ['net/qrtr/qrtr.ko','drivers/soc/qcom/qmi_helpers.ko']]
         sources += [ROOT/'ports'/p for p in [
@@ -241,14 +253,17 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             'qcom-rproc-common/qcom_common.ko','qcom-remoteproc-services/qcom_aoss.ko',
             'qcom-remoteproc-services/qcom_sysmon.ko','qcom-remoteproc-services/qcom_q6v5.ko',
             'qcom-pas-alor/mdt_loader.ko','qcom-pas-alor/qcom_pil_info.ko','qcom-pas-alor/qcom_q6v5_pas.ko']]
+        sources.append(ROOT/'tests'/kind/('avr-'+kind+'-test.ko'))
         commands=[]
         for source in sources:
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
+            if source.name=='avr-pas-driver-test.ko' and args.pas_critical:
+                params=' critical_mode='+('1' if args.pas_critical=='auth' else '2')
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_PAS_RAILS_LOAD_FAIL; /bin/busybox poweroff -f; }}')
-        for name in ['qcom_q6v5_pas','qcom_pil_info','mdt_loader','qcom_q6v5','qcom_sysmon','qcom_aoss','avr_'+kind.replace('-','_')+'_test']:
+        for name in ['avr_'+kind.replace('-','_')+'_test','qcom_q6v5_pas','qcom_pil_info','mdt_loader','qcom_q6v5','qcom_sysmon','qcom_aoss']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_PAS_RAILS_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
-        commands.append('echo '+('AVR_PAS_IMAGES_TESTS_PASS scope=recorded-image-ownership-and-registration-only' if args.pas_images_tests else 'AVR_PAS_PROXY_TESTS_PASS scope=recorded-proxy-ownership-and-registration-only' if args.pas_proxy_tests else 'AVR_PAS_RAILS_TESTS_PASS scope=recorded-regulator-state-machine-and-registration-only'))
+        commands.append('echo '+('AVR_PAS_DRIVER_TESTS_PASS scope=driver-methods-with-recorded-primitives-only' if args.pas_driver_tests else 'AVR_PAS_IMAGES_TESTS_PASS scope=recorded-image-ownership-and-registration-only' if args.pas_images_tests else 'AVR_PAS_PROXY_TESTS_PASS scope=recorded-proxy-ownership-and-registration-only' if args.pas_proxy_tests else 'AVR_PAS_RAILS_TESTS_PASS scope=recorded-regulator-state-machine-and-registration-only'))
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.remoteproc_services_tests:
         sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko', ROOT/'out/native-gki/net/qrtr/qrtr.ko',
@@ -647,7 +662,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('pas-images-tests.cpio.gz' if args.pas_images_tests else 'pas-proxy-tests.cpio.gz' if args.pas_proxy_tests else 'mdt-loader-tests.cpio.gz' if args.mdt_loader_tests else 'pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('pas-driver-critical-'+args.pas_critical+'-tests.cpio.gz' if args.pas_critical else 'pas-driver-tests.cpio.gz' if args.pas_driver_tests else 'pas-images-tests.cpio.gz' if args.pas_images_tests else 'pas-proxy-tests.cpio.gz' if args.pas_proxy_tests else 'mdt-loader-tests.cpio.gz' if args.mdt_loader_tests else 'pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

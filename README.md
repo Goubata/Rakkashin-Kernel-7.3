@@ -553,3 +553,14 @@ Motorola元ソースはpdev->nameをremoteproc名へ渡し、実機は
 Alor descriptorでplatform名を使い、sysmon service名はsoccpのままにした。
 再ビルド/CRC/descriptorの静的照合を通過。これは実probeやROM daemonの動作確認ではない。
 `reports/pas-name-stage45-validation.json`。全sysfs/ioctl/ROM ABI照合とsoftware readinessは残る。
+
+
+## Stage46–48: PAS実処理とremoteprocの接続
+
+DA変換の4GiB切詰め・長さ加算overflowを再現して修正。実driver関数への障害注入と、
+実remoteprocによるfirmware要求・2回の起動停止・起動済みimageへのattachを含む13件成功。
+IRQ/電源/認証等は試験内の記録primitiveで、実SoCCPが動いた証明ではない。
+別の隔離guest2台ではcritical auth/stopの本物のpanic分岐を確認し、不確かな停止後に
+資源解放へ進まないことを検査した。端末の再起動・partition変更は行っていない。
+`reports/pas-driver-stage48-validation.json`。自動fallback・全probe/子device・ROM/実機ABI・
+残りdriver・起動成果物は未完。部分成果物108個のままで、software readinessは未達。

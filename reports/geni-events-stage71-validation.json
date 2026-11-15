@@ -1,0 +1,36 @@
+{
+  "stage": 71,
+  "scope": "Production ring/SG and selected completion/event cursor methods with native DMA/vchan and private state RAM; no hardware IRQ or transfer proof",
+  "checks": {
+    "log": "reports/geni-events-stage71-qemu.log",
+    "test": "geni-ring",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      15,
+      0,
+      0,
+      15
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "DMA cookie completion reporting and callback/terminate descriptor ownership",
+    "Live-producer event-ring scheduling and IRQ/tasklet/terminate concurrency",
+    "Real channel STOP/RESET command/error recovery and peripheral firmware",
+    "SMEM mapping/reclamation and other drivers/whole-board DT/boot/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-events-stage71-check.json": "71de7c93fd53d681e696ab8fe0a67619d10ade5103639bc12d907750bea76393",
+    "reports/geni-events-stage71-qemu.log": "af61bdc3354d5b23022ab79ffddd501fbf15b6b9493461fede530ebc2fba754d",
+    "reports/geni-events-stage71-qemu.json": "3dc1c1fc6f52132015f3f10c9701115b49e45cc049de8aaff944ff929c81ab61",
+    "reports/geni-events-stage71-build.log": "a531a6f0d397ef1251660b612c4b0f9ebe0698854ef160cc7988b7ec70137c6f",
+    "reports/geni-events-stage71-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "8bc649dd1bb45010ec7ec3c757b693a4ea0a6f3ed479ba142d4bb88818700dfe",
+    "patches/geni-bus-7.3.patch": "f75cece70a9cc1be23b291a492e1374bc9d330cd013705511f7098f82446670d"
+  }
+}

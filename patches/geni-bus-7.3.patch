@@ -8,7 +8,24 @@
  #include <linux/module.h>
  #include <linux/of.h>
  #include <linux/of_address.h>
-@@ -1854,7 +1855,7 @@
+@@ -712,6 +713,16 @@
+ 				      phys_addr_t addr)
+ {
+ 	return ring->base + (addr - ring->phys_addr);
++}
++
++/* Hardware event pointers must identify complete elements in the owned ring. */
++static bool gpi_ring_dma_address_valid(const struct gpi_ring *ring, phys_addr_t addr)
++{
++	if (!ring || !ring->configured || !ring->base || !ring->el_size ||
++	    !ring->len || ring->len % ring->el_size || addr < ring->phys_addr)
++		return false;
++	return addr - ring->phys_addr < ring->len &&
++	       !((addr - ring->phys_addr) % ring->el_size);
+ }
+ 
+ #if IS_ENABLED(CONFIG_MSM_GPI_DMA_DEBUG)
+@@ -1854,7 +1865,7 @@
   *
   * Return: Returns success or failure
   */
@@ -17,16 +34,162 @@
  {
  	struct gpii *gpii = gpii_chan->gpii;
  	int ret = 0;
-@@ -2855,7 +2856,7 @@
+@@ -1998,8 +2009,11 @@
+ 	struct gpii *gpii = gpii_chan->gpii;
+ 	struct gpi_client_info *client_info = &gpii_chan->client_info;
+ 	struct msm_gpi_cb msm_gpi_cb = {0};
+-	u32 ch_state = gpi_read_ch_state(gpii_chan);
+-
++	u32 ch_state;
++
++	if (!client_info->callback)
++		return;
++	ch_state = gpi_read_ch_state(gpii_chan);
+ 	GPII_ERR(gpii, gpii_chan->chid, "notifying event:%s with status:%llu ch_state:%s\n",
+ 		 TO_GPI_CB_EVENT_STR(event), status, TO_GPI_CH_STATE_STR(ch_state));
+ 
+@@ -2348,8 +2362,7 @@
+ 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
+ 	struct virt_dma_desc *vd;
+ 	struct gpi_desc *gpi_desc;
+-	void *tre = ch_ring->base +
+-		(ch_ring->el_size * imed_event->tre_index);
++	void *tre;
+ 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
+ 	unsigned long flags;
+ 	u32 chid;
+@@ -2367,6 +2380,16 @@
+ 				      __LINE__);
+ 		return;
+ 	}
++
++	if (!ch_ring || !ch_ring->el_size ||
++	    imed_event->tre_index >= ch_ring->len / ch_ring->el_size ||
++	    imed_event->chid != gpii_chan->chid ||
++	    imed_event->length > sizeof(imed_event->data_bytes) ||
++	    !gpi_ring_dma_address_valid(ch_ring, ch_ring->phys_addr)) {
++		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, imed_event->tre_index);
++		return;
++	}
++	tre = ch_ring->base + ch_ring->el_size * imed_event->tre_index;
+ 
+ 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
+ 	vd = vchan_next_desc(&gpii_chan->vc);
+@@ -2486,7 +2509,7 @@
+ {
+ 	struct gpii *gpii = gpii_chan->gpii;
+ 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
+-	void *ev_rp = to_virtual(ch_ring, compl_event->ptr);
++	void *ev_rp;
+ 	struct virt_dma_desc *vd;
+ 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
+ 	struct gpi_desc *gpi_desc;
+@@ -2503,6 +2526,13 @@
+ 				      __LINE__);
+ 		return;
+ 	}
++
++	if (compl_event->chid != gpii_chan->chid ||
++	    !gpi_ring_dma_address_valid(ch_ring, compl_event->ptr)) {
++		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, compl_event->ptr);
++		return;
++	}
++	ev_rp = to_virtual(ch_ring, compl_event->ptr);
+ 
+ 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
+ 	vd = vchan_next_desc(&gpii_chan->vc);
+@@ -2621,7 +2651,9 @@
+ {
+ 	struct gpii *gpii = gpii_chan->gpii;
+ 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
+-	void *ev_rp = to_virtual(ch_ring, q2spi_status_event->ptr_l);
++	phys_addr_t ptr = q2spi_status_event->ptr_l |
++		((u64)q2spi_status_event->ptr_h << 32);
++	void *ev_rp;
+ 	struct virt_dma_desc *vd;
+ 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
+ 	struct gpi_desc *gpi_desc;
+@@ -2634,6 +2666,13 @@
+ 		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_PENDING_EVENT, __LINE__);
+ 		return;
+ 	}
++
++	if (q2spi_status_event->ch_id != gpii_chan->chid ||
++	    !gpi_ring_dma_address_valid(ch_ring, ptr)) {
++		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, ptr);
++		return;
++	}
++	ev_rp = to_virtual(ch_ring, ptr);
+ 
+ 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
+ 	vd = vchan_next_desc(&gpii_chan->vc);
+@@ -2735,10 +2774,12 @@
+ 	void *rp;
+ 	union gpi_event *gpi_event;
+ 	struct gpii_chan *gpii_chan;
+-	u32 chid, type;
++	u32 chid, type = 0;
+ 
+ 	cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
+ 		   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
++	if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
++		goto error_irq;
+ 	rp = to_virtual(ev_ring, cntxt_rp);
+ 	local_rp = to_physical(ev_ring, ev_ring->rp);
+ 
+@@ -2812,6 +2853,8 @@
+ 			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
+ 		/* make sure event_ring rp updates before proceeding */
+ 		mb();
++		if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
++			goto error_irq;
+ 		rp = to_virtual(ev_ring, cntxt_rp);
+ 
+ 	} while (rp != ev_ring->rp);
+@@ -2855,7 +2898,7 @@
  }
  
  /* marks all pending events for the channel as stale */
 -void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
-+static void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
++static int gpi_mark_stale_events(struct gpii_chan *gpii_chan)
  {
  	struct gpii *gpii = gpii_chan->gpii;
  	struct gpi_ring *ev_ring = gpii->ev_ring;
-@@ -3194,8 +3195,9 @@
+@@ -2866,6 +2909,8 @@
+ 	cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
+ 		   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
+ 
++	if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
++		return -EINVAL;
+ 	ev_rp = ev_ring->rp;
+ 	local_rp = to_physical(ev_ring, ev_rp);
+ 	while (local_rp != cntxt_rp) {
+@@ -2879,8 +2924,11 @@
+ 			ev_rp = ev_ring->base;
+ 		cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
+ 			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
++		if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
++			return -EINVAL;
+ 		local_rp = to_physical(ev_ring, ev_rp);
+ 	}
++	return 0;
+ }
+ 
+ /* reset sw state and issue channel reset or de-alloc */
+@@ -2910,7 +2958,11 @@
+ 
+ 	/* check event ring for any stale events */
+ 	write_lock_irq(&gpii->pm_lock);
+-	gpi_mark_stale_events(gpii_chan);
++	ret = gpi_mark_stale_events(gpii_chan);
++	if (ret) {
++		write_unlock_irq(&gpii->pm_lock);
++		return ret;
++	}
+ 
+ 	/* remove all async descriptors */
+ 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
+@@ -3194,8 +3246,9 @@
  static void gpi_free_ring(struct gpi_ring *ring,
  			  struct gpii *gpii)
  {
@@ -38,7 +201,7 @@
  	memset(ring, 0, sizeof(*ring));
  }
  
-@@ -3205,14 +3207,18 @@
+@@ -3205,14 +3258,18 @@
  			  u32 el_size,
  			  struct gpii *gpii)
  {
@@ -65,7 +228,7 @@
  	ring->alloc_size = (len + (len - 1));
  	GPII_INFO(gpii, GPI_DBG_COMMON,
  		  "#el:%u el_size:%u len:%u actual_len:%llu alloc_size:%lu\n",
-@@ -3220,7 +3226,8 @@
+@@ -3220,7 +3277,8 @@
  		  ring->alloc_size);
  
  	if (gpii->gpi_dev->is_use_smem_region) {
@@ -75,7 +238,7 @@
  			GPII_ERR(gpii, GPI_DBG_COMMON, "SMEM region exceeded for GPI driver\n");
  			return -ENOMEM;
  		} else if (len == TX_RX_RING_LEN || len == EVENT_RING_LEN) {
-@@ -3302,7 +3309,7 @@
+@@ -3302,7 +3360,7 @@
   *
   * Return: Returns success or failure
   */
@@ -84,7 +247,7 @@
  {
  	struct gpii_chan *gpii_chan = to_gpii_chan(chan);
  	struct gpii *gpii = gpii_chan->gpii;
-@@ -3685,7 +3692,7 @@
+@@ -3685,7 +3743,7 @@
  	return 0;
  }
  
@@ -93,7 +256,7 @@
  {
  	struct gpi_desc *gpi_desc = to_gpi_desc(vd);
  
-@@ -3694,7 +3701,7 @@
+@@ -3694,7 +3752,7 @@
  }
  
  /* copy tre into transfer ring */
@@ -102,7 +265,7 @@
  					struct scatterlist *sgl,
  					unsigned int sg_len,
  					enum dma_transfer_direction direction,
-@@ -3713,7 +3720,6 @@
+@@ -3713,7 +3771,6 @@
  	struct gpi_desc *gpi_desc;
  	u32 tre_type;
  
@@ -110,7 +273,7 @@
  	GPII_VERB(gpii, gpii_chan->chid, "enter\n");
  
  	if (!is_slave_direction(direction)) {
-@@ -3722,6 +3728,30 @@
+@@ -3722,6 +3779,30 @@
  		return NULL;
  	}
  
@@ -141,7 +304,7 @@
  	ch_state = gpi_read_ch_state(gpii_chan);
  	GPII_VERB(gpii, gpii_chan->chid, "enter wp:0x%0llx rp:0x%0llx state:%s\n",
  		  to_physical(ch_ring, ch_ring->wp), to_physical(ch_ring, ch_ring->rp),
-@@ -3731,22 +3761,6 @@
+@@ -3731,22 +3812,6 @@
  		GPII_ERR(gpii, gpii_chan->chid,
  			 "Bail out the TRE subimit as Channel is in error state\n");
  		gpi_dump_debug_reg(gpii);
@@ -164,7 +327,7 @@
  		return NULL;
  	}
  
-@@ -3794,6 +3808,7 @@
+@@ -3794,6 +3859,7 @@
  		  to_physical(ch_ring, ch_ring->wp),
  		  to_physical(ch_ring, ch_ring->rp));
  

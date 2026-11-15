@@ -715,6 +715,16 @@ static inline void *to_virtual(const struct gpi_ring *const ring,
 	return ring->base + (addr - ring->phys_addr);
 }
 
+/* Hardware event pointers must identify complete elements in the owned ring. */
+static bool gpi_ring_dma_address_valid(const struct gpi_ring *ring, phys_addr_t addr)
+{
+	if (!ring || !ring->configured || !ring->base || !ring->el_size ||
+	    !ring->len || ring->len % ring->el_size || addr < ring->phys_addr)
+		return false;
+	return addr - ring->phys_addr < ring->len &&
+	       !((addr - ring->phys_addr) % ring->el_size);
+}
+
 #if IS_ENABLED(CONFIG_MSM_GPI_DMA_DEBUG)
 static inline u32 gpi_read_reg(struct gpii *gpii, void __iomem *addr)
 {
@@ -1999,8 +2009,11 @@ static void gpi_generate_cb_event(struct gpii_chan *gpii_chan,
 	struct gpii *gpii = gpii_chan->gpii;
 	struct gpi_client_info *client_info = &gpii_chan->client_info;
 	struct msm_gpi_cb msm_gpi_cb = {0};
-	u32 ch_state = gpi_read_ch_state(gpii_chan);
+	u32 ch_state;
 
+	if (!client_info->callback)
+		return;
+	ch_state = gpi_read_ch_state(gpii_chan);
 	GPII_ERR(gpii, gpii_chan->chid, "notifying event:%s with status:%llu ch_state:%s\n",
 		 TO_GPI_CB_EVENT_STR(event), status, TO_GPI_CH_STATE_STR(ch_state));
 
@@ -2349,8 +2362,7 @@ static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
 	struct virt_dma_desc *vd;
 	struct gpi_desc *gpi_desc;
-	void *tre = ch_ring->base +
-		(ch_ring->el_size * imed_event->tre_index);
+	void *tre;
 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
 	unsigned long flags;
 	u32 chid;
@@ -2368,6 +2380,16 @@ static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
 				      __LINE__);
 		return;
 	}
+
+	if (!ch_ring || !ch_ring->el_size ||
+	    imed_event->tre_index >= ch_ring->len / ch_ring->el_size ||
+	    imed_event->chid != gpii_chan->chid ||
+	    imed_event->length > sizeof(imed_event->data_bytes) ||
+	    !gpi_ring_dma_address_valid(ch_ring, ch_ring->phys_addr)) {
+		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, imed_event->tre_index);
+		return;
+	}
+	tre = ch_ring->base + ch_ring->el_size * imed_event->tre_index;
 
 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
 	vd = vchan_next_desc(&gpii_chan->vc);
@@ -2487,7 +2509,7 @@ static void gpi_process_xfer_compl_event(struct gpii_chan *gpii_chan,
 {
 	struct gpii *gpii = gpii_chan->gpii;
 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
-	void *ev_rp = to_virtual(ch_ring, compl_event->ptr);
+	void *ev_rp;
 	struct virt_dma_desc *vd;
 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
 	struct gpi_desc *gpi_desc;
@@ -2504,6 +2526,13 @@ static void gpi_process_xfer_compl_event(struct gpii_chan *gpii_chan,
 				      __LINE__);
 		return;
 	}
+
+	if (compl_event->chid != gpii_chan->chid ||
+	    !gpi_ring_dma_address_valid(ch_ring, compl_event->ptr)) {
+		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, compl_event->ptr);
+		return;
+	}
+	ev_rp = to_virtual(ch_ring, compl_event->ptr);
 
 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
 	vd = vchan_next_desc(&gpii_chan->vc);
@@ -2622,7 +2651,9 @@ gpi_process_qup_q2spi_status(struct gpii_chan *gpii_chan,
 {
 	struct gpii *gpii = gpii_chan->gpii;
 	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
-	void *ev_rp = to_virtual(ch_ring, q2spi_status_event->ptr_l);
+	phys_addr_t ptr = q2spi_status_event->ptr_l |
+		((u64)q2spi_status_event->ptr_h << 32);
+	void *ev_rp;
 	struct virt_dma_desc *vd;
 	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
 	struct gpi_desc *gpi_desc;
@@ -2635,6 +2666,13 @@ gpi_process_qup_q2spi_status(struct gpii_chan *gpii_chan,
 		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_PENDING_EVENT, __LINE__);
 		return;
 	}
+
+	if (q2spi_status_event->ch_id != gpii_chan->chid ||
+	    !gpi_ring_dma_address_valid(ch_ring, ptr)) {
+		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_FW_ERROR, ptr);
+		return;
+	}
+	ev_rp = to_virtual(ch_ring, ptr);
 
 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
 	vd = vchan_next_desc(&gpii_chan->vc);
@@ -2736,10 +2774,12 @@ static void gpi_process_events(struct gpii *gpii)
 	void *rp;
 	union gpi_event *gpi_event;
 	struct gpii_chan *gpii_chan;
-	u32 chid, type;
+	u32 chid, type = 0;
 
 	cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
 		   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
+	if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
+		goto error_irq;
 	rp = to_virtual(ev_ring, cntxt_rp);
 	local_rp = to_physical(ev_ring, ev_ring->rp);
 
@@ -2813,6 +2853,8 @@ static void gpi_process_events(struct gpii *gpii)
 			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
 		/* make sure event_ring rp updates before proceeding */
 		mb();
+		if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
+			goto error_irq;
 		rp = to_virtual(ev_ring, cntxt_rp);
 
 	} while (rp != ev_ring->rp);
@@ -2856,7 +2898,7 @@ static void gpi_ev_tasklet(unsigned long data)
 }
 
 /* marks all pending events for the channel as stale */
-static void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
+static int gpi_mark_stale_events(struct gpii_chan *gpii_chan)
 {
 	struct gpii *gpii = gpii_chan->gpii;
 	struct gpi_ring *ev_ring = gpii->ev_ring;
@@ -2867,6 +2909,8 @@ static void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
 	cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
 		   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
 
+	if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
+		return -EINVAL;
 	ev_rp = ev_ring->rp;
 	local_rp = to_physical(ev_ring, ev_rp);
 	while (local_rp != cntxt_rp) {
@@ -2880,8 +2924,11 @@ static void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
 			ev_rp = ev_ring->base;
 		cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
 			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
+		if (!gpi_ring_dma_address_valid(ev_ring, cntxt_rp))
+			return -EINVAL;
 		local_rp = to_physical(ev_ring, ev_rp);
 	}
+	return 0;
 }
 
 /* reset sw state and issue channel reset or de-alloc */
@@ -2911,7 +2958,11 @@ static int gpi_reset_chan(struct gpii_chan *gpii_chan, enum gpi_cmd gpi_cmd)
 
 	/* check event ring for any stale events */
 	write_lock_irq(&gpii->pm_lock);
-	gpi_mark_stale_events(gpii_chan);
+	ret = gpi_mark_stale_events(gpii_chan);
+	if (ret) {
+		write_unlock_irq(&gpii->pm_lock);
+		return ret;
+	}
 
 	/* remove all async descriptors */
 	spin_lock_irqsave(&gpii_chan->vc.lock, flags);

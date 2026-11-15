@@ -1,0 +1,14 @@
+Native patch replay: 17 patches, 63 exact files
+Verified pinned GENI DMA/I2C/SPI patch replay: 9 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/geni-bus'
+make[1]: Leaving directory '/work/avr-port/ports/geni-bus'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/geni-ring'
+  CC [M]  avr-geni-ring-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-geni-ring-test.ko
+  BTF [M] avr-geni-ring-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/geni-ring'
+make: Leaving directory '/work/avr-src'

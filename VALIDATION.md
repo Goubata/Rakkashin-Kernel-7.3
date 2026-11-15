@@ -1240,3 +1240,26 @@ mode `geni-ring`. Production modules rebuild with matching imports.
 Evidence: reports/geni-sg-stage70-validation.json. Drafts are saved with their
 matching Image separately from Stage57. Full probe/remove/concurrency, physical
 bus/peripheral behavior and remaining drivers/whole-board gates stay incomplete.
+
+
+## Stage71: bounded GPI completion pointers and event cursors
+
+Validate aligned DMA addresses inside configured rings before translating to
+CPU pointers or changing descriptors. Check immediate event index/channel and
+8-byte data capacity. Combine both Q2SPI pointer fields (40 bits) rather than
+truncating to ptr_l. Validate hardware event cursors before scanning/re-scanning;
+stale scans return errors on invalid targets, propagated by reset before freeing
+descriptors. Missing generic client callback returns before reading channel
+state. These checks do not establish descriptor ownership under concurrent
+termination, bounded live-producer scheduling or complete cookie reporting.
+
+Fifteen SMP4 cases pass: ten ring/SG regressions plus valid completion/wrap,
+malformed address/channel preservation, immediate index/length rejection and
+valid payload callback, full Q2SPI high-bit translation, event-cursor rejection
+and selective stale marking. Native coherent allocations and virtual descriptor
+queues are real; channel/event registers are private RAM. The 40-bit Q2SPI IOVA
+is synthetic metadata, not proof of physical 40-bit DMA. All three production
+modules rebuild with matching import CRCs. Reproduce GENI ring builder/QEMU
+mode `geni-ring`. Evidence: reports/geni-events-stage71-validation.json.
+Drafts remain excluded. Actual IRQ/STOP/RESET/concurrency, callback lifetime,
+physical bus/peripheral and whole-board acceptance remain pending.

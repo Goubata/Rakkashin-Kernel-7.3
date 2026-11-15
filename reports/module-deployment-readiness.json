@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-annotate-stage56",
+  "stage": "android73-info-stage57",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 117,
-  "same_name_candidate_count": 103,
-  "archived_names_without_same_name_candidate_count": 441,
-  "loaded_names_without_same_name_candidate_count": 426,
+  "staged_count": 118,
+  "same_name_candidate_count": 104,
+  "archived_names_without_same_name_candidate_count": 440,
+  "loaded_names_without_same_name_candidate_count": 425,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -391,6 +391,10 @@
     {
       "name": "mmi_annotate",
       "file": "modules/moto-info/mmi_annotate.ko"
+    },
+    {
+      "name": "mmi_info",
+      "file": "modules/moto-info/mmi_info.ko"
     },
     {
       "name": "qcom_glink_smem",
@@ -864,6 +868,10 @@
       "file": "modules/moto-info/mmi_annotate.ko"
     },
     {
+      "name": "mmi_info",
+      "file": "modules/moto-info/mmi_info.ko"
+    },
+    {
       "name": "qcom_glink_smem",
       "file": "modules/qcom-glink-transport/qcom_glink_smem.ko"
     },
@@ -1271,6 +1279,22 @@
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "minidump"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "mmi_info": {
+      "file": "modules/moto-info/mmi_info.ko",
+      "sha256": "b64cdca2e3d2aa213d9a53477d852e53d92f6982e5e1c9eb745b890d933eecb1",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "mmi_annotate",
+        "smem"
       ],
       "softdep": [],
       "archived_placement_candidates": [
@@ -4013,13 +4037,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "mmi_info",
-      "placements": [
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "mmi_sys_temp",
       "placements": [
         "vendor_dlkm"
@@ -6139,7 +6156,6 @@
     "microdump_collector",
     "mii",
     "mmi_glink_charger",
-    "mmi_info",
     "mmi_sys_temp",
     "moto_binder",
     "moto_f_usbnet",

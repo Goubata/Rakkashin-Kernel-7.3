@@ -1,0 +1,41 @@
+/dts-v1/;
+/plugin/;
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <2>; #size-cells = <2>; ranges;
+				info_log: annotate@60000000 { reg = <0 0x60000000 0 0x1000>; no-map; };
+			};
+			avr-info-log { compatible = "mmi,annotate"; memory-region = <&info_log>; mem-size = <0x2000>; };
+			avr-status-exact { mmi,status = "/chosen", "mmi,panel_name", "boe_test_panel"; };
+			avr-status-contains { mmi,status = "/chosen", "mmi,panel_name", "contains", "test"; };
+			avr-status-reject { mmi,status = "/chosen", "mmi,panel_name", "other"; };
+			avr-status-malformed { mmi,status = [01 02 03]; };
+			avr-status-no-value { mmi,status = "/chosen", "mmi,panel_name", "contains"; };
+		};
+	};
+	fragment@1 {
+		target-path = "/chosen";
+		__overlay__ {
+			mmi,bootconfig = "notandroidboot.radio=dead\nandroidboot.radio=7f\nandroidboot.device=avr-test\nandroidboot.baseband=test-baseband\nandroidboot.carrier=TEST\nandroidboot.serialno=TESTSERIAL\nandroidboot.bootreason=test-boot\nandroidboot.mode=normal\n";
+			mmi,panel_name = "boe_test_panel";
+			mmi,dynamic_devices = "/avr-status-reject", "/avr-status-exact";
+			mmi,baseband = "test-baseband";
+			mmi,chipid = "test-chip";
+			mmi,powerup_reason = <0x80>;
+			linux,hwrev = <0x1234>;
+			linux,serialhigh = <0x11223344>;
+			linux,seriallow = <0x55667788>;
+			avr-test-lines = "othermode=bad\nandroidboot.mode = \"line value\"\nempty=\nfirst=one\nfirst=two\n";
+			avr-test-command = "notandroidboot.mode=wrong androidboot.mode=\"command value\" flag empty= tail=x";
+			avr-test-invalid = [01 02 03];
+			avr-test-unmatched-quote = "key=\"unfinished\n";
+			avr-test-race = "one=1\ntwo=2\nthree=3\n";
+			mmi,storage {
+				type = "UFS"; size = "256GB"; manufacturer = "TEST"; product = "AVRTEST"; firmware = "test1";
+			};
+		};
+	};
+};

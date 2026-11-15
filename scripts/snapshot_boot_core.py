@@ -26,6 +26,7 @@ parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
 parser.add_argument('--pmic-ipc',action='store_true')
 parser.add_argument('--pmic-glink',action='store_true')
+parser.add_argument('--moto-info',action='store_true')
 parser.add_argument('--moto-annotate',action='store_true')
 parser.add_argument('--moto-touch-deps',action='store_true')
 parser.add_argument('--panel-event',action='store_true')
@@ -33,6 +34,7 @@ parser.add_argument('--power-key',action='store_true')
 parser.add_argument('--sdam',action='store_true')
 parser.add_argument('--rtc',action='store_true')
 args=parser.parse_args()
+if args.moto_info:args.moto_annotate=True
 if args.moto_annotate:
     subprocess.run(['python',str(ROOT/'scripts/audit_moto_info_sources.py')],check=True)
 if args.moto_touch_deps:
@@ -111,6 +113,8 @@ if args.storage_phy:
 if args.rakkashin:
     ports.append("rakkashin/adios")
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))
+if args.moto_info:
+    modules.append((ROOT/'ports/moto-info/mmi_info.ko','modules/moto-info/mmi_info.ko'))
 if args.moto_annotate:
     modules.append((ROOT/'ports/moto-info/mmi_annotate.ko','modules/moto-info/mmi_annotate.ko'))
     ports += ['qcom-hwspinlock','qcom-smem','qcom-minidump']

@@ -11,37 +11,37 @@
       "file": "ports/moto-info/mmi_info/mmi_boot_info.c",
       "source": "drivers/mmi_info/mmi_boot_info.c",
       "original_sha256": "cf97ba251ca5b88a2d7a5ed16fbbc4fb518bcb6b1aae3cae849f1915c138c751",
-      "sha256": "0cff1794ed7821759fecb2b7bde3f54336f31d03597b77a36238802021414ab1"
+      "sha256": "7cc09c5055d079aaef12006723a717e03a25a9820fe09c69ce758c161748f4d1"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_info.h",
       "source": "drivers/mmi_info/mmi_info.h",
       "original_sha256": "624422f8b3126d479a32b35508149d59e713eeb0489328918b032f7b6151dac1",
-      "sha256": "624422f8b3126d479a32b35508149d59e713eeb0489328918b032f7b6151dac1"
+      "sha256": "4250f5f0ca426b2f1fe6722714af7909bf50d638778134aef417930eb6cf47d1"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_info_main.c",
       "source": "drivers/mmi_info/mmi_info_main.c",
       "original_sha256": "914cd4121b816e3522866029854ff1dddb3e4701323454c253684b0b05520e22",
-      "sha256": "914cd4121b816e3522866029854ff1dddb3e4701323454c253684b0b05520e22"
+      "sha256": "4d1fafd97000e2086f3e7549365575022d3c8849117db6895405ad9c60818ce5"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_ram_info.c",
       "source": "drivers/mmi_info/mmi_ram_info.c",
       "original_sha256": "e46c72df8cd062c63cfb201099b481fb3b3c35ec3c368fa1ec2d53975f01203f",
-      "sha256": "e46c72df8cd062c63cfb201099b481fb3b3c35ec3c368fa1ec2d53975f01203f"
+      "sha256": "622770f8f2f245788ef2025fd4d409c68084530d4799fbf1157a52875be5d1a1"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_storage_info.c",
       "source": "drivers/mmi_info/mmi_storage_info.c",
       "original_sha256": "21e696ffb5155fe07fa2acf0cc8437aa4d9af6ea2fd98745c8cd4c9c68fa6c14",
-      "sha256": "21e696ffb5155fe07fa2acf0cc8437aa4d9af6ea2fd98745c8cd4c9c68fa6c14"
+      "sha256": "d3560a04f52e0b84b2ebe35b882e46a07ee71661730f3415ff1f0a4596399eb6"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_unit_info.c",
       "source": "drivers/mmi_info/mmi_unit_info.c",
       "original_sha256": "0420f67ccd0c8899ade4f461e58f6967daec50c4e57353acb8c45524dea7dc29",
-      "sha256": "26d242adc81075ec3e4a711a47974a2ce9db57a8f8bd1606ecf2a66e239942bb"
+      "sha256": "f542ff0f41478d463cdeef5b357a5ed2a7f1cc1b6eb8f8ef722ab87a2c16ccdc"
     },
     {
       "file": "ports/moto-info/include/linux/mmi_device.h",
@@ -74,26 +74,29 @@
       "sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312"
     }
   ],
-  "patch_sha256": "e0104489d56528fccf65529042a03bc4d3e55d897a6fb1080425f6bc2951cd75",
+  "patch_sha256": "be5150c8ef96549f78f05aefae0a03e9df2249aed725762bc85e99cc92e6b1db",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "module_packaging": {
     "mmi_annotate": "partial snapshot; physical backend acceptance pending",
-    "mmi_info": "excluded draft"
+    "mmi_info": "partial snapshot; physical SMEM/ROM acceptance pending"
   },
   "hardware_runtime_accepted": false,
   "reviewed_changes": [
     "Add exact missing factory headers and required exported prototype; make private build-signature parser static",
     "Use real SMEM API and validate allocation/get errors and exact region size before copying",
     "Bound annotation formatting to actual emitted bytes, subtraction bounds and explicit NUL termination",
-    "Treat boot signature strings as data rather than printf formats; mmi_info remains outside main bundle",
+    "Treat boot signature strings as data rather than printf formats; preserve public headers and metadata endpoint names/modes",
     "Initialize owned annotate state before publication; bound restore using resource capacity; use memremap/memunmap for no-map RAM",
     "Serialize API/remove; unwind proc/map/buffer acquisitions; remove minidump registration before backing release",
-    "Retain unconfirmed minidump backing and retry at next probe/exit; terminal failure intentionally retains backing until reboot"
+    "Retain unconfirmed minidump backing and retry at next probe/exit; terminal failure intentionally retains backing until reboot",
+    "Keep immutable exact-key bootarg values with native cmdline parsing and bounded bootconfig/OF string handling",
+    "Own DDR snapshots; validate SMEM pointers and lengths before reads; retain unit-info v3/1024-byte payload",
+    "Use independently probed software metadata endpoints with real deferred probe and reverse registration unwind; drain proc/sysfs before freeing backing"
   ],
   "pending": [
     "Annotation physical minidump backend/cache/boot acceptance and allocation/proc failure injection remain pending",
-    "Info init failure unwind, SMEM failure tests and complete bootarg/ROM behavior",
+    "Info physical initialized-SMEM/modem acceptance, automatic supplier readiness and complete ROM behavior; low-memory allocation injection pending",
     "Actual firmware/userspace/physical device acceptance"
   ]
 }

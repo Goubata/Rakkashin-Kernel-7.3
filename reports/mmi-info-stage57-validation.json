@@ -1,0 +1,67 @@
+{
+  "stage": 57,
+  "scope": "Metadata source lifecycle/error tests with recorded SMEM, and production module on real unready native SMEM in isolated 7.3 guest; no physical firmware acceptance",
+  "selected_checks_passed": true,
+  "checks": {
+    "source": {
+      "log": "reports/mmi-info-stage57-final-qemu.log",
+      "test": "mmi-info",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        13,
+        0,
+        0,
+        13
+      ]
+    },
+    "native": {
+      "log": "reports/mmi-info-stage57-native-qemu.log",
+      "test": "mmi-info-native",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        2,
+        0,
+        0,
+        2
+      ]
+    }
+  },
+  "total_cases": 15,
+  "public_headers_unchanged_since_stage56": [
+    "ports/moto-info/include/linux/mmi_device.h",
+    "ports/moto-info/include/linux/mmi_annotate.h",
+    "ports/moto-info/include/soc/qcom/mmi_boot_info.h",
+    "ports/moto-info/include/linux/mmi_kernel_common.h"
+  ],
+  "artifact": "artifacts/android73-info-stage57",
+  "packaged_modules": 118,
+  "matching_imports": 5750,
+  "remaining_unaccepted_touch_drafts": 2,
+  "pas_drafts_excluded": 3,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "source_scope": "13 cases: independent defer/reprobe, DDR snapshot ownership, malformed pointers/sizes, unit-info v3/1024-byte guards, exact immutable bootargs, DT selectors, teardown/restart, proc/sysfs faults, four registration unwind positions, concurrent cache reads",
+  "native_scope": "2 cases against production module with real qcom_smem_get returning EPROBE_DEFER; storage/boot bound while RAM/unit wait; public APIs and storage read; shell checks two unloads with one reload and no residual endpoints",
+  "pending": [
+    "Physical initialized SMEM/modem and automatic supplier-readiness timing; low-memory allocation injection and complete ROM behavior",
+    "Goodix/THP ioctl/open/remove/probe/frame/firmware/SPI/display/IRQ/power/gesture/stylus review and physical daemon acceptance",
+    "Whole-board SID4 DT conflict, remaining mandatory drivers, boot/vendor_boot/dtbo/DLKM/SELinux integration and all-function validation"
+  ],
+  "evidence_sha256": {
+    "reports/mmi-info-stage57-final-qemu.log": "7c36bdf30caeef6777c45d0c0fe09f5ee66f22a52d23b7549bbfaf4acf720cc1",
+    "reports/mmi-info-stage57-final-qemu.json": "51a5d216c860974a8d17e7c46d5b4acedf86cb0aec92cff20dad5b5269c16c3a",
+    "reports/mmi-info-stage57-final-build.log": "4679f859171a6d489e2ceac17c91ad3b52227d851e0827d404c5b2413d4e7689",
+    "reports/mmi-info-stage57-native-qemu.log": "0b1e2061b638dfeffe8813c143a8f3716feb5b2594c68a35711c1234d179c44a",
+    "reports/mmi-info-stage57-native-qemu.json": "913d5b5ba4fbb27095e610deb730660c1bebba1d8d5f54e30b668b3a475119ce",
+    "reports/mmi-info-stage57-native-build.log": "c917d9169515814c0dc58e6c3cacfb43e734128cd962200c54f04bf6834a290c",
+    "reports/moto-info-source-lock.json": "065173b23f78da5632e1110bc28142a9d5d494f71865727b65568794ee972d64",
+    "patches/moto-info-7.3.patch": "be5150c8ef96549f78f05aefae0a03e9df2249aed725762bc85e99cc92e6b1db",
+    "reports/module-crc-stage57.json": "b2b34c2b66484bb31208e6d13a0cd4e864d90fd9adbcbc916547ba721e2dbf69",
+    "reports/module-deployment-stage57-summary.json": "8bf53408996c8b16d95098c82637ae36418d470d1310c38724f250ca3f781888",
+    "reports/mmi-info-stage57-source-check.json": "c0a59283a2a138e690d2fc6f22a2d4720a151e8bacb44e3e23d4d484ab232640",
+    "reports/mmi-info-stage57-native-check.json": "a68e378bf0a3856c461d32a8b0e312637ddefad97b4c90ebd5514382baec8a0b"
+  }
+}

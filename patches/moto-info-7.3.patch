@@ -513,16 +513,92 @@
  module_init(mmi_annotate_init);
 --- a/ports/moto-info/mmi_info/mmi_boot_info.c
 +++ b/ports/moto-info/mmi_info/mmi_boot_info.c
-@@ -161,7 +161,7 @@
+@@ -74,15 +74,20 @@
+ static char bootmode[BOOTMODE_MAX_LEN];
+ 
+ 
+-static void mmi_bootarg_setup(void)
+-{
+-	char *s;
+-
+-	if (mmi_get_bootarg("androidboot.bootreason=", &s) == 0)
+-		strscpy(bootreason, s, BOOTREASON_MAX_LEN);
+-
+-	if (mmi_get_bootarg("androidboot.mode=", &s) == 0)
+-		strscpy(bootmode, s, BOOTMODE_MAX_LEN);
++int mmi_boot_info_prepare(void)
++{
++	char reason[BOOTREASON_MAX_LEN] = {}, mode[BOOTMODE_MAX_LEN] = {};
++	int ret;
++
++	ret = mmi_copy_bootarg("androidboot.bootreason=", reason, sizeof(reason));
++	if (ret)
++		return ret;
++	ret = mmi_copy_bootarg("androidboot.mode=", mode, sizeof(mode));
++	if (ret)
++		return ret;
++	memcpy(bootreason, reason, sizeof(bootreason));
++	memcpy(bootmode, mode, sizeof(bootmode));
++	return 0;
+ }
+ 
+ /*
+@@ -161,16 +166,16 @@
  	}
  }
  
 -void bi_add_bl_build_sig(char *bld_sig)
-+static void bi_add_bl_build_sig(char *bld_sig)
++static void bi_add_bl_build_sig(const char *bld_sig)
  {
  	int pos;
- 	char *value;
-@@ -322,9 +322,9 @@
+-	char *value;
++	const char *value;
+ 	char *ptr;
+ 
+ 	if (!bld_sig || (bl_build_sig_count >= MAX_BL_BUILD_SIG))
+ 		return;
+ 
+-	value = (char *)memchr((void *)bld_sig, '=', strnlen(bld_sig, MAX_BLD_SIG_ITEM));
++	value = memchr(bld_sig, '=', strnlen(bld_sig, MAX_BLD_SIG_ITEM));
+ 	if (!value)
+ 		return;
+ 
+@@ -199,9 +204,12 @@
+ 	if (n == NULL)
+ 		return;
+ 
+-	for_each_property_of_node(n, p)
+-		if (strcmp(p->name, "name"))
+-			bi_add_bl_build_sig(p->value);
++	for_each_property_of_node(n, p) {
++		const char *signature;
++		if (strcmp(p->name, "name") &&
++		    !of_property_read_string(n, p->name, &signature))
++			bi_add_bl_build_sig(signature);
++	}
+ 
+ 	of_node_put(n);
+ }
+@@ -309,22 +317,26 @@
+ 
+ int mmi_boot_info_init(void)
+ {
+-	int i;
++	int i, ret;
+ 
+ 	of_blsig();
+-	mmi_bootarg_setup();
++	ret = mmi_boot_info_prepare();
++	if (ret)
++		return ret;
+ 
+ 	/* /proc/bootinfo */
+ 	proc_bootinfo = proc_create("bootinfo",
+ 		0444, NULL, &bootinfo_proc_fops);
++	if (!proc_bootinfo)
++		return -ENOMEM;
+ 
+ 	/* Add to dont panic dump */
  	for (i = 0; i < bl_build_sig_count; i++) {
  		bl_build_sigs[i].item[MAX_BLD_SIG_ITEM - 1] = 0;
  		bl_build_sigs[i].value[MAX_BLD_SIG_VALUE - 1] = 0;
@@ -534,18 +610,940 @@
  		mmi_annotate_persist("\n");
  	}
  	mmi_annotate_persist("MBM_VERSION: 0x%08x\n", bi_mbm_version());
+@@ -341,6 +353,6 @@
+ 
+ void mmi_boot_info_exit(void)
+ {
+-	if (proc_bootinfo)
+-		remove_proc_entry("bootinfo", NULL);
+-}
++	proc_remove(proc_bootinfo);
++	proc_bootinfo = NULL;
++}
+--- a/ports/moto-info/mmi_info/mmi_info.h
++++ b/ports/moto-info/mmi_info/mmi_info.h
+@@ -20,9 +20,11 @@
+ void mmi_ram_info_exit(void);
+ int mmi_unit_info_init(void);
+ void mmi_unit_info_exit(void);
++int mmi_boot_info_prepare(void);
+ int mmi_boot_info_init(void);
+ void mmi_boot_info_exit(void);
+-int mmi_get_bootarg(char *key, char **value);
++int mmi_get_bootarg(const char *key, char **value);
++int mmi_copy_bootarg(const char *key, char *destination, size_t size);
+ 
+ struct mmi_storage_info {
+ 	char type[16];	/* UFS or eMMC */
+--- a/ports/moto-info/mmi_info/mmi_info_main.c
++++ b/ports/moto-info/mmi_info/mmi_info_main.c
+@@ -14,175 +14,286 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/mutex.h>
++#include <linux/list.h>
++#include <linux/kernel.h>
+ #include <linux/ctype.h>
+ #include <linux/slab.h>
+ #include <linux/mmi_device.h>
+ #include "mmi_info.h"
+ 
+ struct mmi_chosen_info mmi_chosen_data;
+-static char *bootargs_str;
+-
+-/**
+- *  mmi_device_is_available - check if a device is available for use
+- *
+- *  @device: Node to check for availability, with locks already held
+- *
+- *  Returns true if the status property
+- *  -- is absent,
+- *  -- refers to another property using string list as following
+- *     mmi,status = <path>, <okay property>, [<contains>,] <value1>[, <value2>...];
+- *     and at least one <value> in the list of values matches
+- *     value of /<path>/<okay property>.
+- *     Partial matches accepted when "contains" provided.
+- *  false otherwise
+- */
++
++/* Immutable parsed values remain valid until the provider is stopped. Internal
++ * callers copy them during probe; sysfs/proc readers use the owned snapshots. */
++struct mmi_bootarg_pair {
++	struct list_head link;
++	char *name, *value;
++};
++struct mmi_bootarg_property {
++	struct list_head link, pairs;
++	char *name, *text;
++	bool lines;
++};
++static LIST_HEAD(bootarg_properties);
++static DEFINE_MUTEX(bootarg_lock);
++static struct platform_device *mmi_info_devices[4];
++
+ bool mmi_device_is_available(struct device_node *np)
+ {
+-	bool found;
+-	int len, operation;
+-	const char *path, *mmi_dts;
+-	const char *mmi_dts_val, *val;
+-	struct property *prop;
+-	struct device_node *mmi_np;
+-
+-	if (np == NULL)
++	struct device_node *target;
++	const char *path, *property, *selected, *value;
++	bool contains = false, found = false;
++	int count, i;
++
++	if (!np || !of_find_property(np, "mmi,status", NULL))
+ 		return true;
+-
+-	prop = of_find_property(np, "mmi,status", &len);
+-	if (prop == NULL || len < 0) {
++	count = of_property_count_strings(np, "mmi,status");
++	if (count < 3 || of_property_read_string_index(np, "mmi,status", 0, &path) ||
++	    of_property_read_string_index(np, "mmi,status", 1, &property) ||
++	    !*path || !*property)
++		return false;
++	target = of_find_node_by_path(path);
++	if (!target)
++		return false;
++	if (of_property_read_string(target, property, &selected))
++		goto out;
++	for (i = 2; i < count; i++) {
++		if (of_property_read_string_index(np, "mmi,status", i, &value))
++			break;
++		if (i == 2 && !strcmp(value, "contains")) {
++			contains = true;
++			continue;
++		}
++		if ((!contains && !strcmp(selected, value)) ||
++		    (contains && strstr(selected, value))) {
++			found = true;
++			break;
++		}
++	}
++out:
++	of_node_put(target);
++	return found;
++}
++EXPORT_SYMBOL(mmi_device_is_available);
++
++bool mmi_check_dynamic_device_node(char *dev_name)
++{
++	struct device_node *chosen, *target;
++	const char *path;
++	bool result = true;
++	int count, i;
++
++	if (!dev_name || !*dev_name)
++		return false;
++	chosen = of_find_node_by_path("/chosen");
++	if (!chosen)
+ 		return true;
+-	}
+-	path = prop->value;
+-
+-	mmi_dts = of_prop_next_string(prop, path);
+-	if (mmi_dts == NULL)
+-		return false;
+-
+-	mmi_np = of_find_node_by_path(path);
+-	if (mmi_np == NULL)
+-		return false;
+-
+-	mmi_dts_val = of_get_property(mmi_np, mmi_dts, &len);
+-	of_node_put(mmi_np);
+-	if (mmi_dts_val == NULL || len <= 0)
+-		return false;
+-
+-	val = mmi_dts;
+-	operation = 0;
+-	found = false;
+-	while ((val = of_prop_next_string(prop, val))) {
+-		if (val == NULL)
+-			return false;
+-
+-		if (!operation) {
+-			operation++;
+-			if (!strcmp(val, "contains")) {
+-				operation++;
+-				continue;
+-			}
+-		}
+-		if (operation == 1) {
+-			if (!strcmp(val, mmi_dts_val))
+-				found = true;
+-		} else if (strstr(mmi_dts_val, val)) {
+-			found = true;
+-		}
+-		if (found)
+-			return true;
+-	}
+-	return false;
+-}
+-EXPORT_SYMBOL(mmi_device_is_available);
+-
+-bool mmi_check_dynamic_device_node(char *dev_name)
+-{
+-	struct property *prop;
+-	struct device_node *node, *dst_node = NULL;
+-	int len;
+-	char *val = NULL;
+-	bool result = true;
+-
+-	node = of_find_node_by_path("/chosen");
+-	if (node == NULL)
++	if (!of_find_property(chosen, "mmi,dynamic_devices", NULL))
+ 		goto out;
+-
+-	prop = of_find_property(node, "mmi,dynamic_devices", &len);
+-	of_node_put(node);
+-	if (prop == NULL || len < 0) {
+-		pr_err("%s: cannot find mmi,dynamic_devices property\n", __func__);
++	count = of_property_count_strings(chosen, "mmi,dynamic_devices");
++	if (count < 0) {
++		result = false;
+ 		goto out;
+ 	}
+-
+-	while ((val = (char *)of_prop_next_string(prop, val))) {
+-		if (strstr(val, dev_name)) {
+-			pr_info("%s: find matched dev name string %s\n", __func__, val);
+-			dst_node = of_find_node_by_path(val);
++	for (i = 0; i < count; i++) {
++		if (of_property_read_string_index(chosen, "mmi,dynamic_devices", i, &path)) {
++			result = false;
+ 			break;
+ 		}
+-	}
+-
+-	if (dst_node == NULL) {
+-		pr_err("%s: cannot find any node with dev_name %s\n", __func__, dev_name);
+-		goto out;
+-	}
+-
+-	result = mmi_device_is_available(dst_node);
+-	of_node_put(dst_node);
++		if (!strstr(path, dev_name))
++			continue;
++		target = of_find_node_by_path(path);
++		if (target) {
++			result = mmi_device_is_available(target);
++			of_node_put(target);
++		}
++		break;
++	}
+ out:
++	of_node_put(chosen);
+ 	return result;
+ }
+ EXPORT_SYMBOL(mmi_check_dynamic_device_node);
+ 
+-static int mmi_get_bootarg_dt(char *key, char **value, char *prop, char *spl_flag)
+-{
+-	const char *bootargs_tmp = NULL;
+-	char *idx = NULL;
+-	char *kvpair = NULL;
+-	int err = 1;
+-	struct device_node *n = of_find_node_by_path("/chosen");
+-	size_t bootargs_tmp_len = 0;
+-
+-	if (n == NULL)
+-		goto err;
+-
+-	if (of_property_read_string(n, prop, &bootargs_tmp) != 0)
+-		goto putnode;
+-
+-	bootargs_tmp_len = strlen(bootargs_tmp);
+-	if (!bootargs_str) {
+-		/* The following operations need a non-const
+-		 * version of bootargs
+-		 */
+-		bootargs_str = kzalloc(bootargs_tmp_len + 1, GFP_KERNEL);
+-		if (!bootargs_str)
+-			goto putnode;
+-	}
+-	strscpy(bootargs_str, bootargs_tmp, bootargs_tmp_len + 1);
+-
+-	idx = strnstr(bootargs_str, key, strlen(bootargs_str));
+-	if (idx) {
+-		kvpair = strsep(&idx, " ");
+-		if (kvpair)
+-			if (strsep(&kvpair, "=")) {
+-				*value = strsep(&kvpair, spl_flag);
+-				if (*value)
+-					err = 0;
+-			}
+-	}
+-
+-putnode:
+-	of_node_put(n);
+-err:
+-	return err;
+-}
+-
+-int mmi_get_bootarg(char *key, char **value)
++static void mmi_bootarg_property_free(struct mmi_bootarg_property *property)
++{
++	struct mmi_bootarg_pair *pair, *next;
++
++	list_for_each_entry_safe(pair, next, &property->pairs, link) {
++		list_del(&pair->link);
++		kfree(pair);
++	}
++	kfree(property->text);
++	kfree(property->name);
++	kfree(property);
++}
++
++static int mmi_bootarg_add(struct mmi_bootarg_property *property, char *name, char *value)
++{
++	struct mmi_bootarg_pair *pair;
++
++	if (!value || !*name)
++		return 0;
++	pair = kzalloc(sizeof(*pair), GFP_KERNEL);
++	if (!pair)
++		return -ENOMEM;
++	pair->name = name;
++	pair->value = value;
++	list_add_tail(&pair->link, &property->pairs);
++	return 0;
++}
++
++static int mmi_bootarg_parse(struct mmi_bootarg_property *property)
++{
++	char *cursor = property->text, *name, *value, *line;
++	int ret;
++	size_t length;
++
++	if (!property->lines) {
++		cursor = skip_spaces(cursor);
++		while (*cursor) {
++			cursor = next_arg(cursor, &name, &value);
++			ret = mmi_bootarg_add(property, name, value);
++			if (ret)
++				return ret;
++		}
++		return 0;
++	}
++	while ((line = strsep(&cursor, "\n"))) {
++		line = strim(line);
++		if (!*line || *line == '#')
++			continue;
++		value = strchr(line, '=');
++		if (!value)
++			continue;
++		*value++ = 0;
++		name = strim(line);
++		value = strim(value);
++		length = strlen(value);
++		if (length && *value == '"') {
++			if (length < 2 || value[length - 1] != '"')
++				return -EINVAL;
++			value[length - 1] = 0;
++			value++;
++		}
++		ret = mmi_bootarg_add(property, name, value);
++		if (ret)
++			return ret;
++	}
++	return 0;
++}
++
++static int mmi_get_bootarg_dt(const char *key, char **value,
++			    const char *name, const char *separator)
++{
++	struct mmi_bootarg_property *property, *cached = NULL;
++	struct mmi_bootarg_pair *pair;
++	struct device_node *chosen;
++	const char *raw;
++	size_t key_length;
++	bool lines;
++	int ret;
++
++	if (!value)
++		return -EINVAL;
++	*value = NULL;
++	if (!key || !name || !separator ||
++	    (strcmp(separator, " ") && strcmp(separator, "\n")))
++		return -EINVAL;
++	key_length = strlen(key);
++	if (key_length < 2 || strchr(key, '=') != key + key_length - 1)
++		return -EINVAL;
++	lines = !strcmp(separator, "\n");
++	mutex_lock(&bootarg_lock);
++	list_for_each_entry(property, &bootarg_properties, link) {
++		if (property->lines == lines && !strcmp(property->name, name)) {
++			cached = property;
++			break;
++		}
++	}
++	if (!cached) {
++		chosen = of_find_node_by_path("/chosen");
++		if (!chosen) {
++			ret = -ENOENT;
++			goto out;
++		}
++		ret = of_property_read_string(chosen, name, &raw);
++		if (ret) {
++			if (!of_find_property(chosen, name, NULL))
++				ret = -ENOENT;
++			of_node_put(chosen);
++			goto out;
++		}
++		property = kzalloc(sizeof(*property), GFP_KERNEL);
++		if (!property) {
++			of_node_put(chosen);
++			ret = -ENOMEM;
++			goto out;
++		}
++		INIT_LIST_HEAD(&property->pairs);
++		property->name = kstrdup(name, GFP_KERNEL);
++		property->text = kstrdup(raw, GFP_KERNEL);
++		property->lines = lines;
++		of_node_put(chosen);
++		if (!property->name || !property->text)
++			ret = -ENOMEM;
++		else
++			ret = mmi_bootarg_parse(property);
++		if (ret) {
++			mmi_bootarg_property_free(property);
++			goto out;
++		}
++		list_add_tail(&property->link, &bootarg_properties);
++		cached = property;
++	}
++	ret = -ENOENT;
++	list_for_each_entry(pair, &cached->pairs, link) {
++		if (strlen(pair->name) == key_length - 1 &&
++		    !memcmp(pair->name, key, key_length - 1)) {
++			*value = pair->value;
++			ret = 0;
++			break;
++		}
++	}
++out:
++	mutex_unlock(&bootarg_lock);
++	return ret;
++}
++
++int mmi_get_bootarg(const char *key, char **value)
+ {
+ #ifdef CONFIG_BOOT_CONFIG
+ 	return mmi_get_bootarg_dt(key, value, "mmi,bootconfig", "\n");
+ #else
+ 	return mmi_get_bootarg_dt(key, value, "bootargs", " ");
+ #endif
++}
++
++int mmi_copy_bootarg(const char *key, char *destination, size_t size)
++{
++	char *value;
++	int ret = mmi_get_bootarg(key, &value);
++
++	if (ret == -ENOENT)
++		return 0;
++	if (ret)
++		return ret;
++	strscpy(destination, value, size);
++	return 0;
++}
++
++static void mmi_bootargs_cleanup(void)
++{
++	struct mmi_bootarg_property *property, *next;
++
++	mutex_lock(&bootarg_lock);
++	list_for_each_entry_safe(property, next, &bootarg_properties, link) {
++		list_del(&property->link);
++		mmi_bootarg_property_free(property);
++	}
++	mutex_unlock(&bootarg_lock);
+ }
+ 
+ static void mmi_of_populate_setup(void)
+@@ -213,23 +324,104 @@
+ 	of_node_put(n);
+ }
+ 
++struct mmi_info_component {
++	int (*init)(void);
++	void (*exit)(void);
++};
++static const struct mmi_info_component mmi_info_components[] = {
++	{ mmi_storage_info_init, mmi_storage_info_exit },
++	{ mmi_ram_info_init, mmi_ram_info_exit },
++	{ mmi_unit_info_init, mmi_unit_info_exit },
++	{ mmi_boot_info_init, mmi_boot_info_exit },
++};
++static const struct platform_device_id mmi_info_ids[] = {
++	{ "mmi_info_storage", 0 }, { "mmi_info_ram", 1 },
++	{ "mmi_info_unit", 2 }, { "mmi_info_boot", 3 }, { }
++};
++MODULE_DEVICE_TABLE(platform, mmi_info_ids);
++
++static int mmi_info_probe(struct platform_device *pdev)
++{
++	const struct platform_device_id *id = platform_get_device_id(pdev);
++	const struct mmi_info_component *component;
++	int ret;
++
++	if (!id || id->driver_data >= ARRAY_SIZE(mmi_info_components))
++		return -EINVAL;
++	component = &mmi_info_components[id->driver_data];
++	ret = component->init();
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "metadata component not ready\n");
++	platform_set_drvdata(pdev, (void *)component);
++	return 0;
++}
++
++static void mmi_info_remove(struct platform_device *pdev)
++{
++	const struct mmi_info_component *component = platform_get_drvdata(pdev);
++
++	component->exit();
++	platform_set_drvdata(pdev, NULL);
++}
++
++/* Software metadata endpoints have independent probe lifetimes. A deferred
++ * RAM or unit-info SMEM request must not block boot info or DT selectors. */
++static struct platform_driver mmi_info_driver = {
++	.probe = mmi_info_probe,
++	.remove = mmi_info_remove,
++	.id_table = mmi_info_ids,
++	.driver = { .name = "mmi_info" },
++};
++
++static int mmi_hw_info_start(void)
++{
++	int ret, i;
++
++	memset(&mmi_chosen_data, 0, sizeof(mmi_chosen_data));
++	mmi_of_populate_setup();
++	/* Public boot-mode getters are ready before this module becomes visible. */
++	ret = mmi_boot_info_prepare();
++	if (ret)
++		goto cleanup;
++	ret = platform_driver_register(&mmi_info_driver);
++	if (ret)
++		goto cleanup;
++	for (i = 0; i < ARRAY_SIZE(mmi_info_components); i++) {
++		mmi_info_devices[i] = platform_device_register_simple(mmi_info_ids[i].name,
++							    PLATFORM_DEVID_AUTO, NULL, 0);
++		if (IS_ERR(mmi_info_devices[i])) {
++			ret = PTR_ERR(mmi_info_devices[i]);
++			mmi_info_devices[i] = NULL;
++			while (i--)
++				platform_device_unregister(mmi_info_devices[i]);
++			memset(mmi_info_devices, 0, sizeof(mmi_info_devices));
++			platform_driver_unregister(&mmi_info_driver);
++			goto cleanup;
++		}
++	}
++	return 0;
++cleanup:
++	mmi_bootargs_cleanup();
++	return ret;
++}
++
+ static int __init mmi_hw_info_init(void)
+ {
+-	mmi_of_populate_setup();
+-	mmi_storage_info_init();
+-	mmi_ram_info_init();
+-	mmi_unit_info_init();
+-	mmi_boot_info_init();
+-	return 0;
++	return mmi_hw_info_start();
+ }
+ 
+ static void mmi_hw_info_exit(void)
+ {
+-	mmi_storage_info_exit();
+-	mmi_ram_info_exit();
+-	mmi_unit_info_exit();
+-	mmi_boot_info_exit();
+-	kfree(bootargs_str);
++	int i;
++
++	for (i = ARRAY_SIZE(mmi_info_devices) - 1; i >= 0; i--) {
++		if (mmi_info_devices[i]) {
++			platform_device_unregister(mmi_info_devices[i]);
++			mmi_info_devices[i] = NULL;
++		}
++	}
++	platform_driver_unregister(&mmi_info_driver);
++	mmi_bootargs_cleanup();
+ }
+ 
+ module_init(mmi_hw_info_init);
+--- a/ports/moto-info/mmi_info/mmi_ram_info.c
++++ b/ports/moto-info/mmi_info/mmi_ram_info.c
+@@ -28,13 +28,15 @@
+ #define SMEM_SDRAM_INFO SMEM_ID_VENDOR1
+ #endif
+ 
+-static struct {
++struct mmi_ddr_snapshot {
+ 	unsigned int mr5;
+ 	unsigned int mr6;
+ 	unsigned int mr7;
+ 	unsigned int mr8;
+ 	unsigned int ramsize;
+-} *smem_ddr_info;
++};
++static struct mmi_ddr_snapshot ddr_snapshot;
++static struct mmi_ddr_snapshot *smem_ddr_info;
+ 
+ struct smem_ddr_info_v2 {
+ 	unsigned int mr5;
+@@ -187,29 +189,23 @@
+ 		"Intel"
+ 	};
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
+-	ssize_t ddr_info_size = 0;
+-	smem_ddr_info = qcom_smem_get(QCOM_SMEM_HOST_ANY,
+-		SMEM_SDRAM_INFO,
+-		&ddr_info_size);
+-
+-	if(smem_ddr_info) {
+-		if(ddr_info_size < sizeof(*smem_ddr_info)) {
+-			pr_err("%s: Invalid SMEM size, cannot get RAM info\n", __func__);
+-			goto err;
+-		}
+-
+-		/* v2 has an extra field */
+-		if(ddr_info_size == sizeof(struct smem_ddr_info_v2))
+-			is_v2 = 1;
+-	}
+-#else
+-	smem_ddr_info = smem_alloc(SMEM_SDRAM_INFO, sizeof(*smem_ddr_info), 0,
+-			SMEM_ANY_HOST_FLAG);
+-#endif
+-	if (smem_ddr_info == NULL) {
+-		pr_err("%s: failed to access RAM info in SMEM\n", __func__);
+-		goto err;
++	size_t ddr_info_size = 0;
++	void *raw;
++	struct smem_ddr_info_v2 v2;
++
++	strscpy(sysfsram_type_name, "unknown", sizeof(sysfsram_type_name));
++	strscpy(sysfsram_vendor_name, "unknown", sizeof(sysfsram_vendor_name));
++	sysfsram_ramsize = 0;
++	raw = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SDRAM_INFO, &ddr_info_size);
++	if (IS_ERR(raw))
++		return PTR_ERR(raw);
++	if (!raw || ddr_info_size < sizeof(ddr_snapshot))
++		return -EINVAL;
++	memcpy(&ddr_snapshot, raw, sizeof(ddr_snapshot));
++	smem_ddr_info = &ddr_snapshot;
++	if (ddr_info_size == sizeof(v2)) {
++		memcpy(&v2, raw, sizeof(v2));
++		is_v2 = 1;
+ 	}
+ 
+ 	/* identify vendor */
+@@ -227,7 +223,7 @@
+ 		"%s", vname);
+ 
+ 	if(is_v2)
+-		parse_ddr_type_v2((struct smem_ddr_info_v2 *)smem_ddr_info);
++		parse_ddr_type_v2(&v2);
+ 	else
+ 		parse_ddr_type();
+ 
+@@ -241,26 +237,30 @@
+ 		smem_ddr_info->mr5, smem_ddr_info->mr6,
+ 		smem_ddr_info->mr7, smem_ddr_info->mr8);
+ 
+-	/* create sysfs object */
++	/* Sysfs callbacks only read the owned snapshot, not a borrowed SMEM pointer. */
+ 	ram_info_properties_kobj = kobject_create_and_add("ram", NULL);
+-
+-	if (ram_info_properties_kobj)
+-		status = sysfs_create_group(ram_info_properties_kobj,
+-			&ram_info_properties_attr_group);
+-
+-	if (!ram_info_properties_kobj || status) {
+-		pr_err("%s: failed to create /sys/ram\n", __func__);
++	if (!ram_info_properties_kobj) {
++		status = -ENOMEM;
+ 		goto err;
+ 	}
+-
++	status = sysfs_create_group(ram_info_properties_kobj, &ram_info_properties_attr_group);
++	if (status) {
++		kobject_put(ram_info_properties_kobj);
++		ram_info_properties_kobj = NULL;
++		goto err;
++	}
+ 	return 0;
+ err:
+-	return 1;
++	smem_ddr_info = NULL;
++	return status;
+ }
+ 
+ void mmi_ram_info_exit(void)
+ {
+-	sysfs_remove_group(ram_info_properties_kobj,
+-			&ram_info_properties_attr_group);
+-	kobject_del(ram_info_properties_kobj);
+-}
++	if (ram_info_properties_kobj) {
++		sysfs_remove_group(ram_info_properties_kobj, &ram_info_properties_attr_group);
++		kobject_put(ram_info_properties_kobj);
++		ram_info_properties_kobj = NULL;
++	}
++	smem_ddr_info = NULL;
++}
+--- a/ports/moto-info/mmi_info/mmi_storage_info.c
++++ b/ports/moto-info/mmi_info/mmi_storage_info.c
+@@ -19,7 +19,7 @@
+ #include <linux/mmi_annotate.h>
+ #include "mmi_info.h"
+ 
+-struct mmi_storage_info *info;
++static struct mmi_storage_info *info;
+ 
+ SYSFS_SIMPLE_SHOW(fw, info->firmware_version, "%s", 32)
+ SYSFS_SIMPLE_SHOW(model, info->product_name, "%s", 32)
+@@ -48,84 +48,75 @@
+ 
+ static struct kobject *st_info_properties_kobj;
+ 
++static int mmi_storage_field(struct device_node *node, const char *name,
++			     char *destination, size_t size)
++{
++	const char *value;
++	int ret;
++
++	if (!of_find_property(node, name, NULL))
++		return 0;
++	ret = of_property_read_string(node, name, &value);
++	if (ret)
++		return ret;
++	strscpy(destination, value, size);
++	return 0;
++}
++
+ int mmi_storage_info_init(void)
+ {
+-	int ret = 0;
+-	int status = 0;
+-	struct property *p;
+-	struct device_node *n;
++	struct device_node *node;
++	int ret;
+ 
+-	n = of_find_node_by_path("/chosen/mmi,storage");
+-	if (n == NULL) {
+-		ret = 1;
+-		goto err;
++	node = of_find_node_by_path("/chosen/mmi,storage");
++	if (!node)
++		return -ENODEV;
++	info = kzalloc(sizeof(*info), GFP_KERNEL);
++	if (!info) {
++		of_node_put(node);
++		return -ENOMEM;
+ 	}
+-
+-	info = kzalloc(sizeof(struct mmi_storage_info), GFP_KERNEL);
+-	if (!info) {
+-		pr_err("%s: failed to allocate space for mmi_storage_info\n",
+-			__func__);
+-		ret = 1;
+-		goto err;
++#define READ_STORAGE(field, property) do { \
++	ret = mmi_storage_field(node, property, info->field, sizeof(info->field)); \
++	if (ret) goto put_node; \
++} while (0)
++	READ_STORAGE(type, "type");
++	READ_STORAGE(size, "size");
++	READ_STORAGE(card_manufacturer, "manufacturer");
++	READ_STORAGE(product_name, "product");
++	READ_STORAGE(firmware_version, "firmware");
++#undef READ_STORAGE
++put_node:
++	of_node_put(node);
++	if (ret)
++		goto free_info;
++	st_info_properties_kobj = kobject_create_and_add("storage", NULL);
++	if (!st_info_properties_kobj) {
++		ret = -ENOMEM;
++		goto free_info;
+ 	}
+-
+-	for_each_property_of_node(n, p) {
+-		if (!strcmp(p->name, "type") && p->value)
+-			strscpy(info->type, (char *)p->value,
+-				sizeof(info->type));
+-		if (!strcmp(p->name, "size") && p->value)
+-			strscpy(info->size, (char *)p->value,
+-				sizeof(info->size));
+-		if (!strcmp(p->name, "manufacturer") && p->value)
+-			strscpy(info->card_manufacturer, (char *)p->value,
+-				sizeof(info->card_manufacturer));
+-		if (!strcmp(p->name, "product") && p->value)
+-			strscpy(info->product_name, (char *)p->value,
+-				sizeof(info->product_name));
+-		if (!strcmp(p->name, "firmware") && p->value)
+-			strscpy(info->firmware_version, (char *)p->value,
+-				sizeof(info->firmware_version));
++	ret = sysfs_create_group(st_info_properties_kobj, &st_info_properties_attr_group);
++	if (ret) {
++		kobject_put(st_info_properties_kobj);
++		st_info_properties_kobj = NULL;
++		goto free_info;
+ 	}
+-
+-	of_node_put(n);
+-
+-	pr_info("mmi_storage_info :%s: %s %s %s FV=%s\n",
+-		info->type,
+-		info->size,
+-		info->card_manufacturer,
+-		info->product_name,
+-		info->firmware_version);
+-
+-	mmi_annotate_persist(
+-		"%s: %s %s %s FV=%s\n",
+-		info->type,
+-		info->size,
+-		info->card_manufacturer,
+-		info->product_name,
+-		info->firmware_version);
+-
+-	/* Export to sysfs*/
+-	st_info_properties_kobj = kobject_create_and_add("storage", NULL);
+-	if (st_info_properties_kobj)
+-		status = sysfs_create_group(st_info_properties_kobj,
+-				&st_info_properties_attr_group);
+-
+-	if (!st_info_properties_kobj || status) {
+-		pr_err("%s: failed to create /sys/storage\n", __func__);
+-		ret = 1;
+-		goto err;
+-	}
+-
+-err:
++	mmi_annotate_persist("%s: %s %s %s FV=%s\n", info->type, info->size,
++			     info->card_manufacturer, info->product_name, info->firmware_version);
++	return 0;
++free_info:
++	kfree(info);
++	info = NULL;
+ 	return ret;
+ }
+ 
+ void mmi_storage_info_exit(void)
+ {
++	if (st_info_properties_kobj) {
++		sysfs_remove_group(st_info_properties_kobj, &st_info_properties_attr_group);
++		kobject_put(st_info_properties_kobj);
++		st_info_properties_kobj = NULL;
++	}
+ 	kfree(info);
+ 	info = NULL;
+-
+-	sysfs_remove_group(st_info_properties_kobj,
+-			&st_info_properties_attr_group);
+-	kobject_del(st_info_properties_kobj);
+ }
 --- a/ports/moto-info/mmi_info/mmi_unit_info.c
 +++ b/ports/moto-info/mmi_info/mmi_unit_info.c
-@@ -90,7 +90,7 @@
+@@ -34,7 +34,6 @@
+ #define SMEM_KERNEL_RESERVE SMEM_ID_VENDOR0
+ 
+ static struct proc_dir_entry *unitinfo_procfs_file;
+-static struct mmi_unit_info *mui;
+ static char serialno[SERIALNO_MAX_LEN];
+ static char carrier[CARRIER_MAX_LEN];
+ static char baseband[BASEBAND_MAX_LEN];
+@@ -42,27 +41,35 @@
+ static unsigned int androidboot_radio;
+ static char androidboot_radio_str[RADIO_MAX_LEN];
+ 
+-static void mmi_bootarg_setup(void)
+-{
+-	char *s;
+-
+-	if (mmi_get_bootarg("androidboot.radio=", &s) == 0) {
+-		if (kstrtouint(s, 16, &androidboot_radio) < 0)
++static int mmi_bootarg_setup(void)
++{
++	char *value;
++	int ret;
++
++	memset(serialno, 0, sizeof(serialno));
++	memset(carrier, 0, sizeof(carrier));
++	memset(baseband, 0, sizeof(baseband));
++	memset(androidboot_device, 0, sizeof(androidboot_device));
++	memset(androidboot_radio_str, 0, sizeof(androidboot_radio_str));
++	androidboot_radio = 0;
++	ret = mmi_get_bootarg("androidboot.radio=", &value);
++	if (!ret) {
++		if (kstrtouint(value, 16, &androidboot_radio))
+ 			androidboot_radio = 0;
+-		strscpy(androidboot_radio_str, s, RADIO_MAX_LEN);
++		strscpy(androidboot_radio_str, value, sizeof(androidboot_radio_str));
++	} else if (ret != -ENOENT) {
++		return ret;
+ 	}
+-
+-	if (mmi_get_bootarg("androidboot.device=", &s) == 0)
+-		strscpy(androidboot_device, s, ANDROIDBOOT_DEVICE_MAX_LEN);
+-
+-	if (mmi_get_bootarg("androidboot.baseband=", &s) == 0)
+-		strscpy(baseband, s, BASEBAND_MAX_LEN);
+-
+-	if (mmi_get_bootarg("androidboot.carrier=", &s) == 0)
+-		strscpy(carrier, s, CARRIER_MAX_LEN);
+-
+-	if (mmi_get_bootarg("androidboot.serialno=", &s) == 0)
+-		strscpy(serialno, s, SERIALNO_MAX_LEN);
++#define COPY_BOOTARG(key, destination) do { \
++	ret = mmi_copy_bootarg(key, destination, sizeof(destination)); \
++	if (ret) return ret; \
++} while (0)
++	COPY_BOOTARG("androidboot.device=", androidboot_device);
++	COPY_BOOTARG("androidboot.baseband=", baseband);
++	COPY_BOOTARG("androidboot.carrier=", carrier);
++	COPY_BOOTARG("androidboot.serialno=", serialno);
++#undef COPY_BOOTARG
++	return 0;
+ }
+ 
+ static int unitinfo_seq_show(struct seq_file *f, void *ptr)
+@@ -89,8 +96,9 @@
+ {
  	int ret = 0;
  	struct mmi_unit_info *mui_copy;
++	void *mui;
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
 -	ssize_t mui_size;
 +	size_t mui_size;
  #endif
  
  	#define SMEM_KERNEL_RESERVE_SIZE 1024
-@@ -131,31 +131,28 @@
+@@ -98,7 +106,7 @@
+ 	if (!mui_copy) {
+ 		pr_err("%s: failed to allocate space for mmi_unit_info\n",
+ 			__func__);
+-		ret = 1;
++		ret = -ENOMEM;
+ 		goto err;
+ 	}
+ 
+@@ -131,31 +139,28 @@
  		mui_copy->powerup_reason);
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
@@ -598,6 +1596,37 @@
  
  err_free:
  	kfree(mui_copy);
+@@ -186,18 +191,19 @@
+ 
+ int mmi_unit_info_init(void)
+ {
+-	mmi_bootarg_setup();
+-	mmi_unit_smem_setup();
+-
+-	/* /proc/unitinfo */
+-	unitinfo_procfs_file = proc_create("unitinfo",
+-		0444, NULL, &unitinfo_operations);
+-
+-	return 0;
++	int ret = mmi_bootarg_setup();
++
++	if (ret)
++		return ret;
++	ret = mmi_unit_smem_setup();
++	if (ret)
++		return ret;
++	unitinfo_procfs_file = proc_create("unitinfo", 0444, NULL, &unitinfo_operations);
++	return unitinfo_procfs_file ? 0 : -ENOMEM;
+ }
+ 
+ void mmi_unit_info_exit(void)
+ {
+-	if (unitinfo_procfs_file)
+-		remove_proc_entry("unitinfo", NULL);
+-}
++	proc_remove(unitinfo_procfs_file);
++	unitinfo_procfs_file = NULL;
++}
 --- a/ports/moto-info/Makefile
 +++ b/ports/moto-info/Makefile
 @@ -0,0 +1,7 @@

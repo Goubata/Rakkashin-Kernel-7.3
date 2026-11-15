@@ -1,0 +1,12 @@
+{
+  "log": "reports/mmi-info-stage57-native-qemu.log",
+  "test": "mmi-info-native",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    2,
+    0,
+    0,
+    2
+  ]
+}

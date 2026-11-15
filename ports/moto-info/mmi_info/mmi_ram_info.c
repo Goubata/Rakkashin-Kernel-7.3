@@ -28,13 +28,15 @@
 #define SMEM_SDRAM_INFO SMEM_ID_VENDOR1
 #endif
 
-static struct {
+struct mmi_ddr_snapshot {
 	unsigned int mr5;
 	unsigned int mr6;
 	unsigned int mr7;
 	unsigned int mr8;
 	unsigned int ramsize;
-} *smem_ddr_info;
+};
+static struct mmi_ddr_snapshot ddr_snapshot;
+static struct mmi_ddr_snapshot *smem_ddr_info;
 
 struct smem_ddr_info_v2 {
 	unsigned int mr5;
@@ -187,29 +189,23 @@ int mmi_ram_info_init(void)
 		"Intel"
 	};
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
-	ssize_t ddr_info_size = 0;
-	smem_ddr_info = qcom_smem_get(QCOM_SMEM_HOST_ANY,
-		SMEM_SDRAM_INFO,
-		&ddr_info_size);
+	size_t ddr_info_size = 0;
+	void *raw;
+	struct smem_ddr_info_v2 v2;
 
-	if(smem_ddr_info) {
-		if(ddr_info_size < sizeof(*smem_ddr_info)) {
-			pr_err("%s: Invalid SMEM size, cannot get RAM info\n", __func__);
-			goto err;
-		}
-
-		/* v2 has an extra field */
-		if(ddr_info_size == sizeof(struct smem_ddr_info_v2))
-			is_v2 = 1;
-	}
-#else
-	smem_ddr_info = smem_alloc(SMEM_SDRAM_INFO, sizeof(*smem_ddr_info), 0,
-			SMEM_ANY_HOST_FLAG);
-#endif
-	if (smem_ddr_info == NULL) {
-		pr_err("%s: failed to access RAM info in SMEM\n", __func__);
-		goto err;
+	strscpy(sysfsram_type_name, "unknown", sizeof(sysfsram_type_name));
+	strscpy(sysfsram_vendor_name, "unknown", sizeof(sysfsram_vendor_name));
+	sysfsram_ramsize = 0;
+	raw = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SDRAM_INFO, &ddr_info_size);
+	if (IS_ERR(raw))
+		return PTR_ERR(raw);
+	if (!raw || ddr_info_size < sizeof(ddr_snapshot))
+		return -EINVAL;
+	memcpy(&ddr_snapshot, raw, sizeof(ddr_snapshot));
+	smem_ddr_info = &ddr_snapshot;
+	if (ddr_info_size == sizeof(v2)) {
+		memcpy(&v2, raw, sizeof(v2));
+		is_v2 = 1;
 	}
 
 	/* identify vendor */
@@ -227,7 +223,7 @@ int mmi_ram_info_init(void)
 		"%s", vname);
 
 	if(is_v2)
-		parse_ddr_type_v2((struct smem_ddr_info_v2 *)smem_ddr_info);
+		parse_ddr_type_v2(&v2);
 	else
 		parse_ddr_type();
 
@@ -241,26 +237,30 @@ int mmi_ram_info_init(void)
 		smem_ddr_info->mr5, smem_ddr_info->mr6,
 		smem_ddr_info->mr7, smem_ddr_info->mr8);
 
-	/* create sysfs object */
+	/* Sysfs callbacks only read the owned snapshot, not a borrowed SMEM pointer. */
 	ram_info_properties_kobj = kobject_create_and_add("ram", NULL);
-
-	if (ram_info_properties_kobj)
-		status = sysfs_create_group(ram_info_properties_kobj,
-			&ram_info_properties_attr_group);
-
-	if (!ram_info_properties_kobj || status) {
-		pr_err("%s: failed to create /sys/ram\n", __func__);
+	if (!ram_info_properties_kobj) {
+		status = -ENOMEM;
 		goto err;
 	}
-
+	status = sysfs_create_group(ram_info_properties_kobj, &ram_info_properties_attr_group);
+	if (status) {
+		kobject_put(ram_info_properties_kobj);
+		ram_info_properties_kobj = NULL;
+		goto err;
+	}
 	return 0;
 err:
-	return 1;
+	smem_ddr_info = NULL;
+	return status;
 }
 
 void mmi_ram_info_exit(void)
 {
-	sysfs_remove_group(ram_info_properties_kobj,
-			&ram_info_properties_attr_group);
-	kobject_del(ram_info_properties_kobj);
+	if (ram_info_properties_kobj) {
+		sysfs_remove_group(ram_info_properties_kobj, &ram_info_properties_attr_group);
+		kobject_put(ram_info_properties_kobj);
+		ram_info_properties_kobj = NULL;
+	}
+	smem_ddr_info = NULL;
 }

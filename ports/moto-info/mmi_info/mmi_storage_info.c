@@ -19,7 +19,7 @@
 #include <linux/mmi_annotate.h>
 #include "mmi_info.h"
 
-struct mmi_storage_info *info;
+static struct mmi_storage_info *info;
 
 SYSFS_SIMPLE_SHOW(fw, info->firmware_version, "%s", 32)
 SYSFS_SIMPLE_SHOW(model, info->product_name, "%s", 32)
@@ -48,84 +48,75 @@ static struct attribute_group st_info_properties_attr_group = {
 
 static struct kobject *st_info_properties_kobj;
 
+static int mmi_storage_field(struct device_node *node, const char *name,
+			     char *destination, size_t size)
+{
+	const char *value;
+	int ret;
+
+	if (!of_find_property(node, name, NULL))
+		return 0;
+	ret = of_property_read_string(node, name, &value);
+	if (ret)
+		return ret;
+	strscpy(destination, value, size);
+	return 0;
+}
+
 int mmi_storage_info_init(void)
 {
-	int ret = 0;
-	int status = 0;
-	struct property *p;
-	struct device_node *n;
+	struct device_node *node;
+	int ret;
 
-	n = of_find_node_by_path("/chosen/mmi,storage");
-	if (n == NULL) {
-		ret = 1;
-		goto err;
-	}
-
-	info = kzalloc(sizeof(struct mmi_storage_info), GFP_KERNEL);
+	node = of_find_node_by_path("/chosen/mmi,storage");
+	if (!node)
+		return -ENODEV;
+	info = kzalloc(sizeof(*info), GFP_KERNEL);
 	if (!info) {
-		pr_err("%s: failed to allocate space for mmi_storage_info\n",
-			__func__);
-		ret = 1;
-		goto err;
+		of_node_put(node);
+		return -ENOMEM;
 	}
-
-	for_each_property_of_node(n, p) {
-		if (!strcmp(p->name, "type") && p->value)
-			strscpy(info->type, (char *)p->value,
-				sizeof(info->type));
-		if (!strcmp(p->name, "size") && p->value)
-			strscpy(info->size, (char *)p->value,
-				sizeof(info->size));
-		if (!strcmp(p->name, "manufacturer") && p->value)
-			strscpy(info->card_manufacturer, (char *)p->value,
-				sizeof(info->card_manufacturer));
-		if (!strcmp(p->name, "product") && p->value)
-			strscpy(info->product_name, (char *)p->value,
-				sizeof(info->product_name));
-		if (!strcmp(p->name, "firmware") && p->value)
-			strscpy(info->firmware_version, (char *)p->value,
-				sizeof(info->firmware_version));
-	}
-
-	of_node_put(n);
-
-	pr_info("mmi_storage_info :%s: %s %s %s FV=%s\n",
-		info->type,
-		info->size,
-		info->card_manufacturer,
-		info->product_name,
-		info->firmware_version);
-
-	mmi_annotate_persist(
-		"%s: %s %s %s FV=%s\n",
-		info->type,
-		info->size,
-		info->card_manufacturer,
-		info->product_name,
-		info->firmware_version);
-
-	/* Export to sysfs*/
+#define READ_STORAGE(field, property) do { \
+	ret = mmi_storage_field(node, property, info->field, sizeof(info->field)); \
+	if (ret) goto put_node; \
+} while (0)
+	READ_STORAGE(type, "type");
+	READ_STORAGE(size, "size");
+	READ_STORAGE(card_manufacturer, "manufacturer");
+	READ_STORAGE(product_name, "product");
+	READ_STORAGE(firmware_version, "firmware");
+#undef READ_STORAGE
+put_node:
+	of_node_put(node);
+	if (ret)
+		goto free_info;
 	st_info_properties_kobj = kobject_create_and_add("storage", NULL);
-	if (st_info_properties_kobj)
-		status = sysfs_create_group(st_info_properties_kobj,
-				&st_info_properties_attr_group);
-
-	if (!st_info_properties_kobj || status) {
-		pr_err("%s: failed to create /sys/storage\n", __func__);
-		ret = 1;
-		goto err;
+	if (!st_info_properties_kobj) {
+		ret = -ENOMEM;
+		goto free_info;
 	}
-
-err:
+	ret = sysfs_create_group(st_info_properties_kobj, &st_info_properties_attr_group);
+	if (ret) {
+		kobject_put(st_info_properties_kobj);
+		st_info_properties_kobj = NULL;
+		goto free_info;
+	}
+	mmi_annotate_persist("%s: %s %s %s FV=%s\n", info->type, info->size,
+			     info->card_manufacturer, info->product_name, info->firmware_version);
+	return 0;
+free_info:
+	kfree(info);
+	info = NULL;
 	return ret;
 }
 
 void mmi_storage_info_exit(void)
 {
+	if (st_info_properties_kobj) {
+		sysfs_remove_group(st_info_properties_kobj, &st_info_properties_attr_group);
+		kobject_put(st_info_properties_kobj);
+		st_info_properties_kobj = NULL;
+	}
 	kfree(info);
 	info = NULL;
-
-	sysfs_remove_group(st_info_properties_kobj,
-			&st_info_properties_attr_group);
-	kobject_del(st_info_properties_kobj);
 }

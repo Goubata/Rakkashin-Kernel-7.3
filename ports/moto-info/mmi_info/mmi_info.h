@@ -20,9 +20,11 @@ int mmi_ram_info_init(void);
 void mmi_ram_info_exit(void);
 int mmi_unit_info_init(void);
 void mmi_unit_info_exit(void);
+int mmi_boot_info_prepare(void);
 int mmi_boot_info_init(void);
 void mmi_boot_info_exit(void);
-int mmi_get_bootarg(char *key, char **value);
+int mmi_get_bootarg(const char *key, char **value);
+int mmi_copy_bootarg(const char *key, char *destination, size_t size);
 
 struct mmi_storage_info {
 	char type[16];	/* UFS or eMMC */

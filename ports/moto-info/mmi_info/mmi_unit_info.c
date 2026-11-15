@@ -34,7 +34,6 @@
 #define SMEM_KERNEL_RESERVE SMEM_ID_VENDOR0
 
 static struct proc_dir_entry *unitinfo_procfs_file;
-static struct mmi_unit_info *mui;
 static char serialno[SERIALNO_MAX_LEN];
 static char carrier[CARRIER_MAX_LEN];
 static char baseband[BASEBAND_MAX_LEN];
@@ -42,27 +41,35 @@ static char androidboot_device[ANDROIDBOOT_DEVICE_MAX_LEN];
 static unsigned int androidboot_radio;
 static char androidboot_radio_str[RADIO_MAX_LEN];
 
-static void mmi_bootarg_setup(void)
+static int mmi_bootarg_setup(void)
 {
-	char *s;
+	char *value;
+	int ret;
 
-	if (mmi_get_bootarg("androidboot.radio=", &s) == 0) {
-		if (kstrtouint(s, 16, &androidboot_radio) < 0)
+	memset(serialno, 0, sizeof(serialno));
+	memset(carrier, 0, sizeof(carrier));
+	memset(baseband, 0, sizeof(baseband));
+	memset(androidboot_device, 0, sizeof(androidboot_device));
+	memset(androidboot_radio_str, 0, sizeof(androidboot_radio_str));
+	androidboot_radio = 0;
+	ret = mmi_get_bootarg("androidboot.radio=", &value);
+	if (!ret) {
+		if (kstrtouint(value, 16, &androidboot_radio))
 			androidboot_radio = 0;
-		strscpy(androidboot_radio_str, s, RADIO_MAX_LEN);
+		strscpy(androidboot_radio_str, value, sizeof(androidboot_radio_str));
+	} else if (ret != -ENOENT) {
+		return ret;
 	}
-
-	if (mmi_get_bootarg("androidboot.device=", &s) == 0)
-		strscpy(androidboot_device, s, ANDROIDBOOT_DEVICE_MAX_LEN);
-
-	if (mmi_get_bootarg("androidboot.baseband=", &s) == 0)
-		strscpy(baseband, s, BASEBAND_MAX_LEN);
-
-	if (mmi_get_bootarg("androidboot.carrier=", &s) == 0)
-		strscpy(carrier, s, CARRIER_MAX_LEN);
-
-	if (mmi_get_bootarg("androidboot.serialno=", &s) == 0)
-		strscpy(serialno, s, SERIALNO_MAX_LEN);
+#define COPY_BOOTARG(key, destination) do { \
+	ret = mmi_copy_bootarg(key, destination, sizeof(destination)); \
+	if (ret) return ret; \
+} while (0)
+	COPY_BOOTARG("androidboot.device=", androidboot_device);
+	COPY_BOOTARG("androidboot.baseband=", baseband);
+	COPY_BOOTARG("androidboot.carrier=", carrier);
+	COPY_BOOTARG("androidboot.serialno=", serialno);
+#undef COPY_BOOTARG
+	return 0;
 }
 
 static int unitinfo_seq_show(struct seq_file *f, void *ptr)
@@ -89,6 +96,7 @@ static int mmi_unit_smem_setup(void)
 {
 	int ret = 0;
 	struct mmi_unit_info *mui_copy;
+	void *mui;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
 	size_t mui_size;
 #endif
@@ -98,7 +106,7 @@ static int mmi_unit_smem_setup(void)
 	if (!mui_copy) {
 		pr_err("%s: failed to allocate space for mmi_unit_info\n",
 			__func__);
-		ret = 1;
+		ret = -ENOMEM;
 		goto err;
 	}
 
@@ -183,18 +191,19 @@ static const struct file_operations unitinfo_operations = {
 
 int mmi_unit_info_init(void)
 {
-	mmi_bootarg_setup();
-	mmi_unit_smem_setup();
+	int ret = mmi_bootarg_setup();
 
-	/* /proc/unitinfo */
-	unitinfo_procfs_file = proc_create("unitinfo",
-		0444, NULL, &unitinfo_operations);
-
-	return 0;
+	if (ret)
+		return ret;
+	ret = mmi_unit_smem_setup();
+	if (ret)
+		return ret;
+	unitinfo_procfs_file = proc_create("unitinfo", 0444, NULL, &unitinfo_operations);
+	return unitinfo_procfs_file ? 0 : -ENOMEM;
 }
 
 void mmi_unit_info_exit(void)
 {
-	if (unitinfo_procfs_file)
-		remove_proc_entry("unitinfo", NULL);
+	proc_remove(unitinfo_procfs_file);
+	unitinfo_procfs_file = NULL;
 }

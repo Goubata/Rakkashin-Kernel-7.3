@@ -74,15 +74,20 @@ static char bootreason[BOOTREASON_MAX_LEN];
 static char bootmode[BOOTMODE_MAX_LEN];
 
 
-static void mmi_bootarg_setup(void)
+int mmi_boot_info_prepare(void)
 {
-	char *s;
+	char reason[BOOTREASON_MAX_LEN] = {}, mode[BOOTMODE_MAX_LEN] = {};
+	int ret;
 
-	if (mmi_get_bootarg("androidboot.bootreason=", &s) == 0)
-		strscpy(bootreason, s, BOOTREASON_MAX_LEN);
-
-	if (mmi_get_bootarg("androidboot.mode=", &s) == 0)
-		strscpy(bootmode, s, BOOTMODE_MAX_LEN);
+	ret = mmi_copy_bootarg("androidboot.bootreason=", reason, sizeof(reason));
+	if (ret)
+		return ret;
+	ret = mmi_copy_bootarg("androidboot.mode=", mode, sizeof(mode));
+	if (ret)
+		return ret;
+	memcpy(bootreason, reason, sizeof(bootreason));
+	memcpy(bootmode, mode, sizeof(bootmode));
+	return 0;
 }
 
 /*
@@ -161,16 +166,16 @@ static void convert_to_upper(char *str)
 	}
 }
 
-static void bi_add_bl_build_sig(char *bld_sig)
+static void bi_add_bl_build_sig(const char *bld_sig)
 {
 	int pos;
-	char *value;
+	const char *value;
 	char *ptr;
 
 	if (!bld_sig || (bl_build_sig_count >= MAX_BL_BUILD_SIG))
 		return;
 
-	value = (char *)memchr((void *)bld_sig, '=', strnlen(bld_sig, MAX_BLD_SIG_ITEM));
+	value = memchr(bld_sig, '=', strnlen(bld_sig, MAX_BLD_SIG_ITEM));
 	if (!value)
 		return;
 
@@ -199,9 +204,12 @@ static void of_blsig(void)
 	if (n == NULL)
 		return;
 
-	for_each_property_of_node(n, p)
-		if (strcmp(p->name, "name"))
-			bi_add_bl_build_sig(p->value);
+	for_each_property_of_node(n, p) {
+		const char *signature;
+		if (strcmp(p->name, "name") &&
+		    !of_property_read_string(n, p->name, &signature))
+			bi_add_bl_build_sig(signature);
+	}
 
 	of_node_put(n);
 }
@@ -309,14 +317,18 @@ static const struct file_operations bootinfo_proc_fops = {
 
 int mmi_boot_info_init(void)
 {
-	int i;
+	int i, ret;
 
 	of_blsig();
-	mmi_bootarg_setup();
+	ret = mmi_boot_info_prepare();
+	if (ret)
+		return ret;
 
 	/* /proc/bootinfo */
 	proc_bootinfo = proc_create("bootinfo",
 		0444, NULL, &bootinfo_proc_fops);
+	if (!proc_bootinfo)
+		return -ENOMEM;
 
 	/* Add to dont panic dump */
 	for (i = 0; i < bl_build_sig_count; i++) {
@@ -341,6 +353,6 @@ int mmi_boot_info_init(void)
 
 void mmi_boot_info_exit(void)
 {
-	if (proc_bootinfo)
-		remove_proc_entry("bootinfo", NULL);
+	proc_remove(proc_bootinfo);
+	proc_bootinfo = NULL;
 }

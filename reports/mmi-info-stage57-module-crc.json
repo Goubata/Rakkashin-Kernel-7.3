@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-info/mmi_info.ko",
+      "imports_checked": 55,
+      "mismatches": {}
+    }
+  ]
+}

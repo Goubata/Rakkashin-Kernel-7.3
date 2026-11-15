@@ -904,3 +904,36 @@ info init/SMEM, Goodix/remaining drivers and complete DT/boot/ROM gates remain.
 Evidence: reports/mmi-annotate-stage56-validation.json. Reproduce with
 `python scripts/build_goodix_touch.py --annotate-tests --annotate-driver-tests --annotate-native-tests`
 and run QEMU modes mmi-annotate, mmi-annotate-driver and mmi-annotate-native.
+
+
+## Stage57: independently deferred Motorola metadata and immutable bootargs
+
+Fixed mmi_info initialization ignoring errors: four software platform endpoints
+now own independent storage/RAM/unit/boot lifetimes. SMEM defers RAM/unit while
+boot metadata and DT selectors stay available. Boot getters are initialized
+before exported APIs become visible. Device registration failure unwinds in
+reverse order, proc/sysfs callbacks drain before backing is released.
+
+DDR error pointers/NULL/short items are rejected before dereference; sysfs reads
+an owned snapshot. Unit SMEM remains version 3 and exactly 1024 bytes; public
+headers remain unchanged since Stage56, with endpoint names/modes preserved.
+Bootargs use immutable cached values, exact keys, native next_arg for cmdline
+and bounded bootconfig parsing. Selected OF strings/lists hold node references.
+
+15 SMP4 cases pass: 13 exact-source cases with recorded SMEM/error injection
+and native framework behavior, plus two against the production module with real
+unready SMEM. The latter confirms storage/boot binding while RAM/unit defer,
+public getters/selector and a real storage sysfs read. Shell checks verify two
+module unloads with one reload leave no proc/sysfs endpoints. These tests do not
+initialize real modem/SMEM firmware or prove physical supplier-readiness timing.
+
+Partial Stage57 contains 118 modules/5,750 matching import CRCs; all hard/soft
+module dependencies are present and acyclic. Same-name coverage is 104/544;
+that is an inventory measure, not functional completion. Two Goodix/THP drafts
+remain excluded, as do three Alor PAS drafts. Whole-board DT/boot/ROM, remaining
+mandatory drivers and physical all-function acceptance are still incomplete.
+
+Evidence: reports/mmi-info-stage57-validation.json. Reproduce with:
+`python scripts/build_goodix_touch.py --info-tests --info-native-tests`, then
+QEMU modes `mmi-info` and `mmi-info-native` with `--cpus 4`. These guests have
+no phone disks or network. No phone partitions were written.

@@ -564,3 +564,13 @@ IRQ/電源/認証等は試験内の記録primitiveで、実SoCCPが動いた証�
 資源解放へ進まないことを検査した。端末の再起動・partition変更は行っていない。
 `reports/pas-driver-stage48-validation.json`。自動fallback・全probe/子device・ROM/実機ABI・
 残りdriver・起動成果物は未完。部分成果物108個のままで、software readinessは未達。
+
+
+## Stage49: PMIC RTC（時計・アラーム）
+
+実機DTのPMK8350互換名・7レジスタ配置をMotorolaと7.3 native sourceで照合し、
+無改変のrtc-pm8xxxを追加。実regmapとRAM busで時刻/桁上がり/アラーム/エラー伝播を試験し、
+実RTC timer workerによる通知まで8件成功。実機はsysfs読み取りだけで、時計/アラームは変更していない。
+部分成果物はartifacts/android73-rtc-stage49/の109モジュールへ更新。全import CRCと
+hard/soft依存を確認。SoCCP draftは含めていない。
+`reports/rtc-stage49-validation.json`。実PMIC・wake・ROM・残りdriver/boot画像は未確認/未完。

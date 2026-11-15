@@ -1,0 +1,74 @@
+{
+  "scope": "selected RTC node, ancestor status and native/factory register table only; not whole-DT/SPMI/IRQ/probe/physical wake proof",
+  "passed": true,
+  "vendor_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "vendor_source_sha256": "75bf4dd0c9a8f9bff624e347c9c1d014f6c8119168db00e5b5e136660ebb4b6f",
+  "native_source_sha256": "a7364852aae55844e117d7799bd1be339775ae576af6d131269da6d5500826d6",
+  "vendor_registers": {
+    "ctrl": 24902,
+    "write": 24896,
+    "read": 24904,
+    "alarm_rw": 25152,
+    "alarm_ctrl": 25158,
+    "alarm_ctrl2": 25160,
+    "alarm_en": 128
+  },
+  "native_registers": {
+    "ctrl": 24902,
+    "write": 24896,
+    "read": 24904,
+    "alarm_rw": 25152,
+    "alarm_ctrl": 25158,
+    "alarm_ctrl2": 25160,
+    "alarm_en": 128
+  },
+  "inputs": {
+    "saved": {
+      "file": "artifacts/dt-input-audit/stock-merged.dtb",
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/rtc@6100",
+      "properties_except_phandle": {
+        "interrupts": "00000000000000620000000100000001",
+        "reg-names": "72746300616c61726d00",
+        "reg": "0000610000006200",
+        "compatible": "71636f6d2c706d6b383335302d72746300"
+      },
+      "ancestor_status": {
+        "/soc": "okay",
+        "/soc/arbiter@c400000": "okay",
+        "/soc/arbiter@c400000/spmi@c426000": "okay",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0": "okay"
+      },
+      "allow_set_time": false,
+      "nvmem_offset_present": false,
+      "uefi_offset_present": false
+    },
+    "candidate": {
+      "file": "artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb",
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/rtc@6100",
+      "properties_except_phandle": {
+        "interrupts": "00000000000000620000000100000001",
+        "reg-names": "72746300616c61726d00",
+        "reg": "0000610000006200",
+        "compatible": "71636f6d2c706d6b383335302d72746300"
+      },
+      "ancestor_status": {
+        "/soc": "okay",
+        "/soc/arbiter@c400000": "okay",
+        "/soc/arbiter@c400000/spmi@c426000": "okay",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0": "okay"
+      },
+      "allow_set_time": false,
+      "nvmem_offset_present": false,
+      "uefi_offset_present": false
+    }
+  },
+  "physical_verified": false,
+  "known_limits": [
+    "No DT time-write permission or kernel offset storage; set_time returns ENODEV like stock",
+    "Native optional UEFI and small-drift offset policy differs from factory, not selected by AVR DT",
+    "Physical SPMI timing, counter progression, alarm IRQ delivery and suspend/power-off wake untested",
+    "RTC module must be available in actual early module ordering; no assembled boot image yet"
+  ]
+}

@@ -714,3 +714,22 @@ remain ignored local artifacts. Full probe, GLINK/sysmon children, ROM firmware
 timing, removal errors and physical firmware ABI are not proven. The not-ready
 case explicitly calls boot a second time; it does not prove automatic fallback.
 The draft stays excluded from packaged 108 modules. Software readiness is false.
+
+
+## Stage49: pinned native PMIC RTC
+
+Unmodified native RTC driver matches saved/candidate qcom,pmk8350-rtc and the
+pinned Motorola seven-field register table. Eight SMP4 cases use actual RTC
+callbacks over real regmap with a RAM bus: decoding/offset, carry rollover, alarm
+round trip, error propagation, no-storage time-write rejection, direct write and
+actual RTC alarm timer work notification. The initial 7/8 failure was a test
+expectation of synchronous irq_data without arming a timer; corrected via
+rtc_set_alarm/flush_work, with work drained before regmap teardown. No production
+RTC modification was necessary. Physical PMIC alarm delivery and wake are untested.
+
+Stage49 partial snapshot contains 109 modules with matching import CRCs, complete
+hard/soft dependencies and an acyclic combined graph. It excludes Alor PAS draft
+and remains non-flashable. Selected AVR DT has no allow-set-time/offset cell/UEFI
+property, so no-storage set_time failure agrees with stock. Native optional UEFI
+and drift-offset persistence differ from factory outside this selected path.
+See reports/rtc-stage49-validation.json. Software readiness remains false.

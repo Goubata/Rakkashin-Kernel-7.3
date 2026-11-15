@@ -1,0 +1,8 @@
+{
+  "scope": "running 6.12 RTC sysfs read only; not candidate execution",
+  "command": "cat /sys/class/rtc/rtc0/name /sys/class/rtc/rtc0/date /sys/class/rtc/rtc0/time /sys/class/rtc/rtc0/device/power/wakeup; readlink -f /sys/class/rtc/rtc0/device/driver",
+  "stdout": "rtc-pm8xxx c426000.spmi:qcom,pmk8550@0:rtc@6100\n1970-06-12\n11:42:03\nenabled\n/sys/bus/platform/drivers/rtc-pm8xxx\n",
+  "stderr": "",
+  "physical_candidate_verified": false,
+  "rtc_written": false
+}

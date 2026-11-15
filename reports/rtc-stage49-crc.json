@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-rtc/rtc-pm8xxx.ko",
+      "imports_checked": 36,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/rtc/avr-rtc-test.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    }
+  ]
+}

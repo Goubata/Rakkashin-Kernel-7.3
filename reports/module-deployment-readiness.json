@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-remoteproc-services-stage37",
+  "stage": "android73-rtc-stage49",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 108,
-  "same_name_candidate_count": 94,
-  "archived_names_without_same_name_candidate_count": 450,
-  "loaded_names_without_same_name_candidate_count": 435,
+  "staged_count": 109,
+  "same_name_candidate_count": 95,
+  "archived_names_without_same_name_candidate_count": 449,
+  "loaded_names_without_same_name_candidate_count": 434,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -339,6 +339,10 @@
     {
       "name": "qcom_glink",
       "file": "modules/qcom-glink-transport/qcom_glink.ko"
+    },
+    {
+      "name": "rtc_pm8xxx",
+      "file": "modules/qcom-rtc/rtc-pm8xxx.ko"
     },
     {
       "name": "secure_buffer",
@@ -774,6 +778,10 @@
     {
       "name": "rpmsg_ctrl",
       "file": "modules/qcom-glink-transport/rpmsg_ctrl.ko"
+    },
+    {
+      "name": "rtc_pm8xxx",
+      "file": "modules/qcom-rtc/rtc-pm8xxx.ko"
     },
     {
       "name": "secure_buffer",
@@ -2253,6 +2261,19 @@
       "softdep": [],
       "archived_placement_candidates": [],
       "loaded_on_baseline": false,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "rtc_pm8xxx": {
+      "file": "modules/qcom-rtc/rtc-pm8xxx.ko",
+      "sha256": "a620733609c89793f0460fe1c4dc222b245ba0c4b9eb719687089e1f7f568a0f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
@@ -5160,13 +5181,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "rtc_pm8xxx",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "rtl8150",
       "placements": [
         "system_dlkm"
@@ -6187,7 +6201,6 @@
     "rmnet_shs",
     "rmnet_wlan",
     "rproc_qcom_common",
-    "rtc_pm8xxx",
     "rtl8150",
     "sched_walt",
     "sdca_registers_dlkm",

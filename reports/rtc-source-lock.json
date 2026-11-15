@@ -1,0 +1,9 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "source": "drivers/rtc/rtc-pm8xxx.c",
+  "file": "ports/qcom-rtc/rtc-pm8xxx.c",
+  "sha256": "a7364852aae55844e117d7799bd1be339775ae576af6d131269da6d5500826d6",
+  "scope": "unmodified native RTC driver; selected PMK8350 register map matches factory; physical alarm/wake pending",
+  "physical_verified": false,
+  "experimental_packaged": false
+}

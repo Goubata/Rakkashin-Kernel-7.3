@@ -1,0 +1,29 @@
+{
+  "stage": 49,
+  "scope": "unmodified pinned 7.3 native RTC, DT register comparison, actual callbacks/RTC timer worker over real regmap RAM bus, compile/CRC/dependency audit",
+  "passed": true,
+  "qemu_cases_passed": 8,
+  "test_correction": "initial 7/8: test expected synchronous irq_data without arming a core RTC timer; use rtc_set_alarm and flush actual timer work before checking notification; cancel work before RAM regmap teardown",
+  "artifact": "artifacts/android73-rtc-stage49",
+  "packaged_modules": 109,
+  "matching_imports": 5516,
+  "hardware_verified": false,
+  "software_readiness_target_complete": false,
+  "partition_written": false,
+  "pending": [
+    "Real PMIC clock progression and SPMI/IRQ/probe path",
+    "Actual suspend/power-off wake, RTC module boot order and ROM policy",
+    "Other mandatory drivers and complete boot/DT/DLKM images"
+  ],
+  "evidence_sha256": {
+    "reports/rtc-source-lock.json": "e6c7f35269ed4f9f2a0392bd2b93be13d98c878f2134af759ae37ca214188ed4",
+    "reports/rtc-stage49-dt.json": "e7bb4a5432b2529a424735ba488ac0f6bc51b9eee37ca65b0bf50336aa33fb4c",
+    "reports/rtc-stage49-live-readonly.json": "09c1bb3e9a6b4589f60b3bbf41cbd63291357f766cdd2afb62320c9d74378e7d",
+    "reports/rtc-stage49-crc.json": "b8b1429000ace279e1786359f0e3436c2bfb4577f9e8cc1994b9e3f683c3cc70",
+    "reports/rtc-stage49-packaged-crc.json": "95b48996767bd4162048979fb9a3bf5ce22c94ec0f5bfd748a9d971a41e1fadd",
+    "reports/rtc-stage49-final-build.log": "d0d7bda3505a2ad82897a1c805f1eee462cd6106d0a43fa88182de053cf8cab8",
+    "reports/rtc-stage49-final-qemu.log": "cbad7b9f65e704f919deb474db30c2d506d6d222280f9933a979d3e1ecae0bb0",
+    "reports/rtc-stage49-final-qemu.json": "865de69ec46823af9085150e1a0c7a0b58bf70b508bd283da56b561fcb2af51e",
+    "reports/module-deployment-stage49-summary.json": "1415fc5e31db4e6ec760d71c087ae3412403cbe0a682e90989f26c8f8d063ddd"
+  }
+}

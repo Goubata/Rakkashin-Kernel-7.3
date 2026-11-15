@@ -14,6 +14,8 @@ ROOTFS = ROOT.parent / '.andronix/distros/ubuntu/rootfs'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--rtc',action='store_true')
+    parser.add_argument('--rtc-tests',action='store_true')
     parser.add_argument('--ice',action='store_true')
     parser.add_argument('--tests',action='store_true')
     parser.add_argument('--ufs-host',action='store_true',help='Build real diagnostic dependencies and vendor host; no physical probe')
@@ -73,6 +75,10 @@ def main():
             raise ValueError('Staged PHY source differs; review and record port changes explicitly: ' + row['staged_path'])
     print('Verified five unmodified firmware-pinned UFS PHY source files', flush=True)
     targets=['ports/ufs-phy-canoe']
+    if args.rtc or args.rtc_tests:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_rtc_sources.py')],check=True)
+        targets.append('ports/qcom-rtc')
+        if args.rtc_tests:targets.append('tests/rtc')
     if args.ice:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ice_sources.py')],check=True)
         config=(ROOT/'out/native-gki/.config').read_text()

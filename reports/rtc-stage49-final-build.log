@@ -1,0 +1,19 @@
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified unmodified pinned native RTC source and external Makefile
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-rtc'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-rtc'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/rtc'
+  CC [M]  avr-rtc-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-rtc-test.mod.o
+  LD [M]  avr-rtc-test.ko
+  BTF [M] avr-rtc-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/rtc'
+make: Leaving directory '/work/avr-src'

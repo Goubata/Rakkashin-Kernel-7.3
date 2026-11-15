@@ -12,6 +12,8 @@ typedef uint8_t u8;
 typedef uint32_t u32;
 #define __user
 #define GFP_KERNEL 0
+#define GOODIX_THP_MAX_TRANS_DATA_LEN (4096 * 32)
+#define ts_err(...) ((void)0)
 #define GOODIX_SPI_SPEED_WAKEUP 3500
 struct spi_transfer { const void *tx_buf; void *rx_buf; unsigned int len; bool cs_change; };
 struct spi_message { struct spi_transfer *items[5120]; unsigned int n; };
@@ -19,7 +21,7 @@ struct spi_device { int unused; };
 struct thp_ts_device;
 struct ops { int (*set_spi_speed)(struct thp_ts_device *, u32); };
 struct thp_ts_device { struct spi_device *spi_dev; int spi_mutex; struct { struct { u32 spi_max_speed; } spi_setting; } board_data; struct ops *hw_ops; };
-struct goodix_thp_core { struct thp_ts_device *ts_dev; };
+struct goodix_thp_core { struct thp_ts_device *ts_dev; int suspended,gesture_enable; };
 /* UAPI structs are inserted directly from the production header. */
 @STRUCTS@
 static int alloc_calls, fail_alloc, live, in_calls, out_calls, fail_in, fail_out;
@@ -59,11 +61,16 @@ static int set_speed(struct thp_ts_device *dev, u32 speed)
         (void)dev; assert(locked); assert(speed_calls<2); speeds[speed_calls++]=speed;
         return speed_calls==fail_speed ? -EIO : 0;
 }
+static int goodix_thp_spi_trans(struct goodix_thp_core *cd, void *tx, void *rx, unsigned int len)
+{
+        (void)cd;sync_calls++;if(sync_error)return sync_error;
+        memcpy(rx,tx,len);return 0;
+}
 @FUNCTION@
 static struct ops hw_ops={set_speed};
 static struct spi_device spi;
 static struct thp_ts_device dev={.spi_dev=&spi,.board_data.spi_setting.spi_max_speed=10000000,.hw_ops=&hw_ops};
-static struct goodix_thp_core core={&dev};
+static struct goodix_thp_core core={.ts_dev=&dev};
 static unsigned int checks;
 static void reset(void)
 {
@@ -96,6 +103,19 @@ int main(void)
         reset();fail_speed=1;expect(&m,-EIO);assert(speed_calls==2 && !sync_calls && !out_calls);
         reset();fail_speed=2;expect(&m,-EIO);assert(speed_calls==2 && sync_calls==1 && !out_calls);
         reset();sync_error=-ETIMEDOUT;fail_speed=2;expect(&m,-ETIMEDOUT);assert(speed_calls==2 && !out_calls);
-        printf("PASS %u production multi-SPI cases; recorded primitives only\n",checks);
+        struct thp_ioctl_spi_trans_data single={.tx=tx,.rx=rx,.size=sizeof(tx)};
+        reset();assert(goodix_thp_ioctl_spi_trans(&core,&single)==0 && sync_calls==1 && !memcmp(tx,rx,sizeof(tx)));checks++;
+        for(int i=1;i<=2;i++){reset();fail_alloc=i;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-ENOMEM && !live && !sync_calls);checks++;}
+        for(int i=1;i<=2;i++){reset();fail_in=i;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-EFAULT && !live && !sync_calls);checks++;}
+        reset();fail_out=1;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-EFAULT && !live && sync_calls==1);checks++;
+        reset();sync_error=-ETIMEDOUT;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-ETIMEDOUT && !live && !out_calls);checks++;
+        reset();single.rx=NULL;assert(goodix_thp_ioctl_spi_trans(&core,&single)==0 && !out_calls && !live);checks++;single.rx=rx;
+        reset();single.size=0;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-EINVAL && !alloc_calls);checks++;
+        reset();single.size=UINT_MAX;assert(goodix_thp_ioctl_spi_trans(&core,&single)==-EINVAL && !alloc_calls);checks++;
+        reset();core.suspended=1;assert(goodix_thp_ioctl_spi_trans(&core,NULL)==0 && !in_calls);checks++;
+        reset();core.gesture_enable=1;single.size=sizeof(tx);assert(goodix_thp_ioctl_spi_trans(&core,&single)==0 && sync_calls==1);checks++;
+        core.suspended=core.gesture_enable=0;
+        assert(!live && !locked);
+        printf("PASS %u production single/multi-SPI cases; recorded primitives only\n",checks);
         return 0;
 }

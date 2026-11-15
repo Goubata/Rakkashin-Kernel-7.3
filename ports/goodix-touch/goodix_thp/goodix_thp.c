@@ -336,7 +336,7 @@ static long goodix_thp_ioctl_spi_trans(struct goodix_thp_core *core_data, void _
         }
 
         /* check sync data size */
-        if (trans_data.size > GOODIX_THP_MAX_TRANS_DATA_LEN) {
+        if (!trans_data.size || trans_data.size > GOODIX_THP_MAX_TRANS_DATA_LEN) {
                 ts_err(ts_dev->dev, "trans_data.size out of range.");
                 return -EINVAL;
         }
@@ -347,6 +347,7 @@ static long goodix_thp_ioctl_spi_trans(struct goodix_thp_core *core_data, void _
         if (!rx_buf || !tx_buf) {
                 ts_err(ts_dev->dev, "buf request memory fail,trans_data.size = %d",
                         trans_data.size);
+                r = -ENOMEM;
                 goto exit;
         }
 
@@ -354,6 +355,7 @@ static long goodix_thp_ioctl_spi_trans(struct goodix_thp_core *core_data, void _
         r = copy_from_user(tx_buf, trans_data.tx, trans_data.size);
         if (r) {
                 ts_err(ts_dev->dev, "copy in buff fail");
+                r = -EFAULT;
                 goto exit;
         }
 
@@ -369,6 +371,7 @@ static long goodix_thp_ioctl_spi_trans(struct goodix_thp_core *core_data, void _
                 r = copy_to_user(trans_data.rx, rx_buf, trans_data.size);
                 if (r) {
                         ts_err(ts_dev->dev, "copy out buff fail");
+                        r = -EFAULT;
                         goto exit;
                 }
         }

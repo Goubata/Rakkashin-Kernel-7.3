@@ -1017,3 +1017,17 @@ unaccepted drafts outside the main Stage57 bundle. Reproduce with
 Evidence: reports/goodix-mmap-stage60-validation.json. Partial page-insertion
 failure injection, all open/ioctl/remove/probe and producer/work/IRQ lifetimes,
 physical daemon/firmware and whole-board completion remain pending.
+
+
+## Stage61: single-SPI errors and combined SPI regression (draft)
+
+Single-SPI allocation failures now return -ENOMEM and user-copy residuals
+-EFAULT. Reject zero-size requests; suspended non-gesture factory behavior
+still returns success without accessing userspace. The host fixture compiles
+both exact production SPI methods and factory structs: 34 recorded-primitive
+cases cover the prior 22 multi-SPI cases and 12 single-SPI success/error paths.
+No physical/native-uaccess/daemon proof is inferred. Reproduce with
+`python tests/goodix-spi/run.py --stage 61` and the normal touch builder.
+Production modules link and import CRCs/UAPI checks pass. Main bundle remains
+Stage57, touch drafts unaccepted. Evidence:
+reports/goodix-spi-stage61-validation.json.

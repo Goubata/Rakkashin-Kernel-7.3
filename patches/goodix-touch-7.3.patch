@@ -52,7 +52,40 @@
          struct thp_ts_device *ts_dev = core_data->ts_dev;
          long r = 0;
  
-@@ -509,97 +517,90 @@
+@@ -328,7 +336,7 @@
+         }
+ 
+         /* check sync data size */
+-        if (trans_data.size > GOODIX_THP_MAX_TRANS_DATA_LEN) {
++        if (!trans_data.size || trans_data.size > GOODIX_THP_MAX_TRANS_DATA_LEN) {
+                 ts_err(ts_dev->dev, "trans_data.size out of range.");
+                 return -EINVAL;
+         }
+@@ -339,6 +347,7 @@
+         if (!rx_buf || !tx_buf) {
+                 ts_err(ts_dev->dev, "buf request memory fail,trans_data.size = %d",
+                         trans_data.size);
++                r = -ENOMEM;
+                 goto exit;
+         }
+ 
+@@ -346,6 +355,7 @@
+         r = copy_from_user(tx_buf, trans_data.tx, trans_data.size);
+         if (r) {
+                 ts_err(ts_dev->dev, "copy in buff fail");
++                r = -EFAULT;
+                 goto exit;
+         }
+ 
+@@ -361,6 +371,7 @@
+                 r = copy_to_user(trans_data.rx, rx_buf, trans_data.size);
+                 if (r) {
+                         ts_err(ts_dev->dev, "copy out buff fail");
++                        r = -EFAULT;
+                         goto exit;
+                 }
+         }
+@@ -509,97 +520,90 @@
          return 0;
  }
  
@@ -214,7 +247,7 @@
                  }
          }
  exit:
-@@ -667,6 +668,14 @@
+@@ -667,6 +671,14 @@
                  ts_err(ts_dev->dev, "Failed to copy_from_user .");
                  return -EFAULT;
          }
@@ -229,7 +262,7 @@
  
          switch (tsc_msg.cmd) {
          case SVC_CMD_MMAP_DEQUEUE:
-@@ -691,8 +700,9 @@
+@@ -691,8 +703,9 @@
                  ts_info(ts_dev->dev, "recv game filter:%*ph", tsc_msg.len, tsc_msg.value);
                  break;
          case SVC_CMD_UPDATE_VERSION:
@@ -241,7 +274,7 @@
                  break;
          case SVC_CMD_HAL_INIT_FINISH:
                  ts_info(ts_dev->dev, "HAL has finished");
-@@ -866,28 +876,50 @@
+@@ -866,28 +879,50 @@
          return ret;
  }
  
@@ -309,7 +342,7 @@
  }
  
  static const struct file_operations g_thp_fops = {
-@@ -1521,10 +1553,10 @@
+@@ -1521,10 +1556,10 @@
          return 0;
  }
  
@@ -322,7 +355,7 @@
  }
  
  static void goodix_thp_force_release_all(struct goodix_thp_core *core_data)
-@@ -1821,7 +1853,7 @@
+@@ -1821,7 +1856,7 @@
          return ret;
  }
  
@@ -331,7 +364,7 @@
  {
          return 0;
  }
-@@ -3135,7 +3167,10 @@
+@@ -3135,7 +3170,10 @@
          if (!core_data)
                  return -ENOMEM;
  
@@ -343,7 +376,7 @@
          core_data->pdev = pdev;
          core_data->ts_dev = tdev;
          mutex_init(&core_data->frame_mutex);
-@@ -3210,7 +3245,7 @@
+@@ -3210,7 +3248,7 @@
          if (pdev->id == 0)
                  sprintf(core_data->thp_misc_name, "%s", GOODIX_THP_MISC_DEVICE_NAME);
          else
@@ -352,7 +385,7 @@
          core_data->thp_misc_dev.minor = MISC_DYNAMIC_MINOR;
          core_data->thp_misc_dev.name = core_data->thp_misc_name;
          core_data->thp_misc_dev.fops = &g_thp_fops;
-@@ -3338,7 +3373,7 @@
+@@ -3338,7 +3376,7 @@
          if (r) {
                  platform_set_drvdata(pdev, NULL);
                  ts_info(tdev->dev, "Cleared pdev drvdata due to probe failure");
@@ -361,7 +394,7 @@
                  goodix_thp_power_off(core_data);
          }
          ts_info(tdev->dev, "goodix_thp_probe OUT, r:%d", r);
-@@ -3366,7 +3401,7 @@
+@@ -3366,7 +3404,7 @@
  #elif IS_ENABLED(CONFIG_FB)
          fb_unregister_client(&core_data->pm_notif);
  #endif

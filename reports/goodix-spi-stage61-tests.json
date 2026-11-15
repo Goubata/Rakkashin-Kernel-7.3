@@ -1,0 +1,7 @@
+{
+  "scope": "exact production single/multi-SPI functions with recorded allocation/uaccess/SPI primitives; no hardware or full driver lifetime proof",
+  "passed": true,
+  "output": "PASS 34 production single/multi-SPI cases; recorded primitives only",
+  "source_sha256": "0ed75e8898273653d98caa9ed34c21483b73c415902056a5d62ddf0791f159d4",
+  "fixture_sha256": "f8bbc1cd4a935e7f1caeedbbaca2f2dd256c0ec35243ea3c9d46170f92a1aa85"
+}

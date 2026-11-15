@@ -1,0 +1,29 @@
+{
+  "stage": 61,
+  "selected_checks_passed": true,
+  "scope": "Single/multi SPI source methods with recorded primitives; draft remains unaccepted",
+  "tests": {
+    "scope": "exact production single/multi-SPI functions with recorded allocation/uaccess/SPI primitives; no hardware or full driver lifetime proof",
+    "passed": true,
+    "output": "PASS 34 production single/multi-SPI cases; recorded primitives only",
+    "source_sha256": "0ed75e8898273653d98caa9ed34c21483b73c415902056a5d62ddf0791f159d4",
+    "fixture_sha256": "f8bbc1cd4a935e7f1caeedbbaca2f2dd256c0ec35243ea3c9d46170f92a1aa85"
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Core/open/ioctl/probe/remove lifetime and work/IRQ draining",
+    "Real SPI and daemon compatibility including zero-size requests",
+    "Physical whole-device acceptance and remaining drivers/DT/boot/DLKM/SELinux"
+  ],
+  "evidence_sha256": {
+    "reports/goodix-spi-stage61-tests.json": "bd3fed63d73b763a7a3effed5a62d922dc5e7c42f447b55f042040dbec1717c5",
+    "reports/goodix-spi-stage61-crc.json": "12911de27caa529e82ffb323f04f7efc231f7862f18f0a18c856cfb2191b16b0",
+    "reports/goodix-spi-stage61-build.log": "b9ba3b3179285e8be380010fe374c2fcf1ec194e9e7ae39b229ea8e8292516cd",
+    "reports/goodix-spi-stage61-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-touch-source-lock.json": "092f0dc480d194c97302ba11e41c0b3cbb15f03befd766921f066d75a05f80ba",
+    "patches/goodix-touch-7.3.patch": "6213c49755af1b7b76d4a4fc69ce4e7ab1f394e9dc80261a345aa3f7da379f39"
+  }
+}

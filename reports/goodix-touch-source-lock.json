@@ -41,7 +41,7 @@
       "file": "ports/goodix-touch/goodix_thp/goodix_thp_spi.c",
       "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_spi.c",
       "original_sha256": "9e355ff42bb3c77ba1a8729f2a64fd196a1388e0e9184b5b9a8524d9ebc3541b",
-      "sha256": "dca118a31d088aab4a5340450793715eeb74b6acde1ff3facc7bfeaa2a604bf3"
+      "sha256": "5f9dc7d5143cc89a6826932399c02a0d33e5ced259036fd0470d98472b968dc7"
     },
     {
       "file": "ports/goodix-touch/goodix_thp/trace_touch.h",
@@ -110,7 +110,7 @@
       "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
     }
   ],
-  "patch_sha256": "1d98e3671ba274176aa6647e3fed8936fe442c4d9aba202aaeab60b2be66f890",
+  "patch_sha256": "c46241992e918d5a139abcb2e1ab64ad576f667accef6eca6e24bdbc3a165435",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -126,7 +126,9 @@
     "Bound TSC advertised length and version destination with NUL validation; clear old version tail and use bounded logging",
     "Allocate zeroed dedicated pages with failure checking; validate mmap offset and length before shift; insert refcounted pages and detach owner under frame mutex",
     "Reject empty single-SPI requests and propagate ENOMEM/EFAULT instead of success or positive residual bytes",
-    "Initialize ESD delayed work before misc publication even when disabled; do not inspect an unfilled ESD byte after SPI read failure"
+    "Initialize ESD delayed work before misc publication even when disabled; do not inspect an unfilled ESD byte after SPI read failure",
+    "Bound low-level SPI transfer lengths before overhead addition; size private wire buffers for advertised maximum frame",
+    "Validate frame header minimum and packaged slot maximum, reject address wrap and propagate frame body read errors"
   ],
   "pending": [
     "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",

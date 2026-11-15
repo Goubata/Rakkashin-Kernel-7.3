@@ -1046,3 +1046,25 @@ CRC/UAPI checks pass. Reproduce: `python tests/goodix-esd/run.py`.
 Concurrent enable/disable/requeue, synchronous remove draining, native workqueue
 execution and power-cycle failure handling are still pending. Evidence:
 reports/goodix-esd-stage62-validation.json. No draft promotion or physical proof.
+
+
+## Stage63: low-level SPI and frame wire bounds (draft)
+
+Check private wire buffer lengths before adding read/write protocol overhead,
+reject missing platform/core before dereference, and allocate maximum advertised
+frame capacity plus 16 protocol bytes (previously 8KiB+16 despite 10KiB frames).
+Get-frame now checks tdev/buf before access, header minimum, packaged ring slot
+maximum, address addition overflow and frame-body read errors. Header-only frames
+need no zero-length SPI read. Sum header bytes as u8 explicitly.
+
+67 exact-source assertions with recorded SPI exercise both chip read formats,
+wire buffer boundary/oversize/NULL requests, all frame lengths below the 14-byte
+header, header-only and maximum packaged frames, oversize, header/body timeout,
+checksum, missing core and suspended transport. Guard bytes stay intact. The
+fixture extracts protocol constants from the pinned source; no hardware model
+or physical firmware proof is inferred. Reproduce:
+`python tests/goodix-wire/run.py` and the normal touch builder.
+Production modules build and CRC/UAPI checks pass. The enlarged private buffer
+and maximum-frame behavior still need daemon/physical acceptance. Draft remains
+excluded; main partial bundle is Stage57. Evidence:
+reports/goodix-wire-stage63-validation.json.

@@ -29,7 +29,7 @@
 /* length*/
 #define GOODIX_MASK_ID_LEN				6
 #define GOODIX_MAX_IC_INFO_LEN				300
-#define GOODIX_SPI_BUFF_MAX_SIZE			(8 * 1024 + 16)
+#define GOODIX_SPI_BUFF_MAX_SIZE			(GOODIX_THP_MAX_FRAME_LEN + 16)
 #define GOODIX_CMD_LEN_9897				6
 #define GOODIX_FRAME_LEN_MAX				2048
 #define DEBUG_BUF_LEN					160
@@ -679,8 +679,15 @@ static int goodix_thp_spi_read(struct thp_ts_device *dev, unsigned int addr,
         struct spi_message spi_msg;
         int ret = 0;
         struct platform_device *pdev = spi_get_drvdata(spi);
-        struct goodix_thp_core *core_data = platform_get_drvdata(pdev);
+        struct goodix_thp_core *core_data = pdev ? platform_get_drvdata(pdev) : NULL;
 
+        unsigned int overhead = dev->board_data.chip_type == CHIP_TYPE_9897 ?
+                GOODIX_READ_WRITE_BYTE_OFFSET_GT9897 : GOODIX_READ_WRITE_BYTE_OFFSET_GT9916;
+
+        if (!core_data)
+                return -ENODEV;
+        if (!data || !len || len > GOODIX_SPI_BUFF_MAX_SIZE - overhead)
+                return -EINVAL;
         if (unlikely(core_data->pm_suspend)) {
             ts_err(&spi->dev, "spi master suspend");
             return -EINVAL;
@@ -756,8 +763,12 @@ static int goodix_thp_spi_write(struct thp_ts_device *dev, unsigned int addr,
         struct spi_message spi_msg;
         int ret = 0;
         struct platform_device *pdev = spi_get_drvdata(spi);
-        struct goodix_thp_core *core_data = platform_get_drvdata(pdev);
+        struct goodix_thp_core *core_data = pdev ? platform_get_drvdata(pdev) : NULL;
 
+        if (!core_data)
+                return -ENODEV;
+        if (!data || !len || len > GOODIX_SPI_BUFF_MAX_SIZE - 5)
+                return -EINVAL;
         if (unlikely(core_data->pm_suspend)) {
             ts_err(&spi->dev, "system spi suspend");
             return -EINVAL;
@@ -1001,19 +1012,17 @@ static int goodix_thp_get_custom_info(struct thp_ts_device *tdev, char *buf,
 #define FRAME_HEAD_LEN 14
 static int goodix_thp_get_frame(struct thp_ts_device *tdev, char *buf)
 {
-        u32 addr = tdev->board_data.frame_addr;
+        u32 addr;
         u16 frame_len;
         u16 cal_checksum = 0;
         u16 checksum;
         int ret;
         int i;
 
-        if (unlikely(!tdev)) {
-                ts_err(tdev->dev, "thp_ts_device null!");
+        if (unlikely(!tdev || !buf))
                 return -EINVAL;
-        }
-
-        if (unlikely(addr == 0)) {
+        addr = tdev->board_data.frame_addr;
+        if (unlikely(addr == 0 || addr > U32_MAX - FRAME_HEAD_LEN)) {
                 ts_err(tdev->dev, "frame addr has not been assigned");
                 return -EINVAL;
         }
@@ -1024,7 +1033,7 @@ static int goodix_thp_get_frame(struct thp_ts_device *tdev, char *buf)
                 return ret;
         }
         for (i = 0; i < FRAME_HEAD_LEN - 2; i++)
-                cal_checksum += buf[i];
+                cal_checksum += (u8)buf[i];
         checksum = le16_to_cpup((__le16 *)&buf[FRAME_HEAD_LEN - 2]);
         if (unlikely(checksum != cal_checksum)) {
                 ts_err(tdev->dev, "frame head checksum error, %*ph", FRAME_HEAD_LEN, buf);
@@ -1032,13 +1041,17 @@ static int goodix_thp_get_frame(struct thp_ts_device *tdev, char *buf)
         }
 
         frame_len = le16_to_cpup((__le16 *)&buf[6]);
-        if (unlikely(frame_len == 0 || frame_len > GOODIX_THP_MAX_FRAME_LEN)) {
+        if (unlikely(frame_len < FRAME_HEAD_LEN ||
+                     frame_len > GOODIX_THP_MAX_FRAME_LEN - sizeof(struct driver_request_pkg))) {
                 ts_err(tdev->dev, "invalid frame_len:%d", frame_len);
                 return -EINVAL;
         }
-        goodix_thp_spi_read(tdev, addr + FRAME_HEAD_LEN,
-                buf + FRAME_HEAD_LEN, frame_len - FRAME_HEAD_LEN);
-
+        if (frame_len > FRAME_HEAD_LEN) {
+                ret = goodix_thp_spi_read(tdev, addr + FRAME_HEAD_LEN,
+                        buf + FRAME_HEAD_LEN, frame_len - FRAME_HEAD_LEN);
+                if (ret)
+                        return ret;
+        }
         return frame_len;
 }
 
@@ -1313,7 +1326,7 @@ static int goodix_spi_resume(struct device *dev)
                 ts_info(dev, "Resume: No platform device");
                 return 0;
         }
-        struct goodix_thp_core *core_data = platform_get_drvdata(pdev);
+        struct goodix_thp_core *core_data = pdev ? platform_get_drvdata(pdev) : NULL;
         if (!core_data) {
                 ts_info(dev, "Resume: No core data");
                 return 0;
@@ -1333,7 +1346,7 @@ static int goodix_spi_suspend(struct device *dev)
                 ts_info(dev, "Suspend: No platform device");
                 return 0;
         }
-        struct goodix_thp_core *core_data = platform_get_drvdata(pdev);
+        struct goodix_thp_core *core_data = pdev ? platform_get_drvdata(pdev) : NULL;
         if (!core_data) {
                 ts_info(dev, "Suspend: No core data");
                 return 0;

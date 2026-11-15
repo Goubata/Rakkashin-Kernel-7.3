@@ -1,0 +1,47 @@
+Verified moto-info source/patch replay: 12 files; hardware acceptance separate
+Verified goodix-touch source/patch replay: 18 files; hardware acceptance separate
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified Motorola touch dependencies source/patch replay: 5 files; hardware acceptance separate
+Verified panel event source/patch replay: 3 files; hardware acceptance separate
+Verified diagnostic source/patch replay: 16 files; hardware acceptance separate
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/moto-touch-deps'
+make[1]: Leaving directory '/work/avr-port/ports/moto-touch-deps'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-panel-event'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-panel-event'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-minidump'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-minidump'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-ipc-logging'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-ipc-logging'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-hwspinlock'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-hwspinlock'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-smem'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-smem'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/moto-info'
+make[1]: Leaving directory '/work/avr-port/ports/moto-info'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/goodix-touch'
+  CC [M]  goodix_thp/goodix_thp_spi.o
+  LD [M]  goodix_brl_thp.o
+  MODPOST Module.symvers
+  LD [M]  goodix_brl_thp.ko
+  BTF [M] goodix_brl_thp.ko
+make[1]: Leaving directory '/work/avr-port/ports/goodix-touch'
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,30 @@
+{
+  "stage": 63,
+  "selected_checks_passed": true,
+  "scope": "Read/write/frame source methods over guarded private RAM and recorded SPI only",
+  "tests": {
+    "passed": true,
+    "scope": "Exact read/write/get-frame source methods with recorded SPI and guarded RAM, not physical wire or firmware acceptance",
+    "output": "PASS 67 wire source-method assertions; recorded SPI only",
+    "source_sha256": "5f9dc7d5143cc89a6826932399c02a0d33e5ced259036fd0470d98472b968dc7",
+    "fixture_sha256": "1ab7295ee552824c793ba7f4dc556a30a8da86c3d43a6bb35fc9304194dfc2e7"
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Physical firmware/daemon and maximum frame acceptance",
+    "Full core/open/ioctl/remove/probe/IRQ/work lifetime",
+    "All remaining mandatory drivers, whole-board DT and boot/DLKM/SELinux"
+  ],
+  "evidence_sha256": {
+    "reports/goodix-wire-stage63-tests.json": "9c877f9f5198477d72e5a6c3434226e1ea855dfc7d6f5a7b7ae15aacff2cc3ef",
+    "reports/goodix-wire-stage63-crc.json": "12911de27caa529e82ffb323f04f7efc231f7862f18f0a18c856cfb2191b16b0",
+    "reports/goodix-wire-stage63-build.log": "6f0994f33306c47a638a4fd341c9fce91e6699fd8c2450e1255327374cc8e63d",
+    "reports/goodix-wire-stage63-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-touch-source-lock.json": "1a8af4781b5471edd238418ac89d4d2d005e037c8da6b20654e873ba8738c940",
+    "patches/goodix-touch-7.3.patch": "c46241992e918d5a139abcb2e1ab64ad576f667accef6eca6e24bdbc3a165435",
+    "ports/goodix-touch/goodix_thp/goodix_thp_spi.c": "5f9dc7d5143cc89a6826932399c02a0d33e5ced259036fd0470d98472b968dc7"
+  }
+}

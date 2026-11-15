@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "Exact read/write/get-frame source methods with recorded SPI and guarded RAM, not physical wire or firmware acceptance",
+  "output": "PASS 67 wire source-method assertions; recorded SPI only",
+  "source_sha256": "5f9dc7d5143cc89a6826932399c02a0d33e5ced259036fd0470d98472b968dc7",
+  "fixture_sha256": "1ab7295ee552824c793ba7f4dc556a30a8da86c3d43a6bb35fc9304194dfc2e7"
+}

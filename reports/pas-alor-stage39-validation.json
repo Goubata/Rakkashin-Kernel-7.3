@@ -1,0 +1,56 @@
+{
+  "stage": 39,
+  "scope": "Alor source integration, recorded regulator state-machine tests and QEMU module registration only",
+  "alor_compatible_added": true,
+  "arc_rail_control_implemented": true,
+  "elf64_coredump_metadata_selected": true,
+  "draft_module_count": 3,
+  "matching_import_count": 132,
+  "crc_passed": true,
+  "qemu": {
+    "log": "reports/pas-rails-stage39-final-qemu.log",
+    "test": "pas-rails",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      8,
+      0,
+      0,
+      8
+    ],
+    "cpus": 4,
+    "log_sha256": "ac1347f4ab3add97160d5c2d745ba58f7c67b5ef28686ccca533452000209e07",
+    "metadata_sha256": "0650ca03ce2ade415e020e51aebde25f4c73af40a5a359525077c30350d02967"
+  },
+  "fault_coverage": {
+    "forward_operation_failures": 6,
+    "release_operation_failures": 6,
+    "forward_and_rollback_failure_together": true,
+    "repeated_release": true,
+    "double_enable_rejected": true,
+    "positive_load_return": true,
+    "concurrent_toggle_workers": 2,
+    "toggle_attempts_per_worker": 200
+  },
+  "production_regulator_calls": "actual Linux regulator API; only the separate source test TU replaces calls with a recording/failure backend",
+  "experimental_packaged": false,
+  "current_packaged_artifact": "artifacts/android73-remoteproc-services-stage37",
+  "current_packaged_module_count": 108,
+  "physical_verified": false,
+  "firmware_booted": false,
+  "partition_written": false,
+  "daily_use_accepted": false,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "2f15441401040affd515488ba0369bc78d03a1cd6217b7c96ebf58a0264c6cd4",
+    "reports/pas-alor-stage39-dt-validation.json": "9e23861515f9c576b09e7b2da1ca1d0dc18c628d59e81d5492042309fbe83cfa",
+    "reports/pas-alor-stage39-crc.json": "51bdc001e15a4b47183f8b0651a17b33062e680e321c1de84c41b82dc265b8ca",
+    "reports/pas-rails-stage39-final-build.log": "26976aaea007d300ee1dbc2255bc578b77ef0fa1da6f25e8c15ca67736d4b17a"
+  },
+  "pending": [
+    "Real regulator framework/provider fault tests and physical ARC rail voting/recovery",
+    "Complete clock/IRQ/handover and authenticated DTB/main firmware failure ownership/cleanup",
+    "Firmware memory/resource-table/ELF64 loader and early-attach acceptance against saved SoCCP ABI",
+    "Probe failure, active-consumer lifetime, suspend/restart and actual remote-service protocol",
+    "Image packaging and controlled physical boot followed by all-functions and daily-use acceptance"
+  ]
+}

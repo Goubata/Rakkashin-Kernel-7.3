@@ -467,3 +467,20 @@ Stage38ではnative PAS・MDT loader・PIL infoの未改変基点3モジュー�
 リンクし、CRC一致まで確認した。`ports/qcom-pas-alor/` はAlor専用電源/ELF64/
 終了経路の適応前なので、Alor compatibleはまだ登録せずStage37の108個にも含めない。
 `reports/pas-alor-stage38-baseline-validation.json` に範囲と次段を記録した。
+
+## Stage39: Alor専用PASのARC電源制御
+
+ドラフトPASにAlor固有descriptorとcompatibleを実装した。PAS51/DTB65、
+crash SMEM656、minidump24、firmware名、early boot/auto bootとELF64を保存元へ合わせ、
+他SoCのpower-domain定義へ置き換えずcx/mx ARC vote64/load0を取得する。
+成功した電圧/負荷/enable操作を数えて逆順に解除し、解除失敗は状態を保持して再試行。
+同時アクセス・二重投入も制御する。実regulator APIを使う本番処理であり、
+試験用の記録/失敗backendは別のKUnit TUだけに限定している。
+
+4CPUの8件成功。投入6段階・解除6段階、元失敗とrollback失敗の併発、正のset_load戻り値、
+繰り返し・再試行・2並行workerを含む。実PAS/MDT/PILの登録・解除と132 import CRCも成功。
+11個のdescriptor値と保存/候補DTの選択項目が一致。実regulator framework/ARC/SoCCP、
+clock/IRQ/handover・DTB認証失敗経路・firmware/resource-table/ELF64 loaderは未検証。
+
+`reports/pas-alor-stage39-validation.json`。新しいAlorドライバはまだ成果物に入れず、
+配布部分は引き続きStage37の108個。Image・保存DT・GPU設定の変更や実機への書き込みはない。

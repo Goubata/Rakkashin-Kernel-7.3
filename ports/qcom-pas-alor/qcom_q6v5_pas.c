@@ -33,6 +33,7 @@
 #include "qcom_pil_info.h"
 #include "qcom_q6v5.h"
 #include "remoteproc_internal.h"
+#include "avr_pas_rails.h"
 
 #define QCOM_PAS_DECRYPT_SHUTDOWN_DELAY_MS	100
 
@@ -64,6 +65,8 @@ struct qcom_pas_data {
 	int region_assign_vmid;
 	bool early_boot;
 	bool needs_tzmem;
+	bool arc_rails;
+	bool uses_elf64;
 };
 
 struct qcom_pas {
@@ -77,6 +80,8 @@ struct qcom_pas {
 
 	struct regulator *cx_supply;
 	struct regulator *px_supply;
+	bool arc_rails;
+	struct avr_pas_rails rails;
 
 	struct device *proxy_pds[3];
 
@@ -277,6 +282,16 @@ static int qcom_pas_map_carveout(struct rproc *rproc, phys_addr_t mem_phys, size
 	return ret;
 }
 
+static void qcom_pas_release_arc_rails(struct qcom_pas *pas)
+{
+	int ret;
+	if (!pas->arc_rails)
+		return;
+	ret = avr_pas_rails_release(&pas->rails);
+	if (ret)
+		dev_err(pas->dev, "ARC rail cleanup incomplete: %d\n", ret);
+}
+
 static int qcom_pas_start(struct rproc *rproc)
 {
 	struct qcom_pas *pas = rproc->priv;
@@ -308,6 +323,15 @@ static int qcom_pas_start(struct rproc *rproc)
 		ret = regulator_enable(pas->px_supply);
 		if (ret)
 			goto disable_cx_supply;
+	}
+
+	if (pas->arc_rails) {
+		ret = avr_pas_rails_enable(&pas->rails);
+		if (ret) {
+			if (pas->rails.cleanup_error)
+				dev_err(pas->dev, "ARC rollback incomplete: %d\n", pas->rails.cleanup_error);
+			goto disable_aggre2_clk;
+		}
 	}
 
 	if (pas->dtb_pas_id) {
@@ -368,6 +392,7 @@ unmap_dtb_carveout:
 	if (pas->dtb_pas_id)
 		qcom_pas_unmap_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
 disable_px_supply:
+	qcom_pas_release_arc_rails(pas);
 	if (pas->px_supply)
 		regulator_disable(pas->px_supply);
 disable_cx_supply:
@@ -392,6 +417,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
 {
 	struct qcom_pas *pas = container_of(q6v5, struct qcom_pas, q6v5);
 
+	qcom_pas_release_arc_rails(pas);
 	if (pas->px_supply)
 		regulator_disable(pas->px_supply);
 	if (pas->cx_supply)
@@ -630,8 +656,39 @@ static int qcom_pas_init_clock(struct qcom_pas *pas)
 	return 0;
 }
 
+static int qcom_pas_init_arc_rails(struct qcom_pas *pas)
+{
+	static const char * const names[] = { "cx", "mx" };
+	u32 request[2];
+	char property[16];
+	const char *name;
+	int i, ret;
+
+	if (of_property_count_strings(pas->dev->of_node, "reg-names") != AVR_PAS_RAIL_COUNT)
+		return -EINVAL;
+	for (i = 0; i < AVR_PAS_RAIL_COUNT; i++) {
+		ret = of_property_read_string_index(pas->dev->of_node, "reg-names", i, &name);
+		if (ret || strcmp(name, names[i]))
+			return -EINVAL;
+		pas->rails.rail[i].reg = devm_regulator_get(pas->dev, names[i]);
+		if (IS_ERR(pas->rails.rail[i].reg))
+			return PTR_ERR(pas->rails.rail[i].reg);
+		snprintf(property, sizeof(property), "%s-uV-uA", names[i]);
+		if (of_property_count_u32_elems(pas->dev->of_node, property) != 2)
+			return -EINVAL;
+		ret = of_property_read_u32_array(pas->dev->of_node, property, request, 2);
+		if (ret || request[0] > INT_MAX || request[1] > INT_MAX)
+			return ret ?: -EINVAL;
+		pas->rails.rail[i].level = request[0];
+		pas->rails.rail[i].load = request[1];
+	}
+	return 0;
+}
+
 static int qcom_pas_init_regulator(struct qcom_pas *pas)
 {
+	if (pas->arc_rails)
+		return qcom_pas_init_arc_rails(pas);
 	pas->cx_supply = devm_regulator_get_optional(pas->dev, "cx");
 	if (IS_ERR(pas->cx_supply)) {
 		if (PTR_ERR(pas->cx_supply) == -ENODEV)
@@ -861,10 +918,12 @@ static int qcom_pas_probe(struct platform_device *pdev)
 
 	rproc->has_iommu = of_property_present(pdev->dev.of_node, "iommus");
 	rproc->auto_boot = desc->auto_boot;
-	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
+	rproc_coredump_set_elf_info(rproc, desc->uses_elf64 ? ELFCLASS64 : ELFCLASS32, EM_NONE);
 
 	pas = rproc->priv;
 	pas->dev = &pdev->dev;
+	pas->arc_rails = desc->arc_rails;
+	mutex_init(&pas->rails.lock);
 	pas->rproc = rproc;
 	pas->minidump_id = desc->minidump_id;
 	pas->pas_id = desc->pas_id;
@@ -967,6 +1026,7 @@ static void qcom_pas_remove(struct platform_device *pdev)
 		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
 
 	rproc_del(pas->rproc);
+	qcom_pas_release_arc_rails(pas);
 
 	qcom_q6v5_deinit(&pas->q6v5);
 	qcom_pas_unassign_memory_region(pas);
@@ -1763,6 +1823,22 @@ static const struct qcom_pas_data sm8750_mpss_resource = {
 	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
 };
 
+/* Pinned Alor values, not a compatible alias for a different board. */
+static const struct qcom_pas_data alor_soccp_resource = {
+	.crash_reason_smem = 656,
+	.firmware_name = "soccp.mbn",
+	.dtb_firmware_name = "soccp_dtb.mbn",
+	.pas_id = 51,
+	.dtb_pas_id = 0x41,
+	.minidump_id = 24,
+	.ssr_name = "soccp",
+	.sysmon_name = "soccp",
+	.auto_boot = true,
+	.early_boot = true,
+	.arc_rails = true,
+	.uses_elf64 = true,
+};
+
 static const struct qcom_pas_data kaanapali_soccp_resource = {
 	.crash_reason_smem = 656,
 	.firmware_name = "soccp.mbn",
@@ -1824,6 +1900,7 @@ static const struct qcom_pas_data eliza_cdsp_resource = {
 };
 
 static const struct of_device_id qcom_pas_of_match[] = {
+	{ .compatible = "qcom,alor-soccp-pas", .data = &alor_soccp_resource },
 	{ .compatible = "qcom,eliza-adsp-pas", .data = &sm8550_adsp_resource },
 	{ .compatible = "qcom,eliza-cdsp-pas", .data = &eliza_cdsp_resource },
 	{ .compatible = "qcom,glymur-soccp-pas", .data = &glymur_soccp_resource },

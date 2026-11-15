@@ -5,7 +5,7 @@
       "file": "ports/qcom-pas-alor/qcom_q6v5_pas.c",
       "source": "drivers/remoteproc/qcom_q6v5_pas.c",
       "original_sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
-      "sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec"
+      "sha256": "e0a70c9fef88cf96b926d65ccb77a12d3ea10ff21c7680ce948b464976693deb"
     },
     {
       "file": "ports/qcom-pas-alor/qcom_pil_info.c",
@@ -30,20 +30,26 @@
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256": "01c97c942e511269cba2a0f9c52586420be484ad3c3e0f75e74270cc3a289892"
+    },
+    {
+      "file": "ports/qcom-pas-alor/avr_pas_rails.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "07fd73ebc7ff5b4b9edeb804913e21206f4514e7949082b1da35b89e7158e66b"
     }
   ],
-  "patch_sha256": "f11a09c3a91ba2393e850607546ea7c5f5bb1034aa7bb105b16e1fdf37bcdecc",
+  "patch_sha256": "9ee01fe98f7eaf5a931a9db59e82da5d4d3aeaf902fd46f37e8d4cdf795218d7",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
   "reviewed_changes": [
     "Native PAS, PIL info and MDT loader sources with real explicit provider declarations",
-    "Baseline integration only: intentionally no Alor compatible until rail/ELF64/cleanup adaptation is tested"
+    "Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts"
   ],
   "pending": [
-    "Alor descriptor and cx/mx ARC regulator acquisition, sequencing and rollback",
+    "Physical ARC votes, retained-error recovery and regulator framework fault injection",
     "ELF64 minidump metadata and early-attach lifetime/failure cleanup",
-    "Software lifecycle and firmware loader validation before packaging",
+    "Full PAS clock/IRQ/handover/secure-error lifetimes and firmware-loader validation before packaging",
     "Secure firmware ABI and physical all-functions acceptance"
   ]
 }

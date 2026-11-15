@@ -567,3 +567,28 @@ remoteproc subdevice serialization are still required. Native QMP firmware
 protocol, hardware/late-peer/lifecycle stress, Alor rails/PAS/ELF64/secure ABI,
 whole-board image/ROM/policy and daily-use acceptance remain open. Evidence:
 `reports/remoteproc-services-stage37-validation.json`.
+
+## Stage39: counted Alor ARC rail integration, draft only
+
+The draft now has an actual Alor match/descriptor and cx/mx ARC requests from
+saved DT. Eleven descriptor values match pinned vendor data, including PAS51,
+DTB65, crash656, minidump24 and ELF64 metadata. No unrelated proxy power-domain
+names are imposed. Native generic cx/px loading is bypassed for Alor.
+
+Eight SMP4 tests exercise the exact counted rail helper with test-only recording
+regulator calls: all six forward and six release operations can fail, recovery
+retains failed operations, a simultaneous primary/rollback failure preserves
+both errors, dirty/double enables are refused, repeated release is harmless,
+positive set_load returns are valid, invalid inputs touch nothing, and two
+workers each attempt 200 toggles without unbalanced recorded enable counts.
+This does not test the actual regulator framework, ARC hardware or physical
+recovery from failed regulator operations. Those remain required.
+
+The real PAS/MDT/PIL modules register/unregister separately in QEMU; 132 imports
+match provider CRCs. No matching Alor device/firmware is exercised. The new
+driver remains excluded from the Stage37 108-module artifact. Its compatible
+would enable early attach/auto boot on an actual matching board, so successful
+link/registration is not sufficient boot approval or an accepted device image.
+Clock/IRQ/handover and authenticated DTB/main image cleanup, firmware memory/
+resource-table/ELF64 loading, secure ABI and real provider/remote-service/suspend
+acceptance remain open. Evidence: `reports/pas-alor-stage39-validation.json`.

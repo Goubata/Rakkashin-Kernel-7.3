@@ -1,0 +1,158 @@
+{
+  "scope": "pinned descriptor fields and selected saved/candidate references only; not loader, probe, secure ABI or whole-board validation",
+  "vendor_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "pas_source_sha256": "e0a70c9fef88cf96b926d65ccb77a12d3ea10ff21c7680ce948b464976693deb",
+  "descriptor": {
+    "crash_reason_smem": 656,
+    "firmware_name": "soccp.mbn",
+    "dtb_firmware_name": "soccp_dtb.mbn",
+    "pas_id": 51,
+    "dtb_pas_id": 65,
+    "minidump_id": 24,
+    "ssr_name": "soccp",
+    "sysmon_name": "soccp",
+    "auto_boot": true,
+    "early_boot": true,
+    "arc_rails": true,
+    "uses_elf64": true
+  },
+  "descriptor_fields_checked": [
+    "crash_reason_smem",
+    "firmware_name",
+    "dtb_firmware_name",
+    "pas_id",
+    "dtb_pas_id",
+    "minidump_id",
+    "uses_elf64",
+    "ssr_name",
+    "sysmon_name",
+    "early_boot",
+    "auto_boot"
+  ],
+  "descriptor_mismatches": {},
+  "inputs": {
+    "saved": {
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "selected": {
+        "node": "/soc/remoteproc-soccp@a3380000",
+        "compatible": "qcom,alor-soccp-pas",
+        "reg_names": [
+          "cx",
+          "mx"
+        ],
+        "rails": [
+          {
+            "name": "cx",
+            "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-cxlvl/vreg-pm8550ve-f-s1-level",
+            "compatible": "qcom,rpmh-arc-regulator",
+            "resource": "cx.lvl",
+            "request": [
+              64,
+              0
+            ]
+          },
+          {
+            "name": "mx",
+            "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxlvl/vreg-pm8550ve-f-s8-level",
+            "compatible": "qcom,rpmh-arc-regulator",
+            "resource": "mx.lvl",
+            "request": [
+              64,
+              0
+            ]
+          }
+        ],
+        "has_power_domains": false,
+        "memory_regions": [
+          {
+            "node": "/reserved-memory/soccp_region@a4400000",
+            "reg_cells": [
+              0,
+              2755657728,
+              0,
+              6291456
+            ]
+          },
+          {
+            "node": "/reserved-memory/soccp_dtb_region@a4a00000",
+            "reg_cells": [
+              0,
+              2761949184,
+              0,
+              262144
+            ]
+          }
+        ],
+        "memory_region_names": [],
+        "firmware_names": [
+          "soccp.mbn",
+          "soccp_dtb.mbn"
+        ]
+      }
+    },
+    "candidate": {
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "selected": {
+        "node": "/soc/remoteproc-soccp@a3380000",
+        "compatible": "qcom,alor-soccp-pas",
+        "reg_names": [
+          "cx",
+          "mx"
+        ],
+        "rails": [
+          {
+            "name": "cx",
+            "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-cxlvl/vreg-pm8550ve-f-s1-level",
+            "compatible": "qcom,rpmh-arc-regulator",
+            "resource": "cx.lvl",
+            "request": [
+              64,
+              0
+            ]
+          },
+          {
+            "name": "mx",
+            "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxlvl/vreg-pm8550ve-f-s8-level",
+            "compatible": "qcom,rpmh-arc-regulator",
+            "resource": "mx.lvl",
+            "request": [
+              64,
+              0
+            ]
+          }
+        ],
+        "has_power_domains": false,
+        "memory_regions": [
+          {
+            "node": "/reserved-memory/soccp_region@a4400000",
+            "reg_cells": [
+              0,
+              2755657728,
+              0,
+              6291456
+            ]
+          },
+          {
+            "node": "/reserved-memory/soccp_dtb_region@a4a00000",
+            "reg_cells": [
+              0,
+              2761949184,
+              0,
+              262144
+            ]
+          }
+        ],
+        "memory_region_names": [],
+        "firmware_names": [
+          "soccp.mbn",
+          "soccp_dtb.mbn"
+        ]
+      }
+    }
+  },
+  "alor_compatible_present": true,
+  "physical_verified": false,
+  "ready_for_firmware_boot": false,
+  "errors": [],
+  "passed": true
+}

@@ -1,18 +1,42 @@
 # Alor PAS integration draft
 
-Pinned native base `4dd306a07b2f456fd70ddaa28f4f65640374f202`; PAS, MDT loader
-and PIL info sources are staged unchanged, with an owned external Makefile.
-`scripts/audit_pas_alor_sources.py` verifies exact inputs and replay.
+Native base `4dd306a07b2f456fd70ddaa28f4f65640374f202`. Source/reviewed patch
+replay: `scripts/audit_pas_alor_sources.py`. MDT loader and PIL info remain
+pinned originals; PAS has an Alor descriptor and owned counted ARC rail helper.
+This draft is excluded from the Stage37 108-module artifact.
 
-The baseline three modules link against real Q6V5, sysmon, common, SMEM and
-native secure PAS providers. API headers select the actual providers explicitly.
-This draft deliberately has no Alor compatible binding, since the cx/mx ARC
-votes, rollback, ELF64 minidump metadata and early-attach cleanup are not yet
-adapted/tested. It is excluded from the Stage37 108-module artifact.
+Alor values match pinned vendor `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`:
+PAS51, DTB PAS65, crash SMEM656, minidump24, soccp.mbn/soccp_dtb.mbn, early boot,
+auto boot and ELF64 dump metadata. `qcom,alor-soccp-pas` now selects that
+actual descriptor, with no unrelated SoC power-domain alias. This makes a future
+load on a matching board attempt early attach/start; do not confuse the draft
+with a reviewed device boot artifact.
 
-Build result and CRC evidence: `reports/pas-alor-stage38-baseline-build.log`,
-`reports/pas-alor-stage38-baseline-crc.json` and
-`reports/pas-alor-stage38-baseline-validation.json`. Compilation/link/CRC does
-not establish firmware image acceptance, secure ABI, physical rail behavior,
-probe safety or daily-use functionality. No firmware was booted or partition
-written. The actual board inputs remain in the Stage36/37 prerequisites reports.
+Regulator acquisition requires the saved cx/mx order and exact two-cell requests.
+It uses real devm regulator APIs and preserves ARC level64/load0 as raw votes,
+not physical 64 microvolts. It bypasses native optional cx/px and hardcoded cx
+load for this target. Enable tracks successful voltage/load/enable operations;
+release reverses owned operations, stops on a cleanup failure and retains flags
+for retry. A dirty state refuses another enable. The original failure and a
+rollback failure remain separately visible. A mutex serializes state transitions.
+Start unwind, handover and removal call the ARC release helper.
+
+Build: `python scripts/build_storage_deps.py --pas-rails-tests`.
+Guest: `python scripts/run_qemu.py --test pas-rails --cpus 4 --log reports/pas-rails-qemu.log`.
+Eight cases compile the exact rail helper with test-only recording regulator
+calls. They cover six forward/six release failures, retry/idempotence, simultaneous
+primary/rollback failures, positive load return values, invalid state, duplicate
+enables and two concurrent workers. These are not real regulator framework or
+hardware tests. The real PAS/MDT/PIL modules separately register/unregister in
+a hardware-free guest. No matching Alor device is probed there.
+
+`audit_alor_pas_dt.py` checks eleven pinned descriptor values and selected saved/
+candidate rail, firmware and memory-region inputs. Actual memory role/firmware
+loader acceptance and secure ABI still require validation. Remaining blockers:
+clock/IRQ/handover lifetime and DTB/main authentication unwind; real regulator
+provider/failure handling; resource-table/ELF64 loading and early attach; real
+remote services, suspend and whole-board boot/ROM/policy acceptance. Cleanup
+failure recovery is software-tested only; a physical hardware failure cannot be
+assumed recoverable. No firmware boot, partition write or daily-use claim.
+
+Evidence: `reports/pas-alor-stage39-validation.json`.

@@ -46,3 +46,7 @@ modules.order
 
 /tests/watchdog/generated-mmio.h
 /tests/watchdog/generated-scm.h
+
+/tests/watchdog/generated-dump.h
+
+/tests/watchdog/generated-free.h

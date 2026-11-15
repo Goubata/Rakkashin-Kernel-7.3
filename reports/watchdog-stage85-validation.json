@@ -1,0 +1,41 @@
+{
+  "stage": 85,
+  "scope": "Exact watchdog minidump ownership/free methods with native pending-region API, fault injection and native devres; prior MMIO/SDEI helper cases retained",
+  "checks": {
+    "log": "reports/watchdog-stage85-qemu.log",
+    "test": "watchdog",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      21,
+      0,
+      0,
+      21
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Retained minidump payloads are intentionally not freed on backend removal failure; automatic reclamation after backend recovery is not implemented",
+    "Tests use the real pending/unready minidump path, not initialized SMEM/firmware dump tables",
+    "Full watchdog probe/remove IRQ/thread/timer/notifier/sysfs/PM/hotplug lifetime and firmware reset behavior remain unverified",
+    "SDEI retained-registration recovery and factory IRQ-stat/die-notifier variants remain pending",
+    "Whole-board drivers/DT/boot/vendor_boot/dtbo/DLKM/SELinux and physical daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/watchdog-stage85-check.json": "0bef466e962556d85e50460ef420bfac59cf034258d9bdb7326629a5acc29124",
+    "reports/watchdog-stage85-qemu.log": "19261672728c43f900a3e2460359a23e7a9e19a86cea176009e08d0285a42233",
+    "reports/watchdog-stage85-qemu.json": "f36fc6db16c5c93ad6f5688b0ddc8b6c69edbb8225ed9739e1fd6775d045c662",
+    "reports/watchdog-stage85-build.log": "3fa5d3a40e879fe1db171a17dbfdb7eaab3252f980096d235e33b59fff276838",
+    "reports/watchdog-stage85-final-build.log": "cb48bb784dc4775d3fe4e040b631b67b821db32dd884a9f5325bfca10e6365fc",
+    "reports/watchdog-stage85-crc.json": "8a52011bd7c8af793fef52f32534d202096dd1b03bc7f7e3a0327f5d941b723a",
+    "reports/watchdog-source-lock.json": "87d3ce710932a9edc88a47293fafbae18e057b14fd4cfe55d6a44dfae3f66c4c",
+    "patches/watchdog-7.3.patch": "b715714e60cc671e62a0fabca6cb8338cabb5665e0765c65be1d7b9e5effb298",
+    "tests/watchdog/avr-watchdog-lifetime-test.c": "e9667fc5420972e39f5d684f756172d1b354e1810d98009dcfd78e00629386e8",
+    "tests/watchdog/generated-dump.h": "cca73135b71c3db232be6176babb2f9d5019f088d9a924e671c2ef4a2385f76a",
+    "tests/watchdog/generated-free.h": "7bdd18063906969906f201044b4f01449dd31e874fed319ed2f66be02ea16dd6"
+  }
+}

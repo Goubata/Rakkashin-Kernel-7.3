@@ -5,13 +5,13 @@
       "file": "ports/qcom-watchdog/qcom_wdt_core.c",
       "source": "drivers/soc/qcom/qcom_wdt_core.c",
       "original_sha256": "63bd7dc073b9f484965115bfbd2b602b34756ca9cda60100fe8634f9b1b48491",
-      "sha256": "913abfb780958b07216652f7048847ab9228ebdef216e5d4104964cb5deac290"
+      "sha256": "f0a34f6b0715610902382bd321f01f9c3e08774a6e275ea6d83d22c530796aa0"
     },
     {
       "file": "ports/qcom-watchdog/qcom_soc_wdt.c",
       "source": "drivers/soc/qcom/qcom_soc_wdt.c",
       "original_sha256": "bd0075292376d53eb3ca5d066d2ef9af24bf6f4b3a236e9522512337118307d4",
-      "sha256": "745abea8b303adf37d732db58ef9abe061ab313a3296357a111c6154f7228bd8"
+      "sha256": "d2f86d4f494c08c2eb7159651beb28d946d385a11cf519713efd8ed21da67b69"
     },
     {
       "file": "ports/qcom-watchdog/qcom_sdei.c",
@@ -23,7 +23,7 @@
       "file": "ports/qcom-watchdog/include/soc/qcom/watchdog.h",
       "source": "include/soc/qcom/watchdog.h",
       "original_sha256": "8e3cdf2cfe4a17cc8003f490fda557ed6f4b767b0cefe6bbe1d6b991ebe6bbb6",
-      "sha256": "8e3cdf2cfe4a17cc8003f490fda557ed6f4b767b0cefe6bbe1d6b991ebe6bbb6"
+      "sha256": "0fdeaccd10c855d57d1cff2c6d55794445f82f9ba5c2cf5a33d1454a10099334"
     },
     {
       "file": "ports/qcom-watchdog/include/linux/soc/qcom/qcom_sdei.h",
@@ -38,7 +38,7 @@
       "sha256": "94323098286ec37e794adf586c7df4c6210102f36f8788cbe0fd75ed3cac3d70"
     }
   ],
-  "patch_sha256": "d736b3c3fddb50493baf5d193acfc676767aa3448a41b31d883467e9fba51b6b",
+  "patch_sha256": "b715714e60cc671e62a0fabca6cb8338cabb5665e0765c65be1d7b9e5effb298",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted watchdog and SDEI drafts",
@@ -48,10 +48,11 @@
     "Keep per-device watchdog register maps, validate MMIO error pointers/offset ranges and checked timer arithmetic",
     "Avoid native SDEI name/macro collisions and propagate actual shared-reset status",
     "Pin SDEI callback owner through registration and incomplete cleanup; retry EINPROGRESS, retain ownership on permanent unregister errors",
+    "Remove only owned watchdog minidump descriptors before freeing the allocation; retain payload memory if removal fails and use native devres ownership for normal/probe-error release",
     "Unregister the PM notifier on normal remove and enable failure; clear failed watchdog publication"
   ],
   "pending": [
-    "Full watchdog IRQ/thread/timer/sysfs/PM/minidump lifecycle and teardown; minidump record removal/lifetime is still unresolved",
+    "Full watchdog IRQ/thread/timer/sysfs/PM/minidump lifecycle and teardown; retained dump reclamation after backend recovery remains pending",
     "Physical hypervisor/secure/PSCI/watchdog behavior and all firmware error modes",
     "SDEI retained-registration recovery after failed removal and active callback drain on real firmware",
     "Whole-board driver/DT/boot acceptance"

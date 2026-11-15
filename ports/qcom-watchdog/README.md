@@ -29,7 +29,18 @@ unbound SoC driver unloads. The factory core has no module_exit; it and its
 provider imports remain until guest shutdown. No full watchdog probe or actual
 bark/bite/panic/reset, physical IRQ or suspend/CPU-ping proof is claimed.
 
-The minidump record is not yet removed on watchdog teardown, and full thread/
-IRQ/timer/sysfs/error-unwind still needs review. Factory IRQ-stat diagnostics and
-minidump die-notifier variants are not enabled in this initial draft. These are
-acceptance blockers. Artifacts remain separate from the Stage57 main bundle.
+Stage85 stores the exact owned minidump descriptor, removes it after stopping
+watchdog work, and frees the SoC allocation through a native devres action only
+when no dump registration remains. If removal fails, retain the actual payload
+allocation so the registered physical address stays valid. A failed add does not
+permit removing another owner's same-name record. ENOENT confirms absence;
+repeated cleanup is inert. Retained payloads have no automatic reclamation path.
+
+Twenty-one guest cases include seven new lifetime cases. Two use the actual
+pending/unready native minidump provider, including an injected remove failure;
+others cover recorded ownership failures, duplicates, absent records and actual
+devres probe-allocation release. This does not exercise initialized SMEM tables,
+full watchdog teardown, callbacks or physical reset. Full thread/IRQ/timer/sysfs/
+notifier/PM/error-unwind still needs review. Factory IRQ-stat/die-notifier variants
+and retained payload reclamation remain pending. Artifacts stay separate from
+the Stage57 main bundle.

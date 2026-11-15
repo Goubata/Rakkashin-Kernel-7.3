@@ -1,0 +1,39 @@
+Native patch replay: 19 patches, 65 exact files
+Verified pinned Qualcomm watchdog/SDEI patch replay: 6 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-watchdog'
+  CC [M]  qcom_wdt_core.o
+  CC [M]  qcom_soc_wdt.o
+  MODPOST Module.symvers
+  CC [M]  qcom_wdt_core.mod.o
+  CC [M]  qcom_soc_wdt.mod.o
+  LD [M]  qcom_wdt_core.ko
+  LD [M]  qcom_soc_wdt.ko
+  BTF [M] qcom_soc_wdt.ko
+  BTF [M] qcom_wdt_core.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-watchdog'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/watchdog'
+  CC [M]  avr-watchdog-mmio-test.o
+  CC [M]  avr-sdei-test.o
+In file included from avr-watchdog-mmio-test.c:9:
+./generated-mmio.h:125:13: error: unused function 'qcom_soc_wdt_free' [-Werror,-Wunused-function]
+  125 | static void qcom_soc_wdt_free(void *data)
+      |             ^~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: avr-watchdog-mmio-test.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/tests/watchdog'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/build_watchdog.py", line 20, in <module>
+    subprocess.run(['su','-c',shlex.join(command)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/tests/watchdog -j2 modules']' returned non-zero exit status 2.

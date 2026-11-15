@@ -34,6 +34,7 @@
 
 #if IS_ENABLED(CONFIG_QCOM_WDT_CORE)
 #include <linux/platform_device.h>
+#include <soc/qcom/minidump.h>
 
 /**
  *  The enable constant that can be used between the core framework and the
@@ -135,6 +136,8 @@ struct msm_watchdog_data {
 	spinlock_t freeze_lock;
 	struct timer_list user_pet_timer;
 	bool hibernate;
+	struct md_region dump_entry;
+	bool dump_registered;
 };
 
 extern void qcom_wdt_trigger_bite(void);

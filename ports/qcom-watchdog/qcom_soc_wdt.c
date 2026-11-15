@@ -135,6 +135,20 @@ static struct qcom_wdt_ops qcom_soc_wdt_ops = {
 	.show_wdt_status   = qcom_soc_show_wdt_status
 };
 
+/* Dump removal may fail after all active watchdog work has stopped. Keep
+ * the described allocation alive rather than leaving a dangling physical
+ * dump address. MMIO/devices are not retained or accessed by this object. */
+static void qcom_soc_wdt_free(void *data)
+{
+	struct qcom_soc_wdt *soc = data;
+
+	if (soc->core.dump_registered) {
+		dev_err(soc->core.dev, "Retaining watchdog allocation for minidump\n");
+		return;
+	}
+	kfree(soc);
+}
+
 static int qcom_soc_wdt_probe(struct platform_device *pdev)
 {
 	struct resource *res;
@@ -142,14 +156,18 @@ static int qcom_soc_wdt_probe(struct platform_device *pdev)
 	struct qcom_soc_wdt *soc;
 	struct wdt_register_map *map;
 	u32 offsets[5];
-	int i;
+	int i, ret;
 	struct device_node *np = pdev->dev.of_node;
 	u32 temp_hz;
 
-	soc = devm_kzalloc(&pdev->dev, sizeof(*soc), GFP_KERNEL);
+	soc = kzalloc(sizeof(*soc), GFP_KERNEL);
 	if (!soc)
 		return -ENOMEM;
 	wdog_dd = &soc->core;
+	wdog_dd->dev = &pdev->dev;
+	ret = devm_add_action_or_reset(&pdev->dev, qcom_soc_wdt_free, soc);
+	if (ret)
+		return ret;
 	map = &soc->map;
 	*map = wdt_default_map;
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "wdt-base");

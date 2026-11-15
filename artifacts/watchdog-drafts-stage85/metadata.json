@@ -1,0 +1,8 @@
+{
+  "scope": "Exact watchdog minidump ownership/free methods with native pending-region API, fault injection and native devres; prior MMIO/SDEI helper cases retained",
+  "image_required": true,
+  "image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "firmware_modules_required": true,
+  "promoted": false,
+  "physical_verified": false
+}

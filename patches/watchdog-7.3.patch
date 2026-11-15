@@ -9,7 +9,50 @@
  #include <linux/cpumask.h>
  #include <linux/cpu_pm.h>
  #include <uapi/linux/sched/types.h>
-@@ -177,13 +177,13 @@
+@@ -40,6 +40,42 @@
+ 
+ static struct msm_watchdog_data *wdog_data;
+ 
++/* Retain the exact descriptor only after successful registration. */
++static int qcom_wdt_add_dump(struct msm_watchdog_data *wdog_dd)
++{
++	struct md_region *entry = &wdog_dd->dump_entry;
++	int ret;
++
++	if (wdog_dd->dump_registered)
++		return -EBUSY;
++	memset(entry, 0, sizeof(*entry));
++	strscpy(entry->name, "KWDOGDATA", sizeof(entry->name));
++	entry->virt_addr = (uintptr_t)wdog_dd;
++	entry->phys_addr = virt_to_phys(wdog_dd);
++	entry->size = sizeof(*wdog_dd);
++	ret = msm_minidump_add_region(entry);
++	if (ret >= 0)
++		wdog_dd->dump_registered = true;
++	else
++		dev_err(wdog_dd->dev, "Failed to add Wdt data in Minidump: %d\n", ret);
++	return ret;
++}
++
++static int qcom_wdt_remove_dump(struct msm_watchdog_data *wdog_dd)
++{
++	int ret;
++
++	if (!wdog_dd->dump_registered)
++		return 0;
++	ret = msm_minidump_remove_region(&wdog_dd->dump_entry);
++	if (!ret || ret == -ENOENT) {
++		wdog_dd->dump_registered = false;
++		return 0;
++	}
++	dev_err(wdog_dd->dev, "Minidump retains Wdt data: %d\n", ret);
++	return ret;
++}
++
+ static void qcom_wdt_dump_cpu_alive_mask(struct msm_watchdog_data *wdog_dd)
+ {
+ 	static char alive_mask_buf[MASK_SIZE];
+@@ -177,13 +213,13 @@
  		return 0;
  
  	if (wdog_data->user_pet_enabled)
@@ -25,7 +68,7 @@
  	if (wdog_data->wakeup_irq_enable) {
  		if (wdog_data->hibernate || (pm_suspend_target_state == PM_SUSPEND_MEM)) {
  			wdog_data->ops->disable_wdt(wdog_data);
-@@ -328,9 +328,9 @@
+@@ -328,9 +364,9 @@
  						&wdog_dd->panic_blk);
  	qcom_wdt_unregister_die_notifier(wdog_dd);
  	unregister_restart_handler(&wdog_dd->restart_blk);
@@ -37,7 +80,7 @@
  	wdog_dd->ops->disable_wdt(wdog_dd);
  	dev_err(wdog_dd->dev, "QCOM Apps Watchdog deactivated\n");
  }
-@@ -390,6 +390,8 @@
+@@ -390,6 +426,8 @@
  			dev_err(wdog_dd->dev,
  				"Failed to deactivate secure wdog, ret = %d\n",
  				 ret);
@@ -46,7 +89,7 @@
  		}
  		qcom_wdt_disable(wdog_dd);
  		mutex_unlock(&wdog_dd->disable_lock);
-@@ -447,7 +449,7 @@
+@@ -447,7 +485,7 @@
  	if (wdog_dd->user_pet_enabled)
  		mod_timer(&wdog_dd->user_pet_timer, jiffies + delay_time);
  	else if (already_enabled)
@@ -55,7 +98,7 @@
  
  	__qcom_wdt_user_pet(wdog_dd);
  
-@@ -537,7 +539,7 @@
+@@ -537,7 +575,7 @@
  static void qcom_wdt_pet_task_wakeup(struct timer_list *t)
  {
  	struct msm_watchdog_data *wdog_dd =
@@ -64,7 +107,7 @@
  	wdog_dd->timer_expired = true;
  	wdog_dd->timer_fired = sched_clock();
  	wake_up(&wdog_dd->pet_complete);
-@@ -545,7 +547,7 @@
+@@ -545,7 +583,7 @@
  static void qcom_wdt_user_pet_bite(struct timer_list *t)
  {
  	struct msm_watchdog_data *wdog_dd =
@@ -73,7 +116,7 @@
  	if (!wdog_dd->user_pet_complete) {
  		dev_info(wdog_dd->dev, "QCOM Apps Watchdog user pet timeout!\n");
  		qcom_wdt_trigger_bite();
-@@ -637,6 +639,7 @@
+@@ -637,6 +675,7 @@
  {
  	struct msm_watchdog_data *wdog_dd = platform_get_drvdata(pdev);
  
@@ -81,7 +124,7 @@
  	if (!IPI_CORES_IN_LPM)
  		cpu_pm_unregister_notifier(&wdog_dd->wdog_cpu_pm_nb);
  
-@@ -650,12 +653,14 @@
+@@ -650,12 +689,15 @@
  		free_percpu((void __percpu *)wdog_dd->wdog_cpu_dd);
  	irq_dispose_mapping(wdog_dd->bark_irq);
  	dev_info(wdog_dd->dev, "QCOM Apps Watchdog Exit - Deactivated\n");
@@ -93,12 +136,13 @@
  	wdog_dd->timer_expired = true;
  	wdog_dd->user_pet_complete = true;
  	kthread_stop(wdog_dd->watchdog_task);
++	qcom_wdt_remove_dump(wdog_dd);
 +	wdog_data = NULL;
 +	platform_set_drvdata(pdev, NULL);
  }
  EXPORT_SYMBOL(qcom_wdt_remove);
  
-@@ -768,7 +773,7 @@
+@@ -768,7 +810,7 @@
  	} else {
  		ret = devm_request_irq(wdog_dd->dev, wdog_dd->bark_irq,
  				qcom_wdt_bark_handler,
@@ -107,7 +151,7 @@
  				"apps_wdog_bark", wdog_dd);
  		if (ret) {
  			dev_err(wdog_dd->dev, "failed to request bark irq: %d\n", ret);
-@@ -821,7 +826,8 @@
+@@ -821,7 +863,8 @@
  			free_percpu((void __percpu *)wdog_dd->wdog_cpu_dd);
  		}
  
@@ -117,7 +161,7 @@
  		dev_err(wdog_dd->dev, "Failed Initializing QCOM Apps Watchdog\n");
  		return ret;
  	}
-@@ -852,16 +858,26 @@
+@@ -852,16 +895,26 @@
  								pdata->base);
  }
  
@@ -146,16 +190,15 @@
  }
  
  /**
-@@ -879,7 +895,7 @@
+@@ -879,7 +932,6 @@
  			struct msm_watchdog_data *wdog_dd,
  			char *wdog_dd_name)
  {
 -	struct md_region md_entry;
-+	struct md_region md_entry = {0};
  	int ret;
  
  	if (!pdev || !wdog_dd || !wdog_dd_name) {
-@@ -887,7 +903,11 @@
+@@ -887,7 +939,11 @@
  		return -EINVAL;
  	}
  
@@ -168,7 +211,18 @@
  	wdog_data = wdog_dd;
  	wdog_dd->dev = &pdev->dev;
  	platform_set_drvdata(pdev, wdog_dd);
-@@ -914,6 +934,8 @@
+@@ -904,16 +960,12 @@
+ 		goto err;
+ 	}
+ 
+-	/* Add wdog info to minidump table */
+-	strscpy(md_entry.name, "KWDOGDATA", sizeof(md_entry.name));
+-	md_entry.virt_addr = (uintptr_t)wdog_dd;
+-	md_entry.phys_addr = virt_to_phys(wdog_dd);
+-	md_entry.size = sizeof(*wdog_dd);
+-	if (msm_minidump_add_region(&md_entry) < 0)
+-		dev_err(wdog_dd->dev, "Failed to add Wdt data in Minidump\n");
++	qcom_wdt_add_dump(wdog_dd);
  
  	return 0;
  err:
@@ -307,23 +361,45 @@
  	return 0;
  }
  
-@@ -99,30 +139,50 @@
+@@ -95,34 +135,72 @@
+ 	.show_wdt_status   = qcom_soc_show_wdt_status
+ };
+ 
++/* Dump removal may fail after all active watchdog work has stopped. Keep
++ * the described allocation alive rather than leaving a dangling physical
++ * dump address. MMIO/devices are not retained or accessed by this object. */
++static void qcom_soc_wdt_free(void *data)
++{
++	struct qcom_soc_wdt *soc = data;
++
++	if (soc->core.dump_registered) {
++		dev_err(soc->core.dev, "Retaining watchdog allocation for minidump\n");
++		return;
++	}
++	kfree(soc);
++}
++
+ static int qcom_soc_wdt_probe(struct platform_device *pdev)
  {
  	struct resource *res;
  	struct msm_watchdog_data *wdog_dd;
 +	struct qcom_soc_wdt *soc;
 +	struct wdt_register_map *map;
 +	u32 offsets[5];
-+	int i;
++	int i, ret;
  	struct device_node *np = pdev->dev.of_node;
  	u32 temp_hz;
  
 -	wdog_dd = devm_kzalloc(&pdev->dev, sizeof(*wdog_dd), GFP_KERNEL);
 -	if (!wdog_dd)
-+	soc = devm_kzalloc(&pdev->dev, sizeof(*soc), GFP_KERNEL);
++	soc = kzalloc(sizeof(*soc), GFP_KERNEL);
 +	if (!soc)
  		return -ENOMEM;
 +	wdog_dd = &soc->core;
++	wdog_dd->dev = &pdev->dev;
++	ret = devm_add_action_or_reset(&pdev->dev, qcom_soc_wdt_free, soc);
++	if (ret)
++		return ret;
 +	map = &soc->map;
 +	*map = wdt_default_map;
  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "wdt-base");
@@ -539,6 +615,25 @@
  }
  
  static const struct of_device_id qcom_sdei_of_match[] = {
+--- a/ports/qcom-watchdog/include/soc/qcom/watchdog.h
++++ b/ports/qcom-watchdog/include/soc/qcom/watchdog.h
+@@ -34,6 +34,7 @@
+ 
+ #if IS_ENABLED(CONFIG_QCOM_WDT_CORE)
+ #include <linux/platform_device.h>
++#include <soc/qcom/minidump.h>
+ 
+ /**
+  *  The enable constant that can be used between the core framework and the
+@@ -135,6 +136,8 @@
+ 	spinlock_t freeze_lock;
+ 	struct timer_list user_pet_timer;
+ 	bool hibernate;
++	struct md_region dump_entry;
++	bool dump_registered;
+ };
+ 
+ extern void qcom_wdt_trigger_bite(void);
 --- a/ports/qcom-watchdog/Makefile
 +++ b/ports/qcom-watchdog/Makefile
 @@ -0,0 +1,6 @@

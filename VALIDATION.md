@@ -1627,3 +1627,31 @@ Image/native firmware modules and remains separate from Stage57. Full controller
 probe/IRQ/thread/timer/sysfs/PM/hotplug, actual panic/reset/firmware, minidump record
 removal/lifetime, retained SDEI recovery and factory IRQ-stat/die-notifier variants
 remain unresolved. No daily-use acceptance, physical boot or partition writes.
+
+## Stage85: watchdog minidump record and allocation ownership
+
+Store the exact zero-initialized minidump descriptor after a successful add and
+track whether this instance owns a registration. Remove that record after the
+watchdog work is stopped during remove. Do not remove records after a failed add;
+reject duplicate adds and make repeated cleanup inert. ENOENT confirms absence.
+Replace automatic devm allocation with an owned allocation and native devres
+release action: free on normal/probe-error cleanup only when no dump registration
+remains. If provider removal fails, retain the actual payload allocation rather
+than leave its physical dump address dangling. MMIO/device mappings are not held
+alive by this retained flat payload. Automatic reclamation after later backend
+recovery is not implemented; retention is an explicit memory tradeoff.
+
+Twenty-one SMP4 cases pass without WARN/panic. The previous 14 remain covered.
+Seven new cases compile exact dump and free methods, use native allocation/devres,
+and include two cases with the real pending/unready minidump provider (normal
+remove and injected remove failure). Also cover failed/duplicate add, ownership,
+repeated cleanup, ENOENT, retained descriptor contents and native probe-allocation
+release. Recorded backend failures are distinguished from the real API. This is
+not initialized SMEM/firmware-table acceptance or complete controller teardown.
+
+Evidence: reports/watchdog-stage85-validation.json. Reproduce build_watchdog.py
+--tests and QEMU mode watchdog (21 cases). Production modules rebuild/import CRCs
+match and the artifact retains matching Image/native firmware modules. Remaining
+watchdog IRQ/thread/timer/notifier/sysfs/PM/hotplug paths, retained-record recovery,
+actual firmware reset and whole-board acceptance remain unresolved. Stage57 is
+unchanged; no physical watchdog operations, 7.3 phone boot or partition writes.

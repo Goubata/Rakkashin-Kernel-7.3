@@ -7,8 +7,14 @@ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--tests',action='
 for name in ['audit_core_patch_replay.py','audit_watchdog_sources.py']:
  subprocess.run([sys.executable,str(ROOT/'scripts'/name)],check=True)
 if a.tests:
- s=(ROOT/'ports/qcom-watchdog/qcom_soc_wdt.c').read_text();start=s.index('struct wdt_register_map');end=s.index('static int qcom_soc_wdt_probe(')
+ s=(ROOT/'ports/qcom-watchdog/qcom_soc_wdt.c').read_text();start=s.index('struct wdt_register_map');end=s.index('/* Dump removal may fail')
  (ROOT/'tests/watchdog/generated-mmio.h').write_text('/* Exact production register helpers and data. */\n'+s[start:end])
+ start=s.index('static void qcom_soc_wdt_free(');end=s.index('\n}',start)+2
+ (ROOT/'tests/watchdog/generated-free.h').write_text('/* Exact production allocation release. */\n'+s[start:end]+'\n')
+ s=(ROOT/'ports/qcom-watchdog/qcom_wdt_core.c').read_text();methods=[]
+ for name in ['static int qcom_wdt_add_dump(', 'static int qcom_wdt_remove_dump(']:
+  start=s.index(name);end=s.index('\n}',start)+2;methods.append(s[start:end])
+ (ROOT/'tests/watchdog/generated-dump.h').write_text('/* Exact production dump lifetime helpers. */\n'+'\n'.join(methods)+'\n')
  repo=ROOT.parent/'avr-upstream-audit/android-7.3';s=(repo/'drivers/firmware/qcom/qcom_scm.c').read_text();start=s.index('int qcom_scm_sec_wdog_deactivate(');end=s.index('\n}',start)+2
  (ROOT/'tests/watchdog/generated-scm.h').write_text('/* Exact production native secure-disable method. */\n'+s[start:end]+'\n')
 for target in ['ports/qcom-watchdog']+(['tests/watchdog'] if a.tests else []):

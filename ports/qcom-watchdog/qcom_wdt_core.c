@@ -40,6 +40,42 @@
 
 static struct msm_watchdog_data *wdog_data;
 
+/* Retain the exact descriptor only after successful registration. */
+static int qcom_wdt_add_dump(struct msm_watchdog_data *wdog_dd)
+{
+	struct md_region *entry = &wdog_dd->dump_entry;
+	int ret;
+
+	if (wdog_dd->dump_registered)
+		return -EBUSY;
+	memset(entry, 0, sizeof(*entry));
+	strscpy(entry->name, "KWDOGDATA", sizeof(entry->name));
+	entry->virt_addr = (uintptr_t)wdog_dd;
+	entry->phys_addr = virt_to_phys(wdog_dd);
+	entry->size = sizeof(*wdog_dd);
+	ret = msm_minidump_add_region(entry);
+	if (ret >= 0)
+		wdog_dd->dump_registered = true;
+	else
+		dev_err(wdog_dd->dev, "Failed to add Wdt data in Minidump: %d\n", ret);
+	return ret;
+}
+
+static int qcom_wdt_remove_dump(struct msm_watchdog_data *wdog_dd)
+{
+	int ret;
+
+	if (!wdog_dd->dump_registered)
+		return 0;
+	ret = msm_minidump_remove_region(&wdog_dd->dump_entry);
+	if (!ret || ret == -ENOENT) {
+		wdog_dd->dump_registered = false;
+		return 0;
+	}
+	dev_err(wdog_dd->dev, "Minidump retains Wdt data: %d\n", ret);
+	return ret;
+}
+
 static void qcom_wdt_dump_cpu_alive_mask(struct msm_watchdog_data *wdog_dd)
 {
 	static char alive_mask_buf[MASK_SIZE];
@@ -659,6 +695,7 @@ void qcom_wdt_remove(struct platform_device *pdev)
 	wdog_dd->timer_expired = true;
 	wdog_dd->user_pet_complete = true;
 	kthread_stop(wdog_dd->watchdog_task);
+	qcom_wdt_remove_dump(wdog_dd);
 	wdog_data = NULL;
 	platform_set_drvdata(pdev, NULL);
 }
@@ -895,7 +932,6 @@ int qcom_wdt_register(struct platform_device *pdev,
 			struct msm_watchdog_data *wdog_dd,
 			char *wdog_dd_name)
 {
-	struct md_region md_entry = {0};
 	int ret;
 
 	if (!pdev || !wdog_dd || !wdog_dd_name) {
@@ -924,13 +960,7 @@ int qcom_wdt_register(struct platform_device *pdev,
 		goto err;
 	}
 
-	/* Add wdog info to minidump table */
-	strscpy(md_entry.name, "KWDOGDATA", sizeof(md_entry.name));
-	md_entry.virt_addr = (uintptr_t)wdog_dd;
-	md_entry.phys_addr = virt_to_phys(wdog_dd);
-	md_entry.size = sizeof(*wdog_dd);
-	if (msm_minidump_add_region(&md_entry) < 0)
-		dev_err(wdog_dd->dev, "Failed to add Wdt data in Minidump\n");
+	qcom_wdt_add_dump(wdog_dd);
 
 	return 0;
 err:

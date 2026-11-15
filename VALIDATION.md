@@ -1689,3 +1689,52 @@ match. Platform probe/MMIO/physical IRQ/firmware, PPI and factory diagnostic
 variants, hardware-error recovery and exhaustive concurrent caller/unbind/PM
 races remain unverified. Retained dump/SDEI recovery and whole-board acceptance
 are pending. Stage57 is unchanged; no phone partition writes or 7.3 phone boot.
+
+## Stage87: BCL SoC depletion sensor and native OF thermal links
+
+Port pinned factory bcl_soc.c to native 7.3 thermal/power-supply/cpufreq APIs.
+Replace the global device and per-CPU static requests with per-device ownership.
+Acquire battery/USB references once with managed puts and return probe deferral
+when unavailable. Register the native thermal zone; gate readiness until notifier
+registration succeeds. On teardown close notifications, drain immediate/delayed
+work and remove owned QoS requests before the managed zone and supply references
+are released. Keep callbacks outside the driver mutex when entering thermal core.
+
+Preserve the 100-capacity depletion metric, absent-battery result, cached trend,
+high-threshold gating and opt-in boot cap (default INT_MAX). Reject invalid
+presence/capacity and propagate property errors without fabricating a healthy
+value. Retain a requested cap on unknown supply state. Acquire one request and
+policy reference per shared policy, rollback partial acquisition and release
+only owned requests. No fake secure/thermal/vendor success callbacks are added.
+
+Twenty SMP4 cases pass with no WARN/panic/skip. The complete production source
+is compiled into the test translation unit with only policy lookup, selected
+faults and generic-zone selection intercepted. Native power_supply registry,
+get_property, notifier, work, devres and QoS requests execute; init/read helpers
+not exported by the native core are extracted verbatim from the pinned base
+with local names. Physical CPU policy/hardware is never registered. All 101
+valid capacities, invalid/error values, missing suppliers, zone/notifier failure,
+threshold/trend behavior, actual changed notifications, repeated probe/remove,
+shared policy ownership, partial rollback and boot cap decisions are exercised.
+
+Two additional cases select the actual devm_thermal_of_zone_register path using
+a private guest DT with saved AVR scalar semantics. Verify zero-cell sensor,
+90/95 passive depletion trips, 100ms passive delay, absent polling-delay=0 and
+three actual private native cooling-device bindings only on the 95 trip, with
+bounds 0..1/0..4/0..4. Test does not assume DT child enumeration order. Repeated
+OF zone registration/removal is exercised. Cooling callbacks only record state.
+Production bcl_soc.ko separately loads/unloads unbound in this guest.
+
+Saved running DT and Stage53 candidate preserve the same selected provider,
+consumer, all trip scalars and normalized trip/cooling references. No AVR DT is
+modified. Audit the compiled guest scalar fixture against the saved semantics.
+This is selected binding/shape evidence, not whole-board schema/provider proof.
+
+Evidence: reports/bcl-soc-stage87-validation.json. Reproduce with
+scripts/build_bcl_soc.py --tests; scripts/run_qemu.py --test bcl-soc --cpus 4
+--timeout 120 --log reports/bcl-soc-stage87-qemu.log; and
+scripts/audit_bcl_soc_dt.py --guest. The draft has 35 matching import CRCs and
+retains matching Image#25/config/native exports. Stage57 stays at 118 modules.
+Physical supplier/charging/CPU/cooling, forced supplier unbind, late-supplier
+probe wakeup, exhaustive PM/unbind races and whole-board boot/DLKM/SELinux
+acceptance remain pending. No phone partition writes or physical 7.3 boot.

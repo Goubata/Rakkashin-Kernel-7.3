@@ -1,0 +1,32 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-bcl-soc/bcl_soc.c",
+      "source": "drivers/thermal/qcom/bcl_soc.c",
+      "original_sha256": "7c5483a207fd5114282861f214a07df92253a1db41bd0f034aeec617d52e49a5",
+      "sha256": "2a68a944de081801051d00389725827caf844e0c2a5ac4770c3dcaf31046938b"
+    },
+    {
+      "file": "ports/qcom-bcl-soc/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "1d114ec57f326a947bd7152d46ca8956fa6c84eae2abe3cfceb0e09a5fd9598e"
+    }
+  ],
+  "patch_sha256": "730adc336117f9df680516b2a99911351dae3c69f33d6deb7caa2cb466478e3f",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Pinned source and patch replay only; unaccepted BCL SoC draft",
+  "reviewed_changes": [
+    "Per-device power-supply references, notifier/work and thermal registration ownership with native 7.3 APIs",
+    "Preserve depletion metric and boot policy with strict property validation and error propagation",
+    "One owned QoS request/reference per shared CPU policy; rollback partial setup; drain work before managed zone/supply release",
+    "Use native cached thermal temperature for trend without recursive sensor reads"
+  ],
+  "pending": [
+    "Physical battery/USB/thermal/cooling behavior and actual OF registration",
+    "Supplier driver forced unbind, late supplier deferred-probe wakeup, exhaustive PM/unbind races",
+    "Whole-board drivers/DT/boot/DLKM/SELinux acceptance"
+  ]
+}

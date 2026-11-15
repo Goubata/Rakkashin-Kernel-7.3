@@ -50,3 +50,5 @@ modules.order
 /tests/watchdog/generated-dump.h
 
 /tests/watchdog/generated-free.h
+
+/tests/bcl-soc/native-qos-test.h

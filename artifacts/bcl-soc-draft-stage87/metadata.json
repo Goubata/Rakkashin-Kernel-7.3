@@ -1,0 +1,11 @@
+{
+  "scope": "Unaccepted BCL SoC draft; production module compiled and unbound registration/unload tested; exact production methods tested with native private power supplies, OF thermal/cooling, QoS and devres; CPU-policy references and faults recorded",
+  "image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "core_image": "7.3.0-4k #25 (unchanged native Stage84 Image)",
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "external_module": true,
+  "promoted": false,
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57"
+}

@@ -1,0 +1,6 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/qcom-bcl-soc/bcl_soc.c": "drivers/thermal/qcom/bcl_soc.c"
+  }
+}

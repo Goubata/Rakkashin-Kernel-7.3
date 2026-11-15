@@ -1,0 +1,28 @@
+/dts-v1/;
+/plugin/;
+/* Private guest only. Scalar trips, sensor arity and cooling bounds reproduce
+ * the saved AVR socd shape; no physical provider/MMIO is exposed. */
+/ {
+ fragment@0 {
+  target-path = "/";
+  __overlay__ {
+   avr_bcl: avr-bcl-private { #thermal-sensor-cells = <0>; };
+   avr_cool0: avr-cooling0 { #cooling-cells = <2>; };
+   avr_cool1: avr-cooling1 { #cooling-cells = <2>; };
+   avr_cool2: avr-cooling2 { #cooling-cells = <2>; };
+   thermal-zones {
+    avr-socd {
+     polling-delay-passive = <100>;
+     thermal-sensors = <&avr_bcl>;
+     trips {
+      thermal-hal-trip { temperature = <90>; hysteresis = <0>; type = "passive"; };
+      avr_socd_trip: socd-trip { temperature = <95>; hysteresis = <0>; type = "passive"; };
+     };
+     cooling-maps {
+      socd_map { trip = <&avr_socd_trip>; cooling-device = <&avr_cool0 0 1>, <&avr_cool1 0 4>, <&avr_cool2 0 4>; };
+     };
+    };
+   };
+  };
+ };
+};

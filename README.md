@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+BCL SoCの7.3向けドラフトを追加しました（Stage87）。残量・参照管理・失敗時の巻き戻しなど20件の4コアQEMUテストと、実機保存DT／候補DTの接続監査が通過。仮想DTでは7.3本来のthermal登録と3つの冷却先の結合・上限も確認しました。成果物は `artifacts/bcl-soc-draft-stage87/`、証拠は `reports/bcl-soc-stage87-validation.json`。実機の電池・充電・CPU制限・冷却は未確認です。
+
 - 7.3本体にCCFの起動時クロック保持、IRQ/SCMの必要な公開APIを移植。
 - clock core / 21 controllers / RPMh / command-db / IRQ / Alor pinctrl と SCM/PAS/TZMEM をビルド・リンク。
 - avr_oplus_sync の7.3化とフェンスが残っている間のモジュール寿命管理を実装。元ROMのioctl配置を維持。

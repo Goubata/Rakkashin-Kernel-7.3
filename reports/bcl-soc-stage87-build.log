@@ -1,0 +1,14 @@
+Native patch replay: 19 patches, 65 exact files
+Verified pinned factory Qualcomm BCL SoC patch replay: 2 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-bcl-soc'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-bcl-soc'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/bcl-soc'
+  CC [M]  avr-bcl-soc-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-bcl-soc-test.ko
+  BTF [M] avr-bcl-soc-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/bcl-soc'
+make: Leaving directory '/work/avr-src'

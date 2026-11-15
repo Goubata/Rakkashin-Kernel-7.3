@@ -1,0 +1,326 @@
+{
+  "passed": true,
+  "scope": "Selected BCL SoC provider, zero-cell consumer, depletion trips and normalized cooling links only; not full DT schema or driver availability",
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "selected": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc": {
+          "compatible": "71636f6d2c6d736d2d62636c2d736f6300",
+          "#thermal-sensor-cells": "00000000"
+        },
+        "/soc/thermal-zones/socd": {
+          "polling-delay-passive": "00000064",
+          "sensor": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc"
+        },
+        "/soc/thermal-zones/socd/trips/thermal-hal-trip": {
+          "temperature": "0000005a",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/socd/trips/socd-trip": {
+          "temperature": "0000005f",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/socd/cooling-maps/socd_map": {
+          "trip": "/soc/thermal-zones/socd/trips/socd-trip",
+          "cooling": [
+            [
+              "/soc/qcom,cpu-pause/apc1-mx-cx-pause",
+              0,
+              1
+            ],
+            [
+              "/soc/qmi-tmd-devices/cdsp/cdsp",
+              0,
+              4
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              4
+            ]
+          ]
+        }
+      },
+      "checks": [
+        {
+          "check": "one active BCL SoC provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc: zero sensor arguments",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: active zero-argument consumer",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: optional single polling-delay (native absence means zero)",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: optional single polling-delay-passive (native absence means zero)",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/thermal-hal-trip: depletion/hysteresis in percent units",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/thermal-hal-trip: passive depletion trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/socd-trip: depletion/hysteresis in percent units",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/socd-trip: passive depletion trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: local trip reference",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: three saved cooling providers",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: two trips and one cooling map",
+          "passed": true
+        },
+        {
+          "check": "one selected depletion zone",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "selected": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc": {
+          "#thermal-sensor-cells": "00000000",
+          "compatible": "71636f6d2c6d736d2d62636c2d736f6300"
+        },
+        "/soc/thermal-zones/socd": {
+          "polling-delay-passive": "00000064",
+          "sensor": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc"
+        },
+        "/soc/thermal-zones/socd/cooling-maps/socd_map": {
+          "trip": "/soc/thermal-zones/socd/trips/socd-trip",
+          "cooling": [
+            [
+              "/soc/qcom,cpu-pause/apc1-mx-cx-pause",
+              0,
+              1
+            ],
+            [
+              "/soc/qmi-tmd-devices/cdsp/cdsp",
+              0,
+              4
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              4
+            ]
+          ]
+        },
+        "/soc/thermal-zones/socd/trips/socd-trip": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "0000005f"
+        },
+        "/soc/thermal-zones/socd/trips/thermal-hal-trip": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "0000005a"
+        }
+      },
+      "checks": [
+        {
+          "check": "one active BCL SoC provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl-soc: zero sensor arguments",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: active zero-argument consumer",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: optional single polling-delay (native absence means zero)",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: optional single polling-delay-passive (native absence means zero)",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: local trip reference",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: ordered cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/cooling-maps/socd_map: three saved cooling providers",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/socd-trip: depletion/hysteresis in percent units",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/socd-trip: passive depletion trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/thermal-hal-trip: depletion/hysteresis in percent units",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd/trips/thermal-hal-trip: passive depletion trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/socd: two trips and one cooling map",
+          "passed": true
+        },
+        {
+          "check": "one selected depletion zone",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "guest": {
+    "file": "artifacts/qemu-bcl-soc/virt-rail.dtb",
+    "sha256": "5d53c15dafae9c4f20c106c2ba7ed523a1201111ed38ccb3b8662e5219c88001",
+    "checks": [
+      {
+        "check": "zero-argument native OF sensor shape",
+        "passed": true
+      },
+      {
+        "check": "polling-delay-passive matches saved AVR semantics",
+        "passed": true
+      },
+      {
+        "check": "polling-delay matches saved AVR semantics",
+        "passed": true
+      },
+      {
+        "check": "trip metrics, hysteresis and types match saved AVR",
+        "passed": true
+      },
+      {
+        "check": "one cooling map",
+        "passed": true
+      },
+      {
+        "check": "cooling map targets depletion 95 trip",
+        "passed": true
+      },
+      {
+        "check": "two cooling arguments",
+        "passed": true
+      },
+      {
+        "check": "two cooling arguments",
+        "passed": true
+      },
+      {
+        "check": "two cooling arguments",
+        "passed": true
+      },
+      {
+        "check": "three cooling bounds match saved AVR; provider hardware deliberately private",
+        "passed": true
+      }
+    ],
+    "scope": "Private guest fixture matches selected scalar binding shape only; substitute cooling providers do not emulate physical cooling"
+  },
+  "saved_semantics_preserved": true,
+  "dt_modified": false,
+  "physical_verified": false,
+  "whole_board_accepted": false,
+  "errors": []
+}

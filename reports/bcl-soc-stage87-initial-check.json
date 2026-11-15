@@ -1,0 +1,17 @@
+{
+  "log": "reports/bcl-soc-stage87-qemu.log",
+  "test": "bcl-soc",
+  "passed": false,
+  "failures": [
+    "\\bnot ok\\b",
+    "AVR_\\w*FAIL",
+    "missing success marker",
+    "expected all 18 KTAP cases"
+  ],
+  "totals": [
+    16,
+    0,
+    0,
+    16
+  ]
+}

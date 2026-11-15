@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-bcl-soc/bcl_soc.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    }
+  ]
+}

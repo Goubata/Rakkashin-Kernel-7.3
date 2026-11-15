@@ -1,0 +1,57 @@
+{
+  "stage": 87,
+  "scope": "Unaccepted BCL SoC draft; production module compiled and unbound registration/unload tested; exact production methods tested with native private power supplies, OF thermal/cooling, QoS and devres; CPU-policy references and faults recorded",
+  "checks": {
+    "log": "reports/bcl-soc-stage87-qemu.log",
+    "test": "bcl-soc",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      20,
+      0,
+      0,
+      20
+    ]
+  },
+  "dt_check_passed": true,
+  "imports_checked": 35,
+  "artifact": "artifacts/bcl-soc-draft-stage87",
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "notes": [
+    "All 101 valid capacity values checked through native power_supply_get_property",
+    "Actual native power-supply registry/notifier/work/devres refs and real QoS requests; recorded two-policy CPU lookup, no physical frequency driver",
+    "Native OF parses private zero-cell sensor, 90/95 depletion trips, 100ms passive and absent poll delay, three actual registered cooling providers bound only at 95 with limits 0..1,0..4,0..4",
+    "Native nonexported QoS init/read helpers are extracted verbatim from pinned base with local names; production QoS add/remove operates in native core",
+    "First run exposed test precondition/event/unload-name errors; OF run exposed test dependence on child enumeration order; final cases identify trips by values and validate bindings/bounds",
+    "Production module loaded unbound in guest; full driver methods compiled into test translation unit; this is not physical production OF probe acceptance"
+  ],
+  "pending": [
+    "Actual AVR battery/USB suppliers, charging firmware, CPU policies and physical cooling behavior",
+    "Forced supplier unbind and late supplier deferred-probe wakeup; exhaustive concurrent PM/unbind/work races",
+    "Source-compatible module parameter and ROM userspace integration; no vendor helper implementation guessed",
+    "All remaining drivers, whole-board DT schema, vendor_boot/dtbo/DLKM/SELinux and 7.3 phone boot/daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/bcl-soc-stage87-check.json": "bdefa65f9d5b32f4cb05ecb76cf9bdc9b1b55608dfe757402e5498acd9a72e0d",
+    "reports/bcl-soc-stage87-qemu.log": "77d4905be6dba3a18145ed9b17b668018f8b7fc20210b0d35192c80815dac5d8",
+    "reports/bcl-soc-stage87-qemu.json": "dbfa6d94702915598fe955a599827fb00ef810b2aaf8cf631f0fd695f8922e3b",
+    "reports/bcl-soc-stage87-build.log": "f13908330dee35ee248cfe61fb8be26d020e827d954645c274a1ff3d93a2c4cb",
+    "reports/bcl-soc-stage87-dt.json": "d05242f886634e5178cc53f21b678e04b2469c6ce79adf3268ed3d50443516dd",
+    "reports/bcl-soc-stage87-crc.json": "6989e2e945e5780e4d8ecd831c54ec10d50004785e22646b5020617c70b281ee",
+    "reports/bcl-soc-source-lock.json": "ad0f27aabc1403c221b53f9ddacf4eb0d9305f9058e5a16df76c0933f8f75a14",
+    "reports/core-patch-checkpoint.json": "d7d364785990f78cd13afe78e7f687eaee6d25e5a93b69665c3f06a894f2945d",
+    "patches/bcl-soc-7.3.patch": "730adc336117f9df680516b2a99911351dae3c69f33d6deb7caa2cb466478e3f",
+    "ports/qcom-bcl-soc/bcl_soc.c": "2a68a944de081801051d00389725827caf844e0c2a5ac4770c3dcaf31046938b",
+    "tests/bcl-soc/avr-bcl-soc-test.c": "f057c8dfa23ec8cb929aa6b32fdf5b20584b09028fae949128c47843ac25c531",
+    "tests/bcl-soc/native-qos-test.h": "4a682e7f72fc1565b790e50decae87e9c08e1210f6797276dcafadebed547bb0",
+    "tests/bcl-soc/qemu-bcl.dtso": "5d9926c67be024d821d7bfc4b229803ee718d2d8d6da2aa30b7e9e61b264495e",
+    "tests/bcl-soc/avr-bcl-soc-test.ko": "5d4b5ce2ad0a2ac19d334e6039aba3ed297a1993f45e7087167d01cf75e3969c",
+    "tests/qemu/bcl-soc-tests.cpio.gz": "d39bf5fb7f3206035cdf3565f270415e5e0c139b7ee559596fd80cac0e8096cd",
+    "artifacts/qemu-bcl-soc/virt-rail.dtb": "5d53c15dafae9c4f20c106c2ba7ed523a1201111ed38ccb3b8662e5219c88001",
+    "artifacts/bcl-soc-draft-stage87/SHA256SUMS": "3848a2f2301ade9ca2b35a4ec80bb76432807c00cc7178eb15cb561cc39d4990"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "copies of audited mounted firmware for isolated RAM loader tests only",
+  "partition_written": false,
+  "files": [
+    {
+      "file": "artifacts/soccp-loader-inputs-stage41/soccp.mbn",
+      "source": "/vendor/soccp_firmware/image/soccp.mbn",
+      "sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e",
+      "size": 2383960
+    },
+    {
+      "file": "artifacts/soccp-loader-inputs-stage41/soccp_dtb.mbn",
+      "source": "/vendor/soccp_firmware/image/soccp_dtb.mbn",
+      "sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965",
+      "size": 94008
+    }
+  ]
+}

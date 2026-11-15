@@ -1,0 +1,105 @@
+{
+  "stage": 42,
+  "scope": "actual exported native MDT APIs operating on exact captured SoCCP firmware into guarded RAM and metadata buffers; no authentication/reset APIs called",
+  "tests": {
+    "mdt-loader": {
+      "log": "reports/soccp-loader-stage42-final-qemu.log",
+      "test": "mdt-loader",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "cpus": 4,
+      "log_sha256": "09f827a60f790b7c0440820a14d851683fcabc253d78d3b7891c5382622f5707",
+      "metadata_sha256": "40ef71d1377a14663696e21a177e733a5008f1850c15f6932bbeea39a633af54"
+    },
+    "pas-rails": {
+      "log": "reports/pas-rails-stage42-regression-qemu.log",
+      "test": "pas-rails",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "cpus": 4,
+      "log_sha256": "51e64619ff8c4ef42b647fb51cd5498ca218f9cd7b68af60c86c4790314f2569",
+      "metadata_sha256": "09096906525ecc0fa317f29d8cba0571eae368080d18d11d8ee16e29113cccfb"
+    }
+  },
+  "test_case_count": 15,
+  "original_loader_regression": {
+    "totals": [
+      4,
+      1,
+      0,
+      5
+    ],
+    "case": "metadata_must_fit_advertised_firmware",
+    "padded_backing_prevents_outside-allocation_read_in_reproducer": true,
+    "log_sha256": "0a0690ef2f3b6c8e65f251b1f18e9b3f150011eb01633440510eb6d82d21eb10"
+  },
+  "actual_firmware_tests": {
+    "files": [
+      {
+        "file": "artifacts/soccp-loader-inputs-stage41/soccp.mbn",
+        "source": "/vendor/soccp_firmware/image/soccp.mbn",
+        "sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e",
+        "size": 2383960
+      },
+      {
+        "file": "artifacts/soccp-loader-inputs-stage41/soccp_dtb.mbn",
+        "source": "/vendor/soccp_firmware/image/soccp_dtb.mbn",
+        "sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965",
+        "size": 94008
+      }
+    ],
+    "reserved_bytes_compared": [
+      6291456,
+      262144
+    ],
+    "guard_bytes_each_side": 32,
+    "metadata_checked": "exact ELF header and hash-segment byte sequences",
+    "bss_and_gaps_compared": true,
+    "actual_loader_api": [
+      "qcom_mdt_get_size",
+      "qcom_mdt_read_metadata",
+      "qcom_mdt_load_no_init"
+    ]
+  },
+  "reviewed_fixes": [
+    "Validate nonnull firmware/data/output length and ELF32 little-endian input",
+    "Metadata header must include program-header table and remain within advertised input before memcpy",
+    "Check metadata total size and widen file/address additions before arithmetic"
+  ],
+  "draft_module_count": 3,
+  "matching_imports": 132,
+  "crc_passed": true,
+  "experimental_packaged": false,
+  "current_packaged_artifact": "artifacts/android73-remoteproc-services-stage37",
+  "current_packaged_module_count": 108,
+  "physical_boot_verified": false,
+  "physical_firmware_reload_tested": false,
+  "secure_abi_verified": false,
+  "partition_written": false,
+  "daily_use_accepted": false,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "ddecc6e582441101d9fe1cf678c61e185b9da6b8f97f9321b6d028ff9dc88f4a",
+    "reports/pas-alor-stage42-crc.json": "51bdc001e15a4b47183f8b0651a17b33062e680e321c1de84c41b82dc265b8ca",
+    "reports/soccp-loader-stage42-test-crc.json": "c6c068fe1b47fd4fda7dc9f06c4ec37b61d6a6283cfb29176cdc86a14e2a451f",
+    "reports/soccp-loader-stage41-inputs.json": "9765f71ba4ec777a96a4d66419d71867a87ff9c34be9e5eb21797da1cec585ef",
+    "reports/soccp-loader-stage42-final-build.log": "cdc73aaccb74e64522c60e3322d6baa3b5ee532bd841a266bded98dab1fbb375"
+  },
+  "pending": [
+    "Broader malformed/split firmware parser and allocation-failure stress",
+    "Complete PAS clock/IRQ/handover and authenticated DTB/main-image error ownership",
+    "Actual ROM firmware fallback/mount ordering, early attach and secure PAS ABI/firmware authentication",
+    "Controlled physical boot, all remote services, whole-board drivers/packaging/SELinux and daily-use/performance acceptance"
+  ]
+}

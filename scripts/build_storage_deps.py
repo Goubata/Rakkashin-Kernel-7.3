@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--pmic-ipc-tests',action='store_true')
     parser.add_argument('--pmic-glink-tests',action='store_true')
     parser.add_argument('--rproc-gate-tests',action='store_true')
+    parser.add_argument('--mdt-loader-tests',action='store_true')
     parser.add_argument('--pas-rails-tests',action='store_true')
     parser.add_argument('--remoteproc-services',action='store_true')
     parser.add_argument('--remoteproc-services-tests',action='store_true')
@@ -44,7 +45,7 @@ def main():
     parser.add_argument('--glink-transport',action='store_true')
     parser.add_argument('--glink-transport-tests',action='store_true')
     args=parser.parse_args()
-    if args.pas_rails_tests:args.remoteproc_services=True;args.glink_transport=True
+    if args.pas_rails_tests or args.mdt_loader_tests:args.remoteproc_services=True;args.glink_transport=True
     if args.remoteproc_services_tests:args.remoteproc_services=True
     if args.smp2p_tests:args.smp2p=True
     if args.ipcc_tests:args.ipcc=True
@@ -135,10 +136,12 @@ def main():
     if args.rproc_gate_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ipc_sources.py')],check=True)
         targets += ['ports/qcom-rproc-common','tests/rproc-common']
-    if args.pas_rails_tests:
+    if args.pas_rails_tests or args.mdt_loader_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_ipc_sources.py')],check=True)
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_pas_alor_sources.py')],check=True)
-        targets += ['ports/qcom-rproc-common','ports/qcom-pas-alor','tests/pas-rails']
+        targets += ['ports/qcom-rproc-common','ports/qcom-pas-alor']
+        if args.pas_rails_tests:targets.append('tests/pas-rails')
+        if args.mdt_loader_tests:targets.append('tests/mdt-loader')
     if args.ufs_core_tests:targets.append('tests/ufs')
     for target in targets:
         command = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin',

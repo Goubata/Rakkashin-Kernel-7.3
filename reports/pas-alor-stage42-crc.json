@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-pas-alor/qcom_q6v5_pas.ko",
+      "imports_checked": 93,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pas-alor/qcom_pil_info.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pas-alor/mdt_loader.ko",
+      "imports_checked": 19,
+      "mismatches": {}
+    }
+  ]
+}

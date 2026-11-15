@@ -5,6 +5,8 @@ from native_module_inventory import firmware_modules
 import gzip
 import argparse
 import stat
+import hashlib
+import json
 
 ROOT=Path(__file__).resolve().parents[1]
 ROOTFS=ROOT.parent/'.andronix/distros/ubuntu/rootfs'
@@ -22,6 +24,7 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--mdt-loader-tests", action="store_true")
     group.add_argument("--pas-rails-tests", action="store_true")
     group.add_argument("--remoteproc-services-tests", action="store_true")
     group.add_argument("--smem-state-tests", action="store_true")
@@ -204,6 +207,26 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         commands += ['/bin/busybox rmmod adios || { echo AVR_ADIOS_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      '/bin/busybox rmmod null_blk || { echo AVR_ADIOS_NULL_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
                      'echo AVR_ADIOS_TESTS_PASS rounds=3 workers=4']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.mdt_loader_tests:
+        for directory in ['lib','lib/firmware','lib/firmware/avr-test']:
+            add(directory,stat.S_IFDIR|0o755)
+        manifest=json.loads((ROOT/'reports/soccp-loader-stage41-inputs.json').read_text())
+        for row in manifest['files']:
+            path=ROOT/row['file'];raw=path.read_bytes()
+            if hashlib.sha256(raw).hexdigest()!=row['sha256'] or len(raw)!=row['size']:
+                raise ValueError('Captured firmware changed: '+str(path))
+            add('lib/firmware/avr-test/'+path.name,stat.S_IFREG|0o644,raw)
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+firmware_modules()+[
+            ROOT/'ports/qcom-pas-alor/mdt_loader.ko',ROOT/'tests/mdt-loader/avr-mdt-loader-test.ko']
+        commands=[]
+        for source in sources:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_MDT_LOADER_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        for name in ['avr_mdt_loader_test','mdt_loader']:
+            commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_MDT_LOADER_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_MDT_LOADER_TESTS_PASS scope=actual-firmware-to-guarded-ram-only')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.pas_rails_tests:
         sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests/pas-rails/avr-pas-rails-test.ko']
@@ -621,7 +644,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('mdt-loader-tests.cpio.gz' if args.mdt_loader_tests else 'pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

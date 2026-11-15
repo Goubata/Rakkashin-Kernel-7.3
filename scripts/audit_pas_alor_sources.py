@@ -48,6 +48,8 @@ def main():
                   'reviewed_changes': [
                       'Native PAS, PIL info and MDT loader sources with real explicit provider declarations',
                       'Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts',
+                      'Native MDT parser validates nonnull inputs, ELF32/LE and bounded full header metadata before copying',
+                      'Widen file/address additions before arithmetic and check metadata total size',
                   ],
                   'pending': ['Physical ARC votes, retained-error recovery and regulator framework fault injection',
                               'ELF64 minidump metadata and early-attach lifetime/failure cleanup',

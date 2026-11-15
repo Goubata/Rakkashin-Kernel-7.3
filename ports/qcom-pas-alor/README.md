@@ -1,8 +1,8 @@
 # Alor PAS integration draft
 
 Native base `4dd306a07b2f456fd70ddaa28f4f65640374f202`. Source/reviewed patch
-replay: `scripts/audit_pas_alor_sources.py`. MDT loader and PIL info remain
-pinned originals; PAS has an Alor descriptor and owned counted ARC rail helper.
+replay: `scripts/audit_pas_alor_sources.py`. PIL info remains a pinned original. PAS has an Alor descriptor and owned
+counted ARC rail helper; MDT has reviewed input/metadata/arithmetic checks.
 This draft is excluded from the Stage37 108-module artifact.
 
 Alor values match pinned vendor `037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1`:
@@ -40,3 +40,18 @@ failure recovery is software-tested only; a physical hardware failure cannot be
 assumed recoverable. No firmware boot, partition write or daily-use claim.
 
 Evidence: `reports/pas-alor-stage39-validation.json`.
+
+
+Stage41–42 runs the real exported MDT library against the exact mounted-file
+captures (also matched against both FAT slots). `tests/mdt-loader` compares each
+entire 6MiB/256KiB destination with expected PT_LOAD bytes, zeroed BSS and
+untouched gaps, plus 32-byte guards. Metadata header/hash bytes match the original
+firmware. No authenticate/reset/PAS boot API is invoked.
+
+A padded-backing reproducer shows the old metadata reader copying beyond the
+advertised firmware length. Header/table/file bounds now reject it before copy.
+The ELF32 parser explicitly rejects incompatible class/byte order, null inputs
+and missing output length; address/file additions are widened before arithmetic.
+The final seven loader cases and eight rail regressions pass on SMP4. This does
+not validate secure-world authentication, physical loading, split images or all
+malformed firmware. Evidence: `reports/soccp-loader-stage42-validation.json`.

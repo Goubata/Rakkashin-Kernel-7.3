@@ -504,3 +504,17 @@ read-only scriptと証拠は `scripts/inspect_soccp_*_readonly.py`、
 volumeのmount・変更・抽出・firmware起動は行わず、filesystem/block読み取りと
 メタデータ報告だけを行った。次は実ファイルを使うnative loaderのguarded-RAM試験、
 PASのsecure/error/resource ownershipと実機起動条件の検証。
+
+## Stage41–42: 実SoCCPイメージのnative loader RAM試験
+
+監査済みの実機マウントから2ファイルをローカル試験artifactへコピーし、ハッシュ固定した。
+実qcom_mdt_get_size/read_metadata/load_no_init APIで6MiB/256KiBのRAMへ配置し、
+PT_LOADデータ・BSS・空隙を領域全体で比較、前後32byte guardとmetadataのheader/hashも一致。
+署名認証・reset・PAS起動APIは呼んでいない。これは物理firmware再起動の確認ではない。
+
+native MDTに宣言サイズを超えるmetadata headerコピーを再現（旧5件中1失敗、
+再現は余裕を持たせたbackingを使いallocation外を読まない）。コピー前にheader/tableの
+範囲を確認し、NULL・ELF class/byte order・合計サイズ・加算幅も検査/修正。
+最終loader7件とARC rail8件がSMP4で成功。符号/4GiB境界も含む。
+`reports/soccp-loader-stage42-validation.json`。実機認証/boot、PAS全failure ownership、
+ROM fallbackの実際の時刻と全driver/画像/常用評価は残る。Alor draftは引き続き配布対象外。

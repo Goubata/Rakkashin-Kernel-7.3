@@ -25,12 +25,14 @@ static bool mdt_header_valid(const struct firmware *fw)
 	size_t phend;
 	size_t shend;
 
-	if (fw->size < sizeof(*ehdr))
+	if (!fw || !fw->data || fw->size < sizeof(*ehdr))
 		return false;
 
 	ehdr = (struct elf32_hdr *)fw->data;
 
-	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG))
+	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) ||
+	    ehdr->e_ident[EI_CLASS] != ELFCLASS32 ||
+	    ehdr->e_ident[EI_DATA] != ELFDATA2LSB)
 		return false;
 
 	if (ehdr->e_phentsize != sizeof(struct elf32_phdr))
@@ -131,8 +133,8 @@ ssize_t qcom_mdt_get_size(const struct firmware *fw)
 		if (phdr->p_paddr < min_addr)
 			min_addr = phdr->p_paddr;
 
-		if (phdr->p_paddr + phdr->p_memsz > max_addr)
-			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+		if ((phys_addr_t)phdr->p_paddr + phdr->p_memsz > max_addr)
+			max_addr = ALIGN((phys_addr_t)phdr->p_paddr + phdr->p_memsz, SZ_4K);
 	}
 
 	return min_addr < max_addr ? max_addr - min_addr : -EINVAL;
@@ -167,11 +169,12 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
 	size_t hash_offset;
 	size_t hash_size;
 	size_t ehdr_size;
+	size_t total_size;
 	unsigned int i;
 	ssize_t ret;
 	void *data;
 
-	if (!mdt_header_valid(fw))
+	if (!data_len || !mdt_header_valid(fw))
 		return ERR_PTR(-EINVAL);
 
 	ehdr = (struct elf32_hdr *)fw->data;
@@ -197,19 +200,26 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
 
 	ehdr_size = phdrs[0].p_filesz;
 	hash_size = phdrs[hash_segment].p_filesz;
+	/* Header metadata must contain its table and fit the advertised input. */
+	if (ehdr_size < (size_t)ehdr->e_phoff + sizeof(*phdrs) * ehdr->e_phnum ||
+	    ehdr_size > fw->size)
+		return ERR_PTR(-EINVAL);
+	total_size = size_add(ehdr_size, hash_size);
+	if (total_size == SIZE_MAX)
+		return ERR_PTR(-EINVAL);
 
-	data = kmalloc(ehdr_size + hash_size, GFP_KERNEL);
+	data = kmalloc(total_size, GFP_KERNEL);
 	if (!data)
 		return ERR_PTR(-ENOMEM);
 
 	/* Copy ELF header */
 	memcpy(data, fw->data, ehdr_size);
 
-	if (ehdr_size + hash_size == fw->size) {
+	if (total_size == fw->size) {
 		/* Firmware is split and hash is packed following the ELF header */
 		hash_offset = phdrs[0].p_filesz;
 		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
-	} else if (phdrs[hash_segment].p_offset + hash_size <= fw->size) {
+	} else if ((u64)phdrs[hash_segment].p_offset + hash_size <= fw->size) {
 		/* Hash is in its own segment, but within the loaded file */
 		hash_offset = phdrs[hash_segment].p_offset;
 		memcpy(data + ehdr_size, fw->data + hash_offset, hash_size);
@@ -222,7 +232,7 @@ void *qcom_mdt_read_metadata(const struct firmware *fw, size_t *data_len,
 		}
 	}
 
-	*data_len = ehdr_size + hash_size;
+	*data_len = total_size;
 
 	return data;
 }
@@ -261,8 +271,8 @@ static int __qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
 		if (phdr->p_paddr < min_addr)
 			min_addr = phdr->p_paddr;
 
-		if (phdr->p_paddr + phdr->p_memsz > max_addr)
-			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+		if ((phys_addr_t)phdr->p_paddr + phdr->p_memsz > max_addr)
+			max_addr = ALIGN((phys_addr_t)phdr->p_paddr + phdr->p_memsz, SZ_4K);
 	}
 
 	metadata = qcom_mdt_read_metadata(fw, &metadata_len, fw_name, dev);
@@ -313,7 +323,7 @@ static bool qcom_mdt_bins_are_split(const struct firmware *fw)
 			continue;
 
 		seg_start = phdrs[i].p_offset;
-		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
+		seg_end = (u64)phdrs[i].p_offset + phdrs[i].p_filesz;
 		if (seg_start > fw->size || seg_end > fw->size)
 			return true;
 	}
@@ -412,7 +422,7 @@ int qcom_mdt_load_no_init(struct device *dev, const struct firmware *fw,
 
 		if (phdr->p_filesz && !is_split) {
 			/* Firmware is large enough to be non-split */
-			if (phdr->p_offset + phdr->p_filesz > fw->size) {
+			if ((u64)phdr->p_offset + phdr->p_filesz > fw->size) {
 				dev_err(dev, "file %s segment %d would be truncated\n",
 					fw_name, i);
 				ret = -EINVAL;

@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "tests/mdt-loader/avr-mdt-loader-test.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    }
+  ]
+}

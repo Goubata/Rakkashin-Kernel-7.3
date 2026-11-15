@@ -615,3 +615,25 @@ validation. Read-only scripts did not mount, extract, modify, boot or authentica
 firmware. Evidence: `reports/soccp-firmware-stage40-validation.json`. Next: exact
 firmware through the actual native loader into guarded RAM without secure calls,
 then remaining PAS lifecycle/secure ABI and physical boot acceptance.
+
+## Stage41–42: exact SoCCP inputs through the actual native MDT loader
+
+Captured mounted files are hash-locked to the Stage40 independent FAT/file audit;
+blobs stay in ignored local artifacts, not Git. Native get_size, read_metadata
+and load_no_init APIs run in SMP4 QEMU. Tests compare the entire 6MiB/256KiB RAM
+regions (load segments, BSS zeros and unchanged gaps), both 32-byte guards,
+relocation base and exact header/hash metadata. No authentication/reset/PAS boot
+API is called. This proves the selected CPU parsing/copy path, not secure ABI,
+actual physical memory mapping, signature acceptance or device firmware reload.
+
+The original metadata implementation fails a padded-backing regression: a header
+length beyond fw.size is accepted. The reproducer intentionally keeps backing
+storage larger so no outside-allocation access is needed. New checks require
+metadata to include the table and fit advertised input before memcpy, validate
+nonnull inputs/output and ELF32/LE, check total size, and widen file/address
+additions before arithmetic. The final seven loader cases plus eight rail
+regressions pass. Wider malformed/split-input and allocation stress, full PAS
+clock/IRQ/handover/authenticated image error ownership, ROM fallback/mount timing,
+secure firmware and all physical/whole-board criteria remain open. The Alor draft
+stays outside the packaged Stage37 108-module artifact. Evidence:
+`reports/soccp-loader-stage42-validation.json`.

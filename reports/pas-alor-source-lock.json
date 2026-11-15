@@ -23,7 +23,7 @@
       "file": "ports/qcom-pas-alor/mdt_loader.c",
       "source": "drivers/soc/qcom/mdt_loader.c",
       "original_sha256": "2647807e4cabe0c97ba0a872de340f6924f000d27951abdd350f85dead95db6d",
-      "sha256": "2647807e4cabe0c97ba0a872de340f6924f000d27951abdd350f85dead95db6d"
+      "sha256": "fca096e9bff48b16315de3d22a97b99778c66477c43b46cdb5617b847053691d"
     },
     {
       "file": "ports/qcom-pas-alor/Makefile",
@@ -38,13 +38,15 @@
       "sha256": "07fd73ebc7ff5b4b9edeb804913e21206f4514e7949082b1da35b89e7158e66b"
     }
   ],
-  "patch_sha256": "9ee01fe98f7eaf5a931a9db59e82da5d4d3aeaf902fd46f37e8d4cdf795218d7",
+  "patch_sha256": "56d69231268c5808e7bb68e43fb326f908203a7cad7b85bb97001ad96cdc49b8",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
   "reviewed_changes": [
     "Native PAS, PIL info and MDT loader sources with real explicit provider declarations",
-    "Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts"
+    "Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts",
+    "Native MDT parser validates nonnull inputs, ELF32/LE and bounded full header metadata before copying",
+    "Widen file/address additions before arithmetic and check metadata total size"
   ],
   "pending": [
     "Physical ARC votes, retained-error recovery and regulator framework fault injection",

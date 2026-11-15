@@ -42,10 +42,11 @@ def main():
         patch.write_text(changes)
         report = {'source_commit': COMMIT, 'files': rows, 'patch_sha256': sha(patch.read_bytes()),
                   'scope': 'source and reviewed patch replay only; module link is recorded separately; physical acceptance pending',
-                  'experimental_packaged': False,
+                  'experimental_packaged': True,
+                  'module_packaging': {'mmi_annotate': 'partial snapshot; physical backend acceptance pending', 'mmi_info': 'excluded draft'},
                   'hardware_runtime_accepted': False,
-                  'reviewed_changes': ['Add exact missing factory headers and required exported prototype; make private build-signature parser static', 'Use real SMEM API and validate allocation/get errors and exact region size before copying', 'Bound annotation formatting to actual emitted bytes, subtraction bounds and explicit NUL termination', 'Treat boot signature strings as data rather than printf formats; draft remains outside main bundle'],
-                  'pending': ['Annotation probe import bounds, publication, unwind, remove synchronization and minidump/mapping lifetime remain unsafe/unaccepted', 'Info init failure unwind, SMEM failure tests and complete bootarg/ROM behavior', 'Actual firmware/userspace/physical device acceptance']}
+                  'reviewed_changes': ['Add exact missing factory headers and required exported prototype; make private build-signature parser static', 'Use real SMEM API and validate allocation/get errors and exact region size before copying', 'Bound annotation formatting to actual emitted bytes, subtraction bounds and explicit NUL termination', 'Treat boot signature strings as data rather than printf formats; mmi_info remains outside main bundle', 'Initialize owned annotate state before publication; bound restore using resource capacity; use memremap/memunmap for no-map RAM', 'Serialize API/remove; unwind proc/map/buffer acquisitions; remove minidump registration before backing release', 'Retain unconfirmed minidump backing and retry at next probe/exit; terminal failure intentionally retains backing until reboot'],
+                  'pending': ['Annotation physical minidump backend/cache/boot acceptance and allocation/proc failure injection remain pending', 'Info init failure unwind, SMEM failure tests and complete bootarg/ROM behavior', 'Actual firmware/userspace/physical device acceptance']}
         lock.write_text(json.dumps(report, indent=2) + '\n')
     report = json.loads(lock.read_text())
     if report['source_commit'] != COMMIT or report['patch_sha256'] != sha(patch.read_bytes()):

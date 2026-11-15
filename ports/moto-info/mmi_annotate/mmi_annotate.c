@@ -24,6 +24,8 @@
 #include <linux/of_address.h>
 #include <linux/ctype.h>
 #include <linux/version.h>
+#include <linux/overflow.h>
+#include <linux/io.h>
 #if KERNEL_VERSION(5, 10, 0) > LINUX_VERSION_CODE
 #include <linux/dma-contiguous.h>
 #endif
@@ -60,20 +62,40 @@ struct persist_data_t {
 	unsigned char contents[];
 };
 
+static DEFINE_MUTEX(provider_lock);
 static DEFINE_MUTEX(persist_lock);
 static DEFINE_MUTEX(mem_lock);
 
-static struct proc_dir_entry *procfs_file;
-static struct proc_dir_entry *mem_procfs_file;
 static struct persist_data_t *persist_data;
+static size_t persist_capacity;
 static struct mem_data_t mem_data;
 static int persist_unsupported = 0;
+
+/* Views below are published together only after full provider initialization.
+ * Provider operations take provider_lock; API operations take mem_lock then
+ * persist_lock when both views are needed. */
+struct annotate_provider {
+	struct mem_data_t ram;
+	struct persist_data_t *persist;
+	void *mapping;
+	size_t capacity;
+	bool fallback;
+	struct proc_dir_entry *file, *mem_file;
+#if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
+	struct md_region md;
+	bool md_registered;
+#endif
+};
+static struct annotate_provider *active_provider;
+static struct annotate_provider *retired_provider;
 
 static int mmi_annotate_seq_show(struct seq_file *f, void *ptr)
 {
 	mutex_lock(&mem_lock);
-	if (mem_data.contents && mem_data.cur_off > 0) {
-		seq_printf(f, "%s", mem_data.contents);
+	if (mem_data.contents && mem_data.size && mem_data.cur_off > 0) {
+		seq_write(f, mem_data.contents,
+			  strnlen(mem_data.contents,
+				  min_t(size_t, mem_data.cur_off, mem_data.size - 1)));
 	} else {
 		seq_printf(f, "No annotated data.\n");
 	}
@@ -97,10 +119,7 @@ static ssize_t mmi_annotate_write(struct file *file, const char __user *buf,
 	if (copy_from_user(buffer, buf, count > maxlen ? maxlen : count))
 		return -EFAULT;
 
-	if (!persist_unsupported)
-		mmi_annotate_persist("%s", buffer);
-	else
-		mmi_annotate("%s", buffer);
+	mmi_annotate_persist("%s", buffer);
 
 	return count;
 }
@@ -142,165 +161,181 @@ static const struct proc_ops mmi_annotate_mem_operations = {
 	.proc_write		= mmi_annotate_mem_write,
 };
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,4,0)
-static void* mmi_annotate_ram_vmap(phys_addr_t start, size_t size)
+static void *mmi_annotate_map_ram(phys_addr_t start, size_t size)
 {
-	struct page **pages;
-	phys_addr_t page_start;
-	unsigned int page_count;
-	unsigned int i;
-	void *vaddr;
+	phys_addr_t end;
+	size_t total;
 
-	page_start = start - offset_in_page(start);
-	page_count = DIV_ROUND_UP(size + offset_in_page(start), PAGE_SIZE);
-
-	pages = kmalloc_array(page_count, sizeof(struct page *), GFP_KERNEL);
-	if (!pages) {
-		pr_err("%s: Failed to allocate array for %u pages\n",
-		       __func__, page_count);
+	if (!size || check_add_overflow(start, (phys_addr_t)size, &end) ||
+	    check_add_overflow(size, (size_t)offset_in_page(start), &total))
 		return NULL;
-	}
-
-	for (i = 0; i < page_count; i++) {
-		phys_addr_t addr = page_start + i * PAGE_SIZE;
-		pages[i] = pfn_to_page(addr >> PAGE_SHIFT);
-	}
-	vaddr = vmap(pages, page_count, VM_MAP, PAGE_KERNEL);
-	kfree(pages);
-
-	if (!vaddr) {
-		pr_err("%s: Failed to vmap the %d pages\n",
-		       __func__, page_count);
-		return NULL;
-	}
-
-	/*
-	 * Since vmap() uses page granularity, we must add the offset
-	 * into the page here, to get the byte granularity address
-	 * into the mapping to represent the actual "start" location.
-	 */
-	return vaddr + offset_in_page(start);
+	/* The factory reservation is no-map. Do not fabricate struct page pointers
+	 * or assume a linear-map alias: use the RAM mapping API and paired teardown. */
+	return memremap(start, size, MEMREMAP_WB);
 }
+
+/* Header capacity comes from the checked mapped resource, never persistent
+ * metadata. Preserve the prefix that fits and always reserve a terminating NUL. */
+static void mmi_annotate_restore(struct annotate_provider *ctx)
+{
+	size_t length = READ_ONCE(ctx->persist->cur_off);
+
+	if (READ_ONCE(ctx->persist->magic_num) == PERSIST_MAGIC_NUM &&
+	    length <= ctx->capacity) {
+		length = min_t(size_t, length, ctx->ram.size - 1);
+		memcpy(ctx->ram.contents, ctx->persist->contents, length);
+		ctx->ram.cur_off = length;
+		ctx->ram.contents[length] = 0;
+	}
+}
+
+static void mmi_annotate_publish(struct annotate_provider *ctx)
+{
+	mutex_lock(&mem_lock);
+	mutex_lock(&persist_lock);
+	mem_data = ctx ? ctx->ram : (struct mem_data_t){};
+	persist_data = ctx ? ctx->persist : NULL;
+	persist_capacity = ctx ? ctx->capacity : 0;
+	persist_unsupported = ctx ? ctx->fallback : 0;
+	mutex_unlock(&persist_lock);
+	mutex_unlock(&mem_lock);
+}
+
+static void mmi_annotate_remove_files(struct annotate_provider *ctx)
+{
+	proc_remove(ctx->file);
+	proc_remove(ctx->mem_file);
+	ctx->file = ctx->mem_file = NULL;
+}
+
+/* Called with provider_lock. Failed dump-table removal retains all
+ * published addresses. A later probe/exit retries; never free an uncertain
+ * registration's backing memory, even on a terminal module unload failure. */
+static int mmi_annotate_release(struct annotate_provider *ctx)
+{
+#if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
+	int ret;
+
+	if (ctx->md_registered) {
+		ret = msm_minidump_remove_region(&ctx->md);
+		if (ret)
+			return ret;
+		ctx->md_registered = false;
+	}
 #endif
+	if (ctx->mapping)
+		memunmap(ctx->mapping);
+	kfree(ctx->ram.contents);
+	kfree(ctx);
+	return 0;
+}
 
 static int mmi_annotate_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
-	struct platform_data *pdata;
+	struct annotate_provider *ctx;
 	struct resource res;
 	struct device_node *node;
-#if KERNEL_VERSION(5, 10, 0) <= LINUX_VERSION_CODE
-#if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
-	struct md_region md_entry;
-#endif
-#endif
-	int err = 0;
+	size_t region_size;
+	int ret;
 
-	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-	if (!pdata) {
-		err = -ENOMEM;
-		goto err;
+	mutex_lock(&provider_lock);
+	if (active_provider) {
+		ret = -EBUSY;
+		goto unlock;
 	}
-
-	/* Get reserved memory region from Device-tree */
+	if (retired_provider) {
+		ret = mmi_annotate_release(retired_provider);
+		if (ret)
+			goto unlock;
+		retired_provider = NULL;
+	}
+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+	if (!ctx) {
+		ret = -ENOMEM;
+		goto unlock;
+	}
 	node = of_parse_phandle(dev->of_node, "memory-region", 0);
 	if (!node) {
-		dev_err(dev, "No %s specified\n", "memory-region");
-		goto err;
+		ret = -EINVAL;
+		goto release;
 	}
-
-	err = of_address_to_resource(node, 0, &res);
+	ret = of_address_to_resource(node, 0, &res);
 	of_node_put(node);
-	if (err) {
-		dev_err(dev, "No memory address assigned to the region\n");
-		goto err;
+	if (ret)
+		goto release;
+	region_size = resource_size(&res);
+	if (region_size <= sizeof(*ctx->persist) ||
+	    !IS_ALIGNED(res.start, __alignof__(struct persist_data_t))) {
+		ret = -EINVAL;
+		goto release;
 	}
-
-	pdata->mem_size = resource_size(&res);
-	pdata->mem_address = res.start;
-
-	dev_info(dev, "size %zx", pdata->mem_size);
-	dev_info(dev, "addr %lx", (unsigned long)pdata->mem_address);
-
-	if (pdata->mem_size < sizeof(struct persist_data_t)) {
-		dev_err(dev, "Mem size too small %zx/%zd\n",
-				pdata->mem_size, sizeof(struct persist_data_t));
-		err = -ENOMEM;
-		goto err;
+	ctx->capacity = region_size - sizeof(*ctx->persist);
+	ctx->ram.size = DEFAULT_MEM_SIZE;
+	of_property_read_u32(dev->of_node, "mem-size", &ctx->ram.size);
+	if (!ctx->ram.size) {
+		ret = -EINVAL;
+		goto release;
 	}
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,4,0)
-	persist_data = mmi_annotate_ram_vmap(pdata->mem_address, pdata->mem_size);
-#else
-	persist_data = dma_remap(dev, NULL, pdata->mem_address,
-					pdata->mem_size, 0);
-#endif
-	if (!persist_data) {
-		dev_err(dev, "Cannot remap buffer %pa size %zx\n",
-				&pdata->mem_address, pdata->mem_size);
-		err = -ENOMEM;
-		goto err;
+	ctx->fallback = of_property_read_bool(dev->of_node, "persist_unsupported");
+	ctx->persist = mmi_annotate_map_ram(res.start, region_size);
+	if (!ctx->persist) {
+		ret = -ENOMEM;
+		goto release;
 	}
-
-	/* Allocate local memory region for non-persistent data */
-	if(of_property_read_u32(dev->of_node, "mem-size", &mem_data.size)) {
-		mem_data.size = DEFAULT_MEM_SIZE;
-		dev_info(dev, "mem-size defaulting to %d", DEFAULT_MEM_SIZE);
+	ctx->mapping = ctx->persist;
+	ctx->ram.contents = kzalloc(ctx->ram.size, GFP_KERNEL);
+	if (!ctx->ram.contents) {
+		ret = -ENOMEM;
+		goto release;
 	}
-	else
-		dev_info(dev, "mem-size %x", mem_data.size);
-
-	persist_unsupported = of_property_read_bool(dev->of_node, "persist_unsupported");
-	if (persist_unsupported )
-		dev_info(dev, "persist unsupported : 1");
-
-	mem_data.contents = kzalloc(mem_data.size, GFP_KERNEL);
-	if(!mem_data.contents) {
-		dev_err(dev, "Cannot allocate buffer of size %x\n",
-				mem_data.size);
-		err = -ENOMEM;
-		goto err;
+	mmi_annotate_restore(ctx);
+	ctx->file = proc_create("driver/mmi_annotate", 0444, NULL,
+				&mmi_annotate_operations);
+	if (!ctx->file) {
+		ret = -ENOMEM;
+		goto release;
 	}
-
-	/* If persist data is valid, copy it to the local mem area and reset it */
-	persist_data->size = pdata->mem_size - sizeof(struct persist_data_t);
-	if(persist_data->magic_num == PERSIST_MAGIC_NUM &&
-		persist_data->cur_off <= persist_data->size) {
-		memcpy(mem_data.contents,
-				persist_data->contents,
-				persist_data->cur_off);
-		mem_data.cur_off += persist_data->cur_off;
+	ctx->mem_file = proc_create("driver/mmi_annotate_mem", 0640, NULL,
+				    &mmi_annotate_mem_operations);
+	if (!ctx->mem_file) {
+		ret = -ENOMEM;
+		goto release;
 	}
-	else
-		persist_data->magic_num = PERSIST_MAGIC_NUM;
-	persist_data->cur_off = 0;
-
-	/* Create the procfs file at /proc/driver/mmi_annotate */
-	procfs_file = proc_create("driver/mmi_annotate",
-		0444, NULL, &mmi_annotate_operations);
-	/* shell can write mmi_annotate mem area*/
-	mem_procfs_file = proc_create("driver/mmi_annotate_mem",
-		0640, NULL, &mmi_annotate_mem_operations);
-
-#if KERNEL_VERSION(5, 10, 0) <= LINUX_VERSION_CODE
 #if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
-	/*Register annotate to minidump */
-	strscpy(md_entry.name, "ANNOTATE", sizeof(md_entry.name));
-	if (!persist_unsupported) {
-		md_entry.virt_addr = (uintptr_t)phys_to_virt(pdata->mem_address);
-		md_entry.phys_addr = pdata->mem_address;
-		md_entry.size = pdata->mem_size;
+	strscpy(ctx->md.name, "ANNOTATE", sizeof(ctx->md.name));
+	if (!ctx->fallback) {
+		ctx->md.virt_addr = (uintptr_t)ctx->persist;
+		ctx->md.phys_addr = res.start;
+		ctx->md.size = region_size;
 	} else {
-		md_entry.virt_addr = (uintptr_t)mem_data.contents;
-		md_entry.phys_addr = virt_to_phys((void*)mem_data.contents);
-		md_entry.size = mem_data.size;
+		ctx->md.virt_addr = (uintptr_t)ctx->ram.contents;
+		ctx->md.phys_addr = virt_to_phys(ctx->ram.contents);
+		ctx->md.size = ctx->ram.size;
 	}
-	if (msm_minidump_add_region(&md_entry) < 0)
-		pr_err("Failed to add annotate in Minidump\n");
+	ret = msm_minidump_add_region(&ctx->md);
+	if (ret < 0)
+		goto release;
+	ctx->md_registered = true;
 #endif
-#endif
-err:
-	return err;
+	/* Do not erase the old boot log until all acquisitions have succeeded. */
+	ctx->persist->size = ctx->capacity;
+	ctx->persist->magic_num = PERSIST_MAGIC_NUM;
+	ctx->persist->cur_off = 0;
+	ctx->persist->contents[0] = 0;
+	mmi_annotate_publish(ctx);
+	active_provider = ctx;
+	platform_set_drvdata(pdev, ctx);
+	mutex_unlock(&provider_lock);
+	return 0;
+
+release:
+	mmi_annotate_remove_files(ctx);
+	/* No fallible operation follows a successful minidump add above. */
+	mmi_annotate_release(ctx);
+unlock:
+	mutex_unlock(&provider_lock);
+	return ret;
 }
 
 int mmi_annotate(const char *fmt, ...)
@@ -331,6 +366,7 @@ EXPORT_SYMBOL(mmi_annotate);
 int mmi_annotate_persist(const char *fmt, ...)
 {
 	va_list args;
+	size_t capacity;
 	int len = 0;
 	char line_buf[512];
 
@@ -340,19 +376,24 @@ int mmi_annotate_persist(const char *fmt, ...)
 	len = vscnprintf(line_buf, sizeof(line_buf), fmt, args);
 	va_end(args);
 
-	if (!persist_unsupported) {
-		mutex_lock(&persist_lock);
-		if (persist_data && persist_data->cur_off < persist_data->size &&
-		    len < persist_data->size - persist_data->cur_off) {
-			memcpy(persist_data->contents + persist_data->cur_off,
-				line_buf, len);
-			persist_data->cur_off += len;
-			persist_data->contents[persist_data->cur_off] = 0;
+	mutex_lock(&mem_lock);
+	mutex_lock(&persist_lock);
+	capacity = persist_data ? min(persist_capacity, persist_data->size) : 0;
+	if (persist_unsupported) {
+		if (mem_data.contents && mem_data.cur_off < mem_data.size &&
+		    len < mem_data.size - mem_data.cur_off) {
+			memcpy(mem_data.contents + mem_data.cur_off, line_buf, len);
+			mem_data.cur_off += len;
+			mem_data.contents[mem_data.cur_off] = 0;
 		}
-		mutex_unlock(&persist_lock);
-	} else {
-		mmi_annotate("%s", line_buf);
+	} else if (persist_data && persist_data->cur_off < capacity &&
+		   len < capacity - persist_data->cur_off) {
+		memcpy(persist_data->contents + persist_data->cur_off, line_buf, len);
+		persist_data->cur_off += len;
+		persist_data->contents[persist_data->cur_off] = 0;
 	}
+	mutex_unlock(&persist_lock);
+	mutex_unlock(&mem_lock);
 
 	return 0;
 }
@@ -360,13 +401,25 @@ EXPORT_SYMBOL(mmi_annotate_persist);
 
 static void mmi_annotate_remove(struct platform_device *pdev)
 {
-	if (procfs_file)
-		remove_proc_entry("driver/mmi_annotate", NULL);
-	if (mem_procfs_file)
-		remove_proc_entry("driver/mmi_annotate_mem", NULL);
-	if(mem_data.contents)
-		kfree(mem_data.contents);
-	return;
+	struct annotate_provider *ctx;
+	int ret;
+
+	mutex_lock(&provider_lock);
+	ctx = platform_get_drvdata(pdev);
+	if (!ctx) {
+		mutex_unlock(&provider_lock);
+		return;
+	}
+	mmi_annotate_remove_files(ctx);
+	mmi_annotate_publish(NULL);
+	active_provider = NULL;
+	platform_set_drvdata(pdev, NULL);
+	ret = mmi_annotate_release(ctx);
+	if (ret) {
+		retired_provider = ctx;
+		dev_err(&pdev->dev, "minidump removal failed (%d); retaining backing memory\n", ret);
+	}
+	mutex_unlock(&provider_lock);
 }
 
 static const struct of_device_id mmi_annotate_match[] = {
@@ -391,6 +444,14 @@ static int mmi_annotate_init(void)
 static void mmi_annotate_exit(void)
 {
 	platform_driver_unregister(&mmi_annotate_driver);
+	mutex_lock(&provider_lock);
+	if (retired_provider) {
+		if (!mmi_annotate_release(retired_provider))
+			retired_provider = NULL;
+		else
+			pr_err("ANNOTATE: retaining minidump backing until reboot\n");
+	}
+	mutex_unlock(&provider_lock);
 }
 
 module_init(mmi_annotate_init);

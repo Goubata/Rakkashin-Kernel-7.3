@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-moto-touch-deps-stage53",
+  "stage": "android73-annotate-stage56",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 116,
-  "same_name_candidate_count": 102,
-  "archived_names_without_same_name_candidate_count": 442,
-  "loaded_names_without_same_name_candidate_count": 427,
+  "staged_count": 117,
+  "same_name_candidate_count": 103,
+  "archived_names_without_same_name_candidate_count": 441,
+  "loaded_names_without_same_name_candidate_count": 426,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -387,6 +387,10 @@
     {
       "name": "minidump",
       "file": "modules/qcom-minidump/minidump.ko"
+    },
+    {
+      "name": "mmi_annotate",
+      "file": "modules/moto-info/mmi_annotate.ko"
     },
     {
       "name": "qcom_glink_smem",
@@ -856,6 +860,10 @@
       "file": "modules/qcom-minidump/minidump.ko"
     },
     {
+      "name": "mmi_annotate",
+      "file": "modules/moto-info/mmi_annotate.ko"
+    },
+    {
       "name": "qcom_glink_smem",
       "file": "modules/qcom-glink-transport/qcom_glink_smem.ko"
     },
@@ -1251,6 +1259,21 @@
       ],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "mmi_annotate": {
+      "file": "modules/moto-info/mmi_annotate.ko",
+      "sha256": "5790abb7c94b255aca9043a14f144cf4c144c3fa7611aa810f4c5517ec51f29a",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "minidump"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
         "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
@@ -3983,13 +4006,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "mmi_annotate",
-      "placements": [
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "mmi_glink_charger",
       "placements": [
         "vendor_dlkm"
@@ -6122,7 +6138,6 @@
     "mhi_dev_uci",
     "microdump_collector",
     "mii",
-    "mmi_annotate",
     "mmi_glink_charger",
     "mmi_info",
     "mmi_sys_temp",

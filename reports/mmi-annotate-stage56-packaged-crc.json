@@ -1,0 +1,591 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/arm-smmu-vendor/arm_smmu.ko",
+      "imports_checked": 172,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/avr-oplus-sync/avr_oplus_sync.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/firmware/qcom-scm.ko",
+      "imports_checked": 119,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/firmware/qcom_pas.ko",
+      "imports_checked": 3,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/governor-adreno-ro/governor_msm_adreno_ro.ko",
+      "imports_checked": 4,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/governor-adreno-tz/governor_msm_adreno_tz.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/governor-gpubw/governor_gpubw_mon.ko",
+      "imports_checked": 15,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah/gh_arm_drv.ko",
+      "imports_checked": 10,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah/gh_dbl.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah/gh_msgq.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah.ko",
+      "imports_checked": 8,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_hypercall.ko",
+      "imports_checked": 4,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_ioeventfd.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_irqfd.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_platform_hooks.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_qtvm.ko",
+      "imports_checked": 29,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_rsc_mgr.ko",
+      "imports_checked": 152,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-core/gunyah_vcpu.ko",
+      "imports_checked": 51,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/gunyah-rm/gh_rm_drv.ko",
+      "imports_checked": 98,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/iommu-logger/iommu_logger.ko",
+      "imports_checked": 15,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/kgsl/msm_kgsl.ko",
+      "imports_checked": 550,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/moto-info/mmi_annotate.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/moto-touch-deps/mmi_relay.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/moto-touch-deps/sensors_class.ko",
+      "imports_checked": 16,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/msm-sysstats/msm_sysstats.ko",
+      "imports_checked": 68,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native/coresight.ko",
+      "imports_checked": 135,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native/nvmem_qfprom.ko",
+      "imports_checked": 44,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native-ipc/pdr_interface.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native-ipc/qcom_pdr_msg.ko",
+      "imports_checked": 2,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native-ipc/qmi_helpers.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native-ipc/qrtr-smd.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/native-ipc/qrtr.ko",
+      "imports_checked": 138,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/ntsync/ntsync.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/pinctrl-alor-vendor-core/pinctrl-alor.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/pinctrl-alor-vendor-core/pinctrl-msm.ko",
+      "imports_checked": 103,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/pmic-pinctrl/pinctrl-spmi-gpio.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/pmic-pinctrl/pinctrl-spmi-mpp.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko",
+      "imports_checked": 64,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-adc-thermal/qcom-vadc-common.ko",
+      "imports_checked": 1,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/cambistmclkcc-canoe.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/camcc-alor.ko",
+      "imports_checked": 29,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/camcc-canoe.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/camcc-chora.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/clk-dummy.ko",
+      "imports_checked": 16,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/clk-rpmh.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/debugcc-alor.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/debugcc-canoe.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/debugcc-chora.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/dispcc-canoe.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/dispcc-chora.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/evacc-canoe.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/gcc-alor.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/gcc-canoe.ko",
+      "imports_checked": 19,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/gcc-chora.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/gpucc-canoe.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/gpucc-chora.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/tcsrcc-canoe.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/tcsrcc-chora.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/videocc-canoe.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-controllers/videocc-chora.ko",
+      "imports_checked": 14,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-core/clk-qcom.ko",
+      "imports_checked": 170,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-core/crm-v2.ko",
+      "imports_checked": 72,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-core/gdsc-regulator.ko",
+      "imports_checked": 74,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-clock-core/proxy-consumer.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-dcvs/dcvs_fp.ko",
+      "imports_checked": 14,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-dcvs/qcom-dcvs.ko",
+      "imports_checked": 76,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-glink-transport/qcom_glink.ko",
+      "imports_checked": 91,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-glink-transport/qcom_glink_smem.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-glink-transport/rpmsg_ctrl.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-hwspinlock/qcom_hwspinlock.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-ice/qcom_ice.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-interconnect/icc-bcm-voter.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-interconnect/icc-debug.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-interconnect/icc-rpmh.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-interconnect/qnoc-alor.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-interconnect/qnoc-qos.ko",
+      "imports_checked": 2,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-iommu-util/qcom_iommu_util.ko",
+      "imports_checked": 124,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-ipc-logging/qcom_ipc_logging.ko",
+      "imports_checked": 55,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-ipcc/qcom-ipcc.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-irq/cpu_phys_log_map.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-irq/gic_intr_routing.ko",
+      "imports_checked": 78,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-irq/qcom-pdc.ko",
+      "imports_checked": 49,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-llcc/llcc-qcom.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-minidump/minidump.ko",
+      "imports_checked": 130,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-panel-event/panel_event_notifier.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-pmic-glink/qti_pmic_glink.ko",
+      "imports_checked": 79,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-power-key/pm8941-pwrkey.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-power-key/qcom-pon.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-power-key/reboot-mode.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-regulators/debug-regulator.ko",
+      "imports_checked": 65,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-regulators/rpmh-regulator.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-regulators/stub-regulator.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-remoteproc-services/qcom_aoss.ko",
+      "imports_checked": 72,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-remoteproc-services/qcom_q6v5.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-remoteproc-services/qcom_sysmon.ko",
+      "imports_checked": 51,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-rpmh/cmd-db.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-rpmh/qcom_rpmh.ko",
+      "imports_checked": 104,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-rproc-common/qcom_common.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-rtc/rtc-pm8xxx.ko",
+      "imports_checked": 36,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-sdam/nvmem_qcom-spmi-sdam.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-smem/smem.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-smp2p/smp2p.ko",
+      "imports_checked": 79,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-socinfo/socinfo.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-spmi/qcom-spmi-pmic.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-spmi/qti-regmap-debugfs.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-spmi/spmi-pmic-arb-debug.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qcom-spmi/spmi-pmic-arb.ko",
+      "imports_checked": 65,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qti-fence/ipclite.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qti-fence/msm_hw_fence.ko",
+      "imports_checked": 147,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/qti-fence/synx-driver.ko",
+      "imports_checked": 123,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/rakkashin/adios/adios.ko",
+      "imports_checked": 72,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/secure-buffer/secure_buffer.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/ufs-host/ufs-qcom.ko",
+      "imports_checked": 237,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/ufs-host/ufshcd-crypto-qti.ko",
+      "imports_checked": 19,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/android73-annotate-stage56/modules/ufs-phy-canoe/phy-qcom-ufs.ko",
+      "imports_checked": 45,
+      "mismatches": {}
+    }
+  ]
+}

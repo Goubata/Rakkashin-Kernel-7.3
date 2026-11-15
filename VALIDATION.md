@@ -871,3 +871,36 @@ gaps and whole-board/ROM/boot gates open. Evidence:
 reports/moto-touch-of-stage55-validation.json. Reproduce using
 `python scripts/build_goodix_touch.py --relay-of-tests` and
 `python scripts/run_qemu.py --test moto-touch-of --cpus 4 --log reports/relay-of.log`.
+
+
+## Stage56: annotate provider lifetime and no-map RAM
+
+A fully owned context is published only after all resources succeed. Old-boot
+restore is clamped to trusted mapped capacity/local size with NUL termination;
+runtime writes cannot expand past trusted capacity via a corrupted header.
+Source header fields and selected stock/candidate 4KiB no-map reservation plus
+8KiB local buffer agree. The generic truncation test uses a smaller local buffer
+than stock; stock geometry alone did not demonstrate that restore overran it.
+Use paired memremap/memunmap instead of invented struct-page/linear-map aliases.
+
+Removal drains proc callbacks and API locks, unpublishes, unregisters minidump
+and only then frees backing. Unconfirmed removal retains backing, retried at
+next probe/exit. Terminal module exit failure intentionally keeps backing until
+reboot; bounded retention is the safety policy, not leak-free terminal teardown.
+
+21 SMP4 cases pass: 11 exact source probe/remove/API cases over real OF/proc/
+reserved QEMU RAM with recorded minidump faults, eight source format regressions
+and two tests around actual production module/native pending minidump APIs.
+The latter uses firmware DT auto-binding, real proc read/write, a duplicate-name
+check while registered and successful name reuse after actual module unload.
+No minidump firmware backend or physical AVR memory is accessed. Initial helper
+symbol_get was rejected for a non-GPLONLY export; test corrected via driver data/
+proc checks, production export semantics unchanged.
+
+Only annotate is promoted: partial Stage56 has 117 modules/5,695 matching imports
+and complete acyclic hard/soft deps. Three info/touch drafts remain excluded.
+Physical/cache/initialized-firmware acceptance, low-memory/proc failure injection,
+info init/SMEM, Goodix/remaining drivers and complete DT/boot/ROM gates remain.
+Evidence: reports/mmi-annotate-stage56-validation.json. Reproduce with
+`python scripts/build_goodix_touch.py --annotate-tests --annotate-driver-tests --annotate-native-tests`
+and run QEMU modes mmi-annotate, mmi-annotate-driver and mmi-annotate-native.

@@ -25,9 +25,9 @@ static int setup(struct kunit *test)
 	memset(f->persist,0xa5,sizeof(*persist_data)+1056);
 	mem_data=(struct mem_data_t){.size=1024,.contents=f->ram+16};
 	persist_data=(void *)(f->persist+16);persist_data->size=1024;persist_data->cur_off=0;memset(persist_data->contents,0,1024);
-	persist_unsupported=0;test->priv=f;return 0;
+	persist_capacity=1024;persist_unsupported=0;test->priv=f;return 0;
 }
-static void cleanup(struct kunit *test){mem_data=(struct mem_data_t){};persist_data=NULL;persist_unsupported=0;}
+static void cleanup(struct kunit *test){mem_data=(struct mem_data_t){};persist_data=NULL;persist_capacity=0;persist_unsupported=0;}
 static void guards(struct kunit *test)
 {
 	struct fixture *f=test->priv;int i;

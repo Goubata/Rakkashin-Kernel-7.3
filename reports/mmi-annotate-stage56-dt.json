@@ -1,0 +1,33 @@
+{
+  "scope": "selected DT inputs/header declarations only; not physical annotation/minidump backend or whole-board acceptance",
+  "passed": true,
+  "factory_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "persistent_header_declarations_unchanged": "unsigned int magic_num; size_t size; size_t cur_off; unsigned char contents[];",
+  "inputs": {
+    "saved": {
+      "file": "artifacts/dt-input-audit/stock-merged.dtb",
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "node": "/soc/mmi_annotate",
+      "reservation": "/reserved-memory/mmi_annotate_mem_region",
+      "base": 2919231488,
+      "size": 4096,
+      "mem_size": 8192,
+      "no_map": true,
+      "fallback": false
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "node": "/soc/mmi_annotate",
+      "reservation": "/reserved-memory/mmi_annotate_mem_region",
+      "base": 2919231488,
+      "size": 4096,
+      "mem_size": 8192,
+      "no_map": true,
+      "fallback": false
+    }
+  },
+  "native_qemu_geometry": "same 4096-byte no-map reservation and 8192-byte local buffer; guest physical address differs",
+  "note": "Stock local buffer exceeds reservation size, so generic small-buffer truncation case is a robustness test, not proof that stock boot logs overran it.",
+  "physical_verified": false
+}

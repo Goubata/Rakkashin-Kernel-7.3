@@ -1,0 +1,43 @@
+/dts-v1/;
+/plugin/;
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <2>;
+				#size-cells = <2>;
+				ranges;
+				annotate_ram: annotate@60000000 {
+					reg = <0 0x60000000 0 0x10000>;
+					no-map;
+				};
+				annotate_small: annotate@60010000 {
+					reg = <0 0x60010000 0 0x10>;
+					no-map;
+				};
+			};
+			avr-annotate-test {
+				compatible = "avr,annotate-test";
+				memory-region = <&annotate_ram>;
+				mem-size = <64>;
+			};
+			avr-annotate-zero {
+				compatible = "avr,annotate-test";
+				memory-region = <&annotate_ram>;
+				mem-size = <0>;
+			};
+			avr-annotate-missing { compatible = "avr,annotate-test"; };
+			avr-annotate-small {
+				compatible = "avr,annotate-test";
+				memory-region = <&annotate_small>;
+			};
+			avr-annotate-fallback {
+				compatible = "avr,annotate-test";
+				memory-region = <&annotate_ram>;
+				mem-size = <64>;
+				persist_unsupported;
+			};
+		};
+	};
+};

@@ -1,0 +1,89 @@
+{
+  "stage": 56,
+  "scope": "selected annotate lifecycle, no-map RAM mapping and API/proc behavior; not physical firmware/cache/whole-board acceptance",
+  "selected_checks_passed": true,
+  "checks": {
+    "driver": {
+      "log": "reports/mmi-annotate-driver-stage56-final-qemu.log",
+      "test": "mmi-annotate-driver",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        11,
+        0,
+        0,
+        11
+      ]
+    },
+    "format_regression": {
+      "log": "reports/mmi-annotate-stage56-regression-qemu.log",
+      "test": "mmi-annotate",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ]
+    },
+    "production_pending": {
+      "log": "reports/mmi-annotate-native-stage56-final-qemu.log",
+      "test": "mmi-annotate-native",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        2,
+        0,
+        0,
+        2
+      ]
+    }
+  },
+  "total_cases": 21,
+  "driver_scope": "11 actual source probe/remove/append cases, real OF/proc/memremap over reserved QEMU RAM; minidump primitives recorded for faults",
+  "native_scope": "2 loads of a helper around unmodified-for-test production annotate module; real OF bind, proc read/write and real minidump pending registration/removal; firmware backend explicitly disabled",
+  "format_scope": "8 source append RAM regressions",
+  "fixes": [
+    "Owned unpublished context until acquisitions finish; singleton guard and deterministic error unwind",
+    "Bound old-boot restore by real resource and local capacity; NUL termination and trusted runtime capacity",
+    "Use memremap/memunmap for actual no-map reservation; no fabricated struct page or linear alias",
+    "Drain proc callbacks and API locks before unpublish/free; remove minidump before backing release",
+    "Failed minidump unregister retains backing and blocks new acquisition until successful retry"
+  ],
+  "error_policy": "If dump removal never succeeds, terminal module unload intentionally leaves backing allocated/mapped until reboot; it never frees a still-referenced dump address. No claim of leak-free terminal failure.",
+  "native_test_correction": "Initial helper used symbol_get on a non-GPLONLY export, rejected by current core; corrected test uses OF driver data/proc and native pending API checks, without changing production exports.",
+  "artifact": "artifacts/android73-annotate-stage56",
+  "packaged_modules": 117,
+  "matching_imports": 5695,
+  "remaining_unaccepted_drafts": 3,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Actual AVR reserved-memory cache/boot and initialized minidump firmware backend acceptance",
+    "Low-memory/proc creation fault injection; native backend permanent-failure recovery acceptance",
+    "Info init currently ignores sub-init failures; complete unwind/SMEM/bootarg/ROM tests",
+    "Goodix open/ioctl/compat/remove, partial probe unwind, frame bounds, SPI/IRQ/display/power/gesture/stylus and daemon integration",
+    "Other mandatory drivers, whole-board SID4 DT conflict, full boot/DLKM/SELinux and all-functions acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/moto-info/mmi_annotate/mmi_annotate.c": "31d3f2066c38ecd201b1e9b1267c9e3f4945c675544e06c749b25bf926688349",
+    "reports/moto-info-source-lock.json": "0d9aeb07d1656b62e01b6bee266ad4d435cc150e5cde2ef9114827d6f3d52384",
+    "patches/moto-info-7.3.patch": "e0104489d56528fccf65529042a03bc4d3e55d897a6fb1080425f6bc2951cd75",
+    "reports/mmi-annotate-stage56-dt.json": "2b66154690251755091e912d8c08cada4d6570863bed316f82273e83e3fbbd35",
+    "reports/mmi-annotate-stage56-crc.json": "31ccdb0deebe4346336ab815635e73b42b1addffd76c5d3f0e74275320213ab7",
+    "reports/mmi-annotate-stage56-packaged-crc.json": "757a5ef297bdb1cfcf96098daad707d083b89bb482b037ff42f4c69e1bdafb88",
+    "reports/module-deployment-stage56-summary.json": "377ae976702df08028fa440e7de9c87a45c0e934851ad6871f9ec921df7bae64",
+    "reports/moto-touch-stage56-drafts.json": "c1c8352365b5c62962d71fb8b151e709d37187a4e7c6e93872424768b759523f",
+    "reports/mmi-annotate-stage56-final-build.log": "603ae34a92502b82f062dd67790f2e5d1c04e56ac988ea3151d73b3d502e53ff",
+    "reports/mmi-annotate-native-stage56-final-build.log": "7c21344ded49a6642a593e0abdb82b45e7116f82ca35d4cec2b82f7000f7c7e9",
+    "reports/mmi-annotate-native-stage56-qemu.log": "583163935f097c8acdc1bb43921550fd835855288718153493b285fd4adcff58",
+    "reports/mmi-annotate-driver-stage56-final-qemu.log": "b64883e1ce8df252a673bdff5c5aa22d03f1fec702cdfb86864ec5d72518bf65",
+    "reports/mmi-annotate-driver-stage56-final-qemu.json": "a1698ada7f143702abcc35f370572b6cdc3f0ff40fc6ad09a2258ef5421fdddb",
+    "reports/mmi-annotate-stage56-regression-qemu.log": "537c2ca690cd0cff64bc5444eb36172e4d165e5525d26e1d81a5a1f45ed55593",
+    "reports/mmi-annotate-stage56-regression-qemu.json": "002203163f40ccb4b70d03b6b194fd6c54634f09399334a3be7e589a0ed29315",
+    "reports/mmi-annotate-native-stage56-final-qemu.log": "7042c28ed9450477c188baef06fa992c7ad6bdb191ea6dc2921acd74b6dbf7c7",
+    "reports/mmi-annotate-native-stage56-final-qemu.json": "d94f8776a32ab7ecf6f40528e34fceb813d42ccabc9b2ad3b0ad16bc57981179"
+  }
+}

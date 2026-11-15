@@ -1,0 +1,23 @@
+/dts-v1/;
+/plugin/;
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <2>;
+				#size-cells = <2>;
+				ranges;
+				native_log: annotate@60000000 {
+					reg = <0 0x60000000 0 0x1000>;
+					no-map;
+				};
+			};
+			avr-native-annotate {
+				compatible = "mmi,annotate";
+				memory-region = <&native_log>;
+				mem-size = <0x2000>;
+			};
+		};
+	};
+};

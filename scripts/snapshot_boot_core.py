@@ -26,12 +26,15 @@ parser.add_argument('--pmic-pinctrl',action='store_true')
 parser.add_argument('--adc-thermal',action='store_true')
 parser.add_argument('--pmic-ipc',action='store_true')
 parser.add_argument('--pmic-glink',action='store_true')
+parser.add_argument('--moto-annotate',action='store_true')
 parser.add_argument('--moto-touch-deps',action='store_true')
 parser.add_argument('--panel-event',action='store_true')
 parser.add_argument('--power-key',action='store_true')
 parser.add_argument('--sdam',action='store_true')
 parser.add_argument('--rtc',action='store_true')
 args=parser.parse_args()
+if args.moto_annotate:
+    subprocess.run(['python',str(ROOT/'scripts/audit_moto_info_sources.py')],check=True)
 if args.moto_touch_deps:
     subprocess.run(['python',str(ROOT/'scripts/audit_moto_touch_deps_sources.py')],check=True)
     subprocess.run(['python',str(ROOT/'scripts/build_moto_relay_dt.py')],check=True)
@@ -108,7 +111,10 @@ if args.storage_phy:
 if args.rakkashin:
     ports.append("rakkashin/adios")
     modules.append((out/"drivers/misc/ntsync.ko","modules/ntsync/ntsync.ko"))
-for name in ports:
+if args.moto_annotate:
+    modules.append((ROOT/'ports/moto-info/mmi_annotate.ko','modules/moto-info/mmi_annotate.ko'))
+    ports += ['qcom-hwspinlock','qcom-smem','qcom-minidump']
+for name in dict.fromkeys(ports):
     modules += [(p,'modules/'+name+'/'+p.name) for p in (ROOT/'ports'/name).glob('*.ko')]
 if args.pmic_ipc:
     modules += [(p,'modules/native-ipc/'+p.name) for p in pmic_ipc_modules()]

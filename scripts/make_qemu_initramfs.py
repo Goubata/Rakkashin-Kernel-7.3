@@ -24,6 +24,8 @@ def entry(name,mode,data=b'',rmajor=0,rminor=0,ino=1):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     group=parser.add_mutually_exclusive_group()
+    group.add_argument("--mmi-annotate-native-tests", action="store_true")
+    group.add_argument("--mmi-annotate-driver-tests", action="store_true")
     group.add_argument("--moto-touch-of-tests", action="store_true")
     group.add_argument("--mmi-annotate-tests", action="store_true")
     group.add_argument("--moto-touch-deps-tests", action="store_true")
@@ -250,6 +252,34 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         for name in ['avr_moto_touch_of_test','mmi_relay']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_MOTO_TOUCH_OF_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         commands.append('echo AVR_MOTO_TOUCH_OF_TESTS_PASS scope=real-of-platform-population-probe-and-relay-api-only')
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.mmi_annotate_native_tests:
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+[ROOT/'ports'/name for name in ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-minidump/minidump.ko','moto-info/mmi_annotate.ko']]+[ROOT/'tests/mmi-annotate-native/avr-mmi-annotate-native-test.ko']
+        commands=[]
+        for source in sources:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_MMI_ANNOTATE_NATIVE_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands += [
+            'echo proc-interface > /proc/driver/mmi_annotate_mem || { echo AVR_MMI_ANNOTATE_NATIVE_WRITE_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox grep -q proc-interface /proc/driver/mmi_annotate || { echo AVR_MMI_ANNOTATE_NATIVE_READ_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod avr_mmi_annotate_native_test || { echo AVR_MMI_ANNOTATE_NATIVE_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod mmi_annotate || { echo AVR_MMI_ANNOTATE_NATIVE_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            '[ ! -e /proc/driver/mmi_annotate ] || { echo AVR_MMI_ANNOTATE_NATIVE_PROC_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox insmod /modules/avr-mmi-annotate-native-test.ko expect_present=0 || { echo AVR_MMI_ANNOTATE_NATIVE_LOAD_FAIL; /bin/busybox poweroff -f; }',
+            '/bin/busybox rmmod avr_mmi_annotate_native_test || { echo AVR_MMI_ANNOTATE_NATIVE_UNLOAD_FAIL; /bin/busybox poweroff -f; }',
+            'echo AVR_MMI_ANNOTATE_NATIVE_TESTS_PASS scope=production-of-proc-real-minidump-pending-only']
+        init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
+    if args.mmi_annotate_driver_tests:
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests/mmi-annotate-driver/avr-mmi-annotate-driver-test.ko']
+        commands=[]
+        for source in sources:
+            add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
+            params=' enable=1' if source.name=='kunit.ko' else ''
+            commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_MMI_ANNOTATE_DRIVER_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        for name in ['avr_mmi_annotate_driver_test']:
+            commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_MMI_ANNOTATE_DRIVER_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('echo AVR_MMI_ANNOTATE_DRIVER_TESTS_PASS scope=real-probe-proc-ram-map-recorded-minidump-only')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.mmi_annotate_tests:
         sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko',ROOT/'tests/mmi-annotate/avr-mmi-annotate-test.ko']
@@ -746,7 +776,7 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     add('init',stat.S_IFREG|0o755,init)
     add('TRAILER!!!',0)
-    target=ROOT/'tests/qemu'/('moto-touch-of-tests.cpio.gz' if args.moto_touch_of_tests else 'mmi-annotate-tests.cpio.gz' if args.mmi_annotate_tests else 'moto-touch-deps-tests.cpio.gz' if args.moto_touch_deps_tests else 'panel-event-tests.cpio.gz' if args.panel_event_tests else 'power-key-tests.cpio.gz' if args.power_key_tests else 'sdam-tests.cpio.gz' if args.sdam_tests else 'rtc-tests.cpio.gz' if args.rtc_tests else 'pas-driver-critical-'+args.pas_critical+'-tests.cpio.gz' if args.pas_critical else 'pas-driver-tests.cpio.gz' if args.pas_driver_tests else 'pas-images-tests.cpio.gz' if args.pas_images_tests else 'pas-proxy-tests.cpio.gz' if args.pas_proxy_tests else 'mdt-loader-tests.cpio.gz' if args.mdt_loader_tests else 'pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
+    target=ROOT/'tests/qemu'/('mmi-annotate-native-tests.cpio.gz' if args.mmi_annotate_native_tests else 'mmi-annotate-driver-tests.cpio.gz' if args.mmi_annotate_driver_tests else 'moto-touch-of-tests.cpio.gz' if args.moto_touch_of_tests else 'mmi-annotate-tests.cpio.gz' if args.mmi_annotate_tests else 'moto-touch-deps-tests.cpio.gz' if args.moto_touch_deps_tests else 'panel-event-tests.cpio.gz' if args.panel_event_tests else 'power-key-tests.cpio.gz' if args.power_key_tests else 'sdam-tests.cpio.gz' if args.sdam_tests else 'rtc-tests.cpio.gz' if args.rtc_tests else 'pas-driver-critical-'+args.pas_critical+'-tests.cpio.gz' if args.pas_critical else 'pas-driver-tests.cpio.gz' if args.pas_driver_tests else 'pas-images-tests.cpio.gz' if args.pas_images_tests else 'pas-proxy-tests.cpio.gz' if args.pas_proxy_tests else 'mdt-loader-tests.cpio.gz' if args.mdt_loader_tests else 'pas-rails-tests.cpio.gz' if args.pas_rails_tests else 'remoteproc-services-tests.cpio.gz' if args.remoteproc_services_tests else 'smem-state-tests.cpio.gz' if args.smem_state_tests else 'smp2p-tests.cpio.gz' if args.smp2p_tests else 'ipcc-tests.cpio.gz' if args.ipcc_tests else 'glink-transport-tests.cpio.gz' if args.glink_transport_tests else 'rproc-gate-tests.cpio.gz' if args.rproc_gate_tests else 'pmic-glink-tests.cpio.gz' if args.pmic_glink_tests else 'pmic-ipc-tests.cpio.gz' if args.pmic_ipc_tests else 'adc-thermal-tests.cpio.gz' if args.adc_thermal_tests else 'pmic-gpio-tests.cpio.gz' if args.pmic_gpio_tests else 'spmi-tests.cpio.gz' if args.spmi_tests else 'interconnect-tests.cpio.gz' if args.interconnect_tests else 'regulators-tests.cpio.gz' if args.regulators_tests else 'storage-host-tests.cpio.gz' if args.storage_host_tests else 'diagnostics-tests.cpio.gz' if args.diagnostics_tests else 'debug-symbol-tests.cpio.gz' if args.debug_symbol_tests else 'ufs-tests.cpio.gz' if args.ufs_tests else 'ice-tests.cpio.gz' if args.ice_tests else 'storage-phy-tests.cpio.gz' if args.storage_phy_tests else 'rm-lifetime-tests.cpio.gz' if args.rm_lifetime_tests else 'gpu-policy-tests.cpio.gz' if args.gpu_policy_tests else 'scm-tests.cpio.gz' if args.scm_tests else 'platform-tests.cpio.gz' if args.platform_tests else 'adios-tests.cpio.gz' if args.adios_tests else 'power-tests.cpio.gz' if args.power_tests else 'rakkashin-tests.cpio.gz' if args.rakkashin_tests else 'ntsync-tests.cpio.gz' if args.ntsync_tests else 'fence-tests.cpio.gz' if args.fence_tests else 'sysstats-tests.cpio.gz' if args.sysstats_tests else 'secure-tests.cpio.gz' if args.secure_tests else 'clock-tests.cpio.gz' if args.clock_tests else 'oplus-tests.cpio.gz' if args.oplus_tests else 'modules-tests.cpio.gz' if args.modules_tests else 'iommu-tests.cpio.gz' if args.iommu_tests else 'boot-smoke.cpio.gz')
     with target.open('wb') as f:
         with gzip.GzipFile(fileobj=f,mode='wb',mtime=0) as z:z.write(data)
     print(target,len(data),'uncompressed bytes')

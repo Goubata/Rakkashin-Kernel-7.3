@@ -1,0 +1,26 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-info/mmi_annotate.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/mmi-annotate/avr-mmi-annotate-test.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/mmi-annotate-driver/avr-mmi-annotate-driver-test.ko",
+      "imports_checked": 61,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/mmi-annotate-native/avr-mmi-annotate-native-test.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    }
+  ]
+}

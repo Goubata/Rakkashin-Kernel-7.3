@@ -5,7 +5,7 @@
       "file": "ports/moto-info/mmi_annotate/mmi_annotate.c",
       "source": "drivers/mmi_annotate/mmi_annotate.c",
       "original_sha256": "3e3bd583625998e310f810d0a4f831565affde79348fc879fd2096b52292f7db",
-      "sha256": "b31c0c733ffe87defcd51dcebeffd854876125d67a77c1f33deb69d9df07339d"
+      "sha256": "31d3f2066c38ecd201b1e9b1267c9e3f4945c675544e06c749b25bf926688349"
     },
     {
       "file": "ports/moto-info/mmi_info/mmi_boot_info.c",
@@ -74,18 +74,25 @@
       "sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312"
     }
   ],
-  "patch_sha256": "f3405aeeca8df400f2875dbb9a12752efb02c121885a7a7653591e1051e9a51c",
+  "patch_sha256": "e0104489d56528fccf65529042a03bc4d3e55d897a6fb1080425f6bc2951cd75",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
-  "experimental_packaged": false,
+  "experimental_packaged": true,
+  "module_packaging": {
+    "mmi_annotate": "partial snapshot; physical backend acceptance pending",
+    "mmi_info": "excluded draft"
+  },
   "hardware_runtime_accepted": false,
   "reviewed_changes": [
     "Add exact missing factory headers and required exported prototype; make private build-signature parser static",
     "Use real SMEM API and validate allocation/get errors and exact region size before copying",
     "Bound annotation formatting to actual emitted bytes, subtraction bounds and explicit NUL termination",
-    "Treat boot signature strings as data rather than printf formats; draft remains outside main bundle"
+    "Treat boot signature strings as data rather than printf formats; mmi_info remains outside main bundle",
+    "Initialize owned annotate state before publication; bound restore using resource capacity; use memremap/memunmap for no-map RAM",
+    "Serialize API/remove; unwind proc/map/buffer acquisitions; remove minidump registration before backing release",
+    "Retain unconfirmed minidump backing and retry at next probe/exit; terminal failure intentionally retains backing until reboot"
   ],
   "pending": [
-    "Annotation probe import bounds, publication, unwind, remove synchronization and minidump/mapping lifetime remain unsafe/unaccepted",
+    "Annotation physical minidump backend/cache/boot acceptance and allocation/proc failure injection remain pending",
     "Info init failure unwind, SMEM failure tests and complete bootarg/ROM behavior",
     "Actual firmware/userspace/physical device acceptance"
   ]

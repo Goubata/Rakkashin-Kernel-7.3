@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む116モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む117モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -28,7 +28,7 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 - ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
 - 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
 
-最新成果物は artifacts/android73-remoteproc-services-stage37/（108モジュール、5,480インポートCRC一致）。Stage35は artifacts/android73-state-ipc-stage35/（105モジュール、5,330インポートCRC一致）。Stage32は artifacts/android73-glink-transport-stage32/（103モジュール、5,216インポートCRC一致）。Stage30は artifacts/android73-rproc-gate-stage30/（100モジュール、5,054インポートCRC一致）。Stage29は artifacts/android73-pmic-glink-stage29/（100モジュール、5,054インポートCRC一致）。Stage25は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+最新の部分成果物は artifacts/android73-annotate-stage56/（117モジュール、5,695インポートCRC一致）。Stage37は artifacts/android73-remoteproc-services-stage37/（108モジュール、5,480インポートCRC一致）。Stage35は artifacts/android73-state-ipc-stage35/（105モジュール、5,330インポートCRC一致）。Stage32は artifacts/android73-glink-transport-stage32/（103モジュール、5,216インポートCRC一致）。Stage30は artifacts/android73-rproc-gate-stage30/（100モジュール、5,054インポートCRC一致）。Stage29は artifacts/android73-pmic-glink-stage29/（100モジュール、5,054インポートCRC一致）。Stage25は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
 
 ## ネイティブビルド
 
@@ -650,3 +650,20 @@ QEMU firmware DTのsimple-bus配下へcandidateと同じ2 propertyのrelay node�
 通す試験が成功。試験コードからplatform deviceを直接生成していない。
 `reports/moto-touch-of-stage55-validation.json`。これは仮想DTによるframework確認で、
 AVR実機DT全体やROM/touchの動作確認ではない。主成果物116個・未受入draft4個のまま。
+
+
+## Stage56: 注釈providerの初期化・終了・予約RAM
+
+注釈contextを全取得成功後に公開し、bootログの復元を予約領域/ローカル容量へ制限。
+実DTの4KiB no-map領域と8KiBローカルbufferを照合し、memremap/memunmapへ変更した。
+proc/API処理の排出後、minidump解除を確認してからRAM/mapを解放する。解除不能時は
+参照先を保持し、次probe/exitで再試行する。永久失敗でのmodule終了はrebootまで意図的に
+backingを保持するため、終端失敗時にメモリ消費ゼロとする方式ではない。
+
+11 lifecycle/fault（dump primitiveは記録backend）・8 format回帰・2本番module/実pending API
+試験がSMP4で成功。本番moduleの実OF bind、procログ読み書き、解除後の登録消失も確認。
+実firmware backendはQEMUで初期化せず、実機cache/boot/firmwareは未確認。
+注釈1個を部分成果物へ追加し、artifacts/android73-annotate-stage56/は117 module、
+5,695 import CRC一致、hard/soft依存がそろい循環なし。未受入のinfo/Goodix等は3 draft。
+`reports/mmi-annotate-stage56-validation.json`。Stage54の注釈実装不足の一部を解消したが、
+低メモリ障害注入、info/touch本体、残りdriver/DT/boot/ROM等のsoftware readinessは未達。

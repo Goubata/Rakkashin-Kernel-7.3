@@ -1,0 +1,19 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-tsens'
+  CC [M]  msm-tsens.o
+  CC [M]  tsens2xxx.o
+tsens2xxx.c:232:11: error: call to undeclared function 'qcom_scm_tsens_reinit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  232 |                                 ret = qcom_scm_tsens_reinit(&tsens_ret);
+      |                                       ^
+tsens2xxx.c:232:11: note: did you mean 'qcom_scm_dcvs_reset'?
+/work/avr-src/include/linux/firmware/qcom/qcom_scm.h:235:5: note: 'qcom_scm_dcvs_reset' declared here
+  235 | int qcom_scm_dcvs_reset(void);
+      |     ^
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: tsens2xxx.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/qcom-tsens'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'

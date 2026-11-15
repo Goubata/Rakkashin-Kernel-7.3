@@ -1,0 +1,7 @@
+{
+  "selected": "native qcom,tsens-v2",
+  "rejected": "legacy msm-tsens.c / qcom,tsens26xx",
+  "reason": "All seven enabled saved AVR TSENS nodes use qcom,tsens-v2, indexed TM/SROT resources and uplow/critical IRQ names; the legacy 26xx driver has different compatibles and named resource requirements",
+  "initial_legacy_build": "reports/tsens-stage78-initial-build.log",
+  "physical_verified": false
+}

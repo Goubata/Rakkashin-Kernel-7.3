@@ -1,0 +1,21 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/tsens'
+  CC [M]  test-main.o
+  CC [M]  v2-source.o
+  CC [M]  v1-source.o
+In file included from test-main.c:8:
+In file included from ./../../ports/qcom-tsens/tsens.c:16:
+/work/avr-src/include/linux/platform_device.h:334:9: error: 'module_platform_driver' macro redefined [-Werror,-Wmacro-redefined]
+  334 | #define module_platform_driver(__platform_driver) \
+      |         ^
+test-main.c:7:9: note: previous definition is here
+    7 | #define module_platform_driver(driver)
+      |         ^
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: test-main.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/tests/tsens'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-tsens/qcom_tsens.ko",
+      "imports_checked": 52,
+      "mismatches": {}
+    }
+  ]
+}

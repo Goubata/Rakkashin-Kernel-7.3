@@ -1,0 +1,4466 @@
+{
+  "scope": "Selected TSENS v2 node/register/IRQ/zone shapes and saved semantic preservation only; not full schema validation or physical thermal acceptance",
+  "passed": true,
+  "limits": {
+    "max_sensors": 16,
+    "trip_min_temp": -40000,
+    "trip_max_temp": 204000
+  },
+  "saved_semantics_preserved": true,
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "controllers": {
+        "/soc/tsens0@c229000": {
+          "sensor_count": 5,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22900000000000000001ff000000000c22200000000000000001ff",
+            "#qcom,sensors": "00000005",
+            "interrupts": "00000000000003030000000400000000000001e400000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens1@c22a000": {
+          "sensor_count": 12,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22a00000000000000001ff000000000c22300000000000000001ff",
+            "#qcom,sensors": "0000000c",
+            "interrupts": "00000000000003040000000400000000000001e500000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens2@c22b000": {
+          "sensor_count": 7,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22b00000000000000001ff000000000c22400000000000000001ff",
+            "#qcom,sensors": "00000007",
+            "interrupts": "00000000000003050000000400000000000001e600000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens3@c22c000": {
+          "sensor_count": 4,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22c00000000000000001ff000000000c22500000000000000001ff",
+            "#qcom,sensors": "00000004",
+            "interrupts": "00000000000003060000000400000000000001e700000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens4@c22d000": {
+          "sensor_count": 5,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22d00000000000000001ff000000000c22600000000000000001ff",
+            "#qcom,sensors": "00000005",
+            "interrupts": "000000000000021f0000000400000000000001cd00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens5@c22e000": {
+          "sensor_count": 8,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22e00000000000000001ff000000000c22700000000000000001ff",
+            "#qcom,sensors": "00000008",
+            "interrupts": "00000000000002200000000400000000000001ce00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens6@c22f000": {
+          "sensor_count": 8,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22f00000000000000001ff000000000c22800000000000000001ff",
+            "#qcom,sensors": "00000008",
+            "interrupts": "00000000000002210000000400000000000001da00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        }
+      },
+      "thermal_zones": {
+        "/soc/thermal-zones/cpullc-0-0": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            },
+            "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-0-1": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-0": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-1": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-2": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-0-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-0-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-0-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-0-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-1-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-1-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-1-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-1-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-2-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-2-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-2-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-2-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-3-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-3-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-3-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            7
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-3-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-4-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            8
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-4-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-4-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            9
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-4-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-5-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            10
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-5-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-5-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            11
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-5-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-1-0": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00001388",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-1-1": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00001388",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-0": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-1": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-2": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-3": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-4": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-4/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-0-0": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-0-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-0-1": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-0-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-1-0": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-1-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-1-1": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-1-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-0": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-1": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-2": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-2/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphmx-0": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphmx-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphmx-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphmx-1": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphmx-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphmx-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-0": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            0
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-0/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-1": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            1
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-1/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-2": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            2
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-2/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-2/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-3": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            3
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-3/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-3/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-4": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            4
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-4/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-4/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-4/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-5": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            5
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-5/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-5/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-5/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-6": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            6
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-6/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-6/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-6/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-7": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            7
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-7/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-7/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-7/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/ddr": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/ddr/trips/ddr0-config": {
+              "temperature": "000186a0",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/ddr/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-0": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            1
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-0/trips/mdmss0-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-0/trips/mdmss0-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-1": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            2
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-1/trips/mdmss1-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-1/trips/mdmss1-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-2": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            3
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-2/trips/mdmss2-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-2/trips/mdmss2-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-3": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            4
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-3/trips/mdmss3-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-3/trips/mdmss3-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/camera-0": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/camera-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/camera-1": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/camera-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/video": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            7
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/video/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        }
+      },
+      "controller_count": 7,
+      "declared_sensor_count": 49,
+      "zone_count": 49,
+      "checks": [
+        {
+          "check": "/soc/tsens0@c229000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-4: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-4/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr/trips/ddr0-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/mdmss0-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/mdmss0-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/mdmss1-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/mdmss1-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/mdmss2-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/mdmss2-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/mdmss3-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/mdmss3-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/video: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/video/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: all declared sensors have active thermal zones",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "controllers": {
+        "/soc/tsens0@c229000": {
+          "sensor_count": 5,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22900000000000000001ff000000000c22200000000000000001ff",
+            "#qcom,sensors": "00000005",
+            "interrupts": "00000000000003030000000400000000000001e400000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens1@c22a000": {
+          "sensor_count": 12,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22a00000000000000001ff000000000c22300000000000000001ff",
+            "#qcom,sensors": "0000000c",
+            "interrupts": "00000000000003040000000400000000000001e500000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens2@c22b000": {
+          "sensor_count": 7,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22b00000000000000001ff000000000c22400000000000000001ff",
+            "#qcom,sensors": "00000007",
+            "interrupts": "00000000000003050000000400000000000001e600000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens3@c22c000": {
+          "sensor_count": 4,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22c00000000000000001ff000000000c22500000000000000001ff",
+            "#qcom,sensors": "00000004",
+            "interrupts": "00000000000003060000000400000000000001e700000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens4@c22d000": {
+          "sensor_count": 5,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22d00000000000000001ff000000000c22600000000000000001ff",
+            "#qcom,sensors": "00000005",
+            "interrupts": "000000000000021f0000000400000000000001cd00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens5@c22e000": {
+          "sensor_count": 8,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22e00000000000000001ff000000000c22700000000000000001ff",
+            "#qcom,sensors": "00000008",
+            "interrupts": "00000000000002200000000400000000000001ce00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        },
+        "/soc/tsens6@c22f000": {
+          "sensor_count": 8,
+          "properties": {
+            "compatible": "71636f6d2c7473656e732d763200",
+            "reg": "000000000c22f00000000000000001ff000000000c22800000000000000001ff",
+            "#qcom,sensors": "00000008",
+            "interrupts": "00000000000002210000000400000000000001da00000004",
+            "interrupt-names": "75706c6f7700637269746963616c00",
+            "#thermal-sensor-cells": "00000001",
+            "interrupt-parent-node": "/soc/interrupt-controller@17000000"
+          }
+        }
+      },
+      "thermal_zones": {
+        "/soc/thermal-zones/cpullc-0-0": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            },
+            "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-0-1": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-0": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-1": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-0-2": {
+          "sensor": [
+            "/soc/tsens0@c229000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-0-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-0-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-0-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-0-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-0-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-1-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-1-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-1-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-1-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-2-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-2-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-2-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-2-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-2-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-3-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-3-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-3-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            7
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-3-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-3-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-4-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            8
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-4-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-4-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            9
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-4-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-4-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-5-0": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            10
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-5-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-0-5-1": {
+          "sensor": [
+            "/soc/tsens1@c22a000",
+            11
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-0-5-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-0-5-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-1-0": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00001388",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpullc-1-1": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpullc-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00001388",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-0": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-1": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-2": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-3": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/qmx-1-4": {
+          "sensor": [
+            "/soc/tsens2@c22b000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/qmx-1-4/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-0-0": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-0-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-0-1": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-0-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-0-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-1-0": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-1-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/cpu-1-1-1": {
+          "sensor": [
+            "/soc/tsens3@c22c000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/cpu-1-1-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-cfg": {
+              "temperature": "0001b580",
+              "hysteresis": "00000fa0",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-1-cfg": {
+              "temperature": "0001bd50",
+              "hysteresis": "00001770",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/cpu-1-1-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-0": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-1": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            1
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphvx-2": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            2
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphvx-2/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphvx-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphmx-0": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            3
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphmx-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphmx-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/nsphmx-1": {
+          "sensor": [
+            "/soc/tsens4@c22d000",
+            4
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/nsphmx-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/nsphmx-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-0": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            0
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-0/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-0/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-1": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            1
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-1/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-1/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-2": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            2
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-2/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-2/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-3": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            3
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-3/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-3/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-4": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            4
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-4/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-4/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-4/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-5": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            5
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-5/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-5/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-5/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-6": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            6
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-6/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-6/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-6/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/gpuss-7": {
+          "sensor": [
+            "/soc/tsens5@c22e000",
+            7
+          ],
+          "properties": {
+            "polling-delay-passive": "0000000c"
+          },
+          "trips": {
+            "/soc/thermal-zones/gpuss-7/trips/thermal-hal-config": {
+              "temperature": "00019a28",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-7/trips/tj_cfg": {
+              "temperature": "00019a28",
+              "hysteresis": "00000000",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/gpuss-7/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/ddr": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            0
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/ddr/trips/ddr0-config": {
+              "temperature": "000186a0",
+              "hysteresis": "00001388",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/ddr/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-0": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            1
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-0/trips/mdmss0-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-0/trips/mdmss0-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-1": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            2
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-1/trips/mdmss1-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-1/trips/mdmss1-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-2": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            3
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-2/trips/mdmss2-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-2/trips/mdmss2-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-2/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/mdmss-3": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            4
+          ],
+          "properties": {
+            "polling-delay-passive": "00000064"
+          },
+          "trips": {
+            "/soc/thermal-zones/mdmss-3/trips/mdmss3-config0": {
+              "temperature": "00018e70",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-3/trips/mdmss3-config1": {
+              "temperature": "00019a28",
+              "hysteresis": "00000bb8",
+              "type": "7061737369766500"
+            },
+            "/soc/thermal-zones/mdmss-3/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/camera-0": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            5
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/camera-0/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/camera-1": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            6
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/camera-1/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        },
+        "/soc/thermal-zones/video": {
+          "sensor": [
+            "/soc/tsens6@c22f000",
+            7
+          ],
+          "properties": {},
+          "trips": {
+            "/soc/thermal-zones/video/trips/reset-mon-cfg": {
+              "temperature": "0001e848",
+              "hysteresis": "00000000",
+              "type": "686f7400"
+            }
+          }
+        }
+      },
+      "controller_count": 7,
+      "declared_sensor_count": 49,
+      "zone_count": 49,
+      "checks": [
+        {
+          "check": "/soc/tsens0@c229000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: supported sensor count",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: two-cell address/size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: exactly indexed TM/SROT resources",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: resource size covers native v2 register fields",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: single thermal sensor argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: native separate IRQ names",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: two level-high GIC SPI specifiers",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: active three-cell IRQ parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-0/trips/cpull00-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/cpull01-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-0-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/cpu0-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/cpu0-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/cpu1-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/cpu1-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/cpu2-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/cpu2-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-2-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/cpu3-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/cpu3-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-3-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/cpu4-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/cpu4-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-4-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/cpu5-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/cpu5-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-0-5-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/cpull10-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/cpull11-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpullc-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-4: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/qmx-1-4/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/cpu6-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/cpu6-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-0-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/cpu7-emerg0-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/cpu7-emerg1-1-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/cpu-1-1-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphvx-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/nsphmx-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-4/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-5/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-6/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/thermal-hal-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/tj_cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/gpuss-7/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr/trips/ddr0-config: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/ddr/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/mdmss0-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/mdmss0-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/mdmss1-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/mdmss1-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/mdmss2-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/mdmss2-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-2/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/mdmss3-config0: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/mdmss3-config1: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/mdmss-3/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-0: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-0/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-1: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/camera-1/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/video: sensor ID within controller count",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/video/trips/reset-mon-cfg: trip lies within factory-preserved range",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens0@c229000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens1@c22a000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens2@c22b000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens3@c22c000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens4@c22d000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens5@c22e000: all declared sensors have active thermal zones",
+          "passed": true
+        },
+        {
+          "check": "/soc/tsens6@c22f000: all declared sensors have active thermal zones",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "dt_modified": false,
+  "whole_board_accepted": false,
+  "physical_verified": false
+}

@@ -1,0 +1,24 @@
+Native patch replay: 17 patches, 63 exact files
+Verified pinned native TSENS patch replay: 7 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-tsens'
+  CC [M]  tsens.o
+  LD [M]  qcom_tsens.o
+  MODPOST Module.symvers
+  LD [M]  qcom_tsens.ko
+  BTF [M] qcom_tsens.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-tsens'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/tsens'
+  CC [M]  test-main.o
+  CC [M]  v0-source.o
+  CC [M]  legacy-source.o
+  LD [M]  avr-tsens-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-tsens-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-tsens-test.ko
+  BTF [M] avr-tsens-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/tsens'
+make: Leaving directory '/work/avr-src'

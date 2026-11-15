@@ -1,0 +1,45 @@
+{
+  "stage": 78,
+  "scope": "Native-derived TSENS v2 draft: real-regmap private-RAM source tests and production driver registration; selected saved/candidate DT semantics only",
+  "checks": {
+    "log": "reports/tsens-stage78-qemu.log",
+    "test": "tsens",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      8,
+      0,
+      0,
+      8
+    ]
+  },
+  "dt_passed": true,
+  "controller_count": 7,
+  "declared_sensor_count": 49,
+  "thermal_zone_count": 49,
+  "temperature_codes_tested": 4096,
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Physical calibration/readings, firmware enable state, IRQ delivery/watchdog/critical protection and suspend/resume",
+    "Native setter register-error propagation and full probe/remove/error-unwind tests",
+    "Factory persistent-temperature diagnostics not provided by this native-derived driver",
+    "Whole-board DT schema/driver coverage/boot/vendor_boot/dtbo/DLKM/SELinux and physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/tsens-stage78-check.json": "7559fb7c3301cc2d8fb328cec3952f9ddeb27b81d27c491aed84142893a50dc4",
+    "reports/tsens-stage78-qemu.log": "e9e611e173105334e94a266d437235a91099decc04f667fea2840871fa09f5bd",
+    "reports/tsens-stage78-qemu.json": "4c0f2eb548fc7f98868d83612d57ba1fd7ca97e26a1063a8766c4ada636ecbcc",
+    "reports/tsens-stage78-final-build.log": "169a9dffe011007635246714fabcbe58b8f48fa1af1425c44d62fb317249807a",
+    "reports/tsens-stage78-crc.json": "a15e7dde8664e91326209580aa4b3dd32f391e34af4629b726c245823e05b4e3",
+    "reports/tsens-stage78-dt.json": "617d0276ff5c7be1212fed02c8b5dbccf497daab3f02f1d7c1017ce68f82a56b",
+    "reports/tsens-stage78-driver-selection.json": "dc15395316d149dcb523296b916772d1cbaa52418f68514453858e340876ba93",
+    "reports/tsens-source-inputs.json": "b33389dac3c40dccaeb0b734d93d6700f8a6f9369ae7b9d55b05549fef1c47c1",
+    "reports/tsens-source-lock.json": "ab0d3abb7be1a70417848b4e5e9efe37ebcdab7efd2b7eb4d098c1bfb0aca106",
+    "patches/tsens-7.3.patch": "dc150795e0bfbd8d1a28fad1364abc5160115d58ba4d95f403e911cd01111766",
+    "tests/tsens/test-main.c": "e2eed9c09dd20f03e8f80f50396c350ea3052ec70215d91fbad1517c54a211fb"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "source_repository": "android-7.3",
+  "factory_reference_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "factory_reference_file": "drivers/thermal/qcom/tsens-v2.c",
+  "files": {
+    "ports/qcom-tsens/tsens.c": "drivers/thermal/qcom/tsens.c",
+    "ports/qcom-tsens/tsens-v2.c": "drivers/thermal/qcom/tsens-v2.c",
+    "ports/qcom-tsens/tsens-v1.c": "drivers/thermal/qcom/tsens-v1.c",
+    "ports/qcom-tsens/tsens-v0_1.c": "drivers/thermal/qcom/tsens-v0_1.c",
+    "ports/qcom-tsens/tsens-8960.c": "drivers/thermal/qcom/tsens-8960.c",
+    "ports/qcom-tsens/tsens.h": "drivers/thermal/qcom/tsens.h"
+  }
+}

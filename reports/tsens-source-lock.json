@@ -1,0 +1,64 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "factory_reference_sha256": "f4f377f1e8ec956b2f097096a0db2fd2dca0964d12349147c6adb72026e1e511",
+  "files": [
+    {
+      "file": "ports/qcom-tsens/tsens.c",
+      "source": "drivers/thermal/qcom/tsens.c",
+      "original_sha256": "088f0e3a1a6a81a44f52203f3e7f47dc3650628937d48d05e06ac4b197b77dcc",
+      "sha256": "a60f3bb71c65946e49e54390ae23266012ce0a715cff0d47f71606df7041d5fe"
+    },
+    {
+      "file": "ports/qcom-tsens/tsens-v2.c",
+      "source": "drivers/thermal/qcom/tsens-v2.c",
+      "original_sha256": "503de3da1bb24d88d982e0372e6e9d0a4ac434212db19bd599910d1cb743d23b",
+      "sha256": "f4ba0107fc78de976cf5643dd5ca3b2ff19cdbeb4e45aa239d80ce89ce77874f"
+    },
+    {
+      "file": "ports/qcom-tsens/tsens-v1.c",
+      "source": "drivers/thermal/qcom/tsens-v1.c",
+      "original_sha256": "49a077f16fdb9e004a99bf4419ec17c7341dd4b838cbbe3fd8ac5e427ee87db0",
+      "sha256": "49a077f16fdb9e004a99bf4419ec17c7341dd4b838cbbe3fd8ac5e427ee87db0"
+    },
+    {
+      "file": "ports/qcom-tsens/tsens-v0_1.c",
+      "source": "drivers/thermal/qcom/tsens-v0_1.c",
+      "original_sha256": "599525421e59a2aca160c8d9788d8ac3fbfdad770f9741cb4d59b312b0dee1d7",
+      "sha256": "599525421e59a2aca160c8d9788d8ac3fbfdad770f9741cb4d59b312b0dee1d7"
+    },
+    {
+      "file": "ports/qcom-tsens/tsens-8960.c",
+      "source": "drivers/thermal/qcom/tsens-8960.c",
+      "original_sha256": "d763626d2479dfb88e1ec4fee809dda034264c072b2d1910068dd3d419305fc9",
+      "sha256": "d763626d2479dfb88e1ec4fee809dda034264c072b2d1910068dd3d419305fc9"
+    },
+    {
+      "file": "ports/qcom-tsens/tsens.h",
+      "source": "drivers/thermal/qcom/tsens.h",
+      "original_sha256": "c00f742c808d44161d17d284034649694be3a8eb2706ff2144a92cadf5062721",
+      "sha256": "c00f742c808d44161d17d284034649694be3a8eb2706ff2144a92cadf5062721"
+    },
+    {
+      "file": "ports/qcom-tsens/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "101ee20b60aba65687aef187d6ddc67b7646e0307c9d5af2d3394ddea6b3f31d"
+    }
+  ],
+  "patch_sha256": "dc150795e0bfbd8d1a28fad1364abc5160115d58ba4d95f403e911cd01111766",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Source/patch replay only; unaccepted TSENS driver draft",
+  "reviewed_changes": [
+    "Use native 7.3 generic TSENS v2 matching saved AVR rather than the legacy 26xx family",
+    "External Kbuild include path only; native thermal APIs/regmap/IRQ/devres retained",
+    "Bound DT sensor counts by the native field limit and explicit hardware-ID table length",
+    "Preserve factory generic-v2 204000 mC upper threshold range; no DT trip values changed"
+  ],
+  "pending": [
+    "Physical calibration/readings, IRQ thresholds/watchdog, firmware and suspend/remove acceptance",
+    "Remaining native setter register-error propagation and complete probe/unbind tests",
+    "Factory persistent-temperature diagnostics are not provided by the native driver",
+    "Whole-board driver/DT/boot/vendor_boot/DLKM/SELinux acceptance"
+  ]
+}

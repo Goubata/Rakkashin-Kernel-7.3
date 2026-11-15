@@ -1423,3 +1423,36 @@ production imports match. Evidence: reports/geni-setup-stage77-validation.json.
 Draft artifacts are separate from Stage57. Continuous queued recovery after
 hardware prepare failure, autosuspend/remove/deep-sleep/VM integration, physical
 AVR transactions and all remaining whole-board acceptance gates are pending.
+
+## Stage78: native-derived AVR TSENS v2 driver and selected DT coverage
+
+Saved AVR DT uses seven qcom,tsens-v2 controllers, not the legacy tsens26xx
+family. The initial legacy compile attempt is retained as rejected investigation;
+its incompatible driver is not part of this port. Build pinned native 7.3 TSENS
+as an external qcom_tsens module, preserving native thermal APIs/regmap/IRQ/devres.
+Bound DT sensor counts by the hardware field count and explicit hardware-ID
+array length. Retain the pinned factory generic-v2 204000 mC trip range instead
+of the native default 120000 mC. This does not change any DT trip or calibration.
+
+Selected DT checks pass for all seven controllers / 49 declared sensors / 49
+thermal zones: generic compatible, indexed TM/SROT resources and field coverage,
+native uplow/critical IRQ names, inherited active GIC provider, level-high SPI
+specifiers, complete in-range sensor ID references, trip range and normalized
+saved/candidate equality. No DT was modified. This is not full schema validation,
+cooling-device binding proof or whole-board acceptance.
+
+Eight SMP4 tests pass without WARN/panic. Compile the complete production source
+with only platform-driver registration disabled in the test module and separate
+exact translation units for native variant data. Use native regmap and regmap
+fields over private scripted RAM. Cover all 4096 signed 12-bit codes, all 16 slots,
+stable invalid-sample fallback, unstable -EAGAIN, later valid sample, read errors,
+factory range, mask isolation and signed IRQ-threshold decoding. The separate
+production qcom_tsens module also registers/unregisters in this guest. Actual
+probe/MMIO, calibration/firmware state, interrupt delivery, critical thermal
+protection, watchdog and suspend/remove are not validated. Factory persistent
+temperature diagnostics and native setter error propagation remain pending.
+
+Reproduce build_tsens.py --tests, audit_tsens_dt.py and QEMU mode tsens. Module
+imports match. Evidence: reports/tsens-stage78-validation.json. Artifact is a
+separate draft; main Stage57 bundle remains 118 modules. No physical 7.3 boot,
+partition writes or whole-board daily-use acceptance occurred.

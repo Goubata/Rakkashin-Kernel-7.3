@@ -1,0 +1,39 @@
+--- a/ports/qcom-tsens/tsens.c
++++ b/ports/qcom-tsens/tsens.c
+@@ -19,7 +19,7 @@
+ #include <linux/slab.h>
+ #include <linux/suspend.h>
+ #include <linux/thermal.h>
+-#include "../thermal_hwmon.h"
++#include "drivers/thermal/thermal_hwmon.h"
+ #include "tsens.h"
+ 
+ /**
+@@ -1402,7 +1402,8 @@
+ 	if (np)
+ 		of_property_read_u32(np, "#qcom,sensors", &num_sensors);
+ 
+-	if (num_sensors <= 0) {
++	if (!num_sensors || num_sensors > data->feat->max_sensors ||
++	    (data->hw_ids && num_sensors > data->num_sensors)) {
+ 		dev_err(dev, "%s: invalid number of sensors\n", __func__);
+ 		return -EINVAL;
+ 	}
+--- a/ports/qcom-tsens/tsens-v2.c
++++ b/ports/qcom-tsens/tsens-v2.c
+@@ -55,7 +55,7 @@
+ 	.srot_split	= 1,
+ 	.max_sensors	= 16,
+ 	.trip_min_temp	= -40000,
+-	.trip_max_temp	= 120000,
++	.trip_max_temp	= 204000, /* Preserve factory generic-v2 range. */
+ };
+ 
+ static struct tsens_features ipq8074_feat = {
+--- a/ports/qcom-tsens/Makefile
++++ b/ports/qcom-tsens/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom_tsens.o
++qcom_tsens-y := tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o tsens-8960.o
++ccflags-y += -I$(srctree)

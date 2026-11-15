@@ -1,0 +1,15 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-tsens'
+  CC [M]  tsens.o
+  CC [M]  tsens-v2.o
+  CC [M]  tsens-v1.o
+  CC [M]  tsens-v0_1.o
+  CC [M]  tsens-8960.o
+  LD [M]  qcom_tsens.o
+  MODPOST Module.symvers
+  CC [M]  qcom_tsens.mod.o
+  CC [M]  .module-common.o
+  LD [M]  qcom_tsens.ko
+  BTF [M] qcom_tsens.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-tsens'
+make: Leaving directory '/work/avr-src'

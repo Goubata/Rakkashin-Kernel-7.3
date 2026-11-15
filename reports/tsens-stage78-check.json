@@ -1,0 +1,12 @@
+{
+  "log": "reports/tsens-stage78-qemu.log",
+  "test": "tsens",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    8,
+    0,
+    0,
+    8
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "stage": 70,
+  "scope": "Production GPI ring and SG prep methods using native coherent/virtual DMA plus private channel-state RAM; no hardware transfer or IRQ/completion proof",
+  "checks": {
+    "log": "reports/geni-sg-stage70-qemu.log",
+    "test": "geni-ring",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      10,
+      0,
+      0,
+      10
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Caller/channel serialization and IRQ/descriptor completion/terminate concurrency",
+    "Allocation fault injection after valid SG preflight",
+    "Real GPI/SPI/I2C firmware, DMA mapping, peripherals and suspend/resume",
+    "SMEM firmware mapping and arena reclamation",
+    "Remaining mandatory drivers and whole-board DT/boot/DLKM/SELinux/all-function acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-sg-stage70-check.json": "78547a764aac9a7b599af2beae7a094d76ba5abf4eaadb13ea9d4924d6fcb162",
+    "reports/geni-sg-stage70-qemu.log": "8694f17d673754e9003f823b1255f0db83cf9e71729c868ae992ddb0739a3be2",
+    "reports/geni-sg-stage70-qemu.json": "59c2614464cc5c8d345e83fb7225de7efaaf9c1aba6972017965af631be92156",
+    "reports/geni-sg-stage70-build.log": "ccb30a32f9f8b1a5f49d2a3b30ab7c30afd67b445d4c0b77e69e9354f3170053",
+    "reports/geni-sg-stage70-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "dc73156497f90917e993a4126486f0058076d561e141197259fbb7cd41c4f61a",
+    "patches/geni-bus-7.3.patch": "78218dc705f73859608f65133ee7eec8326d37aecb27e07ebf02cd0bf0616f6d"
+  }
+}

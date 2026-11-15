@@ -3720,13 +3720,36 @@ static struct dma_async_tx_descriptor *gpi_prep_slave_sg(struct dma_chan *chan,
 	struct gpi_desc *gpi_desc;
 	u32 tre_type;
 
-	gpii_chan->num_tre = sg_len;
 	GPII_VERB(gpii, gpii_chan->chid, "enter\n");
 
 	if (!is_slave_direction(direction)) {
 		GPII_ERR(gpii, gpii_chan->chid,
 			 "invalid dma direction: %d\n", direction);
 		return NULL;
+	}
+
+	/* Validate the complete list before hardware reads or ring mutation.
+	 * Caller serialization is still required for prep on one DMA channel. */
+	if (!sgl || !sg_len || !ch_ring || !ch_ring->configured ||
+	    ch_ring->el_size != sizeof(struct msm_gpi_tre) || !ch_ring->base ||
+	    ch_ring->wp < ch_ring->base || ch_ring->wp >= ch_ring->base + ch_ring->len ||
+	    ch_ring->rp < ch_ring->base || ch_ring->rp >= ch_ring->base + ch_ring->len ||
+	    (ch_ring->wp - ch_ring->base) % ch_ring->el_size ||
+	    (ch_ring->rp - ch_ring->base) % ch_ring->el_size)
+		return NULL;
+	nr = gpi_ring_num_elements_avail(ch_ring);
+	if (sg_len > nr)
+		return NULL;
+	for_each_sg(sgl, sg, sg_len, i) {
+		u32 needed;
+
+		if (!sg_page(sg) || !sg_virt(sg) || !sg->length ||
+		    sg->length % ch_ring->el_size)
+			return NULL;
+		needed = sg->length / ch_ring->el_size;
+		if (needed > nr - nr_req)
+			return NULL;
+		nr_req += needed;
 	}
 
 	ch_state = gpi_read_ch_state(gpii_chan);
@@ -3738,22 +3761,6 @@ static struct dma_async_tx_descriptor *gpi_prep_slave_sg(struct dma_chan *chan,
 		GPII_ERR(gpii, gpii_chan->chid,
 			 "Bail out the TRE subimit as Channel is in error state\n");
 		gpi_dump_debug_reg(gpii);
-		return NULL;
-	}
-
-	/* calculate # of elements required & available */
-	nr = gpi_ring_num_elements_avail(ch_ring);
-	for_each_sg(sgl, sg, sg_len, i) {
-		GPII_VERB(gpii, gpii_chan->chid,
-			  "%d of %u len:%u\n", i, sg_len, sg->length);
-		nr_req += (sg->length / ch_ring->el_size);
-	}
-	GPII_VERB(gpii, gpii_chan->chid, "el avail:%u req:%u\n", nr, nr_req);
-
-	if (nr < nr_req) {
-		GPII_ERR(gpii, gpii_chan->chid,
-			 "not enough space in ring, avail:%u required:%u\n",
-			 nr, nr_req);
 		return NULL;
 	}
 
@@ -3801,6 +3808,7 @@ static struct dma_async_tx_descriptor *gpi_prep_slave_sg(struct dma_chan *chan,
 		  to_physical(ch_ring, ch_ring->wp),
 		  to_physical(ch_ring, ch_ring->rp));
 
+	gpii_chan->num_tre = sg_len;
 	return vchan_tx_prep(&gpii_chan->vc, &gpi_desc->vd, flags);
 }
 

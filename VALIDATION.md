@@ -1216,3 +1216,27 @@ Reproduce `python scripts/build_geni_bus.py --ring-tests` and QEMU mode
 `geni-ring`. All three production modules rebuild and import CRCs match.
 Evidence: reports/geni-ring-stage69-validation.json. Drafts remain excluded
 from the main bundle; descriptor/IRQ/actual transfer and whole-board gates remain.
+
+
+## Stage70: preflight complete GPI scatterlists before ring mutation
+
+Before MMIO or ring writes, validate configured/native TRE geometry, ring cursor
+range/alignment, nonempty SG list, actual pages/CPU addresses, complete TRE-sized
+lengths and aggregate remaining capacity using subtraction bounds. This prevents
+truncated length accounting, aggregate wrap and partially written rings when a
+later SG entry is invalid. Preserve previous num_tre metadata on rejection.
+Prep still requires caller serialization and stable input buffers; no new
+concurrency/completion guarantee is claimed.
+
+Ten SMP4 QEMU cases pass: the six native coherent-DMA ring regressions and four
+SG cases. Invalid lists intentionally have no channel-state mapping and must
+reject before MMIO; cover missing/empty/short/zero/page-less entries, a later
+malformed entry, huge lengths/list counts, unchanged ring/metadata. Valid input
+uses private channel-state RAM and native vchan_init/vchan_tx_prep, confirms
+copied TRE bytes/position/metadata and descriptor allocation; cleanup drains
+native virtual descriptors/tasklet. No doorbell, hardware transfer, IRQ or
+completion is simulated or claimed. Reproduce the GENI ring builder and QEMU
+mode `geni-ring`. Production modules rebuild with matching imports.
+Evidence: reports/geni-sg-stage70-validation.json. Drafts are saved with their
+matching Image separately from Stage57. Full probe/remove/concurrency, physical
+bus/peripheral behavior and remaining drivers/whole-board gates stay incomplete.

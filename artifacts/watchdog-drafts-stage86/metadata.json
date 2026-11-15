@@ -1,0 +1,8 @@
+{
+  "scope": "Full exact production watchdog core with native private IRQ/notifier/sysfs/timer/kthread lifetime, hardware/secure operations recorded; SPI/non-PPI controller path only",
+  "image_required": true,
+  "image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "firmware_modules_required": true,
+  "promoted": false,
+  "physical_verified": false
+}

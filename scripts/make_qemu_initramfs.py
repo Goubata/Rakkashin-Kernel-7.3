@@ -294,13 +294,13 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         commands.append('echo AVR_GENI_SETUP_TESTS_PASS scope=source-setup-native-devres-recorded-channels-only')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.watchdog_tests:
-        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+firmware_modules()+[ROOT/'ports'/name for name in ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-minidump/minidump.ko','qcom-watchdog/qcom_sdei.ko','qcom-watchdog/qcom_wdt_core.ko','qcom-watchdog/qcom_soc_wdt.ko']]+[ROOT/'tests/watchdog'/name for name in ['avr-watchdog-mmio-test.ko','avr-sdei-test.ko','avr-watchdog-lifetime-test.ko']]
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+firmware_modules()+[ROOT/'ports'/name for name in ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-minidump/minidump.ko','qcom-watchdog/qcom_sdei.ko','qcom-watchdog/qcom_wdt_core.ko','qcom-watchdog/qcom_soc_wdt.ko']]+[ROOT/'tests/watchdog'/name for name in ['avr-watchdog-mmio-test.ko','avr-sdei-test.ko','avr-watchdog-lifetime-test.ko','avr-watchdog-core-test.ko']]
         commands=[]
         for source in sources:
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_WATCHDOG_LOAD_FAIL; /bin/busybox poweroff -f; }}')
-        for name in ['avr_watchdog_lifetime_test','avr_sdei_test','avr_watchdog_mmio_test','qcom_soc_wdt']:
+        for name in ['avr_watchdog_core_test','avr_watchdog_lifetime_test','avr_sdei_test','avr_watchdog_mmio_test','qcom_soc_wdt']:
             commands.append(f'/bin/busybox rmmod {name} || {{ echo AVR_WATCHDOG_UNLOAD_FAIL; /bin/busybox poweroff -f; }}')
         # Factory watchdog core has no module_exit and retains provider imports;
         # leave it, SDEI and firmware/minidump providers until private guest exit.

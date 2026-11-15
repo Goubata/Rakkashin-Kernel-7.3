@@ -1,0 +1,6 @@
+0xba492cab	qcom_wdt_pet_suspend	qcom_wdt_core	EXPORT_SYMBOL	
+0xba492cab	qcom_wdt_pet_resume	qcom_wdt_core	EXPORT_SYMBOL	
+0xd825f392	qcom_wdt_remove	qcom_wdt_core	EXPORT_SYMBOL	
+0xd272d446	qcom_wdt_trigger_bite	qcom_wdt_core	EXPORT_SYMBOL	
+0x83f0016a	qcom_wdt_register	qcom_wdt_core	EXPORT_SYMBOL	
+0x7851be11	qcom_sdei_shared_reset	qcom_sdei	EXPORT_SYMBOL_GPL	

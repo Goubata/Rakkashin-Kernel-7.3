@@ -1655,3 +1655,37 @@ match and the artifact retains matching Image/native firmware modules. Remaining
 watchdog IRQ/thread/timer/notifier/sysfs/PM/hotplug paths, retained-record recovery,
 actual firmware reset and whole-board acceptance remain unresolved. Stage57 is
 unchanged; no physical watchdog operations, 7.3 phone boot or partition writes.
+
+## Stage86: full watchdog core ownership and native cleanup
+
+Separate ownership flags from enabled: suspend may stop the counter while IRQs
+and notifiers still exist. Initialize locks/waits/both timers before publishing
+callbacks, populate all PPI storage slots and unwind each acquired resource on
+init failure. Check timeout, notifier, hardware and sysfs registration errors.
+Removal closes/drains the sysfs group, stops hardware activity, unregisters owned
+IRQ/PM/CPU-PM/panic/die/restart callbacks regardless of counter state, shuts down
+timers and wakes/stops the worker. Keep OF/platform IRQ mappings with their owner.
+Track and serialize singleton registration; repeated removal is inert.
+
+Use one atomic sysfs group preserving optional file visibility, readiness gates
+and serialized writes. A permanently disabled controller cannot restart from a
+PM callback or user-pet write. Serialize worker/PM/sysfs hardware operations with
+the same mutex. Worker waits observe stop in both timer and userspace-pet waits,
+prevent rearming after shutdown and take a stable online-CPU snapshot for IPI.
+
+Thirty SMP4 cases pass without WARN/panic. Nine new cases compile the complete
+production core, rename exported names for test isolation and record hardware/
+secure operations. Use native private IRQ descriptors/chip/actions, real notifier
+chains/sysfs/timers/kthread/CPU calls and real pending minidump APIs. Cover actual
+petting, ten init failure points, thread creation error, suspend-then-remove,
+permanent disable/resume, secure-disable error, unready sysfs, userspace-pet wait
+stop and repeated register/remove. Verify IRQ can be requested again and actual
+notifier/sysfs registries have no remaining registration, not just local flags.
+No bark IRQ, panic, physical watchdog or firmware reset is triggered.
+
+Evidence: reports/watchdog-stage86-validation.json. Reproduce build_watchdog.py
+--tests and QEMU mode watchdog (30 cases). Draft modules rebuild and import CRCs
+match. Platform probe/MMIO/physical IRQ/firmware, PPI and factory diagnostic
+variants, hardware-error recovery and exhaustive concurrent caller/unbind/PM
+races remain unverified. Retained dump/SDEI recovery and whole-board acceptance
+are pending. Stage57 is unchanged; no phone partition writes or 7.3 phone boot.

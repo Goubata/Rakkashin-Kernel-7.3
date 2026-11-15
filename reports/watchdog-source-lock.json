@@ -5,7 +5,7 @@
       "file": "ports/qcom-watchdog/qcom_wdt_core.c",
       "source": "drivers/soc/qcom/qcom_wdt_core.c",
       "original_sha256": "63bd7dc073b9f484965115bfbd2b602b34756ca9cda60100fe8634f9b1b48491",
-      "sha256": "f0a34f6b0715610902382bd321f01f9c3e08774a6e275ea6d83d22c530796aa0"
+      "sha256": "c2315f8ae10ece48d3f3eb6f9a65716fac70695cf0d44810a10c3d4f8ad7107d"
     },
     {
       "file": "ports/qcom-watchdog/qcom_soc_wdt.c",
@@ -23,7 +23,7 @@
       "file": "ports/qcom-watchdog/include/soc/qcom/watchdog.h",
       "source": "include/soc/qcom/watchdog.h",
       "original_sha256": "8e3cdf2cfe4a17cc8003f490fda557ed6f4b767b0cefe6bbe1d6b991ebe6bbb6",
-      "sha256": "0fdeaccd10c855d57d1cff2c6d55794445f82f9ba5c2cf5a33d1454a10099334"
+      "sha256": "2090522350962523c04827d36b53109bcebb5c303205db637e1a9f8b6ec8b8ec"
     },
     {
       "file": "ports/qcom-watchdog/include/linux/soc/qcom/qcom_sdei.h",
@@ -38,7 +38,7 @@
       "sha256": "94323098286ec37e794adf586c7df4c6210102f36f8788cbe0fd75ed3cac3d70"
     }
   ],
-  "patch_sha256": "b715714e60cc671e62a0fabca6cb8338cabb5665e0765c65be1d7b9e5effb298",
+  "patch_sha256": "96d0bb2ef8fdb25e7aed2883e43a6b1395789aefaed8d97fb29b21720ba35f23",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted watchdog and SDEI drafts",
@@ -48,6 +48,7 @@
     "Keep per-device watchdog register maps, validate MMIO error pointers/offset ranges and checked timer arithmetic",
     "Avoid native SDEI name/macro collisions and propagate actual shared-reset status",
     "Pin SDEI callback owner through registration and incomplete cleanup; retry EINPROGRESS, retain ownership on permanent unregister errors",
+    "Track IRQ/notifier/timer/sysfs ownership independently of hardware enabled state, unwind init errors, serialize worker/PM/sysfs hardware activity, drain stop-aware worker and retain platform IRQ mapping ownership",
     "Remove only owned watchdog minidump descriptors before freeing the allocation; retain payload memory if removal fails and use native devres ownership for normal/probe-error release",
     "Unregister the PM notifier on normal remove and enable failure; clear failed watchdog publication"
   ],

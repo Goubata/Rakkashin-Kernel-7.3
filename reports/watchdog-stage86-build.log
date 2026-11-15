@@ -1,0 +1,28 @@
+Native patch replay: 19 patches, 65 exact files
+Verified pinned Qualcomm watchdog/SDEI patch replay: 6 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-watchdog'
+  CC [M]  qcom_wdt_core.o
+  MODPOST Module.symvers
+  LD [M]  qcom_wdt_core.ko
+  BTF [M] qcom_wdt_core.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-watchdog'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/watchdog'
+  CC [M]  avr-watchdog-mmio-test.o
+  CC [M]  avr-sdei-test.o
+  CC [M]  avr-watchdog-lifetime-test.o
+  CC [M]  avr-watchdog-core-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-watchdog-mmio-test.ko
+  LD [M]  avr-sdei-test.ko
+  BTF [M] avr-watchdog-mmio-test.ko
+  BTF [M] avr-sdei-test.ko
+  LD [M]  avr-watchdog-lifetime-test.ko
+  CC [M]  avr-watchdog-core-test.mod.o
+  BTF [M] avr-watchdog-lifetime-test.ko
+  LD [M]  avr-watchdog-core-test.ko
+  BTF [M] avr-watchdog-core-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/watchdog'
+make: Leaving directory '/work/avr-src'

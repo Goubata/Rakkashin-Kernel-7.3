@@ -138,6 +138,18 @@ struct msm_watchdog_data {
 	bool hibernate;
 	struct md_region dump_entry;
 	bool dump_registered;
+	bool ready;
+	bool stopping;
+	bool user_disabled;
+	bool irq_registered;
+	bool irq_enabled;
+	bool pm_registered;
+	bool panic_registered;
+	bool die_registered;
+	bool restart_registered;
+	bool cpu_pm_registered;
+	bool timers_initialized;
+	bool sysfs_created;
 };
 
 extern void qcom_wdt_trigger_bite(void);

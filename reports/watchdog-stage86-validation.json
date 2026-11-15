@@ -1,0 +1,42 @@
+{
+  "stage": 86,
+  "scope": "Full exact production watchdog core with native private IRQ/notifier/sysfs/timer/kthread lifetime, hardware/secure operations recorded; SPI/non-PPI controller path only",
+  "checks": {
+    "log": "reports/watchdog-stage86-qemu.log",
+    "test": "watchdog",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      30,
+      0,
+      0,
+      30
+    ]
+  },
+  "init_failure_points_tested": 10,
+  "thread_creation_failure_tested": true,
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Physical IRQ delivery/bark/bite/reset/hypervisor/secure behavior and full platform probe/register mapping remain unverified",
+    "PPI controller path and factory IRQ-stat/die-notifier configurations are not exercised by the native-core fixture",
+    "Hardware shutdown failures, PM operation error propagation and exhaustive concurrent sysfs/PM/forced-unbind/caller races remain pending",
+    "Retained minidump payload auto-reclamation and SDEI retained-registration recovery remain pending",
+    "Whole-board drivers/DT/boot/vendor_boot/dtbo/DLKM/SELinux and physical daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/watchdog-stage86-check.json": "dd67b1257f63c9ff3eb8825ee3554f8f06caf83f80085884a4aff581475eee0d",
+    "reports/watchdog-stage86-qemu.log": "ebbd5763fd738ff0d1dd8cc6db7e92602aaba05383eaa111ae3c0493c8849baa",
+    "reports/watchdog-stage86-qemu.json": "1cec94b669db077e433c84c0fadf81875bf90ff72542a1a4c7df647d0041fb7f",
+    "reports/watchdog-stage86-port-build.log": "e9d9524abdbf8a0e86b528a7755e78ade958dc4f38427be33da2a8004c457b18",
+    "reports/watchdog-stage86-build.log": "60ac7c08a02b1832857f24f3d04312b8cbdc56f9dbf506f6f140514540759f82",
+    "reports/watchdog-stage86-crc.json": "2201e9e70df6a83d0bdeae7b28ab2a34b91270bc40f85eb3a9a5b0be5593babf",
+    "reports/watchdog-source-lock.json": "8b71bdb24586970bd0399b523de70e6c26c1e282d31a9367b055775b83a7e7bd",
+    "patches/watchdog-7.3.patch": "96d0bb2ef8fdb25e7aed2883e43a6b1395789aefaed8d97fb29b21720ba35f23",
+    "ports/qcom-watchdog/qcom_wdt_core.c": "c2315f8ae10ece48d3f3eb6f9a65716fac70695cf0d44810a10c3d4f8ad7107d",
+    "tests/watchdog/avr-watchdog-core-test.c": "bae7afb53d67a500708f4ff0a8feb90235364fdae9bd0a7b4a3f6c78502f06ff"
+  }
+}

@@ -44,3 +44,20 @@ full watchdog teardown, callbacks or physical reset. Full thread/IRQ/timer/sysfs
 notifier/PM/error-unwind still needs review. Factory IRQ-stat/die-notifier variants
 and retained payload reclamation remain pending. Artifacts stay separate from
 the Stage57 main bundle.
+
+
+Stage86 tracks IRQ/notifier/timer/sysfs ownership separately from the hardware
+counter's enabled state. Every SPI-path initialization failure unwinds acquired
+resources; removal also works after suspend or permanent disable. Use stop-aware
+worker waits and serialized hardware access, native timer shutdown, an atomic
+sysfs group/readiness guard and singleton registration locking. Keep the platform
+IRQ mapping owned by its platform/domain instead of disposing it in this driver.
+
+Thirty guest cases pass. Nine new cases compile the full core with exported names
+renamed only and recorded hardware/secure operations. Native private IRQ actions,
+notifier chains, sysfs, timers, CPU IPIs, thread creation/petting and stop are real.
+Check ten registration/hardware failure points and thread creation failure, plus
+paused/disabled/unready/user-pet-wait removal and repeated registration. Native
+IRQ reclamation and absence from notifier/sysfs registries are checked directly.
+This does not prove real bark/bite, PPI, firmware, exhaustive concurrency or PM
+hardware-error recovery. Retained dump reclamation remains pending.

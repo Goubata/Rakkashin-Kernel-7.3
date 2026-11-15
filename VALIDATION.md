@@ -1115,3 +1115,24 @@ QEMU mode `usb-repeater`, and `python scripts/audit_usb_eusb2_dt.py`.
 Evidence: reports/usb-repeater-stage65-validation.json. Three USB drafts are
 saved outside the main 118-module Stage57 bundle. PMIC/M31 callbacks, supplier
 lifetime, vendor DWC3/SuperSpeed/charging and physical USB acceptance remain.
+
+
+## Stage66: PMIC repeater failed-IO and readiness handling
+
+PMIC get_version no longer returns an unfilled stack byte on failed register
+read. Reset returns masked-write errors; init-status polling propagates read
+failure and returns -ETIMEDOUT when RPTR_OK never arrives. Initialize the user
+parameter mutex before publishing the provider to consumers. Tuning writes and
+regulator rollback still require review; this is not full PMIC acceptance.
+
+Seven SMP4 QEMU cases execute exact production source callbacks on a real
+regmap backed by private RAM: successful/failed version, reset mask set/clear
+and write failure, readiness success/read failure/timeout. Factory driver
+registration is disabled only in the test translation unit, so no actual PMIC
+is bound. All three production USB modules rebuild with 101 matching imports.
+Reproduce `python scripts/build_usb_repeater.py --pmic-tests` and QEMU mode
+`usb-repeater-pmic`. Evidence: reports/usb-repeater-stage66-validation.json.
+Three drafts are saved separately, without promotion to the main bundle or
+physical USB/cable/suspend/charging claims. Override/sysfs parsing, tuning writes,
+M31 lifetime/MMIO, forced provider removal, DWC3/SuperSpeed and whole-board
+DT/boot/DLKM/SELinux remain incomplete.

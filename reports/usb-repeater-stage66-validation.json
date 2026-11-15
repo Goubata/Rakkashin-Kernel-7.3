@@ -1,0 +1,40 @@
+{
+  "stage": 66,
+  "scope": "Production PMIC version/reset/init-status callbacks over native 7.3 regmap and private RAM; no physical USB acceptance",
+  "checks": {
+    "log": "reports/usb-repeater-stage66-qemu.log",
+    "test": "usb-repeater-pmic",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      7,
+      0,
+      0,
+      7
+    ]
+  },
+  "matching_imports": 101,
+  "draft_module_count": 3,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "PMIC override parser/sysfs bounds, tuning write failures and regulator rollback",
+    "M31 probe/unwind, power/refgen/vbus-work lifecycle and actual MMIO behavior",
+    "Provider forced-unbind versus consumers and borrowed unmanaged getter lifetime",
+    "DWC3 vendor core, SuperSpeed PHY, Type-C/charging and gadget integration",
+    "Remaining drivers, whole-board DT/boot/DLKM/SELinux and all-function acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/usb-repeater-stage66-check.json": "2314eb4560257c9718689a51f000e808d1340f67b58a563b2a263b6d92b5a625",
+    "reports/usb-repeater-stage66-qemu.log": "9703e914e9d2169859a2e25f39ef0a52effcd704cf792636f0418a3084eb4c16",
+    "reports/usb-repeater-stage66-qemu.json": "cd45ebceed44da3ac589d4f1122d268746c78643f616af80e461e7c05f712da1",
+    "reports/usb-repeater-stage66-build.log": "84c41cac6ca098e1765e32aa87187dd69b260687c604ce14117523ae97403ced",
+    "reports/usb-repeater-stage66-crc.json": "32cc4ed4fd1c5d6a4a54f8543f84a2e6353d5aefe8610c3e02cae8f229e17342",
+    "reports/usb-repeater-source-lock.json": "11265659254f2112d7af1e9bf6d010bf3dfc23967ff7b86f69cb92af6e97d0f2",
+    "patches/usb-repeater-7.3.patch": "ac2f469619f2cc263e146f72764ac62563f58c9fc1671d2ea15e26039d59df66",
+    "reports/usb-eusb2-stage65-dt.json": "adbdd9b0d964f7fcd6585bdcea218dda9133256133f273d0563b01eaf4e3bb2a"
+  }
+}

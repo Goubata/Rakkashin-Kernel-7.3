@@ -1,0 +1,12 @@
+{
+  "log": "reports/usb-repeater-stage66-qemu.log",
+  "test": "usb-repeater-pmic",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    7,
+    0,
+    0,
+    7
+  ]
+}

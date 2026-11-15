@@ -196,10 +196,10 @@ static int eusb2_repeater_get_version(struct usb_repeater *ur)
 	struct eusb2_repeater *er =
 			container_of(ur, struct eusb2_repeater, ur);
 	u8 reg;
+	int ret;
 
-	eusb2_repeater_reg_read(er, &reg, EUSB2_REVISION1, 1);
-
-	return reg;
+	ret = eusb2_repeater_reg_read(er, &reg, EUSB2_REVISION1, 1);
+	return ret ? ret : reg;
 }
 
 static void eusb2_repeater_create_debugfs(struct eusb2_repeater *er)
@@ -343,6 +343,7 @@ static int eusb2_repeater_init(struct usb_repeater *ur)
 	struct eusb2_repeater *er =
 			container_of(ur, struct eusb2_repeater, ur);
 	unsigned int rptr_init_cnt = INIT_MAX_CNT;
+	int ret;
 
 	/* override init sequence using devicetree based values */
 	if (ur->flags & PHY_HOST_MODE)
@@ -435,7 +436,9 @@ static int eusb2_repeater_init(struct usb_repeater *ur)
 
 	/* Wait for RPTR_STATUS for OK */
 	do {
-		eusb2_repeater_reg_read(er, &status, EUSB2_RPTR_STATUS, 1);
+		ret = eusb2_repeater_reg_read(er, &status, EUSB2_RPTR_STATUS, 1);
+		if (ret)
+			return ret;
 		if (status & RPTR_OK)
 			break;
 		usleep_range(10, 20);
@@ -443,7 +446,7 @@ static int eusb2_repeater_init(struct usb_repeater *ur)
 
 	dev_info(er->ur.dev, "eUSB2 repeater status:%s\n",
 			(status & RPTR_OK) ? "OK" : "NOT OK");
-	return 0;
+	return (status & RPTR_OK) ? 0 : -ETIMEDOUT;
 }
 
 static int eusb2_repeater_reset(struct usb_repeater *ur,
@@ -454,9 +457,8 @@ static int eusb2_repeater_reset(struct usb_repeater *ur,
 
 	dev_dbg(ur->dev, "eUSB2 repeater %s\n",
 		bring_out_of_reset ? "out of reset" : "hold into reset");
-	eusb2_repeater_masked_write(er, EUSB2_EN_CTL1, EUSB2_RPTR_EN,
+	return eusb2_repeater_masked_write(er, EUSB2_EN_CTL1, EUSB2_RPTR_EN,
 		bring_out_of_reset ? EUSB2_RPTR_EN : 0x0);
-	return 0;
 }
 
 static int eusb2_repeater_powerup(struct usb_repeater *ur)
@@ -827,13 +829,13 @@ static int eusb2_repeater_probe(struct platform_device *pdev)
 	er->ur.powerdown	= eusb2_repeater_powerdown;
 	er->ur.get_version	= eusb2_repeater_get_version;
 
+	mutex_init(&er->user_param_lock);
 	ret = usb_add_repeater_dev(&er->ur);
 	if (ret)
 		goto err_probe;
 
 	eusb2_repeater_create_debugfs(er);
 
-	mutex_init(&er->user_param_lock);
 	ret = device_create_file(er->ur.dev,
 			&dev_attr_user_param_override);
 	if (ret) {

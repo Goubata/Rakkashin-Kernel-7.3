@@ -1,0 +1,40 @@
+{
+  "stage": 76,
+  "scope": "Exact SPI prepare/unprepare phases with native runtime PM; includes two registered native SPI spi_sync lifecycle cases; pinctrl, master setup and transfers recorded only",
+  "checks": {
+    "log": "reports/geni-pm-stage76-final-qemu.log",
+    "test": "geni-pm",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      19,
+      0,
+      0,
+      19
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Master setup partial DMA allocations, setup flag publication and real firmware/register discovery remain untested and unrepaired by this change",
+    "Continuous queued recovery after hardware prepare failure, full autosuspend/remove/deep sleep and VM modes",
+    "Successful fallback message-reference pairing and actual AVR transfers/IOMMU/IRQ",
+    "DMA peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Remaining mandatory drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-pm-stage76-check.json": "7e44c2458e72d13dbcfa34dbd415210b3f692d55a155d52307382688267ecaeb",
+    "reports/geni-pm-stage76-final-qemu.log": "0779295a4181d68dfc3bc36b4644306e42c9d899445d4afb6cd24e1986057454",
+    "reports/geni-pm-stage76-final-qemu.json": "f43a8a0a3f9faa713067cc7cba5a44761ad98f439440e739afc959543fd86070",
+    "reports/geni-pm-stage76-build.log": "cb87ec20291a4fb1242f7b7e0edcf710b3fd2bef7095b9dc3d3988c0fb8383b7",
+    "reports/geni-pm-stage76-final-build.log": "db573f9e7d028e40c1b21e6e588952fe14a9ee162e08832c851ad95299b11f95",
+    "reports/geni-pm-stage76-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "a2fffa6ee75dbb0848625f1e1286fc33c687df5970165fc292c51644b9ab7fbc",
+    "patches/geni-bus-7.3.patch": "897428aeda763cb69dd1a404da08362f7b178504e2b44507a8c8b502f590d76d",
+    "tests/geni-pm/avr-geni-pm-test.c": "793bb147198dbde026ab644e59dbf0a56093fd50b54717af9d4ed8b2a34d370d",
+    "tests/geni-pm/generated.h": "0ccf066aa452d05c6443d76b235c83f69f5cefb93bd72c1981cfc65a1b03c3b5"
+  }
+}

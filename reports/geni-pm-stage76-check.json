@@ -1,0 +1,12 @@
+{
+  "log": "reports/geni-pm-stage76-final-qemu.log",
+  "test": "geni-pm",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    19,
+    0,
+    0,
+    19
+  ]
+}

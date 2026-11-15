@@ -2360,6 +2360,7 @@ static int spi_geni_prepare_transfer_hardware(struct spi_controller *spi)
 {
 	struct spi_geni_master *mas = spi_controller_get_devdata(spi);
 	int ret = 0, count = 0;
+	bool pins_active = false, pm_acquired = false;
 	unsigned long long start_time;
 
 	start_time = geni_capture_start_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
@@ -2382,18 +2383,20 @@ static int spi_geni_prepare_transfer_hardware(struct spi_controller *spi)
 	}
 
 	if (mas->gsi_mode && !mas->shared_ee) {
-		int ret = 0;
-
 		if (!mas->is_la_vm) {
 			/* Do this only for non TVM LA usecase */
 			/* May not be needed here, but maintain parity */
 			ret = pinctrl_select_state(mas->geni_pinctrl,
 						mas->geni_gpio_active);
+			if (!ret)
+				pins_active = true;
 		}
 
-		if (ret)
+		if (ret) {
 			SPI_LOG_ERR(mas->ipc, false, mas->dev,
 			"%s: Error %d pinctrl_select_state\n", __func__, ret);
+			goto fail_prepare_hardware;
+		}
 	}
 
 	if (!mas->setup || !mas->shared_ee) {
@@ -2402,21 +2405,20 @@ static int spi_geni_prepare_transfer_hardware(struct spi_controller *spi)
 			dev_err(mas->dev,
 				"%s:pm_runtime_get_sync failed %d\n",
 							__func__, ret);
-			WARN_ON_ONCE(1);
 			pm_runtime_put_noidle(mas->dev);
 			/* Set device in suspended since resume failed */
 			pm_runtime_set_suspended(mas->dev);
-			mas->is_xfer_in_progress = false;
-			return ret;
+			goto fail_prepare_hardware;
 		}
+
+		pm_acquired = true;
 
 		if (!mas->setup) {
 			ret = spi_geni_mas_setup(spi);
 			if (ret) {
 				SPI_LOG_ERR(mas->ipc, true, mas->dev,
 				"%s mas_setup failed: %d\n", __func__, ret);
-				mas->is_xfer_in_progress = false;
-				return ret;
+				goto fail_prepare_hardware;
 			}
 		}
 		ret = 0;
@@ -2432,6 +2434,20 @@ static int spi_geni_prepare_transfer_hardware(struct spi_controller *spi)
 	geni_capture_stop_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 			       mas->spi_kpi, start_time, 0, 0);
 	return ret;
+
+fail_prepare_hardware:
+	if (pins_active) {
+		int cleanup_ret = pinctrl_select_state(mas->geni_pinctrl,
+						mas->geni_gpio_sleep);
+
+		if (cleanup_ret)
+			dev_err(mas->dev, "Failed to restore sleep pins: %d\n",
+				cleanup_ret);
+	}
+	if (pm_acquired)
+		pm_runtime_put_sync(mas->dev);
+	mas->is_xfer_in_progress = false;
+	return ret;
 }
 
 static int spi_geni_unprepare_transfer_hardware(struct spi_controller *spi)
@@ -2442,6 +2458,11 @@ static int spi_geni_unprepare_transfer_hardware(struct spi_controller *spi)
 
 	start_time = geni_capture_start_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 					     mas->spi_kpi);
+
+	/* The SPI core may unprepare even when hardware preparation failed.
+	 * No hardware-phase PM reference remains after such a failure. */
+	if (!mas->is_xfer_in_progress)
+		return 0;
 
 	if (mas->shared_ee || mas->is_le_vm) {
 		mas->is_xfer_in_progress = false;

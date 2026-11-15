@@ -35,7 +35,7 @@
       "file": "ports/geni-bus/spi-msm-geni.c",
       "source": "drivers/spi/spi-msm-geni.c",
       "original_sha256": "7b0494313ab100bd43b3c8fde9bc1884edf93bd2f7a1822b86befdbaab28598b",
-      "sha256": "5431531aacf8262088be32c70d716ba369d85b64cf068e4a0f68fe8cfc7ecd3b"
+      "sha256": "77a54d8913135e42d553f9aa04b963cf665d4f6cb058dee12f7cd4c0dbca1201"
     },
     {
       "file": "ports/geni-bus/spi-qup-trace.h",
@@ -56,7 +56,7 @@
       "sha256": "3fd839f7033685de98043702ddc35ea7faec4632cfce24baba6a1a035730b329"
     }
   ],
-  "patch_sha256": "ad82d95977051a0e11b09e7f7bb15dc056844eefa71f3fd3255ab30df6f56fc9",
+  "patch_sha256": "897428aeda763cb69dd1a404da08362f7b178504e2b44507a8c8b502f590d76d",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted GENI bus driver drafts",
@@ -71,6 +71,7 @@
     "Detach the exact completed descriptor and complete its native DMA cookie before callback; support native result callbacks and retain private ownership across reentrant clients",
     "Validate SPI rate/sampling inputs, widen target multiplication, avoid round-up overflow and enforce native divider field range",
     "Initialize message DMA ownership sentinels before mapping, unwind every prior map on failure and clear each ownership token after release",
+    "Propagate hardware prepare pinctrl failures, unwind acquired PM on setup errors and guard unprepare after failed preparation",
     "Unwind SPI message-owned PM references and successful bus lock on prepare failure; preserve shared first-message reference handoff and remove WARN for ordinary resume errors"
   ],
   "pending": [

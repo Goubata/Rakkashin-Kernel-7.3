@@ -18,7 +18,7 @@ if a.map_tests:
  (ROOT/'tests/geni-map/generated.h').write_text('/* Exact production SPI map/unmap. */\n'+'\n'.join(methods)+'\n')
 if a.pm_tests:
  s=(ROOT/'ports/geni-bus/spi-msm-geni.c').read_text();methods=[]
- for name in ['static int spi_geni_prepare_message(', 'static int spi_geni_unprepare_message(']:
+ for name in ['static int spi_geni_prepare_message(', 'static int spi_geni_unprepare_message(', 'static int spi_geni_prepare_transfer_hardware(', 'static int spi_geni_unprepare_transfer_hardware(']:
   start=s.index(name);end=s.index('\n}',start)+2;methods.append(s[start:end])
  (ROOT/'tests/geni-pm/generated.h').write_text('/* Exact production SPI message preparation. */\n'+'\n'.join(methods)+'\n')
 for target in ['ports/geni-bus']+(['tests/geni-bus'] if a.tests else [])+(['tests/geni-ring'] if a.ring_tests else [])+(['tests/geni-map'] if a.map_tests else [])+(['tests/geni-pm'] if a.pm_tests else []):

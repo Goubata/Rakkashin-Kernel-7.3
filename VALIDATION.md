@@ -1361,3 +1361,34 @@ Three draft modules rebuild with all 323 imports matching. Evidence:
 reports/geni-pm-stage75-validation.json. Draft artifacts are separate from the
 Stage57 main bundle. Hardware prepare failure unwind, full suspend/remove/VM
 ownership, actual AVR transfers and whole-board acceptance remain pending.
+
+## Stage76: hardware preparation PM ownership and SPI-core teardown
+
+Stop immediately when active-pin selection fails instead of logging and
+continuing with a shadowed error. Track locally acquired pins/PM and unwind on
+runtime resume or master-setup error. Restore selected sleep pins before the
+successful PM reference is released; keep the original failure if sleep-pin
+restoration also fails. Ordinary resume failures return errors without WARN.
+Guard unprepare_transfer_hardware using the existing preparation-progress flag:
+the native SPI core can call it after failed preparation, when no reference is
+owned. Repeated hardware unprepare no longer releases a second reference.
+
+Nineteen SMP4 cases pass without WARN/panic, including the previous eight.
+Nine new direct cases cover disabled PM, pin failure/retry, native PM resume
+failure, recorded setup failure/unwind, cleanup-error preservation, nonshared
+and shared phase handoffs, shared setup failure and LE client ownership. Two
+more register a native SPI controller and child, then invoke real spi_sync:
+hardware-prepare failure followed by retry, and message-map failure followed by
+retry. The real core's noqueue failure cleanup is exercised. Actual pinctrl,
+master initialization, DMA map and wire transfers are recorded in this fixture.
+Master setup is a clean-result stub: production partial DMA/channel allocation,
+premature setup publication and hardware/firmware discovery are NOT validated
+or repaired here. Continuous queued failure recovery and full autosuspend,
+remove/deep-sleep/VM ownership remain pending, as does successful fallback
+message-reference pairing.
+
+Reproduce build_geni_bus.py --pm-tests and QEMU mode geni-pm (19 cases).
+The earlier 17-case preliminary run is retained; the final run includes native
+SPI-core coverage. All 323 production imports match. Evidence:
+reports/geni-pm-stage76-validation.json. Drafts remain outside Stage57; no real
+AVR 7.3 boot or physical-function acceptance and no partition writes occurred.

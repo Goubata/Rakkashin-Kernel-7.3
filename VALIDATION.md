@@ -1508,3 +1508,29 @@ cached-success bookkeeping, not retry scheduling: the next request may retry,
 but no autonomous timer is added for a failed interrupt-only zone. Permanent
 bus-fault masking, physical thermal protection and all remaining whole-board
 acceptance remain pending. Stage57 is unchanged; no partition writes occurred.
+
+## Stage81: exact successful SPI message PM ownership through cleanup
+
+Persist only references acquired/inherited by a successful prepare_message and
+its successfully acquired bus lock. Release those references in unprepare_message,
+including a successful nonshared fallback resume. Release an acquired reference
+even if runtime PM was subsequently disabled; current PM status is not an
+ownership token. Preserve the hardware-phase/client references. Reject duplicate
+prepare while the original message remains prepared, and make repeated/late
+unprepare inert. These fields rely on normal SPI-core message-pump serialization.
+
+Twenty-five SMP4 cases pass without WARN/panic. The previous 19 include native
+registered SPI-core spi_sync failure/retry coverage. Six new cases cover fallback
+success/reference balance, PM disabled before cleanup, native autosuspend,
+duplicate prepare ownership, late cleanup after failed preparation and LE client
+ownership. The test uses real native PM/SPI objects and callbacks, with recorded
+hardware mode/lock/map/setup actions. Production map/unmap and full master setup
+have separate Stage74/77 evidence; this fixture does not join them into physical
+controller transfer acceptance.
+
+Reproduce build_geni_bus.py --pm-tests and QEMU mode geni-pm (25 cases). All 323
+production imports match the current core. Evidence:
+reports/geni-pm-stage81-validation.json. Draft archive includes matching Image
+#24; Stage57 remains unchanged. Full hardware-phase lifecycle, continuous queued
+failure recovery, physical DMA/SPI and all remaining board gates are pending.
+No physical 7.3 boot or partition writes occurred.

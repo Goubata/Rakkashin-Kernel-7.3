@@ -252,6 +252,10 @@ struct spi_geni_master {
 	int tx_fifo_width;
 	int tx_wm;
 	bool setup;
+	/* Serialized by the SPI core message pump. */
+	bool msg_prepared;
+	bool msg_bus_locked;
+	unsigned int msg_pm_refs;
 	u32 cur_speed_hz;
 	int cur_word_len;
 	unsigned int tx_rem_bytes;
@@ -1948,6 +1952,11 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 	start_time = geni_capture_start_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 					     mas->spi_kpi);
 
+	if (mas->msg_prepared) {
+		ret = -EBUSY;
+		goto exit_prepare_message;
+	}
+
 	if (mas->shared_ee) {
 		if (mas->setup) {
 			/* Client to respect system suspend */
@@ -2044,6 +2053,10 @@ exit_prepare_message:
 			pm_refs--;
 			pm_runtime_put_sync(mas->dev);
 		}
+	} else {
+		mas->msg_pm_refs = pm_refs;
+		mas->msg_bus_locked = bus_locked;
+		mas->msg_prepared = true;
 	}
 	geni_capture_stop_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 			       mas->spi_kpi, start_time, 0, 0);
@@ -2059,28 +2072,36 @@ static int spi_geni_unprepare_message(struct spi_controller *spi_mas, struct spi
 	start_time = geni_capture_start_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 					     mas->spi_kpi);
 
+	if (!mas->msg_prepared)
+		return 0;
+	mas->msg_prepared = false;
+
 	mas->cur_speed_hz = 0;
 	mas->cur_word_len = 0;
 	if (mas->cur_xfer_mode == GENI_GPI_DMA)
 		spi_geni_unmap_buf(mas, spi_msg);
 
-	if (mas->shared_ee) {
-		if (mas->shared_se)
-			spi_geni_unlock_bus(spi_mas);
+	if (mas->msg_bus_locked) {
+		mas->msg_bus_locked = false;
+		spi_geni_unlock_bus(spi_mas);
+	}
 
+	/* Release only references acquired or inherited by this message,
+	 * including a successful nonshared fallback resume. A later PM mode
+	 * change does not transfer ownership of an already acquired reference. */
+	while (mas->msg_pm_refs) {
+		mas->msg_pm_refs--;
 		if (mas->dis_autosuspend) {
 			pm_runtime_put_sync(mas->dev);
-			count = atomic_read(&mas->dev->power.usage_count);
-			if (count < 0)
-				SPI_LOG_ERR(mas->ipc, false, mas->dev,
-					"suspend usage count mismatch:%d",
-								count);
-		} else if (!pm_runtime_status_suspended(mas->dev) &&
-				pm_runtime_enabled(mas->dev)) {
+		} else {
 			pm_runtime_mark_last_busy(mas->dev);
 			pm_runtime_put_autosuspend(mas->dev);
 		}
 	}
+	count = atomic_read(&mas->dev->power.usage_count);
+	if (count < 0)
+		SPI_LOG_ERR(mas->ipc, false, mas->dev,
+			    "suspend usage count mismatch:%d", count);
 
 	geni_capture_stop_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 			       mas->spi_kpi, start_time, 0, 0);

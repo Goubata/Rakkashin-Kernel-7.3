@@ -14,6 +14,7 @@ struct spi_geni_master {
  struct device *dev;struct geni_se spi_rsc;void *ipc,*ipc_log_kpi;
  bool spi_kpi,shared_ee,setup,dis_autosuspend,shared_se,is_le_vm;
  bool is_xfer_in_progress,gsi_mode,is_la_vm;
+ bool msg_prepared,msg_bus_locked;unsigned int msg_pm_refs;
  struct pinctrl *geni_pinctrl;struct pinctrl_state *geni_gpio_active,*geni_gpio_sleep;
  int cur_xfer_mode,cur_speed_hz,cur_word_len;struct spi_geni_gsi gsi[NUM_SPI_XFER];
 };
@@ -246,8 +247,49 @@ static void native_spi_core_message_failure_preserves_hardware_owner(struct kuni
  KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);
  spi_unregister_device(spi);spi_unregister_controller(f->ctl);
 }
+static void successful_fallback_resume_is_released_exactly_once(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->shared_ee=f->mas->shared_se=false;KUNIT_ASSERT_GE(test,pm_runtime_suspend(f->dev),0);
+ KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),1);
+ spi_geni_unprepare_message(f->ctl,&f->msg);spi_geni_unprepare_message(f->ctl,&f->msg);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);KUNIT_EXPECT_EQ(test,f->unmaps,1u);
+}
+static void message_lease_is_balanced_even_if_runtime_pm_disabled(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->dis_autosuspend=false;
+ KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);pm_runtime_disable(f->dev);
+ spi_geni_unprepare_message(f->ctl,&f->msg);KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);
+ KUNIT_EXPECT_EQ(test,f->unlocks,1u);pm_runtime_enable(f->dev);
+}
+static void autosuspend_message_lease_is_not_released_twice(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->dis_autosuspend=false;
+ pm_runtime_set_autosuspend_delay(f->dev,0);pm_runtime_use_autosuspend(f->dev);
+ KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);
+ spi_geni_unprepare_message(f->ctl,&f->msg);spi_geni_unprepare_message(f->ctl,&f->msg);pm_runtime_barrier(f->dev);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);KUNIT_EXPECT_EQ(test,f->unlocks,1u);KUNIT_EXPECT_EQ(test,f->unmaps,1u);
+}
+static void duplicate_prepare_preserves_original_message_ownership(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);
+ KUNIT_EXPECT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),-EBUSY);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),1);KUNIT_EXPECT_EQ(test,f->locks,1u);KUNIT_EXPECT_EQ(test,f->unlocks,0u);
+ spi_geni_unprepare_message(f->ctl,&f->msg);KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),0);
+}
+static void late_unprepare_after_failed_message_does_not_touch_borrowed_pm(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->shared_ee=f->mas->shared_se=false;KUNIT_ASSERT_GE(test,pm_runtime_get_sync(f->dev),0);f->map_error=-EIO;
+ KUNIT_EXPECT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),-EIO);spi_geni_unprepare_message(f->ctl,&f->msg);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),1);KUNIT_EXPECT_EQ(test,f->unmaps,0u);pm_runtime_put_sync(f->dev);
+}
+static void le_message_keeps_client_owned_reference(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->mas->is_le_vm=true;f->mas->shared_ee=f->mas->shared_se=false;KUNIT_ASSERT_GE(test,pm_runtime_get_sync(f->dev),0);
+ KUNIT_ASSERT_EQ(test,spi_geni_prepare_message(f->ctl,&f->msg),0);spi_geni_unprepare_message(f->ctl,&f->msg);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->dev->power.usage_count),1);pm_runtime_put_sync(f->dev);
+}
 static struct kunit_case cases[]={KUNIT_CASE(lock_failure_releases_pm_and_retry_succeeds),KUNIT_CASE(map_failure_unlocks_before_releasing_power),KUNIT_CASE(fifo_failure_releases_only_held_resources),KUNIT_CASE(mode_failure_unwinds_lock_and_pm),KUNIT_CASE(resume_failure_is_recoverable_without_warning),KUNIT_CASE(first_shared_message_consumes_inherited_reference),KUNIT_CASE(nonshared_hardware_reference_is_not_released),KUNIT_CASE(fallback_local_resume_unwinds_on_failure),
- KUNIT_CASE(disabled_pm_never_acquires_hardware_resources),KUNIT_CASE(active_pin_failure_stops_prepare_and_can_retry),KUNIT_CASE(hardware_resume_failure_restores_pins_without_double_put),KUNIT_CASE(setup_error_releases_hardware_reference_once),KUNIT_CASE(cleanup_pin_error_preserves_primary_error),KUNIT_CASE(nonshared_phase_sequence_balances_one_reference),KUNIT_CASE(first_shared_phase_sequence_balances_handoff),KUNIT_CASE(first_shared_hardware_setup_error_does_not_leak),KUNIT_CASE(le_vm_hardware_phase_keeps_client_reference),KUNIT_CASE(native_spi_core_unprepares_failed_hardware_safely),KUNIT_CASE(native_spi_core_message_failure_preserves_hardware_owner),{}};
+ KUNIT_CASE(disabled_pm_never_acquires_hardware_resources),KUNIT_CASE(active_pin_failure_stops_prepare_and_can_retry),KUNIT_CASE(hardware_resume_failure_restores_pins_without_double_put),KUNIT_CASE(setup_error_releases_hardware_reference_once),KUNIT_CASE(cleanup_pin_error_preserves_primary_error),KUNIT_CASE(nonshared_phase_sequence_balances_one_reference),KUNIT_CASE(first_shared_phase_sequence_balances_handoff),KUNIT_CASE(first_shared_hardware_setup_error_does_not_leak),KUNIT_CASE(le_vm_hardware_phase_keeps_client_reference),KUNIT_CASE(native_spi_core_unprepares_failed_hardware_safely),KUNIT_CASE(native_spi_core_message_failure_preserves_hardware_owner),KUNIT_CASE(successful_fallback_resume_is_released_exactly_once),KUNIT_CASE(message_lease_is_balanced_even_if_runtime_pm_disabled),KUNIT_CASE(autosuspend_message_lease_is_not_released_twice),KUNIT_CASE(duplicate_prepare_preserves_original_message_ownership),KUNIT_CASE(late_unprepare_after_failed_message_does_not_touch_borrowed_pm),KUNIT_CASE(le_message_keeps_client_owned_reference),{}};
 static struct kunit_suite suite={.name="avr-geni-pm",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");MODULE_DESCRIPTION("SPI prepare error unwind with native runtime PM");

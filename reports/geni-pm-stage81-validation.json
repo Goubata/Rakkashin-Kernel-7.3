@@ -1,0 +1,38 @@
+{
+  "stage": 81,
+  "scope": "Exact SPI message and hardware prepare/unprepare methods with native runtime PM and registered SPI-core tests; hardware actions recorded only",
+  "checks": {
+    "log": "reports/geni-pm-stage81-qemu.log",
+    "test": "geni-pm",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      25,
+      0,
+      0,
+      25
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Continuous queued recovery after failed hardware prepare and complete hardware-phase autosuspend/remove/deep-sleep/VM lifetime",
+    "Physical SPI/DMA/IRQ/IOMMU/cache/firmware behavior; recorded master-setup stub is separate from Stage77 exact setup tests",
+    "DMA peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Other mandatory drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-pm-stage81-check.json": "3a5a63d2a1a1fec4dfa9a10e0d4ea7ce40841d9cf21134effe1edcc9bbebb215",
+    "reports/geni-pm-stage81-qemu.log": "48cb6baa80c5746d43fb5ee28984a06add258ac3b680ac59bba1400dfd76c54b",
+    "reports/geni-pm-stage81-qemu.json": "48a18dff7036a81507f86048c8c82f7823f0fc103d881e89fd835345111f19b1",
+    "reports/geni-pm-stage81-build.log": "16cbd1bc820678ae34de7508c8217bc80f4e8422e13e23a206ebcf7fe7af5673",
+    "reports/geni-pm-stage81-crc.json": "e8e5773b1778b1bc94e315b47d0dcbf9ee42019ff0469c3e6df7ed1a5424647f",
+    "reports/geni-bus-source-lock.json": "bec7fa1dda6eb752cc60f2fe306221ece79f4616d4d680ec396398de528b8923",
+    "patches/geni-bus-7.3.patch": "b2de73385b207944d22e34ee073e37219fce7c9270e8fba1dea69dafb3369900",
+    "tests/geni-pm/avr-geni-pm-test.c": "b9f9943f4f23f7ebb5e22e2e289eeff2ad30b8c67d3d6c5a9ba41e80c2e93183",
+    "tests/geni-pm/generated.h": "d196d5dc128211120e7fc8ebe9bd2c5e2493690998e336876432afcbcf951824"
+  }
+}

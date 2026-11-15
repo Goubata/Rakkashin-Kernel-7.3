@@ -1,0 +1,7 @@
+{
+  "scope": "Full exact SPI master setup method; recorded channel leases and MMIO, native devres allocations and DMA slave-config dispatch; no physical controller initialization",
+  "image_required": true,
+  "image_sha256": "8f477e97196bdc97dc93c332ab98fab3b0eaa82a316e9acfc5cd382acd9e67da",
+  "promoted": false,
+  "physical_verified": false
+}

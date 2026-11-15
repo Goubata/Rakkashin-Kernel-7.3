@@ -1,0 +1,12 @@
+{
+  "log": "reports/geni-setup-stage77-qemu.log",
+  "test": "geni-setup",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    9,
+    0,
+    0,
+    9
+  ]
+}

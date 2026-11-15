@@ -1,0 +1,39 @@
+{
+  "stage": 77,
+  "scope": "Full exact SPI master setup method; recorded channel leases and MMIO, native devres allocations and DMA slave-config dispatch; no physical controller initialization",
+  "checks": {
+    "log": "reports/geni-setup-stage77-qemu.log",
+    "test": "geni-setup",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      9,
+      0,
+      0,
+      9
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Real DMA channel acquisition/configuration/release/IRQ synchronization and firmware/register programming",
+    "Continuous queued recovery after hardware prepare failure and full autosuspend/remove/deep sleep/VM lifecycle",
+    "Successful fallback message-reference pairing, actual AVR peripheral/IOMMU/cache/waveform behavior",
+    "DMA peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Remaining mandatory drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-setup-stage77-check.json": "3561bc8847b09da3e601ac84aa3803d85c61e7c27d962f1d3ae8522862ff7d03",
+    "reports/geni-setup-stage77-qemu.log": "a03b076b097c57f994c5b1120185203fe1f9566ba048dbb74dfcd39d1fb91dfe",
+    "reports/geni-setup-stage77-qemu.json": "1e3b44381859ac64ff3ba7e60abb3500d6fb874d162a095444e3a59c8a9f7849",
+    "reports/geni-setup-stage77-build.log": "130ed44d3bbf642ce7c17406851ea4bbfa4f41bd3425598a087f0c1a9184212f",
+    "reports/geni-setup-stage77-crc.json": "e8e5773b1778b1bc94e315b47d0dcbf9ee42019ff0469c3e6df7ed1a5424647f",
+    "reports/geni-bus-source-lock.json": "feff0a818a5ef7d1a9e95eae4d1b89b8993cee2dd9787bd5807ddb40ad697aff",
+    "patches/geni-bus-7.3.patch": "e95721b54c86e30803555166815864b890a64352f71d9d921a28a16078268bfc",
+    "tests/geni-setup/avr-geni-setup-test.c": "0d16e301911fd5223d901bff731f29ff84d49657bea1a1bccbe96e008bcf9b61",
+    "tests/geni-setup/generated.h": "265f7e2483f8ad38181e228b44162cab39a9ffac611eee455c84b27ce56e63f4"
+  }
+}

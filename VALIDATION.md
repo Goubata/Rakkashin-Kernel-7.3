@@ -1392,3 +1392,34 @@ The earlier 17-case preliminary run is retained; the final run includes native
 SPI-core coverage. All 323 production imports match. Evidence:
 reports/geni-pm-stage76-validation.json. Drafts remain outside Stage57; no real
 AVR 7.3 boot or physical-function acceptance and no partition writes occurred.
+
+## Stage77: fail-closed SPI master DMA initialization
+
+The full master-setup method previously continued after missing channels or
+allocation failures, sometimes returning success and marking setup complete;
+configuration failures left devres allocations behind, and a zero QUP hardware
+version could fail after setup had already been published. Keep newly acquired
+TX/RX channels and GSI allocations local until all initialization succeeds.
+Return request errors (NULL becomes -ENODEV), -ENOMEM for allocation failure,
+original configuration errors, and -ENXIO for a missing hardware version. Release
+all newly acquired channels/allocations on failure without publishing their
+pointers. Move setup publication to the successful tail; retain the deliberate
+shared first-message handoff flag and LE common-register bypass.
+
+Nine SMP4 cases compile the entire exact production master-setup method. Native
+SPI objects, real devres allocation/free and native dmaengine_slave_config
+callback dispatch are used; channel request/release, configuration results,
+MMIO/firmware values, IPC context and peripheral setup are explicitly recorded.
+Exercise both request positions, NULL channel, both allocation positions, both
+configuration positions, zero version, cleanup and retry; shared handoff,
+nonshared no-lock allocation, FIFO and LE validation/bypass. Assertions check
+no setup/resource publication during configuration and no retained resource
+leases after each injected failure. No warning or panic occurs. This validates
+source ownership only, not real channel shutdown, hardware register rollback,
+interrupt synchronization, firmware loading or full driver probe/remove.
+
+Reproduce build_geni_bus.py --setup-tests and QEMU mode geni-setup. All 323
+production imports match. Evidence: reports/geni-setup-stage77-validation.json.
+Draft artifacts are separate from Stage57. Continuous queued recovery after
+hardware prepare failure, autosuspend/remove/deep-sleep/VM integration, physical
+AVR transactions and all remaining whole-board acceptance gates are pending.

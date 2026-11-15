@@ -2203,6 +2203,8 @@ static int spi_geni_mas_setup(struct spi_controller *spi)
 {
 	struct spi_geni_master *mas = spi_controller_get_devdata(spi);
 	unsigned int major, minor, step;
+	struct dma_chan *tx = NULL, *rx = NULL;
+	struct spi_geni_gsi *gsi = NULL, *gsi_lock_unlock = NULL;
 	int hw_ver;
 	int ret = 0;
 
@@ -2228,68 +2230,47 @@ static int spi_geni_mas_setup(struct spi_controller *spi)
 
 	if (mas->gsi_mode && !mas->is_deep_sleep) {
 		SPI_LOG_DBG(mas->ipc, false, mas->dev, "%s:GSI mode\n", __func__);
-		mas->tx = dma_request_slave_channel(mas->dev, "tx");
-		if (IS_ERR_OR_NULL(mas->tx)) {
-			dev_info(mas->dev, "Failed to get tx DMA ch %ld\n",
-						PTR_ERR(mas->tx));
-			goto setup_ipc;
+		/* Keep resources private until every initialization step succeeds. */
+		tx = dma_request_slave_channel(mas->dev, "tx");
+		if (IS_ERR_OR_NULL(tx))
+			return tx ? PTR_ERR(tx) : -ENODEV;
+		rx = dma_request_slave_channel(mas->dev, "rx");
+		if (IS_ERR_OR_NULL(rx)) {
+			ret = rx ? PTR_ERR(rx) : -ENODEV;
+			rx = NULL;
+			goto fail_setup;
 		}
-		mas->rx = dma_request_slave_channel(mas->dev, "rx");
-		if (IS_ERR_OR_NULL(mas->rx)) {
-			dev_info(mas->dev, "Failed to get rx DMA ch %ld\n",
-						PTR_ERR(mas->rx));
-			dma_release_channel(mas->tx);
-			goto setup_ipc;
-		}
-		mas->gsi = devm_kzalloc(mas->dev,
-			(sizeof(struct spi_geni_gsi) * NUM_SPI_XFER),
-			GFP_KERNEL);
-		if (IS_ERR_OR_NULL(mas->gsi)) {
-			dev_err(mas->dev, "Failed to get GSI mem\n");
-			dma_release_channel(mas->tx);
-			dma_release_channel(mas->rx);
-			mas->tx = NULL;
-			mas->rx = NULL;
-			goto setup_ipc;
+		gsi = devm_kzalloc(mas->dev,
+				sizeof(*gsi) * NUM_SPI_XFER, GFP_KERNEL);
+		if (!gsi) {
+			ret = -ENOMEM;
+			goto fail_setup;
 		}
 		if (mas->shared_se || mas->is_le_vm) {
-			mas->gsi_lock_unlock = devm_kzalloc(mas->dev,
-				(sizeof(struct spi_geni_gsi)),
-				GFP_KERNEL);
-			if (IS_ERR_OR_NULL(mas->gsi_lock_unlock)) {
-				dev_err(mas->dev, "Failed to get GSI lock mem\n");
-				dma_release_channel(mas->tx);
-				dma_release_channel(mas->rx);
-				mas->tx = NULL;
-				mas->rx = NULL;
-				goto setup_ipc;
+			gsi_lock_unlock = devm_kzalloc(mas->dev,
+						 sizeof(*gsi_lock_unlock), GFP_KERNEL);
+			if (!gsi_lock_unlock) {
+				ret = -ENOMEM;
+				goto fail_setup;
 			}
 		}
 		mas->tx_event.init.callback = spi_gsi_ch_cb;
 		mas->tx_event.init.cb_param = spi;
 		mas->tx_event.cmd = MSM_GPI_INIT;
-		mas->tx->private = &mas->tx_event;
+		tx->private = &mas->tx_event;
 		mas->rx_event.init.callback = spi_gsi_ch_cb;
 		mas->rx_event.init.cb_param = spi;
 		mas->rx_event.cmd = MSM_GPI_INIT;
-		mas->rx->private = &mas->rx_event;
-		ret = dmaengine_slave_config(mas->tx, NULL);
+		rx->private = &mas->rx_event;
+		ret = dmaengine_slave_config(tx, NULL);
 		if (ret) {
 			dev_err(mas->dev, "Failed to Config Tx, ret:%d\n", ret);
-			dma_release_channel(mas->tx);
-			dma_release_channel(mas->rx);
-			mas->tx = NULL;
-			mas->rx = NULL;
-			goto setup_ipc;
+			goto fail_setup;
 		}
-		ret = dmaengine_slave_config(mas->rx, NULL);
+		ret = dmaengine_slave_config(rx, NULL);
 		if (ret) {
 			dev_err(mas->dev, "Failed to Config Rx, ret:%d\n", ret);
-			dma_release_channel(mas->tx);
-			dma_release_channel(mas->rx);
-			mas->tx = NULL;
-			mas->rx = NULL;
-			goto setup_ipc;
+			goto fail_setup;
 		}
 	} else {
 		mas->tx_fifo_depth = geni_se_get_tx_fifo_depth(&mas->spi_rsc);
@@ -2301,15 +2282,12 @@ static int spi_geni_mas_setup(struct spi_controller *spi)
 	}
 
 	mas->geni_init_cfg_revision = geni_read_reg(mas->base, GENI_INIT_CFG_REVISION);
-setup_ipc:
 	/* we should avoid reallocation of ipc context during deepsleep */
 	if (!mas->ipc)
 		mas->ipc = ipc_log_context_create(4, dev_name(mas->dev), 0);
 	dev_info(mas->dev, "tx_fifo %d rx_fifo %d tx_width %d\n",
 		mas->tx_fifo_depth, mas->rx_fifo_depth,
 		mas->tx_fifo_width);
-	if (!mas->shared_ee)
-		mas->setup = true;
 
 	/*
 	 * Bypass hw_version read for LE. QUP common registers
@@ -2319,13 +2297,14 @@ setup_ipc:
 	 *  done based on different hw versions.
 	 */
 	if (mas->is_le_vm)
-		return ret;
+		goto setup_done;
 
 	if (!mas->is_deep_sleep) {
 		hw_ver = geni_se_get_qup_hw_version(&mas->spi_rsc);
 		if (unlikely(!hw_ver)) {
 			dev_err(mas->dev, "Err getting HW version 0x%x\n", hw_ver);
-			return -ENXIO;
+			ret = -ENXIO;
+			goto fail_setup;
 		}
 
 		geni_se_common_get_major_minor_num(hw_ver, &major, &minor, &step);
@@ -2353,6 +2332,26 @@ setup_ipc:
 				"Auto Suspend is disabled\n");
 	mas->is_deep_sleep = false;
 
+setup_done:
+	if (tx) {
+		mas->tx = tx;
+		mas->rx = rx;
+		mas->gsi = gsi;
+		mas->gsi_lock_unlock = gsi_lock_unlock;
+	}
+	if (!mas->shared_ee)
+		mas->setup = true;
+	return 0;
+
+fail_setup:
+	if (rx)
+		dma_release_channel(rx);
+	if (tx)
+		dma_release_channel(tx);
+	if (gsi_lock_unlock)
+		devm_kfree(mas->dev, gsi_lock_unlock);
+	if (gsi)
+		devm_kfree(mas->dev, gsi);
 	return ret;
 }
 

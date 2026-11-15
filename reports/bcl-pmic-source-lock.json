@@ -1,0 +1,47 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-bcl-pmic/qti_bcl_pmic5.c",
+      "source": "drivers/thermal/qcom/qti_bcl_pmic5.c",
+      "original_sha256": "8a1a15ffcc2de47951d3037b4a119d49b4d9aa87211e2b352380e343ecba40fc",
+      "sha256": "418dbc2404a7ea767533fd096db0f49a8fa2bcc5ac2dd1c4b4c0ae57233f7e50"
+    },
+    {
+      "file": "ports/qcom-bcl-pmic/qti_bcl_common.h",
+      "source": "drivers/thermal/qcom/qti_bcl_common.h",
+      "original_sha256": "515655dfebb3987a512a20f933231679e05aaf7860d8ea4966cf912aaa6aecc3",
+      "sha256": "bdba9fc11482afd551b91bca42fa8898ca0e1242f856ed1e8c6c2087b02c2bf8"
+    },
+    {
+      "file": "ports/qcom-bcl-pmic/qti_bcl_stats.c",
+      "source": "drivers/thermal/qcom/qti_bcl_stats.c",
+      "original_sha256": "8a0e6c6453b022a4c0f95f000d55352d745201f06623ad75abbbcee8b813f100",
+      "sha256": "9de5a6ddc4b3c6ab4090fcb249987cfa1c151b2df95e6e0c7368cab9ae7e1833"
+    },
+    {
+      "file": "ports/qcom-bcl-pmic/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "d507196f727f2030cb992cdc13b29a93392d5f66080bd89f11addc6220c7f9ba"
+    }
+  ],
+  "patch_sha256": "cb5c1c322970c8af6f7d267a9edfa5e78834a07f7609770d96f62cc005530a50",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Pinned source and patch replay only; unaccepted PMIC BCL draft",
+  "reviewed_changes": [
+    "Build full pinned factory PMIC BCL and stats sources using real native thermal private layout/accessors and actual IPC logging provider",
+    "Propagate NVMEM, revision, IRQ, zone and monitor-write errors; own per-device resources and remove stale allocation globals",
+    "Serialize ADC callbacks and publish successful samples only; wide intermediates and clamp before narrowing CCM requests",
+    "Remove unused auxiliary ADC reads from logical level callback to avoid redundant bus traffic and same-class nested sensor locks",
+    "Read BPM wire snapshot explicitly little endian and commit only after successful HOLD/read/CLR; release HOLD after read failure",
+    "Track native IRQ action/wake ownership and preserve actions across freeze/restore; own debugfs subtrees and drain callbacks before log teardown"
+  ],
+  "pending": [
+    "Full OF/platform probe with NVMEM, native PMIC IRQ/SPMI and partial-probe fault integration",
+    "Actual calibration, register policy and physical current/voltage/thermal/cooling behavior",
+    "Exhaustive concurrent notifier/IRQ/PM/forced-unbind behavior and hardware-error recovery",
+    "Whole-board drivers/DT/boot/DLKM/SELinux acceptance"
+  ]
+}

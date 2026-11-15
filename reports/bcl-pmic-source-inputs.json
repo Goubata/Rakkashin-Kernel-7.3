@@ -1,0 +1,8 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/qcom-bcl-pmic/qti_bcl_pmic5.c": "drivers/thermal/qcom/qti_bcl_pmic5.c",
+    "ports/qcom-bcl-pmic/qti_bcl_common.h": "drivers/thermal/qcom/qti_bcl_common.h",
+    "ports/qcom-bcl-pmic/qti_bcl_stats.c": "drivers/thermal/qcom/qti_bcl_stats.c"
+  }
+}

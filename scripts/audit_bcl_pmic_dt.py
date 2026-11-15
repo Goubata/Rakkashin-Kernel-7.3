@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Audit pinned PMIC BCL source IDs against selected AVR DT, without hardware IO."""
 from pathlib import Path
-import hashlib,json,re,struct,subprocess
+import argparse,hashlib,json,re,struct,subprocess
+p=argparse.ArgumentParser(description=__doc__);p.add_argument("--port",action="store_true");p.add_argument("--output",type=Path,default=Path("reports/bcl-pmic-stage89-dt.json"));args=p.parse_args()
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
 REPO=ROOT.parent/'avr-upstream-audit/qcom-soc'
@@ -105,5 +106,24 @@ for tag,name in [('saved','device-baseline/running.dtb'),('candidate','artifacts
  inputs[tag]={'file':name,'sha256':sha(raw),'providers':list(providers),'zones':zones,'selected':selected,'checks':checks}
 preserved=inputs['saved']['selected']==inputs['candidate']['selected']
 if not preserved:errors.append('Selected saved/candidate PMIC BCL semantics differ')
-r={'stage':89,'passed':not errors,'scope':'Pinned source IDs and selected DT interrupt, thermal, NVMEM and cooling-link shape only; driver not ported by this audit','source_commit':PIN,'source_sha256':{p:sha(v) for p,v in sources.items()},'sensor_ids':dict(enumerate(ids)),'compatible_matches':matches,'inputs':inputs,'saved_semantics_preserved':preserved,'dt_modified':False,'driver_port_complete':False,'physical_verified':False,'whole_board_accepted':False,'observations':['Both active saved nodes use qcom,bcl-v5 and therefore select pmih010x_data in pinned factory source; no speculative PM8550 compatible change made','Parent has zero size cells: the factory of_get_address(...,0) consumes the first raw reg cell; the trailing 0x100 is not treated as a validated native resource size here','DT declares standard IDs0/1 and 2S IDs8/9 simultaneously; factory NVMEM chooses one current pair, so eleven declarations are not eleven proven active sensors','NVMEM reference denotes SMB1510 bit5 at SDAM offset0x5d; its physical value was not read or guessed','BCL event channels5/6/7 carry a logical asserted metric; VBAT/current channels use factory mV/mA scales rather than millidegree temperature'],'required_port_work':['Use real native thermal private layout/accessors, remove vendor change_mode helper dependency','Propagate NVMEM/IRQ/thermal/register-write errors instead of reporting successful partial probe','Own all per-device IRQ wake/enable, notifier, IPC-log and debugfs resources; fix probe/remove and freeze/restore unwind','Initialize notifier callback before registration and remove stale global allocation/count state','Retain physical calibration and validate conversions/endianness/threshold mapping with native regmap fault tests before hardware acceptance'],'errors':errors}
-(ROOT/'reports/bcl-pmic-stage89-dt.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({'passed':r['passed'],'active_providers':len(inputs['candidate']['providers']),'declared_zones':len(inputs['candidate']['zones']),'errors':errors},indent=2));raise SystemExit(bool(errors))
+port_contract=None
+if args.port:
+ port=(ROOT/'ports/qcom-bcl-pmic/qti_bcl_pmic5.c').read_text();header=(ROOT/'ports/qcom-bcl-pmic/qti_bcl_common.h').read_text();checks=[]
+ def check(ok,msg):
+  checks.append({'check':msg,'passed':bool(ok)})
+  if not ok:errors.append('port: '+msg)
+ def compact(text):return re.sub(r'\s+','',text)
+ check(compact(re.search(r'enum bcl_dev_type\s*\{(.*?)\};',header,re.S).group(1))==compact(enum),'sensor ID enum unchanged')
+ check(re.findall(r'"([^"]+)"',re.search(r'bcl_int_names\[BCL_TYPE_MAX\]\[25\]\s*=\s*\{(.*?)\};',port,re.S).group(1))==names,'IRQ names and sensor indices unchanged')
+ check(dict(re.findall(r'\.compatible\s*=\s*"([^"]+)"\s*,\s*\.data\s*=\s*&([a-zA-Z_0-9]+)',port))==matches,'compatible to calibration descriptor matches unchanged')
+ for name in set(matches.values()):
+  pattern=r'static const struct bcl_desc '+name+r'\s*=\s*\{(.*?)\n\};'
+  check(compact(re.search(pattern,port,re.S).group(1))==compact(re.search(pattern,c_source,re.S).group(1)),name+': calibration registers and factors unchanged')
+ def constants(text):return dict(re.findall(r'^#define\s+(BCL_[A-Z0-9_]+)\s+(.+)$',text,re.M))
+ check(constants(port)==constants(c_source),'factory BCL numerical constants unchanged')
+ port_contract={'source_sha256':sha(port.encode()),'header_sha256':sha(header.encode()),'checks':checks,'scope':'Selected ID, IRQ-name, match and calibration constants only; does not prove conversion/control/hardware behavior'}
+r={'stage':90 if args.port else 89,'passed':not errors,'scope':'Pinned source IDs and selected DT interrupt, thermal, NVMEM and cooling-link shape only; driver not ported by this audit','port_contract':port_contract,'source_commit':PIN,'source_sha256':{p:sha(v) for p,v in sources.items()},'sensor_ids':dict(enumerate(ids)),'compatible_matches':matches,'inputs':inputs,'saved_semantics_preserved':preserved,'dt_modified':False,'driver_port_complete':False,'physical_verified':False,'whole_board_accepted':False,'observations':['Both active saved nodes use qcom,bcl-v5 and therefore select pmih010x_data in pinned factory source; no speculative PM8550 compatible change made','Parent has zero size cells: the factory of_get_address(...,0) consumes the first raw reg cell; the trailing 0x100 is not treated as a validated native resource size here','DT declares standard IDs0/1 and 2S IDs8/9 simultaneously; factory NVMEM chooses one current pair, so eleven declarations are not eleven proven active sensors','NVMEM reference denotes SMB1510 bit5 at SDAM offset0x5d; its physical value was not read or guessed','BCL event channels5/6/7 carry a logical asserted metric; VBAT/current channels use factory mV/mA scales rather than millidegree temperature'],'required_port_work':['Use real native thermal private layout/accessors, remove vendor change_mode helper dependency','Propagate NVMEM/IRQ/thermal/register-write errors instead of reporting successful partial probe','Own all per-device IRQ wake/enable, notifier, IPC-log and debugfs resources; fix probe/remove and freeze/restore unwind','Initialize notifier callback before registration and remove stale global allocation/count state','Retain physical calibration and validate conversions/endianness/threshold mapping with native regmap fault tests before hardware acceptance'],'errors':errors}
+if args.port:
+ r['port_acceptance_requirements']=r.pop('required_port_work')
+ r['implementation_status']='Initial full-source 7.3 module draft exists; this audit checks selected DT/calibration contracts only'
+(ROOT/args.output).write_text(json.dumps(r,indent=2)+'\n');print(json.dumps({'passed':r['passed'],'active_providers':len(inputs['candidate']['providers']),'declared_zones':len(inputs['candidate']['zones']),'errors':errors},indent=2));raise SystemExit(bool(errors))

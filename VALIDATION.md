@@ -1808,3 +1808,73 @@ Evidence: reports/bcl-stage89-validation.json and reports/bcl-pmic-stage89-dt.js
 Reproduce build_bcl_soc.py --tests, QEMU mode bcl-soc --cpus4 (26 cases), and
 audit_bcl_pmic_dt.py. No board DT changes, phone partition writes or physical
 7.3 boot. Main Stage57 bundle remains unchanged; whole-board acceptance pending.
+
+## Stage90: full-source PMIC BCL module draft
+
+Build pinned factory qti_bcl_pmic5.c/common header/stats as bcl_pmic5.ko against
+actual native 7.3 thermal private layout/accessors and the existing real IPC log
+provider. Remove the vendor thermal change_mode dependency; native thermal core
+owns zone mode. Do not fabricate a provider or successful callback. Preserve the
+ten sensor IDs, IRQ-name table, compatible matches, descriptor registers/scales
+and BCL constants. Selected saved/candidate DT contract checks pass for both
+active nodes, eleven declarations, sixteen trip nodes and six cooling maps.
+Both current sensor pairs are declared; NVMEM selects the pair actually used.
+No DT or GPU tables are modified by this stage.
+
+Replace stale allocation/count globals with per-device storage. Initialize all
+sensor locks and stats back-pointers before callbacks. Propagate revision,
+NVMEM, IRQ/zone and monitor/BPM enable failures. Native OF absence ENODEV remains
+optional where a sensor has no consumer. Assign the notifier callback before
+registration. On failed/normal teardown close callback publication, remove the
+owned debugfs subtree, drain owned IRQ actions and thermal polling, then destroy
+the log context. Retain a shared debugfs root only while devices own children;
+use device names for diagnostic subtrees. Keep platform IRQ mappings with their
+owner. Track wake ownership and retain IRQ actions across freeze/restore instead
+of freeing invalid/unowned IRQs. Acquire wake references before rearming on
+restore and rollback newly acquired references on the tested wake-enable error.
+Frozen threshold updates return EBUSY so native thermal core can retry later.
+
+Serialize ADC access per sensor and only publish successful callback samples.
+Widen intermediate arithmetic and clamp CCM requests before narrowing. Preserve
+factory no-reading/cache behavior. Decode BPM's eleven wire bytes explicitly LE
+into a local snapshot, attempt CLR after failed reads, and only commit caller
+output/timestamp after successful HOLD/read/CLR. This is output consistency, not
+a guarantee of hardware recovery if the bus rejects CLR. Propagate peer PMIC
+notifier errors to voltage-trip callers. A primary write can already have
+succeeded when a peer fails; cross-chip rollback is not claimed.
+
+Twenty-two SMP4 cases pass with PROVE_LOCKING and no WARN/panic/skip. Tests
+compile both complete production C files, suppress only platform-driver macro
+registration, and use real native regmap, generic thermal zone, private IRQ
+actions/wake bookkeeping, notifier and debugfs registries. RAM bus/chip operations
+record data/errors; no physical SPMI, PMIC IRQ line or wake delivery is modeled.
+Production module separately loads/unloads unbound with real dependency modules.
+Cover signed/voltage samples and selected legacy scaling, caches and read errors,
+threshold programming/ranges/write errors, CCM narrowing, all thirteen BPM bus
+failure positions and snapshot decoding, revision errors, stop/frozen gates,
+IRQ ownership/reusability/wake enable failure, repeated freeze/restore and wake
+rollback, two debugfs subtrees, BPM reset errors and peer threshold fanout/retry.
+
+The first guest had positive assertions but was rejected by the strict checker
+because lockdep detected same-class sensor lock nesting. Remove unused auxiliary
+ADC reads from the level callback; the IRQ handler already collects them, and
+they do not contribute to the level metric. This removes nesting and redundant
+bus work. The final fresh guest passes with lockdep active; its errors from
+fault injection are expected register-operation errors, not hidden warnings.
+
+Evidence: reports/bcl-pmic-stage90-validation.json. Reproduce
+scripts/build_bcl_pmic.py --tests; scripts/run_qemu.py --test bcl-pmic --cpus 4
+--timeout 120 --log reports/bcl-pmic-stage90-qemu.log; and
+scripts/audit_bcl_pmic_dt.py --port --output reports/bcl-pmic-stage90-dt.json.
+Draft includes unchanged matching Image#25/config/native exports, the new module
+and four existing providers (5 modules, 288 matching imports; new module 60).
+Stage57 remains unchanged at 118 modules; this draft is not promoted or flashable.
+
+Still pending: real OF/platform probe with NVMEM/SPMI routing and full partial-
+probe fault integration, initial physical events, calibration and monitor/BPM
+policy, actual IRQ/firmware/cooling behavior, disable-wake/cleanup error recovery,
+open-debugfs-file teardown stress and exhaustive notifier/IRQ/thermal/PM/forced-
+unbind races. Hardware variants/ROM diagnostic paths and initialized firmware
+IPC/minidump state are not accepted by these tests. Whole-board drivers, DT
+schema, boot/vendor_boot/dtbo/DLKM/SELinux and daily-use acceptance remain pending.
+No phone partition writes, 7.3 phone boot or physical BCL operations performed.

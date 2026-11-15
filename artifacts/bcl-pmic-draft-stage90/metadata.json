@@ -1,0 +1,19 @@
+{
+  "scope": "Unaccepted full-source PMIC BCL draft with exact-source private RAM regmap/native thermal/IRQ/wake/debugfs tests; production module loads/unloads unbound",
+  "image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "core_image": "7.3.0-4k #25 unchanged",
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "modules": [
+    "qcom-hwspinlock/qcom_hwspinlock.ko",
+    "qcom-smem/smem.ko",
+    "qcom-minidump/minidump.ko",
+    "qcom-ipc-logging/qcom_ipc_logging.ko",
+    "qcom-bcl-pmic/bcl_pmic5.ko"
+  ],
+  "new_module": "bcl_pmic5.ko",
+  "included_existing_providers": 4,
+  "promoted": false,
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57"
+}

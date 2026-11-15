@@ -1,0 +1,20 @@
+Native patch replay: 19 patches, 65 exact files
+Verified pinned factory Qualcomm PMIC BCL patch replay: 4 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-bcl-pmic'
+  CC [M]  qti_bcl_pmic5.o
+  LD [M]  bcl_pmic5.o
+  MODPOST Module.symvers
+  LD [M]  bcl_pmic5.ko
+  BTF [M] bcl_pmic5.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-bcl-pmic'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/bcl-pmic'
+  CC [M]  avr-bcl-pmic-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-bcl-pmic-test.mod.o
+  LD [M]  avr-bcl-pmic-test.ko
+  BTF [M] avr-bcl-pmic-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/bcl-pmic'
+make: Leaving directory '/work/avr-src'

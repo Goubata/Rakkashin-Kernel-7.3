@@ -1,0 +1,78 @@
+{
+  "stage": 90,
+  "scope": "Full pinned factory PMIC BCL/stats module draft; exact callbacks on native RAM regmap/thermal/private IRQ action and wake bookkeeping/debugfs registries; no physical PMIC or OF probe acceptance",
+  "checks": {
+    "log": "reports/bcl-pmic-stage90-qemu.log",
+    "test": "bcl-pmic",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      22,
+      0,
+      0,
+      22
+    ]
+  },
+  "new_module_imports_checked": 60,
+  "artifact_crc_modules": 5,
+  "artifact_crc_imports": 288,
+  "artifact": "artifacts/bcl-pmic-draft-stage90",
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "core_image_unchanged": true,
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "implemented": [
+    "Real native thermal layout/accessors and IPC provider APIs; no stubbed successful firmware/thermal/register API",
+    "Per-device context and early lock/stats initialization; preserve pinned sensor enum, compatible matches and calibration descriptors",
+    "NVMEM/IRQ/zone/revision/monitor-write error propagation; initialize notifier callback before registration",
+    "ADC callbacks serialize per sensor and only publish successful output; widen arithmetic and clamp CCM before narrowing",
+    "BPM snapshot uses explicit little-endian wire decode, HOLD release after read failure, no partial output/timestamp commit",
+    "Native private IRQ ownership/wake bookkeeping, stop gating and freeze/restore registration retention with wake acquisition rollback",
+    "Remove owned debugfs subtree and drain IRQ/thermal callbacks before IPC log destruction; global debugfs root reference accounting",
+    "Remove unused auxiliary current/voltage reads from level callback, eliminating nested same-class locks and duplicate bus work",
+    "Translate notifier errors back to the voltage-threshold caller, exposing peer PMIC write failures instead of reporting success"
+  ],
+  "verified": [
+    "Generation5 signed current/voltage boundaries, no-reading cache and selected legacy conversions",
+    "Current/voltage threshold register programming, index/value guards and write failure",
+    "13 individual BPM bus failure positions, immutable caller snapshot and release attempt after failed read",
+    "Revision register errors, stopped/frozen callback gating, native IRQ action reusability after remove, wake enable failure, repeated freeze and restore wake rollback",
+    "Two native debugfs subtrees retain independent ownership; BPM reset error preserves timestamp",
+    "Production bcl_pmic5.ko loads/unloads unbound with real dependency modules; test module includes complete production source",
+    "DT/calibration contract audit preserves both active saved nodes and eleven declared zones; does not validate physical provider operation",
+    "Real native blocking-notifier fanout: injected peer-register error reaches original caller; retry programs peer successfully; no claim of cross-chip atomic rollback"
+  ],
+  "initial_failure": "First guest rejected due to lockdep same-class sensor lock nesting despite 21 positive assertions; remove unused level-to-auxiliary sensor reads and final guest passes strict checker without WARN/panic/skip",
+  "pending": [
+    "Real native OF/platform probe with NVMEM and SPMI IRQ routing, complete partial-probe fault integration and initial event handling",
+    "Physical calibration, current/voltage/thermal/cooling, monitor/BPM configuration and hardware reset policy",
+    "Actual interrupt delivery and firmware/PMIC behavior; IRQ-chip operations in tests are recorded only",
+    "Disable-wake/cleanup hardware-error recovery and exhaustive concurrent notifier/IRQ/thermal/PM/forced-unbind races",
+    "Debugfs open-file teardown stress, all descriptor/CCM/current-range hardware variants and initialized IPC/minidump firmware state",
+    "Remaining board drivers, full DT schema, vendor_boot/dtbo/DLKM/SELinux and actual 7.3 daily-use acceptance",
+    "Diagnostic subtree names use device names rather than stale probe-count suffixes; ROM diagnostic-tool integration remains unverified"
+  ],
+  "evidence_sha256": {
+    "ports/qcom-bcl-pmic/Makefile": "d507196f727f2030cb992cdc13b29a93392d5f66080bd89f11addc6220c7f9ba",
+    "ports/qcom-bcl-pmic/qti_bcl_pmic5.c": "418dbc2404a7ea767533fd096db0f49a8fa2bcc5ac2dd1c4b4c0ae57233f7e50",
+    "ports/qcom-bcl-pmic/qti_bcl_common.h": "bdba9fc11482afd551b91bca42fa8898ca0e1242f856ed1e8c6c2087b02c2bf8",
+    "ports/qcom-bcl-pmic/qti_bcl_stats.c": "9de5a6ddc4b3c6ab4090fcb249987cfa1c151b2df95e6e0c7368cab9ae7e1833",
+    "patches/bcl-pmic-7.3.patch": "cb5c1c322970c8af6f7d267a9edfa5e78834a07f7609770d96f62cc005530a50",
+    "reports/bcl-pmic-source-lock.json": "81c19c9c36bff115dd2798bfa69eb3f0f425cc07f19bf88241f6e4316e025e69",
+    "reports/bcl-pmic-stage90-build.log": "88373b6b04289e9778da08b3d265425cc6cf972282720b050d2742d6decfe90a",
+    "reports/bcl-pmic-stage90-check.json": "4735a1860d0793a3640d234d0fb5b34f38de1ba0f3878ebd469eaeae4cba131e",
+    "reports/bcl-pmic-stage90-qemu.log": "7d09f9ddf47832ad70ed400f3f2e494d9d018e0ee70fde6ce17769be9acec762",
+    "reports/bcl-pmic-stage90-qemu.json": "dcfb025ce0e45943bf60aebb5542562c13be62994c03133327f2f5ae9e1e8314",
+    "reports/bcl-pmic-stage90-crc.json": "88fe4b3ab610cab647301dc5b40558c59ffb48831f6934a309493f2c636f9351",
+    "reports/bcl-pmic-stage90-artifact-crc.json": "b92aa008bcb00eed8e32e7d304a82bbb9e78ce084d1d6e1c6cc4401a95907548",
+    "reports/bcl-pmic-stage90-dt.json": "b3a6f9f623289e49f3f390de45ae55b20b0a96f2f5b1c927d8552c4097540afc",
+    "reports/bcl-pmic-stage90-initial-qemu.log": "ff75d5470c787d9aa56a0bcbc4c6454d6314b60b741faa04715007747e114f33",
+    "tests/bcl-pmic/avr-bcl-pmic-test.c": "8af3c104633740c6a722a16e6ab37bc2ed5ff26f8d67325ae4d307fcc20a0a45",
+    "tests/bcl-pmic/avr-bcl-pmic-test.ko": "eac389e01addcc72e5ea2ce1be6e62b9fb2f11d85c706af8c9c4175778b522c1",
+    "tests/qemu/bcl-pmic-tests.cpio.gz": "ba74a2a5268d232569b51f35acf9d7e1bf22c6ede64b37c2efb5cd999a85c6b4",
+    "artifacts/bcl-pmic-draft-stage90/SHA256SUMS": "92adf1ab01f0b77b8f04465910a8a3c4244a2fa651223a90cada6749edae88d4"
+  }
+}

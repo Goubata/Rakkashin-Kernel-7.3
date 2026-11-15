@@ -1,0 +1,23 @@
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified pinned Motorola SDAM source and explicit patch replay
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-sdam'
+  CC [M]  qcom-spmi-sdam.o
+  LD [M]  nvmem_qcom-spmi-sdam.o
+  MODPOST Module.symvers
+  LD [M]  nvmem_qcom-spmi-sdam.ko
+  BTF [M] nvmem_qcom-spmi-sdam.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-sdam'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/sdam'
+  CC [M]  avr-sdam-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-sdam-test.ko
+  BTF [M] avr-sdam-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/sdam'
+make: Leaving directory '/work/avr-src'

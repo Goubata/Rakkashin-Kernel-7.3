@@ -733,3 +733,25 @@ and remains non-flashable. Selected AVR DT has no allow-set-time/offset cell/UEF
 property, so no-storage set_time failure agrees with stock. Native optional UEFI
 and drift-offset persistence differ from factory outside this selected path.
 See reports/rtc-stage49-validation.json. Software readiness remains false.
+
+
+## Stage50: factory SDAM and native NVMEM integration
+
+Motorola driver and stock module/NVMEM naming/configuration are preserved.
+The original length predicate incorrectly accepts SIZE_MAX by addition wrap
+(7/8 cases); subtraction bounds fix yields 8/8 SMP4 cases. Actual native NVMEM
+and regmap cores run RAM-only read/write, boundary guards, three read-only
+register/spanning-write rejection, single-byte PBS exceptions and bus errors.
+Huge-size reproducer calls the predicate only, never a bus/copy API.
+
+Read-only stock metadata acquisition opens NVMEM O_RDONLY and reads exactly one
+SDAM_SIZE byte at 0x44 per provider; all 12 have 128-byte data windows. Saved and
+candidate providers, 13 fixed cells and 18 resolved direct references agree;
+all fixed cells fit. Legacy bit/bits spelling is retained and only geometry is
+audited. No live data cell or PBS register is accessed. Stock config.size is
+left unset (native upstream differs); no new sysfs aperture is invented.
+
+Partial Stage50 snapshot has 110 modules, all imports match, hard/soft
+dependencies present and combined graph acyclic. Alor PAS draft remains excluded.
+Physical candidate probe, all SDAM consumers, suspend and complete board/ROM/boot
+readiness remain unverified/incomplete. reports/sdam-stage50-validation.json.

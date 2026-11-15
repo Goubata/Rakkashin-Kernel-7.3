@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-rtc-stage49",
+  "stage": "android73-sdam-stage50",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 109,
-  "same_name_candidate_count": 95,
-  "archived_names_without_same_name_candidate_count": 449,
-  "loaded_names_without_same_name_candidate_count": 434,
+  "staged_count": 110,
+  "same_name_candidate_count": 96,
+  "archived_names_without_same_name_candidate_count": 448,
+  "loaded_names_without_same_name_candidate_count": 433,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -111,6 +111,10 @@
     {
       "name": "ntsync",
       "file": "modules/ntsync/ntsync.ko"
+    },
+    {
+      "name": "nvmem_qcom_spmi_sdam",
+      "file": "modules/qcom-sdam/nvmem_qcom-spmi-sdam.ko"
     },
     {
       "name": "nvmem_qfprom",
@@ -554,6 +558,10 @@
     {
       "name": "ntsync",
       "file": "modules/ntsync/ntsync.ko"
+    },
+    {
+      "name": "nvmem_qcom_spmi_sdam",
+      "file": "modules/qcom-sdam/nvmem_qcom-spmi-sdam.ko"
     },
     {
       "name": "nvmem_qfprom",
@@ -2267,6 +2275,19 @@
     "rtc_pm8xxx": {
       "file": "modules/qcom-rtc/rtc-pm8xxx.ko",
       "sha256": "a620733609c89793f0460fe1c4dc222b245ba0c4b9eb719687089e1f7f568a0f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "nvmem_qcom_spmi_sdam": {
+      "file": "modules/qcom-sdam/nvmem_qcom-spmi-sdam.ko",
+      "sha256": "a4f0b5a75ce75c05024d4c72e45349b789a0bea215bafd560171ad57565a023b",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -4113,13 +4134,6 @@
       "name": "nhc_udp",
       "placements": [
         "system_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "nvmem_qcom_spmi_sdam",
-      "placements": [
-        "vendor_boot:fragment-0"
       ],
       "loaded_on_baseline": true
     },
@@ -6060,7 +6074,6 @@
     "nhc_mobility",
     "nhc_routing",
     "nhc_udp",
-    "nvmem_qcom_spmi_sdam",
     "nxp_nci",
     "of_kunit_helpers",
     "open_dice",

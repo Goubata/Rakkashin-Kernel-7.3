@@ -574,3 +574,14 @@ IRQ/電源/認証等は試験内の記録primitiveで、実SoCCPが動いた証�
 部分成果物はartifacts/android73-rtc-stage49/の109モジュールへ更新。全import CRCと
 hard/soft依存を確認。SoCCP draftは含めていない。
 `reports/rtc-stage49-validation.json`。実PMIC・wake・ROM・残りdriver/boot画像は未確認/未完。
+
+
+## Stage50: PMIC SDAM / NVMEM
+
+Motorolaのnvmem_qcom-spmi-sdamを移植。stockのNVMEM設定とmodule名を維持し、
+長さ加算overflowだけを修正した（旧7/8、修正後8/8成功）。実NVMEM/regmapとRAM busで
+データ往復・範囲/readonly・PBS単byte例外・busエラーを確認。PBSを含む書込み試験はQEMU内のみ。
+実機では12 providerの容量レジスタ1byteずつを読み、全て128byteと確認。
+保存/候補DTの12 provider・13固定cell・18参照を照合し、全cellが実容量へ収まった。
+部分成果物はartifacts/android73-sdam-stage50/の110モジュール。
+`reports/sdam-stage50-validation.json`。実SPMI probeや各consumer動作、全体software readinessは未達。

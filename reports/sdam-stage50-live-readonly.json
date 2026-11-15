@@ -1,0 +1,120 @@
+{
+  "scope": "running stock 6.12 sysfs NVMEM metadata read only; no candidate probe or data/PBS access",
+  "captured_utc": "2026-11-15T05:31:38.155412+00:00",
+  "provider_count": 12,
+  "reads_per_provider": 1,
+  "read_offset": 68,
+  "read_length": 1,
+  "writes": false,
+  "candidate_hardware_verified": false,
+  "providers": [
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam1",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7000/spmi_sdam1",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam10",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@9a00/spmi_sdam10",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam11",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@9d00/spmi_sdam11",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9d00",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam12",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@b600/spmi_sdam12",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam2",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7100/spmi_sdam2",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam3",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7400/spmi_sdam3",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7400",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam4",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7500/spmi_sdam4",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7500",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam5",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7c00/spmi_sdam5",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7c00",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam6",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@7d00/spmi_sdam6",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7d00",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam7",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@8400/spmi_sdam7",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8400",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam8",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@8500/spmi_sdam8",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8500",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    },
+    {
+      "path": "/sys/bus/nvmem/devices/spmi_sdam9",
+      "resolved": "/sys/devices/platform/soc/c400000.arbiter/spmi-0/0-00/c426000.spmi:qcom,pmk8550@0:sdam@9800/spmi_sdam9",
+      "of_node": "/sys/firmware/devicetree/base/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9800",
+      "size_register": 4,
+      "data_bytes": 128,
+      "data_window_start": 64,
+      "data_window_end_exclusive": 192
+    }
+  ]
+}

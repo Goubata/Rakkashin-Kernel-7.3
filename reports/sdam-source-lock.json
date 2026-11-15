@@ -1,0 +1,9 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source": "drivers/nvmem/qcom-spmi-sdam.c",
+  "original_sha256": "76b287fb6742cb62da20d23d8b60a9108dcfa554b96eaf2e770929b390d63059",
+  "staged_sha256": "5949ef7cd542a5b9f47d062133c2e172266e80eeb859da136901dbb0d4343267",
+  "patch_sha256": "3752c103e18446f5adac4b85b0c80b8613fc8183a26230ccffeb39b3ef5e34c8",
+  "makefile_sha256": "31960b4f2f1ff2b664423874885f075794b47c667f775399b2a8bafc91037867",
+  "hardware_verified": false
+}

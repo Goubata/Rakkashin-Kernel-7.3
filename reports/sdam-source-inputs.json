@@ -1,0 +1,5 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source": "drivers/nvmem/qcom-spmi-sdam.c",
+  "original_sha256": "76b287fb6742cb62da20d23d8b60a9108dcfa554b96eaf2e770929b390d63059"
+}

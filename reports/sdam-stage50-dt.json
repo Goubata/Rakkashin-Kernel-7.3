@@ -1,0 +1,654 @@
+{
+  "scope": "selected provider/cell geometry, resolved direct references and live stock capacity only; not consumer ABI/runtime/whole-DT/physical probe proof",
+  "passed": true,
+  "provider_count": 12,
+  "fixed_cell_count": 13,
+  "resolved_reference_count": 18,
+  "inputs": {
+    "saved": {
+      "file": "artifacts/dt-input-audit/stock-merged.dtb",
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "providers": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00007000",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/ocp-log@76",
+              "properties_except_phandle": {
+                "reg": "0000007600000006"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d",
+              "properties_except_phandle": {
+                "bits": "0000000500000001",
+                "reg": "0000005d00000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d"
+            },
+            {
+              "consumer": "/soc/regulator-ocp-notifier",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/ocp-log@76"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00007100",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/alarm-log@76",
+              "properties_except_phandle": {
+                "reg": "0000007600000006"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/bob1-off-mode-enable@50",
+              "properties_except_phandle": {
+                "reg": "0000005000000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-chg-pon@9f",
+              "properties_except_phandle": {
+                "reg": "0000009f00000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-cnt2-stop@a2",
+              "properties_except_phandle": {
+                "reg": "000000a200000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-set@9a",
+              "properties_except_phandle": {
+                "reg": "0000009a00000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@48",
+              "properties_except_phandle": {
+                "bits": "0000000100000007",
+                "reg": "0000004800000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@49",
+              "properties_except_phandle": {
+                "bit": "0000000000000007",
+                "reg": "0000004900000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/wr_thermal-flag@58",
+              "properties_except_phandle": {
+                "reg": "0000005800000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/xo_calib-data@59",
+              "properties_except_phandle": {
+                "reg": "0000005900000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-chg-pon@9f"
+            },
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-cnt2-stop@a2"
+            },
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-set@9a"
+            },
+            {
+              "consumer": "/soc/moto_reboot_reason",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@49"
+            },
+            {
+              "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000/nq@28",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/bob1-off-mode-enable@50"
+            },
+            {
+              "consumer": "/soc/reboot_reason",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@48"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7400",
+          "properties_except_phandle": {
+            "reg": "00007400",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/pmic-pon-log",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7400"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7500",
+          "properties_except_phandle": {
+            "reg": "00007500",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/pmic-pon-log",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7500"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7c00",
+          "properties_except_phandle": {
+            "reg": "00007c00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7c00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7d00",
+          "properties_except_phandle": {
+            "reg": "00007d00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7d00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8400",
+          "properties_except_phandle": {
+            "reg": "00008400",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/led-controller",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8400"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8500",
+          "properties_except_phandle": {
+            "reg": "00008500",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/led-controller",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8500"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9800",
+          "properties_except_phandle": {
+            "reg": "00009800",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9800"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00009a00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00/sqm-timer@b8",
+              "properties_except_phandle": {
+                "reg": "000000b800000002"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/qcom-amoled",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00/sqm-timer@b8"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9d00",
+          "properties_except_phandle": {
+            "reg": "00009d00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/qcom,hv-haptics@f000",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9d00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600",
+          "properties_except_phandle": {
+            "reg": "0000b600",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600/usb-mode@50",
+              "properties_except_phandle": {
+                "reg": "0000005000000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000/wcd939x_i2c@e",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600/usb-mode@50"
+            }
+          ]
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb",
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "providers": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00007000",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/ocp-log@76",
+              "properties_except_phandle": {
+                "reg": "0000007600000006"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d",
+              "properties_except_phandle": {
+                "bits": "0000000500000001",
+                "reg": "0000005d00000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d"
+            },
+            {
+              "consumer": "/soc/regulator-ocp-notifier",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/ocp-log@76"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00007100",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/alarm-log@76",
+              "properties_except_phandle": {
+                "reg": "0000007600000006"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/bob1-off-mode-enable@50",
+              "properties_except_phandle": {
+                "reg": "0000005000000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-chg-pon@9f",
+              "properties_except_phandle": {
+                "reg": "0000009f00000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-cnt2-stop@a2",
+              "properties_except_phandle": {
+                "reg": "000000a200000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-set@9a",
+              "properties_except_phandle": {
+                "reg": "0000009a00000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@48",
+              "properties_except_phandle": {
+                "bits": "0000000100000007",
+                "reg": "0000004800000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@49",
+              "properties_except_phandle": {
+                "bit": "0000000000000007",
+                "reg": "0000004900000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/wr_thermal-flag@58",
+              "properties_except_phandle": {
+                "reg": "0000005800000001"
+              }
+            },
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/xo_calib-data@59",
+              "properties_except_phandle": {
+                "reg": "0000005900000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-chg-pon@9f"
+            },
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-cnt2-stop@a2"
+            },
+            {
+              "consumer": "/soc/bt_kera",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/fmd-set@9a"
+            },
+            {
+              "consumer": "/soc/moto_reboot_reason",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@49"
+            },
+            {
+              "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000/nq@28",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/bob1-off-mode-enable@50"
+            },
+            {
+              "consumer": "/soc/reboot_reason",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7100/restart@48"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7400",
+          "properties_except_phandle": {
+            "reg": "00007400",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/pmic-pon-log",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7400"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7500",
+          "properties_except_phandle": {
+            "reg": "00007500",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/pmic-pon-log",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7500"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7c00",
+          "properties_except_phandle": {
+            "reg": "00007c00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7c00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7d00",
+          "properties_except_phandle": {
+            "reg": "00007d00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7d00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8400",
+          "properties_except_phandle": {
+            "reg": "00008400",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/led-controller",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8400"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8500",
+          "properties_except_phandle": {
+            "reg": "00008500",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/led-controller",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@8500"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9800",
+          "properties_except_phandle": {
+            "reg": "00009800",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/amoled-ecm@f900",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9800"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00",
+          "properties_except_phandle": {
+            "#size-cells": "00000001",
+            "#address-cells": "00000001",
+            "reg": "00009a00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00/sqm-timer@b8",
+              "properties_except_phandle": {
+                "reg": "000000b800000002"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmd802x@4/qcom-amoled",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9a00/sqm-timer@b8"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9d00",
+          "properties_except_phandle": {
+            "reg": "00009d00",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [],
+          "consumers": [
+            {
+              "consumer": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/qcom,hv-haptics@f000",
+              "property": "nvmem",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@9d00"
+            }
+          ]
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600",
+          "properties_except_phandle": {
+            "reg": "0000b600",
+            "compatible": "71636f6d2c73706d692d7364616d00"
+          },
+          "observed_data_bytes": 128,
+          "cells": [
+            {
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600/usb-mode@50",
+              "properties_except_phandle": {
+                "reg": "0000005000000001"
+              }
+            }
+          ],
+          "consumers": [
+            {
+              "consumer": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000/wcd939x_i2c@e",
+              "property": "nvmem-cells",
+              "target": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@b600/usb-mode@50"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "physical_candidate_verified": false,
+  "pending": [
+    "Physical parent SPMI/IRQ/regmap readiness and probe",
+    "Actual haptics/LED/display/PON consumers not yet ported or accepted",
+    "Factory legacy bit versus bits cell spelling is preserved; only geometry audited",
+    "Complete module/ROM/SELinux/DT and boot artifacts"
+  ]
+}

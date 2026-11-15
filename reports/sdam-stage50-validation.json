@@ -1,0 +1,53 @@
+{
+  "stage": 50,
+  "scope": "factory SDAM driver with bounds fix, actual NVMEM/regmap cores over RAM bus, selected saved/candidate DT and read-only stock size metadata",
+  "passed": true,
+  "baseline_cases_passed": 7,
+  "baseline_cases_total": 8,
+  "final_cases_passed": 8,
+  "fix": "subtract validated offset from capacity before length comparison; reject SIZE_MAX length without additive wrap",
+  "stock_abi_preserved": [
+    "factory module name nvmem_qcom-spmi-sdam",
+    "factory NVMEM config.size remains unset",
+    "same data-window/three readonly registers/PBS one-byte exceptions"
+  ],
+  "stock_readonly_metadata": {
+    "providers": 12,
+    "data_bytes_each": 128,
+    "read_offset": 68,
+    "read_length": 1,
+    "writes": false
+  },
+  "selected_dt": {
+    "providers": 12,
+    "fixed_cells": 13,
+    "resolved_references": 18
+  },
+  "artifact": "artifacts/android73-sdam-stage50",
+  "packaged_modules": 110,
+  "matching_imports": 5528,
+  "physical_candidate_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Physical parent SPMI/IRQ/regmap readiness and probe",
+    "Actual haptics/LED/display/PON consumers not yet ported or accepted",
+    "Factory legacy bit versus bits cell spelling is preserved; only geometry audited",
+    "Complete module/ROM/SELinux/DT and boot artifacts",
+    "Remaining hardware drivers and complete ROM-compatible boot/DLKM/DT/SELinux artifacts"
+  ],
+  "evidence_sha256": {
+    "reports/sdam-source-inputs.json": "af8b3159bf671a2b89eb5d1e67043a30a838b323211d19ae6c7cbab2e26eb3ea",
+    "reports/sdam-source-lock.json": "2c0aff44a0102b6ad940b9d0392eca7f8822d59d948ceddab77a8bd945f1b51f",
+    "patches/sdam-7.3.patch": "3752c103e18446f5adac4b85b0c80b8613fc8183a26230ccffeb39b3ef5e34c8",
+    "reports/sdam-stage50-live-readonly.json": "76c632fb432b98f112d801d504c573c919f24708b7ec091160fb50ac1b010987",
+    "reports/sdam-stage50-dt.json": "a321554922134cb47f95c5d717aefc8b573b36f0bb1b06c45ff3c2fb4f2e3b26",
+    "reports/sdam-stage50-baseline-qemu.log": "c826dff3b0c6496d5526c7b931a47b7af0c573254a38ba74e68c0803b22be44c",
+    "reports/sdam-stage50-final-qemu.log": "e4a217c0159895b37693529da8870855845dfc1f611b2c62659119b49d70718c",
+    "reports/sdam-stage50-final-qemu.json": "92a09332c5ff4f2d7ce5f8d25fba36cee58bfe0f64ad2bd13dc7ed818a676060",
+    "reports/sdam-stage50-final-build.log": "9957440640e4425a55c79c88477679a7e11081386cd7281cc5122b676554262c",
+    "reports/sdam-stage50-crc.json": "5ff2bf42660684f8c0a5758bff5096b3ba65c119c5b151de8a9c1b846a1721d3",
+    "reports/sdam-stage50-packaged-crc.json": "9bf882d168ce17c6e2597ad79d74333c254a3083736ab8ec1bdcb227b95918a4",
+    "reports/module-deployment-stage50-summary.json": "201b0c096cbd750ffc6547caa96babbab00cc26f2586b7abeec6328fc66bb7ac"
+  }
+}

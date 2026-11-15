@@ -1,0 +1,18 @@
+--- a/qcom-spmi-sdam.c
++++ b/qcom-spmi-sdam.c
+@@ -34,13 +34,11 @@
+ static bool sdam_is_valid(struct sdam_chip *sdam, unsigned int offset,
+ 				size_t len)
+ {
+-	unsigned int sdam_mem_end = SDAM_MEM_START + sdam->size - 1;
+-
+ 	if (!len)
+ 		return false;
+ 
+-	if (offset >= SDAM_MEM_START && offset <= sdam_mem_end
+-				&& (offset + len - 1) <= sdam_mem_end)
++	if (offset >= SDAM_MEM_START && offset - SDAM_MEM_START < sdam->size
++				&& len <= sdam->size - (offset - SDAM_MEM_START))
+ 		return true;
+ 	else if ((offset == SDAM_PBS_TRIG_SET || offset == SDAM_PBS_TRIG_CLR)
+ 				&& (len == 1))

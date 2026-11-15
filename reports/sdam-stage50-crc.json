@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-sdam/nvmem_qcom-spmi-sdam.ko",
+      "imports_checked": 12,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/sdam/avr-sdam-test.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    }
+  ]
+}

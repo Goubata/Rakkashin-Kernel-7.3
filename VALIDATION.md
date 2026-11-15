@@ -1313,3 +1313,29 @@ Reproduce `python scripts/build_geni_bus.py --tests` and QEMU mode `geni-bus`.
 Production modules build with matching imports; drafts stay outside Stage57.
 Evidence: reports/geni-spi-clock-stage73-validation.json. Actual AVR clock table,
 waveforms, FIFO/DMA/peripheral/PM and whole-board acceptance remain pending.
+
+
+## Stage74: transactional SPI message DMA mapping
+
+Initialize every transfer DMA field to DMA_MAPPING_ERROR before attempting the
+first mapping. If any RX/TX mapping fails, unwind all earlier acquired mappings,
+including the current transfer's RX when TX fails. Clear each ownership token
+after release so later cleanup cannot double-unmap. Skip zero-length/control
+transfers; use dma_mapping_error rather than treating address zero as unused.
+This requires the normal SPI-core prepare/unprepare sequencing; it does not
+support calling prepare twice on a still-mapped successful message or changing
+transfer buffers midway through a message.
+
+Five SMP4 cases compile exact production map/unmap methods with real native
+spi_message/spi_transfer structures. Native DMA map/unmap uses private linear
+RAM, with wrappers injecting each of six failure positions and tracking lease
+size/direction/ownership. Cover success and repeated cleanup, all rollback
+positions, retry after failure and zero-length/unidirectional transfers. The
+zero-IOVA case is explicitly recorded-only and performs no DMA API calls with
+physical address zero. No AVR IOMMU/cache/actual-transfer proof is claimed.
+
+Reproduce `python scripts/build_geni_bus.py --map-tests` and QEMU mode `geni-map`.
+Production modules rebuild and import CRC checks pass. Evidence:
+reports/geni-map-stage74-validation.json. Drafts remain outside Stage57. Full
+prepare failure PM/sequencer-lock unwind, remove/suspend lifetime, physical
+transfers and remaining mandatory drivers/whole-board gates remain incomplete.

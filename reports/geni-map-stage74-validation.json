@@ -1,0 +1,39 @@
+{
+  "stage": 74,
+  "scope": "Exact production SPI message mapping/unmapping methods with real DMA on private guest RAM and injected failures; zero-IOVA scenario is recorded only",
+  "checks": {
+    "log": "reports/geni-map-stage74-qemu.log",
+    "test": "geni-map",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      5,
+      0,
+      0,
+      5
+    ]
+  },
+  "failure_positions_tested": 6,
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Full SPI prepare failure PM/sequencer-lock unwind and complete remove/suspend lifecycle",
+    "Actual AVR IOMMU/cache/transfer/IRQ behavior and controller/peripheral firmware",
+    "DMA peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Other mandatory drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-map-stage74-check.json": "3ee48f77b4e725ac75990952be2ce373de7c8a67f5d905b89031b486bd434e9c",
+    "reports/geni-map-stage74-qemu.log": "f11100b034f29abe49cf27608fb1972c6bd30c5674bceb746ec8b58fa70239ce",
+    "reports/geni-map-stage74-qemu.json": "535b00ba05216fc26ff662db622a45b5676acfd8af84c2d75173bb575ca589f4",
+    "reports/geni-map-stage74-build.log": "bf25f7fdd34b0b5bfd18b804adeaff423a04546535a5e7a76e50d5d08725c98d",
+    "reports/geni-map-stage74-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "f5d8e72afdbe4f25d27f082c399115e0417b840578912408349831e21a36d833",
+    "patches/geni-bus-7.3.patch": "3880ff2ce73e05ffd688cb2c94461a1fb46d201650231385feae46b8c878b6c9",
+    "tests/geni-map/avr-geni-map-test.c": "896e76dc994639525448a67df09882ce9704cdfb18798ac0fb73d503f9477150",
+    "tests/geni-map/generated.h": "4203d22fe6144079eb0f6dd51cee05574187e07b16756660c4253811ebeccb2d"
+  }
+}

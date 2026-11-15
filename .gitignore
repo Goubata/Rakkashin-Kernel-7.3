@@ -37,3 +37,5 @@ modules.order
 /tests/goodix-mmap/user-test
 
 /tests/geni-bus/generated.h
+
+/tests/geni-map/generated.h

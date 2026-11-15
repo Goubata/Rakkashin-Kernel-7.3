@@ -1873,52 +1873,67 @@ static int setup_gsi_xfer(struct spi_transfer *xfer, struct spi_transfer *xfer_t
 	return ret;
 }
 
-static int spi_geni_map_buf(struct spi_geni_master *mas,
-				struct spi_message *msg)
-{
-	struct spi_transfer *xfer;
-	int ret = 0;
-
-	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-		if (xfer->rx_buf) {
-			ret = geni_se_common_iommu_map_buf(mas->wrapper_dev,
-						&xfer->rx_dma, xfer->rx_buf,
-						xfer->len, DMA_FROM_DEVICE);
-			if (ret) {
-				SPI_LOG_ERR(mas->ipc, true, mas->dev,
-				"%s: Mapping Rx buffer %d\n", __func__, ret);
-				return ret;
-			}
-		}
-
-		if (xfer->tx_buf) {
-			ret = geni_se_common_iommu_map_buf(mas->wrapper_dev,
-						&xfer->tx_dma,
-						(void *)xfer->tx_buf,
-						xfer->len, DMA_TO_DEVICE);
-			if (ret) {
-				SPI_LOG_ERR(mas->ipc, true, mas->dev,
-				"%s: Mapping Tx buffer %d\n", __func__, ret);
-				return ret;
-			}
-		}
-	}
-	return 0;
-}
-
 static void spi_geni_unmap_buf(struct spi_geni_master *mas,
 				struct spi_message *msg)
 {
 	struct spi_transfer *xfer;
 
+	if (!mas->wrapper_dev)
+		return;
 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-		if (xfer->rx_buf)
+		if (xfer->rx_buf && xfer->len &&
+		    !dma_mapping_error(mas->wrapper_dev, xfer->rx_dma)) {
 			geni_se_common_iommu_unmap_buf(mas->wrapper_dev, &xfer->rx_dma,
 						xfer->len, DMA_FROM_DEVICE);
-		if (xfer->tx_buf)
+			xfer->rx_dma = DMA_MAPPING_ERROR;
+		}
+		if (xfer->tx_buf && xfer->len &&
+		    !dma_mapping_error(mas->wrapper_dev, xfer->tx_dma)) {
 			geni_se_common_iommu_unmap_buf(mas->wrapper_dev, &xfer->tx_dma,
 						xfer->len, DMA_TO_DEVICE);
+			xfer->tx_dma = DMA_MAPPING_ERROR;
+		}
 	}
+}
+
+static int spi_geni_map_buf(struct spi_geni_master *mas,
+				struct spi_message *msg)
+{
+	struct spi_transfer *xfer;
+	int ret;
+
+	if (!mas->wrapper_dev)
+		return -EINVAL;
+	/* Establish ownership for every transfer before attempting the first map.
+	 * DMA address zero is valid; only the mapping-error sentinel is unused. */
+	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+		xfer->rx_dma = DMA_MAPPING_ERROR;
+		xfer->tx_dma = DMA_MAPPING_ERROR;
+	}
+	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+		if (!xfer->len)
+			continue;
+		if (xfer->rx_buf) {
+			ret = geni_se_common_iommu_map_buf(mas->wrapper_dev,
+				&xfer->rx_dma, xfer->rx_buf, xfer->len, DMA_FROM_DEVICE);
+			if (ret) {
+				xfer->rx_dma = DMA_MAPPING_ERROR;
+				goto rollback;
+			}
+		}
+		if (xfer->tx_buf) {
+			ret = geni_se_common_iommu_map_buf(mas->wrapper_dev,
+				&xfer->tx_dma, (void *)xfer->tx_buf, xfer->len, DMA_TO_DEVICE);
+			if (ret) {
+				xfer->tx_dma = DMA_MAPPING_ERROR;
+				goto rollback;
+			}
+		}
+	}
+	return 0;
+rollback:
+	spi_geni_unmap_buf(mas, msg);
+	return ret;
 }
 
 static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_message *spi_msg)

@@ -1,0 +1,8 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/geni-bus'
+  CC [M]  avr-geni-bus-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-geni-bus-test.ko
+  BTF [M] avr-geni-bus-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/geni-bus'
+make: Leaving directory '/work/avr-src'

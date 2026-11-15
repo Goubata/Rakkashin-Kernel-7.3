@@ -1,0 +1,4799 @@
+{
+  "scope": "Active GENI resource shapes/targets and factory DMA spec checks only; no transfers, firmware, DMA mapping or interrupt proof",
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "active_compatible_counts": {
+        "qcom,geni-se-qup": 3,
+        "qcom,spi-geni": 1,
+        "qcom,gpi-dma": 3,
+        "qcom,i2c-geni": 8
+      },
+      "nodes": {
+        "/soc/qcom,gpi-dma@a00000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "0000000000a000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                182,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000034400000004000000000000034500000004000000000000034600000004000000000000034700000004000000000000034800000004000000000000034900000004000000000000034a00000004000000000000034b00000004000000000000034c00000004000000000000034d00000004000000000000034e00000004000000000000034f00000004",
+          "qcom,static-gpii-mask": "00000001",
+          "qcom,gpii-mask": "0000000e",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup1_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "0000000000ac00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                137
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                138
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                163,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup1_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a8000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000033c00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                86
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                0,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                0,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00",
+          "qcom,clk-freq-out": "000f4240"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a8c00000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000033f00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                92
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                3,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                3,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000": {
+          "compatible": "71636f6d2c7370692d67656e6900",
+          "reg": "00a9000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "reg-names": "73655f7068797300",
+          "interrupts": "000000000000034000000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                94
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_mosi_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_miso_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_clk_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_cs_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                4,
+                1,
+                64,
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                4,
+                1,
+                64,
+                2
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "spi-max-frequency": "02faf080",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a9400000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000034100000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                96
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                5,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                5,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,gpi-dma@800000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "00000000008000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1078,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000011700000004000000000000011800000004000000000000011900000004000000000000011a00000004000000000000011b00000004000000000000035000000004000000000000035100000004000000000000035200000004000000000000035300000004000000000000035400000004000000000000035500000004000000000000035600000004",
+          "qcom,gpii-mask": "0000001f",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup2_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "00000000008c00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                139
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                140
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1059,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup2_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016100000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                104
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_sda_active_overlay",
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_scl_active_overlay"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_sleep_overlay"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                0,
+                3,
+                1024,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                0,
+                3,
+                1024,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00",
+          "qcom,pm-ctrl-client": "",
+          "qcom,clk-freq-out": "000f4240",
+          "qcom,high-perf": ""
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088400000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016200000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                106
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_sda_active_overlay",
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_scl_active_overlay"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_sleep_overlay"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                1,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                1,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00",
+          "qcom,pm-ctrl-client": "",
+          "qcom,clk-freq-out": "000f4240",
+          "qcom,high-perf": ""
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088800000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016300000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                108
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                2,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                2,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b617900"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088c00000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016400000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                110
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                3,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                3,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b617900"
+        },
+        "/soc/qcom,gpi-dma@1900000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "00000000019000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1238,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000024c00000004000000000000024d00000004000000000000024e00000004000000000000024f00000004000000000000025000000004000000000000025100000004000000000000025200000004000000000000025300000004000000000000025400000004000000000000025500000004000000000000025600000004000000000000025700000004",
+          "qcom,static-gpii-mask": "00000001",
+          "qcom,gpii-mask": "0000001e",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup3_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_3_geni_se@19c0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "00000000019c00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                143
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                144
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1219,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup3_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0199000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000024a00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                133
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                44
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                565
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                533
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                7
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@1900000",
+              "args": [
+                0,
+                4,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@1900000",
+              "args": [
+                1,
+                4,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active dmas provider /soc/qcom,gpi-dma@1900000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active dmas provider /soc/qcom,gpi-dma@1900000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: both DMA channels",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "active_compatible_counts": {
+        "qcom,geni-se-qup": 3,
+        "qcom,spi-geni": 1,
+        "qcom,gpi-dma": 3,
+        "qcom,i2c-geni": 8
+      },
+      "nodes": {
+        "/soc/qcom,gpi-dma@a00000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "0000000000a000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                182,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000034400000004000000000000034500000004000000000000034600000004000000000000034700000004000000000000034800000004000000000000034900000004000000000000034a00000004000000000000034b00000004000000000000034c00000004000000000000034d00000004000000000000034e00000004000000000000034f00000004",
+          "qcom,static-gpii-mask": "00000001",
+          "qcom,gpii-mask": "0000000e",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup1_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "0000000000ac00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                137
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                138
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                163,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup1_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000": {
+          "qcom,clk-freq-out": "000f4240",
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a8000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000033c00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                86
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se0_i2c_pins/qupv3_se0_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                0,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                0,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a8c00000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000033f00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                92
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se3_i2c_pins/qupv3_se3_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                3,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                3,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000": {
+          "compatible": "71636f6d2c7370692d67656e6900",
+          "reg": "00a9000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "reg-names": "73655f7068797300",
+          "interrupts": "000000000000034000000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                94
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_mosi_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_miso_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_clk_active",
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_cs_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se4_spi_pins/qupv3_se4_spi_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                4,
+                1,
+                64,
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                4,
+                1,
+                64,
+                2
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "spi-max-frequency": "02faf080",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "00a9400000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000034100000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                96
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                42
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                563
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                531
+              ]
+            },
+            {
+              "node": "/soc/interconnect@16e0000",
+              "args": [
+                5
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se5_i2c_pins/qupv3_se5_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                0,
+                5,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@a00000",
+              "args": [
+                1,
+                5,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,gpi-dma@800000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "00000000008000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1078,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000011700000004000000000000011800000004000000000000011900000004000000000000011a00000004000000000000011b00000004000000000000035000000004000000000000035100000004000000000000035200000004000000000000035300000004000000000000035400000004000000000000035500000004000000000000035600000004",
+          "qcom,gpii-mask": "0000001f",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup2_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "00000000008c00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                139
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                140
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1059,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup2_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000": {
+          "qcom,pm-ctrl-client": "",
+          "qcom,clk-freq-out": "000f4240",
+          "qcom,high-perf": "",
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016100000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                104
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_sda_active_overlay",
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_scl_active_overlay"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se8_i2c_pins_overlay/qupv3_se8_i2c_sleep_overlay"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                0,
+                3,
+                1024,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                0,
+                3,
+                1024,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000": {
+          "qcom,pm-ctrl-client": "",
+          "qcom,clk-freq-out": "000f4240",
+          "qcom,high-perf": "",
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088400000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016200000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                106
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_sda_active_overlay",
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_scl_active_overlay"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se9_i2c_pins_overlay/qupv3_se9_i2c_sleep_overlay"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                1,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                1,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088800000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016300000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                108
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se10_i2c_pins/qupv3_se10_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                2,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                2,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b617900"
+        },
+        "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0088c00000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000016400000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                110
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                43
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                564
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                532
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                6
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se11_i2c_pins/qupv3_se11_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                0,
+                3,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@800000",
+              "args": [
+                1,
+                3,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "status": "6f6b617900"
+        },
+        "/soc/qcom,gpi-dma@1900000": {
+          "compatible": "71636f6d2c6770692d646d6100",
+          "#dma-cells": "00000005",
+          "reg": "00000000019000000000000000060000",
+          "reg-names": "6770692d746f7000",
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1238,
+                0
+              ]
+            }
+          ],
+          "qcom,max-num-gpii": "0000000c",
+          "interrupts": "000000000000024c00000004000000000000024d00000004000000000000024e00000004000000000000024f00000004000000000000025000000004000000000000025100000004000000000000025200000004000000000000025300000004000000000000025400000004000000000000025500000004000000000000025600000004000000000000025700000004",
+          "qcom,static-gpii-mask": "00000001",
+          "qcom,gpii-mask": "0000001e",
+          "qcom,ev-factor": "00000001",
+          "memory-region": [
+            "/soc/qup3_gpi_iommu_region"
+          ],
+          "qcom,gpi-ee-offset": "00010000",
+          "dma-coherent": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_3_geni_se@19c0000": {
+          "compatible": "71636f6d2c67656e692d73652d71757000",
+          "reg": "00000000019c00000000000000002000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000001",
+          "clock-names": "6d2d61686200732d61686200",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                143
+              ]
+            },
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                144
+              ]
+            }
+          ],
+          "iommus": [
+            {
+              "node": "/soc/apps-smmu@15000000",
+              "args": [
+                1219,
+                0
+              ]
+            }
+          ],
+          "memory-region": [
+            "/soc/qup3_se_iommu_region"
+          ],
+          "qcom,iommu-geometry": "00000000400000000000000010000000",
+          "qcom,iommu-dma": "666173746d617000",
+          "dma-coherent": "",
+          "ranges": "",
+          "status": "6f6b00"
+        },
+        "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000": {
+          "compatible": "71636f6d2c6932632d67656e6900",
+          "reg": "0199000000004000",
+          "#address-cells": "00000001",
+          "#size-cells": "00000000",
+          "interrupts": "000000000000024a00000004",
+          "clock-names": "73652d636c6b00",
+          "clocks": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                133
+              ]
+            }
+          ],
+          "interconnect-names": "7175702d636f7265007175702d636f6e666967007175702d6d656d6f727900",
+          "interconnects": [
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                44
+              ]
+            },
+            {
+              "node": "/soc/interconnect@0",
+              "args": [
+                565
+              ]
+            },
+            {
+              "node": "/soc/interconnect@31100000",
+              "args": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1600000",
+              "args": [
+                533
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1700000",
+              "args": [
+                7
+              ]
+            },
+            {
+              "node": "/soc/interconnect@1",
+              "args": [
+                512
+              ]
+            }
+          ],
+          "pinctrl-names": "64656661756c7400736c65657000",
+          "pinctrl-0": [
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_sda_active",
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_scl_active"
+          ],
+          "pinctrl-1": [
+            "/soc/pinctrl@f000000/qupv3_se20_i2c_pins/qupv3_se20_i2c_sleep"
+          ],
+          "dmas": [
+            {
+              "node": "/soc/qcom,gpi-dma@1900000",
+              "args": [
+                0,
+                4,
+                3,
+                64,
+                0
+              ]
+            },
+            {
+              "node": "/soc/qcom,gpi-dma@1900000",
+              "args": [
+                1,
+                4,
+                3,
+                64,
+                0
+              ]
+            }
+          ],
+          "dma-names": "747800727800",
+          "qcom,shared": "",
+          "status": "6f6b00"
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@a00000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a80000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a8c000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/spi@a90000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@16e0000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: active dmas provider /soc/qcom,gpi-dma@a00000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_1_geni_se@ac0000/i2c@a94000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@800000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@880000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@884000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@888000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: active dmas provider /soc/qcom,gpi-dma@800000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_2_geni_se@8c0000/i2c@88c000: both DMA channels",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,gpi-dma@1900000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: resolve iommus",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: iommus argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active iommus provider /soc/apps-smmu@15000000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000: active reference memory-region",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve clocks",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: clocks argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active clocks provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@31100000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1600000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1700000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve interconnects",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: interconnects argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active interconnects provider /soc/interconnect@1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active reference pinctrl-0",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active reference pinctrl-1",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active dmas provider /soc/qcom,gpi-dma@1900000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: resolve dmas",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: dmas argument count",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: active dmas provider /soc/qcom,gpi-dma@1900000",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: GPI factory argument count and channel range",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: native GENI wrapper parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: serial clock name",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,qupv3_3_geni_se@19c0000/i2c@1990000: both DMA channels",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "saved_semantics_preserved": true,
+  "passed": true,
+  "errors": [],
+  "whole_board_accepted": false,
+  "physical_verified": false,
+  "dt_modified": false
+}

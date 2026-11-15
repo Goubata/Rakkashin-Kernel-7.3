@@ -1,0 +1,13 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/geni-bus/msm_gpi.c": "drivers/dma/qcom/msm_gpi.c",
+    "ports/geni-bus/msm_gpi_mmio.h": "drivers/dma/qcom/msm_gpi_mmio.h",
+    "ports/geni-bus/include/linux/msm_gpi.h": "include/linux/msm_gpi.h",
+    "ports/geni-bus/include/linux/qcom-geni-se-common.h": "include/linux/qcom-geni-se-common.h",
+    "ports/geni-bus/i2c-msm-geni.c": "drivers/i2c/busses/i2c-msm-geni.c",
+    "ports/geni-bus/spi-msm-geni.c": "drivers/spi/spi-msm-geni.c",
+    "ports/geni-bus/spi-qup-trace.h": "drivers/spi/spi-qup-trace.h",
+    "ports/geni-bus/i2c-qup-trace.h": "drivers/i2c/busses/i2c-qup-trace.h"
+  }
+}

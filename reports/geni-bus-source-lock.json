@@ -1,0 +1,74 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/geni-bus/msm_gpi.c",
+      "source": "drivers/dma/qcom/msm_gpi.c",
+      "original_sha256": "ad77b196d7d8a24d21f490fe697b329efc911602b12e1e219063b67ea19152d7",
+      "sha256": "3a07bf2e7f1a3f372c89d69d0f8e7e55b6b4ffb3fd3f202887a5c2f13e938b23"
+    },
+    {
+      "file": "ports/geni-bus/msm_gpi_mmio.h",
+      "source": "drivers/dma/qcom/msm_gpi_mmio.h",
+      "original_sha256": "3e55ba1c6baee8c1c6e60ea694a9e721226195239f1f004b8e490c158c554d18",
+      "sha256": "3e55ba1c6baee8c1c6e60ea694a9e721226195239f1f004b8e490c158c554d18"
+    },
+    {
+      "file": "ports/geni-bus/include/linux/msm_gpi.h",
+      "source": "include/linux/msm_gpi.h",
+      "original_sha256": "d28b7d90259d63f376b5b682aac6636971d131f0fd4b82d05cec30c4f9b1ceea",
+      "sha256": "d28b7d90259d63f376b5b682aac6636971d131f0fd4b82d05cec30c4f9b1ceea"
+    },
+    {
+      "file": "ports/geni-bus/include/linux/qcom-geni-se-common.h",
+      "source": "include/linux/qcom-geni-se-common.h",
+      "original_sha256": "1da3d5455c1304e6c8244c82a69013152ef980ff1eae531b4f3f9633bdceb802",
+      "sha256": "25aee7adf29742b271c5e97bd98825292671255681e8cc3d43c80985700ff5b0"
+    },
+    {
+      "file": "ports/geni-bus/i2c-msm-geni.c",
+      "source": "drivers/i2c/busses/i2c-msm-geni.c",
+      "original_sha256": "cd067e5857cea0f4c57e7ffc98969f938c6720e8bc3283dd400526dbb551123e",
+      "sha256": "4a621f020fe6e36c6fb4e7873b50c3d48c8d52b7ef41e3ef616fe5eca91232bb"
+    },
+    {
+      "file": "ports/geni-bus/spi-msm-geni.c",
+      "source": "drivers/spi/spi-msm-geni.c",
+      "original_sha256": "7b0494313ab100bd43b3c8fde9bc1884edf93bd2f7a1822b86befdbaab28598b",
+      "sha256": "516e43bbb3a9a86b6582b3250b2d4fc39dbf3796dfe9d39a235fd60346357883"
+    },
+    {
+      "file": "ports/geni-bus/spi-qup-trace.h",
+      "source": "drivers/spi/spi-qup-trace.h",
+      "original_sha256": "b524bc7db1fdd3b41ea4e71276d625d156092bbaa4cea396ede81f6f47976c24",
+      "sha256": "71806b39f2ba5f28f7065dd1856368c76814f181e09dc98afcaaf7a48581dbdf"
+    },
+    {
+      "file": "ports/geni-bus/i2c-qup-trace.h",
+      "source": "drivers/i2c/busses/i2c-qup-trace.h",
+      "original_sha256": "f40aa72da5e55397c6fa473923a1bdb17cdc156e2a36c1f959cc8112949ce47a",
+      "sha256": "4a0b2ba2372b83e871c750d45726bd0ea0aff79edfb50b9e5f2c4c66f71d9fd3"
+    },
+    {
+      "file": "ports/geni-bus/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "3fd839f7033685de98043702ddc35ea7faec4632cfce24baba6a1a035730b329"
+    }
+  ],
+  "patch_sha256": "95b2b86dbfc9de78326c53afb091992d1eb0b1d832f2095a5c70c575360d40b2",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Source/patch replay only; unaccepted GENI bus driver drafts",
+  "reviewed_changes": [
+    "Keep non-exported implementation methods static and supply exact factory trace headers for external build",
+    "Assert equality of 35 overlapping native register constants instead of silently overriding them",
+    "Use the new native wrapper mapping accessor instead of casting private data to the wrong structure",
+    "Bound SPI chip-select scanning by the actual native array while preserving hardware four-CS limit"
+  ],
+  "pending": [
+    "GPI DMA rings, interrupt/completion and descriptor lifetime, remove/probe failures",
+    "Real I2C/SPI clock/pinctrl/firmware/DMA transactions and downstream peripheral behavior",
+    "Full physical device and whole-board DT/boot acceptance"
+  ]
+}

@@ -1,0 +1,11 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/geni-bus'
+  CC [M]  i2c-msm-geni.o
+  CC [M]  spi-msm-geni.o
+  MODPOST Module.symvers
+  LD [M]  i2c-msm-geni.ko
+  LD [M]  spi-msm-geni.ko
+  BTF [M] spi-msm-geni.ko
+  BTF [M] i2c-msm-geni.ko
+make[1]: Leaving directory '/work/avr-port/ports/geni-bus'
+make: Leaving directory '/work/avr-src'

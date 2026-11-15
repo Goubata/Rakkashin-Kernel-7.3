@@ -1,0 +1,53 @@
+{
+  "stage": 68,
+  "scope": "Three linked GENI controller drafts, native wrapper RAM/API/client helper tests and selected DT references; not I2C/SPI/DMA hardware acceptance",
+  "source_commit": "93a77327a5030c5e2fefc9ecba94f9357cd6d70d",
+  "checks": {
+    "log": "reports/geni-bus-stage68-qemu.log",
+    "test": "geni-bus",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      4,
+      0,
+      0,
+      4
+    ]
+  },
+  "matching_imports": 323,
+  "selected_dt_counts": {
+    "qcom,geni-se-qup": 3,
+    "qcom,spi-geni": 1,
+    "qcom,gpi-dma": 3,
+    "qcom,i2c-geni": 8
+  },
+  "image_sha256": "8f477e97196bdc97dc93c332ab98fab3b0eaa82a316e9acfc5cd382acd9e67da",
+  "draft_module_count": 3,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "draft_image_required": true,
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "GPI rings/descriptors/interrupt/completion/probe/remove lifecycle",
+    "I2C/SPI DMA/FIFO transactions and peripheral firmware/clock/pinctrl runtime",
+    "Additional mandatory drivers and whole-board SID4/boot/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-bus-stage68-check.json": "be59f9ab27fa178d80c69f5a9760ff05ddfb8ef5800db8b72b10153edd9071db",
+    "reports/geni-bus-stage68-qemu.log": "d851a14c4e7a421a288cc94a0289c8ecfcda9f30b29663ab6358ddca64a54089",
+    "reports/geni-bus-stage68-qemu.json": "78e85759af44d13b9879db380adfa8f571997a8704b261f3f6d0295badcf1041",
+    "reports/geni-bus-stage68-native-build.log": "ef8369953b986ae1a40a0322fdea745a80e9b0c05cb339ee1ca3e92bd0548a26",
+    "reports/geni-bus-stage68-final-build.log": "db001807141c15d472f7324208f0219d30725c75f3b79cbf41dd77bc9e313529",
+    "reports/geni-bus-stage68-test-build.log": "9c3d0dc776bcef07a8eb385cf9049d18e051efc1a8cf89eb70ab445f1c602f51",
+    "reports/geni-bus-stage68-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-stage68-dt.json": "474ecb0552bd623834bf0eed6f98780c16b2201e6c9e7ba8480604a98c0a610f",
+    "reports/geni-bus-source-lock.json": "fe6f19e34e550f2c293ec37f4d7d4b4e44ad001789d6c6d172a157fbbe509e90",
+    "patches/geni-bus-7.3.patch": "95b2b86dbfc9de78326c53afb091992d1eb0b1d832f2095a5c70c575360d40b2",
+    "patches/geni-wrapper-accessor-7.3.patch": "7f484f8186592d0b290c40ef816d0f736a3c4cb45194fbde81f74960808f84b5",
+    "reports/core-patch-checkpoint.json": "bbb014c9ca9113642038db0e9f15c79f50aa04fd073e18b5f0430b4585edcdf8",
+    "reports/core-patch-replay.json": "a518a21518685cd9c6184a285fe0f410f7c2dcb7560e061fe784b68f28007502",
+    "reports/geni-bus-stage68-checkpoint-build.log": "fed29ddd43e43c037cff0e9cb2cc6ccf74b59df95cc989db72ec61d3787beaa9"
+  }
+}

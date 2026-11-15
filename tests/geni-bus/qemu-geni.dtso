@@ -1,0 +1,21 @@
+/dts-v1/;
+/plugin/;
+/ {
+ fragment@0 {
+  target-path = "/";
+  __overlay__ {
+   reserved-memory {
+    #address-cells = <2>; #size-cells = <2>; ranges;
+    geni_ram: geni@60000000 { reg = <0 0x60000000 0 0x1000>; no-map; };
+   };
+   geni_clock: avr-geni-clock { compatible = "fixed-clock"; #clock-cells = <0>; clock-frequency = <19200000>; };
+   avr-geni-wrapper@60000000 {
+    compatible = "qcom,geni-se-qup";
+    reg = <0 0x60000000 0 0x1000>;
+    clocks = <&geni_clock>, <&geni_clock>;
+    clock-names = "m-ahb", "s-ahb";
+    status = "okay";
+   };
+  };
+ };
+};

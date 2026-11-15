@@ -1,0 +1,481 @@
+--- a/ports/geni-bus/msm_gpi.c
++++ b/ports/geni-bus/msm_gpi.c
+@@ -1854,7 +1854,7 @@
+  *
+  * Return: Returns success or failure
+  */
+-int gpi_terminate_channel(struct gpii_chan *gpii_chan)
++static int gpi_terminate_channel(struct gpii_chan *gpii_chan)
+ {
+ 	struct gpii *gpii = gpii_chan->gpii;
+ 	int ret = 0;
+@@ -2855,7 +2855,7 @@
+ }
+ 
+ /* marks all pending events for the channel as stale */
+-void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
++static void gpi_mark_stale_events(struct gpii_chan *gpii_chan)
+ {
+ 	struct gpii *gpii = gpii_chan->gpii;
+ 	struct gpi_ring *ev_ring = gpii->ev_ring;
+@@ -3302,7 +3302,7 @@
+  *
+  * Return: Returns success or failure
+  */
+-int gpi_terminate_all(struct dma_chan *chan)
++static int gpi_terminate_all(struct dma_chan *chan)
+ {
+ 	struct gpii_chan *gpii_chan = to_gpii_chan(chan);
+ 	struct gpii *gpii = gpii_chan->gpii;
+@@ -3685,7 +3685,7 @@
+ 	return 0;
+ }
+ 
+-void gpi_desc_free(struct virt_dma_desc *vd)
++static void gpi_desc_free(struct virt_dma_desc *vd)
+ {
+ 	struct gpi_desc *gpi_desc = to_gpi_desc(vd);
+ 
+@@ -3694,7 +3694,7 @@
+ }
+ 
+ /* copy tre into transfer ring */
+-struct dma_async_tx_descriptor *gpi_prep_slave_sg(struct dma_chan *chan,
++static struct dma_async_tx_descriptor *gpi_prep_slave_sg(struct dma_chan *chan,
+ 					struct scatterlist *sgl,
+ 					unsigned int sg_len,
+ 					enum dma_transfer_direction direction,
+--- a/ports/geni-bus/include/linux/qcom-geni-se-common.h
++++ b/ports/geni-bus/include/linux/qcom-geni-se-common.h
+@@ -67,45 +67,161 @@
+ #define APPS_PROC_TO_QUP_VOTE	140000
+ 
+ /* COMMON SE REGISTERS */
++#ifdef GENI_GENERAL_CFG
++static_assert(GENI_GENERAL_CFG == (0x10));
++#else
+ #define GENI_GENERAL_CFG		(0x10)
++#endif
++#ifdef GENI_CLK_CTRL_RO
++static_assert(GENI_CLK_CTRL_RO == (0x60));
++#else
+ #define GENI_CLK_CTRL_RO		(0x60)
++#endif
++#ifdef GENI_FW_MULTILOCK_MSA_RO
++static_assert(GENI_FW_MULTILOCK_MSA_RO == (0x74));
++#else
+ #define GENI_FW_MULTILOCK_MSA_RO	(0x74)
++#endif
+ #define GENI_INIT_CFG_REVISION		(0x0)
+ 
+ /* SE_DMA_GENERAL_CFG */
++#ifdef DMA_IF_EN_RO
++static_assert(DMA_IF_EN_RO == (0xe20));
++#else
+ #define DMA_IF_EN_RO			(0xe20)
++#endif
++#ifdef SE_GSI_EVENT_EN
++static_assert(SE_GSI_EVENT_EN == (0xe18));
++#else
+ #define SE_GSI_EVENT_EN			(0xe18)
++#endif
++#ifdef SE_IRQ_EN
++static_assert(SE_IRQ_EN == (0xe1c));
++#else
+ #define SE_IRQ_EN			(0xe1c)
++#endif
++#ifdef DMA_GENERAL_CFG
++static_assert(DMA_GENERAL_CFG == (0xe30));
++#else
+ #define DMA_GENERAL_CFG			(0xe30)
++#endif
++#ifdef SE_DMA_QSB_TRANS_CFG
++static_assert(SE_DMA_QSB_TRANS_CFG == (0xe38));
++#else
+ #define SE_DMA_QSB_TRANS_CFG		(0xe38)
++#endif
++#ifdef SE_DMA_DEBUG_REG0
++static_assert(SE_DMA_DEBUG_REG0 == (0xE40));
++#else
+ #define SE_DMA_DEBUG_REG0		(0xE40)
++#endif
++#ifdef SE_DMA_TX_PTR_L
++static_assert(SE_DMA_TX_PTR_L == (0xC30));
++#else
+ #define SE_DMA_TX_PTR_L			(0xC30)
++#endif
++#ifdef SE_DMA_TX_PTR_H
++static_assert(SE_DMA_TX_PTR_H == (0xC34));
++#else
+ #define SE_DMA_TX_PTR_H			(0xC34)
++#endif
++#ifdef SE_DMA_TX_ATTR
++static_assert(SE_DMA_TX_ATTR == (0xC38));
++#else
+ #define SE_DMA_TX_ATTR			(0xC38)
++#endif
++#ifdef SE_DMA_TX_LEN
++static_assert(SE_DMA_TX_LEN == (0xC3C));
++#else
+ #define SE_DMA_TX_LEN                   (0xC3C)
++#endif
++#ifdef SE_DMA_TX_IRQ_EN
++static_assert(SE_DMA_TX_IRQ_EN == (0xC48));
++#else
+ #define SE_DMA_TX_IRQ_EN                (0xC48)
++#endif
++#ifdef SE_DMA_TX_LEN_IN
++static_assert(SE_DMA_TX_LEN_IN == (0xC54));
++#else
+ #define SE_DMA_TX_LEN_IN                (0xC54)
++#endif
+ #define GENI_SE_DMA_EOT_BUF		(BIT(0))
+ 
++#ifdef SE_DMA_RX_PTR_L
++static_assert(SE_DMA_RX_PTR_L == (0xD30));
++#else
+ #define SE_DMA_RX_PTR_L			(0xD30)
++#endif
++#ifdef SE_DMA_RX_PTR_H
++static_assert(SE_DMA_RX_PTR_H == (0xD34));
++#else
+ #define SE_DMA_RX_PTR_H			(0xD34)
++#endif
++#ifdef SE_DMA_RX_ATTR
++static_assert(SE_DMA_RX_ATTR == (0xD38));
++#else
+ #define SE_DMA_RX_ATTR			(0xD38)
++#endif
++#ifdef SE_DMA_RX_LEN
++static_assert(SE_DMA_RX_LEN == (0xD3C));
++#else
+ #define SE_DMA_RX_LEN			(0xD3C)
++#endif
++#ifdef SE_DMA_RX_IRQ_EN
++static_assert(SE_DMA_RX_IRQ_EN == (0xD48));
++#else
+ #define SE_DMA_RX_IRQ_EN                (0xD48)
+-
++#endif
++
++#ifdef SE_DMA_TX_IRQ_EN_SET
++static_assert(SE_DMA_TX_IRQ_EN_SET == (0xC4C));
++#else
+ #define SE_DMA_TX_IRQ_EN_SET	(0xC4C)
++#endif
++#ifdef SE_DMA_TX_IRQ_EN_CLR
++static_assert(SE_DMA_TX_IRQ_EN_CLR == (0xC50));
++#else
+ #define SE_DMA_TX_IRQ_EN_CLR	(0xC50)
+-
++#endif
++
++#ifdef SE_DMA_RX_IRQ_EN_SET
++static_assert(SE_DMA_RX_IRQ_EN_SET == (0xD4C));
++#else
+ #define SE_DMA_RX_IRQ_EN_SET	(0xD4C)
++#endif
++#ifdef SE_DMA_RX_IRQ_EN_CLR
++static_assert(SE_DMA_RX_IRQ_EN_CLR == (0xD50));
++#else
+ #define SE_DMA_RX_IRQ_EN_CLR	(0xD50)
++#endif
+ 
+ #define TX_GENI_CANCEL_IRQ		(BIT(14))
++#ifdef SE_HW_PARAM_2
++static_assert(SE_HW_PARAM_2 == (0xE2C));
++#else
+ #define SE_HW_PARAM_2                   (0xE2C)
++#endif
+ /* DMA DEBUG Register fields */
++#ifdef DMA_TX_ACTIVE
++static_assert(DMA_TX_ACTIVE == (BIT(0)));
++#else
+ #define DMA_TX_ACTIVE			(BIT(0))
++#endif
++#ifdef DMA_RX_ACTIVE
++static_assert(DMA_RX_ACTIVE == (BIT(1)));
++#else
+ #define DMA_RX_ACTIVE			(BIT(1))
++#endif
++#ifdef DMA_TX_STATE
++static_assert(DMA_TX_STATE == (GENMASK(7, 4)));
++#else
+ #define DMA_TX_STATE			(GENMASK(7, 4))
++#endif
++#ifdef DMA_RX_STATE
++static_assert(DMA_RX_STATE == (GENMASK(11, 8)));
++#else
+ #define DMA_RX_STATE			(GENMASK(11, 8))
++#endif
+ 
+ /* SE_IRQ_EN fields */
+ #define DMA_RX_IRQ_EN			(BIT(0))
+@@ -121,7 +237,11 @@
+ 
+ /* GENI_OUTPUT_CTRL fields */
+ #define GENI_CFG_REG80		0x240
++#ifdef GENI_IO_MUX_0_EN
++static_assert(GENI_IO_MUX_0_EN == BIT(0));
++#else
+ #define GENI_IO_MUX_0_EN	BIT(0)
++#endif
+ #define GENI_IO_MUX_1_EN	BIT(2)
+ 
+ /* GENI_CFG_REG80 fields */
+@@ -133,11 +253,31 @@
+ #define GSI_RX_PACK_EN          (BIT(1))
+ #define GSI_PRESERVE_PACK       (BIT(2))
+ 
++#ifdef HW_VER_MAJOR_MASK
++static_assert(HW_VER_MAJOR_MASK == GENMASK(31, 28));
++#else
+ #define HW_VER_MAJOR_MASK GENMASK(31, 28)
++#endif
++#ifdef HW_VER_MAJOR_SHFT
++static_assert(HW_VER_MAJOR_SHFT == 28);
++#else
+ #define HW_VER_MAJOR_SHFT 28
++#endif
++#ifdef HW_VER_MINOR_MASK
++static_assert(HW_VER_MINOR_MASK == GENMASK(27, 16));
++#else
+ #define HW_VER_MINOR_MASK GENMASK(27, 16)
++#endif
++#ifdef HW_VER_MINOR_SHFT
++static_assert(HW_VER_MINOR_SHFT == 16);
++#else
+ #define HW_VER_MINOR_SHFT 16
++#endif
++#ifdef HW_VER_STEP_MASK
++static_assert(HW_VER_STEP_MASK == GENMASK(15, 0));
++#else
+ #define HW_VER_STEP_MASK GENMASK(15, 0)
++#endif
+ 
+ #define OTHER_IO_OE		BIT(12)
+ #define IO2_DATA_IN_SEL		BIT(11)
+@@ -660,16 +800,18 @@
+  */
+ static inline void test_bus_enable_per_qupv3(struct device *wrapper_dev, void *ipc)
+ {
+-	struct geni_se *geni_se_dev;
+-
+-	geni_se_dev = dev_get_drvdata(wrapper_dev);
++	struct geni_se se = { .wrapper = dev_get_drvdata(wrapper_dev) };
++	void __iomem *base = geni_se_get_wrapper_base(&se);
++
++	if (!base)
++		return;
+ 	//Enablement of test bus is required only once.
+ 	//TEST_BUS_EN:4, TEST_BUS_REG_EN:0
+-	geni_write_reg(0x11, geni_se_dev->base, QUPV3_TEST_BUS_EN);
+-	GENI_SE_ERR(ipc, false, geni_se_dev->dev,
++	geni_write_reg(0x11, base, QUPV3_TEST_BUS_EN);
++	GENI_SE_ERR(ipc, false, wrapper_dev,
+ 		    "%s: TEST_BUS_EN: 0x%x @address:%p\n",
+-		    __func__, geni_read_reg(geni_se_dev->base, QUPV3_TEST_BUS_EN),
+-		    (geni_se_dev->base + QUPV3_TEST_BUS_EN));
++		    __func__, geni_read_reg(base, QUPV3_TEST_BUS_EN),
++		    (base + QUPV3_TEST_BUS_EN));
+ }
+ 
+ /*
+@@ -681,15 +823,17 @@
+  */
+ static inline void test_bus_select_per_qupv3(struct device *wrapper_dev, u8 test_bus_num, void *ipc)
+ {
+-	struct geni_se *geni_se_dev;
+-
+-	geni_se_dev = dev_get_drvdata(wrapper_dev);
+-
+-	geni_write_reg(test_bus_num, geni_se_dev->base, QUPV3_TEST_BUS_SEL);
+-	GENI_SE_ERR(ipc, false, geni_se_dev->dev,
++	struct geni_se se = { .wrapper = dev_get_drvdata(wrapper_dev) };
++	void __iomem *base = geni_se_get_wrapper_base(&se);
++
++	if (!base)
++		return;
++
++	geni_write_reg(test_bus_num, base, QUPV3_TEST_BUS_SEL);
++	GENI_SE_ERR(ipc, false, wrapper_dev,
+ 		    "%s: readback TEST_BUS_SEL: 0x%x @address:%p\n",
+-		    __func__, geni_read_reg(geni_se_dev->base, QUPV3_TEST_BUS_SEL),
+-		    (geni_se_dev->base + QUPV3_TEST_BUS_SEL));
++		    __func__, geni_read_reg(base, QUPV3_TEST_BUS_SEL),
++		    (base + QUPV3_TEST_BUS_SEL));
+ }
+ 
+ /*
+@@ -700,12 +844,14 @@
+  */
+ static inline void test_bus_read_per_qupv3(struct device *wrapper_dev, void *ipc)
+ {
+-	struct geni_se *geni_se_dev;
+-
+-	geni_se_dev = dev_get_drvdata(wrapper_dev);
+-	GENI_SE_ERR(ipc, false, geni_se_dev->dev,
++	struct geni_se se = { .wrapper = dev_get_drvdata(wrapper_dev) };
++	void __iomem *base = geni_se_get_wrapper_base(&se);
++
++	if (!base)
++		return;
++	GENI_SE_ERR(ipc, false, wrapper_dev,
+ 		    "%s: dump QUPV3_TEST_BUS_REG:0x%x\n",
+-		    __func__, geni_read_reg(geni_se_dev->base, QUPV3_TEST_BUS_REG));
++		    __func__, geni_read_reg(base, QUPV3_TEST_BUS_REG));
+ }
+ 
+ /**
+@@ -775,4 +921,3 @@
+ 	}
+ }
+ #endif
+-
+--- a/ports/geni-bus/i2c-msm-geni.c
++++ b/ports/geni-bus/i2c-msm-geni.c
+@@ -133,7 +133,7 @@
+ #define MAX_SPLIT_TRE_MSGS	QUP_MAX_SPLIT_TRE_MSGS
+ 
+ /* FTRACE Logging */
+-void i2c_trace_log(struct device *dev, const char *fmt, ...)
++static void i2c_trace_log(struct device *dev, const char *fmt, ...)
+ {
+ 	struct va_format vaf = {
+ 		.fmt = fmt,
+@@ -354,7 +354,7 @@
+  *
+  * Return:	None
+  */
+-void geni_i2c_se_dump_dbg_regs(struct geni_se *se, void __iomem *base,
++static void geni_i2c_se_dump_dbg_regs(struct geni_se *se, void __iomem *base,
+ 				void *ipc)
+ {
+ 	u32 m_cmd0 = 0;
+@@ -1174,7 +1174,7 @@
+  *
+  * Return:  None.
+  */
+-void gi2c_gsi_tx_unmap(struct geni_i2c_dev *gi2c, u32 msg_idx, u32 wr_idx)
++static void gi2c_gsi_tx_unmap(struct geni_i2c_dev *gi2c, u32 msg_idx, u32 wr_idx)
+ {
+ 	if (gi2c->msgs[msg_idx].len > IMMEDIATE_DMA_LEN) {
+ 		geni_se_common_iommu_unmap_buf(gi2c->wrapper_dev, &gi2c->tx_ph[wr_idx],
+@@ -1478,7 +1478,7 @@
+ 	return rx_t;
+ }
+ 
+-void geni_i2c_get_immediate_dma_data(u8 *dword, int len, uint8_t *buf)
++static void geni_i2c_get_immediate_dma_data(u8 *dword, int len, uint8_t *buf)
+ {
+ 	int i = 0;
+ 
+@@ -2471,7 +2471,7 @@
+  *
+  * Return: None
+  */
+-void geni_i2c_sg_init(struct geni_i2c_dev *gi2c, int msg_idx, int *segs, int *sg_index, int num,
++static void geni_i2c_sg_init(struct geni_i2c_dev *gi2c, int msg_idx, int *segs, int *sg_index, int num,
+ 		      struct msm_gpi_tre *lock_t)
+ {
+ 	if (!gi2c->cfg_sent) {
+@@ -2729,7 +2729,7 @@
+  *
+  * Return: None
+  */
+-void geni_i2c_fifo_dma_rw(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], u32 msg_idx,
++static void geni_i2c_fifo_dma_rw(struct geni_i2c_dev *gi2c, struct i2c_msg msgs[], u32 msg_idx,
+ 			  enum geni_se_xfer_mode *mode, dma_addr_t *rx_dma, dma_addr_t *tx_dma,
+ 			  u8 *dma_buf, u32 m_param)
+ {
+@@ -3891,3 +3891,5 @@
+ module_exit(i2c_dev_exit);
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:i2c_geni");
++
++MODULE_DESCRIPTION("Qualcomm firmware-pinned GENI I2C controller for AVR");
+--- a/ports/geni-bus/spi-msm-geni.c
++++ b/ports/geni-bus/spi-msm-geni.c
+@@ -170,7 +170,7 @@
+ #define MAX_IPC_LOG_SIZE	30
+ 
+ /* FTRACE Logging */
+-void spi_trace_log(struct device *dev, const char *fmt, ...)
++static void spi_trace_log(struct device *dev, const char *fmt, ...)
+ {
+ 	struct va_format vaf = {
+ 		.fmt = fmt,
+@@ -315,7 +315,7 @@
+  *
+  * Return:	None
+  */
+-void geni_spi_se_dump_dbg_regs(struct geni_se *se, void __iomem *base,
++static void geni_spi_se_dump_dbg_regs(struct geni_se *se, void __iomem *base,
+ 				void *ipc)
+ {
+ 	u32 m_cmd0 = 0;
+@@ -765,8 +765,8 @@
+ {
+ 	int j;
+ 
+-	for (j = 0; j < SPI_NUM_CHIPSELECT; j++) {
+-		if (spi_slv->chip_select[j] != 0xFF && spi_slv->chip_select[j] < SPI_CS_CNT_MAX) {
++	for (j = 0; j < ARRAY_SIZE(spi_slv->chip_select); j++) {
++		if (spi_slv->chip_select[j] != 0xFF && spi_slv->chip_select[j] < SPI_NUM_CHIPSELECT) {
+ 		/* Geni SE doesn't support mutliple CS by same client, hence use only one CS */
+ 			*cs_num = spi_slv->chip_select[j];
+ 			return 0;
+@@ -2818,7 +2818,7 @@
+ 	u8 idx;
+ 
+ 	if (spi_is_csgpiod(spi_slv)) {
+-		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
++		for (idx = 0; idx < ARRAY_SIZE(spi_slv->chip_select); idx++) {
+ 			if (spi_slv->cs_index_mask & BIT(idx)) {
+ 				struct gpio_desc *desc = spi_get_csgpiod(spi_slv, idx);
+ 
+@@ -3205,7 +3205,7 @@
+ 	return 0;
+ }
+ 
+-void create_ipc_context(struct spi_geni_master *geni_mas, struct device *dev)
++static void create_ipc_context(struct spi_geni_master *geni_mas, struct device *dev)
+ {
+ 	char name[MAX_IPC_NAME_BUF];
+ 
+@@ -3919,3 +3919,5 @@
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:spi_geni");
+ 
++
++MODULE_DESCRIPTION("Qualcomm firmware-pinned GENI SPI controller for AVR");
+--- a/ports/geni-bus/spi-qup-trace.h
++++ b/ports/geni-bus/spi-qup-trace.h
+@@ -40,7 +40,6 @@
+ 
+ /* This part must be outside protection */
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH /work/avr-port/ports/geni-bus
+ #define TRACE_INCLUDE_FILE spi-qup-trace
+ #include <trace/define_trace.h>
+-
+--- a/ports/geni-bus/i2c-qup-trace.h
++++ b/ports/geni-bus/i2c-qup-trace.h
+@@ -40,7 +40,6 @@
+ 
+ /* This part must be outside protection */
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_PATH /work/avr-port/ports/geni-bus
+ #define TRACE_INCLUDE_FILE i2c-qup-trace
+ #include <trace/define_trace.h>
+-
+--- a/ports/geni-bus/Makefile
++++ b/ports/geni-bus/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += msm_gpi.o i2c-msm-geni.o spi-msm-geni.o
++ccflags-y += -I$(src)/include -I$(srctree) -I$(src)/../qcom-ipc-logging/include -I$(src)/../qcom-smem/include
++ccflags-y += -DCONFIG_IPC_LOGGING_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ipc-logging/Module.symvers $(src)/../qcom-smem/Module.symvers

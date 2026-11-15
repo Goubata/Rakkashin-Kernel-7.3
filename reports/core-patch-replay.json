@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
-  "patch_count": 16,
+  "target_commit": "93a77327a5030c5e2fefc9ecba94f9357cd6d70d",
+  "patch_count": 17,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -125,6 +125,10 @@
       "sha256": "ba0e6e90a1aff0ce1660dc9c48edf32dd79bb2deb91237cd18c46f23e536a50b"
     },
     {
+      "file": "drivers/soc/qcom/qcom-geni-se.c",
+      "sha256": "e7b37370ed37ce6c0d6394c94d01937fceecf465afb34d960553c847fdc5cd55"
+    },
+    {
       "file": "drivers/soc/qcom/qmi_encdec.c",
       "sha256": "48b711c8f05edf7f07e2bd50eaf5c3946d076782773170d2e9f12d01ef452223"
     },
@@ -163,6 +167,10 @@
     {
       "file": "include/linux/shmem_fs.h",
       "sha256": "ad1bb9f5ac92ad396660698c16499d1bfcc3e549cc9929d25648ae03c7b0a9b6"
+    },
+    {
+      "file": "include/linux/soc/qcom/geni-se.h",
+      "sha256": "0632d4f7ff104e655cd3813eb6f76fc30dfa9cee2a58730705d0b30f42912c58"
     },
     {
       "file": "include/trace/hooks/gunyah.h",
@@ -250,5 +258,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "04b50da2156c3e74cf27f9669fdd6ae019b3ca4e57b6819f82611177c4568191"
+  "checkpoint_sha256": "bbb014c9ca9113642038db0e9f15c79f50aa04fd073e18b5f0430b4585edcdf8"
 }

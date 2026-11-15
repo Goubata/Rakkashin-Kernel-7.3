@@ -1159,3 +1159,38 @@ and QEMU mode `usb-repeater-pmic`; run the selected DT auditor with
 `--report reports/usb-eusb2-stage67-dt.json` for current DT bounds. Evidence:
 reports/usb-repeater-stage67-validation.json. No promotion, physical USB proof
 or whole-board completion is implied. Three drafts remain separate from Stage57.
+
+
+## Stage68: GENI DMA/I2C/SPI drafts and native wrapper mapping API
+
+Import pinned GPI DMA, I2C and SPI source plus factory common/header/trace files.
+Keep non-exported helpers static, use external trace include paths, and assert
+35 overlapping native register constants match rather than overriding silently.
+SPI chip-select scanning uses actual array bounds and the four-CS hardware limit.
+All three modules link with 323 matching imports, without dummy DMA/bus methods.
+
+Factory common diagnostics cast parent private data to struct geni_se even
+though it is struct geni_wrapper. Add native geni_se_get_wrapper_base borrowed
+mapping API and use it without private-layout assumptions. Keep the parent
+bound during access. Native source is now 93a77327a (full SHA in the report),
+with a rebuilt Image/modules; full replay passes 17 patches/63 exact files.
+This new API requires the matching Image; old Stage57 Image lacks it.
+
+Four SMP4 QEMU cases bind the actual native wrapper to reserved guest RAM using
+fixed clocks, then test new accessor/null behavior, hardware-version read,
+common diagnostic writes/read and neighbor canary, missing wrapper data, and
+SPI chip-select helper using the real native spi_device layout. All three
+controller modules register/unregister, but their physical probes/transfers are
+not exercised. Selected DT checks pass for 3 wrappers, 3 GPI controllers,
+8 I2C and 1 SPI controllers: clock/DMA/IOMMU/ICC/pinctrl/memory references and
+factory five-cell DMA tuples resolve, and normalized properties match saved DT.
+An initial audit assumed six cells from an obsolete log string; corrected to
+parse the factory REQ_OF_DMA_ARGS=5 definition and actual se-clk lookup name.
+No DT values were changed to satisfy the check.
+
+Reproduce `python scripts/build_geni_bus.py --tests`, QEMU mode `geni-bus`, and
+`python scripts/audit_geni_bus_dt.py`. New Image/three drafts are archived in
+artifacts/geni-drafts-stage68 separately from the main Stage57 bundle.
+Evidence: reports/geni-bus-stage68-validation.json. DMA rings/descriptor/IRQ
+lifecycle, physical transfers, other mandatory drivers and whole-board gates
+remain incomplete; no draft promotion or daily-use acceptance is claimed.

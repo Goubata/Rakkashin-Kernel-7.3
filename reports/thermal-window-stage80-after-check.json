@@ -1,0 +1,12 @@
+{
+  "log": "reports/thermal-window-stage80-after-qemu.log",
+  "test": "tsens",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    14,
+    0,
+    0,
+    14
+  ]
+}

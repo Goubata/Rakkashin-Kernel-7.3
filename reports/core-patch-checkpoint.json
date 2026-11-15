@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "93a77327a5030c5e2fefc9ecba94f9357cd6d70d",
+  "source_commit": "28dfb55e2dd82930fe601a10ba8ea4dc889f10e6",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -18,6 +18,7 @@
     "patches/pdr-external-clients-7.3.patch": "e4579585995b4744cca94148d0af152bd6529ee7b9bc1ecacc8fb25f42cedfc3",
     "patches/qmi-decode-bounds-7.3.patch": "c179479d79adad29606e7d10ae1f1a22c0238d1dddc96d29b5dc934101e21e67",
     "patches/smem-state-lifetime-7.3.patch": "d8e38a52deb57c1e887a012b4eb38c1d34b8b9f9a7ceea432eff20db56fcfdb6",
-    "patches/geni-wrapper-accessor-7.3.patch": "7f484f8186592d0b290c40ef816d0f736a3c4cb45194fbde81f74960808f84b5"
+    "patches/geni-wrapper-accessor-7.3.patch": "7f484f8186592d0b290c40ef816d0f736a3c4cb45194fbde81f74960808f84b5",
+    "patches/thermal-window-retry-7.3.patch": "449e8574261e3ac8906fae1b91c9cdb55b5c48b8de68eac98ab6067067d2131d"
   }
 }

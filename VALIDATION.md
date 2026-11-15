@@ -1480,3 +1480,31 @@ Evidence: reports/tsens-stage79-validation.json. Build with build_tsens.py --tes
 and QEMU mode tsens (11 cases). Production imports match; no DT values changed.
 Artifacts stay separate from Stage57. Physical thermal control and whole-board
 acceptance remain pending; no physical boot or partition writes occurred.
+
+## Stage80: actual native thermal core retries failed threshold windows
+
+Reproduced a skipped same-window retry on Image #23 with the actual running
+thermal_zone_set_trips function, resolved through the existing native diagnostic
+symbol provider and called with a real zone lock held. This is not an extracted
+or substitute core function. The original Image passes 13/14 cases and fails
+the same-window retry assertions: no register access, old thresholds and masks
+still set. Preserve the rejected baseline and strict log-check failure.
+
+Patch native thermal_trip.c to cache only successful windows. On failure use
+reversed cached limits to invalidate every valid next request, including a
+return to the old window or an unbounded window. Rebuild Image/modules (#24).
+All exported native symbol CRCs remain unchanged; no public structure/API layout
+changed. Core checkpoint/replay now includes 18 patches / 64 exact files.
+
+The same guest tests pass 14/14 without WARN/panic on the updated Image. Three
+actual-core cases cover failed same-window retry, old/full-range requests after
+failure, and suppression of an already successful duplicate. The previous full
+TSENS source/regmap tests, including all 29 transient callback fault positions,
+remain covered. Test registration/zone/MMIO values are private to the guest.
+
+Evidence: reports/thermal-window-stage80-validation.json. The separate artifact
+includes the required new Image; source-module import CRCs still pass. This fixes
+cached-success bookkeeping, not retry scheduling: the next request may retry,
+but no autonomous timer is added for a failed interrupt-only zone. Permanent
+bus-fault masking, physical thermal protection and all remaining whole-board
+acceptance remain pending. Stage57 is unchanged; no partition writes occurred.

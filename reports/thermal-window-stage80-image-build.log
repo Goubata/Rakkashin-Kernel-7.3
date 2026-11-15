@@ -1,0 +1,314 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/out/native-gki'
+  UPD     include/generated/compile.h
+  DESCEND bpf/resolve_btfids
+  CC      init/version.o
+  AR      init/built-in.a
+  GEN     kernel/kheaders_data.tar.xz
+  CC      drivers/thermal/thermal_trip.o
+  AR      drivers/thermal/built-in.a
+  CC [M]  kernel/kheaders.o
+  AR      drivers/built-in.a
+  AR      built-in.a
+  AR      built-in-fixup.a
+  COPY    vmlinux.a
+  LD      vmlinux.o
+  GEN     .vmlinux.objs
+  MODPOST Module.symvers
+  UPD     include/generated/utsversion.h
+  CC      init/version-timestamp.o
+  KSYMS   .tmp_vmlinux0.kallsyms.S
+  AS      .tmp_vmlinux0.kallsyms.o
+  LD      .tmp_vmlinux1
+  BTF     .tmp_vmlinux1
+  NM      .tmp_vmlinux1.syms
+  KSYMS   .tmp_vmlinux1.kallsyms.S
+  AS      .tmp_vmlinux1.kallsyms.o
+  LD      .tmp_vmlinux2
+  NM      .tmp_vmlinux2.syms
+  KSYMS   .tmp_vmlinux2.kallsyms.S
+  AS      .tmp_vmlinux2.kallsyms.o
+  LD      vmlinux.unstripped
+  BTFIDS  vmlinux.unstripped
+  NM      System.map
+  SORTTAB vmlinux.unstripped
+  OBJCOPY vmlinux
+  GEN     modules.builtin.modinfo
+  GEN     modules.builtin
+  OBJCOPY arch/arm64/boot/Image
+  LD [M]  kernel/irq/refcount_interrupt_test.ko
+  LD [M]  kernel/time/time_test.ko
+  BTF [M] kernel/irq/refcount_interrupt_test.ko
+  BTF [M] kernel/time/time_test.ko
+  LD [M]  kernel/kheaders.ko
+  LD [M]  mm/zsmalloc.ko
+  BTF [M] mm/zsmalloc.ko
+  BTF [M] kernel/kheaders.ko
+  LD [M]  fs/ext4/ext4-test.ko
+  LD [M]  fs/fat/fat_test.ko
+  BTF [M] fs/ext4/ext4-test.ko
+  BTF [M] fs/fat/fat_test.ko
+  LD [M]  fs/netfs/netfs.ko
+  LD [M]  lib/kunit/kunit.ko
+  BTF [M] lib/kunit/kunit.ko
+  BTF [M] fs/netfs/netfs.ko
+  LD [M]  lib/kunit/kunit-test.ko
+  BTF [M] lib/kunit/kunit-test.ko
+  LD [M]  lib/kunit/platform-test.ko
+  BTF [M] lib/kunit/platform-test.ko
+  LD [M]  lib/kunit/backtrace-suppression-test.ko
+  BTF [M] lib/kunit/backtrace-suppression-test.ko
+  LD [M]  lib/kunit/kunit-example-test.ko
+  BTF [M] lib/kunit/kunit-example-test.ko
+  LD [M]  lib/crc/tests/crc_kunit.ko
+  BTF [M] lib/crc/tests/crc_kunit.ko
+  LD [M]  lib/crc/crc-ccitt.ko
+  BTF [M] lib/crc/crc-ccitt.ko
+  LD [M]  lib/crypto/tests/aes_cbc_macs_kunit.ko
+  BTF [M] lib/crypto/tests/aes_cbc_macs_kunit.ko
+  LD [M]  lib/crypto/tests/blake2b_kunit.ko
+  BTF [M] lib/crypto/tests/blake2b_kunit.ko
+  LD [M]  lib/crypto/tests/blake2s_kunit.ko
+  BTF [M] lib/crypto/tests/blake2s_kunit.ko
+  LD [M]  lib/crypto/tests/chacha20poly1305_kunit.ko
+  BTF [M] lib/crypto/tests/chacha20poly1305_kunit.ko
+  LD [M]  lib/crypto/tests/curve25519_kunit.ko
+  BTF [M] lib/crypto/tests/curve25519_kunit.ko
+  LD [M]  lib/crypto/tests/ghash_kunit.ko
+  BTF [M] lib/crypto/tests/ghash_kunit.ko
+  LD [M]  lib/crypto/tests/md5_kunit.ko
+  BTF [M] lib/crypto/tests/md5_kunit.ko
+  LD [M]  lib/crypto/tests/nh_kunit.ko
+  BTF [M] lib/crypto/tests/nh_kunit.ko
+  LD [M]  lib/crypto/tests/poly1305_kunit.ko
+  BTF [M] lib/crypto/tests/poly1305_kunit.ko
+  LD [M]  lib/crypto/tests/polyval_kunit.ko
+  BTF [M] lib/crypto/tests/polyval_kunit.ko
+  LD [M]  lib/crypto/tests/sha1_kunit.ko
+  BTF [M] lib/crypto/tests/sha1_kunit.ko
+  LD [M]  lib/crypto/tests/sha224_kunit.ko
+  BTF [M] lib/crypto/tests/sha224_kunit.ko
+  LD [M]  lib/crypto/tests/sha256_kunit.ko
+  BTF [M] lib/crypto/tests/sha256_kunit.ko
+  LD [M]  lib/crypto/tests/sha384_kunit.ko
+  BTF [M] lib/crypto/tests/sha384_kunit.ko
+  LD [M]  lib/crypto/tests/sha512_kunit.ko
+  BTF [M] lib/crypto/tests/sha512_kunit.ko
+  LD [M]  lib/crypto/libarc4.ko
+  BTF [M] lib/crypto/libarc4.ko
+  LD [M]  drivers/clk/clk-test.ko
+  BTF [M] drivers/clk/clk-test.ko
+  LD [M]  drivers/clk/clk-gate_test.ko
+  BTF [M] drivers/clk/clk-gate_test.ko
+  LD [M]  drivers/clk/clk_kunit_helpers.ko
+  BTF [M] drivers/clk/clk_kunit_helpers.ko
+  LD [M]  drivers/soc/qcom/pdr_interface.ko
+  BTF [M] drivers/soc/qcom/pdr_interface.ko
+  LD [M]  drivers/soc/qcom/qcom_pdr_msg.ko
+  BTF [M] drivers/soc/qcom/qcom_pdr_msg.ko
+  LD [M]  drivers/soc/qcom/qmi_helpers.ko
+  BTF [M] drivers/soc/qcom/qmi_helpers.ko
+  LD [M]  drivers/virtio/virtio_pci_modern_dev.ko
+  BTF [M] drivers/virtio/virtio_pci_modern_dev.ko
+  LD [M]  drivers/virtio/virtio_pci_legacy_dev.ko
+  BTF [M] drivers/virtio/virtio_pci_legacy_dev.ko
+  LD [M]  drivers/virtio/virtio_pci.ko
+  BTF [M] drivers/virtio/virtio_pci.ko
+  LD [M]  drivers/virtio/virtio_balloon.ko
+  BTF [M] drivers/virtio/virtio_balloon.ko
+  LD [M]  drivers/char/hw_random/cctrng.ko
+  BTF [M] drivers/char/hw_random/cctrng.ko
+  LD [M]  drivers/char/virtio_console.ko
+  BTF [M] drivers/char/virtio_console.ko
+  LD [M]  drivers/base/regmap/regmap-kunit.ko
+  BTF [M] drivers/base/regmap/regmap-kunit.ko
+  LD [M]  drivers/base/regmap/regmap-ram.ko
+  BTF [M] drivers/base/regmap/regmap-ram.ko
+  LD [M]  drivers/base/regmap/regmap-raw-ram.ko
+  BTF [M] drivers/base/regmap/regmap-raw-ram.ko
+  LD [M]  drivers/block/virtio_blk.ko
+  BTF [M] drivers/block/virtio_blk.ko
+  LD [M]  drivers/block/zram/zram.ko
+  BTF [M] drivers/block/zram/zram.ko
+  LD [M]  drivers/block/null_blk/null_blk.ko
+  BTF [M] drivers/block/null_blk/null_blk.ko
+  LD [M]  drivers/misc/ntsync.ko
+  BTF [M] drivers/misc/ntsync.ko
+  LD [M]  drivers/misc/open-dice.ko
+  BTF [M] drivers/misc/open-dice.ko
+  LD [M]  drivers/misc/vcpu_stall_detector.ko
+  BTF [M] drivers/misc/vcpu_stall_detector.ko
+  LD [M]  drivers/net/macsec.ko
+  BTF [M] drivers/net/macsec.ko
+  LD [M]  drivers/net/mii.ko
+  BTF [M] drivers/net/mii.ko
+  LD [M]  drivers/net/can/dev/can-dev.ko
+  BTF [M] drivers/net/can/dev/can-dev.ko
+  LD [M]  drivers/net/can/vcan.ko
+  BTF [M] drivers/net/can/vcan.ko
+  LD [M]  drivers/net/can/slcan/slcan.ko
+  BTF [M] drivers/net/can/slcan/slcan.ko
+  LD [M]  drivers/net/ppp/ppp_generic.ko
+  BTF [M] drivers/net/ppp/ppp_generic.ko
+  LD [M]  drivers/net/ppp/bsd_comp.ko
+  BTF [M] drivers/net/ppp/bsd_comp.ko
+  LD [M]  drivers/net/ppp/ppp_deflate.ko
+  BTF [M] drivers/net/ppp/ppp_deflate.ko
+  LD [M]  drivers/net/ppp/ppp_mppe.ko
+  BTF [M] drivers/net/ppp/ppp_mppe.ko
+  LD [M]  drivers/net/ppp/pppox.ko
+  BTF [M] drivers/net/ppp/pppox.ko
+  LD [M]  drivers/net/ppp/pptp.ko
+  BTF [M] drivers/net/ppp/pptp.ko
+  LD [M]  drivers/net/slip/slhc.ko
+  BTF [M] drivers/net/slip/slhc.ko
+  LD [M]  drivers/net/wwan/wwan.ko
+  BTF [M] drivers/net/wwan/wwan.ko
+  LD [M]  drivers/net/usb/rtl8150.ko
+  BTF [M] drivers/net/usb/rtl8150.ko
+  LD [M]  drivers/net/usb/r8152.ko
+  BTF [M] drivers/net/usb/r8152.ko
+  LD [M]  drivers/net/usb/asix.ko
+  BTF [M] drivers/net/usb/asix.ko
+  LD [M]  drivers/net/usb/ax88179_178a.ko
+  BTF [M] drivers/net/usb/ax88179_178a.ko
+  LD [M]  drivers/net/usb/cdc_ether.ko
+  BTF [M] drivers/net/usb/cdc_ether.ko
+  LD [M]  drivers/net/usb/cdc_eem.ko
+  BTF [M] drivers/net/usb/cdc_eem.ko
+  LD [M]  drivers/net/usb/usbnet.ko
+  BTF [M] drivers/net/usb/usbnet.ko
+  LD [M]  drivers/net/usb/cdc_ncm.ko
+  BTF [M] drivers/net/usb/cdc_ncm.ko
+  LD [M]  drivers/net/usb/aqc111.ko
+  BTF [M] drivers/net/usb/aqc111.ko
+  LD [M]  drivers/net/usb/r8153_ecm.ko
+  BTF [M] drivers/net/usb/r8153_ecm.ko
+  LD [M]  drivers/usb/mon/usbmon.ko
+  BTF [M] drivers/usb/mon/usbmon.ko
+  LD [M]  drivers/usb/class/cdc-acm.ko
+  BTF [M] drivers/usb/class/cdc-acm.ko
+  LD [M]  drivers/usb/serial/usbserial.ko
+  BTF [M] drivers/usb/serial/usbserial.ko
+  LD [M]  drivers/usb/serial/ftdi_sio.ko
+  BTF [M] drivers/usb/serial/ftdi_sio.ko
+  LD [M]  drivers/input/tests/input_test.ko
+  BTF [M] drivers/input/tests/input_test.ko
+  LD [M]  drivers/rtc/test_rtc_lib.ko
+  BTF [M] drivers/rtc/test_rtc_lib.ko
+  LD [M]  drivers/ptp/ptp.ko
+  BTF [M] drivers/ptp/ptp.ko
+  LD [M]  drivers/ptp/ptp_kvm.ko
+  BTF [M] drivers/ptp/ptp_kvm.ko
+  LD [M]  drivers/firmware/qcom/qcom-scm.ko
+  BTF [M] drivers/firmware/qcom/qcom-scm.ko
+  LD [M]  drivers/firmware/qcom/qcom_pas.ko
+  BTF [M] drivers/firmware/qcom/qcom_pas.ko
+  LD [M]  drivers/hid/hid-uclogic-test.ko
+  LD [M]  drivers/of/of_kunit_helpers.ko
+  BTF [M] drivers/of/of_kunit_helpers.ko
+  BTF [M] drivers/hid/hid-uclogic-test.ko
+  LD [M]  drivers/iio/test/iio-test-format.ko
+  LD [M]  drivers/android/wonder/wonder.ko
+  BTF [M] drivers/iio/test/iio-test-format.ko
+  BTF [M] drivers/android/wonder/wonder.ko
+  LD [M]  drivers/nvmem/nvmem_qfprom.ko
+  BTF [M] drivers/nvmem/nvmem_qfprom.ko
+  LD [M]  drivers/pps/pps_core.ko
+  BTF [M] drivers/pps/pps_core.ko
+  LD [M]  drivers/bluetooth/hci_uart.ko
+  BTF [M] drivers/bluetooth/hci_uart.ko
+  LD [M]  drivers/bluetooth/btsdio.ko
+  BTF [M] drivers/bluetooth/btsdio.ko
+  LD [M]  drivers/bluetooth/btbcm.ko
+  LD [M]  drivers/bluetooth/btqca.ko
+  BTF [M] drivers/bluetooth/btbcm.ko
+  BTF [M] drivers/bluetooth/btqca.ko
+  LD [M]  drivers/thunderbolt/thunderbolt.ko
+  LD [M]  drivers/hwtracing/coresight/coresight.ko
+  BTF [M] drivers/hwtracing/coresight/coresight.ko
+  BTF [M] drivers/thunderbolt/thunderbolt.ko
+  LD [M]  drivers/hwtracing/coresight/coresight-funnel.ko
+  BTF [M] drivers/hwtracing/coresight/coresight-funnel.ko
+  LD [M]  drivers/hwtracing/coresight/coresight-replicator.ko
+  BTF [M] drivers/hwtracing/coresight/coresight-replicator.ko
+  LD [M]  drivers/hwtracing/coresight/coresight-etm4x.ko
+  BTF [M] drivers/hwtracing/coresight/coresight-etm4x.ko
+  LD [M]  drivers/hwtracing/coresight/coresight-trbe.ko
+  BTF [M] drivers/hwtracing/coresight/coresight-trbe.ko
+  LD [M]  drivers/gnss/gnss.ko
+  BTF [M] drivers/gnss/gnss.ko
+  LD [M]  sound/soc/soc-topology-test.ko
+  BTF [M] sound/soc/soc-topology-test.ko
+  LD [M]  sound/soc/soc-utils-test.ko
+  BTF [M] sound/soc/soc-utils-test.ko
+  LD [M]  net/core/dev_addr_lists_test.ko
+  BTF [M] net/core/dev_addr_lists_test.ko
+  LD [M]  net/8021q/8021q.ko
+  BTF [M] net/8021q/8021q.ko
+  LD [M]  net/wireless/cfg80211.ko
+  BTF [M] net/wireless/cfg80211.ko
+  LD [M]  net/vmw_vsock/vmw_vsock_virtio_transport.ko
+  BTF [M] net/vmw_vsock/vmw_vsock_virtio_transport.ko
+  LD [M]  net/can/can.ko
+  BTF [M] net/can/can.ko
+  LD [M]  net/can/can-raw.ko
+  LD [M]  net/can/can-bcm.ko
+  BTF [M] net/can/can-raw.ko
+  BTF [M] net/can/can-bcm.ko
+  LD [M]  net/can/can-gw.ko
+  LD [M]  net/bluetooth/bluetooth.ko
+  BTF [M] net/can/can-gw.ko
+  BTF [M] net/bluetooth/bluetooth.ko
+  LD [M]  net/bluetooth/rfcomm/rfcomm.ko
+  BTF [M] net/bluetooth/rfcomm/rfcomm.ko
+  LD [M]  net/bluetooth/hidp/hidp.ko
+  BTF [M] net/bluetooth/hidp/hidp.ko
+  LD [M]  net/l2tp/l2tp_core.ko
+  BTF [M] net/l2tp/l2tp_core.ko
+  LD [M]  net/l2tp/l2tp_ppp.ko
+  LD [M]  net/mac80211/mac80211.ko
+  BTF [M] net/l2tp/l2tp_ppp.ko
+  BTF [M] net/mac80211/mac80211.ko
+  LD [M]  net/tipc/tipc.ko
+  BTF [M] net/tipc/tipc.ko
+  LD [M]  net/tipc/tipc_diag.ko
+  LD [M]  net/rfkill/rfkill.ko
+  BTF [M] net/tipc/tipc_diag.ko
+  BTF [M] net/rfkill/rfkill.ko
+  LD [M]  net/9p/9pnet.ko
+  LD [M]  net/9p/9pnet_fd.ko
+  BTF [M] net/9p/9pnet.ko
+  BTF [M] net/9p/9pnet_fd.ko
+  LD [M]  net/6lowpan/6lowpan.ko
+  LD [M]  net/6lowpan/nhc_dest.ko
+  BTF [M] net/6lowpan/nhc_dest.ko
+  BTF [M] net/6lowpan/6lowpan.ko
+  LD [M]  net/6lowpan/nhc_fragment.ko
+  LD [M]  net/6lowpan/nhc_hop.ko
+  BTF [M] net/6lowpan/nhc_fragment.ko
+  BTF [M] net/6lowpan/nhc_hop.ko
+  LD [M]  net/6lowpan/nhc_ipv6.ko
+  LD [M]  net/6lowpan/nhc_mobility.ko
+  BTF [M] net/6lowpan/nhc_ipv6.ko
+  BTF [M] net/6lowpan/nhc_mobility.ko
+  LD [M]  net/6lowpan/nhc_routing.ko
+  LD [M]  net/6lowpan/nhc_udp.ko
+  BTF [M] net/6lowpan/nhc_udp.ko
+  BTF [M] net/6lowpan/nhc_routing.ko
+  LD [M]  net/ieee802154/6lowpan/ieee802154_6lowpan.ko
+  LD [M]  net/ieee802154/ieee802154.ko
+  BTF [M] net/ieee802154/6lowpan/ieee802154_6lowpan.ko
+  BTF [M] net/ieee802154/ieee802154.ko
+  LD [M]  net/ieee802154/ieee802154_socket.ko
+  BTF [M] net/ieee802154/ieee802154_socket.ko
+  LD [M]  net/mac802154/mac802154.ko
+  BTF [M] net/mac802154/mac802154.ko
+  LD [M]  net/nfc/nfc.ko
+  BTF [M] net/nfc/nfc.ko
+  LD [M]  net/qrtr/qrtr.ko
+  BTF [M] net/qrtr/qrtr.ko
+  LD [M]  net/qrtr/qrtr-smd.ko
+  BTF [M] net/qrtr/qrtr-smd.ko
+make[1]: Leaving directory '/work/avr-port/out/native-gki'
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,8 @@
+{
+  "scope": "Native exported symbol CRC set comparison only; not hardware or behavior proof",
+  "passed": true,
+  "old_sha256": "4279e1ab10749d6df3cc7dfef7c41d7735a4e6d6c7e48fab5cebcc1e1938b9c6",
+  "new_sha256": "4279e1ab10749d6df3cc7dfef7c41d7735a4e6d6c7e48fab5cebcc1e1938b9c6",
+  "symbols_checked": 17847,
+  "changed_symbols": {}
+}

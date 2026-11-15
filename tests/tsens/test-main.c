@@ -4,6 +4,8 @@
 #include <kunit/test.h>
 #include <linux/module.h>
 #include <linux/platform_device.h>
+#include <linux/kallsyms.h>
+#include "drivers/thermal/thermal_core.h"
 #undef module_platform_driver
 #define module_platform_driver(driver)
 #include "../../ports/qcom-tsens/tsens.c"
@@ -163,7 +165,47 @@ static void persistent_register_failure_never_reports_an_installed_window(struct
  /* Hardware masking cannot be guaranteed when every register access fails. */
  f->read_error=0;KUNIT_EXPECT_EQ(test,tsens_set_trips(f->zone,25000,145000),0);
 }
-static struct kunit_case cases[]={KUNIT_CASE(signed_temperatures_use_exact_v2_layout),KUNIT_CASE(all_sixteen_sensor_offsets_are_independent),KUNIT_CASE(invalid_sample_fallback_requires_a_stable_pair),KUNIT_CASE(valid_later_sample_overrides_unstable_values),KUNIT_CASE(read_errors_propagate_without_temperature_output),KUNIT_CASE(factory_range_and_threshold_encodings_are_preserved),KUNIT_CASE(irq_mask_fields_cover_each_sensor_without_clobber),KUNIT_CASE(irq_state_decodes_signed_thresholds),KUNIT_CASE(native_zone_window_preserves_factory_range_and_clamps),KUNIT_CASE(every_window_register_failure_is_returned_and_can_retry),KUNIT_CASE(persistent_register_failure_never_reports_an_installed_window),{}};
+/* Call the running Image's actual non-exported thermal core via the existing
+ * diagnostic symbol provider. No substitute core function is compiled here. */
+static int call_native_core_window(struct fixture *f,int low,int high)
+{
+ void (*set_window)(struct thermal_zone_device *,int,int);
+ set_window=(void *)debug_symbol_lookup_name("thermal_zone_set_trips");
+ if(!set_window)return -ENOENT;
+ mutex_lock(&f->zone->lock);set_window(f->zone,low,high);mutex_unlock(&f->zone->lock);return 0;
+}
+static void native_core_retries_identical_window_after_callback_failure(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);f->fail_at=1;
+ KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);
+ KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),(u32)(BIT(0)|BIT(16)));
+ f->fail_at=0;f->operations=0;
+ KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);
+ KUNIT_EXPECT_GT(test,f->operations,0u);
+ KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)1450<<12)|250);
+ KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),0u);
+}
+static void native_core_failure_invalidates_previously_installed_window(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);
+ KUNIT_ASSERT_EQ(test,call_native_core_window(f,10000,30000),0);
+ f->operations=0;f->fail_at=1;KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);
+ f->fail_at=0;f->operations=0;
+ KUNIT_ASSERT_EQ(test,call_native_core_window(f,10000,30000),0);
+ KUNIT_EXPECT_GT(test,f->operations,0u);KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),0u);
+ /* An invalid cached window must also differ from a full-range request. */
+ f->operations=0;f->fail_at=1;KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);
+ f->fail_at=0;f->operations=0;KUNIT_ASSERT_EQ(test,call_native_core_window(f,-INT_MAX,INT_MAX),0);
+ KUNIT_EXPECT_GT(test,f->operations,0u);KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)2040<<12)|0xe70);
+}
+static void native_core_skips_only_a_successfully_installed_duplicate(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);
+ KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);KUNIT_EXPECT_GT(test,f->operations,0u);
+ f->operations=0;KUNIT_ASSERT_EQ(test,call_native_core_window(f,25000,145000),0);
+ KUNIT_EXPECT_EQ(test,f->operations,0u);
+}
+static struct kunit_case cases[]={KUNIT_CASE(signed_temperatures_use_exact_v2_layout),KUNIT_CASE(all_sixteen_sensor_offsets_are_independent),KUNIT_CASE(invalid_sample_fallback_requires_a_stable_pair),KUNIT_CASE(valid_later_sample_overrides_unstable_values),KUNIT_CASE(read_errors_propagate_without_temperature_output),KUNIT_CASE(factory_range_and_threshold_encodings_are_preserved),KUNIT_CASE(irq_mask_fields_cover_each_sensor_without_clobber),KUNIT_CASE(irq_state_decodes_signed_thresholds),KUNIT_CASE(native_zone_window_preserves_factory_range_and_clamps),KUNIT_CASE(every_window_register_failure_is_returned_and_can_retry),KUNIT_CASE(persistent_register_failure_never_reports_an_installed_window),KUNIT_CASE(native_core_retries_identical_window_after_callback_failure),KUNIT_CASE(native_core_failure_invalidates_previously_installed_window),KUNIT_CASE(native_core_skips_only_a_successfully_installed_duplicate),{}};
 static struct kunit_suite suite={.name="avr-tsens",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");

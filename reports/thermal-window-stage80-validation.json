@@ -1,0 +1,62 @@
+{
+  "stage": 80,
+  "scope": "Actual running native thermal core threshold-cache recovery with production TSENS callback, native zone locking and private fault-injected regmap; no real thermal hardware",
+  "source_commit": "28dfb55e2dd82930fe601a10ba8ea4dc889f10e6",
+  "checks": {
+    "log": "reports/thermal-window-stage80-after-qemu.log",
+    "test": "tsens",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      14,
+      0,
+      0,
+      14
+    ]
+  },
+  "baseline_expected_failure": {
+    "log": "reports/thermal-window-stage80-before-qemu.log",
+    "test": "tsens",
+    "passed": false,
+    "failures": [
+      "\\bnot ok\\b",
+      "expected all 14 KTAP cases"
+    ],
+    "totals": [
+      13,
+      0,
+      0,
+      13
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "core_patch_count": 18,
+  "core_replay_files": 64,
+  "export_crcs_unchanged": true,
+  "pending": [
+    "Retry is possible on the next framework request; no autonomous retry timer or failed interrupt-only-zone scheduling is added",
+    "Persistent register faults cannot guarantee masking/threshold state or hardware rollback",
+    "Real thermal calibration/IRQ/watchdog/suspend/remove and factory persistence diagnostics",
+    "Remaining drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/thermal-window-stage80-before-check.json": "4ad869b9f8ac137b2286a4cbb66671a3dc81d0ac48f9b27c611da4995eebbfec",
+    "reports/thermal-window-stage80-after-check.json": "461e690cf6c127b5d5480208fa1bab9db041ad1029598f6ca4b6028c06ad8cea",
+    "reports/thermal-window-stage80-before-qemu.log": "c0f456cb75cf7778350acc34fcaa243839f8ae580b491a49cdda9e4d1bf0cbc1",
+    "reports/thermal-window-stage80-after-qemu.log": "64945c6b84a123a600ec0161a625ba03c836788f132203dcddc2563a2e857dee",
+    "reports/thermal-window-stage80-before-qemu.json": "fd6b787f97fab0dff1442dbc85c37afda28835d61c2886014b9d47f1711ce5dd",
+    "reports/thermal-window-stage80-after-qemu.json": "44e8c5d3631bb798aea1a59679c5db08388cbc1574fd5876dbb3c6b05598de90",
+    "reports/thermal-window-stage80-test-build.log": "80e860f8523a77c0135db5c9ed49b86465a1abf4ab3bca034ba28fd52e4b54f0",
+    "reports/thermal-window-stage80-image-build.log": "cfd809b5c91d2a6a7bdca79289910253f4e53ee9539ed8853100cca5848d0573",
+    "reports/thermal-window-stage80-core-crcs.json": "bb465b2df54cc5f113da3febe3774bc6a6ddf24c270fde1ecdeeffde6407e099",
+    "reports/thermal-window-stage80-crc.json": "a15e7dde8664e91326209580aa4b3dd32f391e34af4629b726c245823e05b4e3",
+    "reports/core-patch-checkpoint.json": "61185a44174475eb75e7ba87b9230a5381ca49d126f18141efa4c03f0d4e357d",
+    "reports/core-patch-replay.json": "bb57819c0875127cf502d13523ed79e20abb82b6fe5f6728b6bdaf29e2c65148",
+    "patches/thermal-window-retry-7.3.patch": "449e8574261e3ac8906fae1b91c9cdb55b5c48b8de68eac98ab6067067d2131d",
+    "tests/tsens/test-main.c": "593bce673946eb575ecb1f89a6db3643e99219430cb3c0fbb8b12208f5d168cc"
+  }
+}

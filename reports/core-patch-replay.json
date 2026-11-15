@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "93a77327a5030c5e2fefc9ecba94f9357cd6d70d",
-  "patch_count": 17,
+  "target_commit": "28dfb55e2dd82930fe601a10ba8ea4dc889f10e6",
+  "patch_count": 18,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -137,6 +137,10 @@
       "sha256": "7f79b4c786f2123391e008eb095db34fb3364032b2bc45f92dbf1f499aa77c29"
     },
     {
+      "file": "drivers/thermal/thermal_trip.c",
+      "sha256": "63345fa97453d1d9e110f4d3a5b93cf4ab9b75a28da1a1bbaf00036ef572f963"
+    },
+    {
       "file": "drivers/ufs/core/ufshcd.c",
       "sha256": "fb5277527e3988cc52e57f406c309e49c5c819683456b26e7155ad5978805c10"
     },
@@ -258,5 +262,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "bbb014c9ca9113642038db0e9f15c79f50aa04fd073e18b5f0430b4585edcdf8"
+  "checkpoint_sha256": "61185a44174475eb75e7ba87b9230a5381ca49d126f18141efa4c03f0d4e357d"
 }

@@ -1,0 +1,34 @@
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 4b8238468..5db813356 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -64,9 +64,6 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz, int low, int high)
+ 	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
+ 		return;
+ 
+-	tz->prev_low_trip = low;
+-	tz->prev_high_trip = high;
+-
+ 	dev_dbg(&tz->device,
+ 		"new temperature boundaries: %d < x < %d\n", low, high);
+ 
+@@ -75,8 +72,18 @@ void thermal_zone_set_trips(struct thermal_zone_device *tz, int low, int high)
+ 	 * must inform the thermal core via thermal_zone_device_update.
+ 	 */
+ 	ret = tz->ops.set_trips(tz, low, high);
+-	if (ret)
++	if (ret) {
++		/* A partial failure can invalidate even the previously installed
++		 * window. Reversed limits force the next valid request to retry,
++		 * including a return to the old window or an unbounded window. */
++		tz->prev_low_trip = INT_MAX;
++		tz->prev_high_trip = -INT_MAX;
+ 		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
++		return;
++	}
++
++	tz->prev_low_trip = low;
++	tz->prev_high_trip = high;
+ }
+ 
+ int thermal_zone_trip_id(const struct thermal_zone_device *tz,

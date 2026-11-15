@@ -1,0 +1,8 @@
+{
+  "scope": "Actual running native thermal core threshold-cache recovery with production TSENS callback, native zone locking and private fault-injected regmap; no real thermal hardware",
+  "image_required": true,
+  "image_sha256": "d1fc48d77360166d54d5be44ce2044ecf9d04da0d9727d24abcf201738eac0c5",
+  "source_commit": "28dfb55e2dd82930fe601a10ba8ea4dc889f10e6",
+  "promoted": false,
+  "physical_verified": false
+}

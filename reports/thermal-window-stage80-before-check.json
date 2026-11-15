@@ -1,0 +1,15 @@
+{
+  "log": "reports/thermal-window-stage80-before-qemu.log",
+  "test": "tsens",
+  "passed": false,
+  "failures": [
+    "\\bnot ok\\b",
+    "expected all 14 KTAP cases"
+  ],
+  "totals": [
+    13,
+    0,
+    0,
+    13
+  ]
+}

@@ -33,3 +33,12 @@ Native thermal core caches the requested limits before calling set_trips and
 will not automatically retry identical limits after failure. Framework-level
 recovery is still required; no automatic recovery or atomic hardware rollback
 is claimed. A permanent bus fault also prevents guaranteed masking.
+
+Stage80 supplies a required updated Image with thermal-window-retry-7.3.patch.
+The native core now caches only successful windows and invalidates its cache on
+failure, allowing the next framework request to retry. Fourteen cases pass on
+that Image, including direct calls to the running core's real window function
+under a native zone lock. The old Image reproduces the skipped-retry failure.
+This fixes the cache issue described above; it does not schedule an autonomous
+retry or prove recovery when an interrupt-only zone receives no further request.
+No native public type layout or exported CRC changes were introduced.

@@ -1,6 +1,6 @@
 # avr: Android 7.3 kernel port
 
-Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む91モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む113モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
 
 ## 固定入力
 
@@ -585,3 +585,16 @@ Motorolaのnvmem_qcom-spmi-sdamを移植。stockのNVMEM設定とmodule名を維
 保存/候補DTの12 provider・13固定cell・18参照を照合し、全cellが実容量へ収まった。
 部分成果物はartifacts/android73-sdam-stage50/の110モジュール。
 `reports/sdam-stage50-validation.json`。実SPMI probeや各consumer動作、全体software readinessは未達。
+
+
+## Stage51: 電源・音量下キーとPON親
+
+7.3 nativeのPON親・reboot-mode・PMIC keyの3モジュールを追加。
+PMK8350 power/resin descriptorと保存/候補DTのcode116/114・IRQ・HLOS/PBS領域を照合し、
+実機で両方enabledだったwake既定値を保持した。実input core/handlerとregmap RAM busで
+押下/解放・取りこぼし時の補完・重複抑制・debounce・I/O失敗・reboot理由bitを8件確認。
+実機へのキー注入・再起動はしていない。
+最新部分成果物はartifacts/android73-power-key-stage51/の113モジュール。
+`reports/power-key-stage51-validation.json`。実probe/wake/ROMは未確認で、
+nativeのsuspend IRQ-wake経路とvendorのIRQ再取得方式の差も実機受入が必要。
+全体software readinessと常用版は引き続き未達。

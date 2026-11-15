@@ -1,0 +1,34 @@
+{
+  "stage": 51,
+  "scope": "native PON parent/reboot-mode/PMIC keys, selected factory descriptor/DT/wake comparison, actual input core and regmap over RAM bus",
+  "passed": true,
+  "qemu_cases_passed": 8,
+  "test_correction": "initial four event tests did not bind: new native input matching requires nonzero id.flags, not driver_info sentinel; use EV_KEY match and require opened handle",
+  "production_change": "Gen3 resin wake default true to preserve stock enabled state; native Gen3 power wake already true",
+  "artifact": "artifacts/android73-power-key-stage51",
+  "packaged_modules": 113,
+  "matching_imports": 5597,
+  "physical_candidate_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Physical SPMI/IRQ/probe and full key wake/suspend tests",
+    "Native PM IRQ wake differs from vendor free/re-request sequence; physical acceptance pending",
+    "GPIO/touchscreen/stylus/gestures/haptics and ROM input consumers",
+    "Reboot/power-off behavior and complete module/DT/ROM/SELinux/boot artifacts"
+  ],
+  "evidence_sha256": {
+    "reports/power-key-source-inputs.json": "38b16db3defdb39751690db14cec7bfd1754c5261ef2eeafda8e321c3c92b834",
+    "reports/power-key-source-lock.json": "8c62987fa9f5577a1a69ebe78a42ecf95074d9dfa62f459dd16594c54125cf5c",
+    "patches/power-key-7.3.patch": "57bda57783d24ddc76b1ad6c35998a182f83d5c2243ce0bc7ad2af48d0ca81b2",
+    "reports/power-key-stage51-live-readonly.json": "2e55e91ba2ea19e2bd3b8f1c14108d5848bf6a5415d4bdedeeb57d9bf80c8b10",
+    "reports/power-key-stage51-dt.json": "316ae6ce87afa38d37125701b606297353c9d026ed51038b2d3b5f8bc251c4d0",
+    "reports/power-key-stage51-qemu.log": "d1776ff1e4177f375d656b1357da59a32d4030ee25d7005ca0c378c71cb26f2d",
+    "reports/power-key-stage51-final-qemu.log": "2bf5b134a5ae591bec57fb66fd49f9a29071ec2bee2fe5ad4622bfb38261aad6",
+    "reports/power-key-stage51-final-qemu.json": "20827efb0e2710d7a5dd438e32c824c63e1c8d2d80b52b234cf359018f02ecb9",
+    "reports/power-key-stage51-final-build.log": "03e6e4433ac951a3fd7515abd91497f588f31bb258604fa82d80cf80a1be3f9f",
+    "reports/power-key-stage51-crc.json": "5379e5ca33dcb759d437116db128eed146cc7e4a2759f64170f378836dede5a9",
+    "reports/power-key-stage51-packaged-crc.json": "35387c5fc94e8fa89f6dc84ecd44a10f9adb3fd4398c8b89fc4c3750fd87c6d6",
+    "reports/module-deployment-stage51-summary.json": "d62999f683590ba7252f7ec6a5a41535b609b073fc6f136469b158ec887175e5"
+  }
+}

@@ -1,0 +1,16 @@
+--- a/ports/qcom-power-key/pm8941-pwrkey.c
++++ b/ports/qcom-power-key/pm8941-pwrkey.c
+@@ -459,7 +459,7 @@
+ 	.supports_ps_hold_poff_config = false,
+ 	.supports_debounce_config = false,
+ 	.has_pon_pbs = true,
+-	.wakeup_source_default = false,
++	.wakeup_source_default = true,
+ };
+ 
+ static const struct of_device_id pm8941_pwr_key_id_table[] = {
+--- a/ports/qcom-power-key/Makefile
++++ b/ports/qcom-power-key/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += reboot-mode.o qcom-pon.o pm8941-pwrkey.o

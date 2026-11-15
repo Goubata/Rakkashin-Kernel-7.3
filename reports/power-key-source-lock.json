@@ -1,0 +1,40 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-power-key/pm8941-pwrkey.c",
+      "source": "drivers/input/misc/pm8941-pwrkey.c",
+      "original_sha256": "2b28b7605514436427c7fbb72a57e271a2e3673ea2c9e73f26576df6b64f9029",
+      "sha256": "daaab709711d0ac78597f5b6c12d43446273ea17968881ab81a3b0ff5e0d5a5e"
+    },
+    {
+      "file": "ports/qcom-power-key/qcom-pon.c",
+      "source": "drivers/power/reset/qcom-pon.c",
+      "original_sha256": "0a66cef8594e53fe1995c63130166cd81b6d4caadc4a8ab69960e2ef340ffbf9",
+      "sha256": "0a66cef8594e53fe1995c63130166cd81b6d4caadc4a8ab69960e2ef340ffbf9"
+    },
+    {
+      "file": "ports/qcom-power-key/reboot-mode.c",
+      "source": "drivers/power/reset/reboot-mode.c",
+      "original_sha256": "c9bde91d25cc60ad4b3ae2f3c94f897e80c3be3aced524f6e655deb8d0ab6886",
+      "sha256": "c9bde91d25cc60ad4b3ae2f3c94f897e80c3be3aced524f6e655deb8d0ab6886"
+    },
+    {
+      "file": "ports/qcom-power-key/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "cdb39778151a44b6349b65a2e94c4d4a81beba9fbb25c6a9dffaa77605fe443e"
+    }
+  ],
+  "patch_sha256": "57bda57783d24ddc76b1ad6c35998a182f83d5c2243ce0bc7ad2af48d0ca81b2",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Use native input, PON parent and real reboot-mode provider",
+    "Preserve observed stock Gen3 resin wakeup enabled default"
+  ],
+  "pending": [
+    "Actual PMIC probe/IRQ/wake, ROM input interfaces and full suspend acceptance"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-power-key/reboot-mode.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-power-key/qcom-pon.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-power-key/pm8941-pwrkey.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/power-key/avr-power-key-test.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    }
+  ]
+}

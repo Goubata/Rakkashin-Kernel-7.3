@@ -1,0 +1,18 @@
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified power key source/patch replay: 4 files; hardware acceptance separate
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-power-key'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-power-key'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/power-key'
+  CC [M]  avr-power-key-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-power-key-test.ko
+  BTF [M] avr-power-key-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/power-key'
+make: Leaving directory '/work/avr-src'

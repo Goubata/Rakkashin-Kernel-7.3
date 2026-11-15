@@ -755,3 +755,27 @@ Partial Stage50 snapshot has 110 modules, all imports match, hard/soft
 dependencies present and combined graph acyclic. Alor PAS draft remains excluded.
 Physical candidate probe, all SDAM consumers, suspend and complete board/ROM/boot
 readiness remain unverified/incomplete. reports/sdam-stage50-validation.json.
+
+
+## Stage51: PMIC power/resin input and PON parent
+
+Three native modules provide real reboot-mode, PON parent child population and
+PMIC key callbacks. Selected Gen3 descriptors match factory status bits/names/
+capabilities; both stock wake defaults are enabled, so native resin default is
+adjusted to true. Saved/candidate two key nodes, key codes, IRQ tuples and the
+0x1300 HLOS / 0x800 PBS bases agree. Stock /proc input and wake reads are recorded
+without injection. Native suspend IRQ-wake semantics differ from vendor IRQ
+free/re-request and need physical acceptance.
+
+Eight SMP4 cases use actual input handler/core and regmap with a RAM-only bus:
+power and volume-down press/release, release-only synthetic pair, duplicate
+press filtering, read errors, pending debounce skip, PBS debounce and reboot-mode
+mask/error propagation. Initial 4/8 failure came from test id.flags=0 (driver_info
+is no longer a match-table sentinel); corrected EV_KEY flags and open-handle
+requirement yield 8/8. Production input matching and Rakkashin matching already
+use nonzero flags; neither required that test correction.
+
+Partial Stage51 has 113 modules, matching import CRCs and complete acyclic hard/
+soft dependencies. It excludes Alor PAS draft and is not a flashable boot image.
+Physical key IRQ/wake, other input devices/ROM consumers, reboot actions and full
+software readiness remain pending. reports/power-key-stage51-validation.json.

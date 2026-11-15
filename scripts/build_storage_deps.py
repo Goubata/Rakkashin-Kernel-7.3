@@ -14,6 +14,8 @@ ROOTFS = ROOT.parent / '.andronix/distros/ubuntu/rootfs'
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--power-key',action='store_true')
+    parser.add_argument('--power-key-tests',action='store_true')
     parser.add_argument('--sdam',action='store_true')
     parser.add_argument('--sdam-tests',action='store_true')
     parser.add_argument('--rtc',action='store_true')
@@ -77,6 +79,10 @@ def main():
             raise ValueError('Staged PHY source differs; review and record port changes explicitly: ' + row['staged_path'])
     print('Verified five unmodified firmware-pinned UFS PHY source files', flush=True)
     targets=['ports/ufs-phy-canoe']
+    if args.power_key or args.power_key_tests:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_power_key_sources.py')],check=True)
+        targets.append('ports/qcom-power-key')
+        if args.power_key_tests:targets.append('tests/power-key')
     if args.sdam or args.sdam_tests:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_sdam_sources.py')],check=True)
         targets.append('ports/qcom-sdam')

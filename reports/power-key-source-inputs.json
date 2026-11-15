@@ -1,0 +1,9 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": {
+    "ports/qcom-power-key/pm8941-pwrkey.c": "drivers/input/misc/pm8941-pwrkey.c",
+    "ports/qcom-power-key/qcom-pon.c": "drivers/power/reset/qcom-pon.c",
+    "ports/qcom-power-key/reboot-mode.c": "drivers/power/reset/reboot-mode.c",
+    "ports/qcom-power-key/Makefile": null
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "scope": "selected DT and descriptor fields plus stock sysfs wake defaults; no physical probe/IRQ/suspend or full ROM input proof",
+  "passed": true,
+  "factory_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "factory_source_sha256": "533f6ba15865d36095c64e0d0c6b2376a3687b8c403933c77413bd0e7fdb68ed",
+  "native_source_sha256": "daaab709711d0ac78597f5b6c12d43446273ea17968881ab81a3b0ff5e0d5a5e",
+  "descriptors": {
+    "pon_gen3_pwrkey_data": {
+      "native": {
+        "status_bit": "PON_GEN3_KPDPWR_N_SET",
+        "name": "\"pmic_pwrkey\"",
+        "phys": "\"pmic_pwrkey/input0\"",
+        "supports_ps_hold_poff_config": "false",
+        "supports_debounce_config": "false",
+        "has_pon_pbs": "true",
+        "wakeup_source_default": "true"
+      },
+      "vendor": {
+        "status_bit": "PON_GEN3_KPDPWR_N_SET",
+        "name": "\"pmic_pwrkey\"",
+        "phys": "\"pmic_pwrkey/input0\"",
+        "supports_ps_hold_poff_config": "false",
+        "supports_debounce_config": "false",
+        "has_pon_pbs": "true"
+      }
+    },
+    "pon_gen3_resin_data": {
+      "native": {
+        "status_bit": "PON_GEN3_RESIN_N_SET",
+        "name": "\"pmic_resin\"",
+        "phys": "\"pmic_resin/input0\"",
+        "supports_ps_hold_poff_config": "false",
+        "supports_debounce_config": "false",
+        "has_pon_pbs": "true",
+        "wakeup_source_default": "true"
+      },
+      "vendor": {
+        "status_bit": "PON_GEN3_RESIN_N_SET",
+        "name": "\"pmic_resin\"",
+        "phys": "\"pmic_resin/input0\"",
+        "supports_ps_hold_poff_config": "false",
+        "supports_debounce_config": "false",
+        "has_pon_pbs": "true"
+      }
+    }
+  },
+  "inputs": {
+    "saved": {
+      "file": "artifacts/dt-input-audit/stock-merged.dtb",
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "parent": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300",
+      "parent_properties_except_phandle": {
+        "reg-names": "706f6e5f686c6f7300706f6e5f70627300",
+        "reg": "0000130000000800",
+        "compatible": "71636f6d2c706d383939382d706f6e00"
+      },
+      "keys": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/pwrkey",
+          "properties_except_phandle": {
+            "linux,code": "00000074",
+            "interrupts": "00000000000000130000000700000003",
+            "compatible": "71636f6d2c706d6b383335302d7077726b657900"
+          }
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/resin",
+          "properties_except_phandle": {
+            "linux,code": "00000072",
+            "interrupts": "00000000000000130000000600000003",
+            "compatible": "71636f6d2c706d6b383335302d726573696e00"
+          }
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb",
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "parent": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300",
+      "parent_properties_except_phandle": {
+        "reg-names": "706f6e5f686c6f7300706f6e5f70627300",
+        "reg": "0000130000000800",
+        "compatible": "71636f6d2c706d383939382d706f6e00"
+      },
+      "keys": [
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/pwrkey",
+          "properties_except_phandle": {
+            "linux,code": "00000074",
+            "interrupts": "00000000000000130000000700000003",
+            "compatible": "71636f6d2c706d6b383335302d7077726b657900"
+          }
+        },
+        {
+          "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/pon_hlos@1300/resin",
+          "properties_except_phandle": {
+            "linux,code": "00000072",
+            "interrupts": "00000000000000130000000600000003",
+            "compatible": "71636f6d2c706d6b383335302d726573696e00"
+          }
+        }
+      ]
+    }
+  },
+  "stock_wakeup": {
+    "pmic_resin": "enabled",
+    "pmic_pwrkey": "enabled"
+  },
+  "candidate_physical_verified": false,
+  "pending": [
+    "Actual SPMI/IRQ/probe and wake from suspend",
+    "Native PM suspend uses IRQ wake rather than vendor free/re-request sequence; hardware validation required",
+    "Other GPIO/touch/gesture/haptics and all ROM input consumers",
+    "Reboot/power-off actions and remaining boot artifacts"
+  ]
+}

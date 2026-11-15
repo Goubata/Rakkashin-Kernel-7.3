@@ -637,3 +637,16 @@ clock/IRQ/handover/authenticated image error ownership, ROM fallback/mount timin
 secure firmware and all physical/whole-board criteria remain open. The Alor draft
 stays outside the packaged Stage37 108-module artifact. Evidence:
 `reports/soccp-loader-stage42-validation.json`.
+
+
+## Stage43: owned proxy resources and deferred handover
+
+Eight recorded-callback helper cases pass, including all six acquire/release
+failure positions, simultaneous failures, pending/late handover, retry, no double
+release and concurrent handover across 200 cycles. ARC8 and actual-input MDT7
+regressions also pass: 23 SMP4 cases. Production wrappers call actual APIs;
+physical clocks/regulators/IRQ/authentication and driver fault paths are not
+exercised by the helper backend. Pending handover is acted on only after main
+authentication returns success. Secure main/DTB ownership/error cleanup remains
+a separate known implementation gap. Draft excluded from packaged 108 modules.
+Evidence: `reports/pas-proxy-stage43-validation.json`.

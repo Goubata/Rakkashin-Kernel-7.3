@@ -34,6 +34,7 @@
 #include "qcom_q6v5.h"
 #include "remoteproc_internal.h"
 #include "avr_pas_rails.h"
+#include "avr_pas_proxy.h"
 
 #define QCOM_PAS_DECRYPT_SHUTDOWN_DELAY_MS	100
 
@@ -82,6 +83,7 @@ struct qcom_pas {
 	struct regulator *px_supply;
 	bool arc_rails;
 	struct avr_pas_rails rails;
+	struct avr_pas_proxy proxy;
 
 	struct device *proxy_pds[3];
 
@@ -282,14 +284,62 @@ static int qcom_pas_map_carveout(struct rproc *rproc, phys_addr_t mem_phys, size
 	return ret;
 }
 
-static void qcom_pas_release_arc_rails(struct qcom_pas *pas)
+static int qcom_pas_proxy_acquire(void *ctx, unsigned int step)
 {
-	int ret;
-	if (!pas->arc_rails)
-		return;
-	ret = avr_pas_rails_release(&pas->rails);
+	struct qcom_pas *pas = ctx;
+	switch (step) {
+	case AVR_PROXY_PDS:
+		return qcom_pas_pds_enable(pas, pas->proxy_pds, pas->proxy_pd_count);
+	case AVR_PROXY_XO:
+		return clk_prepare_enable(pas->xo);
+	case AVR_PROXY_AGGRE:
+		return clk_prepare_enable(pas->aggre2_clk);
+	case AVR_PROXY_CX:
+		return pas->cx_supply ? regulator_enable(pas->cx_supply) : 0;
+	case AVR_PROXY_PX:
+		return pas->px_supply ? regulator_enable(pas->px_supply) : 0;
+	case AVR_PROXY_ARC:
+		return pas->arc_rails ? avr_pas_rails_enable(&pas->rails) : 0;
+	default:
+		return -EINVAL;
+	}
+}
+
+static int qcom_pas_proxy_release(void *ctx, unsigned int step)
+{
+	struct qcom_pas *pas = ctx;
+	switch (step) {
+	case AVR_PROXY_ARC:
+		return pas->arc_rails ? avr_pas_rails_release(&pas->rails) : 0;
+	case AVR_PROXY_PX:
+		return pas->px_supply ? regulator_disable(pas->px_supply) : 0;
+	case AVR_PROXY_CX:
+		return pas->cx_supply ? regulator_disable(pas->cx_supply) : 0;
+	case AVR_PROXY_AGGRE:
+		clk_disable_unprepare(pas->aggre2_clk);
+		return 0;
+	case AVR_PROXY_XO:
+		clk_disable_unprepare(pas->xo);
+		return 0;
+	case AVR_PROXY_PDS:
+		qcom_pas_pds_disable(pas, pas->proxy_pds, pas->proxy_pd_count);
+		return 0;
+	default:
+		return -EINVAL;
+	}
+}
+
+static const struct avr_pas_proxy_ops qcom_pas_proxy_ops = {
+	.acquire = qcom_pas_proxy_acquire,
+	.release = qcom_pas_proxy_release,
+};
+
+static int qcom_pas_release_proxies(struct qcom_pas *pas)
+{
+	int ret = avr_pas_proxy_release(&pas->proxy);
 	if (ret)
-		dev_err(pas->dev, "ARC rail cleanup incomplete: %d\n", ret);
+		dev_err(pas->dev, "proxy cleanup incomplete: %d\n", ret);
+	return ret;
 }
 
 static int qcom_pas_start(struct rproc *rproc)
@@ -297,47 +347,25 @@ static int qcom_pas_start(struct rproc *rproc)
 	struct qcom_pas *pas = rproc->priv;
 	int ret;
 
+	ret = avr_pas_proxy_begin(&pas->proxy);
+	if (ret)
+		return ret;
+
 	ret = qcom_q6v5_prepare(&pas->q6v5);
 	if (ret)
 		return ret;
 
-	ret = qcom_pas_pds_enable(pas, pas->proxy_pds, pas->proxy_pd_count);
-	if (ret < 0)
+	ret = avr_pas_proxy_acquire(&pas->proxy);
+	if (ret) {
+		if (pas->proxy.cleanup_error)
+			dev_err(pas->dev, "proxy rollback incomplete: %d\n", pas->proxy.cleanup_error);
 		goto disable_irqs;
-
-	ret = clk_prepare_enable(pas->xo);
-	if (ret)
-		goto disable_proxy_pds;
-
-	ret = clk_prepare_enable(pas->aggre2_clk);
-	if (ret)
-		goto disable_xo_clk;
-
-	if (pas->cx_supply) {
-		ret = regulator_enable(pas->cx_supply);
-		if (ret)
-			goto disable_aggre2_clk;
-	}
-
-	if (pas->px_supply) {
-		ret = regulator_enable(pas->px_supply);
-		if (ret)
-			goto disable_cx_supply;
-	}
-
-	if (pas->arc_rails) {
-		ret = avr_pas_rails_enable(&pas->rails);
-		if (ret) {
-			if (pas->rails.cleanup_error)
-				dev_err(pas->dev, "ARC rollback incomplete: %d\n", pas->rails.cleanup_error);
-			goto disable_aggre2_clk;
-		}
 	}
 
 	if (pas->dtb_pas_id) {
 		ret = qcom_pas_map_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
 		if (ret)
-			goto disable_px_supply;
+			goto release_proxies;
 
 		ret = qcom_pas_prepare_and_auth_reset(pas->dtb_pas_ctx);
 		if (ret) {
@@ -365,6 +393,10 @@ static int qcom_pas_start(struct rproc *rproc)
 		goto unmap_carveout;
 	}
 
+	/* Handover IRQ may precede the synchronous authentication return. */
+	if (avr_pas_proxy_allow_handover(&pas->proxy))
+		dev_err(pas->dev, "handover cleanup deferred for retry\n");
+
 	ret = qcom_q6v5_wait_for_start(&pas->q6v5, msecs_to_jiffies(5000));
 	if (ret == -ETIMEDOUT) {
 		dev_err(pas->dev, "start timed out\n");
@@ -391,19 +423,8 @@ release_pas_metadata:
 unmap_dtb_carveout:
 	if (pas->dtb_pas_id)
 		qcom_pas_unmap_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
-disable_px_supply:
-	qcom_pas_release_arc_rails(pas);
-	if (pas->px_supply)
-		regulator_disable(pas->px_supply);
-disable_cx_supply:
-	if (pas->cx_supply)
-		regulator_disable(pas->cx_supply);
-disable_aggre2_clk:
-	clk_disable_unprepare(pas->aggre2_clk);
-disable_xo_clk:
-	clk_disable_unprepare(pas->xo);
-disable_proxy_pds:
-	qcom_pas_pds_disable(pas, pas->proxy_pds, pas->proxy_pd_count);
+release_proxies:
+	qcom_pas_release_proxies(pas);
 disable_irqs:
 	qcom_q6v5_unprepare(&pas->q6v5);
 
@@ -416,21 +437,15 @@ disable_irqs:
 static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
 {
 	struct qcom_pas *pas = container_of(q6v5, struct qcom_pas, q6v5);
-
-	qcom_pas_release_arc_rails(pas);
-	if (pas->px_supply)
-		regulator_disable(pas->px_supply);
-	if (pas->cx_supply)
-		regulator_disable(pas->cx_supply);
-	clk_disable_unprepare(pas->aggre2_clk);
-	clk_disable_unprepare(pas->xo);
-	qcom_pas_pds_disable(pas, pas->proxy_pds, pas->proxy_pd_count);
+	int ret = avr_pas_proxy_handover(&pas->proxy);
+	if (ret)
+		dev_err(pas->dev, "handover proxy cleanup incomplete: %d\n", ret);
 }
 
 static int qcom_pas_stop(struct rproc *rproc)
 {
 	struct qcom_pas *pas = rproc->priv;
-	int handover;
+	int proxy_ret;
 	int dtb_ret;
 	int ret;
 
@@ -458,9 +473,11 @@ static int qcom_pas_stop(struct rproc *rproc)
 
 	qcom_pas_unmap_carveout(rproc, pas->mem_phys, pas->mem_size);
 
-	handover = qcom_q6v5_unprepare(&pas->q6v5);
-	if (handover)
-		qcom_pas_handover(&pas->q6v5);
+	qcom_q6v5_unprepare(&pas->q6v5);
+	/* Also retry a previous handover cleanup failure, with no double release. */
+	proxy_ret = qcom_pas_release_proxies(pas);
+	if (!ret)
+		ret = proxy_ret;
 
 	if (pas->smem_host_id)
 		ret = qcom_smem_bust_hwspin_lock_by_host(pas->smem_host_id);
@@ -924,6 +941,9 @@ static int qcom_pas_probe(struct platform_device *pdev)
 	pas->dev = &pdev->dev;
 	pas->arc_rails = desc->arc_rails;
 	mutex_init(&pas->rails.lock);
+	mutex_init(&pas->proxy.lock);
+	pas->proxy.ops = &qcom_pas_proxy_ops;
+	pas->proxy.ctx = pas;
 	pas->rproc = rproc;
 	pas->minidump_id = desc->minidump_id;
 	pas->pas_id = desc->pas_id;
@@ -1026,7 +1046,7 @@ static void qcom_pas_remove(struct platform_device *pdev)
 		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
 
 	rproc_del(pas->rproc);
-	qcom_pas_release_arc_rails(pas);
+	qcom_pas_release_proxies(pas);
 
 	qcom_q6v5_deinit(&pas->q6v5);
 	qcom_pas_unassign_memory_region(pas);

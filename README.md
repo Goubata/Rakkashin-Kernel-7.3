@@ -518,3 +518,16 @@ native MDTに宣言サイズを超えるmetadata headerコピーを再現（旧5
 最終loader7件とARC rail8件がSMP4で成功。符号/4GiB境界も含む。
 `reports/soccp-loader-stage42-validation.json`。実機認証/boot、PAS全failure ownership、
 ROM fallbackの実際の時刻と全driver/画像/常用評価は残る。Alor draftは引き続き配布対象外。
+
+
+## Stage43: proxy所有状態とhandover競合
+
+PDS・XO・aggre・CX/PX・ARCの取得済み状態を記録し、取得した資源だけを逆順解除する。
+handoverを認証成功前は保留し、成功後に処理する。終了処理/重複handover/失敗の競合でも
+二重disableせず、解除失敗時は所有状態を保持しstopで再試行する。
+8個の記録backend試験とARC8/loader7の回帰で計23件成功。実時計/電源/認証ではない。
+`reports/pas-proxy-stage43-validation.json`。secure側DTB/main所有権と認証失敗経路は残る。
+
+ユーザーが指定した次段目標は「全必須機能の移植・構成・起動成果物をそろえ、既知の
+実装不足をなくして、残るのは実機確認という段階」。このsoftware readinessは未達。
+実機が正常に動く保証は、それ以降の検証で別に確認する。現在の部分成果物は108個のまま。

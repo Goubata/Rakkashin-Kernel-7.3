@@ -1,0 +1,52 @@
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified remoteproc services source/patch replay: 6 files; hardware acceptance separate
+Verified GLINK transport source/patch replay: 7 files; hardware acceptance separate
+Gunyah vendor RM provenance and port patch replay verified: 9 files
+Verified IPC source provenance: 36 files
+Verified Alor PAS draft source/patch replay: 7 files; hardware acceptance separate
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-hwspinlock'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-hwspinlock'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-smem'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-smem'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-remoteproc-services'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-remoteproc-services'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-hwspinlock'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-hwspinlock'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-smem'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-smem'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-glink-transport'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-glink-transport'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-rproc-common'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-rproc-common'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-pas-alor'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-pas-alor'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/pas-proxy'
+  CC [M]  avr-pas-proxy-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-pas-proxy-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-pas-proxy-test.ko
+  BTF [M] avr-pas-proxy-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/pas-proxy'
+make: Leaving directory '/work/avr-src'

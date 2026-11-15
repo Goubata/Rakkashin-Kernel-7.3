@@ -55,3 +55,11 @@ and missing output length; address/file additions are widened before arithmetic.
 The final seven loader cases and eight rail regressions pass on SMP4. This does
 not validate secure-world authentication, physical loading, split images or all
 malformed firmware. Evidence: `reports/soccp-loader-stage42-validation.json`.
+
+
+Stage43 adds `avr_pas_proxy.h` for counted PDS/clocks/optional supplies/ARC
+ownership, serializes handover against partial acquire/unwind, and defers early
+handover until successful main authentication return. Incomplete release keeps
+its owned bit for retry; duplicate handover/stop cannot double-disable. Eight
+recorded-callback cases and 15 regressions pass. This is not yet secure main/DTB
+ownership or a complete driver lifecycle/physical test.

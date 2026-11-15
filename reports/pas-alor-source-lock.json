@@ -5,7 +5,7 @@
       "file": "ports/qcom-pas-alor/qcom_q6v5_pas.c",
       "source": "drivers/remoteproc/qcom_q6v5_pas.c",
       "original_sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
-      "sha256": "e0a70c9fef88cf96b926d65ccb77a12d3ea10ff21c7680ce948b464976693deb"
+      "sha256": "3d0fa36240d50a4997f29ad856bc1bcf967920298313a39c10153a9414fba5f4"
     },
     {
       "file": "ports/qcom-pas-alor/qcom_pil_info.c",
@@ -36,9 +36,15 @@
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256": "07fd73ebc7ff5b4b9edeb804913e21206f4514e7949082b1da35b89e7158e66b"
+    },
+    {
+      "file": "ports/qcom-pas-alor/avr_pas_proxy.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "948a757dbc0d4bced5c64b6e6503d49b3547bd04d017ac3346f1c1f761adfc38"
     }
   ],
-  "patch_sha256": "56d69231268c5808e7bb68e43fb326f908203a7cad7b85bb97001ad96cdc49b8",
+  "patch_sha256": "7efac3724ccc85802d922a088a5744f8f586be5e1d17b0315769fbed9ebd3eb5",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -46,7 +52,8 @@
     "Native PAS, PIL info and MDT loader sources with real explicit provider declarations",
     "Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts",
     "Native MDT parser validates nonnull inputs, ELF32/LE and bounded full header metadata before copying",
-    "Widen file/address additions before arithmetic and check metadata total size"
+    "Widen file/address additions before arithmetic and check metadata total size",
+    "Track acquired proxy resources, serialize handover, defer early handover until main authentication succeeds and retry incomplete release"
   ],
   "pending": [
     "Physical ARC votes, retained-error recovery and regulator framework fault injection",

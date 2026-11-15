@@ -1,0 +1,70 @@
+{
+  "stage": 43,
+  "scope": "proxy resource ownership helper with test-only recording callbacks plus module registration; not physical handover/clock/regulator authentication",
+  "tests": {
+    "pas-proxy": {
+      "log": "reports/pas-proxy-stage43-qemu.log",
+      "test": "pas-proxy",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "log_sha256": "bf381701ac0d1a8d0c366ec796fce7b07f9ceaf56fb1763a2259b3a3681302aa",
+      "metadata_sha256": "af7bbe525f187e653267e72c5627ece1399372121e0df23cf5c08dc0cd9d9f28"
+    },
+    "pas-rails": {
+      "log": "reports/pas-rails-stage43-regression-qemu.log",
+      "test": "pas-rails",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "log_sha256": "842f0f8f0113ecff63cb357cc8848970a1ffdd4afd8500b820c77b9acb488774",
+      "metadata_sha256": "1587c9c002475dd3410d977b38de3eb0cef75ab3446be415abc38022f85d3fcc"
+    },
+    "mdt-loader": {
+      "log": "reports/mdt-loader-stage43-regression-qemu.log",
+      "test": "mdt-loader",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "log_sha256": "7129797008b1c1d1e6bb6862a835a4fbc871fbb1496b720fc85291bc2946664c",
+      "metadata_sha256": "08af4e4b02c42d2f0781b1ecb64bee310cf0d7f96c0705f65c565cdf8fcce50f"
+    }
+  },
+  "test_case_count": 23,
+  "draft_matching_imports": 132,
+  "implementation": [
+    "Track PDS/XO/aggre/CX/PX/ARC resources and release only owned operations in reverse order",
+    "Serialize acquisition/release/handover; defer handover permission until successful main authentication return",
+    "Preserve failed release ownership and cleanup error; stop can retry without double disable"
+  ],
+  "software_readiness_target_complete": false,
+  "current_packaged_module_count": 108,
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "f82ca606bd97e65bcc9fcdacee96c7ef9e11a0ec09be060d06bee7aa9055f9cb",
+    "reports/pas-alor-stage43-crc.json": "51bdc001e15a4b47183f8b0651a17b33062e680e321c1de84c41b82dc265b8ca",
+    "reports/pas-proxy-stage43-final-build.log": "279074dd09c433c72324ada507f8910be1a1c1ff0192223a78d1e074ec43c07e"
+  },
+  "pending": [
+    "Authenticated main/DTB image ownership and secure-error quiesce policy",
+    "Actual driver startup/error/IRQ integration fault tests and physical clock/regulator/firmware behavior",
+    "All remaining device drivers/ROM/DT/packaging and software-readiness acceptance before controlled physical boot"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": {
+    "ports/moto-info/mmi_annotate/mmi_annotate.c": "drivers/mmi_annotate/mmi_annotate.c",
+    "ports/moto-info/mmi_info/mmi_boot_info.c": "drivers/mmi_info/mmi_boot_info.c",
+    "ports/moto-info/mmi_info/mmi_info.h": "drivers/mmi_info/mmi_info.h",
+    "ports/moto-info/mmi_info/mmi_info_main.c": "drivers/mmi_info/mmi_info_main.c",
+    "ports/moto-info/mmi_info/mmi_ram_info.c": "drivers/mmi_info/mmi_ram_info.c",
+    "ports/moto-info/mmi_info/mmi_storage_info.c": "drivers/mmi_info/mmi_storage_info.c",
+    "ports/moto-info/mmi_info/mmi_unit_info.c": "drivers/mmi_info/mmi_unit_info.c",
+    "ports/moto-info/include/linux/mmi_device.h": "include/linux/mmi_device.h",
+    "ports/moto-info/include/linux/mmi_annotate.h": "include/linux/mmi_annotate.h",
+    "ports/moto-info/Makefile": null,
+    "ports/moto-info/include/soc/qcom/mmi_boot_info.h": "include/soc/qcom/mmi_boot_info.h",
+    "ports/moto-info/include/linux/mmi_kernel_common.h": "include/linux/mmi_kernel_common.h"
+  }
+}

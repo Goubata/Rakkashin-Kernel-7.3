@@ -1,0 +1,203 @@
+--- a/ports/goodix-touch/goodix_thp/goodix_thp.c
++++ b/ports/goodix-touch/goodix_thp/goodix_thp.c
+@@ -1521,10 +1521,10 @@
+         return 0;
+ }
+ 
+-void goodix_thp_pen_input_dev_exit(struct goodix_thp_core *core_data)
++static void goodix_thp_pen_input_dev_exit(struct goodix_thp_core *core_data)
+ {
+         input_unregister_device(core_data->pen_dev);
+-        input_free_device(core_data->pen_dev);
++        core_data->pen_dev = NULL;
+ }
+ 
+ static void goodix_thp_force_release_all(struct goodix_thp_core *core_data)
+@@ -1821,7 +1821,7 @@
+         return ret;
+ }
+ 
+-int goodix_thp_input_agent_ioctl_get_events(struct goodix_thp_core *core_data, unsigned long arg)
++static int goodix_thp_input_agent_ioctl_get_events(struct goodix_thp_core *core_data, unsigned long arg)
+ {
+         return 0;
+ }
+@@ -3210,7 +3210,7 @@
+         if (pdev->id == 0)
+                 sprintf(core_data->thp_misc_name, "%s", GOODIX_THP_MISC_DEVICE_NAME);
+         else
+-                sprintf(core_data->thp_misc_name, "%s%d", GOODIX_THP_MISC_DEVICE_NAME, pdev->id);        
++                sprintf(core_data->thp_misc_name, "%s%d", GOODIX_THP_MISC_DEVICE_NAME, pdev->id);
+         core_data->thp_misc_dev.minor = MISC_DYNAMIC_MINOR;
+         core_data->thp_misc_dev.name = core_data->thp_misc_name;
+         core_data->thp_misc_dev.fops = &g_thp_fops;
+--- a/ports/goodix-touch/goodix_thp/goodix_thp.h
++++ b/ports/goodix-touch/goodix_thp/goodix_thp.h
+@@ -628,6 +628,8 @@
+         return &(core->ts_dev->board_data);
+ }
+ 
++int goodix_thp_enter_tui(void);
++int goodix_thp_exit_tui(void);
+ int goodix_thp_core_init(void);
+ int goodix_thp_core_deinit(void);
+ u16 checksum16_cmp(u8 *data, u32 size, int mode);
+--- a/ports/goodix-touch/goodix_thp/goodix_thp_config.c
++++ b/ports/goodix-touch/goodix_thp/goodix_thp_config.c
+@@ -236,4 +236,3 @@
+ 		return report_rate_config_info.report_rate_info[i].command;
+ 	}
+ }
+-
+--- a/ports/goodix-touch/goodix_thp/goodix_thp_mmi.c
++++ b/ports/goodix-touch/goodix_thp/goodix_thp_mmi.c
+@@ -372,11 +372,11 @@
+ 	tdev = core_data->ts_dev;
+ 
+ 	if (tdev->board_data.chip_type == CHIP_TYPE_9916)
+-		strncpy(tdev->board_data.ic_name, "gt9916P", sizeof(tdev->board_data.ic_name));
++		strscpy(tdev->board_data.ic_name, "gt9916P", sizeof(tdev->board_data.ic_name));
+ 	else if (tdev->board_data.chip_type == CHIP_TYPE_9966)
+-		strncpy(tdev->board_data.ic_name, "gt9966", sizeof(tdev->board_data.ic_name));
++		strscpy(tdev->board_data.ic_name, "gt9966", sizeof(tdev->board_data.ic_name));
+ 	else if (tdev->board_data.chip_type == CHIP_TYPE_9615)
+-		strncpy(tdev->board_data.ic_name, "gt9615", sizeof(tdev->board_data.ic_name));
++		strscpy(tdev->board_data.ic_name, "gt9615", sizeof(tdev->board_data.ic_name));
+ 
+ 	return scnprintf(TO_CHARP(cdata), TS_MMI_MAX_VENDOR_LEN, "%s", tdev->board_data.ic_name);
+ }
+@@ -1083,7 +1083,7 @@
+ 	return scnprintf(buf, PAGE_SIZE, "0x%02x", 0x01);
+ }
+ 
+-void goodix_filter_mode(struct goodix_thp_core *core_data, int mode)
++static void goodix_filter_mode(struct goodix_thp_core *core_data, int mode)
+ {
+ 	u8 val[3];
+ 
+@@ -1095,7 +1095,7 @@
+ 	}
+ }
+ 
+-void goodix_palm_area_mode(struct goodix_thp_core *core_data, int mode)
++static void goodix_palm_area_mode(struct goodix_thp_core *core_data, int mode)
+ {
+ 	u8 val[3];
+ 
+--- a/ports/goodix-touch/goodix_thp/goodix_thp_spi.c
++++ b/ports/goodix-touch/goodix_thp/goodix_thp_spi.c
+@@ -218,7 +218,7 @@
+         return checksum + ((data[i] << 8) + data[i + 1]);
+ }
+ 
+-u32 checksum16_u32(const u8 *data, int size)
++static u32 __maybe_unused checksum16_u32(const u8 *data, int size)
+ {
+     int i;
+     u32 checksum = 0;
+@@ -490,7 +490,7 @@
+         if (!r) {
+                 ts_info(dev, "avdd name form dt: %s", name_tmp);
+                 if (strlen(name_tmp) < sizeof(board_data->avdd_name))
+-                        strncpy(board_data->avdd_name,
++                        strscpy(board_data->avdd_name,
+                                 name_tmp, sizeof(board_data->avdd_name));
+                 else
+                         ts_info(dev, "invalied avdd name length: %ld > %ld",
+@@ -503,7 +503,7 @@
+         if (!r) {
+                 ts_info(dev, "avdd name form dt: %s", name_tmp);
+                 if (strlen(name_tmp) < sizeof(board_data->iovdd_name))
+-                        strncpy(board_data->iovdd_name,
++                        strscpy(board_data->iovdd_name,
+                                 name_tmp, sizeof(board_data->iovdd_name));
+                 else
+                         ts_info(dev, "invalied avdd name length: %ld > %ld",
+@@ -845,7 +845,7 @@
+         cmd_send.data[1] = (data >> MOVE_8BIT) & MASK_8BIT;
+         cmd_send.checksum = cpu_to_le16(cmd_send.len + cmd_send.cmd +
+                                         cmd_send.data[0] + cmd_send.data[1]);
+-        
++
+         for (i = 0; i < SEND_COMMAND_RETRY; i++) {
+                 ret = goodix_thp_spi_write(tdev, cmd_addr, cmd_send.buf,
+                         sizeof(cmd_send));
+@@ -969,7 +969,7 @@
+ 
+         if (id == NULL)
+                 return false;
+-        
++
+         for (i = 0; i < GOODIX_THP_CUSTOM_INFO_LEN; i++) {
+                 if (!isascii(*id) || !isalnum(*id))
+                         return false;
+@@ -984,11 +984,13 @@
+ {
+         char custom_info[GOODIX_THP_CUSTOM_INFO_LEN + 1] = {0};
+ 
+-        strncpy(custom_info, "H018AM2900", len);
++        if (!buf || len != GOODIX_THP_CUSTOM_INFO_LEN)
++                return -EINVAL;
++        strscpy(custom_info, "H018AM2900", sizeof(custom_info));
+         ts_info(tdev->dev, "custom_info[0-9] %*ph", 10, custom_info);
+ 
+         if (is_valid_custom_info(custom_info)) {
+-                strncpy(buf, custom_info, len);
++                memcpy(buf, custom_info, GOODIX_THP_CUSTOM_INFO_LEN);
+         } else {
+                 ts_err(tdev->dev, "get custom info fail");
+                 return -EIO;
+@@ -998,7 +1000,7 @@
+ 
+ #define FRAME_HEAD_LEN 14
+ static int goodix_thp_get_frame(struct thp_ts_device *tdev, char *buf)
+-{        
++{
+         u32 addr = tdev->board_data.frame_addr;
+         u16 frame_len;
+         u16 cal_checksum = 0;
+--- a/ports/goodix-touch/goodix_thp/trace_touch.h
++++ b/ports/goodix-touch/goodix_thp/trace_touch.h
+@@ -43,7 +43,7 @@
+ #endif /* _TRACE_TOUCH_H */
+ /* This part must be outside protection */
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH ../../../motorola/kernel/modules/drivers/input/touchscreen/goodix_thp
++#define TRACE_INCLUDE_PATH .
+ #undef TRACE_INCLUDE_FILE
+ #define TRACE_INCLUDE_FILE trace_touch
+ #include <trace/define_trace.h>
+--- a/ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_class.c
++++ b/ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_class.c
+@@ -1148,3 +1148,5 @@
+ subsys_initcall(touchscreens_init);
+ module_exit(touchscreens_exit);
+ MODULE_LICENSE("GPL v2");
++
++MODULE_DESCRIPTION("Motorola touchscreen class");
+--- a/ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_panel.c
++++ b/ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_panel.c
+@@ -217,9 +217,9 @@
+ 			dev_err(DEV_TS, "%s: cannot read %s %d\n",
+ 					__func__, panel_name_prop, rc);
+ 			if (strncmp(panel_name_prop, PRIM_PANEL_NAME, strlen(panel_name_prop)) == 0) {
+-				strncpy(touch_cdev->panel_supplier, "dummy", sizeof(touch_cdev->panel_supplier));
++				strscpy(touch_cdev->panel_supplier, "dummy", sizeof(touch_cdev->panel_supplier));
+ 			} else {
+-				strncpy(touch_cdev->panel_supplier, "dummy_s", sizeof(touch_cdev->panel_supplier));
++				strscpy(touch_cdev->panel_supplier, "dummy_s", sizeof(touch_cdev->panel_supplier));
+ 			}
+ 			goto done;
+ 		}
+--- a/ports/goodix-touch/Makefile
++++ b/ports/goodix-touch/Makefile
+@@ -0,0 +1,9 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += touchscreen_mmi.o goodix_brl_thp.o
++touchscreen_mmi-y := touchscreen_mmi/touchscreen_mmi_class.o touchscreen_mmi/touchscreen_mmi_gesture.o touchscreen_mmi/touchscreen_mmi_notif.o touchscreen_mmi/touchscreen_mmi_panel.o
++goodix_brl_thp-y := goodix_thp/goodix_thp.o goodix_thp/goodix_thp_spi.o goodix_thp/goodix_thp_config.o goodix_thp/goodix_thp_mmi.o
++ccflags-y += -I$(src)/include -I$(src)/goodix_thp -I$(src)/../moto-touch-deps/include -I$(src)/../qcom-panel-event/include
++ccflags-y += -DCONFIG_QCOM_PANEL_EVENT_NOTIFIER_MODULE=1 -DCONFIG_DRM_PANEL_EVENT_NOTIFICATIONS=1 -DCONFIG_INPUT_TOUCHSCREEN_MMI=1
++ccflags-y += -DCONFIG_ENABLE_GTP_PALM_CANCEL=1 -DCONFIG_ENABLE_GTP_PALM_CANCEL_BY_ID=1 -DCONFIG_TOUCHIRQ_UPDATE_QOS=1
++ccflags-y += -DCONFIG_TOUCHCLASS_MMI_IRQ_ON_ONCE=1 -DCONFIG_TOUCHSCREEN_DEVICE_VIRTUAL_PATH=1 -DCONFIG_BOARD_USES_DOUBLE_TAP_CTRL=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../moto-touch-deps/Module.symvers $(src)/../qcom-panel-event/Module.symvers $(src)/../moto-info/Module.symvers

@@ -828,3 +828,27 @@ bundle has 116 modules and candidate.dtb, all imports match and hard/soft deps a
 present/acyclic. Whole-board DT (including existing SID4 conflict), boot packaging,
 Goodix/other drivers and physical/software-readiness gates remain open.
 Evidence: reports/moto-touch-deps-stage53-validation.json.
+
+
+## Stage54: linked Goodix/THP and info component drafts
+
+Four modules link to real providers with matching import CRCs. Factory nine
+build flags and header UAPI are preserved; only TUI prototypes are added to
+the Goodix header. Native string/trace/prototype adaptations, ten-byte custom
+info bounds and pen unregister/free correction are recorded in replay patches.
+SMEM now checks real allocation/get errors and exact size before copy.
+Archived GET_EVENTS method is exactly mov w0,wzr; ret (8 bytes), matching
+the original no-payload source behavior. It is not event acquisition proof.
+
+Eight SMP4 tests include actual annotation source append methods with RAM-only
+globals: short/long strings, terminator capacity, SIZE_MAX offsets, persistent
+text bounds, nonpersistent fallback, NULL format and four concurrent writers.
+No physical probe/mapping/minidump/SMEM operation runs in these tests. Test TU
+disables driver init and minidump probe branches; production forces real APIs.
+
+These are explicitly unaccepted drafts outside the main 116-module artifact.
+Known annotation probe import/publication/unwind/remove/minidump mapping issues,
+info init failure handling and full touch open/ioctl/compat/remove/probe lifetime
+remain. Physical SPI/IRQ/display/power/firmware/gesture/stylus and daemon/ROM
+acceptance also remain. No all-functions/software-readiness claim is made.
+See reports/goodix-touch-stage54-validation.json and draft artifacts directory.

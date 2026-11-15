@@ -1,0 +1,23 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": {
+    "ports/goodix-touch/goodix_thp/goodix_thp.c": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
+    "ports/goodix-touch/goodix_thp/goodix_thp.h": "drivers/input/touchscreen/goodix_thp/goodix_thp.h",
+    "ports/goodix-touch/goodix_thp/goodix_thp_config.c": "drivers/input/touchscreen/goodix_thp/goodix_thp_config.c",
+    "ports/goodix-touch/goodix_thp/goodix_thp_config.h": "drivers/input/touchscreen/goodix_thp/goodix_thp_config.h",
+    "ports/goodix-touch/goodix_thp/goodix_thp_mmi.c": "drivers/input/touchscreen/goodix_thp/goodix_thp_mmi.c",
+    "ports/goodix-touch/goodix_thp/goodix_thp_mmi.h": "drivers/input/touchscreen/goodix_thp/goodix_thp_mmi.h",
+    "ports/goodix-touch/goodix_thp/goodix_thp_spi.c": "drivers/input/touchscreen/goodix_thp/goodix_thp_spi.c",
+    "ports/goodix-touch/goodix_thp/trace_touch.h": "drivers/input/touchscreen/goodix_thp/trace_touch.h",
+    "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_class.c": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_class.c",
+    "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_gesture.c": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_gesture.c",
+    "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_notif.c": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_notif.c",
+    "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_panel.c": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_panel.c",
+    "ports/goodix-touch/include/linux/touchscreen_mmi.h": "include/linux/touchscreen_mmi.h",
+    "ports/goodix-touch/include/linux/mmi_device.h": "include/linux/mmi_device.h",
+    "ports/goodix-touch/include/linux/panel_notifier.h": "include/linux/panel_notifier.h",
+    "ports/goodix-touch/Makefile": null,
+    "ports/goodix-touch/include/linux/mmi_kernel_common.h": "include/linux/mmi_kernel_common.h",
+    "ports/goodix-touch/include/linux/mmi_wake_lock.h": "include/linux/mmi_wake_lock.h"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": [
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp.c",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
+      "original_sha256": "a8c11f382634b9edad9435b9643ceba11074c53c8ddf82e1320bc38916572ae7",
+      "sha256": "fc810b4841e178e3cd7d304fdbbf784acffb28c9bad4c2d0e5f6a09e16292f31"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp.h",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.h",
+      "original_sha256": "d1399b050f78651bcb28c552ea7f538b4017a035f02bd052e309d1c1857c3cb5",
+      "sha256": "cab30e2d9a5ee7e138d21e634f0cdba160f437343d224692ab98851c9a511c7c"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp_config.c",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_config.c",
+      "original_sha256": "99bde69b24cfccac1262bea3518c3b1f55247438d7b8d5b7b876c0bdcd9a440e",
+      "sha256": "566762514739541944f1a86b1c059a0488278606f4c6cdf084cd192c9ba52c28"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp_config.h",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_config.h",
+      "original_sha256": "820ff17be46218b8b1d5e2abd436aa658233257c676e3b86dec4ce0c31a55af4",
+      "sha256": "820ff17be46218b8b1d5e2abd436aa658233257c676e3b86dec4ce0c31a55af4"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp_mmi.c",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_mmi.c",
+      "original_sha256": "81b8663060e856767541c5dd542fabb4e8034e480ac671ffe47fbd4925a0a1d3",
+      "sha256": "23c52ac4a9e7c49f0269cb6e25214814d76a9a8d8f7a92af8e867d0b1a7a2ac1"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp_mmi.h",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_mmi.h",
+      "original_sha256": "155d54158fe1c3bb1154e4eb09e59a65cd894149a6c6f6f3737f1e572e38cdb0",
+      "sha256": "155d54158fe1c3bb1154e4eb09e59a65cd894149a6c6f6f3737f1e572e38cdb0"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/goodix_thp_spi.c",
+      "source": "drivers/input/touchscreen/goodix_thp/goodix_thp_spi.c",
+      "original_sha256": "9e355ff42bb3c77ba1a8729f2a64fd196a1388e0e9184b5b9a8524d9ebc3541b",
+      "sha256": "dca118a31d088aab4a5340450793715eeb74b6acde1ff3facc7bfeaa2a604bf3"
+    },
+    {
+      "file": "ports/goodix-touch/goodix_thp/trace_touch.h",
+      "source": "drivers/input/touchscreen/goodix_thp/trace_touch.h",
+      "original_sha256": "2ed5ab77a6b2369d19c7a4fd5aea80a972f55c103f62df73ba3007a27886f782",
+      "sha256": "7c54c2a3501b38a67eb38b151d7ef20e78ac600fe48d09c96d4a535eb8a2965a"
+    },
+    {
+      "file": "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_class.c",
+      "source": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_class.c",
+      "original_sha256": "cc77d944c5c899cb9765954d030071ae23c8494c86a7d8d8550a4ad80bff3997",
+      "sha256": "3d72969882acad1b78d42b08aeabb77de9a1fde1f8521af7441eea4f5a14cd10"
+    },
+    {
+      "file": "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_gesture.c",
+      "source": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_gesture.c",
+      "original_sha256": "77dc6c1e2469cef7e3a2135c2f8fd3216fa29b5226fc0175ce78f45f35ef9d23",
+      "sha256": "77dc6c1e2469cef7e3a2135c2f8fd3216fa29b5226fc0175ce78f45f35ef9d23"
+    },
+    {
+      "file": "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_notif.c",
+      "source": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_notif.c",
+      "original_sha256": "b33db109a96280900dba3ad6733e09d386fdd29e8511cc69a1563d0b2f63e1af",
+      "sha256": "b33db109a96280900dba3ad6733e09d386fdd29e8511cc69a1563d0b2f63e1af"
+    },
+    {
+      "file": "ports/goodix-touch/touchscreen_mmi/touchscreen_mmi_panel.c",
+      "source": "drivers/input/touchscreen/touchscreen_mmi/touchscreen_mmi_panel.c",
+      "original_sha256": "314401097fd9017fee2ea61f5759ac872c1efc2b3e4256056c6743bc6f2af502",
+      "sha256": "990990ab151b01f15a7b4dbe927adca7643bc5f6463c35b03746588c52a6ccf3"
+    },
+    {
+      "file": "ports/goodix-touch/include/linux/touchscreen_mmi.h",
+      "source": "include/linux/touchscreen_mmi.h",
+      "original_sha256": "17e64cd666f89ae9152ff4fdd6a5235b2f47417774f3f1f7ec82c9d2431374d9",
+      "sha256": "17e64cd666f89ae9152ff4fdd6a5235b2f47417774f3f1f7ec82c9d2431374d9"
+    },
+    {
+      "file": "ports/goodix-touch/include/linux/mmi_device.h",
+      "source": "include/linux/mmi_device.h",
+      "original_sha256": "580c2c5b183c7640d40c2b8be85bc7f499058b4ed6245293e4f711d7dc035e85",
+      "sha256": "580c2c5b183c7640d40c2b8be85bc7f499058b4ed6245293e4f711d7dc035e85"
+    },
+    {
+      "file": "ports/goodix-touch/include/linux/panel_notifier.h",
+      "source": "include/linux/panel_notifier.h",
+      "original_sha256": "1419f4458b948d7a852d2366c0c7c27bb14f76d2a0f421d1f86a702ecaa566a7",
+      "sha256": "1419f4458b948d7a852d2366c0c7c27bb14f76d2a0f421d1f86a702ecaa566a7"
+    },
+    {
+      "file": "ports/goodix-touch/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "00f1bb6a4bc3c46e78c8a1214210975fce7b0c551d9797af582214555883c877"
+    },
+    {
+      "file": "ports/goodix-touch/include/linux/mmi_kernel_common.h",
+      "source": "include/linux/mmi_kernel_common.h",
+      "original_sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312",
+      "sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312"
+    },
+    {
+      "file": "ports/goodix-touch/include/linux/mmi_wake_lock.h",
+      "source": "include/linux/mmi_wake_lock.h",
+      "original_sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc",
+      "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
+    }
+  ],
+  "patch_sha256": "631ca7d41da62af8a461aaa99ba0969ba5adbe1c53c0d164b501c885d8c684c2",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": false,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Preserve all nine factory build flags and header UAPI; no dummy dependencies",
+    "Replace removed strncpy for strings, bind trace header to external build path, declare TUI exports and private helpers",
+    "Bound fixed custom-info copy to the actual ten-byte protocol length",
+    "Remove input_free_device after input_unregister_device to avoid pen double free",
+    "Preserve stock legacy GET_EVENTS no-payload return behavior, confirmed from archived instructions; draft remains unaccepted"
+  ],
+  "pending": [
+    "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",
+    "Real SPI/IRQ/display/power/gesture/stylus firmware and daemon integration",
+    "Actual firmware/userspace/physical device acceptance"
+  ]
+}

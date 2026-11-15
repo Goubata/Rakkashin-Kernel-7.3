@@ -1,0 +1,31 @@
+{
+  "scope": "header-level UAPI declarations and selected stock function bytes/build flags only; not complete ioctl/userspace/hardware ABI proof",
+  "passed": true,
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "touchscreen_mmi_header_sha256": "17e64cd666f89ae9152ff4fdd6a5235b2f47417774f3f1f7ec82c9d2431374d9",
+  "goodix_header_only_adds_tui_prototypes": true,
+  "factory_feature_defines": {
+    "goodix_thp": [
+      "CONFIG_DRM_PANEL_EVENT_NOTIFICATIONS",
+      "CONFIG_INPUT_TOUCHSCREEN_MMI",
+      "CONFIG_ENABLE_GTP_PALM_CANCEL",
+      "CONFIG_ENABLE_GTP_PALM_CANCEL_BY_ID",
+      "CONFIG_TOUCHIRQ_UPDATE_QOS"
+    ],
+    "touchscreen_mmi": [
+      "CONFIG_DRM_PANEL_EVENT_NOTIFICATIONS",
+      "CONFIG_TOUCHCLASS_MMI_IRQ_ON_ONCE",
+      "CONFIG_TOUCHSCREEN_DEVICE_VIRTUAL_PATH",
+      "CONFIG_BOARD_USES_DOUBLE_TAP_CTRL"
+    ]
+  },
+  "stock_module_sha256": "88c6467a332385c2b163a3c6b4929f36d10cf80c5fd0ad02cc5ad83cafb7d924",
+  "stock_get_events_bytes": "e0031f2ac0035fd6",
+  "stock_get_events_semantics": "returns zero without event payload; preserve legacy no-op rather than claim event acquisition implemented",
+  "physical_verified": false,
+  "pending": [
+    "Actual ioctl/compat_ioctl payloads, open/remove lifetime, frame bounds and concurrency",
+    "SPI/IRQ/display/power/gesture/stylus firmware and daemon integration",
+    "All remaining board/ROM/boot acceptance gates"
+  ]
+}

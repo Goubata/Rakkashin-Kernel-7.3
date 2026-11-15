@@ -1,0 +1,8 @@
+
+/work/avr-port/artifacts/goodix-stage54-stock/goodix_brl_thp.ko:	file format elf64-littleaarch64
+
+Disassembly of section .text:
+
+00000000000003cc <goodix_thp_input_agent_ioctl_get_events>:
+     3cc: 2a1f03e0     	mov	w0, wzr
+     3d0: d65f03c0     	ret

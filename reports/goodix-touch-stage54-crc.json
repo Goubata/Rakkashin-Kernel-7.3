@@ -1,0 +1,31 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-info/mmi_annotate.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-info/mmi_info.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/goodix-touch/touchscreen_mmi.ko",
+      "imports_checked": 85,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/goodix-touch/goodix_brl_thp.ko",
+      "imports_checked": 148,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/mmi-annotate/avr-mmi-annotate-test.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "stage": 54,
+  "scope": "four linked component drafts and import CRCs; header-level Goodix UAPI/build-flag/selected archived code audit; actual annotation append source methods over private RAM only",
+  "selected_checks_passed": true,
+  "draft_modules": 4,
+  "main_packaged_modules": 116,
+  "draft_imports_checked": 315,
+  "crc_modules_including_test": 5,
+  "annotation_cases_passed": 8,
+  "annotation_scope": "no platform probe, physical mapping, minidump or SMEM operation; source TU compiles out minidump probe branches for RAM tests only, production uses real provider APIs",
+  "changes": [
+    "Native prototypes/private helper linkage and external trace include path",
+    "Bound strings/custom-info length and eliminate pen unregister/free double release",
+    "Real SMEM allocation/get error/size checks before copying",
+    "Use actual emitted annotation length, subtraction bounds, NUL termination and data-only boot signature formatting"
+  ],
+  "stock_legacy_get_events": "archived ARM64 mov w0,wzr; ret matches factory no-payload source behavior; no claim of event acquisition",
+  "draft_artifact": "artifacts/goodix-touch-draft-stage54",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Annotation probe can import beyond local buffer and has unsafe publication/unwind/remove/minidump/mapping lifetime; reject hardware acceptance until fixed",
+    "Info init ignores sub-init failures; full unwind/SMEM fault tests and bootarg/ROM behavior pending",
+    "Touch open/ioctl/compat_ioctl/remove lifetime, partial-probe unwind, frame bounds and concurrency need review/tests",
+    "Actual SPI/IRQ/display/power/gesture/stylus firmware/daemon integration and source/binary interfaces",
+    "All remaining board drivers and complete DT/DLKM/SELinux/boot artifacts"
+  ],
+  "evidence_sha256": {
+    "reports/moto-info-source-inputs.json": "ad9661cdf87b9526b52d14fe41384aa07e2abacdda7f9312d0b7458f59a3f3a8",
+    "reports/moto-info-source-lock.json": "b8cc6c3d4cc195011aefc5d5bfacffcfbb409e56d88c2b44b1e3152308628f4c",
+    "reports/goodix-touch-source-inputs.json": "e05e322c5c4e52cc38cc7660edd53915ac245ff670ebb118c33495268b49d3e9",
+    "reports/goodix-touch-source-lock.json": "d4f7c623288b84c21922c4956de7cd25800745e14b575329d21235bb3bb5f75c",
+    "patches/moto-info-7.3.patch": "f3405aeeca8df400f2875dbb9a12752efb02c121885a7a7653591e1051e9a51c",
+    "patches/goodix-touch-7.3.patch": "631ca7d41da62af8a461aaa99ba0969ba5adbe1c53c0d164b501c885d8c684c2",
+    "reports/goodix-touch-stage54-abi.json": "c34e495ab5156b9ba17334a088cf7a6457d01b81b697802de8a5ab0b7251b2bd",
+    "reports/goodix-touch-stage54-crc.json": "7bd2b396130623f1078607e5ae84600ca5788a812f4496efd4a5adbf44da5827",
+    "reports/goodix-touch-stage54-drafts.json": "79b72e9dd5606608d1fd9e335b4a40a180ea1901b37c878647b5f97ecc5603c7",
+    "reports/goodix-touch-stage54-final-build.log": "27d2ebf46a2fcf3e203f109927b2059ef8d7049eecda208f6a9cacd410bd3af7",
+    "reports/mmi-annotate-stage54-qemu.log": "2d4ccbb2cbffc6cdfccde7308df31107eba7eb9c3b31dfb4a3ae1a5828bd5f0c",
+    "reports/mmi-annotate-stage54-qemu.json": "5d575a84ee2e0ec2348411ffb02766a7db1c42161618a4ddcf2b8e2f06b9b59e",
+    "reports/goodix-get-events-stage54-stock-disassembly.log": "14de109e4b002b39b713e9191bf2f2d7d227f82b6692025fe4826cf9aa564fe0"
+  }
+}

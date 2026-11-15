@@ -1,0 +1,154 @@
+--- a/ports/moto-info/mmi_annotate/mmi_annotate.c
++++ b/ports/moto-info/mmi_annotate/mmi_annotate.c
+@@ -309,14 +309,18 @@
+ 	int len = 0;
+ 	char line_buf[512];
+ 
++	if (!fmt)
++		return -EINVAL;
+ 	va_start(args, fmt);
+-	len += vsnprintf(line_buf, sizeof(line_buf), fmt, args);
++	len = vscnprintf(line_buf, sizeof(line_buf), fmt, args);
+ 	va_end(args);
+ 
+ 	mutex_lock(&mem_lock);
+-	if(mem_data.contents && mem_data.cur_off + len < mem_data.size) {
++	if (mem_data.contents && mem_data.cur_off < mem_data.size &&
++	    len < mem_data.size - mem_data.cur_off) {
+ 		memcpy(mem_data.contents + mem_data.cur_off, line_buf, len);
+ 		mem_data.cur_off += len;
++		mem_data.contents[mem_data.cur_off] = 0;
+ 	}
+ 	mutex_unlock(&mem_lock);
+ 
+@@ -330,17 +334,20 @@
+ 	int len = 0;
+ 	char line_buf[512];
+ 
++	if (!fmt)
++		return -EINVAL;
+ 	va_start(args, fmt);
+-	len += vsnprintf(line_buf, sizeof(line_buf), fmt, args);
++	len = vscnprintf(line_buf, sizeof(line_buf), fmt, args);
+ 	va_end(args);
+ 
+ 	if (!persist_unsupported) {
+ 		mutex_lock(&persist_lock);
+-		if(persist_data &&
+-			persist_data->cur_off + len < persist_data->size) {
++		if (persist_data && persist_data->cur_off < persist_data->size &&
++		    len < persist_data->size - persist_data->cur_off) {
+ 			memcpy(persist_data->contents + persist_data->cur_off,
+ 				line_buf, len);
+ 			persist_data->cur_off += len;
++			persist_data->contents[persist_data->cur_off] = 0;
+ 		}
+ 		mutex_unlock(&persist_lock);
+ 	} else {
+--- a/ports/moto-info/mmi_info/mmi_boot_info.c
++++ b/ports/moto-info/mmi_info/mmi_boot_info.c
+@@ -161,7 +161,7 @@
+ 	}
+ }
+ 
+-void bi_add_bl_build_sig(char *bld_sig)
++static void bi_add_bl_build_sig(char *bld_sig)
+ {
+ 	int pos;
+ 	char *value;
+@@ -322,9 +322,9 @@
+ 	for (i = 0; i < bl_build_sig_count; i++) {
+ 		bl_build_sigs[i].item[MAX_BLD_SIG_ITEM - 1] = 0;
+ 		bl_build_sigs[i].value[MAX_BLD_SIG_VALUE - 1] = 0;
+-		mmi_annotate_persist(bl_build_sigs[i].item);
++		mmi_annotate_persist("%s", bl_build_sigs[i].item);
+ 		mmi_annotate_persist("=");
+-		mmi_annotate_persist(bl_build_sigs[i].value);
++		mmi_annotate_persist("%s", bl_build_sigs[i].value);
+ 		mmi_annotate_persist("\n");
+ 	}
+ 	mmi_annotate_persist("MBM_VERSION: 0x%08x\n", bi_mbm_version());
+--- a/ports/moto-info/mmi_info/mmi_unit_info.c
++++ b/ports/moto-info/mmi_info/mmi_unit_info.c
+@@ -90,7 +90,7 @@
+ 	int ret = 0;
+ 	struct mmi_unit_info *mui_copy;
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
+-	ssize_t mui_size;
++	size_t mui_size;
+ #endif
+ 
+ 	#define SMEM_KERNEL_RESERVE_SIZE 1024
+@@ -131,31 +131,28 @@
+ 		mui_copy->powerup_reason);
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,0)
+-	if(!qcom_smem_alloc(QCOM_SMEM_HOST_ANY,
+-		SMEM_KERNEL_RESERVE,
+-		SMEM_KERNEL_RESERVE_SIZE))
+-		mui = qcom_smem_get(QCOM_SMEM_HOST_ANY,
+-			SMEM_KERNEL_RESERVE,
+-			&mui_size);
+-
+-	if (!mui || mui_size != SMEM_KERNEL_RESERVE_SIZE) {
++    ret = qcom_smem_alloc(QCOM_SMEM_HOST_ANY, SMEM_KERNEL_RESERVE,
++                          SMEM_KERNEL_RESERVE_SIZE);
++    if (ret && ret != -EEXIST)
++        goto err_free;
++    mui = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_KERNEL_RESERVE, &mui_size);
++    if (IS_ERR(mui)) {
++        ret = PTR_ERR(mui);
++        goto err_free;
++    }
++    if (!mui || mui_size != SMEM_KERNEL_RESERVE_SIZE) {
++        ret = -EINVAL;
++        goto err_free;
++    }
+ #else
+-	mui = (struct mmi_unit_info *) smem_alloc(SMEM_KERNEL_RESERVE,
+-		SMEM_KERNEL_RESERVE_SIZE, 0, SMEM_ANY_HOST_FLAG);
+-
+-	if (!mui) {
+-#endif
+-		pr_err("%s: failed to allocate mmi_unit_info in SMEM\n",
+-			__func__);
+-		ret = 1;
+-		goto err_free;
+-	} else if (PTR_ERR(mui_copy) == -EPROBE_DEFER) {
+-		pr_err("%s: SMEM not yet initialized\n", __func__);
+-		ret = 1;
+-		goto err_free;
+-	}
+-
+-	memcpy(mui, mui_copy, SMEM_KERNEL_RESERVE_SIZE);
++    mui = (struct mmi_unit_info *)smem_alloc(SMEM_KERNEL_RESERVE,
++                                            SMEM_KERNEL_RESERVE_SIZE, 0, SMEM_ANY_HOST_FLAG);
++    if (!mui) {
++        ret = -ENOMEM;
++        goto err_free;
++    }
++#endif
++    memcpy(mui, mui_copy, SMEM_KERNEL_RESERVE_SIZE);
+ 
+ err_free:
+ 	kfree(mui_copy);
+--- a/ports/moto-info/Makefile
++++ b/ports/moto-info/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += mmi_annotate.o mmi_info.o
++mmi_annotate-y := mmi_annotate/mmi_annotate.o
++mmi_info-y := mmi_info/mmi_info_main.o mmi_info/mmi_boot_info.o mmi_info/mmi_ram_info.o mmi_info/mmi_storage_info.o mmi_info/mmi_unit_info.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-minidump/include -I$(src)/../qcom-smem/include
++ccflags-y += -DCONFIG_QCOM_MINIDUMP_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-smem/Module.symvers
+--- a/ports/moto-info/include/soc/qcom/mmi_boot_info.h
++++ b/ports/moto-info/include/soc/qcom/mmi_boot_info.h
+@@ -76,6 +76,7 @@
+ const char *bi_bootreason(void);
+ u32  bi_mbm_version(void);
+ const char *bi_bootmode(void);
++const char *bi_chipid(void);
+ u32 bi_boot_seq(void);
+ u32 bi_hwrev(void);
+ 

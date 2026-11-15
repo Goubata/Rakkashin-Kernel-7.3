@@ -1,0 +1,92 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "files": [
+    {
+      "file": "ports/moto-info/mmi_annotate/mmi_annotate.c",
+      "source": "drivers/mmi_annotate/mmi_annotate.c",
+      "original_sha256": "3e3bd583625998e310f810d0a4f831565affde79348fc879fd2096b52292f7db",
+      "sha256": "b31c0c733ffe87defcd51dcebeffd854876125d67a77c1f33deb69d9df07339d"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_boot_info.c",
+      "source": "drivers/mmi_info/mmi_boot_info.c",
+      "original_sha256": "cf97ba251ca5b88a2d7a5ed16fbbc4fb518bcb6b1aae3cae849f1915c138c751",
+      "sha256": "0cff1794ed7821759fecb2b7bde3f54336f31d03597b77a36238802021414ab1"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_info.h",
+      "source": "drivers/mmi_info/mmi_info.h",
+      "original_sha256": "624422f8b3126d479a32b35508149d59e713eeb0489328918b032f7b6151dac1",
+      "sha256": "624422f8b3126d479a32b35508149d59e713eeb0489328918b032f7b6151dac1"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_info_main.c",
+      "source": "drivers/mmi_info/mmi_info_main.c",
+      "original_sha256": "914cd4121b816e3522866029854ff1dddb3e4701323454c253684b0b05520e22",
+      "sha256": "914cd4121b816e3522866029854ff1dddb3e4701323454c253684b0b05520e22"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_ram_info.c",
+      "source": "drivers/mmi_info/mmi_ram_info.c",
+      "original_sha256": "e46c72df8cd062c63cfb201099b481fb3b3c35ec3c368fa1ec2d53975f01203f",
+      "sha256": "e46c72df8cd062c63cfb201099b481fb3b3c35ec3c368fa1ec2d53975f01203f"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_storage_info.c",
+      "source": "drivers/mmi_info/mmi_storage_info.c",
+      "original_sha256": "21e696ffb5155fe07fa2acf0cc8437aa4d9af6ea2fd98745c8cd4c9c68fa6c14",
+      "sha256": "21e696ffb5155fe07fa2acf0cc8437aa4d9af6ea2fd98745c8cd4c9c68fa6c14"
+    },
+    {
+      "file": "ports/moto-info/mmi_info/mmi_unit_info.c",
+      "source": "drivers/mmi_info/mmi_unit_info.c",
+      "original_sha256": "0420f67ccd0c8899ade4f461e58f6967daec50c4e57353acb8c45524dea7dc29",
+      "sha256": "26d242adc81075ec3e4a711a47974a2ce9db57a8f8bd1606ecf2a66e239942bb"
+    },
+    {
+      "file": "ports/moto-info/include/linux/mmi_device.h",
+      "source": "include/linux/mmi_device.h",
+      "original_sha256": "580c2c5b183c7640d40c2b8be85bc7f499058b4ed6245293e4f711d7dc035e85",
+      "sha256": "580c2c5b183c7640d40c2b8be85bc7f499058b4ed6245293e4f711d7dc035e85"
+    },
+    {
+      "file": "ports/moto-info/include/linux/mmi_annotate.h",
+      "source": "include/linux/mmi_annotate.h",
+      "original_sha256": "086941b451d0b3b3a5115ea70960a02b65463c26bb91deff945272b9e3b68dfc",
+      "sha256": "086941b451d0b3b3a5115ea70960a02b65463c26bb91deff945272b9e3b68dfc"
+    },
+    {
+      "file": "ports/moto-info/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "4aaf3f761e07751bf3fa19af31a8bbc695ff4f9aba64da733495221827f38958"
+    },
+    {
+      "file": "ports/moto-info/include/soc/qcom/mmi_boot_info.h",
+      "source": "include/soc/qcom/mmi_boot_info.h",
+      "original_sha256": "0e5c2bfae213e204940d84378e2a5fbff97364ba29cf918804764628b573c56f",
+      "sha256": "511605dabd76ac8e95d7aecbaee1073b35c2a1420dd6ddbfd62ffde81ee9e513"
+    },
+    {
+      "file": "ports/moto-info/include/linux/mmi_kernel_common.h",
+      "source": "include/linux/mmi_kernel_common.h",
+      "original_sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312",
+      "sha256": "f1e0e2214818c3bf954a0e6ec1c4926c116a83aba2bc8416149bba00e8918312"
+    }
+  ],
+  "patch_sha256": "f3405aeeca8df400f2875dbb9a12752efb02c121885a7a7653591e1051e9a51c",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": false,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Add exact missing factory headers and required exported prototype; make private build-signature parser static",
+    "Use real SMEM API and validate allocation/get errors and exact region size before copying",
+    "Bound annotation formatting to actual emitted bytes, subtraction bounds and explicit NUL termination",
+    "Treat boot signature strings as data rather than printf formats; draft remains outside main bundle"
+  ],
+  "pending": [
+    "Annotation probe import bounds, publication, unwind, remove synchronization and minidump/mapping lifetime remain unsafe/unaccepted",
+    "Info init failure unwind, SMEM failure tests and complete bootarg/ROM behavior",
+    "Actual firmware/userspace/physical device acceptance"
+  ]
+}

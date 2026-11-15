@@ -626,3 +626,18 @@ provider消失後のunregisterも進行中callbackを待つ。sensor classは20�
 最新部分成果物はartifacts/android73-moto-touch-deps-stage53/の116モジュールとcandidate.dtb。
 これはflash可能な画像でもwhole-board受入済みDTでもない。
 `reports/moto-touch-deps-stage53-validation.json`。Goodix本体等とsoftware readinessは未完。
+
+
+## Stage54: Goodix/THP・Motorola infoの4 draftをリンク
+
+mmi_annotate/mmi_info/touchscreen_mmi/goodix_brl_thpが7.3で実依存へリンクした。
+factoryの9 build flagとheader UAPIを維持し、削除されたstrncpy・trace include path・
+prototypeを調整。固定custom-infoの長さを制限し、pen deviceのunregister後の二重freeを修正。
+SMEM取得のerror pointer/size判定と、注釈のformat長/加算overflow/NUL境界も修正した。
+注釈sourceのprivate RAM試験8件（4 writerを含む）が成功。実probe/永続map/minidumpは試験外。
+保存stockのGET_EVENTSはmov w0,wzr; retの8byteでpayloadを返さず、元の互換動作を維持した。
+
+4 draftはartifacts/goodix-touch-draft-stage54/へ分離保存。主成果物は116個のまま。
+注釈probe/remove/minidump lifetime、infoの初期化失敗処理、touch ioctl/終了/partial probeと
+実SPI/display/firmware/ROMの受入が残るため、4個を配布セットへ昇格していない。
+`reports/goodix-touch-stage54-validation.json`。software readinessは未達。

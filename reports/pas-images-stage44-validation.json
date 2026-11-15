@@ -1,0 +1,99 @@
+{
+  "stage": 44,
+  "scope": "secure image ownership decisions with recorded shutdown/unmap callbacks and module registration; real PAS authentication, shutdown and panic not executed",
+  "tests": {
+    "pas-images": {
+      "log": "reports/pas-images-stage44-final-qemu.log",
+      "test": "pas-images",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "log_sha256": "e27c7a6b38c5c5ea915d4ae43e96c3939caf7b3bfab92e3d52e470edd19eaaf6",
+      "metadata_sha256": "4abff5abdfa51d5450243e02d855bb19555049abd61638a7b7159add274df59b"
+    },
+    "pas-proxy": {
+      "log": "reports/pas-proxy-stage44-final-qemu.log",
+      "test": "pas-proxy",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "log_sha256": "8c46ae1d1d11c41184db6a3276839c47b7ae8ea12cb3b66ee1d0052a8df59c49",
+      "metadata_sha256": "79879c5c3da7de8967fef3f2dcf74d8f57b8e298cafda86f4ba88bcbef64719d"
+    },
+    "pas-rails": {
+      "log": "reports/pas-rails-stage44-final-qemu.log",
+      "test": "pas-rails",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "log_sha256": "4cbba0c531e2b49a707b3d94e6999cc473f2d6f59f89e32c1d86c1f9e4eac618",
+      "metadata_sha256": "ea23f20e2b9aefc460b3fcd9c7ee3f17c5fce3ae78a5767a6b9689d0d7ea309a"
+    },
+    "mdt-loader": {
+      "log": "reports/mdt-loader-stage44-final-qemu.log",
+      "test": "mdt-loader",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "log_sha256": "86a75e25a6d1a14ec8dd16d80380d9a453ac72c538bf5e4bc5ebba5cbda504cf",
+      "metadata_sha256": "3bc723f4773a20929a43151cc0355e9a6638022c84f6e2445c8c61a295af6514"
+    }
+  },
+  "test_case_count": 30,
+  "draft_module_count": 3,
+  "matching_imports": 133,
+  "crc_passed": true,
+  "implementation": [
+    "Record authentication attempt ownership before calls; confirmed main shutdown precedes DTB shutdown",
+    "Unmap only owned mappings and only after all secure image shutdowns succeed; retain failed ownership for retry",
+    "Stop DTB on later main-load/start failure; mark bootloader-attached images for later shutdown",
+    "Alor critical authentication/unconfirmed-shutdown errors stop the system before remoteproc/devres can free active resources, consistent with pinned vendor failure-stop policy",
+    "Release the separately requested DTB source firmware after its synchronous copy on both success and failure; clear borrowed main references",
+    "Removal rechecks quiesce/unmap before releasing own resources because rproc_del ignores shutdown errors"
+  ],
+  "critical_failure_policy": {
+    "vendor_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+    "vendor_pas_sha256": "6b5604c4097481511e66661b461295fa2dea77fb06f68c31c210229c5c8bd79b",
+    "policy": "panic on critical Alor auth/reset failure or unconfirmed secure shutdown; not ordinary graceful error cleanup",
+    "actual_panic_tested": false
+  },
+  "software_readiness_target_complete": false,
+  "experimental_packaged": false,
+  "current_packaged_module_count": 108,
+  "physical_verified": false,
+  "partition_written": false,
+  "daily_use_accepted": false,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "7f847f57096ad4c9d1e07d124a061109ac07bb26e827b01cc6bd2d6437777669",
+    "reports/pas-alor-stage44-crc.json": "45020fa4f4fbf9ab7264feb69c8a3cfbe8d00608f4455aa08e6d05acabd4ecd5",
+    "reports/pas-alor-stage44-dt-validation.json": "bc4b3dbce3b7061522c0433b3dac705331ebf475d41a999885afe82d5c1a5b15",
+    "reports/pas-images-stage44-final-build.log": "082418c880ec41ad08638bb33845d860cd058182d172b4a0392e82286596e2d1"
+  },
+  "pending": [
+    "Actual driver startup/load/stop fault integration including borrowed firmware and critical failure-stop dispatch",
+    "IOMMU partial unmap and non-Alor noncritical terminal shutdown failure lifetime remain outside accepted scope",
+    "Physical secure PAS authentication/shutdown, bootloader attach, clocks/regulators/IRQ/mount and remote-service behavior",
+    "All remaining hardware drivers, ROM/DT/policy/boot packaging and software-readiness criteria",
+    "Removal/core cleanup failure integration still needs fault injection; the source fallback alone is not a full teardown proof"
+  ]
+}

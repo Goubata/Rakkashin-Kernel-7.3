@@ -1,34 +1,142 @@
 --- a/ports/qcom-pas-alor/qcom_q6v5_pas.c
 +++ b/ports/qcom-pas-alor/qcom_q6v5_pas.c
-@@ -33,6 +33,8 @@
+@@ -33,6 +33,9 @@
  #include "qcom_pil_info.h"
  #include "qcom_q6v5.h"
  #include "remoteproc_internal.h"
 +#include "avr_pas_rails.h"
 +#include "avr_pas_proxy.h"
++#include "avr_pas_images.h"
  
  #define QCOM_PAS_DECRYPT_SHUTDOWN_DELAY_MS	100
  
-@@ -64,6 +66,8 @@
+@@ -64,6 +67,9 @@
  	int region_assign_vmid;
  	bool early_boot;
  	bool needs_tzmem;
 +	bool arc_rails;
 +	bool uses_elf64;
++	bool critical_fw;
  };
  
  struct qcom_pas {
-@@ -77,6 +81,9 @@
+@@ -77,6 +83,11 @@
  
  	struct regulator *cx_supply;
  	struct regulator *px_supply;
 +	bool arc_rails;
 +	struct avr_pas_rails rails;
 +	struct avr_pas_proxy proxy;
++	struct avr_pas_images images;
++	bool critical_fw;
  
  	struct device *proxy_pds[3];
  
-@@ -277,43 +284,88 @@
+@@ -211,9 +222,64 @@
+ 	return ret;
+ }
+ 
++static void qcom_pas_unmap_carveout(struct rproc *rproc, phys_addr_t mem_phys, size_t size);
++
++static int qcom_pas_image_shutdown(void *ctx, unsigned int image)
++{
++	struct qcom_pas *pas = ctx;
++	int ret = qcom_pas_shutdown(image == AVR_IMAGE_MAIN ? pas->pas_id : pas->dtb_pas_id);
++	if (ret && image == AVR_IMAGE_MAIN && pas->decrypt_shutdown)
++		ret = qcom_pas_shutdown_poll_decrypt(pas);
++	return ret;
++}
++
++static void qcom_pas_image_unmap(void *ctx, unsigned int image)
++{
++	struct qcom_pas *pas = ctx;
++	if (image == AVR_IMAGE_MAIN)
++		qcom_pas_unmap_carveout(pas->rproc, pas->mem_phys, pas->mem_size);
++	else
++		qcom_pas_unmap_carveout(pas->rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
++}
++
++static const struct avr_pas_image_ops qcom_pas_image_ops = {
++	.shutdown = qcom_pas_image_shutdown,
++	.unmap = qcom_pas_image_unmap,
++};
++
++static int qcom_pas_quiesce_images(struct qcom_pas *pas)
++{
++	int ret = avr_pas_images_quiesce(&pas->images, &qcom_pas_image_ops, pas);
++	/* Pinned Motorola PAS stops the system on an unconfirmed critical shutdown.
++	 * Never return into remoteproc/devres cleanup while SoCCP may still run. */
++	if (ret && pas->critical_fw)
++		panic("Alor PAS cannot confirm firmware shutdown: %d", ret);
++	return ret;
++}
++
++static int qcom_pas_unmap_images(struct qcom_pas *pas)
++{
++	return avr_pas_images_unmap(&pas->images, &qcom_pas_image_ops, pas);
++}
++
++static int qcom_pas_auth_image(struct qcom_pas *pas, unsigned int image)
++{
++	struct qcom_pas_context *ctx = image == AVR_IMAGE_MAIN ? pas->pas_ctx : pas->dtb_pas_ctx;
++	int ret;
++	/* Failed authentication can have an uncertain secure-world state. */
++	pas->images.needs_shutdown[image] = true;
++	ret = qcom_pas_prepare_and_auth_reset(ctx);
++	if (ret && pas->critical_fw)
++		panic("Alor PAS image %u authentication/reset failed: %d", image, ret);
++	return ret;
++}
++
+ static int qcom_pas_unprepare(struct rproc *rproc)
+ {
+ 	struct qcom_pas *pas = rproc->priv;
++
++	if (avr_pas_images_active(&pas->images))
++		return -EBUSY;
+ 
+ 	/*
+ 	 * qcom_pas_load() did pass pas_metadata to the SCM driver for storing
+@@ -225,6 +291,7 @@
+ 	if (pas->dtb_pas_id)
+ 		qcom_pas_metadata_release(pas->dtb_pas_ctx);
+ 
++	pas->firmware = NULL;
+ 	return 0;
+ }
+ 
+@@ -232,6 +299,9 @@
+ {
+ 	struct qcom_pas *pas = rproc->priv;
+ 	int ret;
++
++	if (avr_pas_images_busy(&pas->images) || READ_ONCE(pas->proxy.owned))
++		return -EBUSY;
+ 
+ 	/* Store firmware handle to be used in qcom_pas_start() */
+ 	pas->firmware = fw;
+@@ -246,14 +316,19 @@
+ 		if (ret) {
+ 			dev_err(pas->dev, "request_firmware failed for %s: %d\n",
+ 				pas->dtb_firmware_name, ret);
++			pas->firmware = NULL;
++			pas->dtb_firmware = NULL;
+ 			return ret;
+ 		}
+ 
+ 		ret = qcom_mdt_pas_load(pas->dtb_pas_ctx, pas->dtb_firmware,
+ 					pas->dtb_firmware_name, &pas->dtb_mem_reloc);
++		/* Metadata and segments were copied synchronously; no source ref remains. */
++		release_firmware(pas->dtb_firmware);
++		pas->dtb_firmware = NULL;
+ 		if (ret) {
+ 			qcom_pas_metadata_release(pas->dtb_pas_ctx);
+-			release_firmware(pas->dtb_firmware);
++			pas->firmware = NULL;
+ 			return ret;
+ 		}
+ 	}
+@@ -277,75 +352,128 @@
  	return ret;
  }
  
@@ -93,7 +201,11 @@
  static int qcom_pas_start(struct rproc *rproc)
  {
  	struct qcom_pas *pas = rproc->priv;
- 	int ret;
+-	int ret;
++	int ret, cleanup_ret;
++
++	if (avr_pas_images_busy(&pas->images))
++		return -EBUSY;
 +
 +	ret = avr_pas_proxy_begin(&pas->proxy);
 +	if (ret)
@@ -135,25 +247,83 @@
  		ret = qcom_pas_map_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
  		if (ret)
 -			goto disable_px_supply;
+-
+-		ret = qcom_pas_prepare_and_auth_reset(pas->dtb_pas_ctx);
 +			goto release_proxies;
- 
- 		ret = qcom_pas_prepare_and_auth_reset(pas->dtb_pas_ctx);
++
++		pas->images.mapped[AVR_IMAGE_DTB] = true;
++		ret = qcom_pas_auth_image(pas, AVR_IMAGE_DTB);
  		if (ret) {
-@@ -341,6 +393,10 @@
- 		goto unmap_carveout;
+ 			dev_err(pas->dev,
+ 				"failed to authenticate dtb image and release reset\n");
+-			goto unmap_dtb_carveout;
++			goto quiesce_images;
+ 		}
  	}
  
+ 	ret = qcom_mdt_pas_load(pas->pas_ctx, pas->firmware, rproc->firmware,
+ 				&pas->mem_reloc);
+ 	if (ret)
+-		goto release_pas_metadata;
++		goto quiesce_images;
+ 
+ 	qcom_pil_info_store(pas->info_name, pas->mem_phys, pas->mem_size);
+ 
+ 	ret = qcom_pas_map_carveout(rproc, pas->mem_phys, pas->mem_size);
+ 	if (ret)
+-		goto release_pas_metadata;
+-
+-	ret = qcom_pas_prepare_and_auth_reset(pas->pas_ctx);
++		goto quiesce_images;
++
++	pas->images.mapped[AVR_IMAGE_MAIN] = true;
++	ret = qcom_pas_auth_image(pas, AVR_IMAGE_MAIN);
+ 	if (ret) {
+ 		dev_err(pas->dev,
+ 			"failed to authenticate image and release reset\n");
+-		goto unmap_carveout;
+-	}
++		goto quiesce_images;
++	}
++
 +	/* Handover IRQ may precede the synchronous authentication return. */
 +	if (avr_pas_proxy_allow_handover(&pas->proxy))
 +		dev_err(pas->dev, "handover cleanup deferred for retry\n");
-+
+ 
  	ret = qcom_q6v5_wait_for_start(&pas->q6v5, msecs_to_jiffies(5000));
  	if (ret == -ETIMEDOUT) {
  		dev_err(pas->dev, "start timed out\n");
-@@ -367,18 +423,8 @@
- unmap_dtb_carveout:
+-		qcom_pas_shutdown(pas->pas_id);
+-		goto unmap_carveout;
++		goto quiesce_images;
+ 	}
+ 
+ 	qcom_pas_metadata_release(pas->pas_ctx);
+@@ -357,28 +485,22 @@
+ 
+ 	return 0;
+ 
+-unmap_carveout:
+-	qcom_pas_unmap_carveout(rproc, pas->mem_phys, pas->mem_size);
+-release_pas_metadata:
++quiesce_images:
++	cleanup_ret = qcom_pas_quiesce_images(pas);
++	if (cleanup_ret) {
++		dev_err(pas->dev, "firmware shutdown incomplete: %d\n", cleanup_ret);
++		/* Keep mappings, metadata and proxy ownership for a retry. */
++		pas->firmware = NULL;
++		return ret ?: cleanup_ret;
++	}
++	cleanup_ret = qcom_pas_unmap_images(pas);
++	if (cleanup_ret)
++		return ret ?: cleanup_ret;
+ 	qcom_pas_metadata_release(pas->pas_ctx);
  	if (pas->dtb_pas_id)
- 		qcom_pas_unmap_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
+ 		qcom_pas_metadata_release(pas->dtb_pas_ctx);
+-
+-unmap_dtb_carveout:
+-	if (pas->dtb_pas_id)
+-		qcom_pas_unmap_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
 -disable_px_supply:
 -	if (pas->px_supply)
 -		regulator_disable(pas->px_supply);
@@ -171,7 +341,7 @@
  disable_irqs:
  	qcom_q6v5_unprepare(&pas->q6v5);
  
-@@ -391,20 +437,15 @@
+@@ -391,53 +513,39 @@
  static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
  {
  	struct qcom_pas *pas = container_of(q6v5, struct qcom_pas, q6v5);
@@ -192,26 +362,70 @@
  {
  	struct qcom_pas *pas = rproc->priv;
 -	int handover;
+-	int dtb_ret;
 +	int proxy_ret;
- 	int dtb_ret;
  	int ret;
  
-@@ -432,9 +473,11 @@
+ 	ret = qcom_q6v5_request_stop(&pas->q6v5, pas->sysmon);
+ 	if (ret == -ETIMEDOUT)
+ 		dev_err(pas->dev, "timed out on wait\n");
  
- 	qcom_pas_unmap_carveout(rproc, pas->mem_phys, pas->mem_size);
- 
+-	ret = qcom_pas_shutdown(pas->pas_id);
+-	if (ret && pas->decrypt_shutdown)
+-		ret = qcom_pas_shutdown_poll_decrypt(pas);
+-
++	ret = qcom_pas_quiesce_images(pas);
+ 	if (ret)
+-		dev_err(pas->dev, "failed to shutdown: %d\n", ret);
+-
+-	if (pas->dtb_pas_id) {
+-		dtb_ret = qcom_pas_shutdown(pas->dtb_pas_id);
+-		if (dtb_ret)
+-			dev_err(pas->dev, "failed to shutdown dtb: %d\n", dtb_ret);
+-
+-		if (!ret && dtb_ret)
+-			ret = dtb_ret;
+-
+-		qcom_pas_unmap_carveout(rproc, pas->dtb_mem_phys, pas->dtb_mem_size);
+-	}
+-
+-	qcom_pas_unmap_carveout(rproc, pas->mem_phys, pas->mem_size);
+-
 -	handover = qcom_q6v5_unprepare(&pas->q6v5);
 -	if (handover)
 -		qcom_pas_handover(&pas->q6v5);
+-
+-	if (pas->smem_host_id)
+-		ret = qcom_smem_bust_hwspin_lock_by_host(pas->smem_host_id);
++		return ret;
++	ret = qcom_pas_unmap_images(pas);
++	if (ret)
++		return ret;
++
 +	qcom_q6v5_unprepare(&pas->q6v5);
 +	/* Also retry a previous handover cleanup failure, with no double release. */
 +	proxy_ret = qcom_pas_release_proxies(pas);
 +	if (!ret)
 +		ret = proxy_ret;
++
++	if (pas->smem_host_id) {
++		int bust_ret = qcom_smem_bust_hwspin_lock_by_host(pas->smem_host_id);
++		if (!ret)
++			ret = bust_ret;
++	}
  
- 	if (pas->smem_host_id)
- 		ret = qcom_smem_bust_hwspin_lock_by_host(pas->smem_host_id);
-@@ -630,8 +673,39 @@
+ 	return ret;
+ }
+@@ -567,6 +675,8 @@
+ 		goto unroll_attach;
+ 	}
+ 
++	pas->images.needs_shutdown[AVR_IMAGE_MAIN] = true;
++	pas->images.needs_shutdown[AVR_IMAGE_DTB] = !!pas->dtb_pas_id;
+ 	return 0;
+ 
+ unroll_attach:
+@@ -630,8 +740,39 @@
  	return 0;
  }
  
@@ -251,7 +465,7 @@
  	pas->cx_supply = devm_regulator_get_optional(pas->dev, "cx");
  	if (IS_ERR(pas->cx_supply)) {
  		if (PTR_ERR(pas->cx_supply) == -ENODEV)
-@@ -861,10 +935,15 @@
+@@ -861,10 +1002,16 @@
  
  	rproc->has_iommu = of_property_present(pdev->dev.of_node, "iommus");
  	rproc->auto_boot = desc->auto_boot;
@@ -261,6 +475,7 @@
  	pas = rproc->priv;
  	pas->dev = &pdev->dev;
 +	pas->arc_rails = desc->arc_rails;
++	pas->critical_fw = desc->critical_fw;
 +	mutex_init(&pas->rails.lock);
 +	mutex_init(&pas->proxy.lock);
 +	pas->proxy.ops = &qcom_pas_proxy_ops;
@@ -268,15 +483,25 @@
  	pas->rproc = rproc;
  	pas->minidump_id = desc->minidump_id;
  	pas->pas_id = desc->pas_id;
-@@ -967,6 +1046,7 @@
+@@ -967,6 +1114,17 @@
  		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
  
  	rproc_del(pas->rproc);
++	/* rproc_del() ignores shutdown errors, including failures before ->stop(). */
++	if (qcom_pas_quiesce_images(pas)) {
++		dev_err(pas->dev, "cannot release unconfirmed firmware ownership\n");
++		return;
++	}
++	if (qcom_pas_unmap_images(pas)) {
++		dev_err(pas->dev, "cannot release active image mappings\n");
++		return;
++	}
++	qcom_q6v5_unprepare(&pas->q6v5);
 +	qcom_pas_release_proxies(pas);
  
  	qcom_q6v5_deinit(&pas->q6v5);
  	qcom_pas_unassign_memory_region(pas);
-@@ -1763,6 +1843,22 @@
+@@ -1763,6 +1921,23 @@
  	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
  };
  
@@ -294,12 +519,13 @@
 +	.early_boot = true,
 +	.arc_rails = true,
 +	.uses_elf64 = true,
++	.critical_fw = true,
 +};
 +
  static const struct qcom_pas_data kaanapali_soccp_resource = {
  	.crash_reason_smem = 656,
  	.firmware_name = "soccp.mbn",
-@@ -1824,6 +1920,7 @@
+@@ -1824,6 +1999,7 @@
  };
  
  static const struct of_device_id qcom_pas_of_match[] = {
@@ -624,5 +850,63 @@
 +	}
 +	mutex_unlock(&proxy->lock);
 +	return ret;
++}
++#endif
+--- a/ports/qcom-pas-alor/avr_pas_images.h
++++ b/ports/qcom-pas-alor/avr_pas_images.h
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef AVR_PAS_IMAGES_H
++#define AVR_PAS_IMAGES_H
++#include <linux/types.h>
++#include <linux/errno.h>
++/* The remoteproc operation mutex serializes this state. IRQ handover owns only
++ * proxy resources, and never changes secure image or mapping ownership. */
++enum avr_pas_image { AVR_IMAGE_MAIN, AVR_IMAGE_DTB, AVR_IMAGE_COUNT };
++struct avr_pas_images {
++	bool needs_shutdown[AVR_IMAGE_COUNT];
++	bool mapped[AVR_IMAGE_COUNT];
++};
++struct avr_pas_image_ops {
++	int (*shutdown)(void *ctx, unsigned int image);
++	void (*unmap)(void *ctx, unsigned int image);
++};
++static bool avr_pas_images_active(const struct avr_pas_images *images)
++{
++	return images->needs_shutdown[AVR_IMAGE_MAIN] || images->needs_shutdown[AVR_IMAGE_DTB];
++}
++static bool avr_pas_images_busy(const struct avr_pas_images *images)
++{
++	return avr_pas_images_active(images) || images->mapped[AVR_IMAGE_MAIN] || images->mapped[AVR_IMAGE_DTB];
++}
++static int avr_pas_images_quiesce(struct avr_pas_images *images,
++				 const struct avr_pas_image_ops *ops, void *ctx)
++{
++	unsigned int i;
++	int ret;
++	/* Stop executable code before its authenticated DTB dependency. */
++	for (i = AVR_IMAGE_MAIN; i < AVR_IMAGE_COUNT; i++) {
++		if (!images->needs_shutdown[i])
++			continue;
++		ret = ops->shutdown(ctx, i);
++		if (ret)
++			return ret;
++		images->needs_shutdown[i] = false;
++	}
++	return 0;
++}
++static int avr_pas_images_unmap(struct avr_pas_images *images,
++			       const struct avr_pas_image_ops *ops, void *ctx)
++{
++	unsigned int i;
++	if (avr_pas_images_active(images))
++		return -EBUSY;
++	for (i = AVR_IMAGE_MAIN; i < AVR_IMAGE_COUNT; i++) {
++		if (!images->mapped[i])
++			continue;
++		ops->unmap(ctx, i);
++		images->mapped[i] = false;
++	}
++	return 0;
 +}
 +#endif

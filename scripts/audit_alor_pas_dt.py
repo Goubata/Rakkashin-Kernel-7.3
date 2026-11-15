@@ -2,12 +2,16 @@
 """Check Alor descriptor and selected saved/candidate rail/firmware inputs, not physical PAS operation."""
 from pathlib import Path
 import hashlib
+import argparse
 import json
 import re
 import struct
 import subprocess
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output',default='reports/pas-alor-stage39-dt-validation.json')
+args=parser.parse_args()
 PIN='037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1'
 source=(ROOT/'ports/qcom-pas-alor/qcom_q6v5_pas.c').read_text()
 vendor=subprocess.check_output(['git','-C',str(ROOT.parent/'avr-upstream-audit/qcom-soc'),'show',PIN+':drivers/remoteproc/qcom_q6v5_pas.c']).decode()
@@ -45,6 +49,6 @@ report={'scope':'pinned descriptor fields and selected saved/candidate reference
  'alor_compatible_present':bool(re.search(r'compatible = "qcom,alor-soccp-pas", .data = &alor_soccp_resource',source)),
  'physical_verified':False,'ready_for_firmware_boot':False,'errors':errors,'passed':not errors}
 if not report['alor_compatible_present']:report['errors'].append('missing Alor binding');report['passed']=False
-(ROOT/'reports/pas-alor-stage39-dt-validation.json').write_text(json.dumps(report,indent=2)+'\n')
+(ROOT/args.output).write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'passed':report['passed'],'descriptor_fields_checked':len(fields),'errors':errors,'memory_regions':len(b['memory_regions'])},indent=2))
 raise SystemExit(not report['passed'])

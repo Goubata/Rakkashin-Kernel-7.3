@@ -5,7 +5,7 @@
       "file": "ports/qcom-pas-alor/qcom_q6v5_pas.c",
       "source": "drivers/remoteproc/qcom_q6v5_pas.c",
       "original_sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
-      "sha256": "3d0fa36240d50a4997f29ad856bc1bcf967920298313a39c10153a9414fba5f4"
+      "sha256": "3d12c8cbf0e88354ba5f28fe088355568bcca6a6ab57320510fe49fe71c03b5b"
     },
     {
       "file": "ports/qcom-pas-alor/qcom_pil_info.c",
@@ -42,9 +42,15 @@
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256": "948a757dbc0d4bced5c64b6e6503d49b3547bd04d017ac3346f1c1f761adfc38"
+    },
+    {
+      "file": "ports/qcom-pas-alor/avr_pas_images.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "9e854afe51be4715f602d763f3298e87fa9b849ba152a32e6a726f492cf1e3b9"
     }
   ],
-  "patch_sha256": "7efac3724ccc85802d922a088a5744f8f586be5e1d17b0315769fbed9ebd3eb5",
+  "patch_sha256": "af2bdf991f0e0fda5f7accd97928030f58e562eca4cf9cca20ac8c96b50a1282",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -53,7 +59,9 @@
     "Alor-specific descriptor, ARC cx/mx votes with counted rollback and retained cleanup errors, ELF64 dump metadata; still excluded from artifacts",
     "Native MDT parser validates nonnull inputs, ELF32/LE and bounded full header metadata before copying",
     "Widen file/address additions before arithmetic and check metadata total size",
-    "Track acquired proxy resources, serialize handover, defer early handover until main authentication succeeds and retry incomplete release"
+    "Track acquired proxy resources, serialize handover, defer early handover until main authentication succeeds and retry incomplete release",
+    "Track main/DTB authentication attempts and owned mappings; stop images before unmap/metadata/proxy cleanup",
+    "Use pinned Motorola critical Alor authentication/shutdown failure-stop policy; retain state on unconfirmed quiesce"
   ],
   "pending": [
     "Physical ARC votes, retained-error recovery and regulator framework fault injection",

@@ -15,7 +15,7 @@ INPUTS = json.loads((ROOT / 'reports/pas-alor-source-inputs.json').read_text())
 if INPUTS['source_commit'] != COMMIT:
     raise ValueError('Alor PAS draft source pin mismatch')
 FILES = {row['file']: row['source'] for row in INPUTS['files']}
-FILES.update({'ports/qcom-pas-alor/Makefile': None, 'ports/qcom-pas-alor/avr_pas_rails.h': None, 'ports/qcom-pas-alor/avr_pas_proxy.h': None})
+FILES.update({'ports/qcom-pas-alor/Makefile': None, 'ports/qcom-pas-alor/avr_pas_rails.h': None, 'ports/qcom-pas-alor/avr_pas_proxy.h': None, 'ports/qcom-pas-alor/avr_pas_images.h': None})
 
 
 
@@ -51,6 +51,8 @@ def main():
                       'Native MDT parser validates nonnull inputs, ELF32/LE and bounded full header metadata before copying',
                       'Widen file/address additions before arithmetic and check metadata total size',
                       'Track acquired proxy resources, serialize handover, defer early handover until main authentication succeeds and retry incomplete release',
+                      'Track main/DTB authentication attempts and owned mappings; stop images before unmap/metadata/proxy cleanup',
+                      'Use pinned Motorola critical Alor authentication/shutdown failure-stop policy; retain state on unconfirmed quiesce',
                   ],
                   'pending': ['Physical ARC votes, retained-error recovery and regulator framework fault injection',
                               'ELF64 minidump metadata and early-attach lifetime/failure cleanup',

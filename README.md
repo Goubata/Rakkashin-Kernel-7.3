@@ -531,3 +531,17 @@ handoverを認証成功前は保留し、成功後に処理する。終了処理
 ユーザーが指定した次段目標は「全必須機能の移植・構成・起動成果物をそろえ、既知の
 実装不足をなくして、残るのは実機確認という段階」。このsoftware readinessは未達。
 実機が正常に動く保証は、それ以降の検証で別に確認する。現在の部分成果物は108個のまま。
+
+## Stage44: main/DTB認証状態と解放順序
+
+認証呼び出し前に停止確認が必要なimageを記録し、本体→DTBの停止成功後にだけ所有mappingを
+解除する。main load/start失敗後にDTBが残る経路と、early-attach後の停止所有権を接続。
+停止未確認時はmapping/metadata/proxy解放へ進まない。Alorのcritical auth/reset失敗や
+停止不能はMotorola元ソースと同様のpanic方針で、通常の成功扱いや解放には置き換えない。
+実際のpanic/TEE呼び出しを試験したわけではない。
+
+DTB firmwareは同期コピー後にsuccess/error両方で参照解放し、借用したmain参照も整理。
+image所有状態7・proxy8・rail8・実入力loader7の計30件がSMP4で成功。
+image試験のshutdown/unmapは記録callbackであり、本番primitiveは実APIへ接続している。
+`reports/pas-images-stage44-validation.json`。driver全体への障害注入、critical分岐の実行、
+IOMMU partial unmapや未受入の非Alor終端失敗、実機secure ABIと全体software readinessは未完。

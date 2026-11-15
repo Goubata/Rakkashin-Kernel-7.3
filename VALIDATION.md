@@ -650,3 +650,27 @@ exercised by the helper backend. Pending handover is acted on only after main
 authentication returns success. Secure main/DTB ownership/error cleanup remains
 a separate known implementation gap. Draft excluded from packaged 108 modules.
 Evidence: `reports/pas-proxy-stage43-validation.json`.
+
+## Stage44: secure image ownership and critical failure-stop policy
+
+Seven recorded shutdown/unmap helper cases pass: main-before-DTB stop, refusal
+to unmap any active/uncertain image, retained ownership on main/DTB errors,
+retry without repeating confirmed shutdown, mapping-only cleanup, nonzero secure
+status and 200 repeated cycles. Proxy8/rail8/actual-input MDT7 regressions pass:
+30 SMP4 cases. Production driver integration is built/registered but its actual
+auth/load/stop fault paths are not exercised by these helper tests.
+
+The driver now records authentication attempt state, quiesces a successfully
+started DTB on subsequent main failure, tracks owned mappings and marks attached
+images for later stop. Separately requested DTB source firmware is released after
+synchronous copying; the main source remains borrowed from remoteproc.
+
+Alor critical authentication/reset failures and unconfirmed secure shutdowns
+panic before active resources can be freed, following the pinned Motorola PAS
+failure-stop policy. This is an intentional kernel-stop policy, not a successful
+fallback or tested physical shutdown. The panic branch itself was not executed.
+Native noncritical foreign-board terminal-error teardown and partial IOMMU unmap
+are not accepted. Full driver failure injection, secure-world ABI, physical
+attach/restart, all board services/remaining drivers and complete software-ready
+boot artifacts still remain. Draft excluded from packaged 108 modules. Evidence:
+`reports/pas-images-stage44-validation.json`.

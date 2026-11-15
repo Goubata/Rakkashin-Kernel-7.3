@@ -63,3 +63,14 @@ handover until successful main authentication return. Incomplete release keeps
 its owned bit for retry; duplicate handover/stop cannot double-disable. Eight
 recorded-callback cases and 15 regressions pass. This is not yet secure main/DTB
 ownership or a complete driver lifecycle/physical test.
+
+Stage44 adds `avr_pas_images.h`. Auth attempts require confirmed shutdown before
+owned mappings are released; main stops before its DTB dependency. Later main
+startup failures now stop the DTB too. Early attach records existing images for
+stop. Failed quiesce retains ownership. Alor critical auth/reset or secure stop
+failure follows the pinned Motorola panic policy before cleanup. That fatal
+branch and actual secure firmware calls have not been exercised by these tests.
+DTB source firmware is released after synchronous load; main remains borrowed.
+Seven recorded image-state cases plus 23 regressions pass. Full driver fault
+integration, partial IOMMU unmap, foreign noncritical failure teardown, physical
+secure ABI and whole-board acceptance remain open; this is still a draft.

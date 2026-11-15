@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+"""Compile and run the exact production multi-SPI method with recorded primitives."""
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+ROOT=Path(__file__).resolve().parents[2]
+src=ROOT/'ports/goodix-touch/goodix_thp/goodix_thp.c'
+header=ROOT/'ports/goodix-touch/goodix_thp/goodix_thp.h'
+s=src.read_text();start=s.index('static long goodix_thp_ioctl_multi_spi_trans(');end=s.index('\nstatic long ',start+1)
+h=header.read_text();a=h.index('struct thp_ioctl_spi_xfer_data {');b=h.index('\nenum {',a)
+fixture=(Path(__file__).parent/'fixture.c').read_text().replace('@FUNCTION@',s[start:end]).replace('@STRUCTS@',h[a:b])
+out=ROOT/'artifacts/goodix-spi-stage58';out.mkdir(parents=True,exist_ok=True)
+(out/'test.c').write_text(fixture)
+subprocess.run(['clang','-std=gnu11','-Wall','-Wextra','-Werror','-O1','-g',str(out/'test.c'),'-o',str(out/'test')],check=True)
+r=subprocess.run([str(out/'test')],check=True,text=True,capture_output=True)
+report={'scope':'exact production multi-SPI function with recorded allocation/uaccess/SPI primitives; no hardware or full driver lifetime proof','passed':True,'output':r.stdout.strip(),'source_sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'fixture_sha256':hashlib.sha256(fixture.encode()).hexdigest()}
+(ROOT/'reports/goodix-spi-stage58-tests.json').write_text(json.dumps(report,indent=2)+'\n')
+print(r.stdout,end='')

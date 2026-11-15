@@ -5,7 +5,7 @@
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.c",
       "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
       "original_sha256": "a8c11f382634b9edad9435b9643ceba11074c53c8ddf82e1320bc38916572ae7",
-      "sha256": "fc810b4841e178e3cd7d304fdbbf784acffb28c9bad4c2d0e5f6a09e16292f31"
+      "sha256": "c062127393b8ba3d84ad068f4b50e1a00cf628d0f989bbf91621d868f97d7a58"
     },
     {
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.h",
@@ -110,7 +110,7 @@
       "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
     }
   ],
-  "patch_sha256": "631ca7d41da62af8a461aaa99ba0969ba5adbe1c53c0d164b501c885d8c684c2",
+  "patch_sha256": "fdb8a21ce330e3ffe48180956d8982d0519e589d7905f0360fef7b377e88c76f",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -119,7 +119,9 @@
     "Replace removed strncpy for strings, bind trace header to external build path, declare TUI exports and private helpers",
     "Bound fixed custom-info copy to the actual ten-byte protocol length",
     "Remove input_free_device after input_unregister_device to avoid pen double free",
-    "Preserve stock legacy GET_EVENTS no-payload return behavior, confirmed from archived instructions; draft remains unaccepted"
+    "Preserve stock legacy GET_EVENTS no-payload return behavior, confirmed from archived instructions; draft remains unaccepted",
+    "Bound multi-SPI descriptor count and aggregate bytes to factory 5120-byte capacity before payload access; use kcalloc and negative allocation/uaccess errors",
+    "Propagate wakeup speed/SPI/restore failures while always attempting speed restore; stop receive copies at first fault"
   ],
   "pending": [
     "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",

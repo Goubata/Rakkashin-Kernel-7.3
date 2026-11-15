@@ -509,97 +509,90 @@ static int goodix_thp_ioctl_set_spi_speed(struct goodix_thp_core *core_data, uns
         return 0;
 }
 
+/* Preserve the factory aggregate buffer capacity; validate before any payload IO. */
 static long goodix_thp_ioctl_multi_spi_trans(struct goodix_thp_core *core_data, void __user *data)
 {
-        struct goodix_thp_core *ts = core_data;
-        struct thp_ts_device *dev = ts->ts_dev;
+        struct thp_ts_device *dev = core_data->ts_dev;
         struct spi_device *spi = dev->spi_dev;
         struct thp_ioctl_multi_spi_trans_data multi_data;
-        struct thp_ioctl_spi_xfer_data * xfer_data = NULL;
-        struct spi_transfer * xfer = NULL;
+        struct thp_ioctl_spi_xfer_data *xfer_data = NULL;
+        struct spi_transfer *xfer = NULL;
         struct spi_message msg;
-        u8 *tx_buf = NULL;
-        u8 *rx_buf = NULL;
-        int r = 0, i = 0;
-        u32 spi_speed_backup = 0;
-        unsigned int tmp_len = 0;
+        const unsigned int capacity = 5120;
+        u8 *tx_buf = NULL, *rx_buf = NULL;
+        unsigned int total = 0, offset = 0, i;
+        u32 spi_speed_backup;
+        int r = 0, restore;
 
-        spi_speed_backup = dev->board_data.spi_setting.spi_max_speed;
-
-        if (copy_from_user(&multi_data, data, sizeof(struct thp_ioctl_multi_spi_trans_data))) {
+        if (copy_from_user(&multi_data, data, sizeof(multi_data)))
                 return -EFAULT;
-        }
-
-        xfer_data =  kzalloc(multi_data.xfer_num * sizeof(*xfer_data), GFP_KERNEL);
-        if (!xfer_data) {
-                ts_info(dev->dev, "failed alloc memory for xfer_data");
+        /* Every descriptor must carry at least one byte. */
+        if (!multi_data.xfer_num || multi_data.xfer_num > capacity)
+                return -EINVAL;
+        xfer_data = kcalloc(multi_data.xfer_num, sizeof(*xfer_data), GFP_KERNEL);
+        xfer = kcalloc(multi_data.xfer_num, sizeof(*xfer), GFP_KERNEL);
+        if (!xfer_data || !xfer) {
+                r = -ENOMEM;
                 goto exit;
         }
-
-        xfer =  kzalloc(multi_data.xfer_num * sizeof(*xfer), GFP_KERNEL);
-        if (!xfer) {
-                ts_info(dev->dev, "failed alloc memory for xfer");
-                goto exit;
-        }
-
         if (copy_from_user(xfer_data, multi_data.xfer_data,
-                sizeof(struct thp_ioctl_spi_xfer_data) * multi_data.xfer_num)) {
-                ts_info(dev->dev, "failed copy from user for xfer_data");
+                           sizeof(*xfer_data) * multi_data.xfer_num)) {
+                r = -EFAULT;
                 goto exit;
         }
-
-        rx_buf = kzalloc(5120, GFP_KERNEL);
-        if (!rx_buf) {
-                ts_info(dev->dev, "failed alloc buffer for rx_buf");
-                goto exit;
-        }
-        tx_buf = kzalloc(5120, GFP_KERNEL);
-        if (!tx_buf) {
-                ts_info(dev->dev, "failed alloc buffer for tx_buf");
-                goto exit;
-        }
-
-        spi_message_init(&msg);
-        for(i = 0; i < multi_data.xfer_num; i++) {
-                if(xfer_data[i].tx){
-                        r = copy_from_user(tx_buf + tmp_len,
-                                xfer_data[i].tx, xfer_data[i].len);
-                        if (r) {
-                                ts_info(dev->dev, "failed copy from user:%d", r);
-                                goto exit;
-                        }
+        for (i = 0; i < multi_data.xfer_num; i++) {
+                if (!xfer_data[i].len || xfer_data[i].len > capacity - total) {
+                        r = -EINVAL;
+                        goto exit;
                 }
-                xfer[i].tx_buf = tx_buf + tmp_len;
-                xfer[i].rx_buf = rx_buf + tmp_len;
+                total += xfer_data[i].len;
+        }
+        tx_buf = kzalloc(total, GFP_KERNEL);
+        rx_buf = kzalloc(total, GFP_KERNEL);
+        if (!tx_buf || !rx_buf) {
+                r = -ENOMEM;
+                goto exit;
+        }
+        spi_message_init(&msg);
+        for (i = 0; i < multi_data.xfer_num; i++) {
+                if (xfer_data[i].tx &&
+                    copy_from_user(tx_buf + offset, xfer_data[i].tx, xfer_data[i].len)) {
+                        r = -EFAULT;
+                        goto exit;
+                }
+                xfer[i].tx_buf = tx_buf + offset;
+                xfer[i].rx_buf = rx_buf + offset;
                 xfer[i].len = xfer_data[i].len;
                 xfer[i].cs_change = !!xfer_data[i].cs_change;
                 spi_message_add_tail(&xfer[i], &msg);
-                tmp_len += xfer_data[i].len;
+                offset += xfer_data[i].len;
         }
-
+        mutex_lock(&dev->spi_mutex);
+        spi_speed_backup = dev->board_data.spi_setting.spi_max_speed;
         if (multi_data.speed_hz == GOODIX_SPI_SPEED_WAKEUP) {
-                mutex_lock(&dev->spi_mutex);
-                dev->hw_ops->set_spi_speed(dev, GOODIX_SPI_SPEED_WAKEUP);
-                spi_sync(spi, &msg);
-                dev->hw_ops->set_spi_speed(dev, spi_speed_backup);
-                mutex_unlock(&dev->spi_mutex);
+                r = dev->hw_ops->set_spi_speed(dev, GOODIX_SPI_SPEED_WAKEUP);
+                if (!r)
+                        r = spi_sync(spi, &msg);
+                /* spi_setup may change software state even when it fails. */
+                restore = dev->hw_ops->set_spi_speed(dev, spi_speed_backup);
+                if (!r)
+                        r = restore;
         } else {
-                mutex_lock(&dev->spi_mutex);
                 r = spi_sync(spi, &msg);
-                mutex_unlock(&dev->spi_mutex);
-                if(r) {
-                        ts_info(dev->dev, "failed do spi sync:%d", r);
-                        goto exit;
-                }
-                tmp_len = 0;
-                for(i = 0; i < multi_data.xfer_num; i++ ){
-                        if (xfer_data[i].rx) {
-                                r = copy_to_user(xfer_data[i].rx, rx_buf + tmp_len,
-                                        xfer_data[i].len);
-                                tmp_len += xfer_data[i].len;
-                        } else {
-                                tmp_len += xfer_data[i].len;
+        }
+        mutex_unlock(&dev->spi_mutex);
+        if (r)
+                goto exit;
+        /* The factory wakeup transaction has no receive-copy phase. */
+        if (multi_data.speed_hz != GOODIX_SPI_SPEED_WAKEUP) {
+                offset = 0;
+                for (i = 0; i < multi_data.xfer_num; i++) {
+                        if (xfer_data[i].rx &&
+                            copy_to_user(xfer_data[i].rx, rx_buf + offset, xfer_data[i].len)) {
+                                r = -EFAULT;
+                                goto exit;
                         }
+                        offset += xfer_data[i].len;
                 }
         }
 exit:

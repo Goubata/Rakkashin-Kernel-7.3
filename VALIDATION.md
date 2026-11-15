@@ -937,3 +937,29 @@ Evidence: reports/mmi-info-stage57-validation.json. Reproduce with:
 `python scripts/build_goodix_touch.py --info-tests --info-native-tests`, then
 QEMU modes `mmi-info` and `mmi-info-native` with `--cpus 4`. These guests have
 no phone disks or network. No phone partitions were written.
+
+
+## Stage58: Goodix multi-SPI bounds and error propagation (draft)
+
+The production multi-SPI ioctl used fixed 5120-byte TX/RX buffers without
+checking aggregate descriptor lengths. Reject empty/over-capacity descriptor
+counts, zero-length transfers and totals beyond that factory capacity before
+payload access. kcalloc bounds array allocation; allocation failures now return
+-ENOMEM, user-copy failures -EFAULT. Stop receive copies at the first fault.
+Wakeup setup, SPI and restoration errors now propagate; restore is attempted
+even after setup failure because spi_setup may already change software state.
+The factory wakeup path still has no receive-copy phase; public ioctl layouts
+and nine build flags remain unchanged. Descriptor delay behavior is not changed.
+
+22 executable cases compile the exact production function and header structs
+against recorded allocation/uaccess/SPI primitives. They cover exact aggregate
+capacity, overflow lengths/counts, all four allocation failures, all input-copy
+positions, both receive faults, normal/NULL transfers and wakeup/SPI/restore
+errors. This is a host source-method test, not native uaccess, full driver
+lifetime, daemon compatibility or physical SPI proof. Reproduce with:
+`python tests/goodix-spi/run.py` and `python scripts/build_goodix_touch.py`.
+Both Goodix/THP modules build and pass import CRC checks, but remain excluded
+from the main 118-module Stage57 bundle. Draft binaries are saved separately in
+artifacts/moto-touch-drafts-stage58. Evidence is recorded in
+reports/goodix-spi-stage58-validation.json. Frame/mmap/TSC message bounds,
+open/remove/probe lifetime, physical hardware and whole-board gates remain.

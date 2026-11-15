@@ -1,0 +1,40 @@
+{
+  "stage": 58,
+  "scope": "Multi-SPI bounds and selected error propagation only; Goodix/THP remains an unaccepted draft",
+  "tests": {
+    "scope": "exact production multi-SPI function with recorded allocation/uaccess/SPI primitives; no hardware or full driver lifetime proof",
+    "passed": true,
+    "output": "PASS 22 production multi-SPI cases; recorded primitives only",
+    "source_sha256": "c062127393b8ba3d84ad068f4b50e1a00cf628d0f989bbf91621d868f97d7a58",
+    "fixture_sha256": "3032d9cb013d0a5939aa68b1addc8dbc764d3ebf3989481b32b80a3524d1d3be"
+  },
+  "build_passed": true,
+  "matching_imports": 233,
+  "draft_modules_sha256": {
+    "touchscreen_mmi.ko": "fc3c0062dc7323c9f48e032abdee75e07ebde7799953fde5d3b5efe4c15fe599",
+    "goodix_brl_thp.ko": "57254ce410631d3ba881168ee3666ba036cb78ebc22de7de5c2ba3b1066432d2"
+  },
+  "main_bundle": "artifacts/android73-info-stage57",
+  "main_bundle_module_count": 118,
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "pending": [
+    "Open/ioctl/remove lifetime and partial probe unwind",
+    "Frame/mmap bounds, TSC message lengths and concurrent accesses",
+    "Real SPI/IRQ/display/power/gesture/stylus firmware and daemon integration",
+    "Multi-SPI descriptor delay behavior and compat ioctl review",
+    "All other mandatory drivers, whole-board DT, boot/DLKM/SELinux and physical all-function acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/goodix-touch/goodix_thp/goodix_thp.c": "c062127393b8ba3d84ad068f4b50e1a00cf628d0f989bbf91621d868f97d7a58",
+    "tests/goodix-spi/fixture.c": "e056dfb4409d771343e364e4ba9eb314fd183ad27d58b014d7267629e953132c",
+    "tests/goodix-spi/run.py": "7030906788340b555ca57a3dae0fac87bbd6c74b1d8a2b7c49f2d3f9868ed294",
+    "reports/goodix-spi-stage58-build.log": "b9ba3b3179285e8be380010fe374c2fcf1ec194e9e7ae39b229ea8e8292516cd",
+    "reports/goodix-spi-stage58-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-spi-stage58-crc.json": "1bdafb7f78596c539965f745f047fb098b61c9207fa27a839197ea36a772ab1b",
+    "reports/goodix-spi-stage58-tests.json": "69802099be79caa3260653a848150cc4709335e9c2d09511c2ec5bb74686da3b",
+    "reports/goodix-touch-source-lock.json": "d5c84a568711a0182dd96e95a16db23fd4ccbd2ddf27ba5eaf23799bd731ab0a",
+    "patches/goodix-touch-7.3.patch": "fdb8a21ce330e3ffe48180956d8982d0519e589d7905f0360fef7b377e88c76f"
+  }
+}

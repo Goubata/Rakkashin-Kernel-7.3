@@ -484,3 +484,23 @@ clock/IRQ/handover・DTB認証失敗経路・firmware/resource-table/ELF64 loade
 
 `reports/pas-alor-stage39-validation.json`。新しいAlorドライバはまだ成果物に入れず、
 配布部分は引き続きStage37の108個。Image・保存DT・GPU設定の変更や実機への書き込みはない。
+
+## Stage40: 実機SoCCP firmwareの読み取り照合
+
+実機ではSoCCPがattachedで、firmwareは `/vendor/soccp_firmware/image/` にある。
+専用soccp_a/bはFAT12 volumeで、両slot内のsoccp.mbn/soccp_dtb.mbnとマウント済み
+2ファイルのSHA256が一致した。実イメージはいずれもELF32/EM_RISCVであり、
+vendor descriptorのuses_elf64（dump metadata）とfirmware入力classは別である。
+firmwareをELF64へ変換する根拠はない。
+
+選択したloadable segmentは保存DTの6MiB/256KiB予約領域へ収まり、全segmentがinline。
+native ELF32ヘッダ形状・末尾hash segmentなど選択した前提条件も一致した。
+これは実loader実行・署名認証・物理restartの成功ではない。
+ROMのueventdはこの専用directoryを検索し、initはforce_sysfs_fallback=1を設定する。
+実機も1、7.3設定のUSER_HELPERも有効。移植版のmount/init/要求時刻は別途検証が必要。
+
+read-only scriptと証拠は `scripts/inspect_soccp_*_readonly.py`、
+`scripts/audit_soccp_firmware_inputs.py`、`reports/soccp-firmware-stage40-validation.json`。
+volumeのmount・変更・抽出・firmware起動は行わず、filesystem/block読み取りと
+メタデータ報告だけを行った。次は実ファイルを使うnative loaderのguarded-RAM試験、
+PASのsecure/error/resource ownershipと実機起動条件の検証。

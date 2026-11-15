@@ -1,0 +1,88 @@
+{
+  "stage": 40,
+  "scope": "independent mounted-file/FAT-slot digest agreement and selected native ELF32 loader/DT preconditions only; no actual native loader execution or secure authentication",
+  "captured_utc": "2026-11-15T00:51:29.131552+00:00",
+  "files": [
+    {
+      "file": "/vendor/soccp_firmware/image/soccp.mbn",
+      "sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e",
+      "elf_class": 32,
+      "machine": 243,
+      "machine_name": "EM_RISCV",
+      "matches_both_fat_slots": true,
+      "loadable_segments": 5,
+      "selected_header_shape_valid": true,
+      "all_segments_inline": true,
+      "fits_saved_reserved_region": true,
+      "reserved_region": "/reserved-memory/soccp_region@a4400000",
+      "reserved_base": 2755657728,
+      "reserved_size": 6291456,
+      "predicted_native_get_size": 3596288,
+      "predicted_metadata_bytes": 4524
+    },
+    {
+      "file": "/vendor/soccp_firmware/image/soccp_dtb.mbn",
+      "sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965",
+      "elf_class": 32,
+      "machine": 243,
+      "machine_name": "EM_RISCV",
+      "matches_both_fat_slots": true,
+      "loadable_segments": 1,
+      "selected_header_shape_valid": true,
+      "all_segments_inline": true,
+      "fits_saved_reserved_region": true,
+      "reserved_region": "/reserved-memory/soccp_dtb_region@a4a00000",
+      "reserved_base": 2761949184,
+      "reserved_size": 262144,
+      "predicted_native_get_size": 86016,
+      "predicted_metadata_bytes": 4044
+    }
+  ],
+  "fat_volume_types": [
+    12,
+    12
+  ],
+  "live_soccp": [
+    {
+      "path": "/sys/class/remoteproc/remoteproc2",
+      "name": "a3380000.remoteproc-soccp",
+      "firmware": "unknown",
+      "state": "attached"
+    }
+  ],
+  "rom_firmware_directory": "/vendor/soccp_firmware/image/",
+  "live_force_sysfs_fallback": "1",
+  "rom_config_evidence": {
+    "/vendor/etc/ueventd.rc": {
+      "sha256": "63de2ff74d5593a5a427c9e409d47cb0cde8cd0661e17c900f70a2fddc1dd470",
+      "selected_lines": [
+        "firmware_directories /vendor/firmware_mnt/image/ /vendor/soccp_firmware/image/"
+      ]
+    },
+    "/vendor/etc/init/hw/init.qti.kernel.rc": {
+      "sha256": "6a4d2e526c27113d93fc2986886d9aa612fd3ae2ff87566f8071ad10f452c280",
+      "selected_lines": [
+        "    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1"
+      ]
+    }
+  },
+  "kernel_user_helper_enabled": true,
+  "dump_elf64_is_separate_from_firmware_elf_class": true,
+  "physical_firmware_restart_tested": false,
+  "native_loader_ram_tested": false,
+  "secure_abi_verified": false,
+  "partition_written": false,
+  "evidence_sha256": {
+    "reports/soccp-firmware-stage40-readonly.json": "c2981d66f03cd4f30aa14ba11df06a664602525ba14b747f91f9d07a0295b443",
+    "reports/soccp-volume-stage40-readonly.json": "52f6a8de0078db2c14ca4aa38c335736c844e6c7fb16fd281c4c2a63bbe71537",
+    "reports/pas-alor-stage39-dt-validation.json": "9e23861515f9c576b09e7b2da1ca1d0dc18c628d59e81d5492042309fbe83cfa",
+    "ports/qcom-pas-alor/mdt_loader.c": "2647807e4cabe0c97ba0a872de340f6924f000d27951abdd350f85dead95db6d"
+  },
+  "errors": [],
+  "selected_audit_passed": true,
+  "next": [
+    "Run the real native loader against exact saved firmware into guarded RAM, without secure calls",
+    "Preserve firmware user-helper fallback and ROM mount/ueventd timing for initial boot and reload",
+    "Verify secure PAS/metadata/resource-table and full clock/IRQ/DTB/main-firmware error ownership before device artifact inclusion"
+  ]
+}

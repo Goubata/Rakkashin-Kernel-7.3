@@ -1,0 +1,58 @@
+{
+  "scope": "read-only bounded FAT inventory and file digests/ELF identities; no extraction, mounting, modification or firmware execution",
+  "partition_written": false,
+  "images": [
+    {
+      "path": "/dev/block/by-name/soccp_a",
+      "size": 8388608,
+      "volume_sha256": "9d17a6914d9e87511a065933340342a5a39a8600585da5ae1da1e9e6cba85735",
+      "fat_bits": 12,
+      "sector_bytes": 4096,
+      "cluster_bytes": 4096,
+      "files": [
+        {
+          "path": "/image/soccp_dtb.mbn",
+          "size": 94008,
+          "sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965",
+          "format": "ELF",
+          "elf_class": 32,
+          "machine": 243
+        },
+        {
+          "path": "/image/soccp.mbn",
+          "size": 2383960,
+          "sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e",
+          "format": "ELF",
+          "elf_class": 32,
+          "machine": 243
+        }
+      ]
+    },
+    {
+      "path": "/dev/block/by-name/soccp_b",
+      "size": 8388608,
+      "volume_sha256": "9d17a6914d9e87511a065933340342a5a39a8600585da5ae1da1e9e6cba85735",
+      "fat_bits": 12,
+      "sector_bytes": 4096,
+      "cluster_bytes": 4096,
+      "files": [
+        {
+          "path": "/image/soccp_dtb.mbn",
+          "size": 94008,
+          "sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965",
+          "format": "ELF",
+          "elf_class": 32,
+          "machine": 243
+        },
+        {
+          "path": "/image/soccp.mbn",
+          "size": 2383960,
+          "sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e",
+          "format": "ELF",
+          "elf_class": 32,
+          "machine": 243
+        }
+      ]
+    }
+  ]
+}

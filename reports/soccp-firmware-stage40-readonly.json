@@ -1,0 +1,503 @@
+{
+  "scope": "read-only live remoteproc identity and SoCCP firmware ELF headers only",
+  "partition_written": false,
+  "firmware_booted": false,
+  "captured_utc": "2026-11-15T00:51:29.131552+00:00",
+  "remoteprocs": [
+    {
+      "path": "/sys/class/remoteproc/remoteproc0",
+      "name": "6800000.remoteproc-adsp",
+      "firmware": "adsp.mdt",
+      "state": "running"
+    },
+    {
+      "path": "/sys/class/remoteproc/remoteproc1",
+      "name": "26300000.remoteproc-cdsp",
+      "firmware": "cdsp.mdt",
+      "state": "running"
+    },
+    {
+      "path": "/sys/class/remoteproc/remoteproc2",
+      "name": "a3380000.remoteproc-soccp",
+      "firmware": "unknown",
+      "state": "attached"
+    },
+    {
+      "path": "/sys/class/remoteproc/remoteproc3",
+      "name": "99f00000.remoteproc-wpss",
+      "firmware": "wcn7750/wpss.mdt",
+      "state": "running"
+    },
+    {
+      "path": "/sys/class/remoteproc/remoteproc4",
+      "name": "4080000.remoteproc-mss",
+      "firmware": "modem.mdt",
+      "state": "running"
+    }
+  ],
+  "images": [
+    {
+      "path": "/dev/block/by-name/soccp_a",
+      "resolved": "/dev/block/sdd15",
+      "prefix_hex": "eb3c904d5357494e342e310010010100",
+      "header_sha256": "fb58b78cec1ee4e8fb00249eb232e28f8f172e42cc6ea1ebedcedea765e5ebf3",
+      "elf_magic": false,
+      "size": 8388608,
+      "content_sha256": "9d17a6914d9e87511a065933340342a5a39a8600585da5ae1da1e9e6cba85735",
+      "prefix_scan_bytes": 1048576,
+      "prefix_scan_sha256": "cee82d094a1e5f924cede8eba5045ba86bbedacb1ac8e8745f79245958087696",
+      "embedded_elf_ident_offsets": [
+        {
+          "offset": 90112,
+          "class_byte": 1
+        },
+        {
+          "offset": 184320,
+          "class_byte": 1
+        }
+      ]
+    },
+    {
+      "path": "/dev/block/by-name/soccp_b",
+      "resolved": "/dev/block/sdf15",
+      "prefix_hex": "eb3c904d5357494e342e310010010100",
+      "header_sha256": "fb58b78cec1ee4e8fb00249eb232e28f8f172e42cc6ea1ebedcedea765e5ebf3",
+      "elf_magic": false,
+      "size": 8388608,
+      "content_sha256": "9d17a6914d9e87511a065933340342a5a39a8600585da5ae1da1e9e6cba85735",
+      "prefix_scan_bytes": 1048576,
+      "prefix_scan_sha256": "cee82d094a1e5f924cede8eba5045ba86bbedacb1ac8e8745f79245958087696",
+      "embedded_elf_ident_offsets": [
+        {
+          "offset": 90112,
+          "class_byte": 1
+        },
+        {
+          "offset": 184320,
+          "class_byte": 1
+        }
+      ]
+    },
+    {
+      "path": "/dev/block/by-name/soccp_dcd_a",
+      "resolved": "/dev/block/sdd17",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "df9b353cd535921cc3026728857581391334c599a239bb4b0a86d1f2176bd58d",
+      "elf_magic": true,
+      "size": 24576,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 13795328,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 4,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "312b7048f7833f2a9dd6944f8c1ad3cf84a1976cebfe4a2b077e34a907772316",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 180,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 6,
+          "offset": 4096,
+          "paddr": 13795328,
+          "filesz": 8604,
+          "memsz": 8604
+        },
+        {
+          "index": 2,
+          "type": 1685382481,
+          "flags": 6,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 0,
+          "memsz": 0
+        },
+        {
+          "index": 3,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 16384,
+          "paddr": 0,
+          "filesz": 3944,
+          "memsz": 3944
+        }
+      ],
+      "content_sha256": "ab3625f938ba11f1e386ffa09482e3f416419b1a6d15c3e43ea4dab2ba82bd76"
+    },
+    {
+      "path": "/dev/block/by-name/soccp_dcd_b",
+      "resolved": "/dev/block/sdf17",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "df9b353cd535921cc3026728857581391334c599a239bb4b0a86d1f2176bd58d",
+      "elf_magic": true,
+      "size": 24576,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 13795328,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 4,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "312b7048f7833f2a9dd6944f8c1ad3cf84a1976cebfe4a2b077e34a907772316",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 180,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 6,
+          "offset": 4096,
+          "paddr": 13795328,
+          "filesz": 8604,
+          "memsz": 8604
+        },
+        {
+          "index": 2,
+          "type": 1685382481,
+          "flags": 6,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 0,
+          "memsz": 0
+        },
+        {
+          "index": 3,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 16384,
+          "paddr": 0,
+          "filesz": 3944,
+          "memsz": 3944
+        }
+      ],
+      "content_sha256": "ab3625f938ba11f1e386ffa09482e3f416419b1a6d15c3e43ea4dab2ba82bd76"
+    },
+    {
+      "path": "/dev/block/by-name/soccp_debug_a",
+      "resolved": "/dev/block/sdd16",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "7752a4cc61b4c7e170bd33cfd042a1becbc6455e91185ff8a848184459badeee",
+      "elf_magic": true,
+      "size": 524288,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 13762560,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 5,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "f9ed72f1e8d82fec43a3b14462844e9659a545620119de6ccb99e61d81a0a1e0",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 212,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 7,
+          "offset": 16384,
+          "paddr": 13762560,
+          "filesz": 11136,
+          "memsz": 16384
+        },
+        {
+          "index": 2,
+          "type": 1,
+          "flags": 7,
+          "offset": 32768,
+          "paddr": 13778944,
+          "filesz": 11938,
+          "memsz": 16384
+        },
+        {
+          "index": 3,
+          "type": 1,
+          "flags": 7,
+          "offset": 49152,
+          "paddr": 2184839168,
+          "filesz": 9020,
+          "memsz": 262144
+        },
+        {
+          "index": 4,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 61440,
+          "paddr": 0,
+          "filesz": 11040,
+          "memsz": 11040
+        }
+      ],
+      "content_sha256": "d9cfc351da657cc8e6f8d04ecbf4ace394565c5662e4e7e7ce57a5fa6b0ecb83"
+    },
+    {
+      "path": "/dev/block/by-name/soccp_debug_b",
+      "resolved": "/dev/block/sdf16",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "7752a4cc61b4c7e170bd33cfd042a1becbc6455e91185ff8a848184459badeee",
+      "elf_magic": true,
+      "size": 524288,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 13762560,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 5,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "f9ed72f1e8d82fec43a3b14462844e9659a545620119de6ccb99e61d81a0a1e0",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 212,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 7,
+          "offset": 16384,
+          "paddr": 13762560,
+          "filesz": 11136,
+          "memsz": 16384
+        },
+        {
+          "index": 2,
+          "type": 1,
+          "flags": 7,
+          "offset": 32768,
+          "paddr": 13778944,
+          "filesz": 11938,
+          "memsz": 16384
+        },
+        {
+          "index": 3,
+          "type": 1,
+          "flags": 7,
+          "offset": 49152,
+          "paddr": 2184839168,
+          "filesz": 9020,
+          "memsz": 262144
+        },
+        {
+          "index": 4,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 61440,
+          "paddr": 0,
+          "filesz": 11040,
+          "memsz": 11040
+        }
+      ],
+      "content_sha256": "d9cfc351da657cc8e6f8d04ecbf4ace394565c5662e4e7e7ce57a5fa6b0ecb83"
+    },
+    {
+      "path": "/vendor/soccp_firmware/image/soccp.mbn",
+      "resolved": "/vendor/soccp_firmware/image/soccp.mbn",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "4366c22cc98c757a6ef3b2afb768c9586f16c7e103691db79b61643642e97e17",
+      "elf_magic": true,
+      "size": 2383960,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 2755657728,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 9,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "d0a07f284a1fca91fde68af93584d7b5f9c943dfcc67f322a4c00858e9bc1765",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 340,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 5,
+          "offset": 4096,
+          "paddr": 2755657728,
+          "filesz": 1748992,
+          "memsz": 1748992
+        },
+        {
+          "index": 2,
+          "type": 1,
+          "flags": 6,
+          "offset": 1753088,
+          "paddr": 2757406720,
+          "filesz": 1,
+          "memsz": 1
+        },
+        {
+          "index": 3,
+          "type": 1,
+          "flags": 4,
+          "offset": 1757184,
+          "paddr": 2757410816,
+          "filesz": 556604,
+          "memsz": 556604
+        },
+        {
+          "index": 4,
+          "type": 1,
+          "flags": 6,
+          "offset": 2314240,
+          "paddr": 2757967872,
+          "filesz": 0,
+          "memsz": 1219200
+        },
+        {
+          "index": 5,
+          "type": 1,
+          "flags": 6,
+          "offset": 2314240,
+          "paddr": 2759188480,
+          "filesz": 64384,
+          "memsz": 64384
+        },
+        {
+          "index": 6,
+          "type": 1879048195,
+          "flags": 0,
+          "offset": 2378624,
+          "paddr": 0,
+          "filesz": 64,
+          "memsz": 64
+        },
+        {
+          "index": 7,
+          "type": 7,
+          "flags": 4,
+          "offset": 1753092,
+          "paddr": 2757406724,
+          "filesz": 0,
+          "memsz": 8
+        },
+        {
+          "index": 8,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 2379776,
+          "paddr": 0,
+          "filesz": 4184,
+          "memsz": 4184
+        }
+      ],
+      "content_sha256": "0b9c9177d2c024f7387f4d3484ba876c735ca8700b8f51e6b5675cbd163b914e"
+    },
+    {
+      "path": "/vendor/soccp_firmware/image/soccp_dtb.mbn",
+      "resolved": "/vendor/soccp_firmware/image/soccp_dtb.mbn",
+      "prefix_hex": "7f454c46010101000000000000000000",
+      "header_sha256": "b5a2edcfed61dd80b2b90a8fdcd4bfec9ceb3229f9bb26f2d077ad0315146983",
+      "elf_magic": true,
+      "size": 94008,
+      "elf_class": 32,
+      "machine": 243,
+      "entry": 2761949184,
+      "program_header_offset": 52,
+      "program_header_size": 32,
+      "program_header_count": 3,
+      "elf_header_size": 52,
+      "section_header_offset": 0,
+      "section_header_size": 0,
+      "section_header_count": 0,
+      "program_header_sha256": "47fdcfccdfa8b6b1852cdd12068e5f0cb1f195845c8cad1478ab9e1f604703f5",
+      "program_headers": [
+        {
+          "index": 0,
+          "type": 0,
+          "flags": 117440512,
+          "offset": 0,
+          "paddr": 0,
+          "filesz": 148,
+          "memsz": 0
+        },
+        {
+          "index": 1,
+          "type": 1,
+          "flags": 6,
+          "offset": 4096,
+          "paddr": 2761949184,
+          "filesz": 83840,
+          "memsz": 83840
+        },
+        {
+          "index": 2,
+          "type": 0,
+          "flags": 33554432,
+          "offset": 90112,
+          "paddr": 0,
+          "filesz": 3896,
+          "memsz": 3896
+        }
+      ],
+      "content_sha256": "f1970c2775738cb3c4285860f6e54f76c9427ca503ef940a1e9ac9151d021965"
+    }
+  ],
+  "firmware_runtime": {
+    "/proc/sys/kernel/firmware_config/force_sysfs_fallback": "1",
+    "/proc/sys/kernel/firmware_config/ignore_sysfs_fallback": "0",
+    "/sys/module/firmware_class/parameters/path": "/vendor/firmware_mnt/image"
+  },
+  "rom_config_evidence": {
+    "/vendor/etc/ueventd.rc": {
+      "sha256": "63de2ff74d5593a5a427c9e409d47cb0cde8cd0661e17c900f70a2fddc1dd470",
+      "selected_lines": [
+        "firmware_directories /vendor/firmware_mnt/image/ /vendor/soccp_firmware/image/"
+      ]
+    },
+    "/vendor/etc/init/hw/init.qti.kernel.rc": {
+      "sha256": "6a4d2e526c27113d93fc2986886d9aa612fd3ae2ff87566f8071ad10f452c280",
+      "selected_lines": [
+        "    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1"
+      ]
+    }
+  }
+}

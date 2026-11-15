@@ -592,3 +592,26 @@ link/registration is not sufficient boot approval or an accepted device image.
 Clock/IRQ/handover and authenticated DTB/main image cleanup, firmware memory/
 resource-table/ELF64 loading, secure ABI and real provider/remote-service/suspend
 acceptance remain open. Evidence: `reports/pas-alor-stage39-validation.json`.
+
+## Stage40: read-only live SoCCP firmware identity
+
+Live SoCCP is attached. The existing ROM supplies firmware under
+`/vendor/soccp_firmware/image/`, configured in vendor ueventd. Both dedicated
+soccp slots are FAT12 volumes. Independently parsed volume files have exactly
+the same hashes as the mounted main/DTB files. Both inputs are ELF32, machine
+243/EM_RISCV; the vendor ELF64 dump-metadata selection does not make the firmware
+input ELF64. No firmware conversion is justified by that descriptor field.
+
+Selected ELF header geometry, inline segments, hash-segment presence and saved
+reserved-region bounds agree with native loader prerequisites. Predicted load
+spans are 3,596,288 and 86,016 bytes within 6MiB and 256KiB reservations.
+This is a selected static audit, not execution of the actual native loader,
+secure authentication, early-attach validation or physical firmware restart.
+
+ROM init enables force_sysfs_fallback=1, the live value is 1 and ignore fallback
+is 0; vendor ueventd includes the SoCCP directory. Native USER_HELPER is enabled.
+The port still needs mount/init/request-timing and actual firmware fallback
+validation. Read-only scripts did not mount, extract, modify, boot or authenticate
+firmware. Evidence: `reports/soccp-firmware-stage40-validation.json`. Next: exact
+firmware through the actual native loader into guarded RAM without secure calls,
+then remaining PAS lifecycle/secure ABI and physical boot acceptance.

@@ -433,3 +433,11 @@ python scripts/audit_state_ipc_dt.py
 python scripts/audit_core_patch_replay.py
 python scripts/snapshot_boot_core.py --name android73-state-ipc-stage35 --gpu-driver --rakkashin --pmic-glink
 ```
+
+
+Stage36の次段要件は `scripts/audit_soccp_provider_requirements.py` と
+`reports/soccp-provider-requirements-stage36.json` に固定。cx/mxはARCリソース
+`cx.lvl`/`mx.lvl`のraw level64・load0であり、物理64uVへの読み替えはしない。
+Alor descriptorはcheck_status=falseのため、別SoC用TCSR/spareプロパティを
+勝手に追加する根拠はない。Q6V5 commonと実sysmonがまだ未リンクで、
+Alor minidump24/ELF64や電源rollbackを含むPAS実装は次段の未完作業。

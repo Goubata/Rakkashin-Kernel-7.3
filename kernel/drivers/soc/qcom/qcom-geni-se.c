@@ -305,6 +305,21 @@ u32 geni_se_get_qup_hw_version(struct geni_se *se)
 }
 EXPORT_SYMBOL_GPL(geni_se_get_qup_hw_version);
 
+/**
+ * geni_se_get_wrapper_base() - get the parent wrapper mapping
+ * @se: serial engine whose wrapper is owned by the parent GENI driver
+ *
+ * The caller must keep the parent bound for the lifetime of its use. The
+ * returned mapping is borrowed; ownership remains with the wrapper driver.
+ */
+void __iomem *geni_se_get_wrapper_base(struct geni_se *se)
+{
+	if (!se || !se->wrapper)
+		return NULL;
+	return se->wrapper->base;
+}
+EXPORT_SYMBOL_GPL(geni_se_get_wrapper_base);
+
 static void geni_se_io_set_mode(void __iomem *base)
 {
 	u32 val;

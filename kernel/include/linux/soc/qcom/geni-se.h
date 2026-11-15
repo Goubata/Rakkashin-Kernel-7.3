@@ -359,6 +359,7 @@ struct geni_se {
 #if IS_ENABLED(CONFIG_QCOM_GENI_SE)
 
 u32 geni_se_get_qup_hw_version(struct geni_se *se);
+void __iomem *geni_se_get_wrapper_base(struct geni_se *se);
 
 /**
  * geni_se_read_proto() - Read the protocol configured for a serial engine

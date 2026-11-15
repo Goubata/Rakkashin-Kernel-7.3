@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage89ではBCL SoCの通知登録前に電源が現れる境界条件も確認し、26件の4コアQEMUテストが通過。PMIC BCLは2有効ノード・11 zone宣言・16 trip・6冷却マップのDT接続を監査しました（`reports/bcl-stage89-validation.json`）。PMIC BCLドライバ自体の移植はまだ未完了です。
+
 BCL SoCの遅延電源登録による未接続を再現し、電源通知から標準driver_attachで回復する処理を追加しました（Stage88）。25件の4コアQEMUテストが通過し、39インポートCRCが一致。成果物は `artifacts/bcl-soc-draft-stage88/`、証拠は `reports/bcl-soc-stage88-validation.json`。実機常用の確認は未完了です。
 
 BCL SoCの7.3向けドラフトを追加しました（Stage87）。残量・参照管理・失敗時の巻き戻しなど20件の4コアQEMUテストと、実機保存DT／候補DTの接続監査が通過。仮想DTでは7.3本来のthermal登録と3つの冷却先の結合・上限も確認しました。成果物は `artifacts/bcl-soc-draft-stage87/`、証拠は `reports/bcl-soc-stage87-validation.json`。実機の電池・充電・CPU制限・冷却は未確認です。

@@ -35,7 +35,7 @@ struct fixture {
  int refs[2], missing_cpu, add_calls, fail_add, zone_error, notifier_error;
  int present, capacity, usb_type, present_error, capacity_error, usb_error;
  int notifier_calls, fail_notifier_call;
- bool driver_registered, plain_driver;
+ bool driver_registered, plain_driver, publish_before_supplier_notifier;
  bool use_of;
  struct device_node *sensor_node;
  struct thermal_cooling_device *cdev[3];
@@ -44,6 +44,7 @@ struct fixture {
  struct bcl_device *bcl;
 };
 static struct fixture *backend;
+static int publish_supply(struct fixture *,bool);
 static enum power_supply_property batt_props[]={POWER_SUPPLY_PROP_PRESENT,POWER_SUPPLY_PROP_CAPACITY};
 static enum power_supply_property usb_props[]={POWER_SUPPLY_PROP_USB_TYPE};
 static int recorded_property(struct power_supply *psy, enum power_supply_property prop, union power_supply_propval *val)
@@ -77,6 +78,11 @@ static int test_qos_add(struct freq_constraints *q,struct freq_qos_request *req,
 static int test_notifier(struct notifier_block *nb)
 {
  backend->notifier_calls++;
+ if(nb==&bcl_supplier_nb && backend->publish_before_supplier_notifier){
+  int ret;backend->publish_before_supplier_notifier=false;
+  ret=publish_supply(backend,true);if(ret)return ret;
+  ret=publish_supply(backend,false);if(ret)return ret;
+ }
  if(backend->notifier_error && (!backend->fail_notifier_call || backend->notifier_calls==backend->fail_notifier_call))return backend->notifier_error;
  return power_supply_reg_notifier(nb);
 }
@@ -379,6 +385,18 @@ static void unregister_drains_retry_before_late_supply(struct kunit *test)
  KUNIT_EXPECT_PTR_EQ(test,platform_get_drvdata(f->pdev),NULL);KUNIT_EXPECT_FALSE(test,work_pending(&bcl_supplier_work));
  KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),1);KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),1);
 }
+static void missed_initial_supply_event_window_recovers(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct bcl_device *bcl;
+ remove_supplies(f);f->publish_before_supplier_notifier=true;
+ /* Hook publishes both real class devices and drains their events after the
+  * driver's missing-supply probe, before its supplier notifier is registered. */
+ KUNIT_ASSERT_EQ(test,register_driver(f,false),0);flush_work(&bcl_supplier_work);wait_for_device_probe();
+ KUNIT_EXPECT_FALSE(test,f->publish_before_supplier_notifier);
+ bcl=platform_get_drvdata(f->pdev);KUNIT_ASSERT_NOT_NULL(test,bcl);flush_work(&bcl->soc_eval_work);
+ KUNIT_EXPECT_TRUE(test,bcl->ready);KUNIT_EXPECT_EQ(test,atomic_read(&bcl_waiting_supplies),0);
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->battery->use_cnt),2);KUNIT_EXPECT_EQ(test,atomic_read(&f->usb->use_cnt),2);
+}
 static struct kunit_case cases[]={
  KUNIT_CASE(all_capacity_values),KUNIT_CASE(absent_battery),KUNIT_CASE(invalid_properties),KUNIT_CASE(property_errors_preserve_output),
  KUNIT_CASE(missing_battery_defers),KUNIT_CASE(missing_usb_unwinds_battery),KUNIT_CASE(zone_failure_unwinds),KUNIT_CASE(notifier_failure_unwinds),
@@ -386,7 +404,7 @@ static struct kunit_case cases[]={
  KUNIT_CASE(repeated_probe_remove),KUNIT_CASE(qos_shared_policies),KUNIT_CASE(qos_add_failure_rolls_back),KUNIT_CASE(missing_policy_rolls_back),
  KUNIT_CASE(boot_cap_retained_on_unknown),KUNIT_CASE(boot_cap_clears_on_known_recovery),KUNIT_CASE(native_of_depletion_and_cooling_links),KUNIT_CASE(native_of_repeated_zone_lifetime),
  KUNIT_CASE(native_late_class_supply_needs_retry),KUNIT_CASE(late_battery_then_usb_binds_native_of),KUNIT_CASE(late_usb_after_multiple_retries),
- KUNIT_CASE(supplier_notifier_failure_unwinds_bound_device),KUNIT_CASE(unregister_drains_retry_before_late_supply),{}
+ KUNIT_CASE(supplier_notifier_failure_unwinds_bound_device),KUNIT_CASE(unregister_drains_retry_before_late_supply),KUNIT_CASE(missed_initial_supply_event_window_recovers),{}
 };
 static struct kunit_suite suite={.name="avr-bcl-soc",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);

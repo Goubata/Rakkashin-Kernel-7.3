@@ -1772,3 +1772,39 @@ The new draft retains matching Image#25/config/symbols and 39 matching imports;
 Stage57 remains unchanged at 118 modules. Physical behavior, supplier forced
 unbind, userspace force-unbind policy, exhaustive concurrent teardown/PM races,
 remaining drivers and whole-board acceptance remain pending. No phone writes.
+
+## Stage89: BCL initial supply event window and PMIC DT dependency audit
+
+Twenty-six SMP4 BCL SoC cases pass without WARN/panic/skip. The new case
+publishes both real supplies and drains their changed events between the initial
+missing-supply probe and the module supplier notifier registration. Initial
+retry work closes this window and completes actual native platform binding.
+Production Image#25 and bcl_soc.ko are byte-identical to the Stage88 artifact.
+The fixture remains private; physical supply/thermal/CPU hardware is not modeled.
+
+Audit pinned qti_bcl_pmic5.c, qti_bcl_common.h and qti_bcl_stats.c at factory
+037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1 against saved/candidate AVR DT. One
+hundred checks per input pass for two active providers, eleven declared zones,
+sixteen passive trips, six cooling maps, native-style inherited four-cell SPMI
+IRQ routes, sensor enum IDs and normalized NVMEM/cooling/trip references. Keep
+the disabled third provider and all selected saved semantics unchanged.
+
+Both active saved nodes use qcom,bcl-v5, selecting pmih010x_data in factory
+source. Do not guess a replacement compatible for the PM8550 node or reinterpret
+calibration. Parent has one address cell and zero size cells; the raw second reg
+cell 0x100 is not evidence of a native resource extent. The factory helper uses
+the first address. The SDAM cell is byte0x5d bit5; its physical value is unknown.
+DT declares standard IDs0/1 and alternative 2S IDs8/9; factory NVMEM selects one
+pair. Event IDs5/6/7 and voltage/current metrics are not degree-temperature units.
+
+This audit does not port or prove PMIC BCL operation. Required implementation
+includes native thermal API/layout, error propagation from NVMEM/IRQ/zone/write,
+per-device resource ownership and probe/remove/freeze/restore rollback. Factory
+notifier callback is assigned after registration, device allocation/count globals
+can become stale, and debugfs/IPC lifetime needs repair. Preserve real register
+semantics and validate calibration/endianness/threshold arithmetic before hardware.
+
+Evidence: reports/bcl-stage89-validation.json and reports/bcl-pmic-stage89-dt.json.
+Reproduce build_bcl_soc.py --tests, QEMU mode bcl-soc --cpus4 (26 cases), and
+audit_bcl_pmic_dt.py. No board DT changes, phone partition writes or physical
+7.3 boot. Main Stage57 bundle remains unchanged; whole-board acceptance pending.

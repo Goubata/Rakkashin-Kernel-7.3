@@ -1,0 +1,57 @@
+{
+  "stage": 89,
+  "scope": "Close BCL initial supplier event window test and audit pinned PMIC BCL DT resources; no new PMIC driver implementation claimed",
+  "checks": {
+    "log": "reports/bcl-soc-stage89-qemu.log",
+    "test": "bcl-soc",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      26,
+      0,
+      0,
+      26
+    ]
+  },
+  "production_artifact": "artifacts/bcl-soc-draft-stage88",
+  "production_image_and_module_unchanged": true,
+  "pmic_dt_audit": {
+    "passed": true,
+    "active_providers": 2,
+    "declared_zones": 11,
+    "trip_nodes": 16,
+    "cooling_maps": 6,
+    "checks_per_input": 100,
+    "saved_semantics_preserved": true,
+    "pmic_driver_ported": false
+  },
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "new_test": "Publish USB then battery using real native class registry, drain changed events after missing-supply probe but before global notifier registration; initial retry work binds the real native platform driver",
+  "pmic_findings": [
+    "Factory generic qcom,bcl-v5 matches both active saved nodes to pmih010x_data; compatible preserved without inferring PM8550 hardware calibration",
+    "Normal and 2S current sensors are alternative pairs selected by a referenced SDAM bit; eleven DT declarations do not imply eleven active channels",
+    "Native IRQ-parent walk resolves the inherited four-cell SPMI controller; SID/peripheral/level routes match both active PMICs",
+    "Six cooling maps and all sixteen passive trip nodes preserve normalized references and scalar properties"
+  ],
+  "pending": [
+    "PMIC BCL driver lifetime/API/error propagation/calibration and regmap fault tests still require implementation",
+    "Physical supply/charging/CPU/cooling, supplier forced unbind and exhaustive concurrent PM/teardown behavior",
+    "Remaining board drivers, DT schema, boot/vendor_boot/dtbo/DLKM/SELinux and actual 7.3 daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "tests/bcl-soc/avr-bcl-soc-test.c": "c550188ecb6aaa1e2fc9b2eb59d29cafb3a32a69550ce2e923341a28ed2a87ca",
+    "tests/bcl-soc/avr-bcl-soc-test.ko": "f0d890f5dd26ff27e800792c9b79bf0e6e1d2f7f80d9aba8dc01ad42440978c8",
+    "tests/bcl-soc/native-qos-test.h": "4a682e7f72fc1565b790e50decae87e9c08e1210f6797276dcafadebed547bb0",
+    "tests/qemu/bcl-soc-tests.cpio.gz": "6cef71b77d751beda814d88fb2b686130381ed13c07d2f3f1071ded0e9a0116f",
+    "scripts/audit_bcl_pmic_dt.py": "5272e607ec8218125c8b26f045532c9defd0bf5d9e25125f8aca71ea7bccf312",
+    "reports/bcl-pmic-stage89-dt.json": "986f7adb5f4ce3a4f13d33ea5d9746fc985ec998cca37a539374f8f92e63ee3f",
+    "reports/bcl-soc-stage89-build.log": "f13908330dee35ee248cfe61fb8be26d020e827d954645c274a1ff3d93a2c4cb",
+    "reports/bcl-soc-stage89-check.json": "63b7fa61fa8e10010fe9da86fbf9ba9e8178b7854fb66c201f042abeee1c93c1",
+    "reports/bcl-soc-stage89-qemu.log": "8eb13ba7922d43f8a4578c268cebf1d1ef36237b4a9dc1b2c273c65c2893af74",
+    "reports/bcl-soc-stage89-qemu.json": "badde09b5a96adc73ab9bd8646e4eca7a3f429f51b523e6d700b78e2204952fe",
+    "artifacts/bcl-soc-draft-stage88/bcl_soc.ko": "a4e8a4f7c19fe0b873015b1c77fdf14be8f3fb210cc8de4fe131e190ccb1e225",
+    "artifacts/bcl-soc-draft-stage88/Image": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd"
+  }
+}

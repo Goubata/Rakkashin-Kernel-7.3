@@ -1,0 +1,26 @@
+{
+  "stage": 38,
+  "scope": "unmodified native PAS/MDT/PIL baseline compile/link/import CRC only; not an Alor implementation",
+  "draft_module_count": 3,
+  "matching_import_count": 124,
+  "crc_passed": true,
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "alor_compatible_added": false,
+  "alor_adapter_implemented": false,
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "firmware_booted": false,
+  "partition_written": false,
+  "current_packaged_artifact": "artifacts/android73-remoteproc-services-stage37",
+  "current_packaged_module_count": 108,
+  "evidence_sha256": {
+    "reports/pas-alor-source-lock.json": "c4db74582877b99b94f437aff1765c208e1ba574c3538cedf30847f0d8c3162e",
+    "reports/pas-alor-stage38-baseline-build.log": "661ae29a80665c88e2b943b2287b278e15843e884012d1297ef9c5f1504e5359",
+    "reports/pas-alor-stage38-baseline-crc.json": "4373e18c652ee9d2b579389366c13f63b657ec2ece966ffe2a4209aab5eba403"
+  },
+  "next": [
+    "Implement Alor descriptor and counted ARC regulator cx/mx voting/rollback against saved DT",
+    "Preserve ELF64 minidump metadata and validate early attach/stop/secure loader semantics",
+    "Test loader/rail/driver lifetimes and failure paths before including driver in any device artifact"
+  ]
+}

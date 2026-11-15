@@ -461,3 +461,9 @@ sysmonはIRQ callbackデータの解放順、任意IRQ未指定、RPC接続/解�
 Imageと保存DT/GPU 21段の入力は変更していない。実機probe、障害注入、全通信、
 Alor電源/PAS・ELF64 dump、起動画像と常用・効率評価は未完。
 `reports/remoteproc-services-stage37-validation.json` を参照。
+
+
+Stage38ではnative PAS・MDT loader・PIL infoの未改変基点3モジュールを実依存へ
+リンクし、CRC一致まで確認した。`ports/qcom-pas-alor/` はAlor専用電源/ELF64/
+終了経路の適応前なので、Alor compatibleはまだ登録せずStage37の108個にも含めない。
+`reports/pas-alor-stage38-baseline-validation.json` に範囲と次段を記録した。

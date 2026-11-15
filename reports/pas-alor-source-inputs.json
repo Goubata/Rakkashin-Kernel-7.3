@@ -1,0 +1,21 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-pas-alor/qcom_q6v5_pas.c",
+      "source": "drivers/remoteproc/qcom_q6v5_pas.c"
+    },
+    {
+      "file": "ports/qcom-pas-alor/qcom_pil_info.c",
+      "source": "drivers/remoteproc/qcom_pil_info.c"
+    },
+    {
+      "file": "ports/qcom-pas-alor/qcom_pil_info.h",
+      "source": "drivers/remoteproc/qcom_pil_info.h"
+    },
+    {
+      "file": "ports/qcom-pas-alor/mdt_loader.c",
+      "source": "drivers/soc/qcom/mdt_loader.c"
+    }
+  ]
+}

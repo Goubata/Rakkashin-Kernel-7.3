@@ -1,0 +1,49 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-pas-alor/qcom_q6v5_pas.c",
+      "source": "drivers/remoteproc/qcom_q6v5_pas.c",
+      "original_sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
+      "sha256": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec"
+    },
+    {
+      "file": "ports/qcom-pas-alor/qcom_pil_info.c",
+      "source": "drivers/remoteproc/qcom_pil_info.c",
+      "original_sha256": "18fb7e5d8c1c0fed21b2a083aa63833f28de6bddb67ed334802b3dc46e82068a",
+      "sha256": "18fb7e5d8c1c0fed21b2a083aa63833f28de6bddb67ed334802b3dc46e82068a"
+    },
+    {
+      "file": "ports/qcom-pas-alor/qcom_pil_info.h",
+      "source": "drivers/remoteproc/qcom_pil_info.h",
+      "original_sha256": "c82c7fb7e81431919d95e8cc58f611e78dc16649e4294414d547616ee5f652ec",
+      "sha256": "c82c7fb7e81431919d95e8cc58f611e78dc16649e4294414d547616ee5f652ec"
+    },
+    {
+      "file": "ports/qcom-pas-alor/mdt_loader.c",
+      "source": "drivers/soc/qcom/mdt_loader.c",
+      "original_sha256": "2647807e4cabe0c97ba0a872de340f6924f000d27951abdd350f85dead95db6d",
+      "sha256": "2647807e4cabe0c97ba0a872de340f6924f000d27951abdd350f85dead95db6d"
+    },
+    {
+      "file": "ports/qcom-pas-alor/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "01c97c942e511269cba2a0f9c52586420be484ad3c3e0f75e74270cc3a289892"
+    }
+  ],
+  "patch_sha256": "f11a09c3a91ba2393e850607546ea7c5f5bb1034aa7bb105b16e1fdf37bcdecc",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": false,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Native PAS, PIL info and MDT loader sources with real explicit provider declarations",
+    "Baseline integration only: intentionally no Alor compatible until rail/ELF64/cleanup adaptation is tested"
+  ],
+  "pending": [
+    "Alor descriptor and cx/mx ARC regulator acquisition, sequencing and rollback",
+    "ELF64 minidump metadata and early-attach lifetime/failure cleanup",
+    "Software lifecycle and firmware loader validation before packaging",
+    "Secure firmware ABI and physical all-functions acceptance"
+  ]
+}

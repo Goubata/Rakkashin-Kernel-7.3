@@ -963,3 +963,30 @@ from the main 118-module Stage57 bundle. Draft binaries are saved separately in
 artifacts/moto-touch-drafts-stage58. Evidence is recorded in
 reports/goodix-spi-stage58-validation.json. Frame/mmap/TSC message bounds,
 open/remove/probe lifetime, physical hardware and whole-board gates remain.
+
+
+## Stage59: frame slot and TSC message bounds (draft)
+
+Reject negative/oversize/NULL-payload frame submissions before ring mutation,
+and invalid ring indices/missing backing under frame_mutex. Request IDs use an
+atomic counter across instances. Zero-initialize the entire frame ioctl result;
+the formerly uninitialized size field is now zero. Its intended daemon semantics
+still require ROM validation; no guessed length ABI is introduced.
+
+Reject TSC lengths larger than the 128-byte source. Version copies fit the
+100-byte destination, require a NUL for a full-size payload, clear the previous
+tail, and log with a bounded length. Fixed-size command fields retain factory
+behavior (ignoring advertised lengths); their daemon compatibility and concurrent
+metadata/event publication still need review.
+
+241 host assertions exercise exact production enqueue/get/message functions
+and factory header structs with recorded primitives: capacity guards, invalid
+ring state, ring wrap/full behavior, ioctl zeroed output/copy errors, all version
+lengths 0..99, full terminated/unterminated strings and oversized messages.
+These are assertions, not 241 independent hardware/KUnit cases. The production
+7.3 modules build and all import CRCs match. Reproduce with
+`python tests/goodix-payload/run.py` and `python scripts/build_goodix_touch.py`.
+No touch drafts are promoted; Stage57 remains the main 118-module partial
+bundle. Mmap, open/remove/probe lifetimes, work/IRQ draining and physical
+firmware/daemon/all-function acceptance remain incomplete. Evidence:
+reports/goodix-payload-stage59-validation.json.

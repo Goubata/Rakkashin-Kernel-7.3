@@ -148,9 +148,15 @@ void put_frame_list(struct goodix_thp_core *core_data, int type, u8 *data, int l
         struct driver_request_pkg *req_pkg;
         struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
         struct thp_ts_device *ts_dev = core_data->ts_dev;
-        static uint32_t id;
+        static atomic_t id = ATOMIC_INIT(0);
 
+        if (len < 0 || (size_t)len > GOODIX_THP_MAX_FRAME_LEN - sizeof(*req_pkg) ||
+            (len && !data))
+                return;
         mutex_lock(&core_data->frame_mutex);
+        if (!list->buf || list->head >= GOODIX_THP_MAX_FRAME_BUF_COUNT ||
+            list->tail >= GOODIX_THP_MAX_FRAME_BUF_COUNT)
+                goto unlock;
         /* check for max limit */
         if (unlikely((list->tail + 1) % GOODIX_THP_MAX_FRAME_BUF_COUNT == list->head)) {
                 ts_err(ts_dev->dev, "touch_health - frame mmap buffer is full, overwriting oldest data");
@@ -159,7 +165,7 @@ void put_frame_list(struct goodix_thp_core *core_data, int type, u8 *data, int l
 
         req_pkg = (struct driver_request_pkg *)&list->buf[list->tail * GOODIX_THP_MAX_FRAME_LEN];
         req_pkg->size = sizeof(req_pkg->request) + len;
-        req_pkg->request.id = id++;
+        req_pkg->request.id = atomic_fetch_inc(&id);
         req_pkg->request.type = type;
         if (likely(len > 0))
                 memcpy(req_pkg->request.data, data, len);
@@ -167,6 +173,7 @@ void put_frame_list(struct goodix_thp_core *core_data, int type, u8 *data, int l
 
         core_data->frame_waitq_state = WAKEUP_STATE;
         wake_up_interruptible(&(core_data->frame_wq));
+unlock:
         mutex_unlock(&(core_data->frame_mutex));
 }
 
@@ -213,7 +220,7 @@ static long goodix_thp_ioctl_get_frame(struct goodix_thp_core *core_data, unsign
 {
         void __user *user_val = (void *)arg;
         struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
-        struct thp_ioctl_frame hal_frame;
+        struct thp_ioctl_frame hal_frame = {};
         struct thp_ts_device *ts_dev = core_data->ts_dev;
         long r = 0;
 
@@ -661,6 +668,14 @@ static long goodix_thp_ioctl_recv_tsc_msg(struct goodix_thp_core *core_data, uns
                 return -EFAULT;
         }
 
+        if (tsc_msg.len > sizeof(tsc_msg.value))
+                return -EINVAL;
+        if (tsc_msg.cmd == SVC_CMD_UPDATE_VERSION &&
+            (tsc_msg.len > sizeof(ts_dev->board_data.thp_ver) ||
+             (tsc_msg.len == sizeof(ts_dev->board_data.thp_ver) &&
+              !memchr(tsc_msg.value, '\0', tsc_msg.len))))
+                return -EINVAL;
+
         switch (tsc_msg.cmd) {
         case SVC_CMD_MMAP_DEQUEUE:
                 mutex_lock(&core_data->frame_mutex);
@@ -684,8 +699,9 @@ static long goodix_thp_ioctl_recv_tsc_msg(struct goodix_thp_core *core_data, uns
                 ts_info(ts_dev->dev, "recv game filter:%*ph", tsc_msg.len, tsc_msg.value);
                 break;
         case SVC_CMD_UPDATE_VERSION:
-                memcpy(core_data->ts_dev->board_data.thp_ver, tsc_msg.value, tsc_msg.len);
-                ts_info(ts_dev->dev, "thp_ver:%s", tsc_msg.value);
+                memset(ts_dev->board_data.thp_ver, 0, sizeof(ts_dev->board_data.thp_ver));
+                memcpy(ts_dev->board_data.thp_ver, tsc_msg.value, tsc_msg.len);
+                ts_info(ts_dev->dev, "thp_ver:%.*s", (int)tsc_msg.len, tsc_msg.value);
                 break;
         case SVC_CMD_HAL_INIT_FINISH:
                 ts_info(ts_dev->dev, "HAL has finished");

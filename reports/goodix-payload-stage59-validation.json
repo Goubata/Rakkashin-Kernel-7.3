@@ -1,0 +1,33 @@
+{
+  "stage": 59,
+  "scope": "Selected frame/TSC source methods only; no physical validation",
+  "tests": {
+    "passed": true,
+    "scope": "exact production frame enqueue/get and TSC message functions with recorded primitives; not mmap ownership, driver lifetime, native uaccess or physical validation",
+    "output": "PASS 241 production payload assertions; recorded primitives only",
+    "source_sha256": "e197c7768559583607f01c34bbc0f2c842302f63f7d611ef82dea112b677d2be",
+    "fixture_sha256": "8055320419bb958fade6ef96569cc15481bcb5b5663e55c06d8c6fe98607ec72"
+  },
+  "build_passed": true,
+  "matching_imports": 234,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "mmap range, initialized backing and mapping lifetime",
+    "Open/ioctl/remove/probe lifetime, IRQ/work draining",
+    "TSC fixed-field advertised-length compatibility and concurrent metadata publication",
+    "Physical firmware/daemon acceptance and all mandatory remaining drivers/DT/boot/DLKM/SELinux"
+  ],
+  "evidence_sha256": {
+    "ports/goodix-touch/goodix_thp/goodix_thp.c": "e197c7768559583607f01c34bbc0f2c842302f63f7d611ef82dea112b677d2be",
+    "reports/goodix-payload-stage59-tests.json": "bb48f6775150b48ac9784a5e6d7dee83c7c28e267f0be728186e68f0d4291f19",
+    "reports/goodix-payload-stage59-crc.json": "1e5ab27dbd76f1883641487933c0ad7e40ecd46e4035a4246f9d787033670645",
+    "reports/goodix-payload-stage59-build.log": "b9ba3b3179285e8be380010fe374c2fcf1ec194e9e7ae39b229ea8e8292516cd",
+    "reports/goodix-payload-stage59-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-touch-source-lock.json": "0a56c034cd063ad14aedfb5211e96b5f85fa40fd7a3a439de419ed646be16ed7",
+    "patches/goodix-touch-7.3.patch": "a03886a3e449fddb5b23c376eb7d24805d181a8789e7b2cf945405a4d959abcf"
+  }
+}

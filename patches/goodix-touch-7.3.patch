@@ -1,6 +1,50 @@
 --- a/ports/goodix-touch/goodix_thp/goodix_thp.c
 +++ b/ports/goodix-touch/goodix_thp/goodix_thp.c
-@@ -509,97 +509,90 @@
+@@ -148,9 +148,15 @@
+         struct driver_request_pkg *req_pkg;
+         struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
+         struct thp_ts_device *ts_dev = core_data->ts_dev;
+-        static uint32_t id;
+-
++        static atomic_t id = ATOMIC_INIT(0);
++
++        if (len < 0 || (size_t)len > GOODIX_THP_MAX_FRAME_LEN - sizeof(*req_pkg) ||
++            (len && !data))
++                return;
+         mutex_lock(&core_data->frame_mutex);
++        if (!list->buf || list->head >= GOODIX_THP_MAX_FRAME_BUF_COUNT ||
++            list->tail >= GOODIX_THP_MAX_FRAME_BUF_COUNT)
++                goto unlock;
+         /* check for max limit */
+         if (unlikely((list->tail + 1) % GOODIX_THP_MAX_FRAME_BUF_COUNT == list->head)) {
+                 ts_err(ts_dev->dev, "touch_health - frame mmap buffer is full, overwriting oldest data");
+@@ -159,7 +165,7 @@
+ 
+         req_pkg = (struct driver_request_pkg *)&list->buf[list->tail * GOODIX_THP_MAX_FRAME_LEN];
+         req_pkg->size = sizeof(req_pkg->request) + len;
+-        req_pkg->request.id = id++;
++        req_pkg->request.id = atomic_fetch_inc(&id);
+         req_pkg->request.type = type;
+         if (likely(len > 0))
+                 memcpy(req_pkg->request.data, data, len);
+@@ -167,6 +173,7 @@
+ 
+         core_data->frame_waitq_state = WAKEUP_STATE;
+         wake_up_interruptible(&(core_data->frame_wq));
++unlock:
+         mutex_unlock(&(core_data->frame_mutex));
+ }
+ 
+@@ -213,7 +220,7 @@
+ {
+         void __user *user_val = (void *)arg;
+         struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
+-        struct thp_ioctl_frame hal_frame;
++        struct thp_ioctl_frame hal_frame = {};
+         struct thp_ts_device *ts_dev = core_data->ts_dev;
+         long r = 0;
+ 
+@@ -509,97 +516,90 @@
          return 0;
  }
  
@@ -162,7 +206,34 @@
                  }
          }
  exit:
-@@ -1521,10 +1514,10 @@
+@@ -667,6 +667,14 @@
+                 ts_err(ts_dev->dev, "Failed to copy_from_user .");
+                 return -EFAULT;
+         }
++
++        if (tsc_msg.len > sizeof(tsc_msg.value))
++                return -EINVAL;
++        if (tsc_msg.cmd == SVC_CMD_UPDATE_VERSION &&
++            (tsc_msg.len > sizeof(ts_dev->board_data.thp_ver) ||
++             (tsc_msg.len == sizeof(ts_dev->board_data.thp_ver) &&
++              !memchr(tsc_msg.value, '\0', tsc_msg.len))))
++                return -EINVAL;
+ 
+         switch (tsc_msg.cmd) {
+         case SVC_CMD_MMAP_DEQUEUE:
+@@ -691,8 +699,9 @@
+                 ts_info(ts_dev->dev, "recv game filter:%*ph", tsc_msg.len, tsc_msg.value);
+                 break;
+         case SVC_CMD_UPDATE_VERSION:
+-                memcpy(core_data->ts_dev->board_data.thp_ver, tsc_msg.value, tsc_msg.len);
+-                ts_info(ts_dev->dev, "thp_ver:%s", tsc_msg.value);
++                memset(ts_dev->board_data.thp_ver, 0, sizeof(ts_dev->board_data.thp_ver));
++                memcpy(ts_dev->board_data.thp_ver, tsc_msg.value, tsc_msg.len);
++                ts_info(ts_dev->dev, "thp_ver:%.*s", (int)tsc_msg.len, tsc_msg.value);
+                 break;
+         case SVC_CMD_HAL_INIT_FINISH:
+                 ts_info(ts_dev->dev, "HAL has finished");
+@@ -1521,10 +1530,10 @@
          return 0;
  }
  
@@ -175,7 +246,7 @@
  }
  
  static void goodix_thp_force_release_all(struct goodix_thp_core *core_data)
-@@ -1821,7 +1814,7 @@
+@@ -1821,7 +1830,7 @@
          return ret;
  }
  
@@ -184,7 +255,7 @@
  {
          return 0;
  }
-@@ -3210,7 +3203,7 @@
+@@ -3210,7 +3219,7 @@
          if (pdev->id == 0)
                  sprintf(core_data->thp_misc_name, "%s", GOODIX_THP_MISC_DEVICE_NAME);
          else

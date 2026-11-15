@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "exact production frame enqueue/get and TSC message functions with recorded primitives; not mmap ownership, driver lifetime, native uaccess or physical validation",
+  "output": "PASS 241 production payload assertions; recorded primitives only",
+  "source_sha256": "e197c7768559583607f01c34bbc0f2c842302f63f7d611ef82dea112b677d2be",
+  "fixture_sha256": "8055320419bb958fade6ef96569cc15481bcb5b5663e55c06d8c6fe98607ec72"
+}

@@ -5,7 +5,7 @@
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.c",
       "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
       "original_sha256": "a8c11f382634b9edad9435b9643ceba11074c53c8ddf82e1320bc38916572ae7",
-      "sha256": "c062127393b8ba3d84ad068f4b50e1a00cf628d0f989bbf91621d868f97d7a58"
+      "sha256": "e197c7768559583607f01c34bbc0f2c842302f63f7d611ef82dea112b677d2be"
     },
     {
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.h",
@@ -110,7 +110,7 @@
       "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
     }
   ],
-  "patch_sha256": "fdb8a21ce330e3ffe48180956d8982d0519e589d7905f0360fef7b377e88c76f",
+  "patch_sha256": "a03886a3e449fddb5b23c376eb7d24805d181a8789e7b2cf945405a4d959abcf",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -121,7 +121,9 @@
     "Remove input_free_device after input_unregister_device to avoid pen double free",
     "Preserve stock legacy GET_EVENTS no-payload return behavior, confirmed from archived instructions; draft remains unaccepted",
     "Bound multi-SPI descriptor count and aggregate bytes to factory 5120-byte capacity before payload access; use kcalloc and negative allocation/uaccess errors",
-    "Propagate wakeup speed/SPI/restore failures while always attempting speed restore; stop receive copies at first fault"
+    "Propagate wakeup speed/SPI/restore failures while always attempting speed restore; stop receive copies at first fault",
+    "Bound frame payloads to slot capacity, reject invalid ring indices, use atomic request IDs and zero-initialize frame ioctl output",
+    "Bound TSC advertised length and version destination with NUL validation; clear old version tail and use bounded logging"
   ],
   "pending": [
     "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",

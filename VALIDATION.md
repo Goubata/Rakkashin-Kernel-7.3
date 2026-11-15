@@ -1456,3 +1456,27 @@ Reproduce build_tsens.py --tests, audit_tsens_dt.py and QEMU mode tsens. Module
 imports match. Evidence: reports/tsens-stage78-validation.json. Artifact is a
 separate draft; main Stage57 bundle remains 118 modules. No physical 7.3 boot,
 partition writes or whole-board daily-use acceptance occurred.
+
+## Stage79: TSENS threshold-window register failures
+
+Return register errors from native-derived interrupt mask helpers. In set_trips,
+check the initial snapshot, mask both boundaries during updates, check both
+threshold writes and interrupt reenables, and return the first error. On error,
+try to mask both boundaries; do not overwrite the original errno. A permanent
+bus fault cannot guarantee masking or rollback. Other IRQ-handler callers still
+need an error-handling review; their previously ignored return values are not
+claimed repaired by this callback change.
+
+Eleven SMP4 cases pass without WARN/panic: the previous eight plus a registered
+native tripless-zone object invoking exact production set_trips. Cover signed
+and factory-range/clamped thresholds, all 29 transient register operation fault
+positions, masking after failure and manual callback retry, and permanent read/
+write failure without false success. This is not thermal-core automatic retry:
+the native core caches requested boundaries before invoking set_trips and skips
+identical requests subsequently. Framework-level recovery remains unresolved and
+is an explicit daily-use blocker. No atomic hardware rollback is claimed.
+
+Evidence: reports/tsens-stage79-validation.json. Build with build_tsens.py --tests
+and QEMU mode tsens (11 cases). Production imports match; no DT values changed.
+Artifacts stay separate from Stage57. Physical thermal control and whole-board
+acceptance remain pending; no physical boot or partition writes occurred.

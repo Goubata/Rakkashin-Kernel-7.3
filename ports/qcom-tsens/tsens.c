@@ -426,7 +426,7 @@ static inline enum tsens_ver tsens_version(struct tsens_priv *priv)
 	return priv->feat->ver_major;
 }
 
-static void tsens_set_interrupt_v1(struct tsens_priv *priv, u32 hw_id,
+static int tsens_set_interrupt_v1(struct tsens_priv *priv, u32 hw_id,
 				   enum tsens_irq_type irq_type, bool enable)
 {
 	u32 index = 0;
@@ -440,15 +440,16 @@ static void tsens_set_interrupt_v1(struct tsens_priv *priv, u32 hw_id,
 		break;
 	case CRITICAL:
 		/* No critical interrupts before v2 */
-		return;
+		return 0;
 	}
-	regmap_field_write(priv->rf[index], enable ? 0 : 1);
+	return regmap_field_write(priv->rf[index], enable ? 0 : 1);
 }
 
-static void tsens_set_interrupt_v2(struct tsens_priv *priv, u32 hw_id,
+static int tsens_set_interrupt_v2(struct tsens_priv *priv, u32 hw_id,
 				   enum tsens_irq_type irq_type, bool enable)
 {
 	u32 index_mask = 0, index_clear = 0;
+	int ret;
 
 	/*
 	 * To enable the interrupt flag for a sensor:
@@ -472,13 +473,13 @@ static void tsens_set_interrupt_v2(struct tsens_priv *priv, u32 hw_id,
 		break;
 	}
 
-	if (enable) {
-		regmap_field_write(priv->rf[index_mask], 0);
-	} else {
-		regmap_field_write(priv->rf[index_mask],  1);
-		regmap_field_write(priv->rf[index_clear], 1);
-		regmap_field_write(priv->rf[index_clear], 0);
-	}
+	ret = regmap_field_write(priv->rf[index_mask], enable ? 0 : 1);
+	if (ret || enable)
+		return ret;
+	ret = regmap_field_write(priv->rf[index_clear], 1);
+	if (ret)
+		return ret;
+	return regmap_field_write(priv->rf[index_clear], 0);
 }
 
 /**
@@ -490,18 +491,18 @@ static void tsens_set_interrupt_v2(struct tsens_priv *priv, u32 hw_id,
  *
  * Call IP-specific function to set state of an interrupt
  *
- * Return: void
+ * Return: 0 on success, a negative errno on a register operation failure
  */
-static void tsens_set_interrupt(struct tsens_priv *priv, u32 hw_id,
+static int tsens_set_interrupt(struct tsens_priv *priv, u32 hw_id,
 				enum tsens_irq_type irq_type, bool enable)
 {
 	dev_dbg(priv->dev, "[%u] %s: %s -> %s\n", hw_id, __func__,
 		irq_type ? ((irq_type == 1) ? "UP" : "CRITICAL") : "LOW",
 		enable ? "en" : "dis");
 	if (tsens_version(priv) >= VER_2_X)
-		tsens_set_interrupt_v2(priv, hw_id, irq_type, enable);
+		return tsens_set_interrupt_v2(priv, hw_id, irq_type, enable);
 	else
-		tsens_set_interrupt_v1(priv, hw_id, irq_type, enable);
+		return tsens_set_interrupt_v1(priv, hw_id, irq_type, enable);
 }
 
 /**
@@ -754,7 +755,7 @@ static int tsens_set_trips(struct thermal_zone_device *tz, int low, int high)
 	struct device *dev = priv->dev;
 	struct tsens_irq_data d;
 	unsigned long flags;
-	int high_val, low_val, cl_high, cl_low;
+	int high_val, low_val, cl_high, cl_low, ret;
 	u32 hw_id = s->hw_id;
 
 	if (tsens_version(priv) < VER_0_1) {
@@ -775,13 +776,30 @@ static int tsens_set_trips(struct thermal_zone_device *tz, int low, int high)
 
 	spin_lock_irqsave(&priv->ul_lock, flags);
 
-	tsens_read_irq_state(priv, hw_id, s, &d);
+	ret = tsens_read_irq_state(priv, hw_id, s, &d);
+	if (ret)
+		goto fail_mask;
 
-	/* Write the new thresholds and clear the status */
-	regmap_field_write(priv->rf[LOW_THRESH_0 + hw_id], low_val);
-	regmap_field_write(priv->rf[UP_THRESH_0 + hw_id], high_val);
-	tsens_set_interrupt(priv, hw_id, LOWER, true);
-	tsens_set_interrupt(priv, hw_id, UPPER, true);
+	/* Quiesce both sides while updating a window. A partial update must
+	 * never be reported as an installed pair of active thresholds. */
+	ret = tsens_set_interrupt(priv, hw_id, LOWER, false);
+	if (ret)
+		goto fail_mask;
+	ret = tsens_set_interrupt(priv, hw_id, UPPER, false);
+	if (ret)
+		goto fail_mask;
+	ret = regmap_field_write(priv->rf[LOW_THRESH_0 + hw_id], low_val);
+	if (ret)
+		goto fail_mask;
+	ret = regmap_field_write(priv->rf[UP_THRESH_0 + hw_id], high_val);
+	if (ret)
+		goto fail_mask;
+	ret = tsens_set_interrupt(priv, hw_id, LOWER, true);
+	if (ret)
+		goto fail_mask;
+	ret = tsens_set_interrupt(priv, hw_id, UPPER, true);
+	if (ret)
+		goto fail_mask;
 
 	spin_unlock_irqrestore(&priv->ul_lock, flags);
 
@@ -789,6 +807,14 @@ static int tsens_set_trips(struct thermal_zone_device *tz, int low, int high)
 		hw_id, __func__, d.low_thresh, d.up_thresh, cl_low, cl_high);
 
 	return 0;
+
+fail_mask:
+	/* Best effort only: persistent bus failure cannot guarantee hardware
+	 * state. Preserve the first error for the thermal framework. */
+	tsens_set_interrupt(priv, hw_id, LOWER, false);
+	tsens_set_interrupt(priv, hw_id, UPPER, false);
+	spin_unlock_irqrestore(&priv->ul_lock, flags);
+	return ret;
 }
 
 static int tsens_enable_irq(struct tsens_priv *priv)

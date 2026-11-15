@@ -6,7 +6,7 @@
       "file": "ports/qcom-tsens/tsens.c",
       "source": "drivers/thermal/qcom/tsens.c",
       "original_sha256": "088f0e3a1a6a81a44f52203f3e7f47dc3650628937d48d05e06ac4b197b77dcc",
-      "sha256": "a60f3bb71c65946e49e54390ae23266012ce0a715cff0d47f71606df7041d5fe"
+      "sha256": "ff9f02447a5675ab3a00fb850a477c2fc845ec497e3b099158c6702ef0e6940e"
     },
     {
       "file": "ports/qcom-tsens/tsens-v2.c",
@@ -45,7 +45,7 @@
       "sha256": "101ee20b60aba65687aef187d6ddc67b7646e0307c9d5af2d3394ddea6b3f31d"
     }
   ],
-  "patch_sha256": "dc150795e0bfbd8d1a28fad1364abc5160115d58ba4d95f403e911cd01111766",
+  "patch_sha256": "9809f9785271a875838c4d673cf0a808909f843f0af2c685aac9c8f1ccec7284",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted TSENS driver draft",
@@ -53,11 +53,12 @@
     "Use native 7.3 generic TSENS v2 matching saved AVR rather than the legacy 26xx family",
     "External Kbuild include path only; native thermal APIs/regmap/IRQ/devres retained",
     "Bound DT sensor counts by the native field limit and explicit hardware-ID table length",
-    "Preserve factory generic-v2 204000 mC upper threshold range; no DT trip values changed"
+    "Preserve factory generic-v2 204000 mC upper threshold range; no DT trip values changed",
+    "Return register errors from IRQ mask helpers; mask both sides while setting a threshold window and report the first failure with best-effort masking"
   ],
   "pending": [
     "Physical calibration/readings, IRQ thresholds/watchdog, firmware and suspend/remove acceptance",
-    "Remaining native setter register-error propagation and complete probe/unbind tests",
+    "Remaining IRQ-handler/register-error paths, persistent bus faults and complete probe/unbind tests",
     "Factory persistent-temperature diagnostics are not provided by the native driver",
     "Whole-board driver/DT/boot/vendor_boot/DLKM/SELinux acceptance"
   ]

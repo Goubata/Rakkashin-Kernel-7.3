@@ -1,0 +1,39 @@
+{
+  "stage": 79,
+  "scope": "TSENS threshold callback with a real tripless thermal-zone object and native regmap over private fault-injected RAM; manual callback retry only",
+  "checks": {
+    "log": "reports/tsens-stage79-qemu.log",
+    "test": "tsens",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      11,
+      0,
+      0,
+      11
+    ]
+  },
+  "failure_positions_tested": 29,
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Native thermal core caches requested trip limits before the callback and does not automatically retry identical limits; framework-level recovery remains unresolved",
+    "Permanent bus failure cannot guarantee mask/threshold state or rollback; interrupted callback windows are not proven atomic in hardware",
+    "Physical thermal protection/calibration/IRQ/watchdog/suspend and full probe/remove acceptance",
+    "Remaining IRQ-handler/register-error paths and factory persistent-temperature diagnostics",
+    "All remaining mandatory drivers/whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/tsens-stage79-check.json": "d2de4d761d09f3393a34f68204641a6f96cf7c5e2adf9d122286972aeef383ee",
+    "reports/tsens-stage79-qemu.log": "53bcb596856d7f013ee76140615194a4acb23680d869b12981a094e6fa666bd0",
+    "reports/tsens-stage79-qemu.json": "34fe2fc32757ef60b342224573a1f726b8e94d6fa197c9ed8c3363c7240eb56f",
+    "reports/tsens-stage79-build.log": "494c8eeebab46ef417747a6e05d00333f120f66f13a1e6d1830be308844df7b0",
+    "reports/tsens-stage79-crc.json": "a15e7dde8664e91326209580aa4b3dd32f391e34af4629b726c245823e05b4e3",
+    "reports/tsens-source-lock.json": "f529f075bdb17ebd01b03717bcf4c0f493bd906949b3c00b12562663403d209c",
+    "patches/tsens-7.3.patch": "9809f9785271a875838c4d673cf0a808909f843f0af2c685aac9c8f1ccec7284",
+    "tests/tsens/test-main.c": "5cfe53b31389e25496ef1306b5eae79836530fa48f6c453cc724fccd56613b22"
+  }
+}

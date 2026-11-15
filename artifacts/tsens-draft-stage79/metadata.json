@@ -1,0 +1,7 @@
+{
+  "scope": "TSENS threshold callback with a real tripless thermal-zone object and native regmap over private fault-injected RAM; manual callback retry only",
+  "external_module": true,
+  "image_sha256": "8f477e97196bdc97dc93c332ab98fab3b0eaa82a316e9acfc5cd382acd9e67da",
+  "promoted": false,
+  "physical_verified": false
+}

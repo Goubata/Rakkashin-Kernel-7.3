@@ -23,3 +23,13 @@ TSENS probe, calibration, IRQ, critical protection, firmware or suspend proof is
 claimed. Register-error handling in setters, complete probe/unbind lifetime and
 factory persistent-temperature diagnostics remain pending. Not promoted into
 the Stage57 main bundle. Do not treat the draft as safe physical thermal control.
+
+Stage79 adds threshold-window register error propagation. Mask both boundaries
+before updating, propagate the first failed operation and try to mask both on
+failure. Eleven guest cases pass, including each of 29 transient register fault
+positions, manual callback retry and permanent register failure. These tests use
+a real tripless thermal-zone object but invoke the production callback directly.
+Native thermal core caches the requested limits before calling set_trips and
+will not automatically retry identical limits after failure. Framework-level
+recovery is still required; no automatic recovery or atomic hardware rollback
+is claimed. A permanent bus fault also prevents guaranteed masking.

@@ -8,13 +8,14 @@
 #define module_platform_driver(driver)
 #include "../../ports/qcom-tsens/tsens.c"
 struct fixture {
- struct device *dev;struct tsens_priv *priv;u32 regs[0x200/4];
- u32 samples[3];unsigned int sample_count,reads;int read_error;
+ struct device *dev;struct tsens_priv *priv;struct thermal_zone_device *zone;u32 regs[0x200/4];
+ u32 samples[3];unsigned int sample_count,reads,operations,fail_at;int read_error;
 };
 static int ram_read(void *context,unsigned int reg,unsigned int *value)
 {
  struct fixture *f=context;
  if(reg>=sizeof(f->regs)||reg%4)return -EINVAL;
+ if(++f->operations==f->fail_at)return -EIO;
  if(f->read_error)return f->read_error;
  if(reg>=0xa0&&reg<=0xdc&&f->sample_count){
   unsigned int i=min(f->reads++,f->sample_count-1);*value=f->samples[i];return 0;
@@ -24,6 +25,8 @@ static int ram_read(void *context,unsigned int reg,unsigned int *value)
 static int ram_write(void *context,unsigned int reg,unsigned int value)
 {
  struct fixture *f=context;if(reg>=sizeof(f->regs)||reg%4)return -EINVAL;
+ if(++f->operations==f->fail_at)return -EIO;
+ if(f->read_error)return f->read_error;
  f->regs[reg/4]=value;return 0;
 }
 static const struct regmap_bus ram_bus={.reg_read=ram_read,.reg_write=ram_write};
@@ -46,7 +49,12 @@ static int setup(struct kunit *test)
  for(i=0;i<16;i++){f->priv->sensor[i].priv=f->priv;f->priv->sensor[i].hw_id=i;}
  spin_lock_init(&f->priv->ul_lock);return 0;
 }
-static void cleanup(struct kunit *test){struct fixture *f=test->priv;root_device_unregister(f->dev);}
+static void cleanup(struct kunit *test)
+{
+ struct fixture *f=test->priv;f->fail_at=0;f->read_error=0;
+ if(f->zone)thermal_zone_device_unregister(f->zone);
+ root_device_unregister(f->dev);
+}
 static void signed_temperatures_use_exact_v2_layout(struct kunit *test)
 {
  struct fixture *f=test->priv;int raw,temp;f->sample_count=1;
@@ -112,7 +120,50 @@ static void irq_state_decodes_signed_thresholds(struct kunit *test)
  KUNIT_EXPECT_EQ(test,d.low_thresh,-40000);KUNIT_EXPECT_EQ(test,d.up_thresh,145000);KUNIT_EXPECT_EQ(test,d.crit_thresh,150000);
  f->read_error=-EIO;KUNIT_EXPECT_EQ(test,tsens_read_irq_state(f->priv,0,&f->priv->sensor[0],&d),-EIO);
 }
-static struct kunit_case cases[]={KUNIT_CASE(signed_temperatures_use_exact_v2_layout),KUNIT_CASE(all_sixteen_sensor_offsets_are_independent),KUNIT_CASE(invalid_sample_fallback_requires_a_stable_pair),KUNIT_CASE(valid_later_sample_overrides_unstable_values),KUNIT_CASE(read_errors_propagate_without_temperature_output),KUNIT_CASE(factory_range_and_threshold_encodings_are_preserved),KUNIT_CASE(irq_mask_fields_cover_each_sensor_without_clobber),KUNIT_CASE(irq_state_decodes_signed_thresholds),{}};
+static int create_zone(struct fixture *f)
+{
+ f->zone=thermal_tripless_zone_device_register("avr-tsens-ram",&f->priv->sensor[0],&tsens_of_ops,NULL);
+ if(IS_ERR(f->zone)){int ret=PTR_ERR(f->zone);f->zone=NULL;return ret;}
+ return 0;
+}
+static void reset_window(struct fixture *f)
+{
+ memset(f->regs,0,sizeof(f->regs));f->regs[0x20/4]=((u32)300<<12)|100;
+ f->regs[0x60/4]=1500;f->operations=0;f->fail_at=0;
+}
+static void native_zone_window_preserves_factory_range_and_clamps(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);
+ KUNIT_ASSERT_EQ(test,tsens_set_trips(f->zone,-40000,145000),0);
+ KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)1450<<12)|0xe70);
+ KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),0u);
+ KUNIT_ASSERT_EQ(test,tsens_set_trips(f->zone,-INT_MAX,INT_MAX),0);
+ KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)2040<<12)|0xe70);
+}
+static void every_window_register_failure_is_returned_and_can_retry(struct kunit *test)
+{
+ struct fixture *f=test->priv;unsigned int steps,i;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);
+ KUNIT_ASSERT_EQ(test,tsens_set_trips(f->zone,25000,145000),0);steps=f->operations;
+ KUNIT_ASSERT_GT(test,steps,0u);KUNIT_ASSERT_LT(test,steps,128u);
+ for(i=1;i<=steps;i++){
+  reset_window(f);f->fail_at=i;
+  KUNIT_ASSERT_EQ(test,tsens_set_trips(f->zone,25000,145000),-EIO);
+  KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),(u32)(BIT(0)|BIT(16)));
+  f->fail_at=0;KUNIT_ASSERT_EQ(test,tsens_set_trips(f->zone,25000,145000),0);
+  KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)1450<<12)|250);
+  KUNIT_EXPECT_EQ(test,f->regs[0x10/4]&(BIT(0)|BIT(16)),0u);
+ }
+ pr_info("AVR_TSENS_WINDOW_FAULTS_PASS positions=%u scope=callback-retry-private-ram-only\n",steps);
+}
+static void persistent_register_failure_never_reports_an_installed_window(struct kunit *test)
+{
+ struct fixture *f=test->priv;KUNIT_ASSERT_EQ(test,create_zone(f),0);reset_window(f);f->read_error=-EIO;
+ KUNIT_EXPECT_EQ(test,tsens_set_trips(f->zone,25000,145000),-EIO);
+ KUNIT_EXPECT_EQ(test,f->regs[0x20/4],((u32)300<<12)|100);
+ /* Hardware masking cannot be guaranteed when every register access fails. */
+ f->read_error=0;KUNIT_EXPECT_EQ(test,tsens_set_trips(f->zone,25000,145000),0);
+}
+static struct kunit_case cases[]={KUNIT_CASE(signed_temperatures_use_exact_v2_layout),KUNIT_CASE(all_sixteen_sensor_offsets_are_independent),KUNIT_CASE(invalid_sample_fallback_requires_a_stable_pair),KUNIT_CASE(valid_later_sample_overrides_unstable_values),KUNIT_CASE(read_errors_propagate_without_temperature_output),KUNIT_CASE(factory_range_and_threshold_encodings_are_preserved),KUNIT_CASE(irq_mask_fields_cover_each_sensor_without_clobber),KUNIT_CASE(irq_state_decodes_signed_thresholds),KUNIT_CASE(native_zone_window_preserves_factory_range_and_clamps),KUNIT_CASE(every_window_register_failure_is_returned_and_can_retry),KUNIT_CASE(persistent_register_failure_never_reports_an_installed_window),{}};
 static struct kunit_suite suite={.name="avr-tsens",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);
 MODULE_LICENSE("GPL");

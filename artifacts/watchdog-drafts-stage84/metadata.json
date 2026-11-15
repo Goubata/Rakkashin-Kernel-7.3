@@ -1,0 +1,9 @@
+{
+  "scope": "Watchdog register helpers on private guest RAM; native module pins and recorded SDEI/SCM firmware calls; production driver/provider loading only",
+  "source_commit": "67a3e4f87095defbecb441104770f90cbd3b332e",
+  "image_required": true,
+  "image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "firmware_modules_required": true,
+  "promoted": false,
+  "physical_verified": false
+}

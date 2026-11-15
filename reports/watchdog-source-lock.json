@@ -1,0 +1,59 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-watchdog/qcom_wdt_core.c",
+      "source": "drivers/soc/qcom/qcom_wdt_core.c",
+      "original_sha256": "63bd7dc073b9f484965115bfbd2b602b34756ca9cda60100fe8634f9b1b48491",
+      "sha256": "913abfb780958b07216652f7048847ab9228ebdef216e5d4104964cb5deac290"
+    },
+    {
+      "file": "ports/qcom-watchdog/qcom_soc_wdt.c",
+      "source": "drivers/soc/qcom/qcom_soc_wdt.c",
+      "original_sha256": "bd0075292376d53eb3ca5d066d2ef9af24bf6f4b3a236e9522512337118307d4",
+      "sha256": "745abea8b303adf37d732db58ef9abe061ab313a3296357a111c6154f7228bd8"
+    },
+    {
+      "file": "ports/qcom-watchdog/qcom_sdei.c",
+      "source": "drivers/soc/qcom/qcom_sdei.c",
+      "original_sha256": "fbcb0d92349faf9582f4e58befbda3da073111afa4f7daae014661fce9b1c84a",
+      "sha256": "bde33a1065594f02f0493698fd58f2135c14be2b73b4bc8e5239916f81b42798"
+    },
+    {
+      "file": "ports/qcom-watchdog/include/soc/qcom/watchdog.h",
+      "source": "include/soc/qcom/watchdog.h",
+      "original_sha256": "8e3cdf2cfe4a17cc8003f490fda557ed6f4b767b0cefe6bbe1d6b991ebe6bbb6",
+      "sha256": "8e3cdf2cfe4a17cc8003f490fda557ed6f4b767b0cefe6bbe1d6b991ebe6bbb6"
+    },
+    {
+      "file": "ports/qcom-watchdog/include/linux/soc/qcom/qcom_sdei.h",
+      "source": "include/linux/soc/qcom/qcom_sdei.h",
+      "original_sha256": "03c5c15cc955e579a991375ea3d782cbe19ce04ccb39c26ca1591ef20580dd4c",
+      "sha256": "03c5c15cc955e579a991375ea3d782cbe19ce04ccb39c26ca1591ef20580dd4c"
+    },
+    {
+      "file": "ports/qcom-watchdog/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "94323098286ec37e794adf586c7df4c6210102f36f8788cbe0fd75ed3cac3d70"
+    }
+  ],
+  "patch_sha256": "d736b3c3fddb50493baf5d193acfc676767aa3448a41b31d883467e9fba51b6b",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Source/patch replay only; unaccepted watchdog and SDEI drafts",
+  "reviewed_changes": [
+    "Use real modular minidump, SDEI and native SCM dependencies; preserve the pinned Alor reference defaults with saved DT timeout overrides",
+    "Use native timer APIs and preserve OF IRQ trigger configuration; reject invalid IRQ/time intervals and preserve secure-disable failure",
+    "Keep per-device watchdog register maps, validate MMIO error pointers/offset ranges and checked timer arithmetic",
+    "Avoid native SDEI name/macro collisions and propagate actual shared-reset status",
+    "Pin SDEI callback owner through registration and incomplete cleanup; retry EINPROGRESS, retain ownership on permanent unregister errors",
+    "Unregister the PM notifier on normal remove and enable failure; clear failed watchdog publication"
+  ],
+  "pending": [
+    "Full watchdog IRQ/thread/timer/sysfs/PM/minidump lifecycle and teardown; minidump record removal/lifetime is still unresolved",
+    "Physical hypervisor/secure/PSCI/watchdog behavior and all firmware error modes",
+    "SDEI retained-registration recovery after failed removal and active callback drain on real firmware",
+    "Whole-board driver/DT/boot acceptance"
+  ]
+}

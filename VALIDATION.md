@@ -1585,3 +1585,45 @@ Imports match the current core. Evidence: reports/rng-stage83-validation.json.
 Physical source/firmware/entropy health and quality, probe/remove/suspend and
 whole-board daily-use acceptance remain pending. Draft archive is separate from
 Stage57; no phone MMIO/partition writes or physical 7.3 boot occurred.
+
+## Stage84: watchdog/SDEI drafts and real native firmware dependencies
+
+Add pinned qcom_wdt_core, qcom_soc_wdt and qcom_sdei drafts. Expose four existing
+native SDEI event APIs as GPL exports and add the exact factory SCM secure-watchdog
+transaction with an unready-SCM deferral guard. Native patch replay now covers
+19 patches / 65 exact files. Rebuild Image (#25) and native firmware modules;
+all preexisting exported CRCs remain unchanged, with exactly five new exports.
+Use the matching native SCM module, not its older artifact lacking the new API.
+
+Use native timer APIs; retain OF IRQ trigger type instead of forcing rising edge.
+Validate negative IRQ errors/time intervals and read saved DT bark/pet requests.
+Make register maps per-device, reject mapped error pointers and invalid resource
+offsets/rates, check wide time multiplication and hardware counter bounds. Return
+secure-disable failures. Unregister PM notifier on normal removal/enable failure
+and clear failed publication. SDEI retains a real native module pin until all
+native event registrations are gone, retries EINPROGRESS, retains ownership on
+unregister failure and propagates reset status. It does not claim firmware success
+through a missing-provider stub. Native signal macro equality is asserted.
+
+Selected DT audit passes for the saved watchdog's named MMIO, native clock default,
+11s requested bark / 9360ms pet, counter limits, level-high GIC specs and inherited
+active interrupt parent. Saved/candidate semantics match. No active SDEI node
+exists in these saved inputs, so none is added. Read-only live 6.12 binding and
+pet interval observations are separately recorded; they are not 7.3 hardware proof.
+
+Fourteen SMP4 cases pass without WARN/panic: six exact register-helper cases use
+actual raw IO writes only to private guest RAM; eight compile full SDEI source
+with recorded firmware APIs, native module pins/CPU calls and a selected native
+SCM method with recorded transport. Cover resource isolation, counter overflow,
+all four registration/enable failures, retry, EINPROGRESS, failed unregister
+pinning, firmware IDs/arguments/status and missing SCM. No actual HVC/PSCI/reset
+was issued by tests. All three production modules load; the unbound SoC driver
+unloads. Factory watchdog core has no module_exit and remains with providers
+until the private guest shuts down. All 102 module imports match.
+
+Evidence: reports/watchdog-stage84-validation.json. Reproduce build_watchdog.py
+--tests, audit_watchdog_dt.py and QEMU mode watchdog. The artifact includes required
+Image/native firmware modules and remains separate from Stage57. Full controller
+probe/IRQ/thread/timer/sysfs/PM/hotplug, actual panic/reset/firmware, minidump record
+removal/lifetime, retained SDEI recovery and factory IRQ-stat/die-notifier variants
+remain unresolved. No daily-use acceptance, physical boot or partition writes.

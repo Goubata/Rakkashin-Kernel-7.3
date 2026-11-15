@@ -1,0 +1,171 @@
+{
+  "scope": "Saved watchdog register/clock/IRQ/timeout shape and SDEI presence only; no firmware reset, IRQ delivery or complete schema proof",
+  "passed": true,
+  "saved_semantics_preserved": true,
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "watchdog_nodes": {
+        "/soc/qcom,wdt@17600000": {
+          "compatible": "71636f6d2c6d736d2d7761746368646f6700",
+          "reg": "00000000176000000000000000001000",
+          "reg-names": "7764742d6261736500",
+          "interrupts": "000000000000000000000004000000000000000100000004",
+          "qcom,bark-time": "00002af8",
+          "qcom,pet-time": "00002490",
+          "qcom,ipi-ping": "",
+          "qcom,wakeup-enable": "",
+          "irq-parent-node": "/soc/interrupt-controller@17000000"
+        }
+      },
+      "sdei_nodes": {},
+      "checks": [
+        {
+          "check": "/soc/qcom,wdt@17600000: named MMIO resource",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: one 64-bit resource",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: two-cell address and size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: nonzero watchdog clock",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-en-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-rst-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-sts-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-bark-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-bite-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: explicit saved pet-before-bark interval",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bark/bite fit hardware counters",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: two level-high GIC SPIs",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: active GIC parent",
+          "passed": true
+        },
+        {
+          "check": "one active saved watchdog",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "watchdog_nodes": {
+        "/soc/qcom,wdt@17600000": {
+          "compatible": "71636f6d2c6d736d2d7761746368646f6700",
+          "reg": "00000000176000000000000000001000",
+          "reg-names": "7764742d6261736500",
+          "interrupts": "000000000000000000000004000000000000000100000004",
+          "qcom,bark-time": "00002af8",
+          "qcom,pet-time": "00002490",
+          "qcom,ipi-ping": "",
+          "qcom,wakeup-enable": "",
+          "irq-parent-node": "/soc/interrupt-controller@17000000"
+        }
+      },
+      "sdei_nodes": {},
+      "checks": [
+        {
+          "check": "/soc/qcom,wdt@17600000: named MMIO resource",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: one 64-bit resource",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: two-cell address and size parent",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: nonzero watchdog clock",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-en-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-rst-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-sts-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-bark-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bounded qcom,wdt-bite-offset",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: explicit saved pet-before-bark interval",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: bark/bite fit hardware counters",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: two level-high GIC SPIs",
+          "passed": true
+        },
+        {
+          "check": "/soc/qcom,wdt@17600000: active GIC parent",
+          "passed": true
+        },
+        {
+          "check": "one active saved watchdog",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "defaults": {
+    "wdt0_en": 8,
+    "wdt0_rst": 4,
+    "wdt0_sts": 12,
+    "wdt0_bark_time": 16,
+    "wdt0_bite_time": 20,
+    "wdt_hz": 32765
+  },
+  "dt_modified": false,
+  "physical_verified": false,
+  "whole_board_accepted": false,
+  "errors": []
+}

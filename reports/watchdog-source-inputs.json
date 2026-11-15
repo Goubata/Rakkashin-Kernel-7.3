@@ -1,0 +1,10 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/qcom-watchdog/qcom_wdt_core.c": "drivers/soc/qcom/qcom_wdt_core.c",
+    "ports/qcom-watchdog/qcom_soc_wdt.c": "drivers/soc/qcom/qcom_soc_wdt.c",
+    "ports/qcom-watchdog/qcom_sdei.c": "drivers/soc/qcom/qcom_sdei.c",
+    "ports/qcom-watchdog/include/soc/qcom/watchdog.h": "include/soc/qcom/watchdog.h",
+    "ports/qcom-watchdog/include/linux/soc/qcom/qcom_sdei.h": "include/linux/soc/qcom/qcom_sdei.h"
+  }
+}

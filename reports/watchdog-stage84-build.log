@@ -1,0 +1,44 @@
+Native patch replay: 19 patches, 65 exact files
+Verified pinned Qualcomm watchdog/SDEI patch replay: 6 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-watchdog'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-watchdog'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/watchdog'
+  CC [M]  avr-watchdog-mmio-test.o
+  CC [M]  avr-sdei-test.o
+In file included from avr-sdei-test.c:49:
+./../../ports/qcom-watchdog/qcom_sdei.c:7:9: error: 'pr_fmt' macro redefined [-Werror,-Wmacro-redefined]
+    7 | #define pr_fmt(fmt) "qcom_sdei: " fmt
+      |         ^
+/work/avr-src/include/linux/printk.h:401:9: note: previous definition is here
+  401 | #define pr_fmt(fmt) fmt
+      |         ^
+In file included from avr-sdei-test.c:56:
+./generated-scm.h:2:5: error: no previous prototype for function 'avr_test_scm_secure_disable' [-Werror,-Wmissing-prototypes]
+    2 | int qcom_scm_sec_wdog_deactivate(void)
+      |     ^
+avr-sdei-test.c:55:38: note: expanded from macro 'qcom_scm_sec_wdog_deactivate'
+   55 | #define qcom_scm_sec_wdog_deactivate avr_test_scm_secure_disable
+      |                                      ^
+./generated-scm.h:2:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+    2 | int qcom_scm_sec_wdog_deactivate(void)
+      | ^
+      | static 
+2 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: avr-sdei-test.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/tests/watchdog'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/build_watchdog.py", line 16, in <module>
+    subprocess.run(['su','-c',shlex.join(command)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/tests/watchdog -j2 modules']' returned non-zero exit status 2.

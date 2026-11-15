@@ -1,0 +1,96 @@
+diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+index e8dd2f0f3..19ecca391 100644
+--- a/drivers/firmware/arm_sdei.c
++++ b/drivers/firmware/arm_sdei.c
+@@ -13,6 +13,7 @@
+ #include <linux/cpu.h>
+ #include <linux/cpu_pm.h>
+ #include <linux/errno.h>
++#include <linux/export.h>
+ #include <linux/hardirq.h>
+ #include <linux/kernel.h>
+ #include <linux/kprobes.h>
+@@ -447,6 +448,7 @@ int sdei_event_enable(u32 event_num)
+ 
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(sdei_event_enable);
+ 
+ static int sdei_api_event_disable(u32 event_num)
+ {
+@@ -488,6 +490,7 @@ int sdei_event_disable(u32 event_num)
+ 
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(sdei_event_disable);
+ 
+ static int sdei_api_event_unregister(u32 event_num)
+ {
+@@ -540,6 +543,7 @@ int sdei_event_unregister(u32 event_num)
+ 
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(sdei_event_unregister);
+ 
+ /*
+  * unregister events, but don't destroy them as they are re-registered by
+@@ -636,6 +640,7 @@ int sdei_event_register(u32 event_num, sdei_event_callback *cb, void *arg)
+ 	mutex_unlock(&sdei_events_lock);
+ 	return err;
+ }
++EXPORT_SYMBOL_GPL(sdei_event_register);
+ 
+ static int sdei_reregister_shared(void)
+ {
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 260c5b48e..79c6ae049 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -1130,6 +1130,23 @@ static const struct reset_control_ops qcom_scm_pas_reset_ops = {
+ 	.deassert = qcom_scm_pas_reset_deassert,
+ };
+ 
++/* Same secure watchdog disable transaction as the pinned factory driver. */
++int qcom_scm_sec_wdog_deactivate(void)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_BOOT,
++		.cmd = QCOM_SCM_BOOT_SEC_WDOG_DIS,
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = 1,
++		.arginfo = QCOM_SCM_ARGS(1),
++	};
++
++	if (!__scm)
++		return -EPROBE_DEFER;
++	return qcom_scm_call(__scm->dev, &desc, NULL);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_sec_wdog_deactivate);
++
+ int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val)
+ {
+ 	struct qcom_scm_desc desc = {
+diff --git a/drivers/firmware/qcom/qcom_scm.h b/drivers/firmware/qcom/qcom_scm.h
+index 97de13753..3a2285b20 100644
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -214,4 +214,7 @@ static inline int qcom_scm_remap_error(int err)
+ #define QCOM_SCM_SVC_GIC 0x1d
+ #define QCOM_SCM_GIC_SET_CPUCLASS 0x02
+ 
++/* Factory watchdog boot-service command. */
++#define QCOM_SCM_BOOT_SEC_WDOG_DIS 0x07
++
+ #endif
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index 0d4f5ae81..e5341f34b 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -106,6 +106,7 @@ bool qcom_scm_is_available(void);
+ int qcom_scm_set_cold_boot_addr(void *entry);
+ int qcom_scm_set_warm_boot_addr(void *entry);
+ void qcom_scm_cpu_power_down(u32 flags);
++int qcom_scm_sec_wdog_deactivate(void);
+ int qcom_scm_set_remote_state(u32 state, u32 id);
+ 
+ struct qcom_scm_pas_context {

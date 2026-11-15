@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-watchdog/qcom_sdei.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-watchdog/qcom_wdt_core.ko",
+      "imports_checked": 69,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-watchdog/qcom_soc_wdt.ko",
+      "imports_checked": 13,
+      "mismatches": {}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "Native exported symbol CRC set comparison only",
+  "passed": true,
+  "existing_exports_changed": {},
+  "added_symbols": [
+    "qcom_scm_sec_wdog_deactivate",
+    "sdei_event_disable",
+    "sdei_event_enable",
+    "sdei_event_register",
+    "sdei_event_unregister"
+  ],
+  "old_sha256": "4279e1ab10749d6df3cc7dfef7c41d7735a4e6d6c7e48fab5cebcc1e1938b9c6",
+  "new_sha256": "6b352e149f21c610fe0a6b541f3536988c79c775f54f19c5108215431739d707"
+}

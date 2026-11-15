@@ -43,3 +43,6 @@ modules.order
 /tests/geni-pm/generated.h
 
 /tests/geni-setup/generated.h
+
+/tests/watchdog/generated-mmio.h
+/tests/watchdog/generated-scm.h

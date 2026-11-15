@@ -1,0 +1,59 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-watchdog'
+  CC [M]  qcom_wdt_core.o
+  CC [M]  qcom_soc_wdt.o
+  CC [M]  qcom_sdei.o
+qcom_wdt_core.c:388:9: error: call to undeclared function 'qcom_scm_sec_wdog_deactivate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  388 |                 ret = qcom_scm_sec_wdog_deactivate();
+      |                       ^
+qcom_wdt_core.c:540:3: error: call to undeclared function 'from_timer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  540 |                 from_timer(wdog_dd, t, pet_timer);
+      |                 ^
+qcom_wdt_core.c:540:3: note: did you mean 'mod_timer'?
+/work/avr-src/include/linux/timer.h:151:12: note: 'mod_timer' declared here
+  151 | extern int mod_timer(struct timer_list *timer, unsigned long expires);
+      |            ^
+qcom_wdt_core.c:540:26: error: use of undeclared identifier 'pet_timer'
+  540 |                 from_timer(wdog_dd, t, pet_timer);
+      |                                        ^~~~~~~~~
+qcom_wdt_core.c:548:3: error: call to undeclared function 'from_timer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  548 |                 from_timer(wdog_dd, t, user_pet_timer);
+      |                 ^
+qcom_wdt_core.c:548:26: error: use of undeclared identifier 'user_pet_timer'
+  548 |                 from_timer(wdog_dd, t, user_pet_timer);
+      |                                        ^~~~~~~~~~~~~~
+5 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: qcom_wdt_core.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+qcom_sdei.c:23:9: error: 'SDEI_1_0_FN_SDEI_EVENT_SIGNAL' macro redefined [-Werror,-Wmacro-redefined]
+   23 | #define SDEI_1_0_FN_SDEI_EVENT_SIGNAL   0xC400002F
+      |         ^
+/work/avr-src/include/uapi/linux/arm_sdei.h:25:9: note: previous definition is here
+   25 | #define SDEI_1_0_FN_SDEI_EVENT_SIGNAL                   SDEI_1_0_FN(0x0F)
+      |         ^
+qcom_sdei.c:56:12: error: conflicting types for 'sdei_event_signal'
+   56 | static int sdei_event_signal(u64 target_pe)
+      |            ^
+/work/avr-src/include/linux/arm_sdei.h:44:5: note: previous declaration is here
+   44 | int sdei_event_signal(u32 event_num, u64 mpidr);
+      |     ^
+qcom_sdei.c:65:5: error: no previous prototype for function 'qcom_sdei_shared_reset' [-Werror,-Wmissing-prototypes]
+   65 | int qcom_sdei_shared_reset(void)
+      |     ^
+qcom_sdei.c:65:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   65 | int qcom_sdei_shared_reset(void)
+      | ^
+      | static 
+qcom_sdei.c:84:44: error: too few arguments to function call, expected 2, have 1
+   84 |                 sdei_event_signal(per_cpu(cpu_mpidr, cpu));
+      |                 ~~~~~~~~~~~~~~~~~                        ^
+/work/avr-src/include/linux/arm_sdei.h:44:5: note: 'sdei_event_signal' declared here
+   44 | int sdei_event_signal(u32 event_num, u64 mpidr);
+      |     ^                 ~~~~~~~~~~~~~~~~~~~~~~~~
+4 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: qcom_sdei.o] Error 1
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/qcom-watchdog'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,37 @@
+{
+  "scope": "Read-only existing 6.12 driver binding/pet interval observations; no MMIO read, disable, reboot or 7.3 hardware proof",
+  "commands": [
+    {
+      "command": [
+        "su",
+        "-c",
+        "readlink /sys/bus/platform/devices/17600000.qcom,wdt/driver"
+      ],
+      "returncode": 0,
+      "stdout": "../../../../bus/platform/drivers/msm_watchdog\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "su",
+        "-c",
+        "cat /sys/bus/platform/devices/17600000.qcom,wdt/pet_time"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "cat: /sys/bus/platform/devices/17600000.qcom,wdt/pet_time: No such file or directory\n"
+    },
+    {
+      "command": [
+        "su",
+        "-c",
+        "cat /proc/sys/kernel/osrelease"
+      ],
+      "returncode": 0,
+      "stdout": "6.12.113-android16-6-g18b507169406-ab14630870-4k\n",
+      "stderr": ""
+    }
+  ],
+  "physical_73_verified": false,
+  "partition_written": false
+}

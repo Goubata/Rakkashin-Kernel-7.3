@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += qcom_wdt_core.o qcom_soc_wdt.o qcom_sdei.o
+ccflags-y += -I$(src)/include -I$(src)/../qcom-minidump/include
+ccflags-y += -DCONFIG_QCOM_WDT_CORE_MODULE=1 -DCONFIG_QCOM_SOC_WATCHDOG_MODULE=1 -DCONFIG_QCOM_SDEI_MODULE=1 -DCONFIG_QCOM_MINIDUMP_MODULE=1
+ccflags-y += -DCONFIG_QCOM_WATCHDOG_BARK_TIME=11000 -DCONFIG_QCOM_WATCHDOG_PET_TIME=9360 -DCONFIG_QCOM_WATCHDOG_IPI_PING=1 -DCONFIG_QCOM_WATCHDOG_WAKEUP_ENABLE=1 -DCONFIG_QCOM_FORCE_WDOG_BITE_ON_PANIC=1
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers

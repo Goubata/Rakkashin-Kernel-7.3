@@ -1,0 +1,550 @@
+--- a/ports/qcom-watchdog/qcom_wdt_core.c
++++ b/ports/qcom-watchdog/qcom_wdt_core.c
+@@ -22,7 +22,7 @@
+ #include <linux/firmware/qcom/qcom_scm.h>
+ #include <soc/qcom/minidump.h>
+ #include <soc/qcom/watchdog.h>
+-#include <soc/qcom/qcom_sdei.h>
++#include <linux/soc/qcom/qcom_sdei.h>
+ #include <linux/cpumask.h>
+ #include <linux/cpu_pm.h>
+ #include <uapi/linux/sched/types.h>
+@@ -177,13 +177,13 @@
+ 		return 0;
+ 
+ 	if (wdog_data->user_pet_enabled)
+-		del_timer_sync(&wdog_data->user_pet_timer);
++		timer_delete_sync(&wdog_data->user_pet_timer);
+ 
+ 	spin_lock(&wdog_data->freeze_lock);
+ 	wdog_data->freeze_in_progress = true;
+ 	spin_unlock(&wdog_data->freeze_lock);
+ 	wdog_data->ops->reset_wdt(wdog_data);
+-	del_timer_sync(&wdog_data->pet_timer);
++	timer_delete_sync(&wdog_data->pet_timer);
+ 	if (wdog_data->wakeup_irq_enable) {
+ 		if (wdog_data->hibernate || (pm_suspend_target_state == PM_SUSPEND_MEM)) {
+ 			wdog_data->ops->disable_wdt(wdog_data);
+@@ -328,9 +328,9 @@
+ 						&wdog_dd->panic_blk);
+ 	qcom_wdt_unregister_die_notifier(wdog_dd);
+ 	unregister_restart_handler(&wdog_dd->restart_blk);
+-	del_timer_sync(&wdog_dd->pet_timer);
++	timer_delete_sync(&wdog_dd->pet_timer);
+ 	if (wdog_dd->user_pet_enabled)
+-		del_timer_sync(&wdog_dd->user_pet_timer);
++		timer_delete_sync(&wdog_dd->user_pet_timer);
+ 	wdog_dd->ops->disable_wdt(wdog_dd);
+ 	dev_err(wdog_dd->dev, "QCOM Apps Watchdog deactivated\n");
+ }
+@@ -390,6 +390,8 @@
+ 			dev_err(wdog_dd->dev,
+ 				"Failed to deactivate secure wdog, ret = %d\n",
+ 				 ret);
++			mutex_unlock(&wdog_dd->disable_lock);
++			return ret;
+ 		}
+ 		qcom_wdt_disable(wdog_dd);
+ 		mutex_unlock(&wdog_dd->disable_lock);
+@@ -447,7 +449,7 @@
+ 	if (wdog_dd->user_pet_enabled)
+ 		mod_timer(&wdog_dd->user_pet_timer, jiffies + delay_time);
+ 	else if (already_enabled)
+-		del_timer_sync(&wdog_dd->user_pet_timer);
++		timer_delete_sync(&wdog_dd->user_pet_timer);
+ 
+ 	__qcom_wdt_user_pet(wdog_dd);
+ 
+@@ -537,7 +539,7 @@
+ static void qcom_wdt_pet_task_wakeup(struct timer_list *t)
+ {
+ 	struct msm_watchdog_data *wdog_dd =
+-		from_timer(wdog_dd, t, pet_timer);
++		timer_container_of(wdog_dd, t, pet_timer);
+ 	wdog_dd->timer_expired = true;
+ 	wdog_dd->timer_fired = sched_clock();
+ 	wake_up(&wdog_dd->pet_complete);
+@@ -545,7 +547,7 @@
+ static void qcom_wdt_user_pet_bite(struct timer_list *t)
+ {
+ 	struct msm_watchdog_data *wdog_dd =
+-		from_timer(wdog_dd, t, user_pet_timer);
++		timer_container_of(wdog_dd, t, user_pet_timer);
+ 	if (!wdog_dd->user_pet_complete) {
+ 		dev_info(wdog_dd->dev, "QCOM Apps Watchdog user pet timeout!\n");
+ 		qcom_wdt_trigger_bite();
+@@ -637,6 +639,7 @@
+ {
+ 	struct msm_watchdog_data *wdog_dd = platform_get_drvdata(pdev);
+ 
++	unregister_pm_notifier(&qcom_wdt_notif_block);
+ 	if (!IPI_CORES_IN_LPM)
+ 		cpu_pm_unregister_notifier(&wdog_dd->wdog_cpu_pm_nb);
+ 
+@@ -650,12 +653,14 @@
+ 		free_percpu((void __percpu *)wdog_dd->wdog_cpu_dd);
+ 	irq_dispose_mapping(wdog_dd->bark_irq);
+ 	dev_info(wdog_dd->dev, "QCOM Apps Watchdog Exit - Deactivated\n");
+-	del_timer_sync(&wdog_dd->pet_timer);
++	timer_delete_sync(&wdog_dd->pet_timer);
+ 	if (wdog_dd->user_pet_enabled)
+-		del_timer_sync(&wdog_dd->user_pet_timer);
++		timer_delete_sync(&wdog_dd->user_pet_timer);
+ 	wdog_dd->timer_expired = true;
+ 	wdog_dd->user_pet_complete = true;
+ 	kthread_stop(wdog_dd->watchdog_task);
++	wdog_data = NULL;
++	platform_set_drvdata(pdev, NULL);
+ }
+ EXPORT_SYMBOL(qcom_wdt_remove);
+ 
+@@ -768,7 +773,7 @@
+ 	} else {
+ 		ret = devm_request_irq(wdog_dd->dev, wdog_dd->bark_irq,
+ 				qcom_wdt_bark_handler,
+-				IRQF_TRIGGER_RISING | IRQF_NO_SUSPEND,
++				irq_get_trigger_type(wdog_dd->bark_irq) | IRQF_NO_SUSPEND,
+ 				"apps_wdog_bark", wdog_dd);
+ 		if (ret) {
+ 			dev_err(wdog_dd->dev, "failed to request bark irq: %d\n", ret);
+@@ -821,7 +826,8 @@
+ 			free_percpu((void __percpu *)wdog_dd->wdog_cpu_dd);
+ 		}
+ 
+-		del_timer_sync(&wdog_dd->pet_timer);
++		timer_delete_sync(&wdog_dd->pet_timer);
++		unregister_pm_notifier(&qcom_wdt_notif_block);
+ 		dev_err(wdog_dd->dev, "Failed Initializing QCOM Apps Watchdog\n");
+ 		return ret;
+ 	}
+@@ -852,16 +858,26 @@
+ 								pdata->base);
+ }
+ 
+-static void qcom_wdt_dt_to_pdata(struct platform_device *pdev,
++static int qcom_wdt_dt_to_pdata(struct platform_device *pdev,
+ 				struct msm_watchdog_data *pdata)
+ {
+-	pdata->bark_irq = platform_get_irq(pdev, 0);
++	int irq = platform_get_irq(pdev, 0);
++
++	if (irq < 0)
++		return irq;
++	pdata->bark_irq = irq;
+ 	pdata->irq_ppi = irq_is_percpu(pdata->bark_irq);
+ 	pdata->bark_time = QCOM_WATCHDOG_BARK_TIME;
+ 	pdata->pet_time = QCOM_WATCHDOG_PET_TIME;
+ 	pdata->do_ipi_ping = QCOM_WATCHDOG_IPI_PING;
+ 	pdata->wakeup_irq_enable = QCOM_WATCHDOG_WAKEUP_ENABLE;
++	of_property_read_u32(pdev->dev.of_node, "qcom,bark-time", &pdata->bark_time);
++	of_property_read_u32(pdev->dev.of_node, "qcom,pet-time", &pdata->pet_time);
++	if (!pdata->pet_time || pdata->pet_time >= pdata->bark_time ||
++	    pdata->bark_time > U32_MAX - 3000)
++		return -EINVAL;
+ 	qcom_wdt_dump_pdata(pdata);
++	return 0;
+ }
+ 
+ /**
+@@ -879,7 +895,7 @@
+ 			struct msm_watchdog_data *wdog_dd,
+ 			char *wdog_dd_name)
+ {
+-	struct md_region md_entry;
++	struct md_region md_entry = {0};
+ 	int ret;
+ 
+ 	if (!pdev || !wdog_dd || !wdog_dd_name) {
+@@ -887,7 +903,11 @@
+ 		return -EINVAL;
+ 	}
+ 
+-	qcom_wdt_dt_to_pdata(pdev, wdog_dd);
++	ret = qcom_wdt_dt_to_pdata(pdev, wdog_dd);
++	if (ret)
++		return ret;
++	if (wdog_data)
++		return -EBUSY;
+ 	wdog_data = wdog_dd;
+ 	wdog_dd->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, wdog_dd);
+@@ -914,6 +934,8 @@
+ 
+ 	return 0;
+ err:
++	wdog_data = NULL;
++	platform_set_drvdata(pdev, NULL);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(qcom_wdt_register);
+--- a/ports/qcom-watchdog/qcom_soc_wdt.c
++++ b/ports/qcom-watchdog/qcom_soc_wdt.c
+@@ -12,6 +12,8 @@
+ #include <linux/module.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
++#include <linux/math64.h>
++#include <linux/overflow.h>
+ 
+ struct wdt_register_map {
+ 	u32 wdt0_en;
+@@ -22,7 +24,7 @@
+ 	unsigned long wdt_hz;
+ };
+ 
+-static struct wdt_register_map wdt_map = {
++static const struct wdt_register_map wdt_default_map = {
+ 	.wdt0_en = 0x08,
+ 	.wdt0_rst = 0x04,
+ 	.wdt0_sts = 0x0C,
+@@ -31,20 +33,50 @@
+ 	.wdt_hz = 32765,
+ };
+ 
++struct qcom_soc_wdt {
++	struct msm_watchdog_data core;
++	struct wdt_register_map map;
++};
++
++static int qcom_soc_wdt_ticks(u32 time, unsigned long hz, u32 *ticks)
++{
++	u64 value;
++
++	if (!time || !hz)
++		return -EINVAL;
++	if (check_mul_overflow((u64)time, (u64)hz, &value))
++		return -ERANGE;
++	value = div_u64(value, 1000);
++	if (!value || value > U32_MAX)
++		return -ERANGE;
++	*ticks = value;
++	return 0;
++}
++
+ static inline int qcom_soc_set_wdt_bark(u32 time,
+-					struct msm_watchdog_data *wdog_dd)
+-{
+-	__raw_writel((time * wdt_map.wdt_hz)/1000, wdog_dd->base + wdt_map.wdt0_bark_time);
+-	/* Make sure register write is complete before proceeding */
++				struct msm_watchdog_data *wdog_dd)
++{
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++	u32 ticks;
++	int ret = qcom_soc_wdt_ticks(time, map->wdt_hz, &ticks);
++
++	if (ret)
++		return ret;
++	__raw_writel(ticks, wdog_dd->base + map->wdt0_bark_time);
+ 	mb();
+ 	return 0;
+ }
+ 
+ static inline int qcom_soc_set_wdt_bite(u32 time,
+-					struct msm_watchdog_data *wdog_dd)
+-{
+-	__raw_writel((time * wdt_map.wdt_hz)/1000, wdog_dd->base + wdt_map.wdt0_bite_time);
+-	/* Make sure register write is complete before proceeding */
++				struct msm_watchdog_data *wdog_dd)
++{
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++	u32 ticks;
++	int ret = qcom_soc_wdt_ticks(time, map->wdt_hz, &ticks);
++
++	if (ret)
++		return ret;
++	__raw_writel(ticks, wdog_dd->base + map->wdt0_bite_time);
+ 	mb();
+ 	return 0;
+ }
+@@ -53,7 +85,9 @@
+ 
+ static inline int qcom_soc_reset_wdt(struct msm_watchdog_data *wdog_dd)
+ {
+-	__raw_writel(1, wdog_dd->base + wdt_map.wdt0_rst);
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++
++	__raw_writel(1, wdog_dd->base + map->wdt0_rst);
+ 	/* Make sure register write is complete before proceeding */
+ 	mb();
+ 	return 0;
+@@ -62,7 +96,9 @@
+ static inline int qcom_soc_enable_wdt(u32 val,
+ 					 struct msm_watchdog_data *wdog_dd)
+ {
+-	__raw_writel(val, wdog_dd->base + wdt_map.wdt0_en);
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++
++	__raw_writel(val, wdog_dd->base + map->wdt0_en);
+ 	/* Make sure register write is complete before proceeding */
+ 	mb();
+ 	return 0;
+@@ -70,7 +106,9 @@
+ 
+ static inline int qcom_soc_disable_wdt(struct msm_watchdog_data *wdog_dd)
+ {
+-	__raw_writel(0, wdog_dd->base + wdt_map.wdt0_en);
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++
++	__raw_writel(0, wdog_dd->base + map->wdt0_en);
+ 	/* Make sure register write is complete before proceeding */
+ 	mb();
+ 	return 0;
+@@ -78,11 +116,13 @@
+ 
+ static inline int qcom_soc_show_wdt_status(struct msm_watchdog_data *wdog_dd)
+ {
++	struct wdt_register_map *map = &container_of(wdog_dd, struct qcom_soc_wdt, core)->map;
++
+ 	dev_err(wdog_dd->dev, "Wdog - STS: 0x%x, CTL: 0x%x, BARK TIME: 0x%x, BITE TIME: 0x%x\n",
+-			__raw_readl(wdog_dd->base + wdt_map.wdt0_sts),
+-			__raw_readl(wdog_dd->base + wdt_map.wdt0_en),
+-			__raw_readl(wdog_dd->base + wdt_map.wdt0_bark_time),
+-			__raw_readl(wdog_dd->base + wdt_map.wdt0_bite_time));
++			__raw_readl(wdog_dd->base + map->wdt0_sts),
++			__raw_readl(wdog_dd->base + map->wdt0_en),
++			__raw_readl(wdog_dd->base + map->wdt0_bark_time),
++			__raw_readl(wdog_dd->base + map->wdt0_bite_time));
+ 	return 0;
+ }
+ 
+@@ -99,30 +139,50 @@
+ {
+ 	struct resource *res;
+ 	struct msm_watchdog_data *wdog_dd;
++	struct qcom_soc_wdt *soc;
++	struct wdt_register_map *map;
++	u32 offsets[5];
++	int i;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	u32 temp_hz;
+ 
+-	wdog_dd = devm_kzalloc(&pdev->dev, sizeof(*wdog_dd), GFP_KERNEL);
+-	if (!wdog_dd)
++	soc = devm_kzalloc(&pdev->dev, sizeof(*soc), GFP_KERNEL);
++	if (!soc)
+ 		return -ENOMEM;
++	wdog_dd = &soc->core;
++	map = &soc->map;
++	*map = wdt_default_map;
+ 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "wdt-base");
+ 	if (!res)
+ 		return -ENODEV;
+ 
+ 	wdog_dd->base  = devm_ioremap_resource(&pdev->dev, res);
+-	if (!wdog_dd->base) {
++	if (IS_ERR(wdog_dd->base)) {
+ 		dev_err(&pdev->dev, "%s cannot map wdog register space\n",
+ 				__func__);
+-		return -ENXIO;
++		return PTR_ERR(wdog_dd->base);
+ 	}
+ 
+-	of_property_read_u32(np, "qcom,wdt-en-offset", &wdt_map.wdt0_en);
+-	of_property_read_u32(np, "qcom,wdt-rst-offset", &wdt_map.wdt0_rst);
+-	of_property_read_u32(np, "qcom,wdt-sts-offset", &wdt_map.wdt0_sts);
+-	of_property_read_u32(np, "qcom,wdt-bark-offset", &wdt_map.wdt0_bark_time);
+-	of_property_read_u32(np, "qcom,wdt-bite-offset", &wdt_map.wdt0_bite_time);
++	of_property_read_u32(np, "qcom,wdt-en-offset", &map->wdt0_en);
++	of_property_read_u32(np, "qcom,wdt-rst-offset", &map->wdt0_rst);
++	of_property_read_u32(np, "qcom,wdt-sts-offset", &map->wdt0_sts);
++	of_property_read_u32(np, "qcom,wdt-bark-offset", &map->wdt0_bark_time);
++	of_property_read_u32(np, "qcom,wdt-bite-offset", &map->wdt0_bite_time);
+ 	if (!of_property_read_u32(np, "qcom,wdt-hz", &temp_hz))
+-		wdt_map.wdt_hz = (unsigned long)temp_hz;
++		map->wdt_hz = (unsigned long)temp_hz;
++
++	offsets[0] = map->wdt0_en;
++	offsets[1] = map->wdt0_rst;
++	offsets[2] = map->wdt0_sts;
++	offsets[3] = map->wdt0_bark_time;
++	offsets[4] = map->wdt0_bite_time;
++	for (i = 0; i < ARRAY_SIZE(offsets); i++) {
++		if ((offsets[i] & 3) || resource_size(res) < 4 ||
++		    offsets[i] > resource_size(res) - 4)
++			return -EINVAL;
++	}
++	if (!map->wdt_hz)
++		return -EINVAL;
+ 
+ 	wdog_dd->ops = &qcom_soc_wdt_ops;
+ 
+--- a/ports/qcom-watchdog/qcom_sdei.c
++++ b/ports/qcom-watchdog/qcom_sdei.c
+@@ -7,6 +7,8 @@
+ #define pr_fmt(fmt) "qcom_sdei: " fmt
+ 
+ #include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/soc/qcom/qcom_sdei.h>
+ #include <linux/kernel.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+@@ -20,7 +22,7 @@
+ #define SDEI_EVENT_STANDARD		0x0
+ #define SDEI_EVENT_WDG_BITE		0x40000000
+ 
+-#define SDEI_1_0_FN_SDEI_EVENT_SIGNAL	0xC400002F
++static_assert(SDEI_1_0_FN_SDEI_EVENT_SIGNAL == 0xC400002F);
+ 
+ static DEFINE_PER_CPU(u64, cpu_mpidr);
+ 
+@@ -53,7 +55,7 @@
+ 	return res.a0;
+ }
+ 
+-static int sdei_event_signal(u64 target_pe)
++static int qcom_sdei_event_signal(u64 target_pe)
+ {
+ 	struct arm_smccc_res res = { 0 };
+ 
+@@ -64,9 +66,7 @@
+ 
+ int qcom_sdei_shared_reset(void)
+ {
+-	sdei_shared_reset();
+-
+-	return 0;
++	return sdei_shared_reset();
+ }
+ EXPORT_SYMBOL_GPL(qcom_sdei_shared_reset);
+ 
+@@ -81,7 +81,7 @@
+ 	for_each_possible_cpu(cpu) {
+ 		if (cpu == smp_processor_id())
+ 			continue;
+-		sdei_event_signal(per_cpu(cpu_mpidr, cpu));
++		qcom_sdei_event_signal(per_cpu(cpu_mpidr, cpu));
+ 		mdelay(1);
+ 	}
+ 
+@@ -95,52 +95,84 @@
+ 	per_cpu(cpu_mpidr, smp_processor_id()) = read_cpuid_mpidr();
+ }
+ 
++/* Native SDEI keeps callback pointers until unregister has succeeded.
++ * Pin this module while any registration exists, including failed teardown.
++ * A bound provider must be unbound successfully before it can be unloaded. */
++static DEFINE_MUTEX(sdei_bind_lock);
++static unsigned long registered_events;
++static bool event_owner_pinned;
++static const u32 qcom_sdei_events[] = { SDEI_EVENT_STANDARD, SDEI_EVENT_WDG_BITE };
++
++static int qcom_sdei_cleanup_events(void)
++{
++	int i, ret, first_error = 0;
++
++	for (i = ARRAY_SIZE(qcom_sdei_events) - 1; i >= 0; i--) {
++		unsigned int retry = 0;
++
++		if (!(registered_events & BIT(i)))
++			continue;
++		sdei_event_disable(qcom_sdei_events[i]);
++		do {
++			ret = sdei_event_unregister(qcom_sdei_events[i]);
++			if (ret != -EINPROGRESS)
++				break;
++			msleep(1);
++		} while (++retry < 1000);
++		if (!ret || ret == -ENOENT)
++			registered_events &= ~BIT(i);
++		else if (!first_error)
++			first_error = ret;
++	}
++	if (!registered_events && event_owner_pinned) {
++		event_owner_pinned = false;
++		module_put(THIS_MODULE);
++	}
++	return first_error;
++}
++
+ static int qcom_sdei_driver_probe(struct platform_device *pdev)
+ {
+-	int ret;
++	sdei_event_callback *callbacks[] = { sdei_standard_cb, sdei_wdg_bite_cb };
++	int i, ret;
+ 
++	mutex_lock(&sdei_bind_lock);
++	/* Retained registrations may belong to a failed prior probe/remove. */
++	if (registered_events) {
++		ret = -EBUSY;
++		goto out;
++	}
++	if (!try_module_get(THIS_MODULE)) {
++		ret = -ENODEV;
++		goto out;
++	}
++	event_owner_pinned = true;
+ 	on_each_cpu(register_cpu_mpidr, NULL, 1);
+-
+-	ret = sdei_event_register(SDEI_EVENT_STANDARD, sdei_standard_cb, NULL);
+-	if (ret) {
+-		pr_err("Failed to register SDEI event 0x%x\n", SDEI_EVENT_STANDARD);
+-		return ret;
++	for (i = 0; i < ARRAY_SIZE(qcom_sdei_events); i++) {
++		ret = sdei_event_register(qcom_sdei_events[i], callbacks[i], NULL);
++		if (ret)
++			goto fail;
++		registered_events |= BIT(i);
++		ret = sdei_event_enable(qcom_sdei_events[i]);
++		if (ret)
++			goto fail;
+ 	}
+-
+-	ret = sdei_event_enable(SDEI_EVENT_STANDARD);
+-	if (ret) {
+-		sdei_event_unregister(SDEI_EVENT_STANDARD);
+-		pr_err("Failed to enable SDEI event 0x%x\n", SDEI_EVENT_STANDARD);
+-		return ret;
+-	}
+-
+-	ret = sdei_event_register(SDEI_EVENT_WDG_BITE, sdei_wdg_bite_cb, NULL);
+-	if (ret) {
+-		sdei_event_disable(SDEI_EVENT_STANDARD);
+-		sdei_event_unregister(SDEI_EVENT_STANDARD);
+-		pr_err("Failed to register SDEI event 0x%x\n", SDEI_EVENT_WDG_BITE);
+-		return ret;
+-	}
+-
+-	ret |= sdei_event_enable(SDEI_EVENT_WDG_BITE);
+-	if (ret) {
+-		sdei_event_unregister(SDEI_EVENT_WDG_BITE);
+-		sdei_event_disable(SDEI_EVENT_STANDARD);
+-		sdei_event_unregister(SDEI_EVENT_STANDARD);
+-		pr_err("Failed to enable SDEI event 0x%x\n", SDEI_EVENT_WDG_BITE);
+-		return ret;
+-	}
+-
+-	return 0;
++	ret = 0;
++	goto out;
++fail:
++	if (qcom_sdei_cleanup_events())
++		dev_err(&pdev->dev, "SDEI callbacks retained; provider remains pinned\n");
++out:
++	mutex_unlock(&sdei_bind_lock);
++	return ret;
+ }
+ 
+ static void qcom_sdei_driver_remove(struct platform_device *pdev)
+ {
+-	sdei_event_disable(SDEI_EVENT_STANDARD);
+-	sdei_event_unregister(SDEI_EVENT_STANDARD);
+-
+-	sdei_event_disable(SDEI_EVENT_WDG_BITE);
+-	sdei_event_unregister(SDEI_EVENT_WDG_BITE);
++	mutex_lock(&sdei_bind_lock);
++	if (qcom_sdei_cleanup_events())
++		dev_err(&pdev->dev, "SDEI callbacks retained; provider remains pinned\n");
++	mutex_unlock(&sdei_bind_lock);
+ }
+ 
+ static const struct of_device_id qcom_sdei_of_match[] = {
+--- a/ports/qcom-watchdog/Makefile
++++ b/ports/qcom-watchdog/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom_wdt_core.o qcom_soc_wdt.o qcom_sdei.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-minidump/include
++ccflags-y += -DCONFIG_QCOM_WDT_CORE_MODULE=1 -DCONFIG_QCOM_SOC_WATCHDOG_MODULE=1 -DCONFIG_QCOM_SDEI_MODULE=1 -DCONFIG_QCOM_MINIDUMP_MODULE=1
++ccflags-y += -DCONFIG_QCOM_WATCHDOG_BARK_TIME=11000 -DCONFIG_QCOM_WATCHDOG_PET_TIME=9360 -DCONFIG_QCOM_WATCHDOG_IPI_PING=1 -DCONFIG_QCOM_WATCHDOG_WAKEUP_ENABLE=1 -DCONFIG_QCOM_FORCE_WDOG_BITE_ON_PANIC=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers

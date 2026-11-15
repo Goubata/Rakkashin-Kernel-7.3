@@ -1,0 +1,13 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/out/native-gki'
+  DESCEND bpf/resolve_btfids
+  CC [M]  drivers/firmware/qcom/qcom_scm.o
+  CC [M]  drivers/firmware/qcom/qcom_scm-smc.o
+  CC [M]  drivers/firmware/qcom/qcom_scm-legacy.o
+  CC [M]  drivers/firmware/qcom/qcom_tzmem.o
+  LD [M]  drivers/firmware/qcom/qcom-scm.o
+  MODPOST Module.symvers
+  LD [M]  drivers/firmware/qcom/qcom-scm.ko
+  BTF [M] drivers/firmware/qcom/qcom-scm.ko
+make[1]: Leaving directory '/work/avr-port/out/native-gki'
+make: Leaving directory '/work/avr-src'

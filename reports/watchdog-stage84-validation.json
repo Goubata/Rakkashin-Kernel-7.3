@@ -1,0 +1,64 @@
+{
+  "stage": 84,
+  "scope": "Watchdog register helpers on private guest RAM; native module pins and recorded SDEI/SCM firmware calls; production driver/provider loading only",
+  "checks": {
+    "log": "reports/watchdog-stage84-qemu.log",
+    "test": "watchdog",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      14,
+      0,
+      0,
+      14
+    ]
+  },
+  "source_commit": "67a3e4f87095defbecb441104770f90cbd3b332e",
+  "core_patch_count": 19,
+  "core_replay_files": 65,
+  "factory_reference_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "factory_reference_sha256": {
+    "drivers/firmware/qcom/qcom_scm.c": "ded76375408927072a9b680bf047a36ed5c8596557501e31431adaf76712bddb",
+    "drivers/firmware/qcom/qcom_scm.h": "06b9f3f4e359b4452b5cbfffa91caf4f2e08014e0e180b6166f7cd7430c966a3",
+    "configs/alor_le.bzl": "a298e757c35ef6af88517db0becfea61040b4d33a249308eedc061a272001590"
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Full watchdog IRQ/thread/timer/sysfs/PM failure-unwind and hotplug lifecycle; current tests cover helpers only",
+    "Minidump registration is not removed on watchdog teardown: lifetime remains unresolved and blocks acceptance",
+    "Firmware HVC/PSCI/SCM and actual bark/bite/reset behavior; no such operation was issued against the phone",
+    "SDEI retained-registration recovery after failed remove is not exposed as a user recovery path; module remains pinned for safety",
+    "Factory IRQ-stat diagnostics and minidump die-notifier configurations are not enabled in this initial draft",
+    "Whole-board DT/remaining drivers/boot/vendor_boot/dtbo/DLKM/SELinux/physical acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/watchdog-stage84-check.json": "d0e25c4792a1597df7cc006504bf5bc242a0c4a3571b8ea4aa60acb8c9011c35",
+    "reports/watchdog-stage84-qemu.log": "b8f3301bbf3424eb532f9ac07445b8bc8b08df7285651800bcbb78838c517125",
+    "reports/watchdog-stage84-qemu.json": "d2e1187b25935b756ed2e7642e016b4e12ad4930d19a0d63644c73cd3bca6262",
+    "reports/watchdog-stage84-initial-build.log": "f8c5da1a86d528f4e4007c42504769a85d98b04ba89adf3e932c73f56dfd067a",
+    "reports/watchdog-stage84-port-build.log": "33d271145eac32ba8483bac30182bcdaa690b2cce691fd4170c48701148553c4",
+    "reports/watchdog-stage84-build.log": "cec3c1d8a296a20562f93c678d89081e90bddd880af21134757a6590ccbdc76b",
+    "reports/watchdog-stage84-final-build.log": "bad47fee53f792574526434a878cb352043924b8073c7aec12c21d2886fb7c41",
+    "reports/watchdog-stage84-verified-build.log": "db243530bf257d2026e69e6dad58bd49bd836f5adff8af3216dddcf5ce56dafb",
+    "reports/watchdog-stage84-image-build.log": "c1889a56c67a7e84a8886340e6fa9c6a31dd13fcf0750b3de891c2011f5aad21",
+    "reports/watchdog-stage84-final-image-build.log": "540a9b0685547ab70354b5bab76be4e3e3d1fcaa6feff95fcff3bc9216682e18",
+    "reports/watchdog-stage84-crc.json": "f854cf165b40152225435c2104c6612d45dc98e6246593c06532ecae7ed006c6",
+    "reports/watchdog-stage84-core-crcs.json": "4b3f346d92e207f0e2884bc9371bb4db7110bf0ee7c3eb430907bbb61bbf4574",
+    "reports/watchdog-stage84-dt.json": "1ad27e7c20928a8d363f209530e2e814338dce2dcb3a2e29331a7b6cfbb54f46",
+    "reports/watchdog-stage84-live-baseline.json": "4a899d3001f847b96dd6aafc227d4f1a242d91d61c7630f3062d94925aa7c967",
+    "reports/watchdog-source-inputs.json": "82a8b99ccc2dc1e835df812b59b10ff0abb5936462883a4d661d1afe18642a5b",
+    "reports/watchdog-source-lock.json": "04e1fc34e06354a5fb65ad8c1dd7a4ac9ba59a18072062f5f3dc7c541870731f",
+    "patches/watchdog-7.3.patch": "d736b3c3fddb50493baf5d193acfc676767aa3448a41b31d883467e9fba51b6b",
+    "patches/watchdog-native-api-7.3.patch": "04e5417702ba75259bf569715fdcbe71e276d6192266d70a7e2da0742267ae94",
+    "reports/core-patch-checkpoint.json": "d7d364785990f78cd13afe78e7f687eaee6d25e5a93b69665c3f06a894f2945d",
+    "reports/core-patch-replay.json": "185253991fc08ccb8c58d74e36c9d4301078d65fc8e68a21bbe1f554d136164d",
+    "tests/watchdog/avr-watchdog-mmio-test.c": "8ae3869a0b705292ef7d26b5d0cc9a5cd3d74b599b9fcf18fa06a8d27ff96ca6",
+    "tests/watchdog/avr-sdei-test.c": "cbd25f96c5afd3c87099953953617fa2d64e75fcddde71439d3221d8ebdb4b5c",
+    "tests/watchdog/generated-mmio.h": "daa9804f64e8c2ed3f621daa981b3df811737fc5e1088c9825e1ac98a9772c98",
+    "tests/watchdog/generated-scm.h": "9e22458a80e416a277646d691d9992d58396b2b3e88d3c911a2c62df6aed0415"
+  }
+}

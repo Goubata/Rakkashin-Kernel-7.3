@@ -1,0 +1,12 @@
+{
+  "log": "reports/watchdog-stage84-qemu.log",
+  "test": "watchdog",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    14,
+    0,
+    0,
+    14
+  ]
+}

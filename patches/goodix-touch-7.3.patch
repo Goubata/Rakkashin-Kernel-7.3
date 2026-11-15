@@ -1,6 +1,14 @@
 --- a/ports/goodix-touch/goodix_thp/goodix_thp.c
 +++ b/ports/goodix-touch/goodix_thp/goodix_thp.c
-@@ -148,9 +148,15 @@
+@@ -16,6 +16,7 @@
+ #include <linux/time.h>
+ #include <linux/time64.h>
+ #include <linux/irq.h>
++#include <linux/mm.h>
+ 
+ #include "goodix_thp.h"
+ #include "goodix_thp_mmi.h"
+@@ -148,9 +149,15 @@
          struct driver_request_pkg *req_pkg;
          struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
          struct thp_ts_device *ts_dev = core_data->ts_dev;
@@ -18,7 +26,7 @@
          /* check for max limit */
          if (unlikely((list->tail + 1) % GOODIX_THP_MAX_FRAME_BUF_COUNT == list->head)) {
                  ts_err(ts_dev->dev, "touch_health - frame mmap buffer is full, overwriting oldest data");
-@@ -159,7 +165,7 @@
+@@ -159,7 +166,7 @@
  
          req_pkg = (struct driver_request_pkg *)&list->buf[list->tail * GOODIX_THP_MAX_FRAME_LEN];
          req_pkg->size = sizeof(req_pkg->request) + len;
@@ -27,7 +35,7 @@
          req_pkg->request.type = type;
          if (likely(len > 0))
                  memcpy(req_pkg->request.data, data, len);
-@@ -167,6 +173,7 @@
+@@ -167,6 +174,7 @@
  
          core_data->frame_waitq_state = WAKEUP_STATE;
          wake_up_interruptible(&(core_data->frame_wq));
@@ -35,7 +43,7 @@
          mutex_unlock(&(core_data->frame_mutex));
  }
  
-@@ -213,7 +220,7 @@
+@@ -213,7 +221,7 @@
  {
          void __user *user_val = (void *)arg;
          struct thp_frame_mmap_list *list = &core_data->frame_mmap_list;
@@ -44,7 +52,7 @@
          struct thp_ts_device *ts_dev = core_data->ts_dev;
          long r = 0;
  
-@@ -509,97 +516,90 @@
+@@ -509,97 +517,90 @@
          return 0;
  }
  
@@ -206,7 +214,7 @@
                  }
          }
  exit:
-@@ -667,6 +667,14 @@
+@@ -667,6 +668,14 @@
                  ts_err(ts_dev->dev, "Failed to copy_from_user .");
                  return -EFAULT;
          }
@@ -221,7 +229,7 @@
  
          switch (tsc_msg.cmd) {
          case SVC_CMD_MMAP_DEQUEUE:
-@@ -691,8 +699,9 @@
+@@ -691,8 +700,9 @@
                  ts_info(ts_dev->dev, "recv game filter:%*ph", tsc_msg.len, tsc_msg.value);
                  break;
          case SVC_CMD_UPDATE_VERSION:
@@ -233,7 +241,75 @@
                  break;
          case SVC_CMD_HAL_INIT_FINISH:
                  ts_info(ts_dev->dev, "HAL has finished");
-@@ -1521,10 +1530,10 @@
+@@ -866,28 +876,50 @@
+         return ret;
+ }
+ 
++/* Each inserted page owns a VMA reference independent of the device owner. */
++static void goodix_thp_frame_buffer_release(struct goodix_thp_core *cd)
++{
++        void *buffer;
++
++        mutex_lock(&cd->frame_mutex);
++        buffer = cd->frame_mmap_list.buf;
++        cd->frame_mmap_list.buf = NULL;
++        mutex_unlock(&cd->frame_mutex);
++        if (buffer)
++                free_pages_exact(buffer, MMAP_BUFFER_SIZE);
++}
++
+ static int goodix_thp_mmap(struct file *filp, struct vm_area_struct *vma)
+ {
+         struct goodix_thp_core *cd =
+                 container_of(filp->private_data, struct goodix_thp_core, thp_misc_dev);
+-        struct thp_ts_device *ts_dev = cd->ts_dev;
+-        void *sh_mem = (void *)cd->frame_mmap_list.buf;
+-        size_t size = vma->vm_end - vma->vm_start;
+-        struct page *page = NULL;
+-
+-        if (size > MMAP_BUFFER_SIZE) {
+-                ts_err(ts_dev->dev, "vm_size[%d] > mmap_size[%d]",
+-                        (int)size, MMAP_BUFFER_SIZE);
++        unsigned long size = vma->vm_end - vma->vm_start;
++        unsigned long pages = PAGE_ALIGN(MMAP_BUFFER_SIZE) >> PAGE_SHIFT;
++        unsigned long offset, addr;
++        char *buffer;
++        int ret = 0;
++
++        /* Validate page offset before shifting, and use subtraction bounds. */
++        if (!size || vma->vm_pgoff >= pages ||
++            (size >> PAGE_SHIFT) > pages - vma->vm_pgoff)
+                 return -EINVAL;
+-        }
+-
+-        page = virt_to_page((unsigned long)sh_mem + (vma->vm_pgoff << PAGE_SHIFT));
+-        if (remap_pfn_range(vma, vma->vm_start, page_to_pfn(page),
+-                        size, vma->vm_page_prot)) {
+-                return -EAGAIN;
+-        }
+-
+-        return 0;
++        offset = vma->vm_pgoff << PAGE_SHIFT;
++        mutex_lock(&cd->frame_mutex);
++        buffer = cd->frame_mmap_list.buf;
++        if (!buffer) {
++                ret = -ENODEV;
++                goto unlock;
++        }
++        vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND | VM_DONTDUMP);
++        for (addr = vma->vm_start; addr < vma->vm_end; addr += PAGE_SIZE) {
++                ret = vm_insert_page(vma, addr, virt_to_page(buffer + offset));
++                if (ret)
++                        break;
++                offset += PAGE_SIZE;
++        }
++unlock:
++        mutex_unlock(&cd->frame_mutex);
++        return ret;
+ }
+ 
+ static const struct file_operations g_thp_fops = {
+@@ -1521,10 +1553,10 @@
          return 0;
  }
  
@@ -246,7 +322,7 @@
  }
  
  static void goodix_thp_force_release_all(struct goodix_thp_core *core_data)
-@@ -1821,7 +1830,7 @@
+@@ -1821,7 +1853,7 @@
          return ret;
  }
  
@@ -255,7 +331,19 @@
  {
          return 0;
  }
-@@ -3210,7 +3219,7 @@
+@@ -3135,7 +3167,10 @@
+         if (!core_data)
+                 return -ENOMEM;
+ 
+-        core_data->frame_mmap_list.buf = kmalloc(MMAP_BUFFER_SIZE, GFP_KERNEL);
++        core_data->frame_mmap_list.buf = alloc_pages_exact(MMAP_BUFFER_SIZE,
++                                                         GFP_KERNEL | __GFP_ZERO);
++        if (!core_data->frame_mmap_list.buf)
++                return -ENOMEM;
+         core_data->pdev = pdev;
+         core_data->ts_dev = tdev;
+         mutex_init(&core_data->frame_mutex);
+@@ -3210,7 +3245,7 @@
          if (pdev->id == 0)
                  sprintf(core_data->thp_misc_name, "%s", GOODIX_THP_MISC_DEVICE_NAME);
          else
@@ -264,6 +352,24 @@
          core_data->thp_misc_dev.minor = MISC_DYNAMIC_MINOR;
          core_data->thp_misc_dev.name = core_data->thp_misc_name;
          core_data->thp_misc_dev.fops = &g_thp_fops;
+@@ -3338,7 +3373,7 @@
+         if (r) {
+                 platform_set_drvdata(pdev, NULL);
+                 ts_info(tdev->dev, "Cleared pdev drvdata due to probe failure");
+-                kfree_safe(core_data->frame_mmap_list.buf);
++                goodix_thp_frame_buffer_release(core_data);
+                 goodix_thp_power_off(core_data);
+         }
+         ts_info(tdev->dev, "goodix_thp_probe OUT, r:%d", r);
+@@ -3366,7 +3401,7 @@
+ #elif IS_ENABLED(CONFIG_FB)
+         fb_unregister_client(&core_data->pm_notif);
+ #endif
+-        kfree_safe(core_data->frame_mmap_list.buf);
++        goodix_thp_frame_buffer_release(core_data);
+         if (core_data->ts_dev->board_data.stylus_interpolation_ctrl && core_data->rate_configs) {
+                 free_stylus_report_rate_config(core_data->rate_configs);
+         }
 --- a/ports/goodix-touch/goodix_thp/goodix_thp.h
 +++ b/ports/goodix-touch/goodix_thp/goodix_thp.h
 @@ -628,6 +628,8 @@

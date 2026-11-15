@@ -16,6 +16,7 @@
 #include <linux/time.h>
 #include <linux/time64.h>
 #include <linux/irq.h>
+#include <linux/mm.h>
 
 #include "goodix_thp.h"
 #include "goodix_thp_mmi.h"
@@ -875,28 +876,50 @@ static long goodix_thp_ioctl(struct file *filp, unsigned int cmd,
         return ret;
 }
 
+/* Each inserted page owns a VMA reference independent of the device owner. */
+static void goodix_thp_frame_buffer_release(struct goodix_thp_core *cd)
+{
+        void *buffer;
+
+        mutex_lock(&cd->frame_mutex);
+        buffer = cd->frame_mmap_list.buf;
+        cd->frame_mmap_list.buf = NULL;
+        mutex_unlock(&cd->frame_mutex);
+        if (buffer)
+                free_pages_exact(buffer, MMAP_BUFFER_SIZE);
+}
+
 static int goodix_thp_mmap(struct file *filp, struct vm_area_struct *vma)
 {
         struct goodix_thp_core *cd =
                 container_of(filp->private_data, struct goodix_thp_core, thp_misc_dev);
-        struct thp_ts_device *ts_dev = cd->ts_dev;
-        void *sh_mem = (void *)cd->frame_mmap_list.buf;
-        size_t size = vma->vm_end - vma->vm_start;
-        struct page *page = NULL;
+        unsigned long size = vma->vm_end - vma->vm_start;
+        unsigned long pages = PAGE_ALIGN(MMAP_BUFFER_SIZE) >> PAGE_SHIFT;
+        unsigned long offset, addr;
+        char *buffer;
+        int ret = 0;
 
-        if (size > MMAP_BUFFER_SIZE) {
-                ts_err(ts_dev->dev, "vm_size[%d] > mmap_size[%d]",
-                        (int)size, MMAP_BUFFER_SIZE);
+        /* Validate page offset before shifting, and use subtraction bounds. */
+        if (!size || vma->vm_pgoff >= pages ||
+            (size >> PAGE_SHIFT) > pages - vma->vm_pgoff)
                 return -EINVAL;
+        offset = vma->vm_pgoff << PAGE_SHIFT;
+        mutex_lock(&cd->frame_mutex);
+        buffer = cd->frame_mmap_list.buf;
+        if (!buffer) {
+                ret = -ENODEV;
+                goto unlock;
         }
-
-        page = virt_to_page((unsigned long)sh_mem + (vma->vm_pgoff << PAGE_SHIFT));
-        if (remap_pfn_range(vma, vma->vm_start, page_to_pfn(page),
-                        size, vma->vm_page_prot)) {
-                return -EAGAIN;
+        vm_flags_set(vma, VM_MIXEDMAP | VM_DONTEXPAND | VM_DONTDUMP);
+        for (addr = vma->vm_start; addr < vma->vm_end; addr += PAGE_SIZE) {
+                ret = vm_insert_page(vma, addr, virt_to_page(buffer + offset));
+                if (ret)
+                        break;
+                offset += PAGE_SIZE;
         }
-
-        return 0;
+unlock:
+        mutex_unlock(&cd->frame_mutex);
+        return ret;
 }
 
 static const struct file_operations g_thp_fops = {
@@ -3144,7 +3167,10 @@ static int goodix_thp_probe(struct platform_device *pdev)
         if (!core_data)
                 return -ENOMEM;
 
-        core_data->frame_mmap_list.buf = kmalloc(MMAP_BUFFER_SIZE, GFP_KERNEL);
+        core_data->frame_mmap_list.buf = alloc_pages_exact(MMAP_BUFFER_SIZE,
+                                                         GFP_KERNEL | __GFP_ZERO);
+        if (!core_data->frame_mmap_list.buf)
+                return -ENOMEM;
         core_data->pdev = pdev;
         core_data->ts_dev = tdev;
         mutex_init(&core_data->frame_mutex);
@@ -3347,7 +3373,7 @@ out:
         if (r) {
                 platform_set_drvdata(pdev, NULL);
                 ts_info(tdev->dev, "Cleared pdev drvdata due to probe failure");
-                kfree_safe(core_data->frame_mmap_list.buf);
+                goodix_thp_frame_buffer_release(core_data);
                 goodix_thp_power_off(core_data);
         }
         ts_info(tdev->dev, "goodix_thp_probe OUT, r:%d", r);
@@ -3375,7 +3401,7 @@ static void goodix_thp_remove(struct platform_device *pdev)
 #elif IS_ENABLED(CONFIG_FB)
         fb_unregister_client(&core_data->pm_notif);
 #endif
-        kfree_safe(core_data->frame_mmap_list.buf);
+        goodix_thp_frame_buffer_release(core_data);
         if (core_data->ts_dev->board_data.stylus_interpolation_ctrl && core_data->rate_configs) {
                 free_stylus_report_rate_config(core_data->rate_configs);
         }

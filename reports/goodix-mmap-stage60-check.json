@@ -1,0 +1,6 @@
+{
+  "log": "reports/goodix-mmap-stage60-qemu.log",
+  "test": "goodix-mmap",
+  "passed": true,
+  "failures": []
+}

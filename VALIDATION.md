@@ -990,3 +990,30 @@ No touch drafts are promoted; Stage57 remains the main 118-module partial
 bundle. Mmap, open/remove/probe lifetimes, work/IRQ draining and physical
 firmware/daemon/all-function acceptance remain incomplete. Evidence:
 reports/goodix-payload-stage59-validation.json.
+
+
+## Stage60: initialized, bounded, page-referenced Goodix mmap (draft)
+
+Replace unchecked kmalloc backing with checked, zeroed alloc_pages_exact and
+paired free_pages_exact. Validate mmap page offsets before shifting and length
+with subtraction bounds. vm_insert_page holds each mapped page independently;
+VM_MIXEDMAP/DONTEXPAND/DONTDUMP flags bound VMA behavior. Owner release clears
+the pointer under frame_mutex and drops only owner references. Existing VMAs
+retain page references through split/fork/unmap; this does not fix core/file
+lifetime or producer callbacks during full driver removal.
+
+Actual 7.3 SMP4 QEMU runs the exact extracted production mmap/release methods
+in a synthetic misc device using native VM APIs. User tests read all 200KiB for
+zeroes, exercise full/last-page aliases, reject end/overrun/huge offsets, release
+allocation-owner references, reject new maps, split VMA with mprotect, fork and
+share child writes, close fd, and independently unmap both aliases. The 204820
+assertions mostly check individual bytes, not independent test scenarios.
+Synthetic core is static; whole physical driver detach is explicitly untested.
+
+Production touch modules rebuild and pass import CRC/UAPI checks, remaining
+unaccepted drafts outside the main Stage57 bundle. Reproduce with
+`python scripts/build_goodix_mmap_test.py`, then
+`python scripts/run_qemu.py --test goodix-mmap --cpus 4 --timeout 120 --log reports/goodix-mmap-stage60-qemu.log`.
+Evidence: reports/goodix-mmap-stage60-validation.json. Partial page-insertion
+failure injection, all open/ioctl/remove/probe and producer/work/IRQ lifetimes,
+physical daemon/firmware and whole-board completion remain pending.

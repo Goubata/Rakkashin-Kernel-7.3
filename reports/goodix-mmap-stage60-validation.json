@@ -1,0 +1,48 @@
+{
+  "stage": 60,
+  "scope": "Exact production mmap/release methods with real VM/page APIs in SMP4 7.3 QEMU; static synthetic core, no physical touch device or whole-driver detach test",
+  "selected_checks_passed": true,
+  "checks": {
+    "log": "reports/goodix-mmap-stage60-qemu.log",
+    "test": "goodix-mmap",
+    "passed": true,
+    "failures": []
+  },
+  "coverage": [
+    "All 204800 mapped bytes initially zero",
+    "Full and last-page shared mappings alias",
+    "End offset/overrun/huge offset rejected",
+    "Existing mappings survive actual free_pages_exact owner release",
+    "New mappings rejected after detach; repeated release safe",
+    "mprotect VMA split, fork, child write, close fd, independently unmap aliases",
+    "Test module unload succeeds after final VMA close"
+  ],
+  "matching_imports": 237,
+  "physical_verified": false,
+  "partition_written": false,
+  "promoted": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Full core/file open/ioctl/remove/probe lifetime and draining IRQ/work callbacks",
+    "Partial vm_insert_page failure injection",
+    "Frame reset and other producer/consumer paths during detach",
+    "Real daemon/firmware/SPI/display/power/stylus acceptance",
+    "Remaining mandatory drivers, whole-board DT, boot/DLKM/SELinux integration"
+  ],
+  "evidence_sha256": {
+    "ports/goodix-touch/goodix_thp/goodix_thp.c": "19559ea68f605ab3e9aa0f9f73867ccaa5ee580f50e34a25c99cfef830a50301",
+    "tests/goodix-mmap/generated.h": "13186a5fef7c22c2ab304a9448fbb05ab2919200380cb0f417d2afb83e6cad94",
+    "tests/goodix-mmap/user-test": "44ef3a3aa14d810842477f62ba0aba8163e67ec57183172a9acbc9918f4fa717",
+    "tests/goodix-mmap/avr-goodix-mmap-test.ko": "7f93f36e7041e37102d629a578219f3ab53c971b31a74813a95e9b06e20ec0ef",
+    "reports/goodix-mmap-stage60-qemu.log": "f0b0fb82a91e27e1f94659a8886685c28c817da1d48002b38d8e13130b11eef6",
+    "reports/goodix-mmap-stage60-qemu.json": "a9921715fc07c5aac9a8ab5b96e79203cbc6786d5274165f5a5d63f8944b33a3",
+    "reports/goodix-mmap-stage60-check.json": "acea63fbb6ab6a864163cb002f20f82703838e7d4a9e6ee9de69a4cf4c7289bd",
+    "reports/goodix-mmap-stage60-test-build.log": "305dd5459e06832e7de97b143e3a75ab959bd13882d91d56174b1a65218bebdf",
+    "reports/goodix-mmap-stage60-build.log": "b9ba3b3179285e8be380010fe374c2fcf1ec194e9e7ae39b229ea8e8292516cd",
+    "reports/goodix-mmap-stage60-crc.json": "12911de27caa529e82ffb323f04f7efc231f7862f18f0a18c856cfb2191b16b0",
+    "reports/goodix-mmap-stage60-abi.log": "6959f04917f5f240292d72f7a02cd5783e987585fad4acbf24abd6b43b765426",
+    "reports/goodix-touch-source-lock.json": "6e0f40e08bb33e8b87a78fa21184ce399c6e1b0b6f3d9bfd67a03ecf81052177",
+    "patches/goodix-touch-7.3.patch": "37158ba709c2ec15e63b63f746eb831ca0d923eee65f5858240de9bad76d06e6"
+  }
+}

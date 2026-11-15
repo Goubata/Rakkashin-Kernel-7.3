@@ -5,7 +5,7 @@
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.c",
       "source": "drivers/input/touchscreen/goodix_thp/goodix_thp.c",
       "original_sha256": "a8c11f382634b9edad9435b9643ceba11074c53c8ddf82e1320bc38916572ae7",
-      "sha256": "e197c7768559583607f01c34bbc0f2c842302f63f7d611ef82dea112b677d2be"
+      "sha256": "19559ea68f605ab3e9aa0f9f73867ccaa5ee580f50e34a25c99cfef830a50301"
     },
     {
       "file": "ports/goodix-touch/goodix_thp/goodix_thp.h",
@@ -110,7 +110,7 @@
       "sha256": "6f89579a19acc24c73867ce199544688b510879523a9480b9a6304a94fc2c0cc"
     }
   ],
-  "patch_sha256": "a03886a3e449fddb5b23c376eb7d24805d181a8789e7b2cf945405a4d959abcf",
+  "patch_sha256": "37158ba709c2ec15e63b63f746eb831ca0d923eee65f5858240de9bad76d06e6",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": false,
   "hardware_runtime_accepted": false,
@@ -123,7 +123,8 @@
     "Bound multi-SPI descriptor count and aggregate bytes to factory 5120-byte capacity before payload access; use kcalloc and negative allocation/uaccess errors",
     "Propagate wakeup speed/SPI/restore failures while always attempting speed restore; stop receive copies at first fault",
     "Bound frame payloads to slot capacity, reject invalid ring indices, use atomic request IDs and zero-initialize frame ioctl output",
-    "Bound TSC advertised length and version destination with NUL validation; clear old version tail and use bounded logging"
+    "Bound TSC advertised length and version destination with NUL validation; clear old version tail and use bounded logging",
+    "Allocate zeroed dedicated pages with failure checking; validate mmap offset and length before shift; insert refcounted pages and detach owner under frame mutex"
   ],
   "pending": [
     "Open/ioctl/remove lifetime, partial probe unwind, frame bounds and concurrency review/tests",

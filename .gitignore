@@ -32,3 +32,6 @@ modules.order
 /tests/ufs/ufs-io-test
 
 /tests/pmic-ipc/qrtr-local-test
+
+/tests/goodix-mmap/generated.h
+/tests/goodix-mmap/user-test

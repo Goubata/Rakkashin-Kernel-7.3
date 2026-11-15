@@ -48,7 +48,43 @@
  	GPII_ERR(gpii, gpii_chan->chid, "notifying event:%s with status:%llu ch_state:%s\n",
  		 TO_GPI_CB_EVENT_STR(event), status, TO_GPI_CH_STATE_STR(ch_state));
  
-@@ -2348,8 +2362,7 @@
+@@ -2340,6 +2354,35 @@
+ 	gpi_desc = NULL;
+ }
+ 
++/* Detach the exact completed descriptor before calling client code. */
++static bool gpi_take_completed_descriptor(struct gpii_chan *chan,
++					 struct virt_dma_desc *vd, u8 code)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&chan->vc.lock, flags);
++	if (vchan_next_desc(&chan->vc) != vd) {
++		spin_unlock_irqrestore(&chan->vc.lock, flags);
++		return false;
++	}
++	list_del_init(&vd->node);
++	vd->tx_result.result = (code == MSM_GPI_TCE_SUCCESS ||
++		code == MSM_GPI_TCE_EOT || code == MSM_GPI_TCE_EOB) ?
++		DMA_TRANS_NOERROR : DMA_TRANS_ABORTED;
++	if (vd->tx.cookie >= DMA_MIN_COOKIE)
++		dma_cookie_complete(&vd->tx);
++	spin_unlock_irqrestore(&chan->vc.lock, flags);
++	return true;
++}
++
++static void gpi_invoke_completed_callback(struct virt_dma_desc *vd)
++{
++	struct dmaengine_desc_callback callback;
++
++	dmaengine_desc_get_callback(&vd->tx, &callback);
++	dmaengine_desc_callback_invoke(&callback, &vd->tx_result);
++}
++
+ /* process DMA Immediate completion data events */
+ static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
+ 					struct immediate_data_event *imed_event)
+@@ -2348,8 +2391,7 @@
  	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
  	struct virt_dma_desc *vd;
  	struct gpi_desc *gpi_desc;
@@ -58,7 +94,7 @@
  	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
  	unsigned long flags;
  	u32 chid;
-@@ -2367,6 +2380,16 @@
+@@ -2367,6 +2409,16 @@
  				      __LINE__);
  		return;
  	}
@@ -75,7 +111,38 @@
  
  	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
  	vd = vchan_next_desc(&gpii_chan->vc);
-@@ -2486,7 +2509,7 @@
+@@ -2460,8 +2512,10 @@
+ 		goto gpi_free_desc;
+ 	}
+ 
++	if (!gpi_take_completed_descriptor(gpii_chan, vd, imed_event->code))
++		return;
+ 	tx_cb_param = vd->tx.callback_param;
+-	if (vd->tx.callback && tx_cb_param) {
++	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
+ 		struct msm_gpi_tre *imed_tre = &tx_cb_param->imed_tre;
+ 
+ 		GPII_VERB(gpii, gpii_chan->chid,
+@@ -2473,11 +2527,14 @@
+ 		tx_cb_param->length = imed_event->length;
+ 		tx_cb_param->completion_code = imed_event->code;
+ 		tx_cb_param->status = imed_event->status;
+-		vd->tx.callback(tx_cb_param);
+-	}
+-
++	}
++
++	gpi_invoke_completed_callback(vd);
++	kfree(to_gpi_desc(vd));
++	return;
+ gpi_free_desc:
+-	gpi_free_chan_desc(gpii_chan);
++	if (gpi_take_completed_descriptor(gpii_chan, vd, imed_event->code))
++		kfree(to_gpi_desc(vd));
+ }
+ 
+ /* processing transfer completion events */
+@@ -2486,7 +2543,7 @@
  {
  	struct gpii *gpii = gpii_chan->gpii;
  	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
@@ -84,7 +151,7 @@
  	struct virt_dma_desc *vd;
  	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
  	struct gpi_desc *gpi_desc;
-@@ -2503,6 +2526,13 @@
+@@ -2503,6 +2560,13 @@
  				      __LINE__);
  		return;
  	}
@@ -98,7 +165,41 @@
  
  	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
  	vd = vchan_next_desc(&gpii_chan->vc);
-@@ -2621,7 +2651,9 @@
+@@ -2592,13 +2656,15 @@
+ 			&& (gpii->protocol != SE_PROTOCOL_UART))
+ 			goto gpi_free_desc;
+ 	}
++	if (!gpi_take_completed_descriptor(gpii_chan, vd, compl_event->code))
++		return;
+ 	tx_cb_param = vd->tx.callback_param;
+ 
+ 	GPII_INFO(gpii, gpii_chan->chid,
+ 		  "DEBUG: vd:%p vd->tx:%p vd->tx.callback:%p tx_cb_param:%p\n",
+ 		 vd, &vd->tx, vd->tx.callback, tx_cb_param);
+ 
+-	if (vd->tx.callback && tx_cb_param) {
++	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
+ 		GPII_VERB(gpii, gpii_chan->chid,
+ 			  "cb_length:%u compl_code:0x%x status:0x%x\n",
+ 			  compl_event->length, compl_event->code,
+@@ -2608,10 +2674,13 @@
+ 		tx_cb_param->status = compl_event->status;
+ 		tx_cb_param->tce_type = compl_event->type;
+ 		GPII_INFO(gpii, gpii_chan->chid, "tx_cb_param:%p\n", tx_cb_param);
+-		vd->tx.callback(tx_cb_param);
+-	}
++	}
++	gpi_invoke_completed_callback(vd);
++	kfree(to_gpi_desc(vd));
++	return;
+ gpi_free_desc:
+-	gpi_free_chan_desc(gpii_chan);
++	if (gpi_take_completed_descriptor(gpii_chan, vd, compl_event->code))
++		kfree(to_gpi_desc(vd));
+ }
+ 
+ /* process Q2SPI_STATUS TCE notification event */
+@@ -2621,7 +2690,9 @@
  {
  	struct gpii *gpii = gpii_chan->gpii;
  	struct gpi_ring *ch_ring = gpii_chan->ch_ring;
@@ -109,7 +210,7 @@
  	struct virt_dma_desc *vd;
  	struct msm_gpi_dma_async_tx_cb_param *tx_cb_param;
  	struct gpi_desc *gpi_desc;
-@@ -2634,6 +2666,13 @@
+@@ -2634,6 +2705,13 @@
  		gpi_generate_cb_event(gpii_chan, MSM_GPI_QUP_PENDING_EVENT, __LINE__);
  		return;
  	}
@@ -123,7 +224,38 @@
  
  	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
  	vd = vchan_next_desc(&gpii_chan->vc);
-@@ -2735,10 +2774,12 @@
+@@ -2669,8 +2747,10 @@
+ 			goto gpi_free_desc;
+ 	}
+ 
++	if (!gpi_take_completed_descriptor(gpii_chan, vd, q2spi_status_event->code))
++		return;
+ 	tx_cb_param = vd->tx.callback_param;
+-	if (vd->tx.callback && tx_cb_param) {
++	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
+ 		GPII_VERB(gpii, gpii_chan->chid,
+ 			  "cb_length:%u code:0x%x type:0x%x status:0x%x q2spi_status:0x%x\n",
+ 			  q2spi_status_event->length, q2spi_status_event->code,
+@@ -2681,11 +2761,14 @@
+ 		tx_cb_param->tce_type = q2spi_status_event->type;
+ 		tx_cb_param->status = q2spi_status_event->status;
+ 		tx_cb_param->q2spi_status = q2spi_status_event->value;
+-		vd->tx.callback(tx_cb_param);
+-	}
+-
++	}
++
++	gpi_invoke_completed_callback(vd);
++	kfree(to_gpi_desc(vd));
++	return;
+ gpi_free_desc:
+-	gpi_free_chan_desc(gpii_chan);
++	if (gpi_take_completed_descriptor(gpii_chan, vd, q2spi_status_event->code))
++		kfree(to_gpi_desc(vd));
+ }
+ 
+ /* process Q2SPI CR Header TCE notification event */
+@@ -2735,10 +2818,12 @@
  	void *rp;
  	union gpi_event *gpi_event;
  	struct gpii_chan *gpii_chan;
@@ -137,7 +269,7 @@
  	rp = to_virtual(ev_ring, cntxt_rp);
  	local_rp = to_physical(ev_ring, ev_ring->rp);
  
-@@ -2812,6 +2853,8 @@
+@@ -2812,6 +2897,8 @@
  			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
  		/* make sure event_ring rp updates before proceeding */
  		mb();
@@ -146,7 +278,7 @@
  		rp = to_virtual(ev_ring, cntxt_rp);
  
  	} while (rp != ev_ring->rp);
-@@ -2855,7 +2898,7 @@
+@@ -2855,7 +2942,7 @@
  }
  
  /* marks all pending events for the channel as stale */
@@ -155,7 +287,7 @@
  {
  	struct gpii *gpii = gpii_chan->gpii;
  	struct gpi_ring *ev_ring = gpii->ev_ring;
-@@ -2866,6 +2909,8 @@
+@@ -2866,6 +2953,8 @@
  	cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
  		   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
  
@@ -164,7 +296,7 @@
  	ev_rp = ev_ring->rp;
  	local_rp = to_physical(ev_ring, ev_rp);
  	while (local_rp != cntxt_rp) {
-@@ -2879,8 +2924,11 @@
+@@ -2879,8 +2968,11 @@
  			ev_rp = ev_ring->base;
  		cntxt_rp = gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg) |
  			   (u64)gpi_read_reg(gpii, gpii->ev_ring_rp_lsb_reg + PTR_H_OFFSET) << 32;
@@ -176,7 +308,7 @@
  }
  
  /* reset sw state and issue channel reset or de-alloc */
-@@ -2910,7 +2958,11 @@
+@@ -2910,7 +3002,11 @@
  
  	/* check event ring for any stale events */
  	write_lock_irq(&gpii->pm_lock);
@@ -189,7 +321,7 @@
  
  	/* remove all async descriptors */
  	spin_lock_irqsave(&gpii_chan->vc.lock, flags);
-@@ -3194,8 +3246,9 @@
+@@ -3194,8 +3290,9 @@
  static void gpi_free_ring(struct gpi_ring *ring,
  			  struct gpii *gpii)
  {
@@ -201,7 +333,7 @@
  	memset(ring, 0, sizeof(*ring));
  }
  
-@@ -3205,14 +3258,18 @@
+@@ -3205,14 +3302,18 @@
  			  u32 el_size,
  			  struct gpii *gpii)
  {
@@ -228,7 +360,7 @@
  	ring->alloc_size = (len + (len - 1));
  	GPII_INFO(gpii, GPI_DBG_COMMON,
  		  "#el:%u el_size:%u len:%u actual_len:%llu alloc_size:%lu\n",
-@@ -3220,7 +3277,8 @@
+@@ -3220,7 +3321,8 @@
  		  ring->alloc_size);
  
  	if (gpii->gpi_dev->is_use_smem_region) {
@@ -238,7 +370,7 @@
  			GPII_ERR(gpii, GPI_DBG_COMMON, "SMEM region exceeded for GPI driver\n");
  			return -ENOMEM;
  		} else if (len == TX_RX_RING_LEN || len == EVENT_RING_LEN) {
-@@ -3302,7 +3360,7 @@
+@@ -3302,7 +3404,7 @@
   *
   * Return: Returns success or failure
   */
@@ -247,7 +379,7 @@
  {
  	struct gpii_chan *gpii_chan = to_gpii_chan(chan);
  	struct gpii *gpii = gpii_chan->gpii;
-@@ -3685,7 +3743,7 @@
+@@ -3685,7 +3787,7 @@
  	return 0;
  }
  
@@ -256,7 +388,7 @@
  {
  	struct gpi_desc *gpi_desc = to_gpi_desc(vd);
  
-@@ -3694,7 +3752,7 @@
+@@ -3694,7 +3796,7 @@
  }
  
  /* copy tre into transfer ring */
@@ -265,7 +397,7 @@
  					struct scatterlist *sgl,
  					unsigned int sg_len,
  					enum dma_transfer_direction direction,
-@@ -3713,7 +3771,6 @@
+@@ -3713,7 +3815,6 @@
  	struct gpi_desc *gpi_desc;
  	u32 tre_type;
  
@@ -273,7 +405,7 @@
  	GPII_VERB(gpii, gpii_chan->chid, "enter\n");
  
  	if (!is_slave_direction(direction)) {
-@@ -3722,6 +3779,30 @@
+@@ -3722,6 +3823,30 @@
  		return NULL;
  	}
  
@@ -304,7 +436,7 @@
  	ch_state = gpi_read_ch_state(gpii_chan);
  	GPII_VERB(gpii, gpii_chan->chid, "enter wp:0x%0llx rp:0x%0llx state:%s\n",
  		  to_physical(ch_ring, ch_ring->wp), to_physical(ch_ring, ch_ring->rp),
-@@ -3731,22 +3812,6 @@
+@@ -3731,22 +3856,6 @@
  		GPII_ERR(gpii, gpii_chan->chid,
  			 "Bail out the TRE subimit as Channel is in error state\n");
  		gpi_dump_debug_reg(gpii);
@@ -327,7 +459,7 @@
  		return NULL;
  	}
  
-@@ -3794,6 +3859,7 @@
+@@ -3794,6 +3903,7 @@
  		  to_physical(ch_ring, ch_ring->wp),
  		  to_physical(ch_ring, ch_ring->rp));
  

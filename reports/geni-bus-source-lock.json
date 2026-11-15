@@ -5,7 +5,7 @@
       "file": "ports/geni-bus/msm_gpi.c",
       "source": "drivers/dma/qcom/msm_gpi.c",
       "original_sha256": "ad77b196d7d8a24d21f490fe697b329efc911602b12e1e219063b67ea19152d7",
-      "sha256": "4f2429167635fa68bae0b8511a35183a459cf9283833a1214f48d3cca31672c8"
+      "sha256": "2e680aa5c6c8cca5a7730d6daa081d3c1f719e0a5b48ea912f7cc917b7d3d72c"
     },
     {
       "file": "ports/geni-bus/msm_gpi_mmio.h",
@@ -56,7 +56,7 @@
       "sha256": "3fd839f7033685de98043702ddc35ea7faec4632cfce24baba6a1a035730b329"
     }
   ],
-  "patch_sha256": "f75cece70a9cc1be23b291a492e1374bc9d330cd013705511f7098f82446670d",
+  "patch_sha256": "6aa10e08309136b2df4b8970d935055a51af5e8286ae22fdc1acaa129a0835c4",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted GENI bus driver drafts",
@@ -67,7 +67,8 @@
     "Bound SPI chip-select scanning by the actual native array while preserving hardware four-CS limit",
     "Validate ring geometry before allocation, widen multiplication and bound power-of-two rounding; reject live-ring replacement and never DMA-free SMEM backing",
     "Prevalidate all SG lengths/addresses and ring capacity with subtraction before MMIO or mutation; preserve num_tre on rejection",
-    "Validate aligned in-ring event DMA pointers and immediate index/payload bounds before translation; preserve full 40-bit Q2SPI pointer; propagate invalid stale-scan errors"
+    "Validate aligned in-ring event DMA pointers and immediate index/payload bounds before translation; preserve full 40-bit Q2SPI pointer; propagate invalid stale-scan errors",
+    "Detach the exact completed descriptor and complete its native DMA cookie before callback; support native result callbacks and retain private ownership across reentrant clients"
   ],
   "pending": [
     "GPI DMA rings, interrupt/completion and descriptor lifetime, remove/probe failures",

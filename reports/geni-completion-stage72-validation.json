@@ -1,0 +1,40 @@
+{
+  "stage": 72,
+  "scope": "Exact production selected completion paths with native coherent/virtual DMA and private event registers; no physical transfer or IRQ/terminate concurrency proof",
+  "checks": {
+    "log": "reports/geni-completion-stage72-qemu.log",
+    "test": "geni-ring",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      19,
+      0,
+      0,
+      19
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "initial_rejection": "Initial 18-case test had native WARNs from two test-side vchan_next_desc calls without the required lock. The strict checker rejected the log. Fixed the test locking, used heap-backed SG source in the reentrant fixture, and added the NULL-param regression; final 19-case log is warning-free. No warning filter was relaxed.",
+  "pending": [
+    "Real IRQ/tasklet/STOP/RESET/terminate and descriptor concurrency stress",
+    "Peer-channel abort/cancellation semantics and shared-sequencer/multi-descriptor modes",
+    "Hardware clock/pinctrl/DMA/peripheral and full suspend/resume behavior",
+    "SMEM firmware mapping/reclamation and remaining drivers/whole-board DT/boot/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-completion-stage72-check.json": "9266f26b0bac26bba515e8e4f044759f2f64d9b4d36124369434c4b49a86baae",
+    "reports/geni-completion-stage72-qemu.log": "2dcab50536c3f03b926781224c760e11163251993ca6a76aa6472e356096c965",
+    "reports/geni-completion-stage72-qemu.json": "e3d4315ec9fc82c62130864f13cb0ae3aa17c3ffbd8901a90604d36d9db40a2f",
+    "reports/geni-completion-stage72-build.log": "a531a6f0d397ef1251660b612c4b0f9ebe0698854ef160cc7988b7ec70137c6f",
+    "reports/geni-completion-stage72-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-completion-stage72-initial-qemu.log": "53ae0e17818f0b775cb2678ab72d77c3bf50045d16d1b7cde59bb5dd2774db45",
+    "reports/geni-completion-stage72-initial-run.log": "a0f9b50cc284ba2e34bc71b7084056ec4bac4734ade39a6d8363fa576bb4ae80",
+    "reports/geni-bus-source-lock.json": "5f8ef31de3ec9f72a01b653431d8dbf41e2e1aa5a3a51b881df7ee7ca50cf94e",
+    "patches/geni-bus-7.3.patch": "6aa10e08309136b2df4b8970d935055a51af5e8286ae22fdc1acaa129a0835c4",
+    "tests/geni-ring/avr-geni-ring-test.c": "855126dd30b4626c0bd42472cdd6bafe42c8c1109c27e4fdc5ee82cdce9712ce"
+  }
+}

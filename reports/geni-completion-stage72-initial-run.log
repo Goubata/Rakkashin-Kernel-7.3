@@ -1,0 +1,15 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/geni-ring-tests.cpio.gz 6286868 uncompressed bytes
+{
+  "log": "reports/geni-completion-stage72-qemu.log",
+  "test": "geni-ring",
+  "passed": false,
+  "failures": [
+    "WARNING:"
+  ],
+  "totals": [
+    18,
+    0,
+    0,
+    18
+  ]
+}

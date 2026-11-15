@@ -1263,3 +1263,30 @@ modules rebuild with matching import CRCs. Reproduce GENI ring builder/QEMU
 mode `geni-ring`. Evidence: reports/geni-events-stage71-validation.json.
 Drafts remain excluded. Actual IRQ/STOP/RESET/concurrency, callback lifetime,
 physical bus/peripheral and whole-board acceptance remain pending.
+
+
+## Stage72: completed-descriptor ownership and native DMA callbacks
+
+Detach the exact issued descriptor under vc.lock before client callback, update
+its native cookie and hold private ownership until callback returns. This avoids
+freeing a new head descriptor if a reentrant client drains/requeues work. Cookie
+retirement occurs before waking clients. Use native callback selection/invocation
+so result callbacks take precedence, receive DMA_TRANS_ABORTED for error events,
+and legacy callbacks may use NULL parameters. Populate Motorola callback metadata
+only for the legacy callback form; keep existing shared/unlock silent-retirement
+branch choices. Completed cookie means retired work, while callback_result
+reports success/error; no new DMA_ERROR polling status is claimed.
+
+Nineteen SMP4 cases pass, including all earlier ring/SG/event regressions plus
+cookie completion before legacy callback, native result-callback error delivery
+with both callback fields present, reentrant drain/requeue preserving the new
+issued descriptor and subsequent completion, and NULL-parameter legacy callback.
+Initial 18-case run was rejected for test-side unlocked vchan_next_desc warnings;
+fixed test locking and made the callback SG source heap-backed. Final checks
+retain strict warning rejection and pass without WARN. These are native software
+DMA/descriptor tests on private RAM, not real IRQ/termination timing.
+Reproduce GENI ring builder/QEMU mode `geni-ring`. All production modules link
+with matching imports. Evidence: reports/geni-completion-stage72-validation.json.
+Peer-channel abort/cancellation, shared multi-descriptor modes, STOP/RESET/IRQ
+concurrency, physical buses/peripherals and whole-board completion remain pending.
+Drafts are archived separately from Stage57; no deployment promotion occurred.

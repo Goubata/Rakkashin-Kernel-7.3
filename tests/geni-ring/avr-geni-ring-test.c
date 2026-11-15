@@ -5,7 +5,7 @@
 #undef module_platform_driver
 #define module_platform_driver(drv) static struct platform_driver * const __maybe_unused tested_driver = &(drv)
 #include "../../ports/geni-bus/msm_gpi.c"
-struct fixture {struct gpii gpii;struct gpi_dev dev;struct gpi_ring ring;struct device *root;struct dma_device dma;struct msm_gpi_dma_async_tx_cb_param cb,last;unsigned int calls,errors;enum msm_gpi_cb_event last_event;};
+struct fixture {struct gpii gpii;struct gpi_dev dev;struct gpi_ring ring;struct device *root;struct dma_device dma;struct msm_gpi_dma_async_tx_cb_param cb,last;unsigned int calls,errors;enum msm_gpi_cb_event last_event;struct dmaengine_result result;unsigned int result_calls;dma_cookie_t callback_cookie;};
 static int setup(struct kunit *test)
 {
  struct fixture *f=kunit_kzalloc(test,sizeof(*f),GFP_KERNEL);int ret;
@@ -119,7 +119,7 @@ static void event_client(struct dma_chan *chan,const struct msm_gpi_cb *cb,void 
 }
 static void transfer_done(void *data)
 {
- struct msm_gpi_dma_async_tx_cb_param *cb=data;struct fixture *f=cb->userdata;f->last=*cb;f->calls++;
+ struct msm_gpi_dma_async_tx_cb_param *cb=data;struct fixture *f=cb->userdata;f->last=*cb;f->calls++;f->callback_cookie=f->gpii.gpii_chan[0].vc.chan.completed_cookie;
 }
 static int prepare_event_transfer(struct kunit *test,unsigned int elements,bool wrap)
 {
@@ -189,6 +189,70 @@ static void event_cursor_and_stale_scan_reject_invalid_target(struct kunit *test
  f->gpii.gpii_chan[0].client_info.callback=NULL;f->gpii.gpii_chan[0].ch_cntxt_base_reg=NULL;
  gpi_generate_cb_event(&f->gpii.gpii_chan[0],MSM_GPI_QUP_FW_ERROR,0);KUNIT_EXPECT_EQ(test,f->errors,2u);
 }
-static struct kunit_case cases[]={KUNIT_CASE(invalid_geometry_and_overflow_are_rejected),KUNIT_CASE(coherent_ring_is_aligned_and_zeroed),KUNIT_CASE(nonpower_request_rounds_and_free_is_idempotent),KUNIT_CASE(full_ring_reserves_slot_and_wraps),KUNIT_CASE(recycle_and_address_translation_follow_ring),KUNIT_CASE(private_smem_arena_bounds_and_release),KUNIT_CASE(malformed_sg_is_rejected_before_mmio),KUNIT_CASE(later_bad_sg_keeps_ring_and_metadata),KUNIT_CASE(overcapacity_sg_lengths_do_not_wrap),KUNIT_CASE(valid_sg_prepares_native_virtual_descriptor),KUNIT_CASE(valid_completion_wraps_and_notifies_once),KUNIT_CASE(malformed_completion_preserves_pending_descriptor),KUNIT_CASE(immediate_payload_and_index_bounds),KUNIT_CASE(q2spi_completion_keeps_high_address_bits),KUNIT_CASE(event_cursor_and_stale_scan_reject_invalid_target),{}};
+static struct virt_dma_desc *find_issued(struct gpii_chan *ch)
+{
+ struct virt_dma_desc *vd;unsigned long flags;
+ spin_lock_irqsave(&ch->vc.lock,flags);vd=vchan_next_desc(&ch->vc);spin_unlock_irqrestore(&ch->vc.lock,flags);return vd;
+}
+static void native_result_done(void *data,const struct dmaengine_result *result)
+{
+ struct fixture *f=data;f->result=*result;f->result_calls++;f->callback_cookie=f->gpii.gpii_chan[0].vc.chan.completed_cookie;
+}
+static void cookie_is_complete_before_legacy_callback(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct gpii_chan *ch=&f->gpii.gpii_chan[0];dma_cookie_t cookie;
+ struct xfer_compl_event ev={.length=16,.code=MSM_GPI_TCE_EOT};
+ KUNIT_ASSERT_EQ(test,prepare_event_transfer(test,1,false),0);cookie=ch->vc.chan.cookie;ev.ptr=f->ring.phys_addr;
+ KUNIT_EXPECT_EQ(test,dma_cookie_status(&ch->vc.chan,cookie,NULL),DMA_IN_PROGRESS);
+ gpi_process_xfer_compl_event(ch,&ev);KUNIT_EXPECT_EQ(test,f->callback_cookie,cookie);
+ KUNIT_EXPECT_EQ(test,dma_cookie_status(&ch->vc.chan,cookie,NULL),DMA_COMPLETE);
+}
+static void result_callback_receives_terminal_error(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct gpii_chan *ch=&f->gpii.gpii_chan[0];struct virt_dma_desc *vd;dma_cookie_t cookie;
+ struct xfer_compl_event ev={.code=MSM_GPI_TCE_UNEXP_ERR};
+ KUNIT_ASSERT_EQ(test,prepare_event_transfer(test,1,false),0);vd=find_issued(ch);KUNIT_ASSERT_NOT_NULL(test,vd);
+ vd->tx.callback_result=native_result_done;vd->tx.callback_param=f;cookie=ch->vc.chan.cookie;ev.ptr=f->ring.phys_addr;
+ gpi_process_xfer_compl_event(ch,&ev);KUNIT_EXPECT_EQ(test,f->result_calls,1u);KUNIT_EXPECT_EQ(test,f->result.result,DMA_TRANS_ABORTED);
+ KUNIT_EXPECT_EQ(test,f->callback_cookie,cookie);KUNIT_EXPECT_TRUE(test,list_empty(&ch->vc.desc_issued));
+}
+static void submit_next_from_callback(void *data)
+{
+ struct msm_gpi_dma_async_tx_cb_param *cb=data;struct fixture *f=cb->userdata;struct gpii_chan *ch=&f->gpii.gpii_chan[0];
+ struct scatterlist sg;struct dma_async_tx_descriptor *tx;struct msm_gpi_tre *tre;unsigned long flags;
+ transfer_done(data);
+ /* Drain queued descriptors as a reentrant client, then submit the next one.
+  * The in-progress callback descriptor must be privately owned by the handler. */
+ vchan_free_chan_resources(&ch->vc);tre=kzalloc(sizeof(*tre),GFP_ATOMIC);if(!tre)return;sg_init_one(&sg,tre,sizeof(*tre));
+ tx=gpi_prep_slave_sg(&ch->vc.chan,&sg,1,DMA_MEM_TO_DEV,DMA_CTRL_ACK,NULL);kfree(tre);
+ if(!tx)return;tx->callback=transfer_done;tx->callback_param=&f->cb;
+ tx->tx_submit(tx);spin_lock_irqsave(&ch->vc.lock,flags);vchan_issue_pending(&ch->vc);spin_unlock_irqrestore(&ch->vc.lock,flags);
+}
+static void callback_requeue_does_not_free_new_descriptor(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct gpii_chan *ch=&f->gpii.gpii_chan[0];struct virt_dma_desc *vd;dma_cookie_t first,second;
+ struct xfer_compl_event ev={.length=16,.code=MSM_GPI_TCE_EOT};
+ KUNIT_ASSERT_EQ(test,prepare_event_transfer(test,1,false),0);vd=find_issued(ch);KUNIT_ASSERT_NOT_NULL(test,vd);vd->tx.callback=submit_next_from_callback;
+ first=ch->vc.chan.cookie;ev.ptr=f->ring.phys_addr;gpi_process_xfer_compl_event(ch,&ev);
+ KUNIT_EXPECT_EQ(test,f->calls,1u);KUNIT_EXPECT_EQ(test,f->callback_cookie,first);KUNIT_ASSERT_FALSE(test,list_empty(&ch->vc.desc_issued));
+ second=ch->vc.chan.cookie;KUNIT_EXPECT_NE(test,second,first);KUNIT_EXPECT_EQ(test,dma_cookie_status(&ch->vc.chan,second,NULL),DMA_IN_PROGRESS);
+ ev.ptr=f->ring.phys_addr+16;gpi_process_xfer_compl_event(ch,&ev);
+ KUNIT_EXPECT_EQ(test,f->calls,2u);KUNIT_EXPECT_EQ(test,dma_cookie_status(&ch->vc.chan,second,NULL),DMA_COMPLETE);KUNIT_EXPECT_TRUE(test,list_empty(&ch->vc.desc_issued));
+}
+static atomic_t null_param_calls=ATOMIC_INIT(0);
+static void legacy_without_param(void *data)
+{
+ if(!data)atomic_inc(&null_param_calls);
+}
+static void legacy_callback_accepts_null_parameter(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct gpii_chan *ch=&f->gpii.gpii_chan[0];struct virt_dma_desc *vd;dma_cookie_t cookie;
+ struct immediate_data_event ev={.length=8,.code=MSM_GPI_TCE_EOT,.type=IMMEDIATE_DATA_EV_TYPE};
+ KUNIT_ASSERT_EQ(test,prepare_event_transfer(test,1,false),0);vd=find_issued(ch);KUNIT_ASSERT_NOT_NULL(test,vd);
+ atomic_set(&null_param_calls,0);vd->tx.callback=legacy_without_param;vd->tx.callback_param=NULL;cookie=ch->vc.chan.cookie;
+ gpi_process_imed_data_event(ch,&ev);KUNIT_EXPECT_EQ(test,atomic_read(&null_param_calls),1);
+ KUNIT_EXPECT_EQ(test,dma_cookie_status(&ch->vc.chan,cookie,NULL),DMA_COMPLETE);KUNIT_EXPECT_TRUE(test,list_empty(&ch->vc.desc_issued));
+}
+static struct kunit_case cases[]={KUNIT_CASE(invalid_geometry_and_overflow_are_rejected),KUNIT_CASE(coherent_ring_is_aligned_and_zeroed),KUNIT_CASE(nonpower_request_rounds_and_free_is_idempotent),KUNIT_CASE(full_ring_reserves_slot_and_wraps),KUNIT_CASE(recycle_and_address_translation_follow_ring),KUNIT_CASE(private_smem_arena_bounds_and_release),KUNIT_CASE(malformed_sg_is_rejected_before_mmio),KUNIT_CASE(later_bad_sg_keeps_ring_and_metadata),KUNIT_CASE(overcapacity_sg_lengths_do_not_wrap),KUNIT_CASE(valid_sg_prepares_native_virtual_descriptor),KUNIT_CASE(valid_completion_wraps_and_notifies_once),KUNIT_CASE(malformed_completion_preserves_pending_descriptor),KUNIT_CASE(immediate_payload_and_index_bounds),KUNIT_CASE(q2spi_completion_keeps_high_address_bits),KUNIT_CASE(event_cursor_and_stale_scan_reject_invalid_target),KUNIT_CASE(cookie_is_complete_before_legacy_callback),KUNIT_CASE(result_callback_receives_terminal_error),KUNIT_CASE(callback_requeue_does_not_free_new_descriptor),KUNIT_CASE(legacy_callback_accepts_null_parameter),{}};
 static struct kunit_suite suite={.name="avr-geni-ring",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);

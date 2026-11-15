@@ -2354,6 +2354,35 @@ static void gpi_free_chan_desc(struct gpii_chan *gpii_chan)
 	gpi_desc = NULL;
 }
 
+/* Detach the exact completed descriptor before calling client code. */
+static bool gpi_take_completed_descriptor(struct gpii_chan *chan,
+					 struct virt_dma_desc *vd, u8 code)
+{
+	unsigned long flags;
+
+	spin_lock_irqsave(&chan->vc.lock, flags);
+	if (vchan_next_desc(&chan->vc) != vd) {
+		spin_unlock_irqrestore(&chan->vc.lock, flags);
+		return false;
+	}
+	list_del_init(&vd->node);
+	vd->tx_result.result = (code == MSM_GPI_TCE_SUCCESS ||
+		code == MSM_GPI_TCE_EOT || code == MSM_GPI_TCE_EOB) ?
+		DMA_TRANS_NOERROR : DMA_TRANS_ABORTED;
+	if (vd->tx.cookie >= DMA_MIN_COOKIE)
+		dma_cookie_complete(&vd->tx);
+	spin_unlock_irqrestore(&chan->vc.lock, flags);
+	return true;
+}
+
+static void gpi_invoke_completed_callback(struct virt_dma_desc *vd)
+{
+	struct dmaengine_desc_callback callback;
+
+	dmaengine_desc_get_callback(&vd->tx, &callback);
+	dmaengine_desc_callback_invoke(&callback, &vd->tx_result);
+}
+
 /* process DMA Immediate completion data events */
 static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
 					struct immediate_data_event *imed_event)
@@ -2483,8 +2512,10 @@ static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
 		goto gpi_free_desc;
 	}
 
+	if (!gpi_take_completed_descriptor(gpii_chan, vd, imed_event->code))
+		return;
 	tx_cb_param = vd->tx.callback_param;
-	if (vd->tx.callback && tx_cb_param) {
+	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
 		struct msm_gpi_tre *imed_tre = &tx_cb_param->imed_tre;
 
 		GPII_VERB(gpii, gpii_chan->chid,
@@ -2496,11 +2527,14 @@ static void gpi_process_imed_data_event(struct gpii_chan *gpii_chan,
 		tx_cb_param->length = imed_event->length;
 		tx_cb_param->completion_code = imed_event->code;
 		tx_cb_param->status = imed_event->status;
-		vd->tx.callback(tx_cb_param);
 	}
 
+	gpi_invoke_completed_callback(vd);
+	kfree(to_gpi_desc(vd));
+	return;
 gpi_free_desc:
-	gpi_free_chan_desc(gpii_chan);
+	if (gpi_take_completed_descriptor(gpii_chan, vd, imed_event->code))
+		kfree(to_gpi_desc(vd));
 }
 
 /* processing transfer completion events */
@@ -2622,13 +2656,15 @@ static void gpi_process_xfer_compl_event(struct gpii_chan *gpii_chan,
 			&& (gpii->protocol != SE_PROTOCOL_UART))
 			goto gpi_free_desc;
 	}
+	if (!gpi_take_completed_descriptor(gpii_chan, vd, compl_event->code))
+		return;
 	tx_cb_param = vd->tx.callback_param;
 
 	GPII_INFO(gpii, gpii_chan->chid,
 		  "DEBUG: vd:%p vd->tx:%p vd->tx.callback:%p tx_cb_param:%p\n",
 		 vd, &vd->tx, vd->tx.callback, tx_cb_param);
 
-	if (vd->tx.callback && tx_cb_param) {
+	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
 		GPII_VERB(gpii, gpii_chan->chid,
 			  "cb_length:%u compl_code:0x%x status:0x%x\n",
 			  compl_event->length, compl_event->code,
@@ -2638,10 +2674,13 @@ static void gpi_process_xfer_compl_event(struct gpii_chan *gpii_chan,
 		tx_cb_param->status = compl_event->status;
 		tx_cb_param->tce_type = compl_event->type;
 		GPII_INFO(gpii, gpii_chan->chid, "tx_cb_param:%p\n", tx_cb_param);
-		vd->tx.callback(tx_cb_param);
 	}
+	gpi_invoke_completed_callback(vd);
+	kfree(to_gpi_desc(vd));
+	return;
 gpi_free_desc:
-	gpi_free_chan_desc(gpii_chan);
+	if (gpi_take_completed_descriptor(gpii_chan, vd, compl_event->code))
+		kfree(to_gpi_desc(vd));
 }
 
 /* process Q2SPI_STATUS TCE notification event */
@@ -2708,8 +2747,10 @@ gpi_process_qup_q2spi_status(struct gpii_chan *gpii_chan,
 			goto gpi_free_desc;
 	}
 
+	if (!gpi_take_completed_descriptor(gpii_chan, vd, q2spi_status_event->code))
+		return;
 	tx_cb_param = vd->tx.callback_param;
-	if (vd->tx.callback && tx_cb_param) {
+	if (!vd->tx.callback_result && vd->tx.callback && tx_cb_param) {
 		GPII_VERB(gpii, gpii_chan->chid,
 			  "cb_length:%u code:0x%x type:0x%x status:0x%x q2spi_status:0x%x\n",
 			  q2spi_status_event->length, q2spi_status_event->code,
@@ -2720,11 +2761,14 @@ gpi_process_qup_q2spi_status(struct gpii_chan *gpii_chan,
 		tx_cb_param->tce_type = q2spi_status_event->type;
 		tx_cb_param->status = q2spi_status_event->status;
 		tx_cb_param->q2spi_status = q2spi_status_event->value;
-		vd->tx.callback(tx_cb_param);
 	}
 
+	gpi_invoke_completed_callback(vd);
+	kfree(to_gpi_desc(vd));
+	return;
 gpi_free_desc:
-	gpi_free_chan_desc(gpii_chan);
+	if (gpi_take_completed_descriptor(gpii_chan, vd, q2spi_status_event->code))
+		kfree(to_gpi_desc(vd));
 }
 
 /* process Q2SPI CR Header TCE notification event */

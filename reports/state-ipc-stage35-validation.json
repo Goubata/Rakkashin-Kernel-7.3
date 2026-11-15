@@ -1,0 +1,149 @@
+{
+  "stage": 35,
+  "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
+  "image_sha256": "ea9dbf362caed8eb6cadb22f6a37991352be826dff839b4ae301f46a5831da8e",
+  "image_release": "7.3.0-4k #22",
+  "artifact": "artifacts/android73-state-ipc-stage35",
+  "scope": "compiled real IPCC/SMP2P/state core and isolated ARM64 software tests; no AVR hardware acceptance",
+  "module_count": 105,
+  "matching_imports": 5330,
+  "crc_passed": true,
+  "test_case_count": 65,
+  "tests": {
+    "smem-state": {
+      "log": "reports/smem-state-stage35-after-qemu.log",
+      "test": "smem-state",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        3,
+        0,
+        0,
+        3
+      ],
+      "sha256": "bf259cd689cd5a51b91d18496a60e8e2e98613bda53225c9747a29368cb5c0c2",
+      "metadata_sha256": "f26d41efa3d1be63c0607e0189dc7ebe5f0f13d8e805aee4c3926043ceb11930"
+    },
+    "ipcc": {
+      "log": "reports/ipcc-stage35-regression-qemu.log",
+      "test": "ipcc",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "sha256": "068fdeb238cfbe43f25a67f8fc2250b2d8e516265a0a547cc4717ea3a5fce5b1",
+      "metadata_sha256": "d1642402b520e7436f3c66f064efbd88645902f59c7d982ebe66d8584d9d1671"
+    },
+    "smp2p": {
+      "log": "reports/smp2p-stage35-regression-qemu.log",
+      "test": "smp2p",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        8,
+        0,
+        0,
+        8
+      ],
+      "sha256": "7452f36de45b3520ce4d79f6d57b2f7c8fda10da55debe12dac24491ba0a5752",
+      "metadata_sha256": "5cb76feabefc3d3781bcd3f332c6c5252f7d0eaf1a0406d4d0258300e5139143"
+    },
+    "glink-transport": {
+      "log": "reports/glink-transport-stage35-regression-qemu.log",
+      "test": "glink-transport",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        11,
+        0,
+        0,
+        11
+      ],
+      "sha256": "eb8e4c1216756ea107a9734db56f87b144134321215476be09dc4f6a6a1d582d",
+      "metadata_sha256": "964a7f76b1fe369b3b678b8e8f2500fa1a08d2bb902edbc29ef146bb3276c74c"
+    },
+    "pmic-glink": {
+      "log": "reports/pmic-glink-stage35-regression-qemu.log",
+      "test": "pmic-glink",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        19,
+        0,
+        0,
+        19
+      ],
+      "sha256": "a3e515ee45e6a12770dbe85f5ae0dc75e552967eafecdb98877f7be81bf1922e",
+      "metadata_sha256": "0cdcac4c8c7841267e5ac763fad9555908d02e46dfc7042a2f0222b8d1e9d717"
+    },
+    "platform": {
+      "log": "reports/platform-stage35-regression-qemu.log",
+      "test": "platform",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        10,
+        0,
+        0,
+        10
+      ],
+      "sha256": "0a864093bea9e864e3c82ec3e5deafd6bfba6cb194d6182ad9decd163c2542ec",
+      "metadata_sha256": "f27cd9af731859927e5c27a07590c7e067a610f378d024d942dd05293c09d766"
+    },
+    "regulators": {
+      "log": "reports/regulators-stage35-regression-qemu.log",
+      "test": "regulators",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "sha256": "01292331aefcb72df395e08f95e20f72e55a5890f4d9b9fb3b6b40dc0a7ec444",
+      "metadata_sha256": "29bc870a620e9b58792886b93f0ce7aa19932e49f33a4a978459c07c3812ad5f"
+    }
+  },
+  "dt_selected_semantics_equal": true,
+  "dt_ipcc_provider_count": 2,
+  "dt_smp2p_edge_count": 6,
+  "dt_wire_layout_subset_equal": true,
+  "dependency_graph_passed": true,
+  "native_patch_count": 16,
+  "native_exact_replay_files": 61,
+  "physical_boot_verified": false,
+  "daily_use_accepted": false,
+  "partition_written": false,
+  "flashable_image_packaged": false,
+  "evidence_sha256": {
+    "reports/ipcc-source-lock.json": "c3772322527665801af4a3f7e10b6eaa842a51124835a5b1eeea76b08483fa78",
+    "reports/smp2p-source-lock.json": "2f707ff94e4d0d0b14189e1e8f255e8d3f6213b680a0cc49ec62179fd068f875",
+    "reports/state-ipc-dt-validation.json": "96c8ca711935f5c1a2ecf3e236aabf80962b7a050167a8deb9a3607082222bd6",
+    "reports/core-patch-checkpoint.json": "04b50da2156c3e74cf27f9669fdd6ae019b3ca4e57b6819f82611177c4568191",
+    "reports/core-patch-replay.json": "86165d3cc47aa83af3c43fca76756c0206b4762768a4ab41dd3f872fdfa14e9c",
+    "reports/module-crc-stage35.json": "1e5e8cae6762494aa321b5a2bae0a5fba6f9820af5c496570471a474542be843",
+    "reports/module-deployment-stage35-summary.json": "00d2e330d1bb290b40fba028dee4e0311170b7172ff4d59a7cc45e5197bea7ef",
+    "reports/state-ipc-stage35-host-tests.log": "0a37fb42d96fae92b554e5c9299b722c22f7519febb4b0d8582a7c4de42d5039",
+    "reports/smem-state-stage35-core-build.log": "5ccf59a5cd021f7a57699f1afe222217ac1cba898998534aa2aa7beb7cf53763",
+    "reports/state-ipc-stage35-build.log": "075b7ca6aafde7c049f27730cbcf04d15ead37920d1b3d9be50ec745bd7f44c3"
+  },
+  "pending": [
+    "Physical IPCC interrupts/doorbells, SMEM partition/coherency and SMP2P peer behavior",
+    "SoCCP Alor PAS driver, cx/mx rails, early attach, secure firmware ABI and full service channels",
+    "Native/provider/IRQ-domain lifetime under actual consumers, forced bind/unbind, suspend and probe-failure stress",
+    "Vendor GLINK zero-copy/extensions and complete charging/USB/modem/WLAN/audio/display/camera coverage",
+    "Whole-board DT differences and duplicate SID4, vendor_boot/vendor_dlkm/DTBO boot packaging and SELinux/ROM acceptance",
+    "Controlled physical 7.3 boot with restoration followed by all-functions and daily-use/performance/power testing"
+  ],
+  "smem_state_before_fix": {
+    "passed": false,
+    "failed_cases": 3,
+    "log": "reports/smem-state-stage35-before-qemu.log",
+    "sha256": "3df637d01fade1f45869ec190bd31721d3f1997eb6168913618b3d83152dfb29"
+  }
+}

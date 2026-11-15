@@ -1,0 +1,211 @@
+--- a/ports/qcom-ipcc/qcom-ipcc.c
++++ b/ports/qcom-ipcc/qcom-ipcc.c
+@@ -58,6 +58,7 @@
+ 	struct mbox_controller mbox;
+ 	int num_chans;
+ 	int irq;
++	spinlock_t channel_lock;
+ };
+ 
+ static inline struct qcom_ipcc *to_qcom_ipcc(struct mbox_controller *mbox)
+@@ -131,7 +132,9 @@
+ 				  unsigned long *out_hwirq,
+ 				  unsigned int *out_type)
+ {
+-	if (intsize != 3)
++	if (intsize != 3 || intspec[0] > U16_MAX ||
++	    intspec[1] > U16_MAX ||
++	    qcom_ipcc_get_hwirq(intspec[0], intspec[1]) == IPCC_NO_PENDING_IRQ)
+ 		return -EINVAL;
+ 
+ 	*out_hwirq = qcom_ipcc_get_hwirq(intspec[0], intspec[1]);
+@@ -159,7 +162,12 @@
+ 
+ static void qcom_ipcc_mbox_shutdown(struct mbox_chan *chan)
+ {
++	struct qcom_ipcc *ipcc = to_qcom_ipcc(chan->mbox);
++	unsigned long flags;
++
++	spin_lock_irqsave(&ipcc->channel_lock, flags);
+ 	chan->con_priv = NULL;
++	spin_unlock_irqrestore(&ipcc->channel_lock, flags);
+ }
+ 
+ static struct mbox_chan *qcom_ipcc_mbox_xlate(struct mbox_controller *mbox,
+@@ -168,42 +176,46 @@
+ 	struct qcom_ipcc *ipcc = to_qcom_ipcc(mbox);
+ 	struct qcom_ipcc_chan_info *mchan;
+ 	struct mbox_chan *chan, *free_chan = NULL;
+-	struct device *dev;
++	unsigned long flags;
+ 	int chan_id;
+ 
+-	dev = ipcc->dev;
+-
+-	if (ph->args_count != 2)
++	if (ph->args_count != 2 || ph->args[0] > U16_MAX ||
++	    ph->args[1] > U16_MAX ||
++	    qcom_ipcc_get_hwirq(ph->args[0], ph->args[1]) == IPCC_NO_PENDING_IRQ)
+ 		return ERR_PTR(-EINVAL);
+ 
++	spin_lock_irqsave(&ipcc->channel_lock, flags);
+ 	for (chan_id = 0; chan_id < mbox->num_chans; chan_id++) {
+ 		chan = &ipcc->chans[chan_id];
+ 		mchan = chan->con_priv;
+ 
+ 		if (!mchan) {
+ 			/* Keep scanning past holes to reject duplicate channel requests. */
+-			if (!free_chan)
++			if (!free_chan && !READ_ONCE(chan->cl))
+ 				free_chan = chan;
+ 		} else if (mchan->client_id == ph->args[0] &&
+ 				mchan->signal_id == ph->args[1]) {
+-			return ERR_PTR(-EBUSY);
++			goto busy;
+ 		}
+ 	}
+ 
+ 	if (!free_chan)
+-		return ERR_PTR(-EBUSY);
++		goto busy;
+ 
+ 	chan = free_chan;
+ 
+-	mchan = devm_kzalloc(dev, sizeof(*mchan), GFP_KERNEL);
+-	if (!mchan)
+-		return ERR_PTR(-ENOMEM);
++	/* Fixed storage: request/free cycles must not accumulate devres allocations. */
++	mchan = &ipcc->mchan[chan - ipcc->chans];
+ 
+ 	mchan->client_id = ph->args[0];
+ 	mchan->signal_id = ph->args[1];
+ 	chan->con_priv = mchan;
++	spin_unlock_irqrestore(&ipcc->channel_lock, flags);
+ 
+ 	return chan;
++busy:
++	spin_unlock_irqrestore(&ipcc->channel_lock, flags);
++	return ERR_PTR(-EBUSY);
+ }
+ 
+ static const struct mbox_chan_ops ipcc_mbox_chan_ops = {
+@@ -233,9 +245,11 @@
+ 		for (j = 0; j < i; j++) {
+ 			ret = of_parse_phandle_with_args(client_dn, "mboxes",
+ 						"#mbox-cells", j, &curr_ph);
+-			of_node_put(curr_ph.np);
+-			if (!ret && curr_ph.np == controller_dn)
+-				ipcc->num_chans++;
++			if (!ret) {
++				if (curr_ph.np == controller_dn)
++					ipcc->num_chans++;
++				of_node_put(curr_ph.np);
++			}
+ 		}
+ 	}
+ 
+@@ -246,6 +260,11 @@
+ 	ipcc->chans = devm_kcalloc(dev, ipcc->num_chans,
+ 					sizeof(struct mbox_chan), GFP_KERNEL);
+ 	if (!ipcc->chans)
++		return -ENOMEM;
++
++	ipcc->mchan = devm_kcalloc(dev, ipcc->num_chans,
++				    sizeof(*ipcc->mchan), GFP_KERNEL);
++	if (!ipcc->mchan)
+ 		return -ENOMEM;
+ 
+ 	mbox = &ipcc->mbox;
+@@ -278,6 +297,14 @@
+ 	return 0;
+ }
+ 
++/* Registered before mailbox and IRQ devres: unwind IRQ, mailbox, then domain. */
++static void qcom_ipcc_remove_domain(void *data)
++{
++	struct qcom_ipcc *ipcc = data;
++
++	irq_domain_remove(ipcc->irq_domain);
++}
++
+ static int qcom_ipcc_probe(struct platform_device *pdev)
+ {
+ 	struct qcom_ipcc *ipcc;
+@@ -291,6 +318,7 @@
+ 		return -ENOMEM;
+ 
+ 	ipcc->dev = &pdev->dev;
++	spin_lock_init(&ipcc->channel_lock);
+ 
+ 	ipcc->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(ipcc->base))
+@@ -321,35 +349,22 @@
+ 	if (!ipcc->irq_domain)
+ 		return -ENOMEM;
+ 
++	ret = devm_add_action_or_reset(&pdev->dev, qcom_ipcc_remove_domain, ipcc);
++	if (ret)
++		return ret;
++
+ 	ret = qcom_ipcc_setup_mbox(ipcc, pdev->dev.of_node);
+ 	if (ret)
+-		goto err_mbox;
++		return ret;
+ 
+ 	ret = devm_request_irq(&pdev->dev, ipcc->irq, qcom_ipcc_irq_fn,
+ 			       IRQF_TRIGGER_HIGH | IRQF_NO_SUSPEND |
+ 			       IRQF_NO_THREAD, name, ipcc);
+-	if (ret < 0)
+-		goto err_req_irq;
++	if (ret)
++		return ret;
+ 
+ 	platform_set_drvdata(pdev, ipcc);
+-
+-	return 0;
+-
+-err_req_irq:
+-	if (ipcc->num_chans)
+-		mbox_controller_unregister(&ipcc->mbox);
+-err_mbox:
+-	irq_domain_remove(ipcc->irq_domain);
+-
+-	return ret;
+-}
+-
+-static void qcom_ipcc_remove(struct platform_device *pdev)
+-{
+-	struct qcom_ipcc *ipcc = platform_get_drvdata(pdev);
+-
+-	disable_irq_wake(ipcc->irq);
+-	irq_domain_remove(ipcc->irq_domain);
++	return 0;
+ }
+ 
+ static const struct of_device_id qcom_ipcc_of_match[] = {
+@@ -364,7 +379,6 @@
+ 
+ static struct platform_driver qcom_ipcc_driver = {
+ 	.probe = qcom_ipcc_probe,
+-	.remove = qcom_ipcc_remove,
+ 	.driver = {
+ 		.name = "qcom-ipcc",
+ 		.of_match_table = qcom_ipcc_of_match,
+@@ -373,11 +387,7 @@
+ 	},
+ };
+ 
+-static int __init qcom_ipcc_init(void)
+-{
+-	return platform_driver_register(&qcom_ipcc_driver);
+-}
+-arch_initcall(qcom_ipcc_init);
++module_platform_driver(qcom_ipcc_driver);
+ 
+ MODULE_AUTHOR("Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>");
+ MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
+--- a/ports/qcom-ipcc/Makefile
++++ b/ports/qcom-ipcc/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += qcom-ipcc.o

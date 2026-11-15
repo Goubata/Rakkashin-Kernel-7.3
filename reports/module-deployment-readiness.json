@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-glink-transport-stage32",
-  "source_commit": "ea019803b79e5463d638fc7325cdab8897f66533",
+  "stage": "android73-state-ipc-stage35",
+  "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 103,
-  "same_name_candidate_count": 89,
-  "archived_names_without_same_name_candidate_count": 455,
-  "loaded_names_without_same_name_candidate_count": 440,
+  "staged_count": 105,
+  "same_name_candidate_count": 91,
+  "archived_names_without_same_name_candidate_count": 453,
+  "loaded_names_without_same_name_candidate_count": 438,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -217,6 +217,10 @@
       "file": "modules/qti-fence/ipclite.ko"
     },
     {
+      "name": "qcom_ipcc",
+      "file": "modules/qcom-ipcc/qcom-ipcc.ko"
+    },
+    {
       "name": "qcom_pas",
       "file": "modules/firmware/qcom_pas.ko"
     },
@@ -367,6 +371,10 @@
     {
       "name": "rpmh_regulator",
       "file": "modules/qcom-regulators/rpmh-regulator.ko"
+    },
+    {
+      "name": "smp2p",
+      "file": "modules/qcom-smp2p/smp2p.ko"
     },
     {
       "name": "socinfo",
@@ -636,6 +644,10 @@
       "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko"
     },
     {
+      "name": "qcom_ipcc",
+      "file": "modules/qcom-ipcc/qcom-ipcc.ko"
+    },
+    {
       "name": "qcom_pas",
       "file": "modules/firmware/qcom_pas.ko"
     },
@@ -784,6 +796,10 @@
       "file": "modules/qcom-regulators/rpmh-regulator.ko"
     },
     {
+      "name": "smp2p",
+      "file": "modules/qcom-smp2p/smp2p.ko"
+    },
+    {
       "name": "socinfo",
       "file": "modules/qcom-socinfo/socinfo.ko"
     },
@@ -880,7 +896,7 @@
     },
     "qcom_scm": {
       "file": "modules/firmware/qcom-scm.ko",
-      "sha256": "56ddb721d7ae001fe68c9228a95a0fc662b30c8d882fe4141755e208c9f94e24",
+      "sha256": "a883ce160394b0e083693bec23ad73e1054554523a0838364c72f3c4b1deeb51",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_pas"
@@ -895,7 +911,7 @@
     },
     "qcom_pas": {
       "file": "modules/firmware/qcom_pas.ko",
-      "sha256": "73cd7aa2ee2d0ef8da23fbc39353001a76b53d0d02e064644ce920e5b4b84b09",
+      "sha256": "b4a8154878a867cdc818f2a76ec77b5f34ce859a69d4a9c3ddf09b31c7b1d728",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1169,7 +1185,7 @@
     },
     "pdr_interface": {
       "file": "modules/native-ipc/pdr_interface.ko",
-      "sha256": "1c9c1ab91b6bc375178779ecaf64b874e93dea93422c4eea34d6bb1647d947c8",
+      "sha256": "b546e4736816fe826046b1ae44ba61fea94572d620a0e7ead3ce77487ce9b154",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qcom_pdr_msg",
@@ -1186,7 +1202,7 @@
     },
     "qcom_pdr_msg": {
       "file": "modules/native-ipc/qcom_pdr_msg.ko",
-      "sha256": "9d146622400930fe2d0702de0fa84a909cdfb0df14243bd81a0859826982a62f",
+      "sha256": "c7f9f857459da6dde4ee01a887f43dbcbec56b62666d03402115cef0f0d2e64a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qmi_helpers"
@@ -1202,7 +1218,7 @@
     },
     "qmi_helpers": {
       "file": "modules/native-ipc/qmi_helpers.ko",
-      "sha256": "f80b6d66b404b0a23e4de2dbbb176a6dd99f9e16b6ec491bd8478b31f8629f3f",
+      "sha256": "41ee862564bca56058d9c1a4687e4005ef4d5c21270782f481033374918a44f0",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1216,7 +1232,7 @@
     },
     "qrtr_smd": {
       "file": "modules/native-ipc/qrtr-smd.ko",
-      "sha256": "7b32ff532cb64634dbf1f4294e05ea208ac5ecf2f81590762c048dc7baa5458d",
+      "sha256": "54eb04a4a453be8423a736ed309a09280d03915192d2d56c12b9443f789bc85a",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [
         "qrtr"
@@ -1232,7 +1248,7 @@
     },
     "qrtr": {
       "file": "modules/native-ipc/qrtr.ko",
-      "sha256": "6eb1c4736df9bb09a411b1b5000bee156b47fe9f1959ff2f9c47be3970da2764",
+      "sha256": "0641387c4416d09444accea920d0d8bc6e36fbe4aabb93850401574d8d04f47b",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1245,7 +1261,7 @@
     },
     "coresight": {
       "file": "modules/native/coresight.ko",
-      "sha256": "6c8ea5bd6c2457d0933df85ddca7ccd31f02c7bd6f6fba9fb4af57f230cc8b4a",
+      "sha256": "23e8d0a3fb4d7c6ab759054fa27273ee984c365bbe6dd7b3e13833a703889bee",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1259,7 +1275,7 @@
     },
     "nvmem_qfprom": {
       "file": "modules/native/nvmem_qfprom.ko",
-      "sha256": "8cea6de6787917b71b0d01c9d65fba4ee56bb5d37cdcf62c4693d015192df22c",
+      "sha256": "dc3e94ba848bdd7e5e1d6272a43721226c847db557fbdf581d6e71fa57feb235",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1273,7 +1289,7 @@
     },
     "ntsync": {
       "file": "modules/ntsync/ntsync.ko",
-      "sha256": "2cd06048794630173528a8176a7ed91fded344e54d882f3d83195aeb71792cf9",
+      "sha256": "ec522d5f0fe241ceb700f752deea8b1c8c42b7a673992de5f2e40afa75b5ce3d",
       "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
       "depends": [],
       "softdep": [],
@@ -1976,6 +1992,19 @@
       "dependencies_absent_from_stage": [],
       "soft_dependencies_absent_from_stage": []
     },
+    "qcom_ipcc": {
+      "file": "modules/qcom-ipcc/qcom-ipcc.ko",
+      "sha256": "e667c473690e1daab578d8354f966337fd2f91d1fc181b62f691d3fd43e4d718",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
     "cpu_phys_log_map": {
       "file": "modules/qcom-irq/cpu_phys_log_map.ko",
       "sha256": "9a2655762db3ff59cdaf324c71630e1501b715e295fe36632eb7f96c72e49432",
@@ -2166,6 +2195,22 @@
       ],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "smp2p": {
+      "file": "modules/qcom-smp2p/smp2p.ko",
+      "sha256": "fcd0dfa411fd792d2a90766d6496b80c372a5e74a7f0ea594a097234750a7a6c",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "smem"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
@@ -4449,13 +4494,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_ipcc",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_llcc_pmu",
       "placements": [
         "vendor_boot:fragment-0"
@@ -5206,14 +5244,6 @@
     },
     {
       "name": "smmu_proxy_dlkm",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "smp2p",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
@@ -6030,7 +6060,6 @@
     "qcom_hv_haptics",
     "qcom_i2c_pmic",
     "qcom_iommu_debug",
-    "qcom_ipcc",
     "qcom_llcc_pmu",
     "qcom_logbuf_boot_log",
     "qcom_logbuf_vendor_hooks",
@@ -6130,7 +6159,6 @@
     "smcinvoke_dlkm",
     "smem_mailbox",
     "smmu_proxy_dlkm",
-    "smp2p",
     "smp2p_sleepstate",
     "snd_event_dlkm",
     "snd_usb_audio_qmi",

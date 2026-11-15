@@ -1,0 +1,44 @@
+Verified five unmodified firmware-pinned UFS PHY source files
+Verified SMP2P state IPC source/patch replay: 3 files; hardware acceptance separate
+Verified IPCC mailbox source/patch replay: 2 files; hardware acceptance separate
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/ufs-phy-canoe'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/ports/ufs-phy-canoe'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/smem-state'
+  MODPOST Module.symvers
+WARNING: modpost: avr-smem-state-test.ko: missing MODULE_DESCRIPTION()
+make[1]: Leaving directory '/work/avr-port/tests/smem-state'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-hwspinlock'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/ports/qcom-hwspinlock'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-smem'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/ports/qcom-smem'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-smp2p'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/ports/qcom-smp2p'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/smp2p'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/tests/smp2p'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-ipcc'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/ports/qcom-ipcc'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/ipcc'
+  MODPOST Module.symvers
+make[1]: Leaving directory '/work/avr-port/tests/ipcc'
+make: Leaving directory '/work/avr-src'

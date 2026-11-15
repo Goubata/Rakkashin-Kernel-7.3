@@ -1,0 +1,222 @@
+--- a/ports/qcom-smp2p/smp2p.c
++++ b/ports/qcom-smp2p/smp2p.c
+@@ -140,6 +140,7 @@
+  */
+ struct qcom_smp2p {
+ 	struct device *dev;
++	int irq;
+ 
+ 	struct smp2p_smem_item *in;
+ 	struct smp2p_smem_item *out;
+@@ -168,6 +169,19 @@
+ 
+ #define CREATE_TRACE_POINTS
+ #include "trace-smp2p.h"
++
++/* The remote owns this header: validate it before indexing its fixed array. */
++static bool qcom_smp2p_valid_item(const struct smp2p_smem_item *item, size_t size)
++{
++	unsigned int total, valid;
++
++	if (size < sizeof(*item) || READ_ONCE(item->magic) != SMP2P_MAGIC ||
++	    !READ_ONCE(item->version) || READ_ONCE(item->version) > MAX_VERSION)
++		return false;
++	total = READ_ONCE(item->total_entries);
++	valid = READ_ONCE(item->valid_entries);
++	return total <= SMP2P_MAX_ENTRY && valid <= total;
++}
+ 
+ static void qcom_smp2p_kick(struct qcom_smp2p *smp2p)
+ {
+@@ -194,6 +208,9 @@
+ 
+ 	restart_done = in->flags & BIT(SMP2P_FLAGS_RESTART_DONE_BIT);
+ 	restart = restart_done != smp2p->ssr_ack;
++	/* Pinned vendor V1 keeps history even during restart; V2 resets it. */
++	if (!restart || READ_ONCE(in->version) == 1)
++		return restart;
+ 	list_for_each_entry(entry, &smp2p->inbound, node) {
+ 		if (!entry->value)
+ 			continue;
+@@ -246,7 +263,7 @@
+ 	size_t size;
+ 
+ 	in = qcom_smem_get(pid, smem_id, &size);
+-	if (IS_ERR(in))
++	if (IS_ERR(in) || size < sizeof(*in) || READ_ONCE(in->magic) != SMP2P_MAGIC)
+ 		return 0;
+ 
+ 	return in->version;
+@@ -256,14 +273,14 @@
+ {
+ 	unsigned int smem_id = smp2p->smem_items[SMP2P_INBOUND];
+ 	unsigned int pid = smp2p->remote_pid;
+-	char buf[SMP2P_MAX_ENTRY_NAME];
++	char buf[SMP2P_MAX_ENTRY_NAME + 1] = {};
+ 	struct smp2p_smem_item *in;
+ 	struct smp2p_entry *entry;
+ 	size_t size;
+ 	int i;
+ 
+ 	in = qcom_smem_get(pid, smem_id, &size);
+-	if (IS_ERR(in))
++	if (IS_ERR(in) || !qcom_smp2p_valid_item(in, size))
+ 		return;
+ 
+ 	smp2p->in = in;
+@@ -272,9 +289,11 @@
+ 	if (in->version == 0)
+ 		return;
+ 
+-	for (i = smp2p->valid_entries; i < in->valid_entries; i++) {
++	rmb();
++	for (i = smp2p->valid_entries;
++	     i < min_t(unsigned int, READ_ONCE(in->valid_entries), SMP2P_MAX_ENTRY); i++) {
+ 		list_for_each_entry(entry, &smp2p->inbound, node) {
+-			memcpy(buf, in->entries[i].name, sizeof(buf));
++			memcpy(buf, in->entries[i].name, SMP2P_MAX_ENTRY_NAME);
+ 			if (!strcmp(buf, entry->name)) {
+ 				entry->value = &in->entries[i].value;
+ 				entry->last_value = readl(entry->value);
+@@ -291,16 +310,18 @@
+ 	struct smp2p_entry *entry;
+ 	int irq_pin;
+ 	u32 status;
+-	char buf[SMP2P_MAX_ENTRY_NAME];
++	char buf[SMP2P_MAX_ENTRY_NAME + 1] = {};
+ 	u32 val;
+ 	int i;
+ 
+ 	in = smp2p->in;
+ 
+ 	/* Match newly created entries */
+-	for (i = smp2p->valid_entries; i < in->valid_entries; i++) {
++	rmb();
++	for (i = smp2p->valid_entries;
++	     i < min_t(unsigned int, READ_ONCE(in->valid_entries), SMP2P_MAX_ENTRY); i++) {
+ 		list_for_each_entry(entry, &smp2p->inbound, node) {
+-			memcpy(buf, in->entries[i].name, sizeof(buf));
++			memcpy(buf, in->entries[i].name, SMP2P_MAX_ENTRY_NAME);
+ 			if (!strcmp(buf, entry->name)) {
+ 				entry->value = &in->entries[i].value;
+ 				break;
+@@ -369,9 +390,14 @@
+ 			goto out;
+ 		}
+ 
++		if (!qcom_smp2p_valid_item(in, size))
++			goto out;
+ 		smp2p->in = in;
+ 	}
+ 
++	if (!qcom_smp2p_valid_item(in, sizeof(*in)))
++		goto out;
++	rmb();
+ 	if (!smp2p->negotiation_done)
+ 		qcom_smp2p_negotiate(smp2p);
+ 
+@@ -500,7 +526,7 @@
+ 	spin_lock_irqsave(&entry->lock, flags);
+ 	val = orig = readl(entry->value);
+ 	val &= ~mask;
+-	val |= value;
++	val |= value & mask;
+ 	writel(val, entry->value);
+ 	spin_unlock_irqrestore(&entry->lock, flags);
+ 
+@@ -523,6 +549,9 @@
+ 	struct smp2p_smem_item *out = smp2p->out;
+ 	char buf[SMP2P_MAX_ENTRY_NAME] = {};
+ 
++	if (out->valid_entries >= SMP2P_MAX_ENTRY)
++		return -ENOSPC;
++
+ 	/* Allocate an entry from the smem item */
+ 	strscpy(buf, entry->name, SMP2P_MAX_ENTRY_NAME);
+ 	memcpy(out->entries[out->valid_entries].name, buf, SMP2P_MAX_ENTRY_NAME);
+@@ -534,6 +563,8 @@
+ 
+ 	entry->state = qcom_smem_state_register(node, &smp2p_state_ops, entry);
+ 	if (IS_ERR(entry->state)) {
++		out->valid_entries--;
++		entry->value = NULL;
+ 		dev_err(smp2p->dev, "failed to register qcom_smem_state\n");
+ 		return PTR_ERR(entry->state);
+ 	}
+@@ -547,6 +578,7 @@
+ 	unsigned smem_id = smp2p->smem_items[SMP2P_OUTBOUND];
+ 	unsigned pid = smp2p->remote_pid;
+ 	u8 in_version;
++	size_t size;
+ 	int ret;
+ 
+ 	ret = qcom_smem_alloc(pid, smem_id, sizeof(*out));
+@@ -554,11 +586,14 @@
+ 		return dev_err_probe(smp2p->dev, ret,
+ 				     "unable to allocate local smp2p item\n");
+ 
+-	out = qcom_smem_get(pid, smem_id, NULL);
++	out = qcom_smem_get(pid, smem_id, &size);
+ 	if (IS_ERR(out)) {
+ 		dev_err(smp2p->dev, "Unable to acquire local smp2p item\n");
+ 		return PTR_ERR(out);
+ 	}
++
++	if (size < sizeof(*out))
++		return -EINVAL;
+ 
+ 	memset(out, 0, sizeof(*out));
+ 	out->magic = SMP2P_MAGIC;
+@@ -622,6 +657,10 @@
+ 		return -EINVAL;
+ 	}
+ 
++	if (smp2p->ipc_bit < 0 || smp2p->ipc_bit >= 32 ||
++	    smp2p->ipc_offset < 0 || smp2p->ipc_offset % 4)
++		return -EINVAL;
++
+ 	return 0;
+ }
+ 
+@@ -638,6 +677,7 @@
+ 		return -ENOMEM;
+ 
+ 	smp2p->dev = &pdev->dev;
++	smp2p->irq = -1;
+ 	INIT_LIST_HEAD(&smp2p->inbound);
+ 	INIT_LIST_HEAD(&smp2p->outbound);
+ 
+@@ -734,6 +774,7 @@
+ 	 * do not have proper autosleep feature may want to handle it with
+ 	 * other wakeup events (e.g. Power button) instead waking up immediately.
+ 	 */
++	smp2p->irq = irq;
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
+ 	ret = dev_pm_set_wake_irq(&pdev->dev, irq);
+@@ -744,6 +785,8 @@
+ 
+ set_wake_irq_fail:
+ 	dev_pm_clear_wake_irq(&pdev->dev);
++	device_set_wakeup_capable(&pdev->dev, false);
++	devm_free_irq(&pdev->dev, smp2p->irq, smp2p);
+ 
+ unwind_interfaces:
+ 	list_for_each_entry(entry, &smp2p->inbound, node)
+@@ -770,6 +813,9 @@
+ 	struct smp2p_entry *entry;
+ 
+ 	dev_pm_clear_wake_irq(&pdev->dev);
++	device_set_wakeup_capable(&pdev->dev, false);
++	/* Drain the threaded receiver before removing its domains or mailbox. */
++	devm_free_irq(&pdev->dev, smp2p->irq, smp2p);
+ 
+ 	list_for_each_entry(entry, &smp2p->inbound, node)
+ 		irq_domain_remove(entry->domain);
+--- a/ports/qcom-smp2p/Makefile
++++ b/ports/qcom-smp2p/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += smp2p.o
++ccflags-y += -I$(src) -DCONFIG_QCOM_SMEM_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers

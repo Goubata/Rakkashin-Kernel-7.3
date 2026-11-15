@@ -33,9 +33,16 @@ def main():
     parser.add_argument('--pmic-ipc-tests',action='store_true')
     parser.add_argument('--pmic-glink-tests',action='store_true')
     parser.add_argument('--rproc-gate-tests',action='store_true')
+    parser.add_argument('--smem-state-tests',action='store_true')
+    parser.add_argument('--smp2p',action='store_true')
+    parser.add_argument('--smp2p-tests',action='store_true')
+    parser.add_argument('--ipcc',action='store_true')
+    parser.add_argument('--ipcc-tests',action='store_true')
     parser.add_argument('--glink-transport',action='store_true')
     parser.add_argument('--glink-transport-tests',action='store_true')
     args=parser.parse_args()
+    if args.smp2p_tests:args.smp2p=True
+    if args.ipcc_tests:args.ipcc=True
     if args.glink_transport_tests or args.pmic_glink_tests or args.rproc_gate_tests:args.glink_transport=True
     if args.pmic_glink_tests:args.pmic_ipc_tests=True;args.diagnostics=True
     if args.adc_thermal_tests:args.adc_thermal=True
@@ -100,6 +107,15 @@ def main():
         from native_module_inventory import pmic_ipc_modules
         pmic_ipc_modules()
         targets.append('tests/pmic-ipc')
+    if args.smem_state_tests:targets.append('tests/smem-state')
+    if args.smp2p:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_smp2p_sources.py')],check=True)
+        targets += ['ports/qcom-hwspinlock','ports/qcom-smem','ports/qcom-smp2p']
+        if args.smp2p_tests:targets.append('tests/smp2p')
+    if args.ipcc:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_ipcc_sources.py')],check=True)
+        targets.append('ports/qcom-ipcc')
+        if args.ipcc_tests:targets.append('tests/ipcc')
     if args.glink_transport:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_glink_transport_sources.py')],check=True)
         targets += ['ports/qcom-hwspinlock','ports/qcom-smem','ports/qcom-glink-transport']

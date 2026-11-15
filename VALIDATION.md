@@ -504,3 +504,39 @@ Five active DT edges retain semantic providers/arguments despite phandle numeric
 renumbering. Three SMEM IDs and 15 common wire IDs match pinned vendor source.
 Vendor command10/zero-copy is not implemented or advertised; complete protocol,
 partition19/coherency/IRQ/mailbox/SoCCP/firmware and all phone criteria remain open.
+
+
+## Stage33–35: actual IPCC/SMP2P and drained SMEM-state callbacks
+
+105 real staged modules / 5,330 matching import CRCs; dependencies and hard/soft
+graph are complete and acyclic within this partial stage. Image #22 hash:
+`ea9dbf362caed8eb6cadb22f6a37991352be826dff839b4ae301f46a5831da8e`. Native source checkpoint
+`74a125597e880ab50dcf372c3b9a2cb082e11d10` replays as 16 patches / 61 exact files.
+
+Seven IPCC callback cases use RAM registers; eight SMP2P cases use real callback
+sources, RAM shared entries, a recording regmap bus and the built-in state API.
+They do not probe hardware. Production modules also register/unregister separately.
+Physical IRQ/MMIO, wakeup, failed hardware probe unwind and active IRQ consumers
+remain unverified despite the reviewed devres/receiver cleanup fixes.
+
+Three tests use actual native state register/get/update/unregister APIs, real
+synthetic DT client references and concurrent tasks. The original Image fails
+all three: unregister returns during a callback, an orphan can be acquired anew,
+and bit32 is accepted. New Image passes all three: unpublish under list mutex,
+SRCU callback drain, retained client handle orphan rejection and range checking.
+Unregister is sleepable and must run outside all state update callbacks. Clients
+must retain/get/put their handles normally; this is not arbitrary-use-after-put
+protection or a self-unregister API.
+
+New Image regressions pass state3 + IPCC7 + SMP2P8 + GLINK11 + PMIC/QMI19 +
+SSR/Gunyah10 + regulators7 = 65 cases, plus QRTR128 packets and 24 DT host tests.
+Saved and candidate retain semantic references for two IPCC and six SMP2P
+providers and the four SoCCP state bits. Vendor/native C shared-item layouts match;
+long WPSS outbound names retain vendor wire truncation and V1/V2 SSR history
+behavior. Full firmware/IRQ/protocol equivalence remains unproven.
+
+Still pending: Alor-specific SoCCP rails/PAS and early attach, remote SMEM peer,
+all actual remote services, vendor extensions, whole-board DT, packaged boot and
+DLKM/DTBO/policy acceptance, controlled physical boot and daily-use/efficiency
+measurements. No partition write or flashable image is claimed. Evidence:
+`reports/state-ipc-stage35-validation.json`.

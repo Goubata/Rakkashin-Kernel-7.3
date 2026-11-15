@@ -1,0 +1,41 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-smp2p/smp2p.c",
+      "source": "drivers/soc/qcom/smp2p.c",
+      "original_sha256": "af84f30d36a206cc7a0b95e39af686a78be88cf428ab9af8bfbc247d8209d13a",
+      "sha256": "07c3346da6e35308214cc7d7c2dec55c18d03ce09ef2b147988f279ddccfaebd"
+    },
+    {
+      "file": "ports/qcom-smp2p/trace-smp2p.h",
+      "source": "drivers/soc/qcom/trace-smp2p.h",
+      "original_sha256": "59c5b9e6838e9d426557b38363008456c9ae70813ce21fd77c3e140051f4f45b",
+      "sha256": "59c5b9e6838e9d426557b38363008456c9ae70813ce21fd77c3e140051f4f45b"
+    },
+    {
+      "file": "ports/qcom-smp2p/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "da4789279dcfed9d3d2b222f40f657584181ad1d34f6f5966377c68634b23699"
+    }
+  ],
+  "patch_sha256": "d75916445e231e7dfd0b8d71eaa2a7d6622793cabad3bd90d78eeb601a4670ad",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Real native SMP2P provider using actual SMEM/state/mailbox APIs",
+    "Validate shared item sizes, magic, versions and fixed array counts",
+    "Bound inbound name reads and outbound slots; preserve pinned vendor long-name truncation",
+    "Only reset cached IRQ values when restart changes on V2; preserve vendor V1 history",
+    "Mask outbound state updates to requested bits",
+    "Drain receiver IRQ before tearing down domains and mailbox",
+    "Validate fallback IPC bit and register alignment"
+  ],
+  "pending": [
+    "Physical firmware SMEM/IRQ/mailbox and suspend/wakeup",
+    "Native SMEM-state callback drain patch required; device/framework lifetime and probe failure stress pending",
+    "Vendor early-attach/IRQ pending extensions and whole-board DT compatibility"
+  ]
+}

@@ -1,0 +1,1004 @@
+{
+  "scope": "selected DT provider cells, identity ranges, outbound capacity and saved semantics only; not whole-board validation or firmware delivery",
+  "hardware_verified": false,
+  "inputs": {
+    "saved": {
+      "sha256": "a84afc05b1a3f0e5b9e2da59d90fbeb10835a3c061090a379a0eade7ef9a5890",
+      "ipcc_providers": [
+        {
+          "node": "/soc/qcom,ipcc@1106000",
+          "reg": [
+            0,
+            17850368,
+            0,
+            4096
+          ],
+          "interrupt_cells": [
+            3
+          ],
+          "mailbox_cells": [
+            2
+          ]
+        },
+        {
+          "node": "/soc/qcom,ipcc_compute_l0@11c3000",
+          "reg": [
+            0,
+            18624512,
+            0,
+            4096
+          ],
+          "interrupt_cells": [
+            3
+          ],
+          "mailbox_cells": [
+            2
+          ]
+        }
+      ],
+      "smp2p_edges": [
+        {
+          "node": "/soc/qcom,smp2p-adsp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            2
+          ],
+          "smem_ids": [
+            443,
+            429
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            3,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                3,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-adsp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/sleepstate-out",
+              "name": "sleepstate",
+              "direction": "outbound",
+              "wire_name": "sleepstate",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,sleepstate-in",
+              "name": "sleepstate_see",
+              "direction": "inbound",
+              "wire_name": "sleepstate_see",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,smp2p-rdbg2-out",
+              "name": "rdbg",
+              "direction": "outbound",
+              "wire_name": "rdbg",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,smp2p-rdbg2-in",
+              "name": "rdbg",
+              "direction": "inbound",
+              "wire_name": "rdbg",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-cdsp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            5
+          ],
+          "smem_ids": [
+            94,
+            432
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            5,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                5,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-cdsp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/qcom,smp2p-rdbg5-out",
+              "name": "rdbg",
+              "direction": "outbound",
+              "wire_name": "rdbg",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/qcom,smp2p-rdbg5-in",
+              "name": "rdbg",
+              "direction": "inbound",
+              "wire_name": "rdbg",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-dcp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            22
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            14,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                14,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-dcp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-dcp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-modem",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            1
+          ],
+          "smem_ids": [
+            435,
+            428
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            2,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                2,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-modem/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-ipa-1-out",
+              "name": "ipa",
+              "direction": "outbound",
+              "wire_name": "ipa",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-ipa-1-in",
+              "name": "ipa",
+              "direction": "inbound",
+              "wire_name": "ipa",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-smem-mailbox-1-out",
+              "name": "smem-mailbox",
+              "direction": "outbound",
+              "wire_name": "smem-mailbox",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-smem-mailbox-1-in",
+              "name": "smem-mailbox",
+              "direction": "inbound",
+              "wire_name": "smem-mailbox",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-soccp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            19
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            13,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                13,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-soccp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-soccp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-wpss",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            13
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            17,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                17,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-3-out",
+              "name": "wlan_ep_power_save",
+              "direction": "outbound",
+              "wire_name": "wlan_ep_power_s",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-2-out",
+              "name": "wlan_soc_wake",
+              "direction": "outbound",
+              "wire_name": "wlan_soc_wake",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-2-in",
+              "name": "wlan_soc_wake",
+              "direction": "inbound",
+              "wire_name": "wlan_soc_wake",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-1-out",
+              "name": "wlan",
+              "direction": "outbound",
+              "wire_name": "wlan",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-1-in",
+              "name": "wlan",
+              "direction": "inbound",
+              "wire_name": "wlan",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "soccp_client": {
+        "node": "/soc/remoteproc-soccp@a3380000",
+        "states": [
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              0
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              10
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              9
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              8
+            ]
+          }
+        ],
+        "names": [
+          "stop",
+          "wakeup",
+          "sleep",
+          "ping"
+        ]
+      },
+      "errors": []
+    },
+    "candidate": {
+      "sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+      "ipcc_providers": [
+        {
+          "node": "/soc/qcom,ipcc@1106000",
+          "reg": [
+            0,
+            17850368,
+            0,
+            4096
+          ],
+          "interrupt_cells": [
+            3
+          ],
+          "mailbox_cells": [
+            2
+          ]
+        },
+        {
+          "node": "/soc/qcom,ipcc_compute_l0@11c3000",
+          "reg": [
+            0,
+            18624512,
+            0,
+            4096
+          ],
+          "interrupt_cells": [
+            3
+          ],
+          "mailbox_cells": [
+            2
+          ]
+        }
+      ],
+      "smp2p_edges": [
+        {
+          "node": "/soc/qcom,smp2p-adsp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            2
+          ],
+          "smem_ids": [
+            443,
+            429
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            3,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                3,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-adsp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/sleepstate-out",
+              "name": "sleepstate",
+              "direction": "outbound",
+              "wire_name": "sleepstate",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,sleepstate-in",
+              "name": "sleepstate_see",
+              "direction": "inbound",
+              "wire_name": "sleepstate_see",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,smp2p-rdbg2-out",
+              "name": "rdbg",
+              "direction": "outbound",
+              "wire_name": "rdbg",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-adsp/qcom,smp2p-rdbg2-in",
+              "name": "rdbg",
+              "direction": "inbound",
+              "wire_name": "rdbg",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-cdsp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            5
+          ],
+          "smem_ids": [
+            94,
+            432
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            5,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                5,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-cdsp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/qcom,smp2p-rdbg5-out",
+              "name": "rdbg",
+              "direction": "outbound",
+              "wire_name": "rdbg",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-cdsp/qcom,smp2p-rdbg5-in",
+              "name": "rdbg",
+              "direction": "inbound",
+              "wire_name": "rdbg",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-dcp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            22
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            14,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                14,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-dcp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-dcp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-modem",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            1
+          ],
+          "smem_ids": [
+            435,
+            428
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            2,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                2,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-modem/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-ipa-1-out",
+              "name": "ipa",
+              "direction": "outbound",
+              "wire_name": "ipa",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-ipa-1-in",
+              "name": "ipa",
+              "direction": "inbound",
+              "wire_name": "ipa",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-smem-mailbox-1-out",
+              "name": "smem-mailbox",
+              "direction": "outbound",
+              "wire_name": "smem-mailbox",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-modem/qcom,smp2p-smem-mailbox-1-in",
+              "name": "smem-mailbox",
+              "direction": "inbound",
+              "wire_name": "smem-mailbox",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-soccp",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            19
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            13,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                13,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-soccp/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-soccp/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        },
+        {
+          "node": "/soc/qcom,smp2p-wpss",
+          "local_pid": [
+            0
+          ],
+          "remote_pid": [
+            13
+          ],
+          "smem_ids": [
+            617,
+            616
+          ],
+          "irq_provider": "/soc/qcom,ipcc@1106000",
+          "irq": [
+            17,
+            2,
+            1
+          ],
+          "mailbox": [
+            {
+              "provider": "/soc/qcom,ipcc@1106000",
+              "args": [
+                17,
+                2
+              ]
+            }
+          ],
+          "entries": [
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-3-out",
+              "name": "wlan_ep_power_save",
+              "direction": "outbound",
+              "wire_name": "wlan_ep_power_s",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-2-out",
+              "name": "wlan_soc_wake",
+              "direction": "outbound",
+              "wire_name": "wlan_soc_wake",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-2-in",
+              "name": "wlan_soc_wake",
+              "direction": "inbound",
+              "wire_name": "wlan_soc_wake",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-1-out",
+              "name": "wlan",
+              "direction": "outbound",
+              "wire_name": "wlan",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/qcom,smp2p-wlan-1-in",
+              "name": "wlan",
+              "direction": "inbound",
+              "wire_name": "wlan",
+              "cells": [
+                2
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/master-kernel",
+              "name": "master-kernel",
+              "direction": "outbound",
+              "wire_name": "master-kernel",
+              "cells": [
+                1
+              ]
+            },
+            {
+              "node": "/soc/qcom,smp2p-wpss/slave-kernel",
+              "name": "slave-kernel",
+              "direction": "inbound",
+              "wire_name": "slave-kernel",
+              "cells": [
+                2
+              ]
+            }
+          ]
+        }
+      ],
+      "soccp_client": {
+        "node": "/soc/remoteproc-soccp@a3380000",
+        "states": [
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              0
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              10
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              9
+            ]
+          },
+          {
+            "provider": "/soc/qcom,smp2p-soccp/master-kernel",
+            "args": [
+              8
+            ]
+          }
+        ],
+        "names": [
+          "stop",
+          "wakeup",
+          "sleep",
+          "ping"
+        ]
+      },
+      "errors": []
+    }
+  },
+  "vendor_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "shared_item_c_layout_equal": true,
+  "wire_comparison_scope": "C shared-item layout and recorded native/vendor outbound strscpy(16) behavior only; not full firmware/IRQ/SSR equivalence",
+  "vendor_long_outbound_names_preserved": true,
+  "selected_semantics_equal": true,
+  "passed": true
+}

@@ -1,0 +1,9 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-ipcc/qcom-ipcc.c",
+      "source": "drivers/mailbox/qcom-ipcc.c"
+    }
+  ]
+}

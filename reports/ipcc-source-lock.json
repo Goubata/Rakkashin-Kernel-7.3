@@ -1,0 +1,34 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-ipcc/qcom-ipcc.c",
+      "source": "drivers/mailbox/qcom-ipcc.c",
+      "original_sha256": "6cf9370c5a7b3b78380a8720f0e791e9c1f7d6d1d36ebe27893c971658841709",
+      "sha256": "1a0e72a3c1b3602968969af45a525d69c4f3da5bc3e8c91df91cd87086695f85"
+    },
+    {
+      "file": "ports/qcom-ipcc/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "572a13833faff6d9623cde79b4771cdb444f20fba57b51f1501889c940ac2ac5"
+    }
+  ],
+  "patch_sha256": "0badf3d8724aa06935debeb551c433561d90fb191d5058870711eacf13179fb6",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Real native IPCC IRQ and mailbox provider with unloadable module registration",
+    "Reject client/signal truncation and reserved no-pending sentinel",
+    "Preallocate channel records; protect reservations and shutdown with a spinlock",
+    "Preserve duplicate checking past holes; avoid slots whose prior client is still bound",
+    "Use ordered devres: free IRQ, unregister mailbox, remove domain; no double unregister or unbalanced wake disable",
+    "Only release successfully parsed DT references"
+  ],
+  "pending": [
+    "Physical IPCC IRQ/mailbox delivery and suspend/wakeup",
+    "Probe failure injection and live IRQ-domain consumer teardown",
+    "Whole-board DT/provider order and SoCCP integration"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-smp2p/smp2p.c",
+      "source": "drivers/soc/qcom/smp2p.c"
+    },
+    {
+      "file": "ports/qcom-smp2p/trace-smp2p.h",
+      "source": "drivers/soc/qcom/trace-smp2p.h"
+    }
+  ]
+}

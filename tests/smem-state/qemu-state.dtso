@@ -1,0 +1,22 @@
+/dts-v1/;
+/plugin/;
+/* Synthetic state providers/clients for an isolated QEMU guest only. */
+/ {
+ fragment@0 {
+  target-path = "/";
+  __overlay__ {
+   avr_test_state: avr-qemu-state-provider {
+    compatible = "avr,qemu-state-test";
+    #qcom,smem-state-cells = <1>;
+   };
+   avr-qemu-state-client {
+    compatible = "avr,qemu-state-test";
+    qcom,smem-states = <&avr_test_state 3>;
+   };
+   avr-qemu-state-bad-client {
+    compatible = "avr,qemu-state-test";
+    qcom,smem-states = <&avr_test_state 32>;
+   };
+  };
+ };
+};

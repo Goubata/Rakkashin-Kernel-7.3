@@ -1,0 +1,38 @@
+{
+  "stage": 75,
+  "scope": "Exact production SPI message prepare/unprepare with native runtime PM and SPI objects; hardware locks/mode/FIFO/DMA recorded only",
+  "checks": {
+    "log": "reports/geni-pm-stage75-qemu.log",
+    "test": "geni-pm",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      8,
+      0,
+      0,
+      8
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "pending": [
+    "Hardware prepare failure unwind, complete suspend/remove/VM modes and fallback successful-reference pairing",
+    "Physical AVR SPI/DMA/IOMMU/IRQ/firmware behavior",
+    "DMA peer-abort/STOP/RESET concurrency and initialized SMEM mapping",
+    "Other mandatory drivers and whole-board DT/boot/vendor_boot/dtbo/DLKM/SELinux acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/geni-pm-stage75-check.json": "0b81bd33aa4a4fe69287b40f032088b7ef6607dadf4154a1b8e8df325a9d237e",
+    "reports/geni-pm-stage75-qemu.log": "923871b1e280da674b6279cfbbcfd215631c389601339014fe368f4e58282a5d",
+    "reports/geni-pm-stage75-qemu.json": "b74d41ae42e2ba851c6aa24cc63a72351f505e4bf065cb5528cae96359fe7613",
+    "reports/geni-pm-stage75-build.log": "81cef2bbb015129862e1785d2633a22b5196ca75de0442c21c7229a98fc1bd25",
+    "reports/geni-pm-stage75-crc.json": "2efb9b7efb4a58dd4d09ed6c6876df7146c646f34d1d29dd20b26f2032dc9a49",
+    "reports/geni-bus-source-lock.json": "e16ae4b525dd555d8e47c29883b79c07fbb7584b13759a416690f7c3f516808d",
+    "patches/geni-bus-7.3.patch": "ad82d95977051a0e11b09e7f7bb15dc056844eefa71f3fd3255ab30df6f56fc9",
+    "tests/geni-pm/avr-geni-pm-test.c": "94b1745fbae79b74997a58c59c047d0bd2df6e91193b95cd769d64c5e3409d14",
+    "tests/geni-pm/generated.h": "979cd42c0c060f38ef0400695cc902af043e65647ec2bce45f2fda7b55eede05"
+  }
+}

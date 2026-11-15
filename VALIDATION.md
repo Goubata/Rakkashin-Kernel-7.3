@@ -1339,3 +1339,25 @@ Production modules rebuild and import CRC checks pass. Evidence:
 reports/geni-map-stage74-validation.json. Drafts remain outside Stage57. Full
 prepare failure PM/sequencer-lock unwind, remove/suspend lifetime, physical
 transfers and remaining mandatory drivers/whole-board gates remain incomplete.
+
+## Stage75: SPI message preparation failure unwind
+
+Track the shared-message reference (including the first reference inherited from
+prepare_transfer_hardware) and a successfully acquired sequencer lock. On failed
+message preparation, release the lock while power is held, then release only the
+references owned by this message. SPI core does not call unprepare_message when
+prepare_message fails. Preserve setup=true after consuming the first inherited
+reference so a queued retry acquires a fresh one. Treat runtime resume failure
+as a returned error rather than issuing WARN_ON_ONCE. Nonshared hardware-phase
+references remain owned by their caller.
+
+Eight SMP4 tests pass using exact production prepare/unprepare methods, native
+runtime-PM callbacks/refcounts and native SPI objects. Lock/mode/FIFO/DMA actions
+are recorded, not physical controller operations. Cover lock, map, FIFO, mode
+and native resume failures; retry; inherited first-message ownership; borrowed
+nonshared reference; and fallback local resume failure unwind. No warning or
+panic occurs. Reproduce build_geni_bus.py --pm-tests and QEMU mode geni-pm.
+Three draft modules rebuild with all 323 imports matching. Evidence:
+reports/geni-pm-stage75-validation.json. Draft artifacts are separate from the
+Stage57 main bundle. Hardware prepare failure unwind, full suspend/remove/VM
+ownership, actual AVR transfers and whole-board acceptance remain pending.

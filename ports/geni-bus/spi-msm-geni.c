@@ -1941,6 +1941,8 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 	int ret = 0;
 	struct spi_geni_master *mas = spi_controller_get_devdata(spi);
 	int count;
+	unsigned int pm_refs = 0;
+	bool bus_locked = false;
 	unsigned long long start_time;
 
 	start_time = geni_capture_start_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
@@ -1961,13 +1963,13 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 				dev_err(mas->dev,
 					"%s:pm_runtime_get_sync failed %d\n",
 							__func__, ret);
-				WARN_ON_ONCE(1);
 				pm_runtime_put_noidle(mas->dev);
 				/* Set device in suspended since resume failed */
 				pm_runtime_set_suspended(mas->dev);
 				goto exit_prepare_message;
 			}
 			ret = 0;
+			pm_refs++;
 
 			if (mas->dis_autosuspend) {
 				count =
@@ -1978,7 +1980,11 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 								count);
 			}
 		} else {
+			/* The first shared message inherits the reference acquired
+			 * by prepare_transfer_hardware. Keep setup true on failure:
+			 * a queued retry must acquire a fresh reference itself. */
 			mas->setup = true;
+			pm_refs++;
 		}
 
 		if (mas->shared_se) {
@@ -1988,6 +1994,7 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 					"%s failed: %d\n", __func__, ret);
 				goto exit_prepare_message;
 			}
+			bus_locked = true;
 		}
 	}
 
@@ -2003,12 +2010,13 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 		if (ret < 0) {
 			dev_err(mas->dev,
 			"%s:pm_runtime_get_sync failed %d\n", __func__, ret);
-			WARN_ON_ONCE(1);
 			pm_runtime_put_noidle(mas->dev);
 			/* Set device in suspended since resume failed */
 			pm_runtime_set_suspended(mas->dev);
 			goto exit_prepare_message;
 		}
+		pm_refs++;
+		ret = 0;
 	}
 
 	mas->cur_xfer_mode = select_xfer_mode(spi, spi_msg);
@@ -2028,6 +2036,15 @@ static int spi_geni_prepare_message(struct spi_controller *spi, struct spi_messa
 	}
 
 exit_prepare_message:
+	if (ret < 0) {
+		/* SPI core does not unprepare a message whose preparation failed. */
+		if (bus_locked)
+			spi_geni_unlock_bus(spi);
+		while (pm_refs) {
+			pm_refs--;
+			pm_runtime_put_sync(mas->dev);
+		}
+	}
 	geni_capture_stop_time(&mas->spi_rsc, mas->ipc_log_kpi, __func__,
 			       mas->spi_kpi, start_time, 0, 0);
 	return ret;

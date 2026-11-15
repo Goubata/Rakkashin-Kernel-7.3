@@ -39,3 +39,5 @@ modules.order
 /tests/geni-bus/generated.h
 
 /tests/geni-map/generated.h
+
+/tests/geni-pm/generated.h

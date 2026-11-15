@@ -1,0 +1,14 @@
+/dts-v1/;
+/plugin/;
+/* A synthetic parent with IRQ names but no optional shutdown-ack, like AVR. */
+/ {
+ fragment@0 {
+  target-path = "/";
+  __overlay__ {
+   avr-qemu-services-parent {
+    compatible = "avr,qemu-services-test";
+    interrupt-names = "unused-test-irq";
+   };
+  };
+ };
+};

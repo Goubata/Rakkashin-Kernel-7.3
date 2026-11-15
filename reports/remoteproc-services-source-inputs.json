@@ -1,0 +1,25 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_q6v5.c",
+      "source": "drivers/remoteproc/qcom_q6v5.c"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_q6v5.h",
+      "source": "drivers/remoteproc/qcom_q6v5.h"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_sysmon.c",
+      "source": "drivers/remoteproc/qcom_sysmon.c"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_aoss.c",
+      "source": "drivers/soc/qcom/qcom_aoss.c"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/trace-aoss.h",
+      "source": "drivers/soc/qcom/trace-aoss.h"
+    }
+  ]
+}

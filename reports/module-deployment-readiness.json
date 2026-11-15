@@ -1,12 +1,12 @@
 {
   "scope": "name/ELF dependency/placement inventory only; no hardware or ABI equivalence inferred",
-  "stage": "android73-state-ipc-stage35",
+  "stage": "android73-remoteproc-services-stage37",
   "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
   "archived_unique_count": 544,
-  "staged_count": 105,
-  "same_name_candidate_count": 91,
-  "archived_names_without_same_name_candidate_count": 453,
-  "loaded_names_without_same_name_candidate_count": 438,
+  "staged_count": 108,
+  "same_name_candidate_count": 94,
+  "archived_names_without_same_name_candidate_count": 450,
+  "loaded_names_without_same_name_candidate_count": 435,
   "all_staged_module_dependencies_present": true,
   "all_staged_soft_dependencies_present": true,
   "elf_dependency_graph_acyclic": true,
@@ -209,6 +209,10 @@
       "file": "modules/qcom-clock-controllers/gpucc-chora.ko"
     },
     {
+      "name": "qcom_aoss",
+      "file": "modules/qcom-remoteproc-services/qcom_aoss.ko"
+    },
+    {
       "name": "qcom_hwspinlock",
       "file": "modules/qcom-hwspinlock/qcom_hwspinlock.ko"
     },
@@ -305,6 +309,10 @@
       "file": "modules/native-ipc/pdr_interface.ko"
     },
     {
+      "name": "qcom_sysmon",
+      "file": "modules/qcom-remoteproc-services/qcom_sysmon.ko"
+    },
+    {
       "name": "qnoc_qos",
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
     },
@@ -363,6 +371,10 @@
     {
       "name": "qcom_ipc_logging",
       "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
+    },
+    {
+      "name": "qcom_q6v5",
+      "file": "modules/qcom-remoteproc-services/qcom_q6v5.ko"
     },
     {
       "name": "qti_pmic_glink",
@@ -636,6 +648,10 @@
       "file": "modules/qcom-clock-controllers/gpucc-chora.ko"
     },
     {
+      "name": "qcom_aoss",
+      "file": "modules/qcom-remoteproc-services/qcom_aoss.ko"
+    },
+    {
       "name": "qcom_glink",
       "file": "modules/qcom-glink-transport/qcom_glink.ko"
     },
@@ -732,6 +748,10 @@
       "file": "modules/native-ipc/pdr_interface.ko"
     },
     {
+      "name": "qcom_sysmon",
+      "file": "modules/qcom-remoteproc-services/qcom_sysmon.ko"
+    },
+    {
       "name": "qnoc_qos",
       "file": "modules/qcom-interconnect/qnoc-qos.ko"
     },
@@ -786,6 +806,10 @@
     {
       "name": "qcom_ipc_logging",
       "file": "modules/qcom-ipc-logging/qcom_ipc_logging.ko"
+    },
+    {
+      "name": "qcom_q6v5",
+      "file": "modules/qcom-remoteproc-services/qcom_q6v5.ko"
     },
     {
       "name": "qti_pmic_glink",
@@ -2136,6 +2160,53 @@
       "softdep": [],
       "archived_placement_candidates": [
         "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_aoss": {
+      "file": "modules/qcom-remoteproc-services/qcom_aoss.ko",
+      "sha256": "ef6d3c982a403126e466949d719af3d4881fbdba1522f377475b228781f96dc1",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_q6v5": {
+      "file": "modules/qcom-remoteproc-services/qcom_q6v5.ko",
+      "sha256": "f341c722d5478bc5db14afbc5af753030e30c900f964ec299a1282a9a1c3de6f",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qcom_aoss",
+        "qcom_sysmon",
+        "smem"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
+      ],
+      "loaded_on_baseline": true,
+      "dependencies_absent_from_stage": [],
+      "soft_dependencies_absent_from_stage": []
+    },
+    "qcom_sysmon": {
+      "file": "modules/qcom-remoteproc-services/qcom_sysmon.ko",
+      "sha256": "b4c342af199e0a1d0dfb777c60c21da771eb6ace949ec0816fc2ae435a9b15e2",
+      "vermagic": "7.3.0-4k SMP preempt mod_unload modversions aarch64",
+      "depends": [
+        "qmi_helpers"
+      ],
+      "softdep": [],
+      "archived_placement_candidates": [
+        "vendor_boot:fragment-0",
+        "vendor_dlkm"
       ],
       "loaded_on_baseline": true,
       "dependencies_absent_from_stage": [],
@@ -4365,13 +4436,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_aoss",
-      "placements": [
-        "vendor_boot:fragment-0"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_cache_allocation",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4570,14 +4634,6 @@
       "loaded_on_baseline": true
     },
     {
-      "name": "qcom_q6v5",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
       "name": "qcom_q6v5_pas",
       "placements": [
         "vendor_boot:fragment-0",
@@ -4662,14 +4718,6 @@
     },
     {
       "name": "qcom_stats",
-      "placements": [
-        "vendor_boot:fragment-0",
-        "vendor_dlkm"
-      ],
-      "loaded_on_baseline": true
-    },
-    {
-      "name": "qcom_sysmon",
       "placements": [
         "vendor_boot:fragment-0",
         "vendor_dlkm"
@@ -6043,7 +6091,6 @@
     "qce50_dlkm",
     "qcedev_mod_dlkm",
     "qcom_amoled_regulator",
-    "qcom_aoss",
     "qcom_cache_allocation",
     "qcom_cpu_vendor_hooks",
     "qcom_cpucp",
@@ -6070,7 +6117,6 @@
     "qcom_pmic_ecid",
     "qcom_pmu_lib",
     "qcom_pon",
-    "qcom_q6v5",
     "qcom_q6v5_pas",
     "qcom_ramdump",
     "qcom_reboot_reason",
@@ -6083,7 +6129,6 @@
     "qcom_spmi_wled",
     "qcom_spss",
     "qcom_stats",
-    "qcom_sysmon",
     "qcom_tsens",
     "qcom_va_minidump",
     "qcom_voltage_adj",

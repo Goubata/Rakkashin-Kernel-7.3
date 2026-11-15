@@ -33,6 +33,8 @@ def main():
     parser.add_argument('--pmic-ipc-tests',action='store_true')
     parser.add_argument('--pmic-glink-tests',action='store_true')
     parser.add_argument('--rproc-gate-tests',action='store_true')
+    parser.add_argument('--remoteproc-services',action='store_true')
+    parser.add_argument('--remoteproc-services-tests',action='store_true')
     parser.add_argument('--smem-state-tests',action='store_true')
     parser.add_argument('--smp2p',action='store_true')
     parser.add_argument('--smp2p-tests',action='store_true')
@@ -41,6 +43,7 @@ def main():
     parser.add_argument('--glink-transport',action='store_true')
     parser.add_argument('--glink-transport-tests',action='store_true')
     args=parser.parse_args()
+    if args.remoteproc_services_tests:args.remoteproc_services=True
     if args.smp2p_tests:args.smp2p=True
     if args.ipcc_tests:args.ipcc=True
     if args.glink_transport_tests or args.pmic_glink_tests or args.rproc_gate_tests:args.glink_transport=True
@@ -107,6 +110,10 @@ def main():
         from native_module_inventory import pmic_ipc_modules
         pmic_ipc_modules()
         targets.append('tests/pmic-ipc')
+    if args.remoteproc_services:
+        subprocess.run([sys.executable,str(ROOT/'scripts/audit_remoteproc_services_sources.py')],check=True)
+        targets += ['ports/qcom-hwspinlock','ports/qcom-smem','ports/qcom-remoteproc-services']
+        if args.remoteproc_services_tests:targets.append('tests/remoteproc-services')
     if args.smem_state_tests:targets.append('tests/smem-state')
     if args.smp2p:
         subprocess.run([sys.executable,str(ROOT/'scripts/audit_smp2p_sources.py')],check=True)

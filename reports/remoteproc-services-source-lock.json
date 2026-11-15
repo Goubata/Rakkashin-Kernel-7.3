@@ -1,0 +1,60 @@
+{
+  "source_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "files": [
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_q6v5.c",
+      "source": "drivers/remoteproc/qcom_q6v5.c",
+      "original_sha256": "ac6574fee31b54bf801fbd6d7872e2c2078adfd05a10251c6b0bc62054c1d4bb",
+      "sha256": "1e692e71affcd0b402ad513f6df682d1f3a36543c425e69e6d15305b7ea83d76"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_q6v5.h",
+      "source": "drivers/remoteproc/qcom_q6v5.h",
+      "original_sha256": "3c2ad08b2a50f42d7db95952ccdd6c3f65ea679768900bddc387ea9149cea4c1",
+      "sha256": "3c2ad08b2a50f42d7db95952ccdd6c3f65ea679768900bddc387ea9149cea4c1"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_sysmon.c",
+      "source": "drivers/remoteproc/qcom_sysmon.c",
+      "original_sha256": "6dca0ece5c8dfd7102104565357f075437d0df0edf27ec0bc0150cc874dd5d48",
+      "sha256": "8dba1b34f3c7251d588fd3e65042d92b60fb29342fdac10cf15d4ec736c92702"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/qcom_aoss.c",
+      "source": "drivers/soc/qcom/qcom_aoss.c",
+      "original_sha256": "eceb726f4c1aebb991f30c04ab73d84a5045ba70541f72c6c948c21305bd1ad4",
+      "sha256": "eceb726f4c1aebb991f30c04ab73d84a5045ba70541f72c6c948c21305bd1ad4"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/trace-aoss.h",
+      "source": "drivers/soc/qcom/trace-aoss.h",
+      "original_sha256": "d2ed405134ed91630568574ac16e85b5e15d3cfcb26abd4a2d0ce61d45d80758",
+      "sha256": "d2ed405134ed91630568574ac16e85b5e15d3cfcb26abd4a2d0ce61d45d80758"
+    },
+    {
+      "file": "ports/qcom-remoteproc-services/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "3c105e239a294c225b0e294ffefa468d077781047003b26c4570f9f2ab86f9c5"
+    }
+  ],
+  "patch_sha256": "8a60bb6b25025b369fed439307aaf25f2dbe1a287798a6831b16845f989fd4b2",
+  "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
+  "experimental_packaged": true,
+  "hardware_runtime_accepted": false,
+  "reviewed_changes": [
+    "Real native Q6V5 common, sysmon/QMI and AOSS QMP modules; force real API declarations",
+    "Free managed sysmon IRQ before manually freeing callback data on QMI failure/removal",
+    "Missing optional shutdown IRQ reports false without querying invalid IRQ or warning",
+    "Drain successful Q6V5 IRQ registrations on explicit deinit and release QMP on ICC acquisition failure",
+    "Bound firmware crash reason string reads to actual SMEM size",
+    "Propagate failed stop-state assertion/clear instead of treating requests as successful",
+    "Serialize RPMSG association with sysmon list/removal and request mutex; unpublish and SRCU-drain callbacks before provider free",
+    "Read current endpoint association inside SRCU instead of stale callback priv; reject duplicate channel association"
+  ],
+  "pending": [
+    "Full RPMSG transport/endpoint lifecycle and concurrent callback/provider removal stress",
+    "Real IRQ/probe failure injection and remote QMI/QMP peer protocol",
+    "Alor PAS adapter, rails, firmware and physical early attach"
+  ]
+}

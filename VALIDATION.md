@@ -540,3 +540,30 @@ all actual remote services, vendor extensions, whole-board DT, packaged boot and
 DLKM/DTBO/policy acceptance, controlled physical boot and daily-use/efficiency
 measurements. No partition write or flashable image is claimed. Evidence:
 `reports/state-ipc-stage35-validation.json`.
+
+
+## Stage37: Q6V5 common, real sysmon/QMI and AOSS QMP
+
+108 modules / 5,480 matching import CRCs; all hard/soft dependencies present and
+acyclic. Existing Image #22 and candidate DT/GPU input remain unchanged.
+ELF imports explicitly select real QMP/sysmon/state/QMI functions rather than
+disabled-header paths. The requirements table's selected helper exports are now
+all present; an Alor PAS driver is still not implemented.
+
+Eleven SMP4 guest cases pass: real state updates and completion notifications,
+stop assertion/clear error propagation, optional IRQ absence, ACK parsing,
+detach rejection, actual QMI/sysmon subdevice lifecycle, actual remoteproc
+ancestor association/duplicate rejection, concurrent source ingress vs provider
+removal, 1,000 post-removal rejections and subsequent consumer removal. Three
+production modules register/unregister separately after the combined test exits.
+No physical QMP, sysmon peer, IRQ or firmware boot is covered. IRQ/QMP resource
+cleanup changes are source-reviewed; probe fault injection remains pending.
+
+Endpoint ingress now reads the association inside SRCU; provider/consumer
+removal unpublishes and drains it. Request serialization prevents sends through
+a removed endpoint. This does not prove full transport endpoint lifetime or
+arbitrary self-removal from callbacks. Normal framework client ownership and
+remoteproc subdevice serialization are still required. Native QMP firmware
+protocol, hardware/late-peer/lifecycle stress, Alor rails/PAS/ELF64/secure ABI,
+whole-board image/ROM/policy and daily-use acceptance remain open. Evidence:
+`reports/remoteproc-services-stage37-validation.json`.

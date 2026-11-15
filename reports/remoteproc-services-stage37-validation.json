@@ -1,0 +1,64 @@
+{
+  "stage": 37,
+  "scope": "real native service modules and isolated source/framework tests only; no Qualcomm firmware execution",
+  "artifact": "artifacts/android73-remoteproc-services-stage37",
+  "source_commit": "74a125597e880ab50dcf372c3b9a2cb082e11d10",
+  "image_sha256": "ea9dbf362caed8eb6cadb22f6a37991352be826dff839b4ae301f46a5831da8e",
+  "module_count": 108,
+  "matching_import_count": 5480,
+  "crc_passed": true,
+  "real_api_elf_imports": {
+    "q6v5": {
+      "qmp_get": true,
+      "qmp_put": true,
+      "qmp_send": true,
+      "qcom_sysmon_shutdown_acked": true,
+      "devm_qcom_smem_state_get": true,
+      "qcom_smem_state_update_bits": true
+    },
+    "sysmon": {
+      "qmi_handle_init": true,
+      "qmi_handle_release": true,
+      "qmi_add_lookup": true,
+      "qmi_send_request": true
+    }
+  },
+  "qemu": {
+    "log": "reports/remoteproc-services-stage37-final-qemu.log",
+    "test": "remoteproc-services",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      11,
+      0,
+      0,
+      11
+    ],
+    "cpus": 4,
+    "log_sha256": "50f32d986ef8e15d60417077660926c5cf11fad22c2ed838a5cbbf48dfac8d69",
+    "metadata_sha256": "7c1812953d52d4498c2c9e9e7bfe54cbbdd4db6972e775d5cc32978bbf5af92a"
+  },
+  "physical_boot_verified": false,
+  "firmware_booted": false,
+  "daily_use_accepted": false,
+  "partition_written": false,
+  "flashable_image_packaged": false,
+  "source_review_only_cleanup": [
+    "Q6V5 successful-init IRQ drain and QMP release on ICC acquisition failure",
+    "Sysmon optional IRQ drain before freeing callback-private data on QMI failure/removal"
+  ],
+  "evidence_sha256": {
+    "reports/remoteproc-services-source-lock.json": "d8d78232a7253dca8e075de729ea89135f222f5b297fd05552f359da8efd33c0",
+    "reports/module-crc-stage37.json": "ef936ab1c03adfc4453ed50932171c358513c06a6361ee52b785b1b80ce4e240",
+    "reports/module-deployment-stage37-summary.json": "ab3adb394fcc26bdde9e4c751514b84a6f9406ec226cda90b3ab87fed975acf5",
+    "reports/soccp-provider-requirements-stage37.json": "043637e9547781b1b7c2974dfc1e5cc25ccb0b6fa662b2689a1c48263e860c13",
+    "reports/remoteproc-services-stage37-build-all.log": "dfb52ae292f95ed5457f820c364fdceb8b411354f4135436fd9d308786cfe4a8"
+  },
+  "pending": [
+    "Alor PAS descriptor/ARC cx-mx rail sequencing/ELF64 dump and secure firmware ABI",
+    "Hardware IRQ and probe-failure injection; actual RPMSG endpoint lifetime under firmware and suspend",
+    "AOSS QMP mailbox/shared-memory protocol and actual remote sysmon/QMI services",
+    "Whole-board DT, remaining drivers, vendor extensions and boot/vendor_boot/DLKM/DTBO/ROM/SELinux packaging",
+    "Physical boot, all-functions validation and daily-use/performance/power acceptance"
+  ]
+}

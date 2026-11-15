@@ -50,7 +50,7 @@ if args.gpu_deps:
     ports += ['qcom-hwspinlock','qcom-smem','qcom-socinfo','qcom-llcc','qcom-dcvs',
               'governor-adreno-ro','governor-gpubw','governor-adreno-tz','qcom-iommu-util','secure-buffer','iommu-logger','arm-smmu-vendor','msm-sysstats']
 if args.ipc_deps or args.gpu_driver:
-    ports += ['qcom-smp2p','qcom-ipcc','qcom-glink-transport','qcom-rproc-common','gunyah']
+    ports += ['qcom-remoteproc-services','qcom-smp2p','qcom-ipcc','qcom-glink-transport','qcom-rproc-common','gunyah']
 if args.gpu_driver:
     ports += ['gunyah-core','gunyah-rm','qti-fence','kgsl']
     modules += [(out/'drivers/hwtracing/coresight/coresight.ko','modules/native/coresight.ko'),

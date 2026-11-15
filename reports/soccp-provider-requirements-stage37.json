@@ -1,0 +1,137 @@
+{
+  "scope": "source/DT/export prerequisites only; no firmware, MMIO, IRQ, rail or PAS execution",
+  "vendor_source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "native_source_base": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
+  "source_sha256": {
+    "vendor_pas": "6b5604c4097481511e66661b461295fa2dea77fb06f68c31c210229c5c8bd79b",
+    "native_pas": "36ec577c3976118f0c8150348903cf47d761d221fd595223bab861e7201e8eec",
+    "native_q6v5_common": "ac6574fee31b54bf801fbd6d7872e2c2078adfd05a10251c6b0bc62054c1d4bb"
+  },
+  "candidate_dtb_sha256": "3bbb2c9faaad8777ea0a9aabd0f603e780aa263c9a37766217da7925f6df750d",
+  "node": "/soc/remoteproc-soccp@a3380000",
+  "alor_descriptor": {
+    "crash_reason_smem": 656,
+    "firmware_name": "soccp.mbn",
+    "dtb_firmware_name": "soccp_dtb.mbn",
+    "pas_id": 51,
+    "dtb_pas_id": 65,
+    "minidump_id": 24,
+    "uses_elf64": true,
+    "ssr_name": "soccp",
+    "sysmon_name": "soccp",
+    "early_boot": true,
+    "auto_boot": true,
+    "proxy_pd_names": []
+  },
+  "native_comparison_descriptors": {
+    "kaanapali_soccp_resource": {
+      "crash_reason_smem": 656,
+      "firmware_name": "soccp.mbn",
+      "dtb_firmware_name": "soccp_dtb.mbn",
+      "pas_id": 51,
+      "dtb_pas_id": 65,
+      "ssr_name": "soccp",
+      "sysmon_name": "soccp",
+      "auto_boot": true,
+      "early_boot": true,
+      "proxy_pd_names": [
+        "cx",
+        "mx"
+      ]
+    },
+    "glymur_soccp_resource": {
+      "crash_reason_smem": 656,
+      "firmware_name": "soccp.mbn",
+      "dtb_firmware_name": "soccp_dtb.mbn",
+      "pas_id": 51,
+      "dtb_pas_id": 65,
+      "ssr_name": "soccp",
+      "sysmon_name": "soccp",
+      "auto_boot": true,
+      "early_boot": true,
+      "needs_tzmem": true,
+      "proxy_pd_names": [
+        "cx",
+        "mx"
+      ]
+    }
+  },
+  "rails": [
+    {
+      "name": "cx",
+      "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-cxlvl/vreg-pm8550ve-f-s1-level",
+      "resource_parent": "/soc/rsc@18900000/drv@2/rpmh-regulator-cxlvl",
+      "resource_compatible": "qcom,rpmh-arc-regulator",
+      "resource_name": "cx.lvl",
+      "raw_vote_and_load": [
+        64,
+        0
+      ],
+      "provider_min_raw": [
+        16
+      ],
+      "provider_max_raw": [
+        65535
+      ],
+      "interpretation": "RPMh ARC level vote; raw DT names contain microvolt but do not convert vote 64 to physical 64 uV"
+    },
+    {
+      "name": "mx",
+      "provider": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxlvl/vreg-pm8550ve-f-s8-level",
+      "resource_parent": "/soc/rsc@18900000/drv@2/rpmh-regulator-mxlvl",
+      "resource_compatible": "qcom,rpmh-arc-regulator",
+      "resource_name": "mx.lvl",
+      "raw_vote_and_load": [
+        64,
+        0
+      ],
+      "provider_min_raw": [
+        16
+      ],
+      "provider_max_raw": [
+        65535
+      ],
+      "interpretation": "RPMh ARC level vote; raw DT names contain microvolt but do not convert vote 64 to physical 64 uV"
+    }
+  ],
+  "has_power_domains": false,
+  "native_pas_regulator_names": [
+    "cx",
+    "px"
+  ],
+  "required_saved_regulator_names": [
+    "cx",
+    "mx"
+  ],
+  "native_pas_coredump_default": "ELFCLASS32",
+  "alor_vendor_uses_elf64": true,
+  "vendor_check_status": false,
+  "vendor_tcsr_call_guard_found": true,
+  "has_tcsr_properties": {
+    "soccp-tcsr": false,
+    "soccp-spare": false
+  },
+  "selected_real_export_presence": {
+    "qcom_q6v5_init": true,
+    "qcom_q6v5_deinit": true,
+    "qcom_add_sysmon_subdev": true,
+    "qcom_sysmon_shutdown_irq_state": true,
+    "qcom_add_glink_subdev": true,
+    "qcom_add_pdm_subdev": true,
+    "devm_qcom_pas_context_alloc": true,
+    "qcom_pas_is_available": true
+  },
+  "physical_verified": false,
+  "compatible_alias_sufficient": false,
+  "ready_for_firmware_boot": false,
+  "implementation_requirements": [
+    "Stage native Q6V5 common and real sysmon/QMI service providers; force actual declarations and verify final ELF imports",
+    "Use an Alor descriptor with pinned PAS/DTB PAS/firmware/crash/minidump values and a reviewed 64-bit dump path",
+    "Implement counted regulator cx/mx ARC votes and rollback only completed requests; keep actual RPMh providers",
+    "Do not attach kaanapali/glymur cx/mx generic power domains to this DT, which has no power-domains property",
+    "Use native early-attach fatal/stop/ready line-state checks backed by the actual SMP2P provider; validate physical state",
+    "Do not require or invent TCSR/spare properties merely because other vendor descriptors use them: Alor check_status is false",
+    "Verify native PAS secure calls, firmware memory/resource-table/64-bit behavior and saved ROM ABI before any physical boot",
+    "Keep all production helpers real; do not silently accept disabled sysmon or unavailable transport via header stubs"
+  ]
+}

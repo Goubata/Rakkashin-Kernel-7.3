@@ -2,12 +2,16 @@
 """Record Alor PAS provider prerequisites from pinned source and saved DT; never boot firmware."""
 from pathlib import Path
 import hashlib
+import argparse
 import json
 import re
 import struct
 import subprocess
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output',default='reports/soccp-provider-requirements-stage36.json')
+args=parser.parse_args()
 PIN='037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1'
 BASE='4dd306a07b2f456fd70ddaa28f4f65640374f202'
 def source(repo,commit,name):
@@ -69,5 +73,5 @@ assert alor['pas_id']==51 and alor['dtb_pas_id']==65 and alor['minidump_id']==24
 assert alor['uses_elf64'] and not report['vendor_check_status'] and report['vendor_tcsr_call_guard_found']
 assert [r['resource_name'] for r in rails]==['cx.lvl','mx.lvl']
 assert all(r['raw_vote_and_load']==[64,0] for r in rails) and not report['has_power_domains']
-(ROOT/'reports/soccp-provider-requirements-stage36.json').write_text(json.dumps(report,indent=2)+'\n')
+(ROOT/args.output).write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({k:report[k] for k in ['alor_descriptor','selected_real_export_presence','vendor_check_status','ready_for_firmware_boot']},indent=2))

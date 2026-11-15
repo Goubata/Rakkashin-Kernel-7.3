@@ -1130,6 +1130,23 @@ static const struct reset_control_ops qcom_scm_pas_reset_ops = {
 	.deassert = qcom_scm_pas_reset_deassert,
 };
 
+/* Same secure watchdog disable transaction as the pinned factory driver. */
+int qcom_scm_sec_wdog_deactivate(void)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_BOOT,
+		.cmd = QCOM_SCM_BOOT_SEC_WDOG_DIS,
+		.owner = ARM_SMCCC_OWNER_SIP,
+		.args[0] = 1,
+		.arginfo = QCOM_SCM_ARGS(1),
+	};
+
+	if (!__scm)
+		return -EPROBE_DEFER;
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_sec_wdog_deactivate);
+
 int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val)
 {
 	struct qcom_scm_desc desc = {

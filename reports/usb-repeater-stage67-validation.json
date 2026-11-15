@@ -1,0 +1,39 @@
+{
+  "stage": 67,
+  "scope": "Counted PMIC override parser and existing PMIC callbacks with native devres/regmap in private RAM; selected DT checks only",
+  "checks": {
+    "log": "reports/usb-repeater-stage67-qemu.log",
+    "test": "usb-repeater-pmic",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      11,
+      0,
+      0,
+      11
+    ]
+  },
+  "physical_verified": false,
+  "promoted": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "draft_module_count": 3,
+  "pending": [
+    "Low-memory replacement fault injection and sysfs/init concurrency stress",
+    "PMIC tuning-write errors and regulator failure rollback",
+    "M31 probe and work/power lifecycle; forced provider-unbind semantics",
+    "DWC3/SuperSpeed/Type-C/charging/gadget and remaining mandatory drivers",
+    "Whole-board DT SID4/boot/vendor_boot/dtbo/DLKM/SELinux and physical all-functions acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/usb-repeater-stage67-check.json": "128815b20993cc82f10610ad835c97a3177449d1cb3fd3b33cea9d1345c11ec7",
+    "reports/usb-repeater-stage67-qemu.log": "4d5d55d9685db03587ede9bd8a53b71195cc8b1b522205f88d68cb5f56b23f08",
+    "reports/usb-repeater-stage67-qemu.json": "27ff51d6266ab412cdab6c453fe180bad7d5274aadbd394848377c4500adfc4a",
+    "reports/usb-repeater-stage67-build.log": "de9a0420a4a8b131bbe74780ef175866d01bdaa273012a9cb8a1f071826b243c",
+    "reports/usb-repeater-stage67-crc.json": "2619f05a5d718e94b293aa596f6b897791829deb3d0a29ffa95414eac503da2f",
+    "reports/usb-eusb2-stage67-dt.json": "954e2c0c9eb00d4ec5313d2f8d5754241249c6216cc248d992e66dcb036f46d1",
+    "reports/usb-repeater-source-lock.json": "84a99326e7e8c25a0940a43b54cf21b5034c297b3f174374c9993b8035c398b5",
+    "patches/usb-repeater-7.3.patch": "9511e6e3915b0b184efe13d970aec45ebb8db7f81fa59b18f9df8eaf5a3c0711"
+  }
+}

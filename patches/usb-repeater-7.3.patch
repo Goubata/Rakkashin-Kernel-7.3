@@ -181,7 +181,316 @@
  }
  
  static int eusb2_repeater_powerup(struct usb_repeater *ur)
-@@ -827,13 +829,13 @@
+@@ -478,9 +480,13 @@
+ static int eusb2_repeater_read_overrides(struct device *dev, const char *prop,
+ 		u32 **seq, u8 *seq_cnt)
+ {
+-	int num_elem, ret;
++	int num_elem, ret, i;
+ 
+ 	num_elem = of_property_count_elems_of_size(dev->of_node, prop, sizeof(**seq));
++	if (num_elem < 0)
++		return of_find_property(dev->of_node, prop, NULL) ? num_elem : 0;
++	if (num_elem > 254)
++		return -E2BIG;
+ 	if (num_elem > 0) {
+ 		if (num_elem % 2) {
+ 			dev_err(dev, "invalid len for %s\n", prop);
+@@ -497,117 +503,81 @@
+ 			dev_err(dev, "%s read failed %d\n", prop, ret);
+ 			return ret;
+ 		}
++		for (i = 0; i < num_elem; i++)
++			if ((*seq)[i] > U8_MAX)
++				return -ERANGE;
+ 	}
+ 
+ 	return 0;
++}
++
++/* The factory counters are u8; a complete pair sequence fits at most 254 cells. */
++#define EUSB2_OVERRIDE_MAX_CELLS 254
++static ssize_t eusb2_user_overrides_store(struct device *dev, const char *buf,
++                                         size_t count, bool host)
++{
++	struct eusb2_repeater *er = dev_get_drvdata(dev);
++	u32 values[EUSB2_OVERRIDE_MAX_CELLS], *replacement = NULL, *old;
++	unsigned int cells = 0;
++	char *copy, *cursor, *token;
++	u8 value;
++	int ret = 0;
++
++	if (!er || !count || count > PAGE_SIZE)
++		return -EINVAL;
++	copy = kmemdup_nul(buf, count, GFP_KERNEL);
++	if (!copy)
++		return -ENOMEM;
++	cursor = strim(copy);
++	if (strcmp(cursor, "none")) {
++		while ((token = strsep(&cursor, " ,\n\r\t"))) {
++			if (!*token)
++				continue;
++			if (cells == EUSB2_OVERRIDE_MAX_CELLS) {
++				ret = -E2BIG;
++				goto out;
++			}
++			ret = kstrtou8(token, 0, &value);
++			if (ret)
++				goto out;
++			values[cells++] = value;
++		}
++		if (!cells || cells % 2) {
++			ret = -EINVAL;
++			goto out;
++		}
++		replacement = devm_kmemdup(dev, values, cells * sizeof(*values), GFP_KERNEL);
++		if (!replacement) {
++			ret = -ENOMEM;
++			goto out;
++		}
++	}
++	/* Commit only complete, validated replacements; old data survives errors. */
++	mutex_lock(&er->user_param_lock);
++	if (host) {
++		old = er->user_host_param_override_seq;
++		er->user_host_param_override_seq = replacement;
++		er->user_host_param_override_seq_cnt = cells;
++		er->user_host_param_override_seq_len = cells;
++	} else {
++		old = er->user_param_override_seq;
++		er->user_param_override_seq = replacement;
++		er->user_param_override_seq_cnt = cells;
++		er->user_param_override_seq_len = cells;
++	}
++	if (old)
++		devm_kfree(dev, old);
++	mutex_unlock(&er->user_param_lock);
++out:
++	kfree(copy);
++	return ret ? ret : count;
+ }
+ 
+ static ssize_t user_param_override_store(struct device *dev,
+ 				struct device_attribute *attr,
+ 				const char *buf, size_t count)
+ {
+-	int ret = 0;
+-	int i = 0;
+-	char *argbuf = NULL;
+-	u8 param_data = 0;
+-	int param_len = 0;
+-	char *param_head = NULL;
+-	u32 *param_seq = NULL;
+-	struct eusb2_repeater *er = dev_get_drvdata(dev);
+-
+-	if (!er)
+-		return -EINVAL;
+-
+-	argbuf = kstrdup(buf, GFP_KERNEL);
+-	if (!argbuf)
+-		return -ENOMEM;
+-
+-	mutex_lock(&er->user_param_lock);
+-	if (!strncmp(argbuf, "none", 4)) {
+-		er->user_param_override_seq_cnt = 0;
+-		dev_info(dev, "Clear user parameters override\n");
+-		goto free_buf;
+-	}
+-
+-	/* validate parameters sequence: reg, val, reg, val... */
+-	for (i = 0; i < count; i++) {
+-		if (argbuf[i] != ' ' &&
+-		    argbuf[i] != ',' &&
+-		    argbuf[i] != '\0' &&
+-		    argbuf[i] != '\n' &&
+-		    argbuf[i] != '\r') {
+-			if (!param_head) {
+-				param_len++;
+-				param_head = &argbuf[i];
+-			}
+-		} else {
+-			argbuf[i] = '\0';
+-			if (param_head) {
+-				ret = kstrtou8(param_head, 0, &param_data);
+-				if (ret) {
+-					dev_err(dev, "invalid data: %s\n",
+-							param_head);
+-					goto free_buf;
+-				}
+-				param_head = NULL;
+-			}
+-		}
+-	}
+-	if (param_len <= 0 || (param_len % 2) != 0) {
+-		dev_err(dev, "invalid len=%d for %s\n", param_len, buf);
+-		ret = -EINVAL;
+-		goto free_buf;
+-	}
+-
+-	if (param_len > er->user_param_override_seq_len) {
+-		param_seq = devm_kzalloc(dev,
+-				param_len * sizeof(*param_seq),
+-				GFP_KERNEL);
+-		if (!param_seq) {
+-			ret = -ENOMEM;
+-			goto free_buf;
+-		}
+-		if (er->user_param_override_seq)
+-			devm_kfree(dev, er->user_param_override_seq);
+-		er->user_param_override_seq_len = param_len;
+-	} else {
+-		param_seq = er->user_param_override_seq;
+-	}
+-
+-	dev_info(dev, "Update %d user parameters\n", param_len / 2);
+-	param_len = 0;
+-	param_head = NULL;
+-	for (i = 0; i < count; i++) {
+-		if (argbuf[i] != '\0') {
+-			if (!param_head) {
+-				param_head = &argbuf[i];
+-				ret = kstrtou8(param_head, 0, &param_data);
+-				if (ret) {
+-					dev_err(dev, "invalid data: %s\n",
+-							param_head);
+-					goto free_buf;
+-				}
+-				if (param_len > 0 && (param_len % 2) > 0) {
+-					dev_info(dev,
+-						"update: 0x%02x to 0x%02x\n",
+-						param_seq[param_len - 1],
+-						param_data);
+-				}
+-				param_seq[param_len++] = param_data;
+-			}
+-		} else {
+-			if (param_head) {
+-				param_head = NULL;
+-			}
+-		}
+-	}
+-	er->user_param_override_seq = param_seq;
+-	er->user_param_override_seq_cnt = param_len;
+-
+-free_buf:
+-	kfree(argbuf);
+-	mutex_unlock(&er->user_param_lock);
+-	return ret < 0? ret : count;
++	return eusb2_user_overrides_store(dev, buf, count, false);
+ }
+ 
+ static ssize_t user_param_override_show(struct device *dev,
+@@ -639,108 +609,7 @@
+ 				struct device_attribute *attr,
+ 				const char *buf, size_t count)
+ {
+-	int ret = 0;
+-	int i = 0;
+-	char *argbuf = NULL;
+-	u8 param_data = 0;
+-	int param_len = 0;
+-	char *param_head = NULL;
+-	u32 *param_seq = NULL;
+-	struct eusb2_repeater *er = dev_get_drvdata(dev);
+-
+-	if (!er)
+-		return -EINVAL;
+-
+-	argbuf = kstrdup(buf, GFP_KERNEL);
+-	if (!argbuf)
+-		return -ENOMEM;
+-
+-	mutex_lock(&er->user_param_lock);
+-	if (!strncmp(argbuf, "none", 4)) {
+-		er->user_host_param_override_seq_cnt = 0;
+-		dev_info(dev, "Clear user host parameters override\n");
+-		goto free_buf;
+-	}
+-
+-	/* validate parameters sequence: reg, val, reg, val... */
+-	for (i = 0; i < count; i++) {
+-		if (argbuf[i] != ' ' &&
+-		    argbuf[i] != ',' &&
+-		    argbuf[i] != '\0' &&
+-		    argbuf[i] != '\n' &&
+-		    argbuf[i] != '\r') {
+-			if (!param_head) {
+-				param_len++;
+-				param_head = &argbuf[i];
+-			}
+-		} else {
+-			argbuf[i] = '\0';
+-			if (param_head) {
+-				ret = kstrtou8(param_head, 0, &param_data);
+-				if (ret) {
+-					dev_err(dev, "invalid data: %s\n",
+-							param_head);
+-					goto free_buf;
+-				}
+-				param_head = NULL;
+-			}
+-		}
+-	}
+-	if (param_len <= 0 || (param_len % 2) != 0) {
+-		dev_err(dev, "invalid len=%d for %s\n", param_len, buf);
+-		ret = -EINVAL;
+-		goto free_buf;
+-	}
+-
+-	if (param_len > er->user_host_param_override_seq_len) {
+-		param_seq = devm_kzalloc(dev,
+-				param_len * sizeof(*param_seq),
+-				GFP_KERNEL);
+-		if (!param_seq) {
+-			ret = -ENOMEM;
+-			goto free_buf;
+-		}
+-		if (er->user_host_param_override_seq)
+-			devm_kfree(dev, er->user_host_param_override_seq);
+-		er->user_host_param_override_seq_len = param_len;
+-	} else {
+-		param_seq = er->user_host_param_override_seq;
+-	}
+-
+-	dev_info(dev, "Update %d user host parameters\n", param_len / 2);
+-	param_len = 0;
+-	param_head = NULL;
+-	for (i = 0; i < count; i++) {
+-		if (argbuf[i] != '\0') {
+-			if (!param_head) {
+-				param_head = &argbuf[i];
+-				ret = kstrtou8(param_head, 0, &param_data);
+-				if (ret) {
+-					dev_err(dev, "invalid data: %s\n",
+-							param_head);
+-					goto free_buf;
+-				}
+-				if (param_len > 0 && (param_len % 2) > 0) {
+-					dev_info(dev,
+-						"update: 0x%02x to 0x%02x\n",
+-						param_seq[param_len - 1],
+-						param_data);
+-				}
+-				param_seq[param_len++] = param_data;
+-			}
+-		} else {
+-			if (param_head) {
+-				param_head = NULL;
+-			}
+-		}
+-	}
+-	er->user_host_param_override_seq = param_seq;
+-	er->user_host_param_override_seq_cnt = param_len;
+-
+-free_buf:
+-	kfree(argbuf);
+-	mutex_unlock(&er->user_param_lock);
+-	return ret < 0? ret : count;
++	return eusb2_user_overrides_store(dev, buf, count, true);
+ }
+ 
+ static ssize_t user_host_param_override_show(struct device *dev,
+@@ -827,13 +696,13 @@
  	er->ur.powerdown	= eusb2_repeater_powerdown;
  	er->ur.get_version	= eusb2_repeater_get_version;
  

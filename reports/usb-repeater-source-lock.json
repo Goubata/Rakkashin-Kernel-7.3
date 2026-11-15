@@ -11,7 +11,7 @@
       "file": "ports/usb-repeater/repeater-qti-pmic-eusb2.c",
       "source": "drivers/usb/repeater/repeater-qti-pmic-eusb2.c",
       "original_sha256": "22c7bca3d2ae7f318269e49ec0574272509d5f937d2c141d95ec01296eea6e91",
-      "sha256": "3e5ea9bd3371aed24ee7d0cab58e2f2fd326fd058e9cb1e1b3bedf835bf67572"
+      "sha256": "522bf5d87ea0988c9fcf3d5736cda3533ec1cd80c6afeb832810f4423ebdf59b"
     },
     {
       "file": "ports/usb-repeater/include/linux/usb/repeater.h",
@@ -38,7 +38,7 @@
       "sha256": "5f8730d2ab9a1a68b6b60b5a0c979575f83b8c2c162e98738bf9fa0b54871c5c"
     }
   ],
-  "patch_sha256": "ac2f469619f2cc263e146f72764ac62563f58c9fc1671d2ea15e26039d59df66",
+  "patch_sha256": "9511e6e3915b0b184efe13d970aec45ebb8db7f81fa59b18f9df8eaf5a3c0711",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Source/patch replay only; unaccepted USB driver drafts",
@@ -46,7 +46,8 @@
     "Managed devres captures exact acquired device/module references instead of passing empty storage as repeater",
     "Check unbound providers and NULL nodes; reject duplicate registry entries; make repeated remove bounded and use IRQ-safe registry locking",
     "Disabled DWC3 header fallbacks are static inline; repeater uses only flag constants, not disabled function substitutes",
-    "Initialize PMIC user-parameter lock before registry publication; propagate version/reset/status read errors and readiness timeout"
+    "Initialize PMIC user-parameter lock before registry publication; propagate version/reset/status read errors and readiness timeout",
+    "Parse counted PMIC sysfs overrides once, validate complete byte pairs within u8 counter capacity, atomically replace and preserve old data on errors; bound DT override count and byte range"
   ],
   "pending": [
     "Provider forced-unbind versus active users and borrowed non-managed getter lifetime",

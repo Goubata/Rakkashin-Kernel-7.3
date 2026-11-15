@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/usb-repeater/repeater.ko",
+      "imports_checked": 15,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/usb-repeater/repeater-qti-pmic-eusb2.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/usb-repeater/phy-msm-m31-eusb2.ko",
+      "imports_checked": 51,
+      "mismatches": {}
+    }
+  ]
+}

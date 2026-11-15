@@ -1136,3 +1136,26 @@ Three drafts are saved separately, without promotion to the main bundle or
 physical USB/cable/suspend/charging claims. Override/sysfs parsing, tuning writes,
 M31 lifetime/MMIO, forced provider removal, DWC3/SuperSpeed and whole-board
 DT/boot/DLKM/SELinux remain incomplete.
+
+
+## Stage67: counted PMIC override parsing and atomic replacement
+
+Replace duplicated two-pass sysfs parsers with one counted parser. Never scan
+past count; validate byte values, complete pairs and at most 254 cells before
+allocation/publication. Commit replacement under the same mutex used by init;
+errors preserve the previous pointer/count, and exact `none` clears only the
+selected host/device sequence. This fixes stale-pointer/free risks when a final
+bad token was discovered after the old buffer was released. The u8 counters
+remain representable, so existing show output stays within one page. DT override
+arrays are checked for the same count/pair/byte limits. Sysfs names/modes and
+valid reg/value ordering are preserved; low-memory/concurrency stress is pending.
+
+Eleven SMP4 QEMU cases pass: the seven native regmap cases plus nonterminated
+counted input, invalid replacement preservation, independent host/device clear,
+254-cell capacity, excess/empty/oversize rejection and output guard checks.
+Production modules rebuild and import CRCs match; selected saved/candidate DT
+checks pass with normalized phandle targets. Reproduce the PMIC test builder
+and QEMU mode `usb-repeater-pmic`; run the selected DT auditor with
+`--report reports/usb-eusb2-stage67-dt.json` for current DT bounds. Evidence:
+reports/usb-repeater-stage67-validation.json. No promotion, physical USB proof
+or whole-board completion is implied. Three drafts remain separate from Stage57.

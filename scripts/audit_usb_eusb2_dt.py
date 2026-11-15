@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Validate selected AVR M31/PMIC USB DT dependencies without touching hardware."""
 from pathlib import Path
-import hashlib,json,struct
+import argparse,hashlib,json,struct
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--report',default='reports/usb-eusb2-stage65-dt.json');options=parser.parse_args()
 PHY='/soc/hsphy@88e3000';REP='/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00'
 def cells(b):
  if len(b)%4:raise ValueError('unaligned cells')
@@ -51,7 +52,9 @@ for tag,name in [('saved','device-baseline/running.dtb'),('candidate','artifacts
    providers[path+':'+prop]=node
  for path in [PHY,REP]:
   for prop in ['qcom,param-override-seq','qcom,host-param-override-seq']:
-   if prop in tree[path]:need(len(cells(tree[path][prop]))%2==0,'override pair count '+path+':'+prop)
+   if prop in tree[path]:
+    values=cells(tree[path][prop]);need(len(values)%2==0,'override pair count '+path+':'+prop)
+    if path==REP:need(len(values)<=254 and all(v<=255 for v in values),'PMIC override counter and byte bounds '+prop)
  selected={}
  for n in [PHY,REP]:
   selected[n]={}
@@ -66,5 +69,5 @@ for tag,name in [('saved','device-baseline/running.dtb'),('candidate','artifacts
 unchanged=inputs['saved']['selected_properties']==inputs['candidate']['selected_properties']
 if not unchanged:errors.append('selected USB node semantics differ from saved running tree')
 r={'scope':'Selected DT compatibility, active parent/provider and tuple checks only; no clock/reset/regulator/PMIC/MMIO/USB probe proof','inputs':inputs,'selected_properties_unchanged':unchanged,'comparison_scope':'phandles normalized to target paths; clock/reset arguments and all non-phandle property bytes exact','passed':not errors,'errors':errors,'whole_board_accepted':False,'physical_verified':False,'dt_modified':False}
-(ROOT/'reports/usb-eusb2-stage65-dt.json').write_text(json.dumps(r,indent=2)+'\n')
+(ROOT/options.report).write_text(json.dumps(r,indent=2)+'\n')
 print(json.dumps({'passed':r['passed'],'selected_properties_unchanged':unchanged,'comparison_scope':'phandles normalized to target paths; clock/reset arguments and all non-phandle property bytes exact','errors':errors},indent=2));raise SystemExit(bool(errors))

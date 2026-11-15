@@ -1,0 +1,19 @@
+Verified pinned USB repeater/M31 patch replay: 6 files; unaccepted drafts
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/usb-repeater'
+  CC [M]  repeater-qti-pmic-eusb2.o
+  MODPOST Module.symvers
+  CC [M]  repeater-qti-pmic-eusb2.mod.o
+  LD [M]  repeater-qti-pmic-eusb2.ko
+  BTF [M] repeater-qti-pmic-eusb2.ko
+make[1]: Leaving directory '/work/avr-port/ports/usb-repeater'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/usb-repeater-pmic'
+  CC [M]  avr-usb-repeater-pmic-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-usb-repeater-pmic-test.mod.o
+  LD [M]  avr-usb-repeater-pmic-test.ko
+  BTF [M] avr-usb-repeater-pmic-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/usb-repeater-pmic'
+make: Leaving directory '/work/avr-src'

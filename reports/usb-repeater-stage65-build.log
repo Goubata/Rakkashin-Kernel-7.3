@@ -1,0 +1,14 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/usb-repeater'
+  CC [M]  repeater.o
+  CC [M]  repeater-qti-pmic-eusb2.o
+  MODPOST Module.symvers
+  CC [M]  repeater.mod.o
+  CC [M]  .module-common.o
+  CC [M]  repeater-qti-pmic-eusb2.mod.o
+  LD [M]  repeater.ko
+  BTF [M] repeater.ko
+  LD [M]  repeater-qti-pmic-eusb2.ko
+  BTF [M] repeater-qti-pmic-eusb2.ko
+make[1]: Leaving directory '/work/avr-port/ports/usb-repeater'
+make: Leaving directory '/work/avr-src'

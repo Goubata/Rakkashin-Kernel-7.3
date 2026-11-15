@@ -1,0 +1,11 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/usb-repeater'
+  CC [M]  avr-usb-repeater-test.o
+  MODPOST Module.symvers
+WARNING: modpost: avr-usb-repeater-test.ko: missing MODULE_DESCRIPTION()
+  CC [M]  avr-usb-repeater-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-usb-repeater-test.ko
+  BTF [M] avr-usb-repeater-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/usb-repeater'
+make: Leaving directory '/work/avr-src'

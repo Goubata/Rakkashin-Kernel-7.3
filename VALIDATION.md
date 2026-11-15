@@ -1083,3 +1083,35 @@ required PMIC subtree/probe acceptance remain unresolved for 7.3; do not mark
 the whole-board gate passed. Reproduce read-only with
 `python scripts/audit_spmi_runtime_selection.py` on this phone. Evidence:
 reports/spmi-runtime-stage64.json. No DT or partition modification occurred.
+
+
+## Stage65: AVR M31 eUSB2 and PMIC repeater drafts
+
+Import firmware-pinned repeater framework, PMIC eUSB2 driver and actual AVR M31
+PHY from qcom-soc 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1. All three modules
+link against real 7.3 dependencies (101 matching import CRCs), without replacing
+hardware operations. Disabled DWC3 header fallbacks are made static inline;
+these drivers use flag constants, not the disabled DWC3 function fallbacks.
+
+Managed repeater acquisition previously allocated empty struct storage then
+released it as a repeater. Store exact acquired device/module refs instead;
+release does not dereference a provider descriptor. Check NULL/unbound nodes,
+reject duplicate entries, use consistent IRQ-safe locking and bound repeated
+remove. Unmanaged getters retain factory borrowed semantics; forced provider
+unbind versus active consumers remains unresolved, so none are promoted.
+
+Five actual production-framework SMP4 QEMU cases exercise native devres groups,
+device/module refcount return, repeated managed acquires, invalid/disabled nodes,
+duplicate/remove/re-add and required/optional missing phandles. Real platform
+registration supplies the synthetic provider; no PMIC/USB IO is attempted.
+
+Selected DT checks pass: AVR M31 node references the enabled SID7 PMIC repeater,
+required clock/reset/supply targets are active, named MMIO tuples and override
+pairs are valid. Normalize phandles to paths before comparing; all other USB
+node property bytes and clock/reset arguments match the saved running DT.
+No USB node changes are needed for these same-binding ports; whole-board gate
+remains unaccepted. Reproduce `python scripts/build_usb_repeater.py --tests`,
+QEMU mode `usb-repeater`, and `python scripts/audit_usb_eusb2_dt.py`.
+Evidence: reports/usb-repeater-stage65-validation.json. Three USB drafts are
+saved outside the main 118-module Stage57 bundle. PMIC/M31 callbacks, supplier
+lifetime, vendor DWC3/SuperSpeed/charging and physical USB acceptance remain.

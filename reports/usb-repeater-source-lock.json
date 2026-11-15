@@ -1,0 +1,55 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/usb-repeater/repeater.c",
+      "source": "drivers/usb/repeater/repeater.c",
+      "original_sha256": "61670a10d2ce14c43dd032edee696bffad1dc8c597d8cfac7e4ec14131196db3",
+      "sha256": "4e43b8da758b1b6db29a58f66bc57426a6c5089a2aa54bf09968a6f815bc33de"
+    },
+    {
+      "file": "ports/usb-repeater/repeater-qti-pmic-eusb2.c",
+      "source": "drivers/usb/repeater/repeater-qti-pmic-eusb2.c",
+      "original_sha256": "22c7bca3d2ae7f318269e49ec0574272509d5f937d2c141d95ec01296eea6e91",
+      "sha256": "22c7bca3d2ae7f318269e49ec0574272509d5f937d2c141d95ec01296eea6e91"
+    },
+    {
+      "file": "ports/usb-repeater/include/linux/usb/repeater.h",
+      "source": "include/linux/usb/repeater.h",
+      "original_sha256": "4cac96817082dfd4043184409ab560fd145061e935a190dedced6e25ae50cf9e",
+      "sha256": "4cac96817082dfd4043184409ab560fd145061e935a190dedced6e25ae50cf9e"
+    },
+    {
+      "file": "ports/usb-repeater/include/linux/usb/dwc3-msm.h",
+      "source": "include/linux/usb/dwc3-msm.h",
+      "original_sha256": "ac2b97ef999e7f644d030f53100c7cefa3c6c30987ba52c0888afa8dc427f996",
+      "sha256": "01d3f480031e9918fdbd45982c1b3dc814ed84e7339b52d2c1e7a5fd3a4ae024"
+    },
+    {
+      "file": "ports/usb-repeater/phy-msm-m31-eusb2.c",
+      "source": "drivers/usb/phy/phy-msm-m31-eusb2.c",
+      "original_sha256": "7e2c97905ff7940f37dc9784545e5c9b71ae7dc0fb63b52c0a2d82985dccca4e",
+      "sha256": "7e2c97905ff7940f37dc9784545e5c9b71ae7dc0fb63b52c0a2d82985dccca4e"
+    },
+    {
+      "file": "ports/usb-repeater/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "5f8730d2ab9a1a68b6b60b5a0c979575f83b8c2c162e98738bf9fa0b54871c5c"
+    }
+  ],
+  "patch_sha256": "9a053588bdae577521ef58d1efc88091f808f3fb66b7ca89662f97a7a00b6371",
+  "experimental_packaged": false,
+  "physical_verified": false,
+  "scope": "Source/patch replay only; unaccepted USB driver drafts",
+  "reviewed_changes": [
+    "Managed devres captures exact acquired device/module references instead of passing empty storage as repeater",
+    "Check unbound providers and NULL nodes; reject duplicate registry entries; make repeated remove bounded and use IRQ-safe registry locking",
+    "Disabled DWC3 header fallbacks are static inline; repeater uses only flag constants, not disabled function substitutes"
+  ],
+  "pending": [
+    "Provider forced-unbind versus active users and borrowed non-managed getter lifetime",
+    "PMIC regulator/MMIO/override/sysfs/error-unwind and M31/DWC3 physical integration",
+    "Full USB/charging/host/device/suspend and all-functions acceptance"
+  ]
+}

@@ -1,0 +1,161 @@
+--- a/ports/usb-repeater/repeater.c
++++ b/ports/usb-repeater/repeater.c
+@@ -17,9 +17,11 @@
+ void usb_put_repeater(struct usb_repeater *r)
+ {
+ 	if (r) {
+-		put_device(r->dev);
+-		if (r->dev->driver && r->dev->driver->owner)
+-			module_put(r->dev->driver->owner);
++		struct device *dev = r->dev;
++		struct module *owner = dev->driver ? dev->driver->owner : NULL;
++
++		put_device(dev);
++		module_put(owner);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(usb_put_repeater);
+@@ -28,6 +30,8 @@
+ {
+ 	struct usb_repeater *r;
+ 
++	if (!node)
++		return ERR_PTR(-EINVAL);
+ 	if (!of_device_is_available(node))
+ 		return ERR_PTR(-ENODEV);
+ 
+@@ -40,16 +44,26 @@
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+ 
++struct repeater_reference {
++	struct device *dev;
++	struct module *owner;
++};
++
+ static void devm_usb_repeater_release_by_node(struct device *dev, void *res)
+ {
+-	usb_put_repeater(res);
++	struct repeater_reference *reference = res;
++
++	/* Release the exact acquired references; never read a removed provider. */
++	put_device(reference->dev);
++	module_put(reference->owner);
+ }
+ 
+ struct usb_repeater *devm_usb_get_repeater_by_node(struct device *dev,
+ 			struct device_node *node)
+ {
+ 	struct usb_repeater *r = ERR_PTR(-ENOMEM);
+-	struct usb_repeater *r_devm;
++	struct repeater_reference *r_devm;
++	struct module *owner;
+ 	unsigned long flags;
+ 
+ 	r_devm = devres_alloc(devm_usb_repeater_release_by_node,
+@@ -66,14 +80,21 @@
+ 		goto err0;
+ 	}
+ 
+-	if (!try_module_get(r->dev->driver->owner)) {
++	if (!r->dev->driver) {
+ 		r = ERR_PTR(-ENODEV);
+ 		devres_free(r_devm);
+ 		goto err0;
+ 	}
+-
++	owner = r->dev->driver->owner;
++	if (!try_module_get(owner)) {
++		r = ERR_PTR(-ENODEV);
++		devres_free(r_devm);
++		goto err0;
++	}
++
++	r_devm->dev = get_device(r->dev);
++	r_devm->owner = owner;
+ 	devres_add(dev, r_devm);
+-	get_device(r->dev);
+ err0:
+ 	spin_unlock_irqrestore(&repeater_lock, flags);
+ 	return r;
+@@ -175,15 +196,20 @@
+  */
+ int usb_add_repeater_dev(struct usb_repeater *r)
+ {
+-	if (!r || !r->dev) {
+-		pr_err("no repeater device\n");
++	struct usb_repeater *existing;
++	unsigned long flags;
++
++	if (!r || !r->dev || !r->dev->of_node)
+ 		return -EINVAL;
+-	}
+-
+-	spin_lock(&repeater_lock);
++	spin_lock_irqsave(&repeater_lock, flags);
++	list_for_each_entry(existing, &repeater_list, head) {
++		if (existing == r || existing->dev->of_node == r->dev->of_node) {
++			spin_unlock_irqrestore(&repeater_lock, flags);
++			return -EEXIST;
++		}
++	}
+ 	list_add_tail(&r->head, &repeater_list);
+-	spin_unlock(&repeater_lock);
+-
++	spin_unlock_irqrestore(&repeater_lock, flags);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(usb_add_repeater_dev);
+@@ -197,8 +223,16 @@
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&repeater_lock, flags);
+-	if (r)
+-		list_del(&r->head);
++	if (r) {
++		struct usb_repeater *existing;
++
++		list_for_each_entry(existing, &repeater_list, head) {
++			if (existing == r) {
++				list_del_init(&r->head);
++				break;
++			}
++		}
++	}
+ 	spin_unlock_irqrestore(&repeater_lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(usb_remove_repeater_dev);
+--- a/ports/usb-repeater/include/linux/usb/dwc3-msm.h
++++ b/ports/usb-repeater/include/linux/usb/dwc3-msm.h
+@@ -297,7 +297,7 @@
+ int msm_ep_set_mode(struct usb_ep *ep, enum usb_hw_ep_mode mode);
+ int dwc3_core_stop_hw_active_transfers(struct dwc3 *dwc);
+ #else
+-void dwc3_msm_notify_event(struct dwc3 *dwc,
++static inline void dwc3_msm_notify_event(struct dwc3 *dwc,
+ 		enum dwc3_notify_event event, unsigned int value)
+ { }
+ static inline int usb_gsi_ep_op(struct usb_ep *ep, void *op_data,
+@@ -320,11 +320,11 @@
+ { return -ENODEV; }
+ static inline int dwc3_msm_release_ss_lane(struct device *dev)
+ { return -ENODEV; }
+-int msm_ep_update_ops(struct usb_ep *ep)
+-{ return -ENODEV; }
+-int msm_ep_clear_ops(struct usb_ep *ep)
+-{ return -ENODEV; }
+-int msm_ep_set_mode(struct usb_ep *ep, enum usb_hw_ep_mode mode)
++static inline int msm_ep_update_ops(struct usb_ep *ep)
++{ return -ENODEV; }
++static inline int msm_ep_clear_ops(struct usb_ep *ep)
++{ return -ENODEV; }
++static inline int msm_ep_set_mode(struct usb_ep *ep, enum usb_hw_ep_mode mode)
+ { return -ENODEV; }
+ inline int dwc3_core_stop_hw_active_transfers(struct dwc3 *dwc)
+ { return 0; }
+--- a/ports/usb-repeater/Makefile
++++ b/ports/usb-repeater/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-m += repeater.o repeater-qti-pmic-eusb2.o phy-msm-m31-eusb2.o
++ccflags-y += -I$(src)/include -DCONFIG_USB_REPEATER_MODULE=1

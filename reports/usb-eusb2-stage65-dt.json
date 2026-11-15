@@ -1,0 +1,438 @@
+{
+  "scope": "Selected DT compatibility, active parent/provider and tuple checks only; no clock/reset/regulator/PMIC/MMIO/USB probe proof",
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "checks": [
+        {
+          "check": "active selected node /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active selected node /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "M31 driver compatible",
+          "passed": true
+        },
+        {
+          "check": "PMIC repeater driver compatible",
+          "passed": true
+        },
+        {
+          "check": "PHY phandle selects actual PMIC repeater",
+          "passed": true
+        },
+        {
+          "check": "repeater belongs to SID7 USID provider",
+          "passed": true
+        },
+        {
+          "check": "PMIC register base matches saved device",
+          "passed": true
+        },
+        {
+          "check": "required memory resource names",
+          "passed": true
+        },
+        {
+          "check": "64-bit address/size resource tuple count",
+          "passed": true
+        },
+        {
+          "check": "required reference clock name",
+          "passed": true
+        },
+        {
+          "check": "required reset name",
+          "passed": true
+        },
+        {
+          "check": "complete three-state vdd voltage table",
+          "passed": true
+        },
+        {
+          "check": "resolve clocks provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count clocks",
+          "passed": true
+        },
+        {
+          "check": "active clocks provider /soc/rsc@18900000/drv@2/clock-controller",
+          "passed": true
+        },
+        {
+          "check": "resolve clocks provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count clocks",
+          "passed": true
+        },
+        {
+          "check": "active clocks provider /soc/clock-controller@1fd5044",
+          "passed": true
+        },
+        {
+          "check": "resolve resets provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count resets",
+          "passed": true
+        },
+        {
+          "check": "active resets provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdda12-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd_refgen-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd3-supply for /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd18-supply for /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "override pair count /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:qcom,param-override-seq",
+          "passed": true
+        },
+        {
+          "check": "override pair count /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:qcom,host-param-override-seq",
+          "passed": true
+        }
+      ],
+      "providers": {
+        "clocks": [
+          {
+            "node": "/soc/rsc@18900000/drv@2/clock-controller",
+            "args": [
+              27
+            ],
+            "active": true
+          },
+          {
+            "node": "/soc/clock-controller@1fd5044",
+            "args": [
+              2
+            ],
+            "active": true
+          }
+        ],
+        "resets": [
+          {
+            "node": "/soc/clock-controller@100000",
+            "args": [
+              20
+            ],
+            "active": true
+          }
+        ],
+        "/soc/hsphy@88e3000:vdd-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3i-e0/vreg-pm8550ve-i-l3",
+        "/soc/hsphy@88e3000:vdda12-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2f-e0/vreg-pm8550ve-f-l2",
+        "/soc/hsphy@88e3000:vdd_refgen-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2i-e0/vreg-pm8550ve-i-l2",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:vdd3-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5b-e0/vreg-pm-humu-l5",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:vdd18-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l15b-e0/vreg-pm-humu-l15"
+      },
+      "selected_properties": {
+        "/soc/hsphy@88e3000": {
+          "compatible": "71636f6d2c7573622d6d33312d65757362322d70687900",
+          "reg": "00000000088e3000000000000000029c00000000088e20000000000000000004000000000c2780000000000000000004",
+          "reg-names": "65757362325f7068795f62617365006575645f656e61626c655f726567006575645f6465746563745f72656700",
+          "vdd-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l3i-e0/vreg-pm8550ve-i-l3"
+          ],
+          "qcom,vdd-voltage-level": "00000000000d6d80000e7ef0",
+          "vdda12-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l2f-e0/vreg-pm8550ve-f-l2"
+          ],
+          "vdd_refgen-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l2i-e0/vreg-pm8550ve-i-l2"
+          ],
+          "clocks": [
+            {
+              "node": "/soc/rsc@18900000/drv@2/clock-controller",
+              "args": [
+                27
+              ],
+              "active": true
+            },
+            {
+              "node": "/soc/clock-controller@1fd5044",
+              "args": [
+                2
+              ],
+              "active": true
+            }
+          ],
+          "clock-names": "7265665f636c6b5f737263007265665f636c6b00",
+          "resets": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                20
+              ],
+              "active": true
+            }
+          ],
+          "reset-names": "7068795f726573657400",
+          "dummy-supply": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00"
+          ],
+          "usb-repeater": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00"
+          ]
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00": {
+          "compatible": "71636f6d2c706d69632d65757362322d726570656174657200",
+          "reg": "0000fd00",
+          "status": "6f6b00",
+          "vdd18-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l15b-e0/vreg-pm-humu-l15"
+          ],
+          "vdd3-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l5b-e0/vreg-pm-humu-l5"
+          ],
+          "qcom,param-override-seq": "0000000a00000051000000010000005200000001000000530000000300000054000000030000005500000000000000560000000300000057",
+          "qcom,host-param-override-seq": "0000000b00000051000000010000005200000001000000530000000300000054000000020000005500000000000000560000000500000057"
+        }
+      }
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "checks": [
+        {
+          "check": "active selected node /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active selected node /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "M31 driver compatible",
+          "passed": true
+        },
+        {
+          "check": "PMIC repeater driver compatible",
+          "passed": true
+        },
+        {
+          "check": "PHY phandle selects actual PMIC repeater",
+          "passed": true
+        },
+        {
+          "check": "repeater belongs to SID7 USID provider",
+          "passed": true
+        },
+        {
+          "check": "PMIC register base matches saved device",
+          "passed": true
+        },
+        {
+          "check": "required memory resource names",
+          "passed": true
+        },
+        {
+          "check": "64-bit address/size resource tuple count",
+          "passed": true
+        },
+        {
+          "check": "required reference clock name",
+          "passed": true
+        },
+        {
+          "check": "required reset name",
+          "passed": true
+        },
+        {
+          "check": "complete three-state vdd voltage table",
+          "passed": true
+        },
+        {
+          "check": "resolve clocks provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count clocks",
+          "passed": true
+        },
+        {
+          "check": "active clocks provider /soc/rsc@18900000/drv@2/clock-controller",
+          "passed": true
+        },
+        {
+          "check": "resolve clocks provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count clocks",
+          "passed": true
+        },
+        {
+          "check": "active clocks provider /soc/clock-controller@1fd5044",
+          "passed": true
+        },
+        {
+          "check": "resolve resets provider",
+          "passed": true
+        },
+        {
+          "check": "provider argument count resets",
+          "passed": true
+        },
+        {
+          "check": "active resets provider /soc/clock-controller@100000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdda12-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd_refgen-supply for /soc/hsphy@88e3000",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd3-supply for /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "active supply vdd18-supply for /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00",
+          "passed": true
+        },
+        {
+          "check": "override pair count /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:qcom,param-override-seq",
+          "passed": true
+        },
+        {
+          "check": "override pair count /soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:qcom,host-param-override-seq",
+          "passed": true
+        }
+      ],
+      "providers": {
+        "clocks": [
+          {
+            "node": "/soc/rsc@18900000/drv@2/clock-controller",
+            "args": [
+              27
+            ],
+            "active": true
+          },
+          {
+            "node": "/soc/clock-controller@1fd5044",
+            "args": [
+              2
+            ],
+            "active": true
+          }
+        ],
+        "resets": [
+          {
+            "node": "/soc/clock-controller@100000",
+            "args": [
+              20
+            ],
+            "active": true
+          }
+        ],
+        "/soc/hsphy@88e3000:vdd-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l3i-e0/vreg-pm8550ve-i-l3",
+        "/soc/hsphy@88e3000:vdda12-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2f-e0/vreg-pm8550ve-f-l2",
+        "/soc/hsphy@88e3000:vdd_refgen-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l2i-e0/vreg-pm8550ve-i-l2",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:vdd3-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l5b-e0/vreg-pm-humu-l5",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00:vdd18-supply": "/soc/rsc@18900000/drv@2/rpmh-regulator-l15b-e0/vreg-pm-humu-l15"
+      },
+      "selected_properties": {
+        "/soc/hsphy@88e3000": {
+          "usb-repeater": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00"
+          ],
+          "dummy-supply": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00"
+          ],
+          "compatible": "71636f6d2c7573622d6d33312d65757362322d70687900",
+          "reg": "00000000088e3000000000000000029c00000000088e20000000000000000004000000000c2780000000000000000004",
+          "reg-names": "65757362325f7068795f62617365006575645f656e61626c655f726567006575645f6465746563745f72656700",
+          "vdd-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l3i-e0/vreg-pm8550ve-i-l3"
+          ],
+          "qcom,vdd-voltage-level": "00000000000d6d80000e7ef0",
+          "vdda12-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l2f-e0/vreg-pm8550ve-f-l2"
+          ],
+          "vdd_refgen-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l2i-e0/vreg-pm8550ve-i-l2"
+          ],
+          "clocks": [
+            {
+              "node": "/soc/rsc@18900000/drv@2/clock-controller",
+              "args": [
+                27
+              ],
+              "active": true
+            },
+            {
+              "node": "/soc/clock-controller@1fd5044",
+              "args": [
+                2
+              ],
+              "active": true
+            }
+          ],
+          "clock-names": "7265665f636c6b5f737263007265665f636c6b00",
+          "resets": [
+            {
+              "node": "/soc/clock-controller@100000",
+              "args": [
+                20
+              ],
+              "active": true
+            }
+          ],
+          "reset-names": "7068795f726573657400"
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/eusb2-repeater@fd00": {
+          "qcom,host-param-override-seq": "0000000b00000051000000010000005200000001000000530000000300000054000000020000005500000000000000560000000500000057",
+          "qcom,param-override-seq": "0000000a00000051000000010000005200000001000000530000000300000054000000030000005500000000000000560000000300000057",
+          "vdd3-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l5b-e0/vreg-pm-humu-l5"
+          ],
+          "vdd18-supply": [
+            "/soc/rsc@18900000/drv@2/rpmh-regulator-l15b-e0/vreg-pm-humu-l15"
+          ],
+          "status": "6f6b00",
+          "reg": "0000fd00",
+          "compatible": "71636f6d2c706d69632d65757362322d726570656174657200"
+        }
+      }
+    }
+  },
+  "selected_properties_unchanged": true,
+  "comparison_scope": "phandles normalized to target paths; clock/reset arguments and all non-phandle property bytes exact",
+  "passed": true,
+  "errors": [],
+  "whole_board_accepted": false,
+  "physical_verified": false,
+  "dt_modified": false
+}

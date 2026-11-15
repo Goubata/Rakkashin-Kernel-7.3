@@ -1,0 +1,43 @@
+{
+  "stage": 65,
+  "scope": "Three linked USB driver drafts; real registry/devres tests and selected DT checks, not physical USB acceptance",
+  "checks": {
+    "log": "reports/usb-repeater-stage65-qemu.log",
+    "test": "usb-repeater",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      5,
+      0,
+      0,
+      5
+    ]
+  },
+  "selected_dt_passed": true,
+  "matching_imports": 101,
+  "draft_module_count": 3,
+  "main_bundle": "artifacts/android73-info-stage57",
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "PMIC/M31 register/regulator/error and probe/remove paths",
+    "Provider forced-unbind versus consumers; borrowed unmanaged lookup lifetime",
+    "DWC3 vendor core, SuperSpeed PHY, Type-C/charging and USB gadget functions",
+    "Real cable/host/device/suspend and daemon/SELinux acceptance",
+    "All remaining mandatory drivers and whole-board DT/boot/DLKM acceptance"
+  ],
+  "evidence_sha256": {
+    "reports/usb-repeater-stage65-check.json": "e3745972043ba01e3c97930610b7b418ce4eded13874c5fcd26dfc9181b4566f",
+    "reports/usb-repeater-stage65-qemu.log": "3b17c502cdebb5c3df7081d4930ed62cff5225085d4dcef38bcff09f315c3c86",
+    "reports/usb-repeater-stage65-qemu.json": "a283492e9985c88ee25407cabc53c9589ff3aa0d78207a162af60742d5772fb2",
+    "reports/usb-repeater-stage65-build.log": "a2bb78d60ea34d1227d8ce67d80a90fa17ec990f5209df8c9afc6b2ce1fb5899",
+    "reports/usb-repeater-stage65-phy-build.log": "d638c45e723e93a83479b8921595cdb97684a2a73fee128da6e61e433ee11913",
+    "reports/usb-repeater-stage65-test-build.log": "daf8588b8cf489f42e440e89a03fd91a205bdd50bfd8540492e0032e0fcac8e1",
+    "reports/usb-repeater-stage65-crc.json": "32cc4ed4fd1c5d6a4a54f8543f84a2e6353d5aefe8610c3e02cae8f229e17342",
+    "reports/usb-eusb2-stage65-dt.json": "adbdd9b0d964f7fcd6585bdcea218dda9133256133f273d0563b01eaf4e3bb2a",
+    "reports/usb-repeater-source-lock.json": "49a12b692ceaea7dd02e7e17dfd1ac7b236341e463f49186cb438cfbd0ad5f95",
+    "patches/usb-repeater-7.3.patch": "9a053588bdae577521ef58d1efc88091f808f3fb66b7ca89662f97a7a00b6371"
+  }
+}

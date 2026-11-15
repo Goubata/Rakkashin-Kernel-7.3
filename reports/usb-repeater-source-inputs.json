@@ -1,0 +1,10 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/usb-repeater/repeater.c": "drivers/usb/repeater/repeater.c",
+    "ports/usb-repeater/repeater-qti-pmic-eusb2.c": "drivers/usb/repeater/repeater-qti-pmic-eusb2.c",
+    "ports/usb-repeater/include/linux/usb/repeater.h": "include/linux/usb/repeater.h",
+    "ports/usb-repeater/include/linux/usb/dwc3-msm.h": "include/linux/usb/dwc3-msm.h",
+    "ports/usb-repeater/phy-msm-m31-eusb2.c": "drivers/usb/phy/phy-msm-m31-eusb2.c"
+  }
+}

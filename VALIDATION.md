@@ -2409,3 +2409,23 @@ Regression: 16 suites pass; 133 port modules' CRCs match.
 Open risk: a fixture without CPUFREQ_HAVE_GOVERNOR_PER_POLICY made waltgov_init fail midway
 and CFS later oopsed; the phone driver sets the flag but that error path needs an audit.
 Not verified: gclk counters, SCMI, perf HAL/thermal_pause/moto_sched, perf/power parity.
+
+## Stage105: proxy-execution donors and sched_walt load balancing
+
+Stage104's open risk was real and not governor specific. With both policies on walt and
+20 s of mixed load, ~40% of QEMU runs hit lockdep_assert_rq_held in update_se /
+update_load_avg / cpuacct_charge, then put_prev_task_fair h_curr != prev and an Oops in
+pick_next_entity. A failed waltgov_init alone did not reproduce (0/2); disabling WALT's
+MVP replace hook did not help (1/4); instrumenting set_task_cpu found no running/queued
+retarget (0 hits in 13 runs, 2 reproductions). The first warning trace was an idle CPU in
+walt_newidle_balance -> walt_lb_pull_tasks -> walt_detach_task -> deactivate_task.
+
+Root cause: android18-7.3 builds SCHED_PROXY_EXEC. Mutex-blocked tasks stay queued and can
+be rq->donor while the owner runs on their scheduling context; native can_migrate_task()
+rejects task_is_blocked(). WALT targets 6.12 (no proxy exec) and only skipped on-CPU tasks,
+so it pulled donors and left the source CPU accounting an entity of another rq.
+Fix: walt_proxy_pinned() (blocked_on.lock or rq->donor) in _walt_can_migrate_task and the
+storage LB; the active-push path also skips blocked tasks (stopper already requires
+TASK_RUNNING). blocked_on.lock is read directly because __sched_proxy_exec is unexported.
+After: 12/12 sustained all-walt, 4/4 mixed, 3/3 standard checks+stress, zero WARN/Oops.
+Evidence: reports/sched-walt-stage105-validation.json (before/after per-log counts).

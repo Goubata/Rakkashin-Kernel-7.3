@@ -4,6 +4,7 @@ from pathlib import Path
 from native_module_inventory import firmware_modules
 import gzip
 import argparse
+import os
 import stat
 import hashlib
 import json
@@ -397,8 +398,10 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
             if source.name=='sched-walt.ko':params=' midpoint_freq=2500000 sw_cycle_counter=1'
+            if source.name=='avr-walt-fixture.ko' and os.environ.get('AVR_WALT_DIAG')=='nopolicy':params=' per_policy=0'
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_SCHED_WALT_LOAD_FAIL; /bin/busybox poweroff -f; }}')
-        add('bin/walt-check',stat.S_IFREG|0o755,(ROOT/'tests/sched-walt/walt-check.sh').read_bytes())
+        diag=os.environ.get('AVR_WALT_DIAG','')
+        add('bin/walt-check',stat.S_IFREG|0o755,(ROOT/'tests/sched-walt'/({'mixed':'walt-mixed.sh','allwalt':'walt-allwalt.sh'}.get(diag,'walt-check.sh'))).read_bytes())
         # sched_walt is permanent (restricted hooks); the check script validates runtime behaviour.
         commands.append('/bin/walt-check || { echo AVR_SCHED_WALT_CHECK_FAIL; /bin/busybox poweroff -f; }')
         commands.append('echo AVR_SCHED_WALT_TESTS_PASS scope=real-module-private-cpufreq-em-fixture')

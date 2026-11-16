@@ -252,6 +252,9 @@ static inline bool _walt_can_migrate_task(struct task_struct *p, int dst_cpu,
 	if (p->se.sched_delayed)
 		return false;
 
+	if (walt_proxy_pinned(task_rq(p), p))
+		return false;
+
 	/* Don't detach task if it is under active migration */
 	if (wrq->push_task == p)
 		return false;
@@ -430,6 +433,7 @@ static int walt_lb_pull_tasks(int dst_cpu, int src_cpu,
 		if (task_on_cpu(src_rq, p)) {
 			if (cpumask_test_cpu(dst_cpu, p->cpus_ptr) &&
 					!p->se.sched_delayed &&
+					!walt_task_blocked(p) &&
 					need_active_lb(p, dst_cpu, src_cpu)) {
 				bool success;
 

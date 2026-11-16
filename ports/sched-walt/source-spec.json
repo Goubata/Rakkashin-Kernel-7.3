@@ -47,11 +47,11 @@
   "7.3 asserts rq clock under lock: update_rq_clock() before detach/attach and MOTO long-wait timestamp read under the src lock",
   "Refuse to load if the task vendor area is smaller than walt_task_struct (android_arch_task_struct_size missing); BUILD_BUG_ON size > 512",
   "sw_cycle_counter module parameter (default off) selects the shipped software cycle counter; used in QEMU where qcom,gclk MMIO is absent",
-  "sched_ext enable-state hook not registered (7.3 lacks it; sched_ext unused on device)"
+  "sched_ext enable-state hook not registered (7.3 lacks it; sched_ext unused on device)",
+  "SCHED_PROXY_EXEC (7.3): never migrate mutex-blocked tasks or rq->donor (native can_migrate_task rule); 6.12 had no proxy execution"
  ],
  "pending": [
   "qcom,gclk MMIO counters, SCMI cpufreq, perf HAL / thermal_pause / moto_sched consumers on hardware",
-  "waltgov_init partial-failure path (seen only with duplicate sysfs from a misconfigured fixture)",
   "performance/power parity measurement vs 6.12"
  ]
 }

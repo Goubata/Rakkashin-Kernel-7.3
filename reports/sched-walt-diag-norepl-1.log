@@ -1,0 +1,1029 @@
+[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000][    T0] Linux version 7.3.0-4k (avr-builder@avr-arm64) (Ubuntu clang version 21.1.8 (6ubuntu1), Ubuntu LLD 21.1.8) #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026
+[    0.000000][    T0] KASLR enabled
+[    0.000000][    T0] random: crng init done
+[    0.000000][    T0] Machine model: linux,dummy-virt
+[    0.000000][    T0] earlycon: pl11 MMIO:0x0000000009000000 (options '')
+[    0.000000][    T0] printk: legacy bootconsole [pl11] enabled
+[    0.000000][    T0] efi: UEFI not found.
+[    0.000000][    T0] OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+[    0.000000][    T0] cma: Reserved 16 MiB at 0x000000007ec00000
+[    0.000000][    T0] psci: probing for conduit method from DT.
+[    0.000000][    T0] psci: PSCIv1.1 detected in firmware.
+[    0.000000][    T0] psci: Using standard PSCI v0.2 function IDs
+[    0.000000][    T0] psci: Trusted OS migration not required
+[    0.000000][    T0] psci: SMC Calling Convention v1.0
+[    0.000000][    T0] Zone ranges:
+[    0.000000][    T0]   DMA32    [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0]   Normal   empty
+[    0.000000][    T0] Movable zone start for each node
+[    0.000000][    T0] Early memory node ranges
+[    0.000000][    T0]   node   0: [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] Initmem setup node 0 [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] percpu: Embedded 56 pages/cpu s192400 r8192 d28784 u229376
+[    0.000000][    T0] Detected PIPT I-cache on CPU0
+[    0.000000][    T0] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000][    T0] CPU features: detected: GICv3 CPU interface
+[    0.000000][    T0] CPU features: detected: HCRX_EL2 register
+[    0.000000][    T0] CPU features: detected: Stage-1 Permission Indirection Extension (S1PIE)
+[    0.000000][    T0] CPU features: detected: Spectre-v4
+[    0.000000][    T0] alternatives: applying boot alternatives
+[    0.000000][    T0] Kernel command line: console=ttyAMA0 earlycon=pl011,0x09000000 rdinit=/init panic=1 android_arch_task_struct_size=512 
+[    0.000000][    T0] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000][    T0] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000][    T0] software IO TLB: SWIOTLB bounce buffer size adjusted to 1MB
+[    0.000000][    T0] software IO TLB: area num 4.
+[    0.000000][    T0] software IO TLB: mapped [mem 0x000000007d980000-0x000000007da80000] (1MB)
+[    0.000000][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 262144
+[    0.000000][    T0] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.000000][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.000000][    T0] stackdepot hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.000000][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000][    T0] Running RCU self tests
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000][    T0] rcu: 	RCU event tracing is enabled.
+[    0.000000][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.000000][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+[    0.000000][    T0] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[    0.000000][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.000000][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000][    T0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000][    T0] GICv3: 256 SPIs implemented
+[    0.000000][    T0] GICv3: 0 Extended SPIs implemented
+[    0.000000][    T0] Root IRQ handler: gic_handle_irq
+[    0.000000][    T0] GICv3: GICv3 features: 16 PPIs
+[    0.000000][    T0] GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.000000][    T0] GICv3: CPU0: found redistributor 0 region 0:0x00000000080a0000
+[    0.000000][    T0] ITS [mem 0x08080000-0x0809ffff]
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Devices @43d20000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Interrupt Collections @43d30000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] GICv3: using LPI property table @0x0000000043d40000
+[    0.000000][    T0] GICv3: CPU0: using allocated LPI pending table @0x0000000043d50000
+[    0.000000][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.000000][    T0] arch_timer: cp15 timer running at 1000.00MHz (virt).
+[    0.000000][    T0] clocksource: arch_sys_counter: mask: 0x1fffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000067][    T0] sched_clock: 61 bits at 1000MHz, resolution 1ns, wraps every 4398046511103ns
+[    0.006779][    T0] kfence: initialized - using 524288 bytes for 63 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.041910][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.046016][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.046308][    T0] ... MAX_LOCK_DEPTH:          48
+[    0.046583][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    0.046868][    T0] ... CLASSHASH_SIZE:          4096
+[    0.047139][    T0] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.047410][    T0] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.047681][    T0] ... CHAINHASH_SIZE:          32768
+[    0.047953][    T0]  memory used by lock dependency info: 6429 kB
+[    0.048276][    T0]  memory used for stack traces: 4224 kB
+[    0.048556][    T0]  per task-struct memory footprint: 1920 bytes
+[    0.051286][    T0] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.00 BogoMIPS (lpj=4000000)
+[    0.052500][    T0] pid_max: default: 32768 minimum: 301
+[    0.084259][    T0] landlock: Up and running.
+[    0.085142][    T0] SELinux:  Initializing.
+[    0.147724][    T0] LSM support for eBPF active
+[    0.166696][    T0] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.167315][    T0] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.193648][    T0] VFS: Finished mounting rootfs on nullfs
+[    0.231162][    T0] Running RCU synchronous self tests
+[    0.232074][    T0] Running RCU synchronous self tests
+[    0.334412][    T1] rcu: Hierarchical SRCU implementation.
+[    0.334859][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    0.350557][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.366672][    T1] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.371301][    T1] EFI services will not be available.
+[    0.384606][    T1] smp: Bringing up secondary CPUs ...
+[    0.423184][    T0] Detected PIPT I-cache on CPU1
+[    0.426130][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    0.427469][    T0] GICv3: CPU1: using allocated LPI pending table @0x0000000043d60000
+[    0.431681][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    0.464885][    T0] Detected PIPT I-cache on CPU2
+[    0.465289][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    0.465640][    T0] GICv3: CPU2: using allocated LPI pending table @0x0000000043d70000
+[    0.466730][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    0.491870][    T0] Detected PIPT I-cache on CPU3
+[    0.492239][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    0.492591][    T0] GICv3: CPU3: using allocated LPI pending table @0x0000000043d80000
+[    0.493881][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    0.498095][    T1] smp: Brought up 1 node, 4 CPUs
+[    0.501374][    T1] SMP: Total of 4 processors activated.
+[    0.501692][    T1] CPU: All CPU(s) started at EL1
+[    0.503176][    T1] CPU features: detected: Branch Target Identification
+[    0.503530][    T1] CPU features: detected: 32-bit EL0 Support
+[    0.503837][    T1] CPU features: detected: 32-bit EL1 Support
+[    0.504157][    T1] CPU features: detected: ARMv8.4 Translation Table Level
+[    0.504506][    T1] CPU features: detected: Instruction cache invalidation not required for I/D coherence
+[    0.504905][    T1] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.505308][    T1] CPU features: detected: Common not Private translations
+[    0.505628][    T1] CPU features: detected: CRC32 instructions
+[    0.505915][    T1] CPU features: detected: Data cache clean to Point of Deep Persistence
+[    0.506516][    T1] CPU features: detected: Data cache clean to Point of Persistence
+[    0.506863][    T1] CPU features: detected: Data independent timing control (DIT)
+[    0.507195][    T1] CPU features: detected: E0PD
+[    0.507449][    T1] CPU features: detected: Enhanced Counter Virtualization
+[    0.507765][    T1] CPU features: detected: Enhanced Counter Virtualization (CNTPOFF)
+[    0.508146][    T1] CPU features: detected: Enhanced Privileged Access Never
+[    0.508473][    T1] CPU features: detected: Enhanced Virtualization Traps
+[    0.508787][    T1] CPU features: detected: Fine Grained Traps
+[    0.509075][    T1] CPU features: detected: Guarded Control Stack (GCS)
+[    0.509465][    T1] CPU features: detected: Generic authentication (IMP DEF algorithm)
+[    0.509936][    T1] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.510281][    T1] CPU features: detected: 52-bit Virtual Addressing for KVM (LPA2)
+[    0.511476][    T1] CPU features: detected: LSE atomic instructions
+[    0.511787][    T1] CPU features: detected: Memory Copy and Memory Set instructions
+[    0.512127][    T1] CPU features: detected: Privileged Access Never
+[    0.512522][    T1] CPU features: detected: PMUv3
+[    0.512782][    T1] CPU features: detected: SCTLR2
+[    0.513041][    T1] CPU features: detected: RAS Extension Support
+[    0.513358][    T1] CPU features: detected: RASv1p1 Extension Support
+[    0.513661][    T1] CPU features: detected: Random Number Generator
+[    0.513959][    T1] CPU features: detected: Speculation barrier (SB)
+[    0.514260][    T1] CPU features: detected: Stage-2 Force Write-Back
+[    0.514611][    T1] CPU features: detected: Trap EL0 IMPLEMENTATION DEFINED functionality
+[    0.515359][    T1] CPU features: detected: TLB range maintenance instructions
+[    0.515689][    T1] CPU features: detected: WFx with timeout
+[    0.515989][    T1] CPU features: detected: XNX
+[    0.516374][    T1] CPU features: detected: Scalable Matrix Extension
+[    0.516706][    T1] CPU features: detected: FA64
+[    0.516961][    T1] CPU features: detected: SME2
+[    0.517216][    T1] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.517551][    T1] CPU features: detected: Scalable Vector Extension
+[    0.551397][    T1] alternatives: applying system-wide alternatives
+[    0.588715][    T1] CPU features: detected: Hardware dirty bit management on CPU0-3
+[    0.590179][    T1] SVE: maximum available vector length 256 bytes per vector
+[    0.590557][    T1] SVE: default vector length 64 bytes per vector
+[    0.590954][    T1] SME: minimum available vector length 16 bytes per vector
+[    0.591283][    T1] SME: maximum available vector length 256 bytes per vector
+[    0.591610][    T1] SME: default vector length 32 bytes per vector
+[    0.645954][    T1] Memory: 941640K/1048576K available (21376K kernel code, 2734K rwdata, 16084K rodata, 5184K init, 11496K bss, 85292K reserved, 16384K cma-reserved)
+[    0.918124][    T1] Running RCU synchronous self tests
+[    0.921355][    T1] Running RCU synchronous self tests
+[    0.937110][    T1] Running RCU Tasks wait API self tests
+[    0.948139][    T1] Running RCU Tasks Trace wait API self tests
+[    0.970095][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    0.975056][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.987230][    T1] 18480 pages in range for non-PLT usage
+[    0.987418][    T1] 510000 pages in range for PLT usage
+[    0.991085][   T11] Callback from call_rcu_tasks_trace() invoked.
+[    1.081502][   T42] Callback from call_rcu_tasks() invoked.
+[    1.140118][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    1.187027][    T1] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    1.189789][    T1] audit: initializing netlink subsys (disabled)
+[    1.198878][   T44] audit: type=2000 audit(1.044:1): state=initialized audit_enabled=0 res=1
+[    1.415500][    T1] thermal_sys: Registered thermal governor 'bang_bang'
+[    1.415846][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    1.416391][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    1.416711][    T1] thermal_sys: Registered thermal governor 'power_allocator'
+[    1.419043][    T1] cpuidle: using governor menu
+[    1.427933][    T1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    1.432473][    T1] ASID allocator initialised with 65536 entries
+[    1.454294][    T1] Serial: AMBA PL011 UART driver
+[    1.838082][    T1] 9000000.pl011: ttyAMA0 MMIO:0x0000000009000000 (irq = 13, base_baud = 0) is a PL011 rev1
+[    1.843062][    T1] printk: console [ttyAMA0] enabled
+[    1.843062][    T1] printk: console [ttyAMA0] enabled
+[    1.844607][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.844607][    T1] printk: legacy bootconsole [pl11] disabled
+[    2.078502][    T1] iommu: Default domain type: Translated
+[    2.078701][    T1] iommu: DMA domain TLB invalidation policy: strict mode
+[    2.112453][    T1] SCSI subsystem initialized
+[    2.122648][    T1] usbcore: registered new interface driver usbfs
+[    2.124891][    T1] usbcore: registered new interface driver hub
+[    2.126013][    T1] usbcore: registered new device driver usb
+[    2.134978][    T1] mc: Linux media interface: v0.10
+[    2.137039][    T1] videodev: Linux video capture interface: v2.00
+[    2.142139][    T1] EDAC MC: Ver: 3.0.0
+[    2.157133][    T1] scmi_core: SCMI protocol bus registered
+[    2.172283][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    2.220821][    T1] clocksource: Switched to clocksource arch_sys_counter
+[    2.255617][    T1] VFS: Disk quotas dquot_6.6.0
+[    2.256886][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    2.307029][    T1] NET: Registered PF_INET protocol family
+[    2.310699][    T1] IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    2.342135][    T1] tcp_listen_portaddr_hash hash table entries: 512 (order: 4, 36864 bytes, linear)
+[    2.342872][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    2.345206][    T1] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    2.351382][    T1] TCP bind hash table entries: 8192 (order: 9, 1179648 bytes, linear)
+[    2.367096][    T1] TCP: Hash tables configured (established 8192 bind 8192)
+[    2.369799][    T1] UDP hash table entries: 512 (order: 5, 131072 bytes, linear)
+[    2.376976][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    2.379016][    T1] NET: Registered PF_XDP protocol family
+[    2.380138][    T1] PCI: CLS 0 bytes, default 64
+[    2.394927][    T1] kvm [1]: HYP mode not available
+[    2.406948][   T14] Trying to unpack rootfs image as initramfs...
+[    2.468103][    T1] Initialise system trusted keyrings
+[    2.475356][    T1] workingset: timestamp_bits=46 (anon: 41) max_order=18 bucket_order=0 (anon: 0)
+[    2.481401][    T1] Memory allocation profiling is not supported!
+[    2.537868][    T1] fuse: init (API version 7.46)
+[    2.649452][    T1] Key type asymmetric registered
+[    2.649788][    T1] Asymmetric key parser 'x509' registered
+[    2.652022][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    2.657170][    T1] io scheduler mq-deadline registered
+[    2.657317][    T1] io scheduler kyber registered
+[    2.661347][    T1] io scheduler bfq registered
+[    2.725899][    T1] pl061_gpio 9030000.pl061: PL061 GPIO chip registered
+[    2.745190][    T1] pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+[    2.746633][    T1] pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 0x0000000000
+[    2.747924][    T1] pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 0x0010000000
+[    2.748785][    T1] pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 0x8000000000
+[    2.749848][    T1] pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 32 bits
+[    2.751057][    T1] pci-host-generic 4010000000.pcie: ECAM at [mem 0x4010000000-0x401fffffff] for [bus 00-ff]
+[    2.761789][    T1] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    2.762323][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    2.762462][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    2.762544][    T1] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    2.762605][    T1] pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+[    2.765789][    T1] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    2.789037][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    2.789137][    T1] pci_bus 0000:00: resource 5 [mem 0x10000000-0x3efeffff]
+[    2.789191][    T1] pci_bus 0000:00: resource 6 [mem 0x8000000000-0xffffffffff]
+[    3.091537][   T14] Freeing initrd memory: 4320K
+[    3.404008][    T1] brd: module loaded
+[    3.940897][    T1] loop: module loaded
+[    3.954936][    T1] encore_fas: version 9, branch main-f408a00, counter 1000000000 Hz
+[    3.995268][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    3.995341][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    4.073145][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    4.126784][    T1] usbcore: registered new interface driver uas
+[    4.129563][    T1] usbcore: registered new interface driver usb-storage
+[    4.149541][    T1] usbcore: registered new interface driver xpad
+[    4.193669][    T1] rtc-pl031 9010000.pl031: registered as rtc0
+[    4.194840][    T1] rtc-pl031 9010000.pl031: setting system clock to 2026-11-16T09:04:57 UTC (1794819897)
+[    4.203950][    T1] usbcore: registered new interface driver uvcvideo
+[    4.217865][    T1] device-mapper: uevent: version 1.0.3
+[    4.224660][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    4.292734][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    4.376534][    T1] usbcore: registered new interface driver usbhid
+[    4.376599][    T1] usbhid: USB HID core driver
+[    4.380752][    T1] ashmem_rust: Using Rust implementation.
+[    4.434113][    T1] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 (0,8000003f) counters available
+[    4.470616][    T1] usbcore: registered new interface driver snd-usb-audio
+[    4.480986][    T1] GACT probability NOT on
+[    4.481506][    T1] Mirror/redirect action on
+[    4.483910][    T1] u32 classifier
+[    4.483951][    T1]     input device check on
+[    4.483987][    T1]     Actions configured
+[    4.498488][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    4.498488][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    4.498812][    T1] The pptp conntrack helper is scheduled for removal.
+[    4.498812][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    4.513975][    T1] xt_time: kernel timezone is -0000
+[    4.514706][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    4.535670][    T1] gre: GRE over IPv4 demultiplexer driver
+[    4.535775][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    4.599819][    T1] IPv4 over IPsec tunneling driver
+[    4.624886][    T1] Initializing XFRM netlink socket
+[    4.625692][    T1] IPsec XFRM device driver
+[    4.631418][    T1] NET: Registered PF_INET6 protocol family
+[    4.674149][    T1] Segment Routing with IPv6
+[    4.674947][    T1] In-situ OAM (IOAM) with IPv6
+[    4.677804][    T1] mip6: Mobile IPv6
+[    4.702325][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    4.744057][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    4.765423][    T1] NET: Registered PF_PACKET protocol family
+[    4.765539][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    4.765990][    T1] NET: Registered PF_KEY protocol family
+[    4.771981][    T1] NET: Registered PF_VSOCK protocol family
+[    5.705067][    T1] sched_proxy_exec: enabled
+[    5.730849][    T1] registered taskstats version 1
+[    5.746558][    T1] workqueue: work func tboost_fn enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
+[    5.747209][    T1] Rakkashin v3.2 features (avr, Android 7.3 port)
+[    5.747286][    T1] Loading compiled-in X.509 certificates
+[    5.770270][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 877395b53bfc9825fc15d9fe6e9400be628ea3ba'
+[    5.770368][    T1] Problem parsing in-kernel X.509 certificate list
+[    7.411451][    T1] page_owner is disabled
+[    7.421807][    T1] Key type .fscrypt registered
+[    7.421880][    T1] Key type fscrypt-provisioning registered
+[    7.446430][    T1] Boeffla WL blocker: driver version 1.1.0-7.3 started
+[    7.473570][    T1] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    7.507017][    T1] clk: Disabling unused clocks
+[    7.510078][    T1] PM: genpd: Disabling unused power domains
+[    7.510686][    T1] ALSA device list:
+[    7.511175][    T1]   No soundcards found.
+[    8.112696][    T1] Freeing unused kernel memory: 5184K
+[    8.117008][    T1] Run /init as init process
+AVR_QEMU_SMOKE_BEGIN
+Linux (none) 7.3.0-4k #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026 aarch64 GNU/Linux
+[    8.486593][   T71] smem: loading out-of-tree module taints kernel.
+[    8.486840][   T71] smem: module verification failed: signature and/or required key missing - tainting kernel
+[    9.042209][   T74] cpu cpu0: EM: created perf domain
+[    9.093724][   T74] cpu cpu2: EM: created perf domain
+[    9.126907][   T45] core_ctl: Creating CPU group 0
+[    9.127023][   T45] core_ctl: Init CPU0 state
+[    9.127090][   T45] core_ctl: Init CPU1 state
+[    9.130591][   T45] core_ctl: Creating CPU group 2
+[    9.130627][   T45] core_ctl: Init CPU2 state
+[    9.130647][   T45] core_ctl: Init CPU3 state
+[    9.140097][   T78] midpoint: Start init point
+[    9.140216][   T78] midpoint: request_freq_qos: exiting as governor is schedutil
+[   27.748752][    C0] ------------[ cut here ]------------
+[   27.748965][    C0] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#0: busybox/85
+[   27.749962][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.751410][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G           OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.753149][    C0] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.753575][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.754113][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.754628][    C0] pc : update_se+0x200/0x5b0
+[   27.754849][    C0] lr : update_se+0x40/0x5b0
+[   27.755033][    C0] sp : ffffffc080003cf0
+[   27.755198][    C0] x29: ffffffc080003cf0 x28: ffffff803fc76ac0 x27: 0000000000100000
+[   27.755675][    C0] x26: 0000000000000002 x25: ffffffdee71ed000 x24: ffffffdee6ff2000
+[   27.755998][    C0] x23: ffffff803fcd1b00 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.756497][    C0] x20: ffffff803fcd18c0 x19: ffffff8004b9bec0 x18: 0000000000000000
+[   27.756745][    C0] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000003
+[   27.757193][    C0] x14: 0000000000000003 x13: 0000000000000000 x12: 00000000000000c4
+[   27.757609][    C0] x11: 0000000000000000 x10: ffffffdee6fa47b8 x9 : 0000000101000003
+[   27.758198][    C0] x8 : 0000000000000000 x7 : 0000000000000064 x6 : 28f5c28f5c28f5c3
+[   27.758662][    C0] x5 : ffffffdee1867000 x4 : ffffffdee6fb98c0 x3 : 0000000000000000
+[   27.758960][    C0] x2 : 0000000000000000 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.759466][    C0] Call trace:
+[   27.759679][    C0]  update_se+0x200/0x5b0 (P)
+[   27.759950][    C0]  update_curr+0x30/0x114
+[   27.760085][    C0]  task_tick_fair+0x58/0x22c
+[   27.760219][    C0]  sched_tick+0x144/0x434
+[   27.760477][    C0]  update_process_times+0x11c/0x160
+[   27.760818][    C0]  tick_nohz_handler+0x12c/0x2dc
+[   27.761025][    C0]  __hrtimer_run_queues+0x1b4/0x548
+[   27.761229][    C0]  hrtimer_interrupt+0xdc/0x324
+[   27.761422][    C0]  arch_timer_handler_virt+0x4c/0x60
+[   27.761629][    C0]  handle_percpu_devid_irq+0x188/0x210
+[   27.761839][    C0]  generic_handle_domain_irq+0x54/0x7c
+[   27.762045][    C0]  gic_handle_irq+0xb0/0x35c
+[   27.762236][    C0]  call_on_irq_stack+0x48/0x68
+[   27.762425][    C0]  do_interrupt_handler+0x4c/0x84
+[   27.762620][    C0]  el1_interrupt+0x48/0xbc
+[   27.762800][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.762990][    C0]  el1h_64_irq+0x84/0x88
+[   27.763233][    C0]  radix_tree_tag_get+0x0/0xa8 (P)
+[   27.763431][    C0]  alloc_pid+0x30c/0x578
+[   27.763606][    C0]  copy_process+0xb58/0x10e4
+[   27.763789][    C0]  kernel_clone+0xdc/0x5fc
+[   27.763966][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.764153][    C0]  invoke_syscall+0x60/0x10c
+[   27.764364][    C0]  el0_svc_common+0x8c/0xdc
+[   27.764547][    C0]  do_el0_svc+0x1c/0x28
+[   27.764720][    C0]  el0_svc+0x60/0x220
+[   27.764885][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.765077][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.765423][    C0] irq event stamp: 57566
+[   27.765582][    C0] hardirqs last  enabled at (57565): [<ffffffdee519eb80>] crng_make_state+0x100/0x288
+[   27.765927][    C0] hardirqs last disabled at (57566): [<ffffffdee5a9ea08>] el1_interrupt+0x34/0xbc
+[   27.766235][    C0] softirqs last  enabled at (57552): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.766552][    C0] softirqs last disabled at (57545): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.766933][    C0] ---[ end trace 0000000000000000 ]---
+[   27.767433][    C0] ------------[ cut here ]------------
+[   27.767456][    C0] WARNING: kernel/sched/sched.h:1677 at cpuacct_charge+0x11c/0x12c, CPU#0: busybox/85
+[   27.767932][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.768364][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.768783][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.769003][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.769199][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.769451][    C0] pc : cpuacct_charge+0x11c/0x12c
+[   27.769638][    C0] lr : cpuacct_charge+0x5c/0x12c
+[   27.769822][    C0] sp : ffffffc080003cb0
+[   27.769968][    C0] x29: ffffffc080003cb0 x28: ffffff803fc76ac0 x27: 0000000000100000
+[   27.770290][    C0] x26: 0000000000000002 x25: ffffffdee71ed000 x24: ffffffdee6ff2000
+[   27.770608][    C0] x23: ffffff8004a17c80 x22: ffffffdee6ff0290 x21: 0000000000000001
+[   27.770931][    C0] x20: ffffff80057e0000 x19: 00000000002eb258 x18: 0000000000000000
+[   27.771247][    C0] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000003
+[   27.771564][    C0] x14: 0000000000000003 x13: 0000000000000000 x12: 00000000000000c4
+[   27.771880][    C0] x11: 0000000000000000 x10: 000000000000000f x9 : 0000000101000003
+[   27.772204][    C0] x8 : 0000000000000000 x7 : 0000000000000064 x6 : 28f5c28f5c28f5c3
+[   27.772517][    C0] x5 : ffffffdee1867000 x4 : ffffffdee6fb98c0 x3 : 0000000000000000
+[   27.772887][    C0] x2 : 0000000000000000 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.773206][    C0] Call trace:
+[   27.773331][    C0]  cpuacct_charge+0x11c/0x12c (P)
+[   27.773526][    C0]  update_se+0x13c/0x5b0
+[   27.773698][    C0]  update_curr+0x30/0x114
+[   27.773872][    C0]  task_tick_fair+0x58/0x22c
+[   27.774054][    C0]  sched_tick+0x144/0x434
+[   27.774230][    C0]  update_process_times+0x11c/0x160
+[   27.774439][    C0]  tick_nohz_handler+0x12c/0x2dc
+[   27.774630][    C0]  __hrtimer_run_queues+0x1b4/0x548
+[   27.774828][    C0]  hrtimer_interrupt+0xdc/0x324
+[   27.775017][    C0]  arch_timer_handler_virt+0x4c/0x60
+[   27.775219][    C0]  handle_percpu_devid_irq+0x188/0x210
+[   27.775445][    C0]  generic_handle_domain_irq+0x54/0x7c
+[   27.775647][    C0]  gic_handle_irq+0xb0/0x35c
+[   27.775826][    C0]  call_on_irq_stack+0x48/0x68
+[   27.776010][    C0]  do_interrupt_handler+0x4c/0x84
+[   27.776214][    C0]  el1_interrupt+0x48/0xbc
+[   27.776391][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.776582][    C0]  el1h_64_irq+0x84/0x88
+[   27.776752][    C0]  radix_tree_tag_get+0x0/0xa8 (P)
+[   27.776945][    C0]  alloc_pid+0x30c/0x578
+[   27.777117][    C0]  copy_process+0xb58/0x10e4
+[   27.777297][    C0]  kernel_clone+0xdc/0x5fc
+[   27.777475][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.777659][    C0]  invoke_syscall+0x60/0x10c
+[   27.777842][    C0]  el0_svc_common+0x8c/0xdc
+[   27.778022][    C0]  do_el0_svc+0x1c/0x28
+[   27.778193][    C0]  el0_svc+0x60/0x220
+[   27.778356][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.778547][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.778727][    C0] irq event stamp: 57566
+[   27.778874][    C0] hardirqs last  enabled at (57565): [<ffffffdee519eb80>] crng_make_state+0x100/0x288
+[   27.779182][    C0] hardirqs last disabled at (57566): [<ffffffdee5a9ea08>] el1_interrupt+0x34/0xbc
+[   27.779478][    C0] softirqs last  enabled at (57552): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.779782][    C0] softirqs last disabled at (57545): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.780075][    C0] ---[ end trace 0000000000000000 ]---
+[   27.780339][    C0] ------------[ cut here ]------------
+[   27.780359][    C0] WARNING: kernel/sched/sched.h:1677 at __resched_curr+0x138/0x324, CPU#0: busybox/85
+[   27.780827][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.781225][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.781638][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.781856][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.782043][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.782293][    C0] pc : __resched_curr+0x138/0x324
+[   27.782478][    C0] lr : __resched_curr+0x50/0x324
+[   27.782661][    C0] sp : ffffffc080003cf0
+[   27.782805][    C0] x29: ffffffc080003d00 x28: ffffff803fc76ac0 x27: 0000000000100000
+[   27.783123][    C0] x26: 0000000000000002 x25: ffffffdee71ed000 x24: ffffff8004b9bec0
+[   27.783440][    C0] x23: ffffff803fcd1b00 x22: 00000000002eb258 x21: ffffff803fcd18c0
+[   27.783756][    C0] x20: ffffff80057e0000 x19: b1db4c5ee4752758 x18: 0000000000000000
+[   27.784073][    C0] x17: 000000007787680c x16: 00000001a6708a23 x15: 0000000000000002
+[   27.784397][    C0] x14: 0000000000100000 x13: 0000000000000000 x12: 00000000001fffff
+[   27.784715][    C0] x11: 00000001a6708a23 x10: ffffffdee6fa47b8 x9 : 0000000101000003
+[   27.785034][    C0] x8 : 0000000000000000 x7 : 0000000000000064 x6 : 28f5c28f5c28f5c3
+[   27.785349][    C0] x5 : ffffffdee1867000 x4 : ffffffdee6fb98c0 x3 : 0000000000000000
+[   27.785668][    C0] x2 : 00000000002eb258 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.785985][    C0] Call trace:
+[   27.786108][    C0]  __resched_curr+0x138/0x324 (P)
+[   27.786302][    C0]  resched_curr_lazy+0x10/0x20
+[   27.786488][    C0]  update_curr+0xb4/0x114
+[   27.786661][    C0]  task_tick_fair+0x58/0x22c
+[   27.786843][    C0]  sched_tick+0x144/0x434
+[   27.787018][    C0]  update_process_times+0x11c/0x160
+[   27.787217][    C0]  tick_nohz_handler+0x12c/0x2dc
+[   27.787406][    C0]  __hrtimer_run_queues+0x1b4/0x548
+[   27.787604][    C0]  hrtimer_interrupt+0xdc/0x324
+[   27.787793][    C0]  arch_timer_handler_virt+0x4c/0x60
+[   27.787994][    C0]  handle_percpu_devid_irq+0x188/0x210
+[   27.788207][    C0]  generic_handle_domain_irq+0x54/0x7c
+[   27.788418][    C0]  gic_handle_irq+0xb0/0x35c
+[   27.788596][    C0]  call_on_irq_stack+0x48/0x68
+[   27.788781][    C0]  do_interrupt_handler+0x4c/0x84
+[   27.788973][    C0]  el1_interrupt+0x48/0xbc
+[   27.789148][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.789337][    C0]  el1h_64_irq+0x84/0x88
+[   27.789506][    C0]  radix_tree_tag_get+0x0/0xa8 (P)
+[   27.789700][    C0]  alloc_pid+0x30c/0x578
+[   27.789872][    C0]  copy_process+0xb58/0x10e4
+[   27.790052][    C0]  kernel_clone+0xdc/0x5fc
+[   27.790228][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.790413][    C0]  invoke_syscall+0x60/0x10c
+[   27.790597][    C0]  el0_svc_common+0x8c/0xdc
+[   27.790778][    C0]  do_el0_svc+0x1c/0x28
+[   27.790950][    C0]  el0_svc+0x60/0x220
+[   27.791114][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.791304][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.791484][    C0] irq event stamp: 57566
+[   27.791631][    C0] hardirqs last  enabled at (57565): [<ffffffdee519eb80>] crng_make_state+0x100/0x288
+[   27.791940][    C0] hardirqs last disabled at (57566): [<ffffffdee5a9ea08>] el1_interrupt+0x34/0xbc
+[   27.792248][    C0] softirqs last  enabled at (57552): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.792554][    C0] softirqs last disabled at (57545): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.792849][    C0] ---[ end trace 0000000000000000 ]---
+[   27.793105][    C0] ------------[ cut here ]------------
+[   27.793124][    C0] WARNING: kernel/sched/sched.h:1677 at update_load_avg+0x3d8/0x618, CPU#0: busybox/85
+[   27.793597][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.793995][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.794408][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.794626][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.794814][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.795075][    C0] pc : update_load_avg+0x3d8/0x618
+[   27.795268][    C0] lr : update_load_avg+0x48/0x618
+[   27.795458][    C0] sp : ffffffc080003d40
+[   27.795604][    C0] x29: ffffffc080003d40 x28: ffffff803fc76ac0 x27: 0000000000100000
+[   27.795927][    C0] x26: 0000000000000002 x25: ffffffdee71ed000 x24: ffffff8004b9bec0
+[   27.796261][    C0] x23: ffffff803fcd1b00 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.796581][    C0] x20: 0000000000000001 x19: ffffff8004b9bec0 x18: 0000000000000000
+[   27.796899][    C0] x17: 00000000651f2c9b x16: 00000000651f2c9b x15: 0000000000000002
+[   27.797218][    C0] x14: 0000000000100000 x13: 0000000000000000 x12: 00000000001fffff
+[   27.797535][    C0] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000101000003
+[   27.797915][    C0] x8 : 0000000000000000 x7 : 0000000000000064 x6 : 28f5c28f5c28f5c3
+[   27.798232][    C0] x5 : ffffffdee1867000 x4 : ffffffdee6fb98c0 x3 : 0000000000000000
+[   27.798548][    C0] x2 : 0000000000000001 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.798870][    C0] Call trace:
+[   27.798993][    C0]  update_load_avg+0x3d8/0x618 (P)
+[   27.799192][    C0]  task_tick_fair+0x68/0x22c
+[   27.799375][    C0]  sched_tick+0x144/0x434
+[   27.799551][    C0]  update_process_times+0x11c/0x160
+[   27.799750][    C0]  tick_nohz_handler+0x12c/0x2dc
+[   27.799941][    C0]  __hrtimer_run_queues+0x1b4/0x548
+[   27.800140][    C0]  hrtimer_interrupt+0xdc/0x324
+[   27.800339][    C0]  arch_timer_handler_virt+0x4c/0x60
+[   27.800542][    C0]  handle_percpu_devid_irq+0x188/0x210
+[   27.800797][    C0]  generic_handle_domain_irq+0x54/0x7c
+[   27.801001][    C0]  gic_handle_irq+0xb0/0x35c
+[   27.801180][    C0]  call_on_irq_stack+0x48/0x68
+[   27.801364][    C0]  do_interrupt_handler+0x4c/0x84
+[   27.801557][    C0]  el1_interrupt+0x48/0xbc
+[   27.801733][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.801923][    C0]  el1h_64_irq+0x84/0x88
+[   27.802095][    C0]  radix_tree_tag_get+0x0/0xa8 (P)
+[   27.802290][    C0]  alloc_pid+0x30c/0x578
+[   27.802464][    C0]  copy_process+0xb58/0x10e4
+[   27.802644][    C0]  kernel_clone+0xdc/0x5fc
+[   27.802821][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.803010][    C0]  invoke_syscall+0x60/0x10c
+[   27.803193][    C0]  el0_svc_common+0x8c/0xdc
+[   27.803374][    C0]  do_el0_svc+0x1c/0x28
+[   27.803546][    C0]  el0_svc+0x60/0x220
+[   27.803709][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.803900][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.804080][    C0] irq event stamp: 57566
+[   27.804236][    C0] hardirqs last  enabled at (57565): [<ffffffdee519eb80>] crng_make_state+0x100/0x288
+[   27.804546][    C0] hardirqs last disabled at (57566): [<ffffffdee5a9ea08>] el1_interrupt+0x34/0xbc
+[   27.804846][    C0] softirqs last  enabled at (57552): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.805152][    C0] softirqs last disabled at (57545): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.805449][    C0] ---[ end trace 0000000000000000 ]---
+[   27.807431][   T85] ------------[ cut here ]------------
+[   27.807458][   T85] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#0: busybox/85
+[   27.807854][   T85] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.808484][   T85] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.809134][   T85] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.809289][   T85] Hardware name: linux,dummy-virt (DT)
+[   27.809422][   T85] pstate: 614020c5 (nZCv daIF +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   27.809599][   T85] pc : update_se+0x200/0x5b0
+[   27.809723][   T85] lr : update_se+0x40/0x5b0
+[   27.809842][   T85] sp : ffffffc0806ebad0
+[   27.809942][   T85] x29: ffffffc0806ebad0 x28: ffffff8005848000 x27: 0000000000000000
+[   27.810164][   T85] x26: ffffff8004a01fc0 x25: 0000000000000005 x24: ffffffdee6ff2000
+[   27.810377][   T85] x23: ffffffdee6ff0290 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.810594][   T85] x20: ffffff803fcd18c0 x19: ffffff80057e00c0 x18: ffffffdee7000fa0
+[   27.810810][   T85] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000000
+[   27.811022][   T85] x14: 0000000000000000 x13: 0000000000000000 x12: ffffffa158ce0000
+[   27.811238][   T85] x11: 0000000000001d00 x10: ffffffdee6fa47b8 x9 : 0000000100000003
+[   27.811450][   T85] x8 : 0000000000000000 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.811662][   T85] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.811870][   T85] x2 : 0000000000080008 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.812083][   T85] Call trace:
+[   27.812168][   T85]  update_se+0x200/0x5b0 (P)
+[   27.812424][   T85]  update_curr+0x30/0x114
+[   27.812640][   T85]  enqueue_task_fair+0x78/0x8e0
+[   27.812850][   T85]  enqueue_task+0xac/0x1e0
+[   27.813041][   T85]  activate_task+0x7c/0xd8
+[   27.813221][   T85]  wake_up_new_task+0x170/0x458
+[   27.813413][   T85]  kernel_clone+0x29c/0x5fc
+[   27.813598][   T85]  __arm64_sys_clone+0x68/0x98
+[   27.813786][   T85]  invoke_syscall+0x60/0x10c
+[   27.813983][   T85]  el0_svc_common+0x8c/0xdc
+[   27.814168][   T85]  do_el0_svc+0x1c/0x28
+[   27.814342][   T85]  el0_svc+0x60/0x220
+[   27.814510][   T85]  el0t_64_sync_handler+0x68/0xdc
+[   27.814703][   T85]  el0t_64_sync+0x1c4/0x1c8
+[   27.814889][   T85] irq event stamp: 57602
+[   27.815037][   T85] hardirqs last  enabled at (57601): [<ffffffdee5ab3e20>] _raw_spin_unlock_irqrestore+0x3c/0x94
+[   27.815370][   T85] hardirqs last disabled at (57602): [<ffffffdee5ab3b08>] _raw_spin_lock_irqsave+0x34/0xb4
+[   27.815690][   T85] softirqs last  enabled at (57580): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.815999][   T85] softirqs last disabled at (57567): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.816383][   T85] ---[ end trace 0000000000000000 ]---
+[   27.816749][   T85] ------------[ cut here ]------------
+[   27.816776][   T85] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#0: busybox/85
+[   27.817258][   T85] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.817671][   T85] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.818092][   T85] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.818312][   T85] Hardware name: linux,dummy-virt (DT)
+[   27.818505][   T85] pstate: 614020c5 (nZCv daIF +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   27.818759][   T85] pc : update_se+0x200/0x5b0
+[   27.818937][   T85] lr : update_se+0x40/0x5b0
+[   27.819112][   T85] sp : ffffffc0806ebb20
+[   27.819258][   T85] x29: ffffffc0806ebb20 x28: ffffff8005848000 x27: 0000000000000000
+[   27.819580][   T85] x26: ffffff8004b9bec0 x25: 0000000000000000 x24: ffffffdee6ff2000
+[   27.819900][   T85] x23: ffffff8004b9be00 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.820229][   T85] x20: ffffff803fcd18c0 x19: ffffff80057e00c0 x18: ffffffdee7000fa0
+[   27.820559][   T85] x17: 000000007787680c x16: 000000007787680c x15: 0000000000040000
+[   27.820876][   T85] x14: 0000000000000100 x13: 0000000000000130 x12: 0000000000000110
+[   27.821204][   T85] x11: 000000000e30b87c x10: ffffffdee6fa47b8 x9 : 0000000000000002
+[   27.821521][   T85] x8 : 0000000000000000 x7 : ffffffdee47c4f7c x6 : 0000000000000000
+[   27.821837][   T85] x5 : 0000000000000001 x4 : 000000067a00ccc8 x3 : 0000000000000004
+[   27.822152][   T85] x2 : 0000000000000084 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.822470][   T85] Call trace:
+[   27.822595][   T85]  update_se+0x200/0x5b0 (P)
+[   27.822782][   T85]  update_curr+0x30/0x114
+[   27.822959][   T85]  wakeup_preempt_fair+0x164/0x300
+[   27.823155][   T85]  wakeup_preempt+0x90/0xf0
+[   27.823336][   T85]  wake_up_new_task+0x1ac/0x458
+[   27.823527][   T85]  kernel_clone+0x29c/0x5fc
+[   27.823707][   T85]  __arm64_sys_clone+0x68/0x98
+[   27.823894][   T85]  invoke_syscall+0x60/0x10c
+[   27.824084][   T85]  el0_svc_common+0x8c/0xdc
+[   27.824275][   T85]  do_el0_svc+0x1c/0x28
+[   27.824449][   T85]  el0_svc+0x60/0x220
+[   27.824615][   T85]  el0t_64_sync_handler+0x68/0xdc
+[   27.824807][   T85]  el0t_64_sync+0x1c4/0x1c8
+[   27.824989][   T85] irq event stamp: 57602
+[   27.825144][   T85] hardirqs last  enabled at (57601): [<ffffffdee5ab3e20>] _raw_spin_unlock_irqrestore+0x3c/0x94
+[   27.825474][   T85] hardirqs last disabled at (57602): [<ffffffdee5ab3b08>] _raw_spin_lock_irqsave+0x34/0xb4
+[   27.825791][   T85] softirqs last  enabled at (57580): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.826099][   T85] softirqs last disabled at (57567): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.826395][   T85] ---[ end trace 0000000000000000 ]---
+[   27.827051][    C1] ------------[ cut here ]------------
+[   27.827085][    C1] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#1: busybox/93
+[   27.827650][    C1] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.828194][    C1] CPU: 1 UID: 0 PID: 93 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.828679][    C1] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.828944][    C1] Hardware name: linux,dummy-virt (DT)
+[   27.829144][    C1] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.829403][    C1] pc : update_se+0x200/0x5b0
+[   27.829590][    C1] lr : update_se+0x40/0x5b0
+[   27.829768][    C1] sp : ffffffc08000bad0
+[   27.829917][    C1] x29: ffffffc08000bad0 x28: ffffffdee6fefe48 x27: 0000000000000001
+[   27.830248][    C1] x26: ffffff8003ee5dc0 x25: 0000000000000006 x24: ffffffdee6ff2000
+[   27.830575][    C1] x23: 0000000000100009 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.830902][    C1] x20: ffffff803fcd18c0 x19: ffffff80057e00c0 x18: 0000000000000000
+[   27.831229][    C1] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000000
+[   27.831556][    C1] x14: 0000000000000000 x13: 0000000000000000 x12: ffffffa158ce0000
+[   27.831884][    C1] x11: 000000000007d800 x10: ffffffdee6fa47b8 x9 : 0000000000000105
+[   27.832222][    C1] x8 : 0000000000000000 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.832590][    C1] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.832930][    C1] x2 : 0000000000100009 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.833258][    C1] Call trace:
+[   27.833385][    C1]  update_se+0x200/0x5b0 (P)
+[   27.833577][    C1]  update_curr+0x30/0x114
+[   27.833756][    C1]  enqueue_task_fair+0x78/0x8e0
+[   27.833950][    C1]  enqueue_task+0xac/0x1e0
+[   27.834130][    C1]  activate_task+0x7c/0xd8
+[   27.834310][    C1]  ttwu_do_activate+0xd0/0x298
+[   27.834499][    C1]  try_to_wake_up+0x580/0x16c4
+[   27.834689][    C1]  wake_up_process+0x18/0x28
+[   27.834874][    C1]  __queue_work+0x648/0x8c8
+[   27.835060][    C1]  delayed_work_timer_fn+0x20/0x30
+[   27.835257][    C1]  call_timer_fn+0xbc/0x538
+[   27.835444][    C1]  __run_timer_base+0x260/0x2a4
+[   27.835637][    C1]  run_timer_softirq+0x4c/0x6c
+[   27.835830][    C1]  handle_softirqs+0x1d8/0x660
+[   27.836020][    C1]  __do_softirq+0x14/0x20
+[   27.836205][    C1]  ____do_softirq+0x10/0x20
+[   27.836400][    C1]  call_on_irq_stack+0x48/0x68
+[   27.836590][    C1]  do_softirq_own_stack+0x1c/0x2c
+[   27.836785][    C1]  __irq_exit_rcu+0xd8/0x194
+[   27.836970][    C1]  irq_exit_rcu+0x10/0x34
+[   27.837147][    C1]  el1_interrupt+0x4c/0xbc
+[   27.837328][    C1]  el1h_64_irq_handler+0x18/0x24
+[   27.837521][    C1]  el1h_64_irq+0x84/0x88
+[   27.837697][    C1]  _raw_spin_unlock_irqrestore+0x44/0x94 (P)
+[   27.837918][    C1]  remove_wait_queue+0x6c/0x8c
+[   27.838113][    C1]  do_wait+0xcc/0x20c
+[   27.838281][    C1]  kernel_wait4+0x124/0x34c
+[   27.838462][    C1]  __arm64_sys_wait4+0x68/0xc4
+[   27.838650][    C1]  invoke_syscall+0x60/0x10c
+[   27.838839][    C1]  el0_svc_common+0x8c/0xdc
+[   27.839025][    C1]  do_el0_svc+0x1c/0x28
+[   27.839200][    C1]  el0_svc+0x60/0x220
+[   27.839368][    C1]  el0t_64_sync_handler+0x68/0xdc
+[   27.839563][    C1]  el0t_64_sync+0x1c4/0x1c8
+[   27.839750][    C1] irq event stamp: 70333
+[   27.839900][    C1] hardirqs last  enabled at (70332): [<ffffffdee5ab3ea8>] _raw_spin_unlock_irq+0x30/0x80
+[   27.840228][    C1] hardirqs last disabled at (70333): [<ffffffdee5ab3bbc>] _raw_spin_lock_irq+0x34/0xa8
+[   27.840542][    C1] softirqs last  enabled at (70312): [<ffffffdee4634c6c>] fpsimd_restore_current_state+0x300/0x498
+[   27.840937][    C1] softirqs last disabled at (70323): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.841239][    C1] ---[ end trace 0000000000000000 ]---
+[   27.841535][    C1] ------------[ cut here ]------------
+[   27.841557][    C1] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#1: busybox/93
+[   27.842086][    C1] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.842498][    C1] CPU: 1 UID: 0 PID: 93 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.842922][    C1] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.843143][    C1] Hardware name: linux,dummy-virt (DT)
+[   27.843332][    C1] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.843585][    C1] pc : update_se+0x200/0x5b0
+[   27.843763][    C1] lr : update_se+0x40/0x5b0
+[   27.843939][    C1] sp : ffffffc08000bb50
+[   27.844084][    C1] x29: ffffffc08000bb50 x28: ffffffdee6fefe48 x27: 0000000000000001
+[   27.844424][    C1] x26: ffffff8004b9bec0 x25: 0000000000000000 x24: ffffffdee6ff2000
+[   27.844744][    C1] x23: ffffff8004b9be00 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.845065][    C1] x20: ffffff803fcd18c0 x19: ffffff80057e00c0 x18: 0000000000000000
+[   27.845386][    C1] x17: 000000007787680c x16: 000000007787680c x15: 0000000000040000
+[   27.845707][    C1] x14: 0000000000000100 x13: 0000000000000130 x12: 0000000000000110
+[   27.846028][    C1] x11: 000000000fab1747 x10: 00000000ffffffff x9 : 0000000000000104
+[   27.846348][    C1] x8 : 0000000000000000 x7 : ffffffdee47c4f7c x6 : 0000000000000000
+[   27.846666][    C1] x5 : 0000000000000001 x4 : 000000067b7b2b93 x3 : 0000000000000004
+[   27.846984][    C1] x2 : 0000000000000088 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.847303][    C1] Call trace:
+[   27.847427][    C1]  update_se+0x200/0x5b0 (P)
+[   27.847611][    C1]  update_curr+0x30/0x114
+[   27.847788][    C1]  wakeup_preempt_fair+0x164/0x300
+[   27.847986][    C1]  ttwu_do_activate+0x154/0x298
+[   27.848177][    C1]  try_to_wake_up+0x580/0x16c4
+[   27.848379][    C1]  wake_up_process+0x18/0x28
+[   27.848561][    C1]  __queue_work+0x648/0x8c8
+[   27.848746][    C1]  delayed_work_timer_fn+0x20/0x30
+[   27.848941][    C1]  call_timer_fn+0xbc/0x538
+[   27.849125][    C1]  __run_timer_base+0x260/0x2a4
+[   27.849318][    C1]  run_timer_softirq+0x4c/0x6c
+[   27.849507][    C1]  handle_softirqs+0x1d8/0x660
+[   27.849697][    C1]  __do_softirq+0x14/0x20
+[   27.849871][    C1]  ____do_softirq+0x10/0x20
+[   27.850052][    C1]  call_on_irq_stack+0x48/0x68
+[   27.850240][    C1]  do_softirq_own_stack+0x1c/0x2c
+[   27.850432][    C1]  __irq_exit_rcu+0xd8/0x194
+[   27.850615][    C1]  irq_exit_rcu+0x10/0x34
+[   27.850790][    C1]  el1_interrupt+0x4c/0xbc
+[   27.850968][    C1]  el1h_64_irq_handler+0x18/0x24
+[   27.851158][    C1]  el1h_64_irq+0x84/0x88
+[   27.851331][    C1]  _raw_spin_unlock_irqrestore+0x44/0x94 (P)
+[   27.851550][    C1]  remove_wait_queue+0x6c/0x8c
+[   27.851740][    C1]  do_wait+0xcc/0x20c
+[   27.851905][    C1]  kernel_wait4+0x124/0x34c
+[   27.852084][    C1]  __arm64_sys_wait4+0x68/0xc4
+[   27.852284][    C1]  invoke_syscall+0x60/0x10c
+[   27.852470][    C1]  el0_svc_common+0x8c/0xdc
+[   27.852654][    C1]  do_el0_svc+0x1c/0x28
+[   27.852829][    C1]  el0_svc+0x60/0x220
+[   27.852995][    C1]  el0t_64_sync_handler+0x68/0xdc
+[   27.853189][    C1]  el0t_64_sync+0x1c4/0x1c8
+[   27.853370][    C1] irq event stamp: 70333
+[   27.853519][    C1] hardirqs last  enabled at (70332): [<ffffffdee5ab3ea8>] _raw_spin_unlock_irq+0x30/0x80
+[   27.853835][    C1] hardirqs last disabled at (70333): [<ffffffdee5ab3bbc>] _raw_spin_lock_irq+0x34/0xa8
+[   27.854146][    C1] softirqs last  enabled at (70312): [<ffffffdee4634c6c>] fpsimd_restore_current_state+0x300/0x498
+[   27.854483][    C1] softirqs last disabled at (70323): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.854781][    C1] ---[ end trace 0000000000000000 ]---
+[   27.855909][    C0] ------------[ cut here ]------------
+[   27.855929][    C0] WARNING: kernel/sched/sched.h:1677 at update_se+0x200/0x5b0, CPU#0: busybox/85
+[   27.856571][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.857111][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.857530][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.857754][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.857957][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.858208][    C0] pc : update_se+0x200/0x5b0
+[   27.858387][    C0] lr : update_se+0x40/0x5b0
+[   27.858562][    C0] sp : ffffffc080003a30
+[   27.858707][    C0] x29: ffffffc080003a30 x28: 0000000000000000 x27: ffffff803fcd18c0
+[   27.859031][    C0] x26: ffffff8007649fc0 x25: 0000000000000007 x24: ffffffdee6ff2000
+[   27.859415][    C0] x23: ffffffdee6ff0290 x22: ffffff803fcd18c0 x21: ffffff803fcd1b00
+[   27.859735][    C0] x20: ffffff803fcd18c0 x19: ffffff80057e00c0 x18: 0000000000000000
+[   27.860055][    C0] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000000
+[   27.860555][    C0] x14: 0000000000000000 x13: 0000000000000000 x12: ffffffa158ce0000
+[   27.860922][    C0] x11: 0000000000001d00 x10: ffffffdee6fa47b8 x9 : 0000000000000103
+[   27.861246][    C0] x8 : 0000000000000000 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.861565][    C0] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.861897][    C0] x2 : 0000000000040008 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.862227][    C0] Call trace:
+[   27.862350][    C0]  update_se+0x200/0x5b0 (P)
+[   27.862537][    C0]  update_curr+0x30/0x114
+[   27.862712][    C0]  enqueue_task_fair+0x78/0x8e0
+[   27.862903][    C0]  enqueue_task+0xac/0x1e0
+[   27.863080][    C0]  activate_task+0x7c/0xd8
+[   27.863257][    C0]  sched_balance_rq+0x22d8/0x2e38
+[   27.863452][    C0]  sched_balance_domains+0x278/0x3b8
+[   27.863653][    C0]  sched_balance_softirq+0x60/0x74
+[   27.863849][    C0]  handle_softirqs+0x1d8/0x660
+[   27.864034][    C0]  __do_softirq+0x14/0x20
+[   27.864216][    C0]  ____do_softirq+0x10/0x20
+[   27.864645][    C0]  call_on_irq_stack+0x48/0x68
+[   27.864888][    C0]  do_softirq_own_stack+0x1c/0x2c
+[   27.865032][    C0]  __irq_exit_rcu+0xd8/0x194
+[   27.865166][    C0]  irq_exit_rcu+0x10/0x34
+[   27.865294][    C0]  el1_interrupt+0x4c/0xbc
+[   27.865425][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.865564][    C0]  el1h_64_irq+0x84/0x88
+[   27.865691][    C0]  _raw_spin_unlock_irqrestore+0x44/0x94 (P)
+[   27.865852][    C0]  wake_up_new_task+0x24c/0x458
+[   27.865991][    C0]  kernel_clone+0x29c/0x5fc
+[   27.866124][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.866261][    C0]  invoke_syscall+0x60/0x10c
+[   27.866398][    C0]  el0_svc_common+0x8c/0xdc
+[   27.866532][    C0]  do_el0_svc+0x1c/0x28
+[   27.866659][    C0]  el0_svc+0x60/0x220
+[   27.866778][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.866918][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.867050][    C0] irq event stamp: 57609
+[   27.867158][    C0] hardirqs last  enabled at (57608): [<ffffffdee4771c0c>] sched_balance_update_blocked_averages+0xbc/0x130
+[   27.867421][    C0] hardirqs last disabled at (57609): [<ffffffdee4773d1c>] sched_balance_rq+0x1d00/0x2e38
+[   27.867657][    C0] softirqs last  enabled at (57580): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.867915][    C0] softirqs last disabled at (57605): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.868093][    C0] ---[ end trace 0000000000000000 ]---
+[   27.868258][    C0] ------------[ cut here ]------------
+[   27.868271][    C0] WARNING: kernel/sched/sched.h:1677 at cpuacct_charge+0x11c/0x12c, CPU#0: busybox/85
+[   27.868750][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.869160][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.869576][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.869795][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.869983][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.870233][    C0] pc : cpuacct_charge+0x11c/0x12c
+[   27.870424][    C0] lr : cpuacct_charge+0x5c/0x12c
+[   27.870610][    C0] sp : ffffffc0800039f0
+[   27.870759][    C0] x29: ffffffc0800039f0 x28: 0000000000000000 x27: ffffff803fcd18c0
+[   27.871080][    C0] x26: ffffff8007649fc0 x25: 0000000000000007 x24: ffffffdee6ff2000
+[   27.871408][    C0] x23: 0000000000000000 x22: ffffffdee6ff0290 x21: 0000000000000001
+[   27.871726][    C0] x20: ffffff8003ee8000 x19: 000000000001afed x18: 0000000000000000
+[   27.872042][    C0] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000000
+[   27.872448][    C0] x14: 0000000000000000 x13: 0000000000000000 x12: ffffffa158ce0000
+[   27.872838][    C0] x11: 0000000000001d00 x10: 000000000000000f x9 : 0000000000000103
+[   27.873155][    C0] x8 : 0000000000000000 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.873471][    C0] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.873787][    C0] x2 : 0000000000040008 x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.874103][    C0] Call trace:
+[   27.874225][    C0]  cpuacct_charge+0x11c/0x12c (P)
+[   27.874422][    C0]  update_se+0x13c/0x5b0
+[   27.874594][    C0]  update_curr+0x30/0x114
+[   27.874768][    C0]  enqueue_task_fair+0x78/0x8e0
+[   27.874957][    C0]  enqueue_task+0xac/0x1e0
+[   27.875133][    C0]  activate_task+0x7c/0xd8
+[   27.875310][    C0]  sched_balance_rq+0x22d8/0x2e38
+[   27.875503][    C0]  sched_balance_domains+0x278/0x3b8
+[   27.875703][    C0]  sched_balance_softirq+0x60/0x74
+[   27.875899][    C0]  handle_softirqs+0x1d8/0x660
+[   27.876084][    C0]  __do_softirq+0x14/0x20
+[   27.876280][    C0]  ____do_softirq+0x10/0x20
+[   27.876459][    C0]  call_on_irq_stack+0x48/0x68
+[   27.876644][    C0]  do_softirq_own_stack+0x1c/0x2c
+[   27.876861][    C0]  __irq_exit_rcu+0xd8/0x194
+[   27.877041][    C0]  irq_exit_rcu+0x10/0x34
+[   27.877215][    C0]  el1_interrupt+0x4c/0xbc
+[   27.877391][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.877581][    C0]  el1h_64_irq+0x84/0x88
+[   27.877752][    C0]  _raw_spin_unlock_irqrestore+0x44/0x94 (P)
+[   27.878016][    C0]  wake_up_new_task+0x24c/0x458
+[   27.878205][    C0]  kernel_clone+0x29c/0x5fc
+[   27.878383][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.878568][    C0]  invoke_syscall+0x60/0x10c
+[   27.878752][    C0]  el0_svc_common+0x8c/0xdc
+[   27.878933][    C0]  do_el0_svc+0x1c/0x28
+[   27.879106][    C0]  el0_svc+0x60/0x220
+[   27.879270][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.879461][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.879641][    C0] irq event stamp: 57609
+[   27.879788][    C0] hardirqs last  enabled at (57608): [<ffffffdee4771c0c>] sched_balance_update_blocked_averages+0xbc/0x130
+[   27.880144][    C0] hardirqs last disabled at (57609): [<ffffffdee4773d1c>] sched_balance_rq+0x1d00/0x2e38
+[   27.880470][    C0] softirqs last  enabled at (57580): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.880774][    C0] softirqs last disabled at (57605): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.881068][    C0] ---[ end trace 0000000000000000 ]---
+[   27.881311][    C0] ------------[ cut here ]------------
+[   27.881331][    C0] WARNING: kernel/sched/sched.h:1677 at __resched_curr+0x138/0x324, CPU#0: busybox/85
+[   27.881800][    C0] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.882195][    C0] CPU: 0 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.882607][    C0] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.882824][    C0] Hardware name: linux,dummy-virt (DT)
+[   27.883010][    C0] pstate: 604020c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.883259][    C0] pc : __resched_curr+0x138/0x324
+[   27.883445][    C0] lr : __resched_curr+0x50/0x324
+[   27.883628][    C0] sp : ffffffc080003a30
+[   27.883773][    C0] x29: ffffffc080003a40 x28: 0000000000000000 x27: ffffff803fcd18c0
+[   27.884092][    C0] x26: ffffff8007649fc0 x25: 0000000000000007 x24: 0000000000000010
+[   27.884439][    C0] x23: ffffffdee6ff0290 x22: 000000000001afed x21: ffffff803fcd18c0
+[   27.884824][    C0] x20: ffffff8003ee8000 x19: 25b8705ee4752758 x18: 0000000000000000
+[   27.885144][    C0] x17: 000000007787680c x16: 000000007787680c x15: 0000000000000000
+[   27.885461][    C0] x14: 0000000000000000 x13: 0000000000000000 x12: ffffffa158ce0000
+[   27.885800][    C0] x11: 00000003b8a5b58f x10: ffffffdee6fa47b8 x9 : 0000000000000103
+[   27.886118][    C0] x8 : 0000000000000000 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.886434][    C0] x5 : 0000000000000001 x4 : 0000000000000000 x3 : 0000000000000000
+[   27.886750][    C0] x2 : 000000000001afed x1 : ffffff803fcd1920 x0 : 0000000000000000
+[   27.887065][    C0] Call trace:
+[   27.887187][    C0]  __resched_curr+0x138/0x324 (P)
+[   27.887380][    C0]  resched_curr_lazy+0x10/0x20
+[   27.887566][    C0]  update_curr+0xb4/0x114
+[   27.887740][    C0]  enqueue_task_fair+0x78/0x8e0
+[   27.887929][    C0]  enqueue_task+0xac/0x1e0
+[   27.888105][    C0]  activate_task+0x7c/0xd8
+[   27.888289][    C0]  sched_balance_rq+0x22d8/0x2e38
+[   27.888483][    C0]  sched_balance_domains+0x278/0x3b8
+[   27.888684][    C0]  sched_balance_softirq+0x60/0x74
+[   27.888880][    C0]  handle_softirqs+0x1d8/0x660
+[   27.889065][    C0]  __do_softirq+0x14/0x20
+[   27.889237][    C0]  ____do_softirq+0x10/0x20
+[   27.889415][    C0]  call_on_irq_stack+0x48/0x68
+[   27.889599][    C0]  do_softirq_own_stack+0x1c/0x2c
+[   27.889790][    C0]  __irq_exit_rcu+0xd8/0x194
+[   27.889970][    C0]  irq_exit_rcu+0x10/0x34
+[   27.890144][    C0]  el1_interrupt+0x4c/0xbc
+[   27.890321][    C0]  el1h_64_irq_handler+0x18/0x24
+[   27.890510][    C0]  el1h_64_irq+0x84/0x88
+[   27.890680][    C0]  _raw_spin_unlock_irqrestore+0x44/0x94 (P)
+[   27.890897][    C0]  wake_up_new_task+0x24c/0x458
+[   27.891086][    C0]  kernel_clone+0x29c/0x5fc
+[   27.891265][    C0]  __arm64_sys_clone+0x68/0x98
+[   27.891451][    C0]  invoke_syscall+0x60/0x10c
+[   27.891634][    C0]  el0_svc_common+0x8c/0xdc
+[   27.891815][    C0]  do_el0_svc+0x1c/0x28
+[   27.891988][    C0]  el0_svc+0x60/0x220
+[   27.892152][    C0]  el0t_64_sync_handler+0x68/0xdc
+[   27.892351][    C0]  el0t_64_sync+0x1c4/0x1c8
+[   27.892530][    C0] irq event stamp: 57609
+[   27.892676][    C0] hardirqs last  enabled at (57608): [<ffffffdee4771c0c>] sched_balance_update_blocked_averages+0xbc/0x130
+[   27.893029][    C0] hardirqs last disabled at (57609): [<ffffffdee4773d1c>] sched_balance_rq+0x1d00/0x2e38
+[   27.893342][    C0] softirqs last  enabled at (57580): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.893646][    C0] softirqs last disabled at (57605): [<ffffffdee46105d8>] __do_softirq+0x14/0x20
+[   27.893938][    C0] ---[ end trace 0000000000000000 ]---
+[   27.895835][   T15] ------------[ cut here ]------------
+[   27.895876][   T15] WARNING: kernel/sched/fair.c:6809 at put_prev_task_fair+0x114/0x1a4, CPU#0: ksoftirqd/0/15
+[   27.896732][   T15] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   27.897153][   T15] CPU: 0 UID: 0 PID: 15 Comm: ksoftirqd/0 Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   27.897579][   T15] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   27.897797][   T15] Hardware name: linux,dummy-virt (DT)
+[   27.898184][   T15] pstate: 214020c5 (nzCv daIF +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[   27.898503][   T15] pc : put_prev_task_fair+0x114/0x1a4
+[   27.898834][   T15] lr : __schedule+0x580/0x1240
+[   27.899048][   T15] sp : ffffffc0800dbce0
+[   27.899645][   T15] x29: ffffffc0800dbcf0 x28: ffffff8003eebf28 x27: ffffff8003eebf88
+[   27.899939][   T15] x26: ffffff8003eebf70 x25: ffffff8003eebf80 x24: ffffff8003ee5dc0
+[   27.900155][   T15] x23: ffffff803fc99b00 x22: ffffff8003eebec0 x21: ffffff8003eebe00
+[   27.900677][   T15] x20: ffffff8003eebe00 x19: ffffff8003eebec0 x18: ffffffdee7000fa0
+[   27.900916][   T15] x17: 0000000024fe98fa x16: 0000000024fe98fa x15: fffff51cf0800000
+[   27.901402][   T15] x14: 0000000000000000 x13: ffffffffffffffff x12: 0000000000000000
+[   27.901784][   T15] x11: 0000000000000000 x10: ffffff8003ee5dc0 x9 : ffffffdee62cf3d0
+[   27.902000][   T15] x8 : ffffff8004b9bec0 x7 : ffffffdee182f0fc x6 : 0000000000000000
+[   27.902298][   T15] x5 : 0000000000000001 x4 : 0000000000000000 x3 : ffffff8003eebe00
+[   27.902807][   T15] x2 : ffffff8003ee5d00 x1 : ffffff8003eebe00 x0 : ffffff803fc998c0
+[   27.903017][   T15] Call trace:
+[   27.903164][   T15]  put_prev_task_fair+0x114/0x1a4 (P)
+[   27.903314][   T15]  __schedule+0x580/0x1240
+[   27.903438][   T15]  schedule+0x9c/0x128
+[   27.903554][   T15]  smpboot_thread_fn+0x200/0x32c
+[   27.903683][   T15]  kthread+0x11c/0x14c
+[   27.903859][   T15]  ret_from_fork+0x10/0x20
+[   27.904011][   T15] irq event stamp: 400
+[   27.904152][   T15] hardirqs last  enabled at (399): [<ffffffdee470a7b4>] run_ksoftirqd+0x48/0xb0
+[   27.904591][   T15] hardirqs last disabled at (400): [<ffffffdee5aa85c4>] __schedule+0x16c/0x1240
+[   27.904925][   T15] softirqs last  enabled at (398): [<ffffffdee47092e0>] handle_softirqs+0x5e0/0x660
+[   27.905350][   T15] softirqs last disabled at (385): [<ffffffdee470a7b0>] run_ksoftirqd+0x44/0xb0
+[   27.905552][   T15] ---[ end trace 0000000000000000 ]---
+[   28.023056][    C1] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000069
+[   28.023139][    C1] Mem abort info:
+[   28.023160][    C1]   ESR = 0x0000000096000006
+[   28.023197][    C1]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   28.023223][    C1]   SET = 0, FnV = 0
+[   28.023241][    C1]   EA = 0, S1PTW = 0
+[   28.023263][    C1]   FSC = 0x06: level 2 translation fault
+[   28.023297][    C1] Data abort info:
+[   28.023316][    C1]   ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000
+[   28.023338][    C1]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[   28.023359][    C1]   GCS = 0, Overlay = 0, DirtyBit = 0
+[   28.023438][    C1] user pgtable: 4k pages, 39-bit VAs, pgdp=000000004588c000
+[   28.023475][    C1] [0000000000000069] pgd=08000000458f9403, p4d=08000000458f9403, pud=08000000458f9403, pmd=0000000000000000
+[   28.024343][    C1] Internal error: Oops: 0000000096000006 [#1]  SMP
+[   28.027663][    C1] Modules linked in: avr_walt_fixture(OE) sched_walt(OE) socinfo(OE) smem(OE)
+[   28.028136][    C1] CPU: 1 UID: 0 PID: 85 Comm: busybox Tainted: G        W  OE       7.3.0-4k #30 PREEMPT  7457a8ce1a1c18ae2532b8fe4345d1a1be1a7f61
+[   28.028604][    C1] Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[   28.028754][    C1] Hardware name: linux,dummy-virt (DT)
+[   28.028884][    C1] pstate: a04020c5 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   28.029049][    C1] pc : pick_next_entity+0x33c/0x398
+[   28.029193][    C1] lr : wakeup_preempt_fair+0x1f4/0x300
+[   28.029323][    C1] sp : ffffffc08000bce0
+[   28.029418][    C1] x29: ffffffc08000bce0 x28: ffffff803fcaeac0 x27: 0000000000000001
+[   28.029631][    C1] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+[   28.029838][    C1] x23: ffffff8005848000 x22: 0000000000000002 x21: 0000000000000088
+[   28.030046][    C1] x20: ffffff803fcd18c0 x19: ffffff800773bec0 x18: 0000000000000000
+[   28.030242][    C1] x17: ffffffffffffffff x16: ffffffe501300000 x15: 0000000000000000
+[   28.030454][    C1] x14: 0000000000000002 x13: 0000000000100000 x12: 0000000000000000
+[   28.030653][    C1] x11: 0000000000000000 x10: ffffffe501300000 x9 : 0000000000000000
+[   28.030844][    C1] x8 : 0000000000000000 x7 : ffffff800773bec0 x6 : ffffff80058480c0
+[   28.031043][    C1] x5 : 0000000000000088 x4 : 00000001a905c035 x3 : 00000001a905c035
+[   28.031249][    C1] x2 : 00000001a905c035 x1 : 0000000000000000 x0 : ffffff803fcd18c0
+[   28.031454][    C1] Call trace:
+[   28.031538][    C1]  pick_next_entity+0x33c/0x398 (P)
+[   28.031679][    C1]  wakeup_preempt_fair+0x1f4/0x300
+[   28.031812][    C1]  ttwu_do_activate+0x154/0x298
+[   28.031933][    C1]  try_to_wake_up+0x580/0x16c4
+[   28.032054][    C1]  wake_up_process+0x18/0x28
+[   28.032177][    C1]  hrtimer_wakeup+0x20/0x1a4
+[   28.032310][    C1]  __hrtimer_run_queues+0x1e0/0x548
+[   28.032448][    C1]  hrtimer_interrupt+0xdc/0x324
+[   28.032570][    C1]  arch_timer_handler_virt+0x4c/0x60
+[   28.032707][    C1]  handle_percpu_devid_irq+0x188/0x210
+[   28.032847][    C1]  generic_handle_domain_irq+0x54/0x7c
+[   28.032987][    C1]  gic_handle_irq+0xb0/0x35c
+[   28.033107][    C1]  call_on_irq_stack+0x48/0x68
+[   28.033225][    C1]  do_interrupt_handler+0x4c/0x84
+[   28.033347][    C1]  el1_interrupt+0x48/0xbc
+[   28.033463][    C1]  el1h_64_irq_handler+0x18/0x24
+[   28.033593][    C1]  el1h_64_irq+0x84/0x88
+[   28.033712][    C1]  finish_task_switch+0x180/0x3c0 (P)
+[   28.033842][    C1]  __schedule+0xb58/0x1240
+[   28.033958][    C1]  preempt_schedule_irq+0x78/0xdc
+[   28.034095][    C1]  raw_irqentry_exit_cond_resched+0x34/0x50
+[   28.034244][    C1]  irqentry_exit_to_kernel_mode_preempt+0x28/0x48
+[   28.034403][    C1]  arm64_exit_to_kernel_mode_preempt+0x1c/0x38
+[   28.034555][    C1]  el1_interrupt+0x58/0xbc
+[   28.034673][    C1]  el1h_64_irq_handler+0x18/0x24
+[   28.034803][    C1]  el1h_64_irq+0x84/0x88
+[   28.034918][    C1]  avc_lookup+0x5c/0x234 (P)
+[   28.035042][    C1]  avc_has_perm_noaudit+0xb8/0x1c4
+[   28.035175][    C1]  selinux_vm_enough_memory+0x5c/0x88
+[   28.035314][    C1]  security_vm_enough_memory_mm+0xa8/0x1b0
+[   28.035461][    C1]  dup_mmap+0x2d0/0x870
+[   28.035579][    C1]  copy_mm+0x98/0x230
+[   28.035692][    C1]  copy_process+0x860/0x10e4
+[   28.035815][    C1]  kernel_clone+0xdc/0x5fc
+[   28.035934][    C1]  __arm64_sys_clone+0x68/0x98
+[   28.036061][    C1]  invoke_syscall+0x60/0x10c
+[   28.036194][    C1]  el0_svc_common+0x8c/0xdc
+[   28.036319][    C1]  do_el0_svc+0x1c/0x28
+[   28.036437][    C1]  el0_svc+0x60/0x220
+[   28.036549][    C1]  el0t_64_sync_handler+0x68/0xdc
+[   28.036680][    C1]  el0t_64_sync+0x1c4/0x1c8
+[   28.036959][    C1] Code: eb09011f aa0a03e8 540000c5 aa0b03e8 (3941a509) 
+[   28.037268][    C1] ---[ end trace 0000000000000000 ]---
+[   28.037608][    C1] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+[   28.037935][    C1] SMP: stopping secondary CPUs
+[   50.010725][    C1] SMP: failed to stop secondary CPUs 0,2-3
+[   50.011815][    C1] Kernel Offset: 0x1e64600000 from 0xffffffc080000000
+[   50.012134][    C1] PHYS_OFFSET: 0x40000000
+[   50.012370][    C1] CPU features: 0x0,00000000,00d3802c,ffb88f03,3afff73f
+[   50.012709][    C1] Memory Limit: none
+[   50.013180][    C1] Rebooting in 1 seconds..

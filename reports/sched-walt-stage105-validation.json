@@ -1,0 +1,191 @@
+{
+ "stage": 105,
+ "scope": "Fix CFS corruption with sched_walt on 7.3: WALT load balancing migrated proxy-execution donors / mutex-blocked tasks",
+ "root_cause": "android18-7.3 has CONFIG_SCHED_PROXY_EXEC=y: a mutex-blocked task stays queued and can be rq->donor (its scheduling context runs the lock owner). Native can_migrate_task() refuses task_is_blocked(); WALT (written for 6.12 without proxy exec) only skipped task_on_cpu(), so walt_newidle_balance -> walt_lb_pull_tasks detached the donor. The source CPU then ticked/updated an entity whose cfs_rq belonged to another rq: lockdep_assert_rq_held in update_se/update_load_avg/cpuacct, h_curr mismatch in put_prev_task_fair, Oops in pick_next_entity.",
+ "how_found": [
+  "Reproduced at ~40% with 20 s sustained mixed load with both policies on walt (not governor-specific; schedutil mix and failed waltgov_init were red herrings: failed init alone 0/2)",
+  "Disabling the MVP replace hook did not help (1/4)",
+  "Instrumented set_task_cpu never saw a running/queued task retargeted (0/13 hits, 2 reproductions)",
+  "First warning trace: CPU entering idle -> walt_newidle_balance -> walt_lb_pull_tasks -> walt_detach_task -> deactivate_task with assertion; compared against native can_migrate_task"
+ ],
+ "fix": [
+  "walt_proxy_pinned(): blocked_on.lock set or rq->donor -> not migratable, used by _walt_can_migrate_task (pull loops) and storage LB",
+  "active-push path additionally skips blocked tasks; stopper already requires TASK_RUNNING",
+  "__sched_proxy_exec key is unexported, so blocked_on.lock is checked directly (conservative when proxy exec is off)"
+ ],
+ "evidence": {
+  "before_fix_logs_warn_counts": [
+   [
+    "sched-walt-diag-allwalt-1.log",
+    0
+   ],
+   [
+    "sched-walt-diag-allwalt-2.log",
+    5
+   ],
+   [
+    "sched-walt-diag-allwalt-3.log",
+    2
+   ],
+   [
+    "sched-walt-diag-allwalt-4.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-1.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-10.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-11.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-12.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-13.log",
+    5
+   ],
+   [
+    "sched-walt-diag-stc-2.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-3.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-4.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-5.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-6.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-7.log",
+    2
+   ],
+   [
+    "sched-walt-diag-stc-8.log",
+    0
+   ],
+   [
+    "sched-walt-diag-stc-9.log",
+    0
+   ],
+   [
+    "sched-walt-diag-norepl-1.log",
+    14
+   ],
+   [
+    "sched-walt-diag-norepl-2.log",
+    0
+   ],
+   [
+    "sched-walt-diag-norepl-3.log",
+    0
+   ],
+   [
+    "sched-walt-diag-norepl-4.log",
+    0
+   ],
+   [
+    "sched-walt-diag-mixed.log",
+    4
+   ]
+  ],
+  "after_fix_logs_warn_counts": [
+   [
+    "sched-walt-stage105-proxy-1.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-10.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-11.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-12.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-2.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-3.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-4.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-5.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-6.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-7.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-8.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-proxy-9.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-mixed-1.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-mixed-2.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-mixed-3.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-mixed-4.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-check-1.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-check-2.log",
+    0
+   ],
+   [
+    "sched-walt-stage105-check-3.log",
+    0
+   ]
+  ]
+ },
+ "result": "after fix: 12/12 sustained all-walt, 4/4 mixed governors, 3/3 standard+stress (6 checks) with zero WARN/Oops",
+ "core_image": "7.3.0-4k #30 (unchanged)",
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

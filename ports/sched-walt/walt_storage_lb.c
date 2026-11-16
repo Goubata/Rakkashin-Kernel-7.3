@@ -80,6 +80,9 @@ static bool move_task(int src_cpu, int dst_cpu, cpumask_t *dst_cpu_mask_to_avoid
 		if (p->se.sched_delayed)
 			continue;
 
+		if (walt_proxy_pinned(src_rq, p) && !task_on_cpu(src_rq, p))
+			continue;
+
 		if (!walt_fair_task(p))
 			continue;
 

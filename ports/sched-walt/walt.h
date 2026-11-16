@@ -14,6 +14,22 @@
 /* Exported by drivers/base/arch_topology.c; 7.3 dropped the header declaration. */
 extern bool topology_update_done;
 /* android_pick_task()/cpu_busy_with_softirqs(): restored exports, kernel/sched/sched.h */
+/*
+ * 7.3 port: SCHED_PROXY_EXEC keeps mutex-blocked tasks queued and may run a lock
+ * owner on a blocked task's scheduling context (rq->donor). Native can_migrate_task()
+ * refuses both; 6.12 had no proxy execution, so WALT never checked. Migrating a
+ * donor leaves the source CPU ticking an entity of another rq (CFS corruption).
+ */
+static inline bool walt_task_blocked(struct task_struct *p)
+{
+	/* sched_proxy_exec() key is not exported; blocked_on alone is conservative. */
+	return !!READ_ONCE(p->blocked_on.lock);
+}
+
+static inline bool walt_proxy_pinned(struct rq *rq, struct task_struct *p)
+{
+	return walt_task_blocked(p) || task_current_donor(rq, p);
+}
 #include <linux/jump_label.h>
 
 #include <linux/cgroup.h>

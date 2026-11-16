@@ -25,6 +25,9 @@ static const unsigned int big_khz[] = {
 static struct cpufreq_frequency_table tl[ARRAY_SIZE(little_khz) + 1];
 static struct cpufreq_frequency_table tb[ARRAY_SIZE(big_khz) + 1];
 static unsigned int cur[NR_CPUS];
+/* Diagnostics only: 0 reproduces a driver without per-policy governors (waltgov_init fails). */
+static bool per_policy = true;
+module_param(per_policy, bool, 0444);
 
 static int fx_active_power(struct device *dev, unsigned long *uw, unsigned long *khz)
 {
@@ -92,6 +95,8 @@ static int __init fx_mod_init(void)
 {
 	int i;
 
+	if (!per_policy)
+		fx_driver.flags &= ~CPUFREQ_HAVE_GOVERNOR_PER_POLICY;
 	for (i = 0; i < ARRAY_SIZE(little_khz); i++)
 		tl[i].frequency = little_khz[i];
 	tl[i].frequency = CPUFREQ_TABLE_END;

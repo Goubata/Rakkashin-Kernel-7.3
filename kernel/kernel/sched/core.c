@@ -5783,6 +5783,8 @@ void __balance_callbacks(struct rq *rq, struct rq_flags *rf)
 		rq_repin_lock(rq, rf);
 }
 
+EXPORT_SYMBOL_GPL(__balance_callbacks);
+
 void balance_callbacks(struct rq *rq, struct balance_callback *head)
 {
 	unsigned long flags;
@@ -6812,6 +6814,32 @@ static inline struct task_struct *pick_task(struct rq *rq, struct rq_flags *rf)
 }
 
 extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
+#endif /* CONFIG_SCHED_CORE */
+
+/*
+ * ANDROID: pick the next task without switching to it (android16-6.12 exported
+ * pick_task(rq) for sched_walt CPU halt). Caller holds the pinned rq lock and @rf.
+ */
+struct task_struct *android_pick_task(struct rq *rq, struct rq_flags *rf)
+{
+	const struct sched_class *class;
+	struct task_struct *p;
+
+restart:
+	rq->dl_server = NULL;
+	for_each_active_class(class) {
+		p = class->pick_task(rq, rf);
+		if (unlikely(p == RETRY_TASK))
+			goto restart;
+		if (p)
+			return p;
+	}
+
+	BUG(); /* The idle class should always have a runnable task. */
+}
+EXPORT_SYMBOL_GPL(android_pick_task);
+
+#ifdef CONFIG_SCHED_CORE
 
 static void queue_core_balance(struct rq *rq);
 

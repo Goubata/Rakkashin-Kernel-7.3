@@ -33,6 +33,9 @@
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/lock.h>
+#undef CREATE_TRACE_POINTS
+/* hook instances are created in drivers/android/vendor_hooks.c */
+#include <trace/hooks/dtask.h>
 
 #ifndef CONFIG_PREEMPT_RT
 #include "mutex.h"
@@ -676,8 +679,11 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
 	lock_contended(&lock->dep_map, ip);
 
 	if (!use_ww_ctx) {
-		/* add waiting tasks to the end of the waitqueue (FIFO): */
-		__mutex_add_waiter(lock, &waiter, NULL);
+		struct mutex_waiter *pos = NULL;
+
+		/* FIFO tail unless a vendor ordering policy picks a waiter to precede. */
+		trace_android_vh_mutex_add_waiter_pos(lock, &waiter, &pos);
+		__mutex_add_waiter(lock, &waiter, pos);
 	} else {
 		/*
 		 * Add in stamp order, waking up waiters that must kill

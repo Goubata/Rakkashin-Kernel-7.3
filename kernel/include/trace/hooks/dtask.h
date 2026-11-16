@@ -24,6 +24,13 @@ DECLARE_HOOK(android_vh_alter_mutex_list_add,
 		struct list_head *list,
 		bool *already_on_list),
 	TP_ARGS(lock, waiter, list, already_on_list));
+/*
+ * 7.3 replacement for alter_mutex_list_add: the vendor may only choose the waiter
+ * that @waiter is inserted in front of (*pos stays NULL for FIFO tail).
+ */
+DECLARE_HOOK(android_vh_mutex_add_waiter_pos,
+	TP_PROTO(struct mutex *lock, struct mutex_waiter *waiter, struct mutex_waiter **pos),
+	TP_ARGS(lock, waiter, pos));
 DECLARE_HOOK(android_vh_mutex_unlock_slowpath,
 	TP_PROTO(struct mutex *lock),
 	TP_ARGS(lock));

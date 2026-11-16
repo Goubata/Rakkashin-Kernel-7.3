@@ -2641,6 +2641,10 @@ extern const u32		sched_prio_to_wmult[40];
 
 #define RETRY_TASK		((void *)-1UL)
 
+/* ANDROID: vendor scheduler (sched_walt) interfaces restored from android16-6.12 */
+extern struct task_struct *android_pick_task(struct rq *rq, struct rq_flags *rf);
+extern bool cpu_busy_with_softirqs(int cpu);
+
 struct affinity_context {
 	const struct cpumask	*new_mask;
 	struct cpumask		*user_mask;

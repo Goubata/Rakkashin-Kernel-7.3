@@ -1532,20 +1532,21 @@ static int find_lowest_rq(struct task_struct *sched_ctx, struct task_struct *exe
  * task is likely to block preemptions soon because it is a
  * ksoftirq thread that is handling softirqs.
  */
-static bool cpu_busy_with_softirqs(int cpu)
+bool cpu_busy_with_softirqs(int cpu)
 {
 	u32 softirqs = per_cpu(active_softirqs, cpu) |
 		       __cpu_softirq_pending(cpu);
 
 	return softirqs & LONG_SOFTIRQ_MASK;
 }
+EXPORT_SYMBOL_GPL(cpu_busy_with_softirqs);
 
 bool local_rt_runnable(void)
 {
 	return sched_rt_runnable(this_rq());
 }
 #else
-static bool cpu_busy_with_softirqs(int cpu)
+bool cpu_busy_with_softirqs(int cpu)
 {
 	return false;
 }

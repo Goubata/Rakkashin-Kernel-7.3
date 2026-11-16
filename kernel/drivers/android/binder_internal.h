@@ -596,6 +596,9 @@ struct binder_transaction {
 	 * during thread teardown
 	 */
 	spinlock_t lock;
+	/* ANDROID: vendor (sched_walt) and OEM data, as in android16-6.12 */
+	ANDROID_VENDOR_DATA(1);
+	ANDROID_OEM_DATA(1);
 };
 
 /**

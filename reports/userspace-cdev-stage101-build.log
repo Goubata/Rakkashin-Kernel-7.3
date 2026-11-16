@@ -1,0 +1,22 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qti-userspace-cdev'
+  CC [M]  qti_userspace_cdev.o
+  MODPOST Module.symvers
+WARNING: modpost: qti_userspace_cdev.ko: missing MODULE_DESCRIPTION()
+  CC [M]  qti_userspace_cdev.mod.o
+  CC [M]  .module-common.o
+  LD [M]  qti_userspace_cdev.ko
+  BTF [M] qti_userspace_cdev.ko
+make[1]: Leaving directory '/work/avr-port/ports/qti-userspace-cdev'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/userspace-cdev'
+  CC [M]  avr-userspace-cdev-test.o
+  MODPOST Module.symvers
+WARNING: modpost: avr-userspace-cdev-test.ko: missing MODULE_DESCRIPTION()
+  CC [M]  avr-userspace-cdev-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-userspace-cdev-test.ko
+  BTF [M] avr-userspace-cdev-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/userspace-cdev'
+make: Leaving directory '/work/avr-src'

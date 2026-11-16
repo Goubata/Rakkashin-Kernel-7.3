@@ -1,0 +1,20 @@
+{
+ "name": "userspace-cdev",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qti-userspace-cdev/qti_userspace_cdev.c": "drivers/thermal/qcom/qti_userspace_cdev.c",
+  "ports/qti-userspace-cdev/Makefile": null
+ },
+ "scope": "Pinned factory userspace cooling device (display-fps) semantics; native 7.3 child registration and OF ownership port",
+ "reviewed_changes": [
+  "Keep one OF cdev per available child named after the node with qcom,max-level and stored level only",
+  "7.3 devm_thermal_of_cooling_device_register binds dev->of_node: register each child with thermal_of_cooling_device_register plus devm release",
+  "Drop factory of_node_put of the device node (reference underflow) and hold child references for the cdev lifetime",
+  "Unwind already registered children on a later child error; -ENODEV instead of -EFAULT for no children"
+ ],
+ "pending": [
+  "Display HAL consumption of display-fps level through thermal sysfs",
+  "Whole-board drivers/DT/boot/DLKM/SELinux and daily-use acceptance"
+ ]
+}

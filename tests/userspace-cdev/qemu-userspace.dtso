@@ -1,0 +1,30 @@
+/dts-v1/;
+/plugin/;
+/* AVR-shaped qcom,userspace-cooling-devices plus a private sensor/zone whose three
+ * passive trips select display-fps levels 1/2/3 like the saved maps. */
+/ { fragment@0 { target-path="/"; __overlay__ {
+ avr_us_sensor: avr-us-sensor { #thermal-sensor-cells=<0>; };
+ thermal-zones {
+  avr-us-zone { polling-delay-passive=<0>; polling-delay=<0>; thermal-sensors=<&avr_us_sensor>;
+   trips {
+    avr_us_t1: t1 { temperature=<40000>; hysteresis=<1000>; type="passive"; };
+    avr_us_t2: t2 { temperature=<45000>; hysteresis=<1000>; type="passive"; };
+    avr_us_t3: t3 { temperature=<50000>; hysteresis=<1000>; type="passive"; };
+   };
+   cooling-maps {
+    fps1 { trip=<&avr_us_t1>; cooling-device=<&avr_fps 1 1>; };
+    fps2 { trip=<&avr_us_t2>; cooling-device=<&avr_fps 2 2>; };
+    fps3 { trip=<&avr_us_t3>; cooling-device=<&avr_fps 3 3>; };
+   };
+  };
+ };
+ avr-us-fixture {
+  good { compatible="avr,userspace-cdev-private";
+   avr_fps: display-fps { qcom,max-level=<16>; #cooling-cells=<2>; };
+   other-cdev { qcom,max-level=<3>; #cooling-cells=<2>; };
+   off { status="disabled"; qcom,max-level=<1>; };
+  };
+  missing-level { compatible="avr,userspace-cdev-private"; a { qcom,max-level=<2>; #cooling-cells=<2>; }; b { #cooling-cells=<2>; }; };
+  empty { compatible="avr,userspace-cdev-private"; };
+ };
+}; }; };

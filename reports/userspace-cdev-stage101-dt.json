@@ -1,0 +1,57 @@
+{
+ "scope": "saved 6.12 DT + read-only phone sysfs; no phone DT edit",
+ "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+ "children": [
+  {
+   "node": "/soc/qcom,userspace-cdev/display-fps",
+   "max_level": 16,
+   "maps": [
+    [
+     "/soc/thermal-zones/sys-therm-0/cooling-maps/display_cdev1",
+     [
+      1,
+      1
+     ]
+    ],
+    [
+     "/soc/thermal-zones/sys-therm-0/cooling-maps/display_cdev2",
+     [
+      2,
+      2
+     ]
+    ],
+    [
+     "/soc/thermal-zones/sys-therm-0/cooling-maps/display_cdev3",
+     [
+      3,
+      3
+     ]
+    ]
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "check": "one qcom,userspace-cooling-devices node",
+   "passed": true
+  },
+  {
+   "check": "single child display-fps",
+   "passed": true
+  },
+  {
+   "check": "display-fps max level 16",
+   "passed": true
+  },
+  {
+   "check": "three saved maps select levels 1/2/3 (fixture mirrors them)",
+   "passed": true
+  },
+  {
+   "check": "phone 6.12 display-fps max_state 16",
+   "passed": true
+  }
+ ],
+ "passed": true,
+ "errors": []
+}

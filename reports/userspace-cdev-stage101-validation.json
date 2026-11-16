@@ -1,0 +1,54 @@
+{
+ "stage": 101,
+ "scope": "Port Qualcomm userspace cooling devices (display-fps) to native 7.3 thermal_of; private sensor only",
+ "checks": {
+  "userspace_cdev": {
+   "log": "reports/userspace-cdev-stage101-qemu.log",
+   "passed": true,
+   "totals": [
+    6,
+    0,
+    0,
+    6
+   ],
+   "cpus": 4,
+   "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f"
+  },
+  "saved_dt_and_phone": {
+   "report": "reports/userspace-cdev-stage101-dt.json",
+   "passed": true
+  },
+  "import_crc": {
+   "report": "reports/userspace-cdev-stage101-crc.json",
+   "passed": true,
+   "imports": [
+    15,
+    37
+   ]
+  },
+  "source_replay": {
+   "spec": "ports/qti-userspace-cdev/source-spec.json",
+   "lock": "reports/userspace-cdev-source-lock.json",
+   "passed": true
+  }
+ },
+ "new_cases": 6,
+ "core_image": "7.3.0-4k #27",
+ "core_changed": false,
+ "phone_partition_written": false,
+ "phone_dt_modified": false,
+ "physical_verified": false,
+ "promoted": false,
+ "factory_defects_found_by_review": [
+  "of_node_put on the device own node (reference underflow) and unreferenced child pointers",
+  "7.3 devm OF helper would bind dev->of_node instead of children"
+ ],
+ "verified": [
+  "6 KUnit cases: two children with OF node identity and max levels 16/3; level store and bound; private zone with three trips mirrors saved maps and step_wise selects 1/2/3 then 0; rebind 3x; later-child error unwinds earlier registration; no children rejected",
+  "Saved DT display-fps max 16 with maps 1/2/3; phone display-fps max_state 16"
+ ],
+ "limits": [
+  "Display HAL consumption of the level is unverified",
+  "Whole-board boot and daily use remain"
+ ]
+}

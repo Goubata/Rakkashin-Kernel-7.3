@@ -2324,3 +2324,17 @@ Saved DT (scripts/audit_cpu_hotplug_dt.py): 8 children -> CPUs0-7, aliases cpu-h
 20 cooling-map references; phone cpu-hotplug0-7 max_state1. Evidence:
 reports/cpu-hotplug-stage100-validation.json. Limits: physical isolation with vendor
 hooks/HAL, suspend interaction, whole-board boot and daily use remain. No writes/reboot.
+
+## Stage101: userspace cooling device (display-fps)
+
+Port pinned factory qti_userspace_cdev.c (037aa1c) as ports/qti-userspace-cdev. The
+factory put the device's own node (reference underflow) and kept unreferenced child
+pointers; 7.3's devm OF helper binds dev->of_node, so each child is registered with
+thermal_of_cooling_device_register and released by devres with its node reference.
+Image#27 (unchanged) passes6 KUnit cases: OF identity and max levels16/3, level store
+and bound, private zone mirroring the saved three maps where step_wise selects levels
+1/2/3 then0, rebind3x, later-child error unwinding, no children rejected. Saved DT:
+display-fps max16, maps1/2/3; phone display-fps max_state16. Source replay now uses the
+generic scripts/audit_port_sources.py with ports/qti-userspace-cdev/source-spec.json.
+Evidence: reports/userspace-cdev-stage101-validation.json. Limits: display HAL use,
+boot and daily use remain. No writes/reboot.

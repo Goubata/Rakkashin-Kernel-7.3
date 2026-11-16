@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qti-userspace-cdev/qti_userspace_cdev.ko",
+      "imports_checked": 15,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/userspace-cdev/avr-userspace-cdev-test.ko",
+      "imports_checked": 37,
+      "mismatches": {}
+    }
+  ]
+}

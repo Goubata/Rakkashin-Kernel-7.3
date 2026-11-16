@@ -1,0 +1,16 @@
+{
+  "scope": "Unaccepted userspace cooling device draft; native thermal_of with private sensor only",
+  "core_image": "7.3.0-4k #27",
+  "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+  "modules": [
+    "qti_userspace_cdev.ko"
+  ],
+  "test_modules": [
+    "avr-userspace-cdev-test.ko"
+  ],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

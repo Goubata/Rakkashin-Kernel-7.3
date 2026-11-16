@@ -1,0 +1,25 @@
+{
+ "scope": "Phone modules that the 7.3 module set deliberately omits or renames, with reasons",
+ "omitted": {
+  "sdhci_msm": {
+   "stage": 112,
+   "reason": "AVR sdhci@8804000 (only SDHC) is status=disabled in the phone DT; the 7.3 in-tree sdhci-msm imports the upstream 7.3 qcom_ice API, which cannot coexist with the vendor ICE (ports/qcom-ice) that UFS FBE uses (same symbol names, different ABI)"
+  },
+  "cqhci": {
+   "stage": 112,
+   "reason": "only user is sdhci-msm (omitted)"
+  }
+ },
+ "renamed": {
+  "clk_scmi": {
+   "stage": 111,
+   "7.3_module": "scmi-clk.ko",
+   "reason": "7.3 in-tree driver replaces the stale vendor copy"
+  },
+  "rproc_qcom_common": {
+   "stage": "37",
+   "7.3_module": "ports/qcom-rproc-common/qcom_common.ko",
+   "reason": "same vendor sources (qcom_common.c + tracepoints); module name to be aligned at packaging"
+  }
+ }
+}

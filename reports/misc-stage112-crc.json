@@ -1,0 +1,26 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-firststage-misc/sg.ko",
+      "imports_checked": 108,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-firststage-misc/icc-clk.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-firststage-misc/qcom_smd.ko",
+      "imports_checked": 69,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-firststage-misc/msm_qmp.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    }
+  ]
+}

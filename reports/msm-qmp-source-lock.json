@@ -1,0 +1,28 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-firststage-misc/msm_qmp.c",
+      "source": "drivers/mailbox/msm_qmp.c",
+      "original_sha256": "0172e692891d40df43e23805e87a37b7db2eeea6e63f5e6e8e665b970190dd75",
+      "sha256": "0172e692891d40df43e23805e87a37b7db2eeea6e63f5e6e8e665b970190dd75"
+    },
+    {
+      "file": "ports/qcom-firststage-misc/include/linux/mailbox/qmp.h",
+      "source": "include/linux/mailbox/qmp.h",
+      "original_sha256": "e5930d839e715770a48aea7966f4cf4b2682b17b4d13852a72c57ff8503410cc",
+      "sha256": "e5930d839e715770a48aea7966f4cf4b2682b17b4d13852a72c57ff8503410cc"
+    }
+  ],
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "vendor AOSS QMP mailbox msm_qmp, unmodified",
+  "reviewed_changes": [
+    "unmodified"
+  ],
+  "pending": [
+    "AOSS mailbox on the phone"
+  ]
+}

@@ -58,3 +58,4 @@ modules.order
 /tests/qcom-tee/fake-scm/
 /tests/qcom-tee/smcinvoke-test
 /tests/qcom-reboot/reboot2-test
+/tests/firststage-misc/sg-test

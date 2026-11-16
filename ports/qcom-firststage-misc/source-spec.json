@@ -1,0 +1,21 @@
+{
+ "name": "qcom-firststage-misc",
+ "repo": "android-7.3",
+ "commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
+ "files": {
+  "ports/qcom-firststage-misc/sg.c": "drivers/scsi/sg.c",
+  "ports/qcom-firststage-misc/icc-clk.c": "drivers/interconnect/icc-clk.c",
+  "ports/qcom-firststage-misc/qcom_smd.c": "drivers/rpmsg/qcom_smd.c",
+  "ports/qcom-firststage-misc/Makefile": null
+ },
+ "scope": "sg, icc-clk, qcom_smd built from the android18-7.3 sources as modules (Kconfig symbols not selectable here) with the AVR vendor deltas re-applied; msm_qmp from qcom-soc (see source-spec-qmp.json)",
+ "reviewed_changes": [
+  "sg: vendor 6.12 runtime-PM reference held while /dev/sgN is open (scsi_autopm_get/put_device)",
+  "sg/qcom_smd: local includes resolved via $(srctree)",
+  "icc-clk: vendor 'num_nodes = j' not needed: 7.3 sets num_nodes first for __counted_by and registers 2 nodes per clock unconditionally (same count)",
+  "qcom_smd: vendor delta was cosmetic (include path, uninitialised ret) -> 7.3 source"
+ ],
+ "pending": [
+  "SMD edges / AOSS QMP on the phone"
+ ]
+}

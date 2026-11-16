@@ -1,0 +1,75 @@
+--- a/ports/qcom-firststage-misc/sg.c
++++ b/ports/qcom-firststage-misc/sg.c
+@@ -60,7 +60,7 @@
+ #include <scsi/scsi_tcq.h>
+ #include <scsi/sg.h>
+ 
+-#include "scsi_logging.h"
++#include "drivers/scsi/scsi_logging.h"
+ 
+ #ifdef CONFIG_SCSI_PROC_FS
+ #include <linux/proc_fs.h>
+@@ -308,6 +308,11 @@
+ 	if (retval)
+ 		goto sg_put;
+ 
++	/* AVR (vendor 6.12): keep the device runtime-resumed while sg is open */
++	retval = scsi_autopm_get_device(device);
++	if (retval)
++		goto sdp_put;
++
+ 	/* scsi_block_when_processing_errors() may block so bypass
+ 	 * check if O_NONBLOCK. Permits SCSI commands to be issued
+ 	 * during error recovery. Tread carefully. */
+@@ -315,7 +320,7 @@
+ 	      scsi_block_when_processing_errors(device))) {
+ 		retval = -ENXIO;
+ 		/* we are in error recovery for this device */
+-		goto sdp_put;
++		goto error_out;
+ 	}
+ 
+ 	mutex_lock(&sdp->open_rel_lock);
+@@ -368,6 +373,8 @@
+ 	}
+ error_mutex_locked:
+ 	mutex_unlock(&sdp->open_rel_lock);
++error_out:
++	scsi_autopm_put_device(device);
+ sdp_put:
+ 	kref_put(&sdp->d_ref, sg_device_destroy);
+ 	scsi_device_put(device);
+@@ -398,6 +405,8 @@
+ 		wake_up_interruptible(&sdp->open_wait);
+ 	}
+ 	mutex_unlock(&sdp->open_rel_lock);
++	/* AVR (vendor 6.12): drop the runtime-PM reference taken in sg_open() */
++	scsi_autopm_put_device(sdp->device);
+ 	kref_put(&sfp->f_ref, sg_remove_sfp);
+ 	return 0;
+ }
+--- a/ports/qcom-firststage-misc/qcom_smd.c
++++ b/ports/qcom-firststage-misc/qcom_smd.c
+@@ -21,7 +21,7 @@
+ #include <linux/rpmsg.h>
+ #include <linux/rpmsg/qcom_smd.h>
+ 
+-#include "rpmsg_internal.h"
++#include "drivers/rpmsg/rpmsg_internal.h"
+ 
+ /*
+  * The Qualcomm Shared Memory communication solution provides point-to-point
+--- a/ports/qcom-firststage-misc/Makefile
++++ b/ports/qcom-firststage-misc/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# First-stage modules whose AVR (qcom-soc 6.12) sources carry vendor changes or
++# whose 7.3 Kconfig symbols are not selectable here (canoe_perf.bzl: =m):
++#  sg (CHR_DEV_SG; vendor: runtime-PM reference while open), icc-clk
++#  (INTERCONNECT_CLK; vendor: num_nodes = registered nodes), qcom_smd
++#  (RPMSG_QCOM_SMD; needs the ported smem), msm_qmp (MSM_QMP, vendor only).
++obj-m += sg.o icc-clk.o qcom_smd.o msm_qmp.o
++ccflags-y += -I$(src)/include -I$(srctree) -I$(src)/../qcom-smem/include -I$(src)/../qcom-ipc-logging/include
++ccflags-y += -DCONFIG_RPMSG_QCOM_SMD_MODULE=1 -DCONFIG_MSM_QMP_MODULE=1
++ccflags-y += -Wno-missing-prototypes
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

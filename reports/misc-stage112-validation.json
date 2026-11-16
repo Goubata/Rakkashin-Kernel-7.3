@@ -1,0 +1,19 @@
+{
+ "stage": 112,
+ "scope": "sg (vendor autopm delta on 7.3 source), icc-clk, qcom_smd, msm_qmp; sdhci-msm/cqhci omitted",
+ "qemu_runs": [
+  "reports/misc-stage112-qemu.log",
+  "reports/misc-stage112-r2.log",
+  "reports/misc-stage112-r3.log",
+  "reports/regress-stage112-firststage-misc.log"
+ ],
+ "results": {
+  "sg": "INQUIRY ok; runtime_usage 2->3->2",
+  "others": "load"
+ },
+ "decisions": "reports/module-set-decisions.json",
+ "regression": "reports/regress-stage112-summary.txt",
+ "crc": "reports/misc-stage112-crc.json",
+ "physical_verified": false,
+ "promoted": false
+}

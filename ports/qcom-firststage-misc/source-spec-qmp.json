@@ -1,0 +1,16 @@
+{
+ "name": "msm-qmp",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-firststage-misc/msm_qmp.c": "drivers/mailbox/msm_qmp.c",
+  "ports/qcom-firststage-misc/include/linux/mailbox/qmp.h": "include/linux/mailbox/qmp.h"
+ },
+ "scope": "vendor AOSS QMP mailbox msm_qmp, unmodified",
+ "reviewed_changes": [
+  "unmodified"
+ ],
+ "pending": [
+  "AOSS mailbox on the phone"
+ ]
+}

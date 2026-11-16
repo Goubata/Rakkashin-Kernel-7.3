@@ -2576,3 +2576,18 @@ get_qcom_scmi_device(); qcom_cpucp, cpucp_log, cpu_phys_log_map, qcom-cpufreq-hw
 Regression on Image#36: 23 suites + scm, secure, pas-driver, ice, iommu; 158 CRCs; replay 31 patches.
 Not verified: CPUCP MMIO mailbox/IRQ, cpucp_fast (needs WALT + CPUCP), perf notifications/
 fastchannels support of the real PDP firmware.
+
+## Stage112: sg, icc-clk, qcom_smd, msm_qmp; sdhci-msm/cqhci omitted
+
+ports/qcom-firststage-misc builds modules whose 7.3 Kconfig symbols are not selectable in this
+tree (INTERCONNECT_CLK is select-only, RPMSG_QCOM_SMD needs the in-tree QCOM_SMEM we replace by
+the smem port, CHR_DEV_SG kept out of the core): sg, icc-clk, qcom_smd from android18-7.3 sources
+plus the vendor deltas that matter (sg: scsi_autopm_get/put_device around open/release; icc-clk
+and qcom_smd deltas are equivalent on 7.3), msm_qmp from qcom-soc unmodified.
+QEMU (UFS host + QEMU UFS LU, as the ufs suite): sg attaches sg0-sg3 (W-LUNs + LU0), SG_IO
+INQUIRY on the LU returns QEMU/QEMU HARDDISK, runtime_usage 2 -> 3 while /dev/sg3 is open -> 2
+after close; icc-clk, qcom_smd, msm_qmp load. 3/3 runs.
+sdhci-msm/cqhci are deliberately omitted (reports/module-set-decisions.json): the AVR's only
+SDHC is status=disabled, and the 7.3 in-tree sdhci-msm imports the upstream qcom_ice ABI, which
+conflicts with the vendor ICE module used by UFS inline encryption.
+Regression: 25 suites incl. firststage-misc; 162 CRCs.

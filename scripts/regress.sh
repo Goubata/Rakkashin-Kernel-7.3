@@ -14,4 +14,5 @@ for t in smoke clock oplus rakkashin ntsync fence walt-hooks ddr-cooling devfreq
 one task-vendor-data "avr_expect_vendor=512 android_arch_task_struct_size=512"
 for t in sched-walt thermal-pause moto-sched; do one $t "android_arch_task_struct_size=512"; done
 one dma-heaps
+one qcom-tee
 python3 scripts/audit_module_versions.py ports/*/*.ko 2>/dev/null | python3 -c "import json,sys;d=json.load(sys.stdin);print('crc',d['passed'],len(d['modules']),[m['module'] for m in d['modules'] if m['mismatches']][:6])"

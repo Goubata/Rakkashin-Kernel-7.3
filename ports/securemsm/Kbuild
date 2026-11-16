@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: GPL-2.0-only
+# AVR 7.3 port of vendor/qcom/opensource/securemsm-kernel (canoe module set).
+# Vendor Kbuild kept as Kbuild.vendor; same include layout and config headers.
+LINUXINCLUDE += -I$(src)/ -I$(src)/linux/ -I$(src)/include/linux/ -I$(src)/include/uapi/ \
+		-I$(src)/include/uapi/linux/ -I$(src)/../qcom-tee/include \
+		-I$(src)/../qcom-dma-heaps/include -I$(src)/../secure-buffer/include \
+		-I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include
+# vendor code is built without W=1 by kleaf; 7.3 promotes this to -Werror
+ccflags-y += -Wno-missing-prototypes
+LINUXINCLUDE += -include $(src)/config/sec-kernel_defconfig.h
+LINUXINCLUDE += -include $(src)/config/sec-kernel_defconfig_smcinvoke.h
+# canoe extra_options (build/canoe.bzl)
+ccflags-y += -DCONFIG_QCOM_SI_CORE=1 -DCONFIG_QSEECOM_COMPAT=1 -DCONFIG_MSM_TMECOM_QMP=1 \
+	-DCONFIG_TZLOG_TIME_CONSOLIDATE=1 -DCONFIG_MOTO_TZ_READ_NOWAIT=1 -DCONFIG_QSEECOM_PROXY_MODULE=1
+
+obj-m += smcinvoke_dlkm.o
+smcinvoke_dlkm-objs := smcinvoke/si_core_xts/qseecom.o smcinvoke/si_core_xts/smci_kernel.o \
+	smcinvoke/si_core_xts/smci.o
+ccflags-y += -I$(src)/smcinvoke/si_core_xts
+
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-tee/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers \
+	$(src)/../secure-buffer/Module.symvers

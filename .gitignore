@@ -55,3 +55,5 @@ modules.order
 /tests/walt-hooks/binder-pi-test
 /tests/dma-heaps/dma-heap-test
 /tests/moto-sched/vma-name-test
+/tests/qcom-tee/fake-scm/
+/tests/qcom-tee/smcinvoke-test

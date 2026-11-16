@@ -1,0 +1,11 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture: the phone's TEE nodes (firmware/qcom_scm, qcom_smcinvoke,
+ * qcom_mem_object) without interrupts/dload-mode; the SCM backend is avr_fake_tz. */
+/ {
+ fragment@0 { target-path="/"; __overlay__ {
+  firmware { qcom_scm { compatible = "qcom,scm-v1.1", "qcom,scm"; }; };
+  qcom_smcinvoke { compatible = "qcom,smcinvoke"; };
+  qcom_mem_object { compatible = "qcom,mem-object"; };
+ }; };
+};

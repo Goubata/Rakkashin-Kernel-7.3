@@ -1,0 +1,36 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": false,
+  "modules": [
+    {
+      "module": "out/native-gki/drivers/firmware/qcom/qcom-scm.ko",
+      "imports_checked": 123,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-tee/si_core_module.ko",
+      "imports_checked": 108,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-tee/qseecom_proxy.ko",
+      "imports_checked": 3,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/smcinvoke_dlkm.ko",
+      "imports_checked": 88,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-tee/avr-tee-test.ko",
+      "imports_checked": 49,
+      "mismatches": {
+        "avr_fake_tz_get_stats": {
+          "module": "0x8f44c124",
+          "provider": null
+        }
+      }
+    }
+  ]
+}

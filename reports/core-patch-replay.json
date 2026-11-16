@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "6b1cbb295687e038b0f717bbaa13607ba33bc1dd",
-  "patch_count": 26,
+  "target_commit": "65aa58a218ba7851cf2e499ac1fedf0a88ba3389",
+  "patch_count": 29,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -70,7 +70,7 @@
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.c",
-      "sha256": "bfa852fe1b098f6ef2ca0366222119e15f315e045bfa205798af07908c21d0b8"
+      "sha256": "ef72d071082243fe36b76ed6de4d217ea02d91b89c6f50d9b565f9634cc33ab8"
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.h",
@@ -79,6 +79,10 @@
     {
       "file": "drivers/firmware/qcom/qcom_scm_retry.h",
       "sha256": "61fa5a36ff3dbc7bcab313470cfe32d384cb3ab634bec182c970d6aed98e770c"
+    },
+    {
+      "file": "drivers/firmware/qcom/qcom_tzmem.c",
+      "sha256": "d19df82c69af85217ecdb925aba718ef0718f87e09a2ca1aec25504326974c1d"
     },
     {
       "file": "drivers/misc/Kconfig",
@@ -190,7 +194,11 @@
     },
     {
       "file": "include/linux/firmware/qcom/qcom_scm.h",
-      "sha256": "2ff734b21b02140380879175609e2a45656f46344f4e48490b691fcb809d94ac"
+      "sha256": "a6230dec7d09ecad7c5b08f817c8352333889e684ff7bc735a25ec57648d10fc"
+    },
+    {
+      "file": "include/linux/firmware/qcom/qcom_tzmem.h",
+      "sha256": "ff1098b81313b7f610226488a93f35a83f6a315603f0221b70233bd88853271c"
     },
     {
       "file": "include/linux/kallsyms.h",
@@ -203,6 +211,10 @@
     {
       "file": "include/linux/percpu-rwsem.h",
       "sha256": "6732c0f48fe28da2d70b5f828e39c21f63b103a7a5700ee539f49c2efb7e605d"
+    },
+    {
+      "file": "include/linux/qtee_shmbridge.h",
+      "sha256": "7a4604153c389f80108cc35450e3bf5c7455b8d3412c9cf8011847aa7f90015f"
     },
     {
       "file": "include/linux/qti-lcp-ppddr.h",
@@ -370,5 +382,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "ed513b23eb32b77e2c590fbf18f46c89678e1ab73fe953fb33137c2eaa896f06"
+  "checkpoint_sha256": "bbbb5fc635425932e8562435d372da085933097ddfae88b7044fd9ba9353e068"
 }

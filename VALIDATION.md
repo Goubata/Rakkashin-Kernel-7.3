@@ -2483,3 +2483,43 @@ exports, never shipped) stands in for those symbols. Not verified: LCP SCM call,
 manager, secure heap assignment to TZ (phone only).
 Regression: 15 base suites + task-vendor-data, sched-walt, thermal-pause, moto-sched, dma-heaps
 pass; 144 port module CRCs; core patch replay 26 patches / 91 exact files.
+
+## Stage109: Qualcomm TEE transport (si_core, qseecom_proxy, smcinvoke) on android18-7.3
+
+canoe builds smcinvoke_dlkm from securemsm-kernel 43e5f439c in the si_core_xts variant
+(CONFIG_QCOM_SI_CORE, +ADCI, +WQ; no MEM_FFA/DOORBELL), matching the phone's module deps
+(smcinvoke_dlkm -> si_core_module -> qseecom_proxy, mem_buf_dev). ports/qcom-tee (qcom-soc
+037aa1c: si_core + xts mem-object, qseecom_proxy) and ports/securemsm (whole repo, canoe Kbuild).
+Core (qcom-scm.ko only; Image stays #34):
+- patches/qtee-shmbridge-7.3.patch: <linux/qtee_shmbridge.h> on qcom_tzmem; cached pools
+  (is_cached), bridge registry (re-register returns handle + ref; query -EEXIST),
+  create_with_vmid with the 6.12 encodings (vmid 0: self-owner bit + RW; vmid: 1 NS VM),
+  flush/inv; default 1 MiB..8 MiB cached pool created on first use.
+- patches/scm-invoke-7.3.patch: qcom_scm_invoke_smc/_legacy/callback_response with 6.12
+  signatures (int32 result, response type, data) on the no-busy-replay SMC path (si_core
+  backs off itself).
+- patches/tzmem-once-sleepable-7.3.patch: upstream 7.3 runs qcom_tzmem_init() under DO_ONCE
+  (once_lock spinlock, IRQs off) while SHM-bridge mode issues sleeping SCM calls; lockdep
+  "Invalid wait context" on first probe. Now DO_ONCE_SLEEPABLE.
+Port fixes: si_core resets oic->u before RELEASE/RETAIN callbacks (update_msg re-applied the
+previous callback's args and failed the release reply with -EINVAL whenever QTEE's message area
+was not left untouched); trace_smci.h wait_for_pending_txn stored a cb_txn pointer and printed
+through it (7.3 double-dereference WARN; use-after-free in trace output); string import NS.
+QEMU method: tests/qcom-tee/prepare_fake_scm.py builds the REAL android-7.3 qcom-scm sources
+with only the two SMC call sites redirected to tests/qcom-tee/avr_fake_tz.c (all 96 exports
+CRC-identical to the shipped qcom-scm.ko). The fake TZ answers INFO, SHM bridge
+enable/create/delete and a miniature QTEE in the real si_core wire format (open, echo,
+callback into NS objects via INBOUND_REQ_NEEDED + CB_RSP, output objects, SCM busy x2,
+registerWithCredentials releasing the credentials through a callback, RELEASE). Fixture DT
+mirrors the phone nodes (qcom_scm, qcom_smcinvoke, qcom_mem_object).
+Results (3/3 runs, no WARN/BUG/Invalid wait): KUnit avr_qcom_tee 4/4 (bridge registry and flag
+encoding, cached pool growth to 8 MiB + phys/cache maintenance, si_core invoke/callback/
+output object/busy/client env/release, 4-thread x 200 open+echo+release storm with all QTEE
+objects released); userspace smcinvoke-test via /dev/smcinvoke (root ADCI refusal,
+SERVER_REQ + ACCEPT_REQ callback server, NULL-credential refusal, registerWithCredentials,
+open/refused open, echo, SIZE_OUT, QTEE->user callback "pong:ping", output object fd, busy,
+4 threads x 100, si_core release counters 0/0).
+Regression: 21 suites (incl. qcom-tee) + scm, secure, pas-driver, ice, iommu pass; 147 port
+module CRCs; core replay 29 patches / 94 files. Not verified: real QTEE ABI, 6.12 multi-SMC
+concurrency (not ported; standard SCM calls are serialised), securemsm tz_log/qrng/qce/hdcp/
+smmu_proxy/tmecom (not built yet).

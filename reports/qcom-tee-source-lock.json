@@ -1,0 +1,122 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-tee/include/linux/firmware/qcom/si_core_xts.h",
+      "source": "include/linux/firmware/qcom/si_core_xts.h",
+      "original_sha256": "e661af4d2a10168dbe21738741ecad057e9669ba4960195b896f81edd226168f",
+      "sha256": "e661af4d2a10168dbe21738741ecad057e9669ba4960195b896f81edd226168f"
+    },
+    {
+      "file": "ports/qcom-tee/include/linux/firmware/qcom/si_object.h",
+      "source": "include/linux/firmware/qcom/si_object.h",
+      "original_sha256": "8d3162488e93cb049b8cbcba8578aa28e804cfae0b40752c49e0efebee02fca6",
+      "sha256": "8d3162488e93cb049b8cbcba8578aa28e804cfae0b40752c49e0efebee02fca6"
+    },
+    {
+      "file": "ports/qcom-tee/include/linux/qseecom_kernel.h",
+      "source": "include/linux/qseecom_kernel.h",
+      "original_sha256": "cdf0e15072d67a72f96e4adbf032349288c5d7b66b24df3954d032733230b50b",
+      "sha256": "cdf0e15072d67a72f96e4adbf032349288c5d7b66b24df3954d032733230b50b"
+    },
+    {
+      "file": "ports/qcom-tee/qseecom_proxy.c",
+      "source": "drivers/misc/qseecom_proxy.c",
+      "original_sha256": "9f84f9c9be013c14ecbfe80a97d2378cf913ed0666157f5f45dd66da7591ef1f",
+      "sha256": "9f84f9c9be013c14ecbfe80a97d2378cf913ed0666157f5f45dd66da7591ef1f"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/qcom_scm_invoke.c",
+      "source": "drivers/firmware/qcom/si_core/qcom_scm_invoke.c",
+      "original_sha256": "339fac3f920d0ac57712245dc3a3862bb9aa0315e9150c16f960f909cb3491b3",
+      "sha256": "339fac3f920d0ac57712245dc3a3862bb9aa0315e9150c16f960f909cb3491b3"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core.c",
+      "source": "drivers/firmware/qcom/si_core/si_core.c",
+      "original_sha256": "294186828f6d77208a514a923c8e4fedb2c53e4ca4cb159da47f1ce93f6798db",
+      "sha256": "b712897765c9be66da26ce7c60da92135b52dc84a18474e2257dff7a58588029"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core.h",
+      "source": "drivers/firmware/qcom/si_core/si_core.h",
+      "original_sha256": "e0102478c532ab208e44493607f2c2e71d62fccd8deb47848e8065898f8047bf",
+      "sha256": "e0102478c532ab208e44493607f2c2e71d62fccd8deb47848e8065898f8047bf"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_adci.c",
+      "source": "drivers/firmware/qcom/si_core/si_core_adci.c",
+      "original_sha256": "c36fc3b5d2b8a30596a693b73c61847568f3282ed1e1b866178747d2cbba494f",
+      "sha256": "c36fc3b5d2b8a30596a693b73c61847568f3282ed1e1b866178747d2cbba494f"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_adci.h",
+      "source": "drivers/firmware/qcom/si_core/si_core_adci.h",
+      "original_sha256": "911802c3a1d931772704de1a0fc177069913a0ac2fe993215a0e3f5ea26cd757",
+      "sha256": "911802c3a1d931772704de1a0fc177069913a0ac2fe993215a0e3f5ea26cd757"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_async.c",
+      "source": "drivers/firmware/qcom/si_core/si_core_async.c",
+      "original_sha256": "f41a55ee8329f1864759c55f544a11ae9bf581bfa01d9d338bfce14a6b9ce0a4",
+      "sha256": "f41a55ee8329f1864759c55f544a11ae9bf581bfa01d9d338bfce14a6b9ce0a4"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_helpers.c",
+      "source": "drivers/firmware/qcom/si_core/si_core_helpers.c",
+      "original_sha256": "dbb9969143b297881b917354e35ee10248f5815adcf8ee2d7e27db59963c614b",
+      "sha256": "dbb9969143b297881b917354e35ee10248f5815adcf8ee2d7e27db59963c614b"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_irq.h",
+      "source": "drivers/firmware/qcom/si_core/si_core_irq.h",
+      "original_sha256": "35023ae6ba29d3e7b6d64d5b9280ef41775cdffb40c5cc2d6cad9285dd8e99cd",
+      "sha256": "35023ae6ba29d3e7b6d64d5b9280ef41775cdffb40c5cc2d6cad9285dd8e99cd"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/si_core_wq.c",
+      "source": "drivers/firmware/qcom/si_core/si_core_wq.c",
+      "original_sha256": "582f54b703409da78c22d672b4faa946204e1da7831be675411191de0e4aceb2",
+      "sha256": "582f54b703409da78c22d672b4faa946204e1da7831be675411191de0e4aceb2"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/trace_si_core.h",
+      "source": "drivers/firmware/qcom/si_core/trace_si_core.h",
+      "original_sha256": "7c81a79e67c30045c596c43c7a2573fa5b83f6bac5bf2550810f912178e50a15",
+      "sha256": "7c81a79e67c30045c596c43c7a2573fa5b83f6bac5bf2550810f912178e50a15"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/xts/mem-object.c",
+      "source": "drivers/firmware/qcom/si_core/xts/mem-object.c",
+      "original_sha256": "15f010e83b7f4770ddc9d9d07b8fd19a3eef7d41a6aa10c0d317d45c272425d8",
+      "sha256": "15f010e83b7f4770ddc9d9d07b8fd19a3eef7d41a6aa10c0d317d45c272425d8"
+    },
+    {
+      "file": "ports/qcom-tee/si_core/xts/mem-object.h",
+      "source": "drivers/firmware/qcom/si_core/xts/mem-object.h",
+      "original_sha256": "46545b038abd8877e5ceb4d3b9be0651c5f26f0cb314550bbedc174de29ef6d4",
+      "sha256": "46545b038abd8877e5ceb4d3b9be0651c5f26f0cb314550bbedc174de29ef6d4"
+    },
+    {
+      "file": "ports/qcom-tee/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "0688183405c68fa97b014d012f8498983b192d7f4d6b6a00665d02a7639658be"
+    }
+  ],
+  "patch_sha256": "4b1117eddb6bc581842f27e506099c33cd81ec0b84ca9641b142ebf51f46cbb0",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "si_core_module (CONFIG_QCOM_SI_CORE=m, _ADCI, _WQ; no MEM_FFA/DOORBELL as canoe_perf.bzl) and qseecom_proxy from the AVR 6.12 qcom-soc tree on android18-7.3",
+  "reviewed_changes": [
+    "MODULE_IMPORT_NS string form",
+    "si_object_invoke(): reset oic->u before RELEASE/RETAIN callbacks; update_msg() otherwise re-applied the previous callback's argument array and failed the release reply with -EINVAL unless QTEE left the message area untouched",
+    "core: vendor SMCInvoke SCM calls (patches/scm-invoke-7.3.patch), qtee_shmbridge/qcom_tzmem parity (patches/qtee-shmbridge-7.3.patch), DO_ONCE_SLEEPABLE tzmem init (patches/tzmem-once-sleepable-7.3.patch)",
+    "-Wno-missing-prototypes (vendor code is built without W=1)"
+  ],
+  "pending": [
+    "6.12 multi-SMC concurrency (qcom_scm_sem_lock / whitelisted multicall) not ported: 7.3 serialises standard SCM calls",
+    "real QTEE only on the phone"
+  ]
+}

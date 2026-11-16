@@ -22,7 +22,7 @@ if a.record:
  rows=[];changes=''
  for n,raw in originals.items():
   data=(ROOT/n).read_bytes();rows.append({'file':n,'source':files[n],'original_sha256':sha(raw),'sha256':sha(data)})
-  changes+=''.join(difflib.unified_diff(raw.decode().splitlines(True),data.decode().splitlines(True),fromfile='a/'+n,tofile='b/'+n))
+  changes+=''.join(l if l.endswith('\n') else l+'\n\\ No newline at end of file\n' for l in difflib.unified_diff(raw.decode().splitlines(True),data.decode().splitlines(True),fromfile='a/'+n,tofile='b/'+n))
  patch.write_text(changes)
  lock.write_text(json.dumps({'source_commit':commit,'source_repo':spec.get('repo','qcom-soc'),'files':rows,'patch_sha256':sha(patch.read_bytes()),'physical_verified':False,'combined_bundle_promoted':False,'scope':spec['scope'],'reviewed_changes':spec['reviewed_changes'],'pending':spec['pending']},indent=2)+'\n')
 l=json.loads(lock.read_text());assert l['source_commit']==commit and l['patch_sha256']==sha(patch.read_bytes());assert {x['file'] for x in l['files']}==set(files)

@@ -1,0 +1,44 @@
+{
+ "stage": 109,
+ "scope": "si_core_module, qseecom_proxy, smcinvoke_dlkm + qtee_shmbridge/SCM invoke core on android18-7.3",
+ "sources": {
+  "qcom-tee": "qcom-soc 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "securemsm": "securemsm-kernel 43e5f439ce6f2b4a97278096ed4f04a84aacf502"
+ },
+ "core_patches": [
+  "patches/qtee-shmbridge-7.3.patch",
+  "patches/scm-invoke-7.3.patch",
+  "patches/tzmem-once-sleepable-7.3.patch"
+ ],
+ "source_commit": "65aa58a218ba7851cf2e499ac1fedf0a88ba3389",
+ "core_image": "7.3.0-4k #34 (unchanged; qcom-scm.ko rebuilt)",
+ "qemu_runs": [
+  "reports/tee-stage109-qemu.log",
+  "reports/tee-stage109-r2.log",
+  "reports/tee-stage109-r3.log",
+  "reports/regress-stage109-qcom-tee.log"
+ ],
+ "results": {
+  "kunit": "avr_qcom_tee 4/4",
+  "userspace": "AVR_SMCINVOKE_USER_PASS (callbacks=1 releases=2)",
+  "fake_scm_crc": "96/96 exports identical to out/native-gki qcom-scm.ko"
+ },
+ "bugs_found": [
+  "upstream 7.3 qcom_tzmem_enable DO_ONCE runs sleeping SCM calls under a spinlock",
+  "vendor si_core RELEASE/RETAIN callback reply reused stale oic->u",
+  "vendor trace_smci.h double dereference of cb_txn"
+ ],
+ "regression": "reports/regress-stage109-summary.txt",
+ "crc": "reports/tee-stage109-crc.json (only avr_fake_tz_get_stats, a test-fixture symbol, is provider=None)",
+ "qemu_substitutes": [
+  "tests/qcom-tee/fake-scm (real qcom-scm sources, SMC instruction -> avr_fake_tz.c)",
+  "tests/dma-heaps/avr-gunyah-stub.ko"
+ ],
+ "not_verified": [
+  "real QTEE ABI and apps (keymint, gatekeeper, DRM)",
+  "6.12 multi-SMC concurrency (not ported)",
+  "other securemsm modules"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

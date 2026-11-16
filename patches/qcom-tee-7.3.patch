@@ -1,0 +1,41 @@
+--- a/ports/qcom-tee/si_core/si_core.c
++++ b/ports/qcom-tee/si_core/si_core.c
+@@ -813,6 +813,11 @@
+ 	}
+ 
+ 	oic->object = object;
++
++	/* AVR 7.3 port: RELEASE/RETAIN carry no arguments. Without this, update_msg()
++	 * re-applies the previous callback's argument array (oic->u) to this reply and
++	 * fails with -EINVAL unless QTEE left that message area untouched. */
++	oic->u[0].type = SI_AT_END;
+ 
+ 	switch (SI_OBJECT_OP_METHOD_ID(msg->op)) {
+ 	case SI_OBJECT_OP_RELEASE:
+@@ -1515,7 +1520,7 @@
+ 
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("SI CORE driver");
+-MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");
+ MODULE_SOFTDEP("pre: qcom-scm");
+ #if IS_ENABLED(CONFIG_QCOM_SI_CORE_MEM_FFA)
+ MODULE_SOFTDEP("pre: arm_ffa arm_ffa_transport");
+--- a/ports/qcom-tee/Makefile
++++ b/ports/qcom-tee/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Qualcomm TEE transport (canoe: CONFIG_QCOM_SI_CORE=m, _ADCI=y, _WQ=y; no MEM_FFA/DOORBELL)
++# and qseecom_proxy, from qcom-soc (android16-6.12 AVR tree).
++obj-m += qseecom_proxy.o si_core_module.o
++si_core_module-y := si_core/qcom_scm_invoke.o si_core/si_core.o si_core/si_core_async.o \
++	si_core/si_core_helpers.o si_core/xts/mem-object.o si_core/si_core_adci.o si_core/si_core_wq.o
++
++ccflags-y += -I$(src)/include -I$(src)/si_core -I$(src)/si_core/xts -I$(src)/../qcom-dma-heaps/include \
++	-I$(src)/../secure-buffer/include -I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include
++# vendor code is built without W=1 by kleaf; 7.3 promotes this to -Werror
++ccflags-y += -Wno-missing-prototypes
++ccflags-y += -DCONFIG_QCOM_SI_CORE_MODULE=1 -DCONFIG_QCOM_SI_CORE_ADCI=1 -DCONFIG_QCOM_SI_CORE_WQ=1 \
++	-DCONFIG_QSEECOM_PROXY_MODULE=1
++CFLAGS_si_core.o += -I$(src)/si_core
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-dma-heaps/Module.symvers $(src)/../secure-buffer/Module.symvers

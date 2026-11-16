@@ -1,0 +1,10 @@
+{
+  "scope": "qcom-scm.ko with qtee_shmbridge/tzmem parity, vendor SMCInvoke calls, DO_ONCE_SLEEPABLE tzmem init; Image unchanged (#34, all changes are in the qcom-scm module); QEMU only",
+  "core_image": "7.3.0-4k #34",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "qcom_scm_sha256": "12d764b7514ace522c028b877687cc2e9b022c7352c93a0ce1d057a4c4dcee7a",
+  "source_commit": "65aa58a218ba7851cf2e499ac1fedf0a88ba3389",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

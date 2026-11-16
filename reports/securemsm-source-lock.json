@@ -1,0 +1,895 @@
+{
+  "source_commit": "43e5f439ce6f2b4a97278096ed4f04a84aacf502",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-securemsm-kernel",
+  "files": [
+    {
+      "file": "ports/securemsm/Android.bp",
+      "source": "Android.bp",
+      "original_sha256": "83cb9b686281e023544125da35d13167ba9ad0db6198f7a774d011f9336b290a",
+      "sha256": "83cb9b686281e023544125da35d13167ba9ad0db6198f7a774d011f9336b290a"
+    },
+    {
+      "file": "ports/securemsm/Android.mk",
+      "source": "Android.mk",
+      "original_sha256": "1237c60c764f24f9b851e551b4490fd3f6e4823e46043d424bd7b79d336697c6",
+      "sha256": "1237c60c764f24f9b851e551b4490fd3f6e4823e46043d424bd7b79d336697c6"
+    },
+    {
+      "file": "ports/securemsm/BUILD.bazel",
+      "source": "BUILD.bazel",
+      "original_sha256": "3568a33aebbc7755828146637ecc65904e508422ae99bc7b9d94b28d5545e57d",
+      "sha256": "3568a33aebbc7755828146637ecc65904e508422ae99bc7b9d94b28d5545e57d"
+    },
+    {
+      "file": "ports/securemsm/Kbuild",
+      "source": "Kbuild",
+      "original_sha256": "9ed5ae090a7ed6031c6946d2171f7a4083835aa82d630d7ac2cb6c594bdd2930",
+      "sha256": "ab53af031690aae256a0bb7f4c0b3160aef2d7657a8788b8e756d3e5fd48fb19"
+    },
+    {
+      "file": "ports/securemsm/Kbuild.vendor",
+      "source": "Kbuild",
+      "original_sha256": "9ed5ae090a7ed6031c6946d2171f7a4083835aa82d630d7ac2cb6c594bdd2930",
+      "sha256": "9ed5ae090a7ed6031c6946d2171f7a4083835aa82d630d7ac2cb6c594bdd2930"
+    },
+    {
+      "file": "ports/securemsm/Makefile",
+      "source": "Makefile",
+      "original_sha256": "e5324041a8defe06683d1545633a71022e8db40c63e7c5a5e3491b2bc519ad69",
+      "sha256": "4881b267dbc2159bfbf13146e44b7d574f48ba2ef72bc0c83fd5c9be2b200279"
+    },
+    {
+      "file": "ports/securemsm/Makefile.vendor",
+      "source": "Makefile",
+      "original_sha256": "e5324041a8defe06683d1545633a71022e8db40c63e7c5a5e3491b2bc519ad69",
+      "sha256": "e5324041a8defe06683d1545633a71022e8db40c63e7c5a5e3491b2bc519ad69"
+    },
+    {
+      "file": "ports/securemsm/build/alor-le.bzl",
+      "source": "build/alor-le.bzl",
+      "original_sha256": "437a442ca92d15ec13099f09a29111a6255e4d4a7bbb2696ea7be9aef55fc78f",
+      "sha256": "437a442ca92d15ec13099f09a29111a6255e4d4a7bbb2696ea7be9aef55fc78f"
+    },
+    {
+      "file": "ports/securemsm/build/autoghgvm.bzl",
+      "source": "build/autoghgvm.bzl",
+      "original_sha256": "4034de91c6e9a26befa30d8f790d646218e3d21abe5e744f44009e523feb57b3",
+      "sha256": "4034de91c6e9a26befa30d8f790d646218e3d21abe5e744f44009e523feb57b3"
+    },
+    {
+      "file": "ports/securemsm/build/autogvm.bzl",
+      "source": "build/autogvm.bzl",
+      "original_sha256": "f057f3bc9b4a1f138c5050eea0e945d19061a26186dc68c51b776752089ff972",
+      "sha256": "f057f3bc9b4a1f138c5050eea0e945d19061a26186dc68c51b776752089ff972"
+    },
+    {
+      "file": "ports/securemsm/build/bengal.bzl",
+      "source": "build/bengal.bzl",
+      "original_sha256": "d0e3da1ac3cbd1b0eb2a45ff6cc27e092bd93a41a3a8c7b448c6186cca7d2984",
+      "sha256": "d0e3da1ac3cbd1b0eb2a45ff6cc27e092bd93a41a3a8c7b448c6186cca7d2984"
+    },
+    {
+      "file": "ports/securemsm/build/blair.bzl",
+      "source": "build/blair.bzl",
+      "original_sha256": "1c8d4730a15c638929a28e08cf215e439d4a737f6edcd4673e246e16b19983db",
+      "sha256": "1c8d4730a15c638929a28e08cf215e439d4a737f6edcd4673e246e16b19983db"
+    },
+    {
+      "file": "ports/securemsm/build/canoe.bzl",
+      "source": "build/canoe.bzl",
+      "original_sha256": "9d162f39ddc7c89e6ffcfe61a87b3909502191c28b229cbb759fd5b1bc98f2b5",
+      "sha256": "9d162f39ddc7c89e6ffcfe61a87b3909502191c28b229cbb759fd5b1bc98f2b5"
+    },
+    {
+      "file": "ports/securemsm/build/canoevm.bzl",
+      "source": "build/canoevm.bzl",
+      "original_sha256": "4ab3f95087151cb7c2e2df389f2b086cc421e179722c5b38f60d80bb53646f6f",
+      "sha256": "4ab3f95087151cb7c2e2df389f2b086cc421e179722c5b38f60d80bb53646f6f"
+    },
+    {
+      "file": "ports/securemsm/build/lahaina.bzl",
+      "source": "build/lahaina.bzl",
+      "original_sha256": "3e69125b368e527407eeecbc750b0cc943c5c1ab752c89f3bdb7f267d54168a1",
+      "sha256": "3e69125b368e527407eeecbc750b0cc943c5c1ab752c89f3bdb7f267d54168a1"
+    },
+    {
+      "file": "ports/securemsm/build/malabar.bzl",
+      "source": "build/malabar.bzl",
+      "original_sha256": "6f17a3bc4ca5ee0cd937ed50a79d18d4eae423f672123591f25e094e27d41ae7",
+      "sha256": "6f17a3bc4ca5ee0cd937ed50a79d18d4eae423f672123591f25e094e27d41ae7"
+    },
+    {
+      "file": "ports/securemsm/build/malabarvm.bzl",
+      "source": "build/malabarvm.bzl",
+      "original_sha256": "97ca04bd9f7b6918dbb5f0d30b781b857871c511b8e8f820be7d3cc64cfdfc3b",
+      "sha256": "97ca04bd9f7b6918dbb5f0d30b781b857871c511b8e8f820be7d3cc64cfdfc3b"
+    },
+    {
+      "file": "ports/securemsm/build/monaco.bzl",
+      "source": "build/monaco.bzl",
+      "original_sha256": "ada8c30275fee10af7fff7882b6c2c06989c4c25436a6d3e2e6e228fd4a4e45b",
+      "sha256": "ada8c30275fee10af7fff7882b6c2c06989c4c25436a6d3e2e6e228fd4a4e45b"
+    },
+    {
+      "file": "ports/securemsm/build/niobe.bzl",
+      "source": "build/niobe.bzl",
+      "original_sha256": "deb97284d4b745ec380dfa664a81467b82fb6f16d118c466b311e9726d29a6d9",
+      "sha256": "deb97284d4b745ec380dfa664a81467b82fb6f16d118c466b311e9726d29a6d9"
+    },
+    {
+      "file": "ports/securemsm/build/parrot.bzl",
+      "source": "build/parrot.bzl",
+      "original_sha256": "c24d18e7463942a830f1227bdac228d84f2255997c311ad940f0aee8664244ff",
+      "sha256": "c24d18e7463942a830f1227bdac228d84f2255997c311ad940f0aee8664244ff"
+    },
+    {
+      "file": "ports/securemsm/build/pineapple.bzl",
+      "source": "build/pineapple.bzl",
+      "original_sha256": "3edb76abfcdaded1b30fd67a3bf5347cec01e609bf4f90959f4d42d6d18d03b5",
+      "sha256": "3edb76abfcdaded1b30fd67a3bf5347cec01e609bf4f90959f4d42d6d18d03b5"
+    },
+    {
+      "file": "ports/securemsm/build/pitti.bzl",
+      "source": "build/pitti.bzl",
+      "original_sha256": "3bc62a69911e7063c8aef9db011040777dd55ae33af9848999e00ffe3e3f338c",
+      "sha256": "3bc62a69911e7063c8aef9db011040777dd55ae33af9848999e00ffe3e3f338c"
+    },
+    {
+      "file": "ports/securemsm/build/qcs610.bzl",
+      "source": "build/qcs610.bzl",
+      "original_sha256": "1235bafd508a61a12716ebb3cfe747f959e6943387b7b58829e72d21682bcee3",
+      "sha256": "1235bafd508a61a12716ebb3cfe747f959e6943387b7b58829e72d21682bcee3"
+    },
+    {
+      "file": "ports/securemsm/build/seraph.bzl",
+      "source": "build/seraph.bzl",
+      "original_sha256": "e8ee043e548e726f995da2554a28aa936e7537193a178d7898f081fcda5e155d",
+      "sha256": "e8ee043e548e726f995da2554a28aa936e7537193a178d7898f081fcda5e155d"
+    },
+    {
+      "file": "ports/securemsm/build/shikra.bzl",
+      "source": "build/shikra.bzl",
+      "original_sha256": "ec59110a3cc3a6888d6357488dbbb694432c6c087ebddb52bd939a659b792f93",
+      "sha256": "ec59110a3cc3a6888d6357488dbbb694432c6c087ebddb52bd939a659b792f93"
+    },
+    {
+      "file": "ports/securemsm/build/sun.bzl",
+      "source": "build/sun.bzl",
+      "original_sha256": "8edb5f9e0f92429defa6fcfa4e80f96f628d08128a76748450362eebaba9b923",
+      "sha256": "8edb5f9e0f92429defa6fcfa4e80f96f628d08128a76748450362eebaba9b923"
+    },
+    {
+      "file": "ports/securemsm/build/sunvm.bzl",
+      "source": "build/sunvm.bzl",
+      "original_sha256": "d7ca94cfef408370ba9838eac0be24f952e5ebbdf3d4c84e151536e025abbda0",
+      "sha256": "d7ca94cfef408370ba9838eac0be24f952e5ebbdf3d4c84e151536e025abbda0"
+    },
+    {
+      "file": "ports/securemsm/build/vienna-le.bzl",
+      "source": "build/vienna-le.bzl",
+      "original_sha256": "cfb172b3c712d9777f5a65f77eeecf9a0308cf7d7340667b38a01b5470459c3b",
+      "sha256": "cfb172b3c712d9777f5a65f77eeecf9a0308cf7d7340667b38a01b5470459c3b"
+    },
+    {
+      "file": "ports/securemsm/build/vienna.bzl",
+      "source": "build/vienna.bzl",
+      "original_sha256": "8cb369ab0854372a796a9835ef684f6cc6c3e5bb8423031577ade452c3a7fbdd",
+      "sha256": "8cb369ab0854372a796a9835ef684f6cc6c3e5bb8423031577ade452c3a7fbdd"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig.conf",
+      "source": "config/sec-kernel_defconfig.conf",
+      "original_sha256": "2e0880a816966e39bddfdea26d22848391bf5103f5bbd701ee9ad946dd3b7eaf",
+      "sha256": "2e0880a816966e39bddfdea26d22848391bf5103f5bbd701ee9ad946dd3b7eaf"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig.h",
+      "source": "config/sec-kernel_defconfig.h",
+      "original_sha256": "6f60a320dd087ec5c2370fe7a8327a76f43cdb51e35cbad7a3a3b7d87a2a82ea",
+      "sha256": "6f60a320dd087ec5c2370fe7a8327a76f43cdb51e35cbad7a3a3b7d87a2a82ea"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_hibernate_tzdata_mgr.conf",
+      "source": "config/sec-kernel_defconfig_hibernate_tzdata_mgr.conf",
+      "original_sha256": "25bf4cfb7d21ad8c2cc152a228ef86bcb22a80336a5e9a05d22a92aabe192295",
+      "sha256": "25bf4cfb7d21ad8c2cc152a228ef86bcb22a80336a5e9a05d22a92aabe192295"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_hibernate_tzdata_mgr.h",
+      "source": "config/sec-kernel_defconfig_hibernate_tzdata_mgr.h",
+      "original_sha256": "1a376a502c2609bc95234e5193435f934af163255dabc0d5b6ef4abf5d7cf56c",
+      "sha256": "1a376a502c2609bc95234e5193435f934af163255dabc0d5b6ef4abf5d7cf56c"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qcedev_fe.conf",
+      "source": "config/sec-kernel_defconfig_qcedev_fe.conf",
+      "original_sha256": "613903675cdf87184d77e09b2a5f736f6eb5f4a8a3bb0e1c70a0b19a618a1a87",
+      "sha256": "613903675cdf87184d77e09b2a5f736f6eb5f4a8a3bb0e1c70a0b19a618a1a87"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qcedev_fe.h",
+      "source": "config/sec-kernel_defconfig_qcedev_fe.h",
+      "original_sha256": "0191a3385075aab4f116df6d98177c0d347dd811577eb5467cdd7f7c2e479233",
+      "sha256": "0191a3385075aab4f116df6d98177c0d347dd811577eb5467cdd7f7c2e479233"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qrng.conf",
+      "source": "config/sec-kernel_defconfig_qrng.conf",
+      "original_sha256": "996224cfaba0b428a7dd8213168f362d19361f397d4cfb78f7b1b521969c6ddb",
+      "sha256": "996224cfaba0b428a7dd8213168f362d19361f397d4cfb78f7b1b521969c6ddb"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qrng.h",
+      "source": "config/sec-kernel_defconfig_qrng.h",
+      "original_sha256": "9eb420b590af854969d81754d05d2268c251626965469911581bf1c27a438ff4",
+      "sha256": "9eb420b590af854969d81754d05d2268c251626965469911581bf1c27a438ff4"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qseecom.conf",
+      "source": "config/sec-kernel_defconfig_qseecom.conf",
+      "original_sha256": "59d2c773ed360201b76034743708c7fe16d6c0fcabc0b204558bdee474debc53",
+      "sha256": "59d2c773ed360201b76034743708c7fe16d6c0fcabc0b204558bdee474debc53"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qseecom.h",
+      "source": "config/sec-kernel_defconfig_qseecom.h",
+      "original_sha256": "20b38094039f7aad7286997a9baae5a42b9652457a7cbccc06642102898ab571",
+      "sha256": "20b38094039f7aad7286997a9baae5a42b9652457a7cbccc06642102898ab571"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_qseecom_compat.h",
+      "source": "config/sec-kernel_defconfig_qseecom_compat.h",
+      "original_sha256": "5ec550110e0d458eddd063099ab0a87e19086e862c1ef02398af7cf959b0be14",
+      "sha256": "5ec550110e0d458eddd063099ab0a87e19086e862c1ef02398af7cf959b0be14"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_si_core_test.conf",
+      "source": "config/sec-kernel_defconfig_si_core_test.conf",
+      "original_sha256": "615e4b5b761f5caeb64b8bdab08ef43ce6e5fced239a388680b48fd40f1243e2",
+      "sha256": "615e4b5b761f5caeb64b8bdab08ef43ce6e5fced239a388680b48fd40f1243e2"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_si_core_test.h",
+      "source": "config/sec-kernel_defconfig_si_core_test.h",
+      "original_sha256": "cca2e4420e91cd17fbe9715f900f68b60ca740a556c074bf6e590965b577da1e",
+      "sha256": "cca2e4420e91cd17fbe9715f900f68b60ca740a556c074bf6e590965b577da1e"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_smcinvoke.conf",
+      "source": "config/sec-kernel_defconfig_smcinvoke.conf",
+      "original_sha256": "6fcac7957565d8d24b2d343697c671c2b1c802e1318f893656640a3aec045e49",
+      "sha256": "6fcac7957565d8d24b2d343697c671c2b1c802e1318f893656640a3aec045e49"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_smcinvoke.h",
+      "source": "config/sec-kernel_defconfig_smcinvoke.h",
+      "original_sha256": "1109305d0665801c9689627e064a90fc070aa7fa7ab0dba2aac0283f4a3a3161",
+      "sha256": "1109305d0665801c9689627e064a90fc070aa7fa7ab0dba2aac0283f4a3a3161"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_smmu_proxy.conf",
+      "source": "config/sec-kernel_defconfig_smmu_proxy.conf",
+      "original_sha256": "d9f236ac48378c8fc1537fa7f1f28be63d5273be484f9960048789204b1e50ad",
+      "sha256": "d9f236ac48378c8fc1537fa7f1f28be63d5273be484f9960048789204b1e50ad"
+    },
+    {
+      "file": "ports/securemsm/config/sec-kernel_defconfig_smmu_proxy.h",
+      "source": "config/sec-kernel_defconfig_smmu_proxy.h",
+      "original_sha256": "92f837de0d1450de3c103573f5ece8e1e29bee05e589f7a4bb856b241283f050",
+      "sha256": "92f837de0d1450de3c103573f5ece8e1e29bee05e589f7a4bb856b241283f050"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/compat_qcedev.c",
+      "source": "crypto-qti/compat_qcedev.c",
+      "original_sha256": "863d77e3d98f3081a21c21171b4d1c2dc589481d0fb304bc5b3e5891bf1ac193",
+      "sha256": "863d77e3d98f3081a21c21171b4d1c2dc589481d0fb304bc5b3e5891bf1ac193"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/fips_status.h",
+      "source": "crypto-qti/fips_status.h",
+      "original_sha256": "3be5c163c5c4cf9c532d1a70c5eaa5196fb79268080e972a803148a11bc3e63d",
+      "sha256": "3be5c163c5c4cf9c532d1a70c5eaa5196fb79268080e972a803148a11bc3e63d"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/ota_crypto.c",
+      "source": "crypto-qti/ota_crypto.c",
+      "original_sha256": "146cc70eac10ea96dfb21f9b86618d45bc6dba210c066609b3ef8ce5468def28",
+      "sha256": "146cc70eac10ea96dfb21f9b86618d45bc6dba210c066609b3ef8ce5468def28"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qce.h",
+      "source": "crypto-qti/qce.h",
+      "original_sha256": "9b172b52625433046d35c3afba8e02ea807fd42ed678eb0d56199c5c7cf0657d",
+      "sha256": "9b172b52625433046d35c3afba8e02ea807fd42ed678eb0d56199c5c7cf0657d"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qce50.c",
+      "source": "crypto-qti/qce50.c",
+      "original_sha256": "d393a7b688553c6f5b0917debbe7000683c6c519a338162874a5c3d31311a4a3",
+      "sha256": "d393a7b688553c6f5b0917debbe7000683c6c519a338162874a5c3d31311a4a3"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qce50.h",
+      "source": "crypto-qti/qce50.h",
+      "original_sha256": "54202e2093a44b43c0ce030ad608403e74d5ef302b0a0b41d4427eb7b4e228ae",
+      "sha256": "54202e2093a44b43c0ce030ad608403e74d5ef302b0a0b41d4427eb7b4e228ae"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qce_ota.h",
+      "source": "crypto-qti/qce_ota.h",
+      "original_sha256": "dd53349e1d54d9f87969aa92222dfbdaf7b8cb43da7fbb8adfef2e3a03fe491d",
+      "sha256": "dd53349e1d54d9f87969aa92222dfbdaf7b8cb43da7fbb8adfef2e3a03fe491d"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcedev.c",
+      "source": "crypto-qti/qcedev.c",
+      "original_sha256": "fc9a1b9622d3b28216bf095c3610d1409e68f481ae2e7384480ffa2531524feb",
+      "sha256": "fc9a1b9622d3b28216bf095c3610d1409e68f481ae2e7384480ffa2531524feb"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcedev_smmu.c",
+      "source": "crypto-qti/qcedev_smmu.c",
+      "original_sha256": "f4e53552afa3fce89afd36ec44dccd136bbbc1b4b3ce6887ba3e7863f0ca5b96",
+      "sha256": "f4e53552afa3fce89afd36ec44dccd136bbbc1b4b3ce6887ba3e7863f0ca5b96"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcedev_smmu.h",
+      "source": "crypto-qti/qcedev_smmu.h",
+      "original_sha256": "69b597eff596a338b2ee1d6bdf6fb7114b8f536533b8488fff1124c454896c04",
+      "sha256": "69b597eff596a338b2ee1d6bdf6fb7114b8f536533b8488fff1124c454896c04"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcedevi.h",
+      "source": "crypto-qti/qcedevi.h",
+      "original_sha256": "f591969ed38f659abf7ed22098b873a5d539418f3b47fdd0b4d190635a2717ea",
+      "sha256": "f591969ed38f659abf7ed22098b873a5d539418f3b47fdd0b4d190635a2717ea"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcom_crypto_device.h",
+      "source": "crypto-qti/qcom_crypto_device.h",
+      "original_sha256": "0a6a7078400d74d78b47442359ed8406c9f3cc93895adcac9a5a0d3040e4cfc8",
+      "sha256": "0a6a7078400d74d78b47442359ed8406c9f3cc93895adcac9a5a0d3040e4cfc8"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcrypto.c",
+      "source": "crypto-qti/qcrypto.c",
+      "original_sha256": "5261cee1d48e25059e81154180098328bde48deac75ecf008dd76bc4cfffdf7f",
+      "sha256": "5261cee1d48e25059e81154180098328bde48deac75ecf008dd76bc4cfffdf7f"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcrypto.h",
+      "source": "crypto-qti/qcrypto.h",
+      "original_sha256": "2d7cb5a1c21c76f7ce01af752ee8339c0025c6aa452b513ebd48c493a00894f8",
+      "sha256": "2d7cb5a1c21c76f7ce01af752ee8339c0025c6aa452b513ebd48c493a00894f8"
+    },
+    {
+      "file": "ports/securemsm/crypto-qti/qcryptohw_50.h",
+      "source": "crypto-qti/qcryptohw_50.h",
+      "original_sha256": "cc0c5007caf97cf5a6afbb9862dec2bf3ed74a768aa4ee41a55138ebba17ff67",
+      "sha256": "cc0c5007caf97cf5a6afbb9862dec2bf3ed74a768aa4ee41a55138ebba17ff67"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp1.h",
+      "source": "hdcp/hdcp1.h",
+      "original_sha256": "b44054b6a6d20c516db9a0c6db97187076c3c66eb731dbe3d170e4cf61a870bb",
+      "sha256": "b44054b6a6d20c516db9a0c6db97187076c3c66eb731dbe3d170e4cf61a870bb"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp1_ops.h",
+      "source": "hdcp/hdcp1_ops.h",
+      "original_sha256": "ef979b72a4b9c553acc908f908e211808b22dfa3ebad3647ce65598d58171de3",
+      "sha256": "ef979b72a4b9c553acc908f908e211808b22dfa3ebad3647ce65598d58171de3"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp2p2.h",
+      "source": "hdcp/hdcp2p2.h",
+      "original_sha256": "8ab848bd03e55f84aacc801285bc63d83b447d69d804443221578803a9174317",
+      "sha256": "8ab848bd03e55f84aacc801285bc63d83b447d69d804443221578803a9174317"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_main.c",
+      "source": "hdcp/hdcp_main.c",
+      "original_sha256": "7b0b38a332bbc445d83a9af02bd68e3f7b5ccb3bbd527121ff49fe0892b2c9c5",
+      "sha256": "7b0b38a332bbc445d83a9af02bd68e3f7b5ccb3bbd527121ff49fe0892b2c9c5"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_main.h",
+      "source": "hdcp/hdcp_main.h",
+      "original_sha256": "1b7a1e46973ab740f4be492c3a58454052f903da79ab011e8db09a2e762f2ffe",
+      "sha256": "1b7a1e46973ab740f4be492c3a58454052f903da79ab011e8db09a2e762f2ffe"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_qseecom.c",
+      "source": "hdcp/hdcp_qseecom.c",
+      "original_sha256": "4d6cabe4c340dc7348ab75d496119ff4422c415643461b6f9045eb804706a08c",
+      "sha256": "4d6cabe4c340dc7348ab75d496119ff4422c415643461b6f9045eb804706a08c"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_qseecom.h",
+      "source": "hdcp/hdcp_qseecom.h",
+      "original_sha256": "16ead790be121ffcdb64211e46be725b8417b1bdfe278734b7da5bbc5b54872e",
+      "sha256": "16ead790be121ffcdb64211e46be725b8417b1bdfe278734b7da5bbc5b54872e"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_smcinvoke.c",
+      "source": "hdcp/hdcp_smcinvoke.c",
+      "original_sha256": "bf6b558548b90d198e80d079f77c7b2a666cd294a73d38a0c753ad8d8f0c128b",
+      "sha256": "bf6b558548b90d198e80d079f77c7b2a666cd294a73d38a0c753ad8d8f0c128b"
+    },
+    {
+      "file": "ports/securemsm/hdcp/hdcp_smcinvoke.h",
+      "source": "hdcp/hdcp_smcinvoke.h",
+      "original_sha256": "3255dd54578ef23a371c2b8b592686fd3c296de13fd77ae7df76e30c7b514841",
+      "sha256": "3255dd54578ef23a371c2b8b592686fd3c296de13fd77ae7df76e30c7b514841"
+    },
+    {
+      "file": "ports/securemsm/hibernate_tzdata_mgr/hibernate_tzdata_mgr.c",
+      "source": "hibernate_tzdata_mgr/hibernate_tzdata_mgr.c",
+      "original_sha256": "e8a38158c3e62f94dbd083808ea8ea5668ded26512e19f3a4aa9e08b9237b4f8",
+      "sha256": "e8a38158c3e62f94dbd083808ea8ea5668ded26512e19f3a4aa9e08b9237b4f8"
+    },
+    {
+      "file": "ports/securemsm/include/linux/CTrustedCameraDriver.h",
+      "source": "include/linux/CTrustedCameraDriver.h",
+      "original_sha256": "5f67c196e885c5f55897c583f6467dcc1cf9f7f32d59a23591ede16f1a7f2a6c",
+      "sha256": "5f67c196e885c5f55897c583f6467dcc1cf9f7f32d59a23591ede16f1a7f2a6c"
+    },
+    {
+      "file": "ports/securemsm/include/linux/IClientEnv.h",
+      "source": "include/linux/IClientEnv.h",
+      "original_sha256": "9702d99330afb207b3c8b551d0564872c19d042a57e5efcaecfc7bd515a231e4",
+      "sha256": "9702d99330afb207b3c8b551d0564872c19d042a57e5efcaecfc7bd515a231e4"
+    },
+    {
+      "file": "ports/securemsm/include/linux/ITrustedCameraDriver.h",
+      "source": "include/linux/ITrustedCameraDriver.h",
+      "original_sha256": "77ba5c59fe372ecf61d0e8ca9f9da6910a66672d7e75f7d8b421833cf8860cc0",
+      "sha256": "77ba5c59fe372ecf61d0e8ca9f9da6910a66672d7e75f7d8b421833cf8860cc0"
+    },
+    {
+      "file": "ports/securemsm/include/linux/ctrusted_camera_driver.h",
+      "source": "include/linux/ctrusted_camera_driver.h",
+      "original_sha256": "f7c00f49bb81a27026a687c0f433eb1ae6d65912ddaaa3d24de651dfcc203fd8",
+      "sha256": "f7c00f49bb81a27026a687c0f433eb1ae6d65912ddaaa3d24de651dfcc203fd8"
+    },
+    {
+      "file": "ports/securemsm/include/linux/hibernate_tzdata_mgr.h",
+      "source": "include/linux/hibernate_tzdata_mgr.h",
+      "original_sha256": "7468bd1e0856811eb1bcf28d0fda420a22f1a221f58438164d0791eef78432bc",
+      "sha256": "7468bd1e0856811eb1bcf28d0fda420a22f1a221f58438164d0791eef78432bc"
+    },
+    {
+      "file": "ports/securemsm/include/linux/smci_clientenv.h",
+      "source": "include/linux/smci_clientenv.h",
+      "original_sha256": "e734e9e1df1530cbe05f2603e46311115c60c74c721f0b2f069841dde5fae6c9",
+      "sha256": "e734e9e1df1530cbe05f2603e46311115c60c74c721f0b2f069841dde5fae6c9"
+    },
+    {
+      "file": "ports/securemsm/include/linux/smci_object.h",
+      "source": "include/linux/smci_object.h",
+      "original_sha256": "14c0a46c60cc7115dc4284d9ea62bffe860e6ef913e946ef32ae487cdf6ba03a",
+      "sha256": "14c0a46c60cc7115dc4284d9ea62bffe860e6ef913e946ef32ae487cdf6ba03a"
+    },
+    {
+      "file": "ports/securemsm/include/linux/smcinvoke.h",
+      "source": "include/linux/smcinvoke.h",
+      "original_sha256": "e2c1d7881e91d567640fd495b3771b77e593159c9b7c2069d2d45daf3fd611b6",
+      "sha256": "e2c1d7881e91d567640fd495b3771b77e593159c9b7c2069d2d45daf3fd611b6"
+    },
+    {
+      "file": "ports/securemsm/include/linux/smcinvoke_object.h",
+      "source": "include/linux/smcinvoke_object.h",
+      "original_sha256": "73cf1b00c352b978ee5276e178fb830a6cd0d51635887e0d142e9d123548c18a",
+      "sha256": "73cf1b00c352b978ee5276e178fb830a6cd0d51635887e0d142e9d123548c18a"
+    },
+    {
+      "file": "ports/securemsm/include/linux/tmelog.h",
+      "source": "include/linux/tmelog.h",
+      "original_sha256": "b74fa6020eb2def56e2b694d201a2b7ce6aa9d82191f1ed9ed66a44243dc8d31",
+      "sha256": "b74fa6020eb2def56e2b694d201a2b7ce6aa9d82191f1ed9ed66a44243dc8d31"
+    },
+    {
+      "file": "ports/securemsm/include/linux/trusted_camera_driver.h",
+      "source": "include/linux/trusted_camera_driver.h",
+      "original_sha256": "42c6d21c3d76ad5c09621ce6487d848f2db60733e8d9642e6f122d771daa3ef1",
+      "sha256": "42c6d21c3d76ad5c09621ce6487d848f2db60733e8d9642e6f122d771daa3ef1"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/IAppClient.h",
+      "source": "include/smci/interface/IAppClient.h",
+      "original_sha256": "a18effe9f59012992b9c9928b922008019bc730647cd4ef9fd0f0aa04e00fc7e",
+      "sha256": "a18effe9f59012992b9c9928b922008019bc730647cd4ef9fd0f0aa04e00fc7e"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/IAppController.h",
+      "source": "include/smci/interface/IAppController.h",
+      "original_sha256": "1d9e573e7aaeebbc5e10d95695d51243fc4b63cbaf6c8f9b9077711e9ca4d083",
+      "sha256": "1d9e573e7aaeebbc5e10d95695d51243fc4b63cbaf6c8f9b9077711e9ca4d083"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/IAppLoader.h",
+      "source": "include/smci/interface/IAppLoader.h",
+      "original_sha256": "9dacc7516d14470ca2e181f0c78f15cb659d66c7b7d119fcd1160863742ae045",
+      "sha256": "9dacc7516d14470ca2e181f0c78f15cb659d66c7b7d119fcd1160863742ae045"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/IOpener.h",
+      "source": "include/smci/interface/IOpener.h",
+      "original_sha256": "033496feaceb7204914b89e29b5c8254bb9a548e7be5267c59ed1d8071664676",
+      "sha256": "033496feaceb7204914b89e29b5c8254bb9a548e7be5267c59ed1d8071664676"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/smci_appclient.h",
+      "source": "include/smci/interface/smci_appclient.h",
+      "original_sha256": "52ea04edef4015ab5723ed5cedbf88acfe06abae95bf0b5b5843d33475a800be",
+      "sha256": "52ea04edef4015ab5723ed5cedbf88acfe06abae95bf0b5b5843d33475a800be"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/smci_appcontroller.h",
+      "source": "include/smci/interface/smci_appcontroller.h",
+      "original_sha256": "b87efd5912b511d839ab595e0cbd50ff685f39ed7e7603a75b56e7d79ed4c8ea",
+      "sha256": "b87efd5912b511d839ab595e0cbd50ff685f39ed7e7603a75b56e7d79ed4c8ea"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/smci_apploader.h",
+      "source": "include/smci/interface/smci_apploader.h",
+      "original_sha256": "2100f6379c74beb9959b1a9ca2d52771a608090fbc247b75563476a90d61d475",
+      "sha256": "2100f6379c74beb9959b1a9ca2d52771a608090fbc247b75563476a90d61d475"
+    },
+    {
+      "file": "ports/securemsm/include/smci/interface/smci_opener.h",
+      "source": "include/smci/interface/smci_opener.h",
+      "original_sha256": "d91dabbba212ab36e954f308aad461506cc7a8c5768b424a672fc52ed7ba4af4",
+      "sha256": "d91dabbba212ab36e954f308aad461506cc7a8c5768b424a672fc52ed7ba4af4"
+    },
+    {
+      "file": "ports/securemsm/include/smci/uid/CAppClient.h",
+      "source": "include/smci/uid/CAppClient.h",
+      "original_sha256": "02b9435cc97add294574b4bdb8fa3b7021c4fea92f51f04d04bd5c2b1570acd0",
+      "sha256": "02b9435cc97add294574b4bdb8fa3b7021c4fea92f51f04d04bd5c2b1570acd0"
+    },
+    {
+      "file": "ports/securemsm/include/smci/uid/CAppLoader.h",
+      "source": "include/smci/uid/CAppLoader.h",
+      "original_sha256": "252230f3b094201fc93f014398ffb47cc8345d97b7607bacf58caea0015958f2",
+      "sha256": "252230f3b094201fc93f014398ffb47cc8345d97b7607bacf58caea0015958f2"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/compat_qcedev.h",
+      "source": "include/uapi/linux/compat_qcedev.h",
+      "original_sha256": "fccb190e07355f85cc6f5278ced0a164a40875190029865a27fcd6cd8d1970e1",
+      "sha256": "fccb190e07355f85cc6f5278ced0a164a40875190029865a27fcd6cd8d1970e1"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qcedev.h",
+      "source": "include/uapi/linux/qcedev.h",
+      "original_sha256": "557f1e4a502efc0ce2f210d2485c52dee27487a8bb7c17003b3bebfb4e8dad61",
+      "sha256": "557f1e4a502efc0ce2f210d2485c52dee27487a8bb7c17003b3bebfb4e8dad61"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qcota.h",
+      "source": "include/uapi/linux/qcota.h",
+      "original_sha256": "e83f2bb7668f5349ed606b7876abf7d62d057e223e5ec34716ea6cf54cc31b0b",
+      "sha256": "e83f2bb7668f5349ed606b7876abf7d62d057e223e5ec34716ea6cf54cc31b0b"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qrng.h",
+      "source": "include/uapi/linux/qrng.h",
+      "original_sha256": "335083241288b82b29309a698bae4e5a29f5f76358b7d3c940103612e0b8fc56",
+      "sha256": "335083241288b82b29309a698bae4e5a29f5f76358b7d3c940103612e0b8fc56"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qseecom.h",
+      "source": "include/uapi/linux/qseecom.h",
+      "original_sha256": "a0f25f8ea6192d8d6d0e0380583f44ca90a0d4af2605ac81934de4be46f59941",
+      "sha256": "a0f25f8ea6192d8d6d0e0380583f44ca90a0d4af2605ac81934de4be46f59941"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qseecom_32bit_impl.h",
+      "source": "include/uapi/linux/qseecom_32bit_impl.h",
+      "original_sha256": "6b867ef0265d5e33a9942702421dcdd40008b0d5df8c3f70d45a770e8477afb4",
+      "sha256": "6b867ef0265d5e33a9942702421dcdd40008b0d5df8c3f70d45a770e8477afb4"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/qseecom_api.h",
+      "source": "include/uapi/linux/qseecom_api.h",
+      "original_sha256": "771f3747a4c0b1a0be427a11d4bea0456d950a93200aef02842fa9b4d76392c6",
+      "sha256": "771f3747a4c0b1a0be427a11d4bea0456d950a93200aef02842fa9b4d76392c6"
+    },
+    {
+      "file": "ports/securemsm/include/uapi/linux/smcinvoke.h",
+      "source": "include/uapi/linux/smcinvoke.h",
+      "original_sha256": "e2c1d7881e91d567640fd495b3771b77e593159c9b7c2069d2d45daf3fd611b6",
+      "sha256": "e2c1d7881e91d567640fd495b3771b77e593159c9b7c2069d2d45daf3fd611b6"
+    },
+    {
+      "file": "ports/securemsm/linux/misc/qseecom_kernel.h",
+      "source": "linux/misc/qseecom_kernel.h",
+      "original_sha256": "c3fb43b06a0a595304f82e3e4a0e8a166ec1f2b25b21c8ae421da3a10f194e30",
+      "sha256": "c3fb43b06a0a595304f82e3e4a0e8a166ec1f2b25b21c8ae421da3a10f194e30"
+    },
+    {
+      "file": "ports/securemsm/linux/misc/qseecom_priv.h",
+      "source": "linux/misc/qseecom_priv.h",
+      "original_sha256": "f245590fc5708126f0ab57894b3380b9d2c2cc3929c848bba5482e91bf80c84f",
+      "sha256": "f245590fc5708126f0ab57894b3380b9d2c2cc3929c848bba5482e91bf80c84f"
+    },
+    {
+      "file": "ports/securemsm/linux/misc/qseecomi.h",
+      "source": "linux/misc/qseecomi.h",
+      "original_sha256": "5ad064af9ac80fb8b466ad65d296e944735b24a1e8eb54bac3fe9b60553a6013",
+      "sha256": "5ad064af9ac80fb8b466ad65d296e944735b24a1e8eb54bac3fe9b60553a6013"
+    },
+    {
+      "file": "ports/securemsm/qcedev_fe/qcedev_fe.c",
+      "source": "qcedev_fe/qcedev_fe.c",
+      "original_sha256": "82273fce5e1c2012535f0fe75e448086efb9a8bf5b73edb1e85121e198a85afb",
+      "sha256": "82273fce5e1c2012535f0fe75e448086efb9a8bf5b73edb1e85121e198a85afb"
+    },
+    {
+      "file": "ports/securemsm/qcedev_fe/qcedev_fe.h",
+      "source": "qcedev_fe/qcedev_fe.h",
+      "original_sha256": "5a927d909b7cd30ff16918a4bf7a866cbe73cccbf75fe3afb2a9c00c71070121",
+      "sha256": "5a927d909b7cd30ff16918a4bf7a866cbe73cccbf75fe3afb2a9c00c71070121"
+    },
+    {
+      "file": "ports/securemsm/qcedev_fe/qcedev_smmu.c",
+      "source": "qcedev_fe/qcedev_smmu.c",
+      "original_sha256": "2ae46dde74db91dbf6c3fe581e7f9ae6d7f6ccf08bb14b11cadab88b844e277d",
+      "sha256": "2ae46dde74db91dbf6c3fe581e7f9ae6d7f6ccf08bb14b11cadab88b844e277d"
+    },
+    {
+      "file": "ports/securemsm/qcedev_fe/qcedev_smmu.h",
+      "source": "qcedev_fe/qcedev_smmu.h",
+      "original_sha256": "bb3def90933eb7453f64bcb750de492059aac5e6367addabf133d5e8800f043f",
+      "sha256": "bb3def90933eb7453f64bcb750de492059aac5e6367addabf133d5e8800f043f"
+    },
+    {
+      "file": "ports/securemsm/qrng/msm_rng.c",
+      "source": "qrng/msm_rng.c",
+      "original_sha256": "b8c6701f10b4e0f17046ff3177347deb40ea12afa0a3f10efac2c48e39fed170",
+      "sha256": "b8c6701f10b4e0f17046ff3177347deb40ea12afa0a3f10efac2c48e39fed170"
+    },
+    {
+      "file": "ports/securemsm/qseecom/ice.h",
+      "source": "qseecom/ice.h",
+      "original_sha256": "70b66a9ccd258c35611fc2d9d68e626ab40b4ce8c38469613f46121db4756306",
+      "sha256": "70b66a9ccd258c35611fc2d9d68e626ab40b4ce8c38469613f46121db4756306"
+    },
+    {
+      "file": "ports/securemsm/qseecom/qseecom.c",
+      "source": "qseecom/qseecom.c",
+      "original_sha256": "68ea6bdf6d1be15f4fdb5d47d10693b88331545499e129f2a6842f62fdd70c7c",
+      "sha256": "68ea6bdf6d1be15f4fdb5d47d10693b88331545499e129f2a6842f62fdd70c7c"
+    },
+    {
+      "file": "ports/securemsm/qseecom/qseecom_32bit_impl.c",
+      "source": "qseecom/qseecom_32bit_impl.c",
+      "original_sha256": "14e9966a1f187e75c78c544289fcf1df59ad38593fac10a64d7667ad022da321",
+      "sha256": "14e9966a1f187e75c78c544289fcf1df59ad38593fac10a64d7667ad022da321"
+    },
+    {
+      "file": "ports/securemsm/securemsm_kernel.bzl",
+      "source": "securemsm_kernel.bzl",
+      "original_sha256": "ebd61cca7cb400b9e4b07d8bdd42200ae810acf2fac6c8534ed2ca101b560932",
+      "sha256": "ebd61cca7cb400b9e4b07d8bdd42200ae810acf2fac6c8534ed2ca101b560932"
+    },
+    {
+      "file": "ports/securemsm/securemsm_kernel_product_board.mk",
+      "source": "securemsm_kernel_product_board.mk",
+      "original_sha256": "0affc8cb6983a00ee658f0b2542ad3300a39bdb1cd7eeb22683d705df0b377a8",
+      "sha256": "0affc8cb6983a00ee658f0b2542ad3300a39bdb1cd7eeb22683d705df0b377a8"
+    },
+    {
+      "file": "ports/securemsm/securemsm_kernel_vendor_board.mk",
+      "source": "securemsm_kernel_vendor_board.mk",
+      "original_sha256": "7a2042899b360aa645e5050eae3bdae504c0758d9a273da52b05bef432997055",
+      "sha256": "7a2042899b360aa645e5050eae3bdae504c0758d9a273da52b05bef432997055"
+    },
+    {
+      "file": "ports/securemsm/securemsm_modules.bzl",
+      "source": "securemsm_modules.bzl",
+      "original_sha256": "a452276ca69aeb4abe949bd14292045cf9b960eab76092a5946c6cda897b1081",
+      "sha256": "a452276ca69aeb4abe949bd14292045cf9b960eab76092a5946c6cda897b1081"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/hdcp2p2_test/hdcp2p2_test.c",
+      "source": "securemsm_tests/hdcp2p2_test/hdcp2p2_test.c",
+      "original_sha256": "b7d736e7c81c9271c395856572f3085fbb9be9144e6f0cf3b7e8d97f0ab7c1d3",
+      "sha256": "b7d736e7c81c9271c395856572f3085fbb9be9144e6f0cf3b7e8d97f0ab7c1d3"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/hdcp2p2_test/hdcp2p2_test.h",
+      "source": "securemsm_tests/hdcp2p2_test/hdcp2p2_test.h",
+      "original_sha256": "08ff5f4e8f27284450f6806d667587fa198fee96dcc490b80ab13518877412c1",
+      "sha256": "08ff5f4e8f27284450f6806d667587fa198fee96dcc490b80ab13518877412c1"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/seccam_test_driver/scm_wrapper.h",
+      "source": "securemsm_tests/seccam_test_driver/scm_wrapper.h",
+      "original_sha256": "0916884fcb759a895a922d53e8a734ff50514295370345b3252f1b646f6a0fc4",
+      "sha256": "0916884fcb759a895a922d53e8a734ff50514295370345b3252f1b646f6a0fc4"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/seccam_test_driver/seccam_test_driver.c",
+      "source": "securemsm_tests/seccam_test_driver/seccam_test_driver.c",
+      "original_sha256": "846c63a64ff938bee3423340d9b66aa601d4d4a5701cd0f15d9d3d690d83d7cb",
+      "sha256": "846c63a64ff938bee3423340d9b66aa601d4d4a5701cd0f15d9d3d690d83d7cb"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/seccam_test_driver/seccam_test_driver.h",
+      "source": "securemsm_tests/seccam_test_driver/seccam_test_driver.h",
+      "original_sha256": "a8985e1fe7e17a47129dad78a31f9a5c9b465bd780c325e3b168a04f2030fe5d",
+      "sha256": "a8985e1fe7e17a47129dad78a31f9a5c9b465bd780c325e3b168a04f2030fe5d"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/si_core_tests/README.txt",
+      "source": "securemsm_tests/si_core_tests/README.txt",
+      "original_sha256": "72d06cb22b01b34c152420af786bcdc91b51c57d06469872a52d157f3035c6e5",
+      "sha256": "72d06cb22b01b34c152420af786bcdc91b51c57d06469872a52d157f3035c6e5"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/si_core_tests/si_core_test.c",
+      "source": "securemsm_tests/si_core_tests/si_core_test.c",
+      "original_sha256": "699d04fe0554e60c89e4177ccaee682013f5f345642f129b99cd7d90253d6a57",
+      "sha256": "699d04fe0554e60c89e4177ccaee682013f5f345642f129b99cd7d90253d6a57"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/tornado_mod/tornado_mod.c",
+      "source": "securemsm_tests/tornado_mod/tornado_mod.c",
+      "original_sha256": "1f7f6860c2f98ce41c8acb503ba3fec73d11aa526484b886206cf055ba5402d6",
+      "sha256": "1f7f6860c2f98ce41c8acb503ba3fec73d11aa526484b886206cf055ba5402d6"
+    },
+    {
+      "file": "ports/securemsm/securemsm_tests/tornado_mod/tornado_mod.h",
+      "source": "securemsm_tests/tornado_mod/tornado_mod.h",
+      "original_sha256": "13e8a57156938a664fdd9a3f9b9db9a5b47b773816b2005ff86424739cf61075",
+      "sha256": "13e8a57156938a664fdd9a3f9b9db9a5b47b773816b2005ff86424739cf61075"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/IQSEEComCompat.h",
+      "source": "smcinvoke/IQSEEComCompat.h",
+      "original_sha256": "055f1af7680e0ccc8ca5e0fc70bcef46ae27dad06e22edba347ef429244f8fad",
+      "sha256": "055f1af7680e0ccc8ca5e0fc70bcef46ae27dad06e22edba347ef429244f8fad"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/IQSEEComCompatAppLoader.h",
+      "source": "smcinvoke/IQSEEComCompatAppLoader.h",
+      "original_sha256": "ca09a32e4464e7ffed9d5e497896bba21d860a7455baa90754abb9fd43b798a5",
+      "sha256": "ca09a32e4464e7ffed9d5e497896bba21d860a7455baa90754abb9fd43b798a5"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/compat/smcinvoke.c",
+      "source": "smcinvoke/compat/smcinvoke.c",
+      "original_sha256": "27823cbbe85537d621766a80dcd8a8446cb6250c2c596647c3e7ecc839c70241",
+      "sha256": "27823cbbe85537d621766a80dcd8a8446cb6250c2c596647c3e7ecc839c70241"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/compat/smcinvoke_kernel.c",
+      "source": "smcinvoke/compat/smcinvoke_kernel.c",
+      "original_sha256": "8471e82b3e57b4e1e9bb3971f737677f6e6c4fdd59726be9b12b1d05434d52a3",
+      "sha256": "8471e82b3e57b4e1e9bb3971f737677f6e6c4fdd59726be9b12b1d05434d52a3"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/compat/trace_smcinvoke.h",
+      "source": "smcinvoke/compat/trace_smcinvoke.h",
+      "original_sha256": "452896d64d1becc4e08cae11084d249d78565b9110dde67064316bdc0e8452e4",
+      "sha256": "452896d64d1becc4e08cae11084d249d78565b9110dde67064316bdc0e8452e4"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/si_core_xts/qseecom.c",
+      "source": "smcinvoke/si_core_xts/qseecom.c",
+      "original_sha256": "2ffa27630b18cd9442039c6ea4ef8941969e83475134c8b442ab6c7dbaf75725",
+      "sha256": "2ffa27630b18cd9442039c6ea4ef8941969e83475134c8b442ab6c7dbaf75725"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/si_core_xts/smci.c",
+      "source": "smcinvoke/si_core_xts/smci.c",
+      "original_sha256": "ffe316efdd229389071652777efeda9bbc665036b6c19ec2822de88ca5bab9aa",
+      "sha256": "ffe316efdd229389071652777efeda9bbc665036b6c19ec2822de88ca5bab9aa"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/si_core_xts/smci_impl.h",
+      "source": "smcinvoke/si_core_xts/smci_impl.h",
+      "original_sha256": "fdc987cb5ebb4800c138710b3957ce4a8526765670d41b98bb7b2bb2ab0b71a7",
+      "sha256": "fdc987cb5ebb4800c138710b3957ce4a8526765670d41b98bb7b2bb2ab0b71a7"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/si_core_xts/smci_kernel.c",
+      "source": "smcinvoke/si_core_xts/smci_kernel.c",
+      "original_sha256": "653889f20275087db2438353f14d959f396864c06c4f31d311347bf03aa86d5b",
+      "sha256": "653889f20275087db2438353f14d959f396864c06c4f31d311347bf03aa86d5b"
+    },
+    {
+      "file": "ports/securemsm/smcinvoke/si_core_xts/trace_smci.h",
+      "source": "smcinvoke/si_core_xts/trace_smci.h",
+      "original_sha256": "0b97bf68621ccf3b1a48edf1b37db5ef76e46542f78abfbecb52c41bcf6c41c2",
+      "sha256": "156e9de23c49cde13e8ce70e9d07dc9478e91de649e1b1df81d3a62da49896dd"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/include/uapi/linux/qti-smmu-proxy.h",
+      "source": "smmu-proxy/include/uapi/linux/qti-smmu-proxy.h",
+      "original_sha256": "54fffbdc53205074fdedb5e9517ca9327f3eb25dc3642f13b338245848fa0946",
+      "sha256": "54fffbdc53205074fdedb5e9517ca9327f3eb25dc3642f13b338245848fa0946"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/linux/qti-smmu-proxy.h",
+      "source": "smmu-proxy/linux/qti-smmu-proxy.h",
+      "original_sha256": "a91a6e0b1a51a2f794e4187d506722fbe37690c787f36e535cccc3604f27b3f6",
+      "sha256": "a91a6e0b1a51a2f794e4187d506722fbe37690c787f36e535cccc3604f27b3f6"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/qti-smmu-proxy-common.c",
+      "source": "smmu-proxy/qti-smmu-proxy-common.c",
+      "original_sha256": "46a6a47fdad433933d757463711bd0b3b394841863f44b8a514415e349866559",
+      "sha256": "46a6a47fdad433933d757463711bd0b3b394841863f44b8a514415e349866559"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/qti-smmu-proxy-common.h",
+      "source": "smmu-proxy/qti-smmu-proxy-common.h",
+      "original_sha256": "67a1a0381f9f0f42d9fcd23e1fc9530ecaa34c5ff4f3b3e8dbe2cfe28e96d8aa",
+      "sha256": "67a1a0381f9f0f42d9fcd23e1fc9530ecaa34c5ff4f3b3e8dbe2cfe28e96d8aa"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/qti-smmu-proxy-msgq.h",
+      "source": "smmu-proxy/qti-smmu-proxy-msgq.h",
+      "original_sha256": "67d7d276b761b24c702401f75d6f064eaa59ec3b582ed80ea8017f08963c13cc",
+      "sha256": "67d7d276b761b24c702401f75d6f064eaa59ec3b582ed80ea8017f08963c13cc"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/qti-smmu-proxy-pvm.c",
+      "source": "smmu-proxy/qti-smmu-proxy-pvm.c",
+      "original_sha256": "84f0c280279dc032879cfc3eaacc0549bb229d17d507164f16cb7127699b4025",
+      "sha256": "84f0c280279dc032879cfc3eaacc0549bb229d17d507164f16cb7127699b4025"
+    },
+    {
+      "file": "ports/securemsm/smmu-proxy/qti-smmu-proxy-tvm.c",
+      "source": "smmu-proxy/qti-smmu-proxy-tvm.c",
+      "original_sha256": "e5cad100d0c2be10ff7f47837c4a071dc1769518d47428f7c182c9d93643a181",
+      "sha256": "e5cad100d0c2be10ff7f47837c4a071dc1769518d47428f7c182c9d93643a181"
+    },
+    {
+      "file": "ports/securemsm/ssg_kernel_headers.py",
+      "source": "ssg_kernel_headers.py",
+      "original_sha256": "cb4eec632d823af9db4d982e74bd994209c460d04f3d3ebd5263781f8dcbe691",
+      "sha256": "cb4eec632d823af9db4d982e74bd994209c460d04f3d3ebd5263781f8dcbe691"
+    },
+    {
+      "file": "ports/securemsm/tmecom/tmecom.c",
+      "source": "tmecom/tmecom.c",
+      "original_sha256": "ee7a7766d4310c6a5e5a50cfb16f76cf2f9e69cbe6f6d27fa210917f20664da8",
+      "sha256": "ee7a7766d4310c6a5e5a50cfb16f76cf2f9e69cbe6f6d27fa210917f20664da8"
+    },
+    {
+      "file": "ports/securemsm/tmecom/tmecom.h",
+      "source": "tmecom/tmecom.h",
+      "original_sha256": "40b785e10c8af9bee58aecd46e0f6a47b16ee5315cd4329e5e80047e0f03b3d0",
+      "sha256": "40b785e10c8af9bee58aecd46e0f6a47b16ee5315cd4329e5e80047e0f03b3d0"
+    },
+    {
+      "file": "ports/securemsm/tmecom/tmelog.c",
+      "source": "tmecom/tmelog.c",
+      "original_sha256": "a4eff5db9f89fe450e75eb03905a71e3c146901778ccbe2e334d3526dd0665c9",
+      "sha256": "a4eff5db9f89fe450e75eb03905a71e3c146901778ccbe2e334d3526dd0665c9"
+    },
+    {
+      "file": "ports/securemsm/tz_log/tz_log.c",
+      "source": "tz_log/tz_log.c",
+      "original_sha256": "1c655f3045b01177ab896ea86b3b6687dd23597e5c1d3b2776c2196e83b2ea24",
+      "sha256": "1c655f3045b01177ab896ea86b3b6687dd23597e5c1d3b2776c2196e83b2ea24"
+    }
+  ],
+  "patch_sha256": "bbcade0dd22f6376ad86cd7cf6d268ae58f788c8c95eb9d78a4eb8b1a43799a4",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3; Stage109 builds smcinvoke_dlkm (si_core_xts variant, CONFIG_QCOM_SI_CORE)",
+  "reviewed_changes": [
+    "Kbuild rewritten for out-of-tree build of the canoe smcinvoke_dlkm objects (vendor Kbuild/Makefile kept as *.vendor); canoe extra_options as -D",
+    "trace_smci.h: TRACE_INCLUDE_PATH '.'; wait_for_pending_txn copies context_id/u_handle/op instead of printing through the cb_txn pointer (7.3 double-dereference check; possible use-after-free in trace output)",
+    "-Wno-missing-prototypes (vendor code is built without W=1)"
+  ],
+  "pending": [
+    "tz_log, qrng, qce50, qcedev, hdcp_qseecom, smmu_proxy, tmecom-intf modules (loaded on the phone) not built yet",
+    "real QTEE ABI only verifiable on the phone"
+  ]
+}

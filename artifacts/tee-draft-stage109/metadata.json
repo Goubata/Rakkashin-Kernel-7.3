@@ -1,0 +1,19 @@
+{
+  "scope": "Unaccepted draft; QEMU fake-TZ verification only (fake qcom-scm build is a test fixture, not included)",
+  "core_image": "changed",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "modules": [
+    "qcom-scm.ko",
+    "si_core_module.ko",
+    "qseecom_proxy.ko",
+    "smcinvoke_dlkm.ko"
+  ],
+  "test_modules": [
+    "avr-tee-test.ko"
+  ],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

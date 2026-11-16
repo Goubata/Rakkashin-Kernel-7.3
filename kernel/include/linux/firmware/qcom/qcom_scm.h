@@ -287,6 +287,7 @@ enum qcom_scm_custom_reset_type {
 };
 
 int qcom_scm_disable_sdi(void);
+int qcom_scm_assign_dump_table_region(bool is_assign, phys_addr_t addr, size_t size);
 void qcom_scm_set_download_mode(enum qcom_download_mode mode);
 int qcom_scm_get_download_mode(unsigned int *mode);
 

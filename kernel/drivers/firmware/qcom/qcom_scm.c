@@ -608,6 +608,26 @@ int qcom_scm_get_download_mode(unsigned int *mode)
 }
 EXPORT_SYMBOL_GPL(qcom_scm_get_download_mode);
 
+/* ANDROID: 6.12 qcom_scm-scm.c: hand the memory_dump_v2 table to TZ */
+int qcom_scm_assign_dump_table_region(bool is_assign, phys_addr_t addr, size_t size)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_UTIL,
+		.cmd = QCOM_SCM_UTIL_DUMP_TABLE_ASSIGN,
+		.arginfo = QCOM_SCM_ARGS(3),
+		.owner = ARM_SMCCC_OWNER_SIP,
+		.args[0] = is_assign,
+		.args[1] = addr,
+		.args[2] = size,
+	};
+
+	if (!__scm)
+		return -ENODEV;
+
+	return qcom_scm_call(__scm->dev, &desc, NULL);
+}
+EXPORT_SYMBOL_GPL(qcom_scm_assign_dump_table_region);
+
 static enum qcom_scm_custom_reset_type qcom_scm_custom_reset_type = QCOM_SCM_RST_NONE;
 
 static int qcom_scm_oem_reboot(struct device *dev)

@@ -109,6 +109,9 @@ int qcom_scm_shm_bridge_enable(struct device *scm_dev);
 #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
 /* ANDROID: OEM power service (6.12 warm/custom reboot) */
 #define QCOM_SCM_SVC_OEM_POWER			0x09
+/* ANDROID: crash dump table registration (6.12 qcom_scm-scm.c) */
+#define QCOM_SCM_SVC_UTIL			0x03
+#define QCOM_SCM_UTIL_DUMP_TABLE_ASSIGN		0x13
 #define QCOM_SCM_OEM_POWER_REBOOT		0x22
 #define QCOM_SCM_OEM_POWER_CUSTOM_REBOOT	0x23
 #define QCOM_SCM_BOOT_SET_ADDR_MC	0x11

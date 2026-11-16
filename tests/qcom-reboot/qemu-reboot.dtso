@@ -1,0 +1,24 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture mirroring the phone's reboot nodes: qcom_scm with
+ * qcom,dload-mode on a TCSR window (fake TZ SCM IO), imem dload_type, SDAM
+ * restart@48/49 cells (fake nvmem), pmic-pon-log on two SDAMs with a small
+ * preset FIFO (PON trigger, PON success, ON), reboot_reason, moto_reboot_reason. */
+/ {
+ fragment@0 { target-path="/"; __overlay__ {
+  reserved-memory { #address-cells=<2>; #size-cells=<2>; ranges;
+   avr_imem: imem@7ff00000 { reg=<0x0 0x7ff00000 0x0 0x1000>; no-map; }; };
+  avr_tcsr: tcsr@1fc0000 { compatible="avr,fake-tcsr"; reg=<0x0 0x01fc0000 0x0 0x30000>; };
+  firmware { qcom_scm { compatible="qcom,scm-v1.1","qcom,scm"; qcom,dload-mode=<&avr_tcsr 0x19000>; }; };
+  dload_type@7ff0001c { compatible="qcom,msm-imem-dload-type"; reg=<0x0 0x7ff0001c 0x0 0x4>; };
+  sdam_restart: sdam-restart { compatible="avr,fake-sdam"; avr,restart-sdam;
+   #address-cells=<1>; #size-cells=<1>;
+   restart48: restart@48 { reg=<0x48 0x1>; };
+   restart49: restart@49 { reg=<0x49 0x1>; }; };
+  sdam_pon0: sdam-pon0 { compatible="avr,fake-sdam"; avr,preset=[00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 57 00 00 00 00 01 01 00 01 01 0e 00 00 03 0f 00 00]; };
+  sdam_pon1: sdam-pon1 { compatible="avr,fake-sdam"; };
+  pmic-pon-log { compatible="qcom,pmic-pon-log"; nvmem=<&sdam_pon0 &sdam_pon1>; nvmem-names="pon_log0","pon_log1"; };
+  reboot_reason { compatible="qcom,reboot-reason"; nvmem-cells=<&restart48>; nvmem-cell-names="restart_reason"; };
+  moto_reboot_reason { compatible="moto,reboot-reason"; nvmem-cells=<&restart49>; nvmem-cell-names="extra_restart_reason"; };
+ }; };
+};

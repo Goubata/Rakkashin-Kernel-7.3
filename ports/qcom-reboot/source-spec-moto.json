@@ -1,0 +1,15 @@
+{
+ "name": "moto-reboot-reason",
+ "repo": "vendor-repos/motorola-kernel-modules",
+ "commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+ "files": {
+  "ports/qcom-reboot/moto_reboot_reason.c": "drivers/moto_reboot_reason/moto_reboot_reason.c"
+ },
+ "scope": "Motorola moto_reboot_reason (extra restart reason in SDAM), unmodified, on android18-7.3",
+ "reviewed_changes": [
+  "unmodified; CONFIG_MOTO_UNKNOWN_REBOOT_DEBUG left at Kconfig default n"
+ ],
+ "pending": [
+  "phone SDAM verification"
+ ]
+}

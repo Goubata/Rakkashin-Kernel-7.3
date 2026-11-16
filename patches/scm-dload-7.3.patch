@@ -1,0 +1,234 @@
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 3eb151102..4e91129a7 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -30,6 +30,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/platform_device.h>
++#include <linux/reboot.h>
+ #include <linux/reset-controller.h>
+ #include <linux/remoteproc.h>
+ #include <linux/sizes.h>
+@@ -69,6 +70,7 @@ struct qcom_scm {
+ 
+ 	struct qcom_tzmem_pool *mempool;
+ 	unsigned int wq_cnt;
++	struct notifier_block restart_nb;	/* ANDROID: 6.12 OEM reboot */
+ };
+ 
+ /**
+@@ -511,6 +513,7 @@ static int qcom_scm_disable_sdi(void)
+ 
+ 	return ret ? : res.result[0];
+ }
++EXPORT_SYMBOL_GPL(qcom_scm_disable_sdi);
+ 
+ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+ {
+@@ -542,7 +545,7 @@ static int qcom_scm_io_rmw(phys_addr_t addr, unsigned int mask, unsigned int val
+ 	return qcom_scm_io_writel(addr, new);
+ }
+ 
+-static void qcom_scm_set_download_mode(struct qcom_scm *scm, u32 dload_mode)
++static void qcom_scm_set_dload_field(struct qcom_scm *scm, u32 dload_mode)
+ {
+ 	int ret = 0;
+ 
+@@ -569,6 +572,90 @@ static void qcom_scm_set_download_mode(struct qcom_scm *scm, u32 dload_mode)
+ 		writel_relaxed(minidump_dest, scm->minidump_sram);
+ }
+ 
++/* ANDROID: 6.12 vendor API: whole-register write of the vendor mode value */
++void qcom_scm_set_download_mode(enum qcom_download_mode mode)
++{
++	struct device *dev = __scm ? __scm->dev : NULL;
++	int ret = 0;
++
++	if (__scm && __scm->dload_mode_addr) {
++		ret = qcom_scm_io_writel(__scm->dload_mode_addr, mode);
++	} else if (__scm && __qcom_scm_is_call_available(dev, QCOM_SCM_SVC_BOOT,
++							 QCOM_SCM_BOOT_SET_DLOAD_MODE)) {
++		ret = __qcom_scm_set_dload_mode(dev, mode != QCOM_DOWNLOAD_NODUMP);
++	} else {
++		dev_err(dev, "No available mechanism for setting download mode\n");
++	}
++
++	if (ret)
++		dev_err(dev, "failed to set download mode: %d\n", ret);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_set_download_mode);
++
++int qcom_scm_get_download_mode(unsigned int *mode)
++{
++	struct device *dev = __scm ? __scm->dev : NULL;
++	int ret = -EINVAL;
++
++	if (__scm && __scm->dload_mode_addr)
++		ret = qcom_scm_io_readl(__scm->dload_mode_addr, mode);
++	else
++		dev_err(dev, "No available mechanism for getting download mode\n");
++
++	if (ret)
++		dev_err(dev, "failed to get download mode: %d\n", ret);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(qcom_scm_get_download_mode);
++
++static enum qcom_scm_custom_reset_type qcom_scm_custom_reset_type = QCOM_SCM_RST_NONE;
++
++static int qcom_scm_oem_reboot(struct device *dev)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_OEM_POWER,
++		.cmd = QCOM_SCM_OEM_POWER_REBOOT,
++		.owner = ARM_SMCCC_OWNER_OEM,
++	};
++
++	return qcom_scm_call_atomic(dev, &desc, NULL);
++}
++
++static int qcom_scm_oem_custom_reboot(struct device *dev,
++				      enum qcom_scm_custom_reset_type type)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_OEM_POWER,
++		.cmd = QCOM_SCM_OEM_POWER_CUSTOM_REBOOT,
++		.owner = ARM_SMCCC_OWNER_OEM,
++		.args[0] = type,
++		.arginfo = QCOM_SCM_ARGS(1),
++	};
++
++	return qcom_scm_call_atomic(dev, &desc, NULL);
++}
++
++static int qcom_scm_do_restart(struct notifier_block *nb, unsigned long event,
++			       void *ptr)
++{
++	struct qcom_scm *scm = container_of(nb, struct qcom_scm, restart_nb);
++	const char *cmd = ptr;
++
++	if (reboot_mode == REBOOT_WARM &&
++	    qcom_scm_custom_reset_type == QCOM_SCM_RST_NONE)
++		qcom_scm_oem_reboot(scm->dev);
++	else if (cmd && !strcmp(cmd, "rtc"))
++		qcom_scm_custom_reset_type = QCOM_SCM_RST_SHUTDOWN_TO_RTC_MODE;
++	else if (cmd && !strcmp(cmd, "twm"))
++		qcom_scm_custom_reset_type = QCOM_SCM_RST_SHUTDOWN_TO_TWM_MODE;
++
++	if (qcom_scm_custom_reset_type > QCOM_SCM_RST_NONE &&
++	    qcom_scm_custom_reset_type < QCOM_SCM_RST_MAX)
++		qcom_scm_oem_custom_reboot(scm->dev, qcom_scm_custom_reset_type);
++
++	return NOTIFY_OK;
++}
++
+ struct qcom_scm_pas_context *devm_qcom_scm_pas_context_alloc(struct device *dev,
+ 							     u32 pas_id,
+ 							     phys_addr_t mem_phys,
+@@ -3353,7 +3440,7 @@ static int set_download_mode(const char *val, const struct kernel_param *kp)
+ 	/* Pairs with smp_store_release() in qcom_scm_probe(). */
+ 	scm = smp_load_acquire(&__scm);
+ 	if (scm)
+-		qcom_scm_set_download_mode(scm, download_mode);
++		qcom_scm_set_dload_field(scm, download_mode);
+ 
+ 	return 0;
+ }
+@@ -3526,17 +3613,35 @@ static int qcom_scm_probe(struct platform_device *pdev)
+ 		qcom_pas_ops_register(&qcom_pas_ops_scm);
+ 	}
+ 
++	/* ANDROID: 6.12 restart handler (OEM warm reboot, rtc/twm resets) */
++	scm->restart_nb.notifier_call = qcom_scm_do_restart;
++	scm->restart_nb.priority = 130;
++	register_restart_handler(&scm->restart_nb);
++
++	/* ANDROID: vendor qcom-dload-mode.ko binds to this device (6.12) */
++	if (scm->dload_mode_addr) {
++		struct device_node *dload = of_find_node_by_path("/soc/dload_mode");
++
++		if (dload)
++			of_node_put(dload);
++		else if (IS_ERR(platform_device_register_data(&pdev->dev,
++				"qcom-dload-mode", PLATFORM_DEVID_NONE, NULL, 0)))
++			dev_err(&pdev->dev, "Failed to register qcom dload device\n");
++	}
++
+ 	/*
+ 	 * If "download mode" is requested, from this point on warmboot
+ 	 * will cause the boot stages to enter download mode, unless
+-	 * disabled below by a clean shutdown/reboot.
++	 * disabled below by a clean shutdown/reboot. ANDROID: as on 6.12 only
++	 * when requested; otherwise qcom-dload-mode owns the register.
+ 	 */
+-	qcom_scm_set_download_mode(scm, download_mode);
++	if (download_mode)
++		qcom_scm_set_dload_field(scm, download_mode);
+ 
+ 	/*
+ 	 * Disable SDI if indicated by DT that it is enabled by default.
+ 	 */
+-	if (of_property_read_bool(pdev->dev.of_node, "qcom,sdi-enabled") || !download_mode)
++	if (of_property_read_bool(pdev->dev.of_node, "qcom,sdi-enabled"))
+ 		qcom_scm_disable_sdi();
+ 
+ 	/*
+@@ -3567,8 +3672,11 @@ static int qcom_scm_probe(struct platform_device *pdev)
+ 
+ static void qcom_scm_shutdown(struct platform_device *pdev)
+ {
++	/* ANDROID: 6.12: always drop SDI, clear dump mode only if we set it */
++	qcom_scm_disable_sdi();
+ 	/* Clean shutdown, disable download mode to allow normal restart */
+-	qcom_scm_set_download_mode(__scm, QCOM_DLOAD_NODUMP);
++	if (download_mode)
++		qcom_scm_set_dload_field(__scm, QCOM_DLOAD_NODUMP);
+ 	qcom_pas_ops_unregister();
+ }
+ 
+diff --git a/drivers/firmware/qcom/qcom_scm.h b/drivers/firmware/qcom/qcom_scm.h
+index 3a2285b20..dc4b76914 100644
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -107,6 +107,10 @@ int qcom_scm_shm_bridge_enable(struct device *scm_dev);
+ #define QCOM_SCM_BOOT_TERMINATE_PC	0x02
+ #define QCOM_SCM_BOOT_SDI_CONFIG	0x09
+ #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
++/* ANDROID: OEM power service (6.12 warm/custom reboot) */
++#define QCOM_SCM_SVC_OEM_POWER			0x09
++#define QCOM_SCM_OEM_POWER_REBOOT		0x22
++#define QCOM_SCM_OEM_POWER_CUSTOM_REBOOT	0x23
+ #define QCOM_SCM_BOOT_SET_ADDR_MC	0x11
+ #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
+ #define QCOM_SCM_FLUSH_FLAG_MASK	0x3
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index 61ad6c7ed..2a28777a9 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -271,6 +271,25 @@ static inline int qcom_scm_qseecom_app_send(u32 app_id,
+ #endif /* CONFIG_QCOM_QSEECOM */
+ 
+ /* ANDROID: vendor SMCInvoke entry points (android16-6.12 signatures) */
++/* ANDROID: vendor download mode / SDI / restart API (android16-6.12) */
++enum qcom_download_mode {
++	QCOM_DOWNLOAD_NODUMP	= 0x00,
++	QCOM_DOWNLOAD_EDL	= 0x01,
++	QCOM_DOWNLOAD_FULLDUMP	= 0x10,
++	QCOM_DOWNLOAD_MINIDUMP	= 0x20,
++};
++
++enum qcom_scm_custom_reset_type {
++	QCOM_SCM_RST_NONE,
++	QCOM_SCM_RST_SHUTDOWN_TO_RTC_MODE = 0x80000005,
++	QCOM_SCM_RST_SHUTDOWN_TO_TWM_MODE,
++	QCOM_SCM_RST_MAX
++};
++
++int qcom_scm_disable_sdi(void);
++void qcom_scm_set_download_mode(enum qcom_download_mode mode);
++int qcom_scm_get_download_mode(unsigned int *mode);
++
+ int qcom_scm_invoke_smc(phys_addr_t in_buf, size_t in_buf_size,
+ 			phys_addr_t out_buf, size_t out_buf_size, int32_t *result,
+ 			u64 *response_type, unsigned int *data);

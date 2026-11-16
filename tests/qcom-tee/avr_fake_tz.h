@@ -17,6 +17,9 @@ struct avr_fake_tz_stats {
 	u64 last_bridge_flags, last_bridge_vmids, last_bridge_pfn;
 	unsigned int invokes, callbacks, releases_from_ns, services_live, ns_objects_held;
 	unsigned int unknown_calls;
+	/* SCM IO (TCSR dload register), SDI and OEM power calls */
+	u64 last_io_addr;
+	unsigned int last_io_val, io_writes, sdi_disables, oem_reboots;
 };
 void avr_fake_tz_get_stats(struct avr_fake_tz_stats *s);
 #endif

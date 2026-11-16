@@ -2523,3 +2523,25 @@ Regression: 21 suites (incl. qcom-tee) + scm, secure, pas-driver, ice, iommu pas
 module CRCs; core replay 29 patches / 94 files. Not verified: real QTEE ABI, 6.12 multi-SMC
 concurrency (not ported; standard SCM calls are serialised), securemsm tz_log/qrng/qce/hdcp/
 smmu_proxy/tmecom (not built yet).
+
+## Stage110: download mode, reboot reasons and PON log on android18-7.3
+
+ports/qcom-reboot: qcom-dload-mode, qcom-reboot-reason, pmic-pon-log (MOT_PON_LOG; the phone has
+/proc/driver/mot_pon_log) from qcom-soc 037aa1c and moto_reboot_reason from motorola-kernel-modules,
+all unmodified (canoe_perf.bzl: POWER_RESET_QCOM_DOWNLOAD_MODE=m +_DEFAULT, *_REBOOT_REASON=m,
+QTI_PMIC_PON_LOG=m). qcom_pon/reboot-mode/pwrkey were already ported (qcom-power-key).
+Core (patches/scm-dload-7.3.patch, qcom-scm.ko only): exported 6.12 qcom_scm_set_download_mode(enum)
+(whole-register write: EDL 0x1, FULL 0x10, MINI 0x20), qcom_scm_get_download_mode(),
+qcom_scm_disable_sdi(); "qcom-dload-mode" child device when qcom,dload-mode is present and there is
+no /soc/dload_mode node; 6.12 restart handler (priority 130: OEM warm reboot for REBOOT_WARM, rtc/twm
+custom resets). Probe/shutdown follow 6.12: download mode only touched when qcom_scm.download_mode
+is set, SDI disabled at probe only for qcom,sdi-enabled and always at shutdown (7.3 rewrote the
+dump field at every probe/shutdown and disabled SDI at probe).
+QEMU (fake-TZ qcom-scm + SCM IO TCSR register, RAM nvmem SDAMs with the phone's restart@48/49
+cells and a preset PON FIFO, minidump_enabled stub with the real CRC): dload probe with
+name=mini writes 0x20 to tcsr+0x19000; sysfs full/both -> 0x10/0x30, bogus rejected;
+download_mode=0 -> 0x0 and one SDI disable; =1 -> 0x30; mot_pon_log shows the PON trigger;
+reboot(RESTART2,"bootloader") -> restart handler sees SDAM 0x48=0x02 (qcom reason),
+0x49=0x04 (moto bootloader flag), dload 0x0, SDI disabled during shutdown. 3/3 runs.
+Regression: 22 suites + scm, secure, pas-driver, ice, iommu; 151 CRCs; core replay 30 patches.
+Not verified: real TCSR/SDAM/PON hardware, EDL entry (vendor code keeps EDL disabled: "#if 0").

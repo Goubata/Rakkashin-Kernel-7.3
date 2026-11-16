@@ -1,0 +1,20 @@
+{
+  "scope": "Unaccepted draft; QEMU fake-TZ/fake-SDAM verification only",
+  "core_image": "changed",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "modules": [
+    "qcom-scm.ko",
+    "qcom-dload-mode.ko",
+    "qcom-reboot-reason.ko",
+    "moto_reboot_reason.ko",
+    "pmic-pon-log.ko",
+    "avr-fake-sdam.ko",
+    "avr-minidump-stub.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

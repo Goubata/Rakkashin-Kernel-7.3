@@ -21,6 +21,7 @@
 #include <linux/arm-smccc.h>
 #include <linux/export.h>
 #include <linux/io.h>
+#include <linux/moduleparam.h>
 #include <linux/slab.h>
 #include <linux/spinlock.h>
 #include <linux/string.h>
@@ -76,6 +77,24 @@ static struct avr_fake_tz_stats st;
 static u64 next_bridge = 0x1000;
 struct bridge { struct list_head node; u64 handle; };
 static LIST_HEAD(bridges);
+#define NIO 8
+static struct { u64 addr; u32 val; } io[NIO];
+
+static u32 *io_slot(u64 addr)
+{
+	int i;
+
+	for (i = 0; i < NIO; i++)
+		if (io[i].addr == addr)
+			return &io[i].val;
+	for (i = 0; i < NIO; i++)
+		if (!io[i].addr) {
+			io[i].addr = addr;
+			return &io[i].val;
+		}
+	return NULL;
+}
+
 static int busy_left = 2;	/* op 3: two SCM busy answers, then success */
 
 void avr_fake_tz_get_stats(struct avr_fake_tz_stats *s)
@@ -396,6 +415,22 @@ static void fake_call(unsigned long a0, unsigned long a1, unsigned long a2,
 		resp = qtee_cb_response(a2, a3, &result);
 		res->a1 = resp;
 		res->a2 = (u32)result;
+	} else if (owner == OWNER_SIP && fn == FN(QCOM_SCM_SVC_IO, QCOM_SCM_IO_READ)) {
+		u32 *v = io_slot(a2);
+
+		res->a1 = v ? *v : 0;
+	} else if (owner == OWNER_SIP && fn == FN(QCOM_SCM_SVC_IO, QCOM_SCM_IO_WRITE)) {
+		u32 *v = io_slot(a2);
+
+		if (v)
+			*v = a3;
+		st.io_writes++;
+		st.last_io_addr = a2;
+		st.last_io_val = a3;
+	} else if (owner == OWNER_SIP && fn == FN(QCOM_SCM_SVC_BOOT, QCOM_SCM_BOOT_SDI_CONFIG)) {
+		st.sdi_disables += (a2 == 1 && a3 == 0);
+	} else if (owner == ARM_SMCCC_OWNER_OEM && fn == FN(0x09, 0x22)) {
+		st.oem_reboots++;
 	} else {
 		st.unknown_calls++;
 		res->a0 = QCOM_SCM_EOPNOTSUPP;
@@ -420,3 +455,15 @@ void avr_fake_smc(unsigned long a0, unsigned long a1, unsigned long a2,
 	memset(res, 0, sizeof(*res));
 	res->a0 = QCOM_SCM_EOPNOTSUPP;	/* legacy convention is never offered */
 }
+
+/* shell-visible state: /sys/module/qcom_scm/parameters/avr_state */
+static int avr_state_get(char *buf, const struct kernel_param *kp)
+{
+	struct avr_fake_tz_stats s;
+
+	avr_fake_tz_get_stats(&s);
+	return sysfs_emit(buf, "io=0x%llx:0x%x writes=%u sdi=%u oem=%u\n", s.last_io_addr,
+			  s.last_io_val, s.io_writes, s.sdi_disables, s.oem_reboots);
+}
+static const struct kernel_param_ops avr_state_ops = { .get = avr_state_get };
+module_param_cb(avr_state, &avr_state_ops, NULL, 0444);

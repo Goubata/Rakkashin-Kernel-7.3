@@ -1,0 +1,46 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": false,
+  "modules": [
+    {
+      "module": "out/native-gki/drivers/firmware/qcom/qcom-scm.ko",
+      "imports_checked": 127,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-reboot/qcom-dload-mode.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-reboot/qcom-reboot-reason.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-reboot/moto_reboot_reason.ko",
+      "imports_checked": 19,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-reboot/pmic-pon-log.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-reboot/avr-fake-sdam.ko",
+      "imports_checked": 13,
+      "mismatches": {
+        "avr_fake_tz_get_stats": {
+          "module": "0x1aa1d5c6",
+          "provider": null
+        }
+      }
+    },
+    {
+      "module": "tests/qcom-reboot/avr-minidump-stub.ko",
+      "imports_checked": 1,
+      "mismatches": {}
+    }
+  ]
+}

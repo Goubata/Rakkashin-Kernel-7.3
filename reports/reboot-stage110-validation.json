@@ -1,0 +1,32 @@
+{
+ "stage": 110,
+ "scope": "qcom-dload-mode, qcom-reboot-reason, moto_reboot_reason, pmic-pon-log + qcom_scm dload/restart parity",
+ "core_patch": "patches/scm-dload-7.3.patch",
+ "source_commit": "516244ba312350dbeb1c6fcee1226a0cd64979a1",
+ "core_image": "7.3.0-4k #34 (qcom-scm.ko rebuilt)",
+ "qemu_runs": [
+  "reports/reboot-stage110-qemu.log",
+  "reports/reboot-stage110-r2.log",
+  "reports/reboot-stage110-r3.log",
+  "reports/regress-stage110-qcom-reboot.log"
+ ],
+ "results": {
+  "dload_boot": "0x20 (mini)",
+  "sysfs": "full 0x10, both 0x30, bogus rejected",
+  "download_mode_off": "0x0 + SDI disable",
+  "reboot_bootloader": "SDAM 0x48=0x02, 0x49=0x04, dload 0x0, SDI disabled in shutdown"
+ },
+ "regression": "reports/regress-stage110-summary.txt",
+ "crc": "reports/reboot-stage110-crc.json (only the test fixture's avr_fake_tz_get_stats is provider=None)",
+ "qemu_substitutes": [
+  "tests/qcom-tee/fake-scm",
+  "tests/qcom-reboot/avr-fake-sdam.ko",
+  "tests/qcom-reboot/avr-minidump-stub.ko"
+ ],
+ "not_verified": [
+  "phone TCSR/SDAM/PMIC PON log content",
+  "EDL (disabled in vendor source)"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

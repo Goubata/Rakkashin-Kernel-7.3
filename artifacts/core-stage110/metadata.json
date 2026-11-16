@@ -1,0 +1,10 @@
+{
+  "scope": "qcom-scm.ko + 6.12 download-mode API, dload child device, SDI/restart parity; Image unchanged #34; QEMU only",
+  "core_image": "7.3.0-4k #34",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "qcom_scm_sha256": "92ea905367e88ec85d76b6a89c982700e69632680f4f7942a2573d87a19cb619",
+  "source_commit": "516244ba312350dbeb1c6fcee1226a0cd64979a1",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

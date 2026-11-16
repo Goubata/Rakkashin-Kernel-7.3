@@ -31,6 +31,6 @@ if replay.exists():shutil.rmtree(replay)
 for row in l['files']:
  n=row['file'];assert row['original_sha256']==sha(originals[n]) and row['sha256']==sha((ROOT/n).read_bytes()),n
  dest=replay/n;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(originals[n])
-subprocess.run(['git','-C',str(ROOT),'apply','--directory='+replay.relative_to(ROOT).as_posix(),str(patch)],check=True)
+if patch.stat().st_size: subprocess.run(['git','-C',str(ROOT),'apply','--directory='+replay.relative_to(ROOT).as_posix(),str(patch)],check=True)
 assert all((replay/n).read_bytes()==(ROOT/n).read_bytes() for n in files)
 print(f'Verified {name} source replay: {len(files)} files; unaccepted draft')

@@ -1,0 +1,40 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-reboot/qcom-dload-mode.c",
+      "source": "drivers/power/reset/qcom-dload-mode.c",
+      "original_sha256": "914c40f4dc4faf278aa5d28a2d00c5b4cc196dc3290b7afabff708a835df3b4b",
+      "sha256": "914c40f4dc4faf278aa5d28a2d00c5b4cc196dc3290b7afabff708a835df3b4b"
+    },
+    {
+      "file": "ports/qcom-reboot/qcom-reboot-reason.c",
+      "source": "drivers/power/reset/qcom-reboot-reason.c",
+      "original_sha256": "7a5d8ee38e37875b17a0c1a610412682b7292c2fd48362ab22fc6f836db0727e",
+      "sha256": "7a5d8ee38e37875b17a0c1a610412682b7292c2fd48362ab22fc6f836db0727e"
+    },
+    {
+      "file": "ports/qcom-reboot/pmic-pon-log.c",
+      "source": "drivers/soc/qcom/pmic-pon-log.c",
+      "original_sha256": "eaf2553d6e13b50d2a4964c855abe7110b8dea1174c1a68625df82b60ff1b991",
+      "sha256": "eaf2553d6e13b50d2a4964c855abe7110b8dea1174c1a68625df82b60ff1b991"
+    },
+    {
+      "file": "ports/qcom-reboot/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "140d11246d9ae15e9788fc694badc7c7fd715c4cd7971a604fcbe29a69b44ad0"
+    }
+  ],
+  "patch_sha256": "4a842152cc5a9b815611628bc187eec69396485f95187c8d9032c4da627394ba",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "qcom-dload-mode, qcom-reboot-reason, pmic-pon-log (MOT_PON_LOG) from the AVR 6.12 qcom-soc tree, unmodified, on android18-7.3",
+  "reviewed_changes": [
+    "sources unmodified; 7.3 core restores the 6.12 qcom_scm download-mode API and dload child device (patches/scm-dload-7.3.patch)"
+  ],
+  "pending": [
+    "real TCSR/SDAM/PMIC PON on the phone"
+  ]
+}

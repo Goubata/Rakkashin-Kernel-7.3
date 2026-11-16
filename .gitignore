@@ -57,3 +57,4 @@ modules.order
 /tests/moto-sched/vma-name-test
 /tests/qcom-tee/fake-scm/
 /tests/qcom-tee/smcinvoke-test
+/tests/qcom-reboot/reboot2-test

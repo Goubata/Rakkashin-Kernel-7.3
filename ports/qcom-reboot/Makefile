@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-2.0-only
+# Reboot/download-mode/PON-log modules loaded on the phone (canoe_perf.bzl:
+# POWER_RESET_QCOM_DOWNLOAD_MODE=m (+_DEFAULT=y), POWER_RESET_QCOM_REBOOT_REASON=m,
+# QTI_PMIC_PON_LOG=m with MOT_PON_LOG (/proc/driver/mot_pon_log exists on the phone),
+# QCOM_MINIDUMP=m) + Motorola moto_reboot_reason.
+obj-m += qcom-dload-mode.o qcom-reboot-reason.o pmic-pon-log.o moto_reboot_reason.o
+ccflags-y += -I$(src)/../qcom-minidump/include -I$(src)/../qcom-ipc-logging/include
+ccflags-y += -DCONFIG_POWER_RESET_QCOM_DOWNLOAD_MODE_MODULE=1 \
+	-DCONFIG_POWER_RESET_QCOM_DOWNLOAD_MODE_DEFAULT=1 -DCONFIG_QCOM_MINIDUMP_MODULE=1 \
+	-DCONFIG_MOT_PON_LOG=1
+ccflags-y += -Wno-missing-prototypes
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers

@@ -2823,6 +2823,14 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
 	if (!policy->freq_table)
 		return -ENXIO;
 
+	/*
+	 * ANDROID: cpufreq_frequency_table_cpuinfo() keeps a cpuinfo.max_freq
+	 * that is above the table maximum ("driver set its own"). For this
+	 * table-driven helper that is always the previous boost maximum, so
+	 * turning boost off never lowered the limit (found on the AVR SCMI
+	 * policies). Recompute both bounds from the table.
+	 */
+	policy->cpuinfo.max_freq = 0;
 	ret = cpufreq_frequency_table_cpuinfo(policy);
 	if (ret)
 		pr_err("%s: Policy frequency update failed\n", __func__);

@@ -290,6 +290,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
 	policy->driver_data = priv;
 	policy->freq_table = freq_table;
 
+	/* ANDROID: 6.12 GKI parity: boost (turbo OPPs) is on by default */
+	{
+		struct cpufreq_frequency_table *pos;
+
+		cpufreq_for_each_valid_entry(pos, freq_table)
+			if (pos->flags & CPUFREQ_BOOST_FREQ) {
+				scmi_cpufreq_driver.boost_enabled = true;
+				break;
+			}
+	}
+
 	/* SCMI allows DVFS request for any domain from any CPU */
 	policy->dvfs_possible_from_any_cpu = true;
 

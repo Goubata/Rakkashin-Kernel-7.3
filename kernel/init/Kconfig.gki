@@ -309,6 +309,22 @@ config GKI_HIDDEN_XFRM_OFFLOAD_CONFIGS
 # All of these should be reworked into an upstream solution
 # if possible.
 #
+config GKI_DYNAMIC_TASK_STRUCT_SIZE
+	bool "Dynamic task_struct size needed for GKI"
+	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
+	help
+	  Avoid static allocation of memory for vendor data in task_struct.
+	  The bootloader passes android_arch_task_struct_size=<bytes>; vendor
+	  modules (WALT) reach the area through android_task_vendor_data().
+
+config GKI_TASK_STRUCT_VENDOR_SIZE_MAX
+	int "Max vendor data size in bytes"
+	default 512
+	depends on GKI_DYNAMIC_TASK_STRUCT_SIZE
+	help
+	  Maximum size which can be added to task_struct dynamically when
+	  GKI_DYNAMIC_TASK_STRUCT_SIZE is enabled.
+
 config GKI_HACKS_TO_FIX
 	bool "GKI Dummy config options"
 	select GKI_HIDDEN_CRYPTO_CONFIGS

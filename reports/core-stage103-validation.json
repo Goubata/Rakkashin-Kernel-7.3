@@ -1,0 +1,57 @@
+{
+ "stage": 103,
+ "scope": "Restore five vendor hooks sched_walt needs on 7.3 EEVDF and switch to the C binder driver with binderfs",
+ "source_commit": "22a4a79de0456f2afdc0986edb18d6066aede2a4",
+ "core_patch": "patches/walt-core-hooks-7.3.patch",
+ "core_image": "7.3.0-4k #29",
+ "image_sha256": "00051da3221fcbdae16044230d3bb8fbeabb799182cf93af5dde4870fbbfac1b",
+ "hooks": {
+  "android_rvh_check_preempt_wakeup_fair": "wakeup_preempt_fair after idle/policy/sched_delayed filters, before slice/eligibility; preempt->resched, nopreempt->keep (6.12 order)",
+  "android_rvh_replace_next_task_fair": "pick_task_fair after EEVDF pick (pick_next_task_fair folded into it in 7.3); prev=rq->curr",
+  "android_rvh_find_new_ilb": "top of find_new_ilb; nr_cpu_ids=native, -1=none (kick_ilb returns on <0)",
+  "android_vh_binder_set_priority/restore_priority": "C binder at the three 6.12 restore sites and after binder_set_priority"
+ },
+ "omitted": [
+  "preemptirq hooks: only sched-walt-debug (not loaded on phone)",
+  "scx hook: sched_ext path not used"
+ ],
+ "binder_decision": "android18-7.3 gki_defconfig builds only Rust binder; it has binderfs but no Android RT priority inheritance (inherit_rt/min priority/txn priority). 6.12 phone uses the C driver. Fragment now sets ANDROID_BINDER_IPC=y, ANDROID_BINDERFS=y, Rust binder off.",
+ "checks": {
+  "walt_hooks": {
+   "log": "reports/walt-hooks-stage103-qemu.log",
+   "totals": [
+    3,
+    0,
+    0,
+    3
+   ],
+   "passed": true
+  },
+  "binder_pi": "real binderfs transaction: SCHED_FIFO 42 client -> INHERIT_RT context manager runs at FIFO 42, back to SCHED_OTHER after BC_REPLY; set hook 1, restore hook 2",
+  "regression": [
+   "smoke True  []",
+   "clock True [35, 0, 0, 35] []",
+   "oplus True 1283 []",
+   "rakkashin True 120 []",
+   "ntsync True  []",
+   "fence True [5, 0, 0, 5] []",
+   "task-vendor-data True [4, 0, 0, 4] []",
+   "ddr-cooling True [14, 0, 0, 14] []",
+   "devfreq-cooling True [9, 0, 0, 9] []",
+   "cpufreq-cooling True [9, 0, 0, 9] []",
+   "cpu-hotplug True [8, 0, 0, 8] []",
+   "userspace-cdev True [6, 0, 0, 6] []",
+   "qmi-cooling True [38, 0, 0, 38] []",
+   "bcl-soc True [26, 0, 0, 26] []",
+   "bcl-pmic True [44, 0, 0, 44] []"
+  ],
+  "module_crc": "132 port modules match Image#29 Module.symvers"
+ },
+ "notes": [
+  "First binder-pi run compared raw sched_getscheduler including SCHED_RESET_ON_FORK; test now masks it (kernel behaviour was already correct)",
+  "Rakkashin user test reports 120-122 checks depending on conditional cases; threshold 100"
+ ],
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

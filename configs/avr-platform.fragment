@@ -12,3 +12,8 @@ CONFIG_NVMEM_QCOM_QFPROM=m
 # Stage102: GKI dynamic task_struct vendor area (bootloader passes android_arch_task_struct_size=512)
 CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE=y
 CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX=512
+
+# Stage103: 6.12 parity binder (C driver keeps Android RT priority inheritance; Rust binder lacks it)
+CONFIG_ANDROID_BINDER_IPC=y
+CONFIG_ANDROID_BINDERFS=y
+# CONFIG_ANDROID_BINDER_IPC_RUST is not set

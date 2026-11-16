@@ -73,6 +73,11 @@ def chroot_make(target):
 
 def build(a):
  for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+ for c in sorted((ROOT/a.port).glob('*-test.c'))+sorted((ROOT/a.test).glob('*-test.c') if a.test else []):
+  if 'MODULE_LICENSE' in c.read_text():continue  # kernel module sources
+  rel='/work/avr-port/'+c.relative_to(ROOT).as_posix()
+  cmd=['chroot',str(ROOTFS),'/usr/bin/env','-i','PATH=/usr/sbin:/usr/bin:/sbin:/bin','cc','-static','-O2','-Wall','-Wextra','-Werror',rel,'-o',rel[:-2]]
+  subprocess.run(['su','-c',shlex.join(cmd)],check=True)
 
 def qemu(a):
  log=ROOT/'reports'/(a.log or f'{a.name}-qemu.log')

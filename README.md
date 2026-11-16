@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage103ではWALTが使うフックのうち7.3で消えていた5個（wakeup時のpreempt判定、次タスク差し替え、アイドル負荷分散CPU選択、binder優先度の設定・復帰）を、7.3のEEVDF構造に合わせて戻しました。また7.3の標準設定はRust版binderのみで、Android独自のRT優先度継承がないため、6.12と同じC版binder＋binderfsに切り替えました。新Image#29で、実際のスケジューリングでの各フック発火と、binderfs上の実トランザクションでFIFO優先度42が継承され返信後に通常へ戻ること・binderフック発火を確認。既存の15試験群と132モジュールのCRCも合格。証拠は `reports/core-stage103-validation.json`。
+
 Stage102ではWALT（Qualcommのスケジューラ拡張、実機のCPUガバナー `walt`）の前提として、6.12にあった「task_structの後ろに付くベンダー領域」（`android_arch_task_struct_size`／`android_task_vendor_data`）を7.3本体へ戻しました。実機の起動パラメーターは `android_arch_task_struct_size=512` です。新Image#28で、512指定時に64回のfork/kthreadで子の領域がゼロ初期化・親と分離されること、指定なし・上限超え（4096）では領域が付かないことを確認。既存の冷却・QMI・BCL・clock・oplus・Rakkashin・fence・ntsync試験も通過し、外部モジュールのCRCは不変。証拠は `reports/core-stage102-validation.json`。
 
 Stage101ではフレームレート制限用の `qti_userspace_cdev`（`display-fps`、最大16）を移植しました。工場版のデバイスノード過剰解放を修正し、7.3では子ノードごとにOF冷却デバイスを登録します。保存DTと同じ3段階の冷却マップを持つ仮想温度ゾーンでstep_wiseが1→2→3→0と選ぶことを含む6テストが通過。実機の `display-fps` 最大16とも一致。表示HAL側での反映は未確認です。今回からソース固定は `scripts/audit_port_sources.py` と `source-spec.json` の汎用方式にしました。

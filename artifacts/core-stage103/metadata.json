@@ -1,0 +1,9 @@
+{
+  "scope": "Image#29: sched/binder vendor hooks for sched_walt; C binder + binderfs (6.12 parity); QEMU only",
+  "core_image": "7.3.0-4k #29",
+  "image_sha256": "00051da3221fcbdae16044230d3bb8fbeabb799182cf93af5dde4870fbbfac1b",
+  "source_commit": "22a4a79de0456f2afdc0986edb18d6066aede2a4",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

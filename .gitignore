@@ -52,3 +52,4 @@ modules.order
 /tests/watchdog/generated-free.h
 
 /tests/bcl-soc/native-qos-test.h
+/tests/walt-hooks/binder-pi-test

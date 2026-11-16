@@ -1,0 +1,4 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/walt-hooks'
+make[1]: Leaving directory '/work/avr-port/tests/walt-hooks'
+make: Leaving directory '/work/avr-src'

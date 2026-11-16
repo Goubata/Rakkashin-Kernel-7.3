@@ -2357,3 +2357,26 @@ ntsync13, ddr14, devfreq9, cpufreq9, cpu-hotplug8, userspace6, qmi38, bcl-soc26,
 One ntsync stress_wait TCG timeout did not reproduce (2 reruns on #28, 1 on #27: 13/13).
 External port CRCs unchanged. Evidence: reports/core-stage102-validation.json,
 artifacts/core-stage102. Next: five sched/binder hooks WALT needs, then WALT itself.
+
+## Stage103: sched_walt vendor hooks and C binder (6.12 parity)
+
+sched_walt registers 58 vendor hooks; 48 exist in android18-7.3. Restored the five it
+needs on the phone (android-7.3 22a4a79de, patches/walt-core-hooks-7.3.patch,
+scripts/apply_walt_core_hooks.py): check_preempt_wakeup_fair in wakeup_preempt_fair
+(after idle/policy/sched_delayed filters, before slice/eligibility, as in 6.12),
+replace_next_task_fair in pick_task_fair (7.3 folded pick_next_task_fair into it),
+find_new_ilb at the top of find_new_ilb (-1 = none, honoured by kick_ilb), and binder
+set/restore priority. preemptirq hooks (sched-walt-debug, not loaded on the phone) and
+the sched_ext hook are omitted.
+
+android18-7.3 gki_defconfig builds only Rust binder: it has binderfs but none of the
+Android RT priority inheritance the 6.12 C driver provides. The platform fragment now
+selects ANDROID_BINDER_IPC=y, ANDROID_BINDERFS=y and disables Rust binder.
+
+Image#29: a probe module registered like a vendor module sees the preempt hook for a
+real wakeup on a busy CPU (p/pse match), >10 picks with on-rq/cpu-consistent tasks,
+and find_new_ilb from a nohz kick (3/3). binder-pi-test mounts binderfs and runs a real
+transaction: a SCHED_FIFO 42 client to an INHERIT_RT context manager executes at FIFO 42
+and returns to SCHED_OTHER after BC_REPLY; set/restore hooks fire (1/2). Regression:
+15 suites pass; 132 port modules' CRCs match. Evidence: reports/core-stage103-validation.json.
+Next: port sched_walt itself onto these interfaces.

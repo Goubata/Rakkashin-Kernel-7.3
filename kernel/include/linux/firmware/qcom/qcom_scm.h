@@ -271,6 +271,25 @@ static inline int qcom_scm_qseecom_app_send(u32 app_id,
 #endif /* CONFIG_QCOM_QSEECOM */
 
 /* ANDROID: vendor SMCInvoke entry points (android16-6.12 signatures) */
+/* ANDROID: vendor download mode / SDI / restart API (android16-6.12) */
+enum qcom_download_mode {
+	QCOM_DOWNLOAD_NODUMP	= 0x00,
+	QCOM_DOWNLOAD_EDL	= 0x01,
+	QCOM_DOWNLOAD_FULLDUMP	= 0x10,
+	QCOM_DOWNLOAD_MINIDUMP	= 0x20,
+};
+
+enum qcom_scm_custom_reset_type {
+	QCOM_SCM_RST_NONE,
+	QCOM_SCM_RST_SHUTDOWN_TO_RTC_MODE = 0x80000005,
+	QCOM_SCM_RST_SHUTDOWN_TO_TWM_MODE,
+	QCOM_SCM_RST_MAX
+};
+
+int qcom_scm_disable_sdi(void);
+void qcom_scm_set_download_mode(enum qcom_download_mode mode);
+int qcom_scm_get_download_mode(unsigned int *mode);
+
 int qcom_scm_invoke_smc(phys_addr_t in_buf, size_t in_buf_size,
 			phys_addr_t out_buf, size_t out_buf_size, int32_t *result,
 			u64 *response_type, unsigned int *data);

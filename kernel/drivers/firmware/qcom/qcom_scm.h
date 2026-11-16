@@ -107,6 +107,10 @@ int qcom_scm_shm_bridge_enable(struct device *scm_dev);
 #define QCOM_SCM_BOOT_TERMINATE_PC	0x02
 #define QCOM_SCM_BOOT_SDI_CONFIG	0x09
 #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
+/* ANDROID: OEM power service (6.12 warm/custom reboot) */
+#define QCOM_SCM_SVC_OEM_POWER			0x09
+#define QCOM_SCM_OEM_POWER_REBOOT		0x22
+#define QCOM_SCM_OEM_POWER_CUSTOM_REBOOT	0x23
 #define QCOM_SCM_BOOT_SET_ADDR_MC	0x11
 #define QCOM_SCM_BOOT_SET_REMOTE_STATE	0x0a
 #define QCOM_SCM_FLUSH_FLAG_MASK	0x3

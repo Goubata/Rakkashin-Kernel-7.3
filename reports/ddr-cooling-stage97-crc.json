@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-ddr-cooling/ddr_cdev.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/ddr-cooling/avr-ddr-cooling-test.ko",
+      "imports_checked": 51,
+      "mismatches": {}
+    }
+  ]
+}

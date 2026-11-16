@@ -1,0 +1,33 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-ddr-cooling/ddr_cdev.c",
+      "source": "drivers/thermal/qcom/ddr_cdev.c",
+      "original_sha256": "78176694ffe6f1b3e7788608d6c862694e08e79577f6019b3651331da30f0143",
+      "sha256": "14cdf9d9d535813fc0997d1ad0a9e6fa78be2494733c1adb4eed692f97532946"
+    },
+    {
+      "file": "ports/qcom-ddr-cooling/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e7f7d2e05bce74f9438314c702aa74ff94c4b69ba3913f9a94226eeee0c0e65e"
+    }
+  ],
+  "patch_sha256": "fbaae633cb94af20e7d17e50c176279f2ffad38ef850d3c28528f616c0941025",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned factory DDR bandwidth table and request semantics; native 7.3 resource and confirmed-state port",
+  "reviewed_changes": [
+    "Preserve factory zero-state and frequency-times-bus-width scaling without introducing a new hardware policy",
+    "Validate array cell width/count, cooling arity and nonzero width/frequencies; reject multiplication overflow",
+    "Reject a NULL optional ICC path instead of reporting successful no-op requests",
+    "Serialize callbacks, distinguish confirmed versus requested state, and retry unconfirmed requests through a drained delayed worker",
+    "Use native 7.3 managed thermal API; drain native thermal callbacks before releasing the ICC path via devres order; native icc_put releases consumer requests"
+  ],
+  "pending": [
+    "Physical qnoc/RPMh/CRM/DDR actuation and precise frequency interpretation of the factory table",
+    "Permanent ICC release failure and exhaustive concurrent setter/worker/PM/supplier unbind recovery",
+    "Whole-board drivers/DT/boot/DLKM/SELinux and daily-use acceptance"
+  ]
+}

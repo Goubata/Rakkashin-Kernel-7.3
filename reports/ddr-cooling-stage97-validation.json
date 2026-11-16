@@ -1,0 +1,71 @@
+{
+ "stage": 97,
+ "scope": "Port Qualcomm DDR cooling device (ddr_cdev) to native 7.3 ICC/thermal with acknowledged votes; private recorded ICC provider only",
+ "checks": {
+  "ddr_cooling": {
+   "log": "reports/ddr-cooling-stage97-zero-provider-qemu.log",
+   "test": "ddr-cooling",
+   "passed": true,
+   "failures": [],
+   "totals": [
+    14,
+    0,
+    0,
+    14
+   ],
+   "cpus": 4,
+   "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+   "initramfs_sha256": "758ab8306047868ca458d2357b003decf05a5eb35bf9e6807ffbf59c29fdb230",
+   "guest_dtb_sha256": "ff390e678183aea31e734a44669a0f1be671e2157dad3369ab68d5d8b83b6fb4"
+  },
+  "saved_dt": {
+   "report": "reports/ddr-cooling-stage97-dt.json",
+   "passed": true,
+   "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0"
+  },
+  "import_crc": {
+   "report": "reports/ddr-cooling-stage97-crc.json",
+   "passed": true,
+   "imports": [
+    23,
+    51
+   ]
+  },
+  "source_replay": {
+   "lock": "reports/ddr-cooling-source-lock.json",
+   "patch": "patches/ddr-cooling-7.3.patch",
+   "passed": true
+  }
+ },
+ "new_cases": 14,
+ "total_passed_cases": 14,
+ "artifact": "artifacts/ddr-cooling-draft-stage97",
+ "core_image": "7.3.0-4k #27",
+ "core_changed": false,
+ "phone_partition_written": false,
+ "phone_dt_modified": false,
+ "physical_verified": false,
+ "promoted": false,
+ "software_readiness_target_complete": false,
+ "regressions_before": [
+  "First run: all 14 cases failed in teardown/probe expectations because the private ICC provider lacked get_bw; native ICC then conservatively keeps an INT_MAX boot request until sync_state, so provider users/peak never returned to recorded zero. Fixed in the fixture (recorded zero hardware vote), not by weakening driver checks."
+ ],
+ "implemented": [
+  "Factory semantics kept: state0=0, stateN=freq*bus-width, single peak vote on interconnects path",
+  "Validate #cooling-cells==2, nonzero width/frequency, u32 array, multiplication overflow; reject missing/NULL ICC path",
+  "Mutex-serialized callbacks; cur_state reported only after acknowledged icc_set_bw; failed vote retried by drained delayed work and cancelled by a newer acknowledged target",
+  "devm order: ICC release action registered before managed thermal cdev so callbacks drain before icc_put zero-vote/free"
+ ],
+ "verified": [
+  "14 KUnit cases on 4-CPU QEMU with real OF/platform/devres/ICC core/thermal registry: probe, vote 3552 and release to 0, idempotent repeat, -EINVAL bound, failed vote -> EAGAIN -> retry, pending cancel, pending remove, 3x rebind, multi-level table, 6 malformed DT rejections, initial vote failure and reattach",
+  "Saved 6.12 DT: one active node, width4, table<888>, mc_virt MASTER_LLCC->SLAVE_EBI1, one passive map (ddr zone, 100C/5C hysteresis, state1..1); fixture reuses the same values/IDs",
+  "ddr_cdev is in saved vendor.modules.load and loaded on 6.12",
+  "23+51 import CRCs match Image#27 Module.symvers"
+ ],
+ "limits": [
+  "Physical qnoc/RPMh/CRM DDR actuation and the unit interpretation of 3552 on alor firmware are unverified",
+  "qnoc-alor provider behaviour with this consumer was not co-tested; provider is a private RAM fixture",
+  "Exhaustive concurrent setter/worker/PM/supplier-unbind variants remain",
+  "Whole-board boot, remaining drivers/DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain"
+ ]
+}

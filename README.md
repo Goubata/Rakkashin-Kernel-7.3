@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage97ではDDR冷却ドライバ `ddr_cdev` を7.3へ移植しました。工場ソースの「状態0=0、状態N=周波数×バス幅」の帯域要求を維持し、DT値の検証、ICC要求が成功した時だけ現在状態を報告する処理、失敗時の再試行と解除時の排出を追加。実際のOF／platform／devres／interconnect core／thermal登録を使う14テストが4コア仮想環境で通過し（Image#27は変更なし）、2モジュール計74インポートCRCが一致。保存DT（幅4・表888→要求3552、mc_virt MASTER_LLCC→SLAVE_EBI1、ddrゾーン100℃のpassive map）とも照合しました。実機のDDR帯域制御は未確認です。証拠は `reports/ddr-cooling-stage97-validation.json`、成果物は `artifacts/ddr-cooling-draft-stage97/`。
+
 Stage96ではQMI通信先の制御上限が変わった際に冷却マップが外れる問題と、上限回復時に元のDT制御範囲へ戻らない問題を修正。冷却デバイスを保持し、native thermal側に設定時の範囲を保存して再計算します。Image#27でQMI38件＋BCL SoC26件＋PMIC BCL44件、計108テストが通過。実機6.12で記録した25個の上限を使う試験も追加しましたが、実機7.3／ファームウェアの動作確認ではありません。証拠は `reports/qmi-thermal-stage96-validation.json`、実機未検証のドラフトは `artifacts/qmi-thermal-draft-stage96/`。Stage57統合版・実機DTは未変更です。
 
 Stage95ではDTの冷却マップからnative thermal制御・QMI送信まで接続し、状態取得失敗時にstep_wiseが無効な値から制御量を作る問題を修正。新Image#26でQMI／冷却マップ32件、既存BCL SoC26件、PMIC BCL44件の計102テストが通過しました。4ゾーン・8個のQMI参照は保存DTのtrip順序・値・制御範囲を維持（他の冷却先と実センサーは試験対象外）。成果物は `artifacts/qmi-thermal-draft-stage95/`、証拠は `reports/qmi-thermal-stage95-validation.json`。実機6.12の読み取り専用スナップショットでは27定義中25個が見え、残り2個は要調査です。実機7.3の起動・制御・常用動作は未確認、Stage57統合版は未更新です。

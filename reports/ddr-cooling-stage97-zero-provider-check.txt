@@ -1,0 +1,13 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/ddr-cooling-tests.cpio.gz 4093132 uncompressed bytes
+{
+  "log": "reports/ddr-cooling-stage97-zero-provider-qemu.log",
+  "test": "ddr-cooling",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    14,
+    0,
+    0,
+    14
+  ]
+}

@@ -1,0 +1,92 @@
+{
+ "scope": "saved 6.12 DT read-only semantic audit; no phone DT edit",
+ "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+ "node": "/soc/qcom,ddr-cdev",
+ "bus_width": [
+  4
+ ],
+ "freq_table": [
+  888
+ ],
+ "driver_votes": [
+  0,
+  3552
+ ],
+ "provider": "/soc/interconnect@1",
+ "endpoints": [
+  "MASTER_LLCC",
+  "SLAVE_EBI1"
+ ],
+ "maps": [
+  {
+   "map": "/soc/thermal-zones/ddr/cooling-maps/ddr_cdev",
+   "zone": "/soc/thermal-zones/ddr",
+   "min": 1,
+   "max": 1,
+   "trip": "/soc/thermal-zones/ddr/trips/ddr0-config",
+   "temperature": 100000,
+   "hysteresis": 5000,
+   "type": "passive",
+   "zone_sensors": [
+    256,
+    0
+   ]
+  }
+ ],
+ "checks": [
+  {
+   "check": "one active qcom,ddr-cooling-device node",
+   "passed": true
+  },
+  {
+   "check": "#cooling-cells is 2",
+   "passed": true
+  },
+  {
+   "check": "bus width 4",
+   "passed": true
+  },
+  {
+   "check": "factory frequency table <888>",
+   "passed": true
+  },
+  {
+   "check": "driver vote table 0/3552 matches fixture expectation",
+   "passed": true
+  },
+  {
+   "check": "one provider path with two endpoints",
+   "passed": true
+  },
+  {
+   "check": "path provider is qcom,alor-mc_virt",
+   "passed": true
+  },
+  {
+   "check": "provider uses one interconnect cell",
+   "passed": true
+  },
+  {
+   "check": "path is MASTER_LLCC -> SLAVE_EBI1",
+   "passed": true
+  },
+  {
+   "check": "one saved cooling-map references ddr_cdev",
+   "passed": true
+  },
+  {
+   "check": "map selects state 1 within max_state",
+   "passed": true
+  },
+  {
+   "check": "map trip is passive",
+   "passed": true
+  },
+  {
+   "check": "private fixture reuses saved width/table/endpoint IDs",
+   "passed": true
+  }
+ ],
+ "passed": true,
+ "errors": []
+}

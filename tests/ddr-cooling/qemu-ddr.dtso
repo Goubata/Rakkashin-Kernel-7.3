@@ -1,0 +1,16 @@
+/dts-v1/;
+/plugin/;
+/* Private ICC provider and recorded hardware; no physical bus or DDR exposed. */
+/ { fragment@0 { target-path="/"; __overlay__ {
+ avr-ddr-fixture {
+  avr_ddr_icc: icc { compatible="avr,ddr-icc"; #interconnect-cells=<1>; };
+  avr_ddr: good { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; qcom,freq-table=<888>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  multi { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; qcom,freq-table=<888 444>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  zero-width { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<0>; qcom,freq-table=<888>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  overflow { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; qcom,freq-table=<0xffffffff>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  bad-length { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; qcom,freq-table=[01 02 03]; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  no-table { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+  no-path { compatible="avr,ddr-private"; #cooling-cells=<2>; qcom,bus-width=<4>; qcom,freq-table=<888>; };
+  bad-cells { compatible="avr,ddr-private"; #cooling-cells=<1>; qcom,bus-width=<4>; qcom,freq-table=<888>; interconnects=<&avr_ddr_icc 3 &avr_ddr_icc 512>; };
+ };
+}; }; };

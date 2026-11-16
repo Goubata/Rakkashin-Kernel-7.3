@@ -1,0 +1,10 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/ddr-cooling'
+  CC [M]  avr-ddr-cooling-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-ddr-cooling-test.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-ddr-cooling-test.ko
+  BTF [M] avr-ddr-cooling-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/ddr-cooling'
+make: Leaving directory '/work/avr-src'

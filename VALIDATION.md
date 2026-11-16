@@ -2205,3 +2205,38 @@ of immediate hardware mitigation before that event. Additional governors and
 concurrent capability/setter/peer replacement/PM/forced-unbind variants remain to
 be tested, as do physical firmware and7.3 boot, remaining drivers/maps/ROM/HAL,
 whole DT/schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux and stable daily operation.
+
+## Stage97: DDR cooling device on native ICC/thermal
+
+Port pinned factory drivers/thermal/qcom/ddr_cdev.c (037aa1c) as ports/qcom-ddr-cooling.
+Factory semantics are kept: state0 votes 0, stateN votes freq-table[N-1]*bus-width as a
+single peak request on the DT interconnects path. The 7.3 draft validates #cooling-cells,
+nonzero width/frequencies, array shape and multiplication overflow, and rejects a NULL
+optional ICC path instead of reporting no-op success. Callbacks are serialized; cur_state
+is reported only after an acknowledged icc_set_bw, a failed vote returns the error, keeps
+get_cur_state at EAGAIN and is retried by a delayed worker that a newer acknowledged target
+cancels. devres order releases the ICC path only after the managed thermal cdev has been
+unregistered and its callbacks drained; native icc_put sends the zero vote.
+
+First QEMU run failed all14 cases: the private provider had no get_bw, so native ICC keeps
+the conservative INT_MAX boot request and teardown never saw users/peak return to zero.
+The fixture now records a zero initial hardware vote; driver checks were not weakened.
+
+Image#27 (unchanged, sha 2555cbe4…) passes14 KUnit cases on4 CPUs with real OF/platform/
+devres/ICC core/thermal registry: probe, vote3552 and release, idempotent repeat, bound
+rejection, failed vote->EAGAIN->retry, pending cancel, pending remove,3x rebind, two-level
+table, six malformed DT rejections and initial-vote failure with reattach. No WARN/panic.
+23+51 import CRCs match. Source replay lock and patch: reports/ddr-cooling-source-lock.json,
+patches/ddr-cooling-7.3.patch.
+
+Saved6.12 DT audit (scripts/audit_ddr_cooling_dt.py): one active node, width4, table<888>,
+provider qcom,alor-mc_virt MASTER_LLCC->SLAVE_EBI1, one passive map in zone ddr (100C,
+hysteresis5C) selecting state1..1. The private fixture reuses those values and endpoint IDs.
+ddr_cdev is in saved vendor.modules.load and loaded on the running6.12 phone.
+
+Evidence: reports/ddr-cooling-stage97-validation.json; draft artifacts/ddr-cooling-draft-stage97
+(Image#27 not duplicated). Limits: physical qnoc/RPMh/CRM DDR actuation and the firmware
+unit interpretation of3552 are unverified; qnoc-alor was not co-tested with this consumer;
+concurrent PM/supplier-unbind variants, whole-board boot, DT/vendor_boot/dtbo/DLKM/SELinux
+and daily use remain. No partition writes, phone DT edits or reboot.
+

@@ -1,0 +1,10 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-ddr-cooling'
+  CC [M]  ddr_cdev.o
+  MODPOST Module.symvers
+  CC [M]  ddr_cdev.mod.o
+  CC [M]  .module-common.o
+  LD [M]  ddr_cdev.ko
+  BTF [M] ddr_cdev.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-ddr-cooling'
+make: Leaving directory '/work/avr-src'

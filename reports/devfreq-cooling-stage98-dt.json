@@ -1,0 +1,88 @@
+{
+ "scope": "saved 6.12 DT + read-only phone sysfs snapshot; no phone DT edit",
+ "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+ "snapshot_sha256": "88a2a7765722d69350c29701bc1e33f4e6a6b73a67281a36e2e2c863c8cb93ad",
+ "node": "/soc/qcom,devfreq-cdev",
+ "gpu": "/soc/qcom,kgsl-3d0@3d00000",
+ "gpu_hz": [
+  1238000000,
+  1225000000,
+  1150000000,
+  1075000000,
+  1025000000,
+  975000000,
+  891000000,
+  795000000,
+  732000000,
+  714000000,
+  660000000,
+  589000000,
+  496000000,
+  456000000,
+  403000000,
+  301000000,
+  250000000,
+  195000000,
+  150000000,
+  100000000,
+  72000000
+ ],
+ "gpu_maps": [
+  "/soc/thermal-zones/gpuss-0/cooling-maps/gpu0_cdev",
+  "/soc/thermal-zones/gpuss-1/cooling-maps/gpu1_cdev",
+  "/soc/thermal-zones/gpuss-2/cooling-maps/gpu2_cdev",
+  "/soc/thermal-zones/gpuss-3/cooling-maps/gpu3_cdev",
+  "/soc/thermal-zones/gpuss-4/cooling-maps/gpu4_cdev",
+  "/soc/thermal-zones/gpuss-5/cooling-maps/gpu5_cdev",
+  "/soc/thermal-zones/gpuss-6/cooling-maps/gpu6_cdev",
+  "/soc/thermal-zones/gpuss-7/cooling-maps/gpu7_cdev",
+  "/soc/thermal-zones/pm8550ve_f_tz/cooling-maps/pm8550ve_gpu",
+  "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+  "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2",
+  "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2"
+ ],
+ "checks": [
+  {
+   "check": "one active qcom,devfreq-cdev node",
+   "passed": true
+  },
+  {
+   "check": "qcom,devfreq targets the active KGSL node",
+   "passed": true
+  },
+  {
+   "check": "single saved GPU power-level bin",
+   "passed": true
+  },
+  {
+   "check": "21 saved GPU power levels (user table)",
+   "passed": true
+  },
+  {
+   "check": "levels strictly descending, unique",
+   "passed": true
+  },
+  {
+   "check": "QEMU fixture OPP table equals saved DT table",
+   "passed": true
+  },
+  {
+   "check": "GPU-node cooling maps bind KGSL own OF cdev (not this type-only cdev)",
+   "passed": true
+  },
+  {
+   "check": "phone 6.12 cdev \"gpu\" max_state == levels-1",
+   "passed": true
+  },
+  {
+   "check": "phone 6.12 KGSL OF cdev max_state == levels-1",
+   "passed": true
+  },
+  {
+   "check": "phone ddr-cdev max_state 1 (Stage97 cross-check)",
+   "passed": true
+  }
+ ],
+ "passed": true,
+ "errors": []
+}

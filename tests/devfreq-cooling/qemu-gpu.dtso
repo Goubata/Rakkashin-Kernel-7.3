@@ -1,0 +1,14 @@
+/dts-v1/;
+/plugin/;
+/* Private GPU OPP supplier only; no physical GPU, GMU or clocks exposed. */
+/ { fragment@0 { target-path="/"; __overlay__ {
+ avr-gpu-fixture {
+  avr_gpu: gpu { compatible="avr,gpu-private"; #cooling-cells=<2>; };
+  avr_gpu_empty: gpu-empty { compatible="avr,gpu-private"; avr,opp-count=<0>; };
+  avr_gpu_nodev: gpu-nodev { compatible="avr,gpu-private-unused"; };
+  good { compatible="avr,gpu-cdev-private"; qcom,devfreq=<&avr_gpu>; };
+  empty { compatible="avr,gpu-cdev-private"; qcom,devfreq=<&avr_gpu_empty>; };
+  no-device { compatible="avr,gpu-cdev-private"; qcom,devfreq=<&avr_gpu_nodev>; };
+  no-phandle { compatible="avr,gpu-cdev-private"; };
+ };
+}; }; };

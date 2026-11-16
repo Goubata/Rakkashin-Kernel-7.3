@@ -2240,3 +2240,34 @@ unit interpretation of3552 are unverified; qnoc-alor was not co-tested with this
 concurrent PM/supplier-unbind variants, whole-board boot, DT/vendor_boot/dtbo/DLKM/SELinux
 and daily use remain. No partition writes, phone DT edits or reboot.
 
+## Stage98: GPU devfreq cooling device on native OPP/PM-QoS
+
+Port pinned factory drivers/thermal/qcom/qti_devfreq_cdev.c (037aa1c) as
+ports/qti-devfreq-cdev. Factory ABI kept: a type-only cooling device "gpu" (no OF
+node), kHz OPP table highest-first, and one DEV_PM_QOS_MAX_FREQUENCY request on the
+KGSL device. Source review found factory defects: a missing qcom,devfreq phandle
+dereferences NULL, an empty OPP table yields max_state -1, and the GPU device is used
+after put_device. The draft rejects those, defers until the GPU device exists and its
+driver is bound, holds the GPU reference for the binding, uses a managed device link,
+serializes state and orders devres as cdev unregister -> QoS removal -> GPU put.
+7.3 devm_thermal_of_cooling_device_register binds dev->of_node, so the non-OF devm
+variant is used to keep the factory type-only ABI.
+
+Image#27 (unchanged) passes9 KUnit cases on4 CPUs with real OF/platform/devres/
+device-link/OPP/PM-QoS/thermal: the private GPU publishes the saved21-level user
+table; max_state20; ceilings891000/72000/1238000 kHz; bound rejection; release
+restores the default; coexistence with a KGSL-style request (native min); deferral
+until the GPU binds; GPU unbind forces consumer unbind and QoS removal (3 cycles);
+consumer rebind3x; missing phandle, empty table and phandle-without-device rejected.
+22+43 import CRCs match.
+
+Saved DT (scripts/audit_devfreq_cooling_dt.py): one active node targeting the active
+KGSL node, one bin, 21 strictly descending levels equal to the fixture; the12 GPU-node
+cooling maps bind KGSL's own OF cdev "kgsl", not this module. Read-only phone6.12
+snapshot (reports/thermal-stage98-phone-cdevs.tsv): gpu20, kgsl20, ddr-cdev1.
+
+Evidence: reports/devfreq-cooling-stage98-validation.json, artifacts/devfreq-cooling-
+draft-stage98. Limits: real KGSL/GMU enforcement of the ceiling and thermal HAL use of
+type gpu are unverified; concurrency stress beyond devres ordering, whole-board boot,
+DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain. No partition writes or reboot.
+

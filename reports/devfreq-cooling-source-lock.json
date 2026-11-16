@@ -1,0 +1,33 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qti-devfreq-cdev/qti_devfreq_cdev.c",
+      "source": "drivers/thermal/qcom/qti_devfreq_cdev.c",
+      "original_sha256": "0d6f8ecc0a1b797a00403e3100419b77e47482c847d52862f6820bfd0d711114",
+      "sha256": "eb01d3d44fba0d5582819fa3483678f31d0de5696aea8142dc5b8e9bb53a71c5"
+    },
+    {
+      "file": "ports/qti-devfreq-cdev/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "b2835bd9f3d6c346252d90de960085b6991f137a2b1ce903a4e97b6de9f496f8"
+    }
+  ],
+  "patch_sha256": "226070af633f773d3795d49c67ca088642587268ce195e76ca290ec5adf334ff",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned factory GPU devfreq cooling type/table/QoS semantics; native 7.3 lifetime and acknowledged-state port",
+  "reviewed_changes": [
+    "Keep cdev type gpu without OF node, kHz OPP table highest-first and DEV_PM_QOS_MAX_FREQUENCY request semantics",
+    "Reject missing phandle (factory NULL dereference), empty OPP table (factory max_state -1) and out-of-range frequencies",
+    "Hold the GPU device reference for the binding lifetime instead of using it after put_device",
+    "Defer until the GPU driver is bound; managed device link unbinds the consumer before the GPU",
+    "Serialize state; devres order unregisters the cooling device before removing the QoS request and dropping the GPU reference"
+  ],
+  "pending": [
+    "Physical KGSL/GMU frequency enforcement of the QoS ceiling and thermal HAL use of type gpu",
+    "Concurrent setter/PM/forced-unbind variants",
+    "Whole-board drivers/DT/boot/DLKM/SELinux and daily-use acceptance"
+  ]
+}

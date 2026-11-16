@@ -1,0 +1,13 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/devfreq-cooling-tests.cpio.gz 4090748 uncompressed bytes
+{
+  "log": "reports/devfreq-cooling-stage98-qemu.log",
+  "test": "devfreq-cooling",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    9,
+    0,
+    0,
+    9
+  ]
+}

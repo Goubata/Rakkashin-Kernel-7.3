@@ -1,0 +1,82 @@
+{
+ "stage": 98,
+ "scope": "Port Qualcomm GPU devfreq cooling device (qti_devfreq_cdev) to native 7.3 OPP/PM-QoS/device-link/thermal; private GPU OPP supplier only",
+ "checks": {
+  "devfreq_cooling": {
+   "log": "reports/devfreq-cooling-stage98-qemu.log",
+   "test": "devfreq-cooling",
+   "passed": true,
+   "failures": [],
+   "totals": [
+    9,
+    0,
+    0,
+    9
+   ],
+   "cpus": 4,
+   "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+   "initramfs_sha256": "19729e2ef79b64ff8451642aadebfa3899b595df6cebc0d5d9bf2f1642e4c266",
+   "guest_dtb_sha256": "d577735708efa272b208e1b92c0eaf05e2fe247f4adf7956e2fc2f7df4e9c358"
+  },
+  "saved_dt_and_phone_snapshot": {
+   "report": "reports/devfreq-cooling-stage98-dt.json",
+   "passed": true,
+   "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+   "snapshot": "reports/thermal-stage98-phone-cdevs.tsv"
+  },
+  "import_crc": {
+   "report": "reports/devfreq-cooling-stage98-crc.json",
+   "passed": true,
+   "imports": [
+    22,
+    43
+   ]
+  },
+  "source_replay": {
+   "lock": "reports/devfreq-cooling-source-lock.json",
+   "patch": "patches/devfreq-cooling-7.3.patch",
+   "passed": true
+  }
+ },
+ "new_cases": 9,
+ "total_passed_cases": 9,
+ "artifact": "artifacts/devfreq-cooling-draft-stage98",
+ "core_image": "7.3.0-4k #27",
+ "core_changed": false,
+ "phone_partition_written": false,
+ "phone_dt_modified": false,
+ "physical_verified": false,
+ "promoted": false,
+ "software_readiness_target_complete": false,
+ "factory_defects_found_by_review": [
+  "missing qcom,devfreq phandle: of_find_device_by_node(NULL) -> NULL then gpu_np->name NULL dereference",
+  "empty OPP table: devm_kcalloc(0) and max_state=-1",
+  "GPU device used (OPP/QoS) after put_device; node leaked on not-found path",
+  "remove() unregisters cdev without serialization against in-flight set_state"
+ ],
+ "build_fixes": [
+  "7.3 devm_thermal_of_cooling_device_register binds dev->of_node; factory ABI is a type-only cdev, so use devm_thermal_cooling_device_register",
+  "KUnit header pr_fmt clash in test include"
+ ],
+ "implemented": [
+  "Type gpu cdev without OF node, kHz table highest-first, DEV_PM_QOS_MAX_FREQUENCY request (factory ABI)",
+  "Reject missing phandle/empty table/out-of-range freq; defer until GPU device exists and its driver is bound",
+  "GPU reference held for binding lifetime; managed device link; devres order cdev unregister -> QoS removal -> put GPU",
+  "Mutex-serialized state, stopping flag"
+ ],
+ "verified": [
+  "9 KUnit cases on 4-CPU QEMU, real OF/platform/devres/device-link/OPP/PM-QoS/thermal: saved 21-level table -> max_state 20, ceilings 891000/72000/1238000 kHz, -EINVAL bound, release restores default",
+  "Coexists with a KGSL-style max request (native min aggregation; release restores the other request)",
+  "Deferred until GPU driver binds; GPU unbind forces consumer unbind and QoS removal, 3 cycles; consumer rebind 3x",
+  "Missing phandle, empty OPP table and phandle without device are rejected without binding",
+  "Saved DT: one active node -> active KGSL node, one bin, 21 strictly descending levels equal to fixture; 12 GPU-node cooling maps bind KGSL own OF cdev",
+  "Read-only phone 6.12 snapshot: gpu max_state 20, kgsl 20, ddr-cdev 1",
+  "22+43 import CRCs match Image#27"
+ ],
+ "limits": [
+  "KGSL/GMU enforcement of the QoS ceiling on real hardware and thermal HAL use of type gpu are unverified",
+  "KGSL OF cdev (kgsl) is part of the KGSL port, not this module",
+  "Concurrent setter vs forced unbind races beyond devres ordering not stress-tested",
+  "Whole-board boot, remaining drivers/DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain"
+ ]
+}

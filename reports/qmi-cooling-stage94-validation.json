@@ -1,0 +1,74 @@
+{
+  "stage": 94,
+  "scope": "Native OF/platform probe and real local QRTR name service discover two local QMI server endpoints and register all 27 saved cooling declarations; firmware behavior recorded",
+  "checks": {
+    "log": "reports/qmi-cooling-stage94-final-qemu.log",
+    "test": "qmi-cooling",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      26,
+      0,
+      0,
+      26
+    ]
+  },
+  "new_cases": 11,
+  "artifact": "artifacts/qmi-cooling-probe-stage94",
+  "production_module_unchanged": true,
+  "core_image_unchanged": true,
+  "main_bundle_unchanged": true,
+  "phone_partitions_written": false,
+  "physical_verified": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "verified": [
+    "Full production OF parsing and managed native platform probe/remove, with private compatible/name used only for isolation",
+    "All 27 saved instance IDs/node names/wire names/#cooling-cells reproduced exactly in private DT fixture",
+    "Actual native QRTR name-service registration and lookup deliver new_server/del_server callbacks for two separate bound native QMI sockets; no manual lifecycle callback injection in new integration cases",
+    "27 native thermal cooling devices obtain capabilities and acknowledged state, then all accept state2 with actual encoded request/reply",
+    "Both remote local-server sockets close, all clients go offline; newly bound server sockets advertise and all 27 clients reconnect",
+    "Three native driver release/attach cycles and two simultaneous devices with independent per-device contexts; removing one preserves the other",
+    "Duplicate instance ID, unknown wire name, and wrong cooling-cell count rejected in real probe without drvdata publication",
+    "Injected first/second QMI init and lookup errors: every successfully acquired real native QMI handle is released, work is drained, and same platform device subsequently attaches with all 27 clients",
+    "26 KTAP leaf cases, no skip/WARN/panic; production/test modules and native QMI/QRTR providers unload normally"
+  ],
+  "fault_scope": "Only chosen allocation/lookup returns are injected by wrappers in source-included test; successful native operations and cleanup are real, with tracked handle ownership. Firmware responses remain local recorded values. Production code is unchanged.",
+  "fixture_corrections": [
+    "First fixture attempted two service instances on one QRTR port; native name service stores one service per port, so use separate modem/CDSP endpoints",
+    "Second fixture bind used node0 instead of the actual local node; bind using native qmi_handle_init socket identity"
+  ],
+  "pending": [
+    "Real thermal-zone cooling-map consumer binding and userspace thermal HAL interaction",
+    "Physical modem/CDSP advertisements, capability levels, firmware mitigation and all ROM consumers",
+    "Exhaustive concurrent setter/server replacement, PM/forced-unbind/hotplug tests and physical 7.3 boot",
+    "Remaining display/camera/audio/wireless/board drivers and full DT/schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux/daily-use acceptance"
+  ],
+  "imports": [
+    {
+      "module": "ports/qcom-qmi-cooling/qmi_cooling.ko",
+      "checked": 42
+    },
+    {
+      "module": "tests/qmi-cooling/avr-qmi-cooling-test.ko",
+      "checked": 71
+    }
+  ],
+  "evidence_sha256": {
+    "tests/qmi-cooling/avr-qmi-cooling-test.c": "9cbd6da7c82c2f147aab5ecc1130f5261e0aa9f95d29fd6ec0f6fad8cc06aead",
+    "tests/qmi-cooling/avr-qmi-cooling-test.ko": "1319d2e05aa8e38069f33703db6a56603ed9f6f6ff134c3f2d4845eb2e1f0ce3",
+    "tests/qmi-cooling/qemu-qmi.dtso": "763f2f27fd8c68f6c408be835ae695c65e6c0a3347547f032aa9d4261d9cfc4a",
+    "tests/qemu/qmi-cooling-tests.cpio.gz": "73474110c820df61209f1f2f0de3e9f76fee759cf4cbde8fbe50797cbb7a1136",
+    "scripts/audit_qmi_probe_fixture.py": "3f86fe96bc753d78b48f4c387df5c48c949eafec20eedd4e3f6b195abd80a0d3",
+    "scripts/run_qemu.py": "6fd4f85141dc8f9602fb24cf8cdd6f84b75c13b6cdd311434940770a2cda28c7",
+    "scripts/check_qemu_log.py": "ad55fd104e77491fbf871a46953335850d69a806d8207bb861b3c0696bd1eee4",
+    "reports/qmi-cooling-stage94-build.log": "8c3b20a542eec1c704fb26e60b74f830ed56d41c181500b4abb265b71fb9319b",
+    "reports/qmi-cooling-stage94-final-qemu.log": "66aa27769b4f3c02826307dd62080eec988bf8642683bc18a233626f36ffae9c",
+    "reports/qmi-cooling-stage94-final-qemu.json": "fee90d9784df69a5c80f298f2a6729407e82b1c88e7fccb1c789eea774e667e5",
+    "reports/qmi-cooling-stage94-check.json": "6f10f531a311dc970d16c242988267530806ad3eb9631600172e55fb8bc30e29",
+    "reports/qmi-cooling-stage94-probe-dt.json": "afe4f797bdcec9fd49e2caf431cd0b0eef64377c670d72fc9ddab9c958dc4bce",
+    "reports/qmi-cooling-stage94-dt.json": "b3d53f6d0437c7de81a4ef20ad63b310d1948cb0704093d35ceb01cfae668ee3",
+    "reports/qmi-cooling-stage94-crc.json": "33e85fe115774de1a39328665c9a75d47f2d755f0b6f606cc677722ef69c25b6",
+    "artifacts/qmi-cooling-probe-stage94/metadata.json": "c6d3884227b4413bc83efbde7618f5acd6c8af89ef97e40b3e94ea18475dc815"
+  }
+}

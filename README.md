@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage94ではQMI温度制御の実際のOF／platform probe、QRTR名前サービスでの通信先検出、27冷却デバイスの登録までを隔離環境で接続しました。通信先の再起動、3回の再バインド、複数デバイス、不正DT、途中の初期化失敗と復旧を含む26テストが4コア仮想環境で通過。証拠は `reports/qmi-cooling-stage94-validation.json`、試験成果物は `artifacts/qmi-cooling-probe-stage94/`。本番モジュール／Image#25／Stage57統合版は未変更です。ファームウェアの応答はローカルで再現したもので、実機の制御・thermal HAL・cooling-map連携は未確認です。
+
 Stage93ではモデム／CDSP向けQMI温度制御ドライバを7.3へ移植しました。実際のnative QMI／QRTRローカル通信とthermal登録を使う15テストが通過し、3モジュール計222インポートCRCが一致。保存DTの27冷却デバイス宣言と正規化したcooling-map参照が一致しています。実機ファームウェア・OF probe統合・全競合条件は未確認です。成果物は `artifacts/qmi-cooling-draft-stage93/`、証拠は `reports/qmi-cooling-stage93-validation.json`。同名のビルド候補は544個中122個（22.4%）ですが、異なる段階の候補を合わせた名前の対応率であり、機能・作業の完成率ではありません。Stage57の118モジュールの統合版は未更新、常用版ではありません。
 
 Stage92ではPMIC BCLのIRQ wake解除失敗・freeze／restoreの再試行と、regmap供給元の解除順序を修正しました。IRQ処理中の供給元解除を含む44テストが4コア仮想環境で警告なしに通過し、新モジュールの62インポートCRCが一致。成果物は `artifacts/bcl-pmic-draft-stage92/`、証拠は `reports/bcl-pmic-stage92-validation.json`。恒久的なwake解除失敗の最終復旧と実機常用動作は未確認です。

@@ -2049,3 +2049,51 @@ Stage57; it is not one accepted package, functionality coverage, effort complete
 or a daily-use completion percentage. Display/camera/audio/wireless, physical
 firmware, remaining board drivers, whole DT/SID4 and boot/vendor_boot/dtbo/DLKM/
 SELinux/physical stability remain pending. No phone partition writes.
+
+## Stage94: native OF probe and QMI name-service lifecycle
+
+The private DT fixture reproduces all 27 saved AVR instance IDs, node names, wire
+names and #cooling-cells. A container without compatible prevents automatic board
+population. Tests explicitly create native platform devices with a private driver
+name/compatible; the full production OF parser, probe, managed resource actions,
+QMI lookup, worker, thermal registration, removal and native device attach run.
+The production driver code and module are unchanged from Stage93.
+
+Two separately bound native QRTR/QMI sockets advertise TMD service instances0 and
+0x43. Native QRTR name service performs actual registration/lookup and delivers
+new_server/del_server to the production callbacks; new integration cases do not
+manually inject those lifecycle events. All27 cdevs obtain advertised max3 and
+ACK state0, then send/confirm state2. Firmware values are recorded local replies.
+Closing both server sockets makes all27 clients offline; advertising replacement
+sockets reconnects all27. Three driver release/attach cycles pass. Two concurrent
+platform devices own distinct instance arrays; removing one leaves the other ready.
+
+Native probe rejects duplicate instance IDs, unsupported wire IDs and cooling
+arity1 without publishing drvdata. Four targeted failure cases inject only the
+first/second QMI handle-init or lookup error. Earlier successful native resources,
+callbacks and workers remain real. Wrappers track ownership of each successfully
+acquired handle, observe balanced releases after failed probe, then allow the same
+platform device to attach and register27 clients before normal balanced teardown.
+This does not exhaust allocator failure points or all concurrency/PM variants.
+
+Initial fixture failures are retained: two services on a single QRTR port replaced
+one another in the native name service; use distinct endpoint ports. A subsequent
+second endpoint bind used node0 instead of the actual local socket node; preserve
+native qmi_handle_init identity when binding. The bound-peer diagnostic log passes
+22 cases before adding four partial-probe cases. Final log passes26/0/0/26 with no
+WARN/panic/skip and normal module unload/powerdown. These corrections apply only to
+the test endpoint fixture, not the production driver.
+
+Reproduce build_qmi_cooling.py --tests and run_qemu.py --test qmi-cooling --cpus4
+(use separate arguments --cpus 4) --log reports/NEW-qmi.log. Fixture comparison:
+audit_qmi_probe_fixture.py. Saved/candidate contract audit remains
+ audit_qmi_cooling_dt.py. Evidence: reports/qmi-cooling-stage94-validation.json;
+private artifacts: artifacts/qmi-cooling-probe-stage94. Image#25 and the Stage93
+production module are byte-identical; Stage57118-module bundle and Stage91 DT/HAL
+candidates are unchanged. No phone partition/vendor file writes or phone reboot.
+
+Physical firmware and ROM/HAL consumers, actual thermal-zone cooling-map binding,
+exhaustive PM/concurrency/unbind and all remaining board drivers/full DT/SID4/boot/
+vendor_boot/dtbo/DLKM/SELinux/daily-use work remain pending. Candidate count stays
+122/544, a module-name proxy only; this integration milestone does not imply a
+new functional completion percentage or physical daily-use acceptance.

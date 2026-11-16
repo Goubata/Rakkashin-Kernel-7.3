@@ -1,0 +1,12 @@
+{
+  "scope": "Private native OF/QMI name-service lifecycle evidence; no physical firmware validation",
+  "production_modules": "artifacts/qmi-cooling-draft-stage93",
+  "production_module_sha256": "13846ff5a470e84537f0cde4238933d20646d13100719791b32863e61f3bc24c",
+  "core_image_sha256": "92a93ca8b9dcf96ffa15a7f939b984b0ab644aa10bad65d60590ad12cd3923fd",
+  "core_image": "7.3.0-4k #25 unchanged",
+  "native_cases": 26,
+  "saved_cooling_declarations": 27,
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

@@ -1,0 +1,856 @@
+{
+  "passed": true,
+  "scope": "27 saved DT cooling declarations match whitelist and parser shape; no firmware or physical behavior proof",
+  "qmi_subtree_properties_unchanged_except_phandle_ids": true,
+  "inputs": [
+    {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "instances": [
+        0,
+        67
+      ],
+      "cooling_devices": [
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "instance": 67,
+          "wire_name": "cdsp_sw",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_sw_hvx",
+          "instance": 67,
+          "wire_name": "cdsp_sw_hvx",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_sw_hmx",
+          "instance": 67,
+          "wire_name": "cdsp_sw_hmx",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_hw",
+          "instance": 67,
+          "wire_name": "cdsp_hw",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "instance": 0,
+          "wire_name": "modem_lte_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_lte_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_lte_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_scg_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_lte_sdr0_dsc",
+          "instance": 0,
+          "wire_name": "pa_lte_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_scg_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_lte_sdr0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_lte_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_scg_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw0_dsc",
+          "instance": 0,
+          "wire_name": "mmw0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw1_dsc",
+          "instance": 0,
+          "wire_name": "mmw1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw2_dsc",
+          "instance": 0,
+          "wire_name": "mmw2_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw3_dsc",
+          "instance": 0,
+          "wire_name": "mmw3_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw1_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw1_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw2_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw2_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw3_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw3_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_vdd",
+          "instance": 0,
+          "wire_name": "cpuv_restriction_cold",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "instance": 0,
+          "wire_name": "bcl",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_bcl_mtpl_dsc",
+          "instance": 0,
+          "wire_name": "modem_bcl_mtpl_dsc",
+          "cooling_cells": 2
+        }
+      ],
+      "normalized_cooling_map_references": [
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4294967295
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4294967295
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/socd/cooling-maps/socd_map",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            1
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            2
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            1
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "file": "artifacts/dt-bcl-name-stage91/avr-bcl-name-candidate.dtb",
+      "sha256": "18cf3ab832d8a23219f0991e6d6147fda5384dfe2bae39efce7810fac4a30c4e",
+      "instances": [
+        0,
+        67
+      ],
+      "cooling_devices": [
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "instance": 67,
+          "wire_name": "cdsp_sw",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_sw_hvx",
+          "instance": 67,
+          "wire_name": "cdsp_sw_hvx",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_sw_hmx",
+          "instance": 67,
+          "wire_name": "cdsp_sw_hmx",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/cdsp/cdsp_hw",
+          "instance": 67,
+          "wire_name": "cdsp_hw",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "instance": 0,
+          "wire_name": "modem_lte_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_lte_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_lte_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_nr_scg_sub1_dsc",
+          "instance": 0,
+          "wire_name": "modem_nr_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_lte_sdr0_dsc",
+          "instance": 0,
+          "wire_name": "pa_lte_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_scg_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_lte_sdr0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_lte_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/pa_nr_sdr0_scg_sub1_dsc",
+          "instance": 0,
+          "wire_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw0_dsc",
+          "instance": 0,
+          "wire_name": "mmw0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw1_dsc",
+          "instance": 0,
+          "wire_name": "mmw1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw2_dsc",
+          "instance": 0,
+          "wire_name": "mmw2_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw3_dsc",
+          "instance": 0,
+          "wire_name": "mmw3_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw0_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw1_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw1_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw2_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw2_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/mmw3_sub1_dsc",
+          "instance": 0,
+          "wire_name": "mmw3_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_vdd",
+          "instance": 0,
+          "wire_name": "cpuv_restriction_cold",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "instance": 0,
+          "wire_name": "bcl",
+          "cooling_cells": 2
+        },
+        {
+          "node": "/soc/qmi-tmd-devices/modem/modem_bcl_mtpl_dsc",
+          "instance": 0,
+          "wire_name": "modem_bcl_mtpl_dsc",
+          "cooling_cells": 2
+        }
+      ],
+      "normalized_cooling_map_references": [
+        {
+          "map": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            2
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            1
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            2
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_bcl",
+          "limits": [
+            0,
+            1
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/socd/cooling-maps/socd_map",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4294967295
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_g_tz/cooling-maps/pm8550ve_cdsp",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/cdsp/cdsp",
+          "limits": [
+            0,
+            4294967295
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/pm8550ve_d_tz/cooling-maps/pm8550ve_modem",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-0/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-1/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-2/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            8,
+            8
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_scg_dsc",
+          "limits": [
+            100,
+            100
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev0",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            10,
+            10
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_lte_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        },
+        {
+          "map": "/soc/thermal-zones/mdmss-3/cooling-maps/lte_cdev2",
+          "target": "/soc/qmi-tmd-devices/modem/modem_nr_dsc",
+          "limits": [
+            255,
+            255
+          ]
+        }
+      ]
+    }
+  ],
+  "pending": [
+    "Native OF probe fixture and cooling-map runtime binding",
+    "Firmware advertisement/capabilities and physical modem/CDSP mitigation",
+    "Full-board schema and boot acceptance"
+  ]
+}

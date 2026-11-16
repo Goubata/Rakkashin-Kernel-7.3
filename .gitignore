@@ -53,3 +53,5 @@ modules.order
 
 /tests/bcl-soc/native-qos-test.h
 /tests/walt-hooks/binder-pi-test
+/tests/dma-heaps/dma-heap-test
+/tests/moto-sched/vma-name-test

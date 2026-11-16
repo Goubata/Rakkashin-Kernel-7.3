@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "eb6d0f515132dba627c0c2fd6eb101d11a24f55a",
-  "patch_count": 25,
+  "target_commit": "6b1cbb295687e038b0f717bbaa13607ba33bc1dd",
+  "patch_count": 26,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -41,12 +41,20 @@
       "sha256": "334ed4ab8fc2141e9031b038149961a59f6381c975d4425a63cfc6be7c15002a"
     },
     {
+      "file": "drivers/dma-buf/dma-heap.c",
+      "sha256": "29f6c89addee57188d33733405c47569967cd7fc02a42a5da9285222730a8008"
+    },
+    {
       "file": "drivers/firmware/arm_sdei.c",
       "sha256": "e50093169a59727bb06e588075e37a53cb9a23a93e27b18692355aed58fc18ec"
     },
     {
       "file": "drivers/firmware/qcom/Makefile",
       "sha256": "8a56ecc17ae99825641916c242d54b971862e427055b284696ab3e8c1d43e7bd"
+    },
+    {
+      "file": "drivers/firmware/qcom/lcp-ppddr-internal.h",
+      "sha256": "d71a1797dcb6ac902f4cb9046d3b531de04cca67a795ff6843c0f589ca4129b8"
     },
     {
       "file": "drivers/firmware/qcom/qcom_ice_v2.h",
@@ -62,7 +70,7 @@
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.c",
-      "sha256": "7dc303f47264d6e856a1cb301420d2c4aae33eacfa500d146d00c76ec9243eca"
+      "sha256": "bfa852fe1b098f6ef2ca0366222119e15f315e045bfa205798af07908c21d0b8"
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.h",
@@ -177,6 +185,10 @@
       "sha256": "b1cb25bae2468d478892c976c1a7f07a5aa95b5c8215800feee0cb550ab2ea7b"
     },
     {
+      "file": "include/linux/dma-heap.h",
+      "sha256": "c7eda6639a9f8900f03c86fd41a11224b299607efef71eed8c635824e0930a1b"
+    },
+    {
       "file": "include/linux/firmware/qcom/qcom_scm.h",
       "sha256": "2ff734b21b02140380879175609e2a45656f46344f4e48490b691fcb809d94ac"
     },
@@ -191,6 +203,10 @@
     {
       "file": "include/linux/percpu-rwsem.h",
       "sha256": "6732c0f48fe28da2d70b5f828e39c21f63b103a7a5700ee539f49c2efb7e605d"
+    },
+    {
+      "file": "include/linux/qti-lcp-ppddr.h",
+      "sha256": "94370f824ba1e596b25194ebb57fe33d4a94644fc9ee8b76a872aab9defdba1e"
     },
     {
       "file": "include/linux/rk_tboost.h",
@@ -354,5 +370,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "ada374d377d15c93192e624dd7232e0f37a5cd13b99f1496288e1ff1bbf4998f"
+  "checkpoint_sha256": "ed513b23eb32b77e2c590fbf18f46c89678e1ab73fe953fb33137c2eaa896f06"
 }

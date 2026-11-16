@@ -1,0 +1,321 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-dma-heaps/deferred-free-helper.c",
+      "source": "drivers/dma-buf/heaps/deferred-free-helper.c",
+      "original_sha256": "c482084eb69a66230b14f4c19c678970bb94ce848c4a862e6a52e801dec936e1",
+      "sha256": "c482084eb69a66230b14f4c19c678970bb94ce848c4a862e6a52e801dec936e1"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/deferred-free-helper.h",
+      "source": "drivers/dma-buf/heaps/deferred-free-helper.h",
+      "original_sha256": "2a153d3f1124c9293bdf6d3e72c98264092b4b47ba854107598672872f6b4d4b",
+      "sha256": "2a153d3f1124c9293bdf6d3e72c98264092b4b47ba854107598672872f6b4d4b"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/gh_mem_notifier.c",
+      "source": "drivers/virt/gunyah/gh_mem_notifier.c",
+      "original_sha256": "f657b180deccd516cf778c3194c3049c359aaae0098e94ca509bb8146c5cd311",
+      "sha256": "f657b180deccd516cf778c3194c3049c359aaae0098e94ca509bb8146c5cd311"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/gh_rm_heap_manager.c",
+      "source": "drivers/virt/gunyah/gh_rm_heap_manager.c",
+      "original_sha256": "206bc3ed24c7b75dfed7fe272975c22d9fcaab6b4e5e5c90048503d977ed71f9",
+      "sha256": "d87b34975be64653e1500ccae8cedffa0d152d09920c7e804200f9222236fae1"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/mem-buf-altmap.h",
+      "source": "include/linux/mem-buf-altmap.h",
+      "original_sha256": "e47128a230d168eac5c11b27e5e8ef4821515d6dcacdda50e0df211babbc2d62",
+      "sha256": "a97e1b5a411e0f1edf1daf572b3f78472df47c0a4f5b04461b3b02cd188e9251"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/mem-buf-exporter.h",
+      "source": "include/linux/mem-buf-exporter.h",
+      "original_sha256": "f944d7852a9ca0659145fe0fbcfea3a0ff36785309ffb413d42c27b876c33cbc",
+      "sha256": "f944d7852a9ca0659145fe0fbcfea3a0ff36785309ffb413d42c27b876c33cbc"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/mem-buf.h",
+      "source": "include/linux/mem-buf.h",
+      "original_sha256": "d4ca6730c3942342bc43d6d4cacabcf2e667ce92fc5855f26b9e97735028fe4a",
+      "sha256": "d4ca6730c3942342bc43d6d4cacabcf2e667ce92fc5855f26b9e97735028fe4a"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/mem-prot.h",
+      "source": "include/linux/mem-prot.h",
+      "original_sha256": "6c255b68b730e2cd4c9c0c97e331a52bf77ca8ab19e1b57b458e9856929ee4d0",
+      "sha256": "6c255b68b730e2cd4c9c0c97e331a52bf77ca8ab19e1b57b458e9856929ee4d0"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/msm_dma_iommu_mapping.h",
+      "source": "include/linux/msm_dma_iommu_mapping.h",
+      "original_sha256": "3df550d1305f1be25cdfa9db116cc2b65906929738b1f6240c2459febe235055",
+      "sha256": "3df550d1305f1be25cdfa9db116cc2b65906929738b1f6240c2459febe235055"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/qcom_dma_heap.h",
+      "source": "include/linux/qcom_dma_heap.h",
+      "original_sha256": "ccc6604081fa7c26882b89d7f759821dd643b0529b15e92479a6be4318f803cc",
+      "sha256": "ccc6604081fa7c26882b89d7f759821dd643b0529b15e92479a6be4318f803cc"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/qcom_dma_heap_dt_constants.h",
+      "source": "include/linux/qcom_dma_heap_dt_constants.h",
+      "original_sha256": "6c52de923ea87f08405f53edd1dd68057df9152c8f38e6c35d0f7572616e7221",
+      "sha256": "6c52de923ea87f08405f53edd1dd68057df9152c8f38e6c35d0f7572616e7221"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/qcom_tvm_heap.h",
+      "source": "include/linux/qcom_tvm_heap.h",
+      "original_sha256": "47cd731dbc0fc1fcde0a33504a7f821852a76a72b0367458f6d8ed6a7915395b",
+      "sha256": "47cd731dbc0fc1fcde0a33504a7f821852a76a72b0367458f6d8ed6a7915395b"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/linux/qti-smmu-proxy-callbacks.h",
+      "source": "include/linux/qti-smmu-proxy-callbacks.h",
+      "original_sha256": "2d7acb1bcac28626247213f0df66b2ce5d43e4806d0a34270d5aa28fc920f37a",
+      "sha256": "2d7acb1bcac28626247213f0df66b2ce5d43e4806d0a34270d5aa28fc920f37a"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/uapi/linux/mem-buf.h",
+      "source": "include/uapi/linux/mem-buf.h",
+      "original_sha256": "cd26ecdce9686d1b98338e5fb37305832cde8927add3330bad75fff3701d4580",
+      "sha256": "cd26ecdce9686d1b98338e5fb37305832cde8927add3330bad75fff3701d4580"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/uapi/linux/msm_ion.h",
+      "source": "include/uapi/linux/msm_ion.h",
+      "original_sha256": "5469cb96b46af3b7ab9a3f0331307f1ad96548a91658d18e4f260244fe800cbf",
+      "sha256": "5469cb96b46af3b7ab9a3f0331307f1ad96548a91658d18e4f260244fe800cbf"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/include/uapi/linux/msm_ion_ids.h",
+      "source": "include/uapi/linux/msm_ion_ids.h",
+      "original_sha256": "f17d9c702f710e38175ec74219239c2a65214f31fc72b6b45db6cb554d497ec9",
+      "sha256": "f17d9c702f710e38175ec74219239c2a65214f31fc72b6b45db6cb554d497ec9"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-dev-gh.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-dev-gh.c",
+      "original_sha256": "d3319b0ae0b5c6dc91e0d9628da5724d516b6ace24ea2ced311620ed49c8ecc9",
+      "sha256": "d3319b0ae0b5c6dc91e0d9628da5724d516b6ace24ea2ced311620ed49c8ecc9"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-dev.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-dev.c",
+      "original_sha256": "70d65c46ebb6aea3d8b4c9e60998c81d1a74c8029d25e7f968e21f5501589dad",
+      "sha256": "8467c0f1881264e6c28adad1bd07b5b3786a29d3cd22725330d3f65eb2b45869"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-dev.h",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-dev.h",
+      "original_sha256": "52f121ee2e52d617d93da20414b541bc4beb0837d033d87aff6e01aa295ba56e",
+      "sha256": "52f121ee2e52d617d93da20414b541bc4beb0837d033d87aff6e01aa295ba56e"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-gh.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-gh.c",
+      "original_sha256": "1e76a56d51f154f703a3f380a584eca462a31ed9c33ca210c9719febe9138911",
+      "sha256": "40a04518e68153e79f1a3d444fed0fe3e2c6cbfab05ebc90605aab64115330d4"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-gh.h",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-gh.h",
+      "original_sha256": "35c9f80cd72457e6e8774c7183f40f237abe9fdc3323ab32eddf08c238aa622e",
+      "sha256": "35c9f80cd72457e6e8774c7183f40f237abe9fdc3323ab32eddf08c238aa622e"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-ids.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-ids.c",
+      "original_sha256": "9a2e8a5cc8a39b90cafe4b21a679b3779daf7ecffa4882a374a9022f8f6bf9b5",
+      "sha256": "9a2e8a5cc8a39b90cafe4b21a679b3779daf7ecffa4882a374a9022f8f6bf9b5"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-ids.h",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-ids.h",
+      "original_sha256": "a632c9fbcf2756bd417dd81b44aa1802c33f5d1fcbb023bddba33d3c120b3495",
+      "sha256": "a632c9fbcf2756bd417dd81b44aa1802c33f5d1fcbb023bddba33d3c120b3495"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-msgq.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-msgq.c",
+      "original_sha256": "40a25bc856e8a025a804624772828b80b0c1d4dad92a649b8df2fa9c3755a579",
+      "sha256": "40a25bc856e8a025a804624772828b80b0c1d4dad92a649b8df2fa9c3755a579"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf-msgq.h",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf-msgq.h",
+      "original_sha256": "0a51226f455fdee3aab2cac3d7a8684b88be727e5857044a9ea6b0a88581a90e",
+      "sha256": "0a51226f455fdee3aab2cac3d7a8684b88be727e5857044a9ea6b0a88581a90e"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-buf.c",
+      "source": "drivers/soc/qcom/mem_buf/mem-buf.c",
+      "original_sha256": "d41fde01342a1a6e4303b77bd4f8fb6bb03896c848039cdd5b30a8c619123576",
+      "sha256": "40a07492705e4386de7f04ce8c38b766bbd320ea84329b629e56b6aa9ad4a420"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem-prot.c",
+      "source": "drivers/soc/qcom/mem-prot.c",
+      "original_sha256": "acfe096e8346252475030cff6b0cecd00d5d927af5de545f904cab298aede687",
+      "sha256": "acfe096e8346252475030cff6b0cecd00d5d927af5de545f904cab298aede687"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/mem_buf_dma_buf.c",
+      "source": "drivers/soc/qcom/mem_buf/mem_buf_dma_buf.c",
+      "original_sha256": "50ac6a9c9c03d15014c6a19ac7558801eb025ba4216e19ca6948c52e7d4704c3",
+      "sha256": "50ac6a9c9c03d15014c6a19ac7558801eb025ba4216e19ca6948c52e7d4704c3"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/msm_dma_iommu_mapping.c",
+      "source": "drivers/iommu/msm_dma_iommu_mapping.c",
+      "original_sha256": "22f0e92b2fb0925576deeaeb8015cdcf5dc8d9cfc70484f00825ca9ffe5dcfd3",
+      "sha256": "22f0e92b2fb0925576deeaeb8015cdcf5dc8d9cfc70484f00825ca9ffe5dcfd3"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_carveout_heap.c",
+      "source": "drivers/dma-buf/heaps/qcom_carveout_heap.c",
+      "original_sha256": "7feba3cc9586c5f4500304f71440dd7064f81d39f2a9581f6ed621ac2f4e08a0",
+      "sha256": "7feba3cc9586c5f4500304f71440dd7064f81d39f2a9581f6ed621ac2f4e08a0"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_carveout_heap.h",
+      "source": "drivers/dma-buf/heaps/qcom_carveout_heap.h",
+      "original_sha256": "8ba8ccb0143f62e709cefa996b11f03ca44ba2b44fc4c2216f7a457b561533e5",
+      "sha256": "8ba8ccb0143f62e709cefa996b11f03ca44ba2b44fc4c2216f7a457b561533e5"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_cma_heap.c",
+      "source": "drivers/dma-buf/heaps/qcom_cma_heap.c",
+      "original_sha256": "e345a3408de28819c1436e0e7921ea00a938f14da3e7af420510cd5b2568cf47",
+      "sha256": "e345a3408de28819c1436e0e7921ea00a938f14da3e7af420510cd5b2568cf47"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_cma_heap.h",
+      "source": "drivers/dma-buf/heaps/qcom_cma_heap.h",
+      "original_sha256": "e4d0d5b899c6819354c3b169efbd7da512dcd16fd3a8d3f2a8b99f76d06bad0a",
+      "sha256": "e4d0d5b899c6819354c3b169efbd7da512dcd16fd3a8d3f2a8b99f76d06bad0a"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dma_heap.c",
+      "source": "drivers/dma-buf/heaps/qcom_dma_heap.c",
+      "original_sha256": "f39f10e8d12712db6820ebb5adc6e939a53dfbe98f86718ac23a3aa50ad3938e",
+      "sha256": "ba144185ccf54d3e3d45896adfa32f7dfb1bebcc59cad99104a608e838f2ac33"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dma_heap_priv.h",
+      "source": "drivers/dma-buf/heaps/qcom_dma_heap_priv.h",
+      "original_sha256": "1e50a989eda904410743ab86ea6d8cbd852ece0ef286ee0b5e51359cb9be017d",
+      "sha256": "1e50a989eda904410743ab86ea6d8cbd852ece0ef286ee0b5e51359cb9be017d"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dma_heap_secure_utils.c",
+      "source": "drivers/dma-buf/heaps/qcom_dma_heap_secure_utils.c",
+      "original_sha256": "0bf760aa5f8cd9bdaa7cac910fb837f88b192cce6fb887de0eaf834373b2a1a0",
+      "sha256": "0bf760aa5f8cd9bdaa7cac910fb837f88b192cce6fb887de0eaf834373b2a1a0"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dma_heap_secure_utils.h",
+      "source": "drivers/dma-buf/heaps/qcom_dma_heap_secure_utils.h",
+      "original_sha256": "5fe92c9d42af3ce27e1ae65685303417c93ef9a4f2559857d4a53d0a2a2c71ec",
+      "sha256": "5fe92c9d42af3ce27e1ae65685303417c93ef9a4f2559857d4a53d0a2a2c71ec"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dt_parser.c",
+      "source": "drivers/dma-buf/heaps/qcom_dt_parser.c",
+      "original_sha256": "85677fdab82c506a5b167b68f3200809a83bf303b22dcaa9704816024a333ea3",
+      "sha256": "85677fdab82c506a5b167b68f3200809a83bf303b22dcaa9704816024a333ea3"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dt_parser.h",
+      "source": "drivers/dma-buf/heaps/qcom_dt_parser.h",
+      "original_sha256": "c37491f209a0872aae3221e079b79a1f72f336d1f165f10c191f5e5a8fedbf83",
+      "sha256": "c37491f209a0872aae3221e079b79a1f72f336d1f165f10c191f5e5a8fedbf83"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dynamic_page_pool.c",
+      "source": "drivers/dma-buf/heaps/qcom_dynamic_page_pool.c",
+      "original_sha256": "c40d6a7c6afd5889b60da0f37abdaed4971f5a4cd487b0aad250802c37a96c36",
+      "sha256": "c40d6a7c6afd5889b60da0f37abdaed4971f5a4cd487b0aad250802c37a96c36"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_dynamic_page_pool.h",
+      "source": "drivers/dma-buf/heaps/qcom_dynamic_page_pool.h",
+      "original_sha256": "96370b26ba2bd0a3b5a224812ec04298025789262e8529621ac12c2cbe30a15c",
+      "sha256": "96370b26ba2bd0a3b5a224812ec04298025789262e8529621ac12c2cbe30a15c"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_secure_system_heap.c",
+      "source": "drivers/dma-buf/heaps/qcom_secure_system_heap.c",
+      "original_sha256": "5203f32e357979560f6f97f0d0998eae013624e89b5b200a5b69f82d51909083",
+      "sha256": "82a612e627a2469cfd2c66368a8164c0a4e2625117b06ba2588e2971bc7f9951"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_secure_system_heap.h",
+      "source": "drivers/dma-buf/heaps/qcom_secure_system_heap.h",
+      "original_sha256": "256a0b6b50285d3a173897022fa8d596de9ff6ee272293abab3f0ac101530a73",
+      "sha256": "256a0b6b50285d3a173897022fa8d596de9ff6ee272293abab3f0ac101530a73"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_sg_ops.c",
+      "source": "drivers/dma-buf/heaps/qcom_sg_ops.c",
+      "original_sha256": "1e9e8a68fefabd5a93218b088fcd445fd3d0c82c570855f681e88530190b02eb",
+      "sha256": "1e9e8a68fefabd5a93218b088fcd445fd3d0c82c570855f681e88530190b02eb"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_sg_ops.h",
+      "source": "drivers/dma-buf/heaps/qcom_sg_ops.h",
+      "original_sha256": "60f9a57b740a37ce0d5e4466e009714e1090a832ec710a163d946cf74364b6c3",
+      "sha256": "60f9a57b740a37ce0d5e4466e009714e1090a832ec710a163d946cf74364b6c3"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_system_heap.c",
+      "source": "drivers/dma-buf/heaps/qcom_system_heap.c",
+      "original_sha256": "9718d89758e7ba49ce134809f272ea7be928f68dc270bcbfb1b3fbb93269ca00",
+      "sha256": "bc79b7eceffcb627abc226e1fd2735bf92b66e87ec8c41c8d763df1ad734b343"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_system_heap.h",
+      "source": "drivers/dma-buf/heaps/qcom_system_heap.h",
+      "original_sha256": "5e5117e9b98e7f710399b0cff30f2921bf834902fbc87ce264455915f9c212ae",
+      "sha256": "5e5117e9b98e7f710399b0cff30f2921bf834902fbc87ce264455915f9c212ae"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/qcom_system_movable_heap.h",
+      "source": "drivers/dma-buf/heaps/qcom_system_movable_heap.h",
+      "original_sha256": "f2d0596fe28cf0d29936ac2ddbf59ca00df59da2ed30de4d7236cf9891e47c3e",
+      "sha256": "f2d0596fe28cf0d29936ac2ddbf59ca00df59da2ed30de4d7236cf9891e47c3e"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/trace-mem-buf.h",
+      "source": "drivers/soc/qcom/mem_buf/trace-mem-buf.h",
+      "original_sha256": "6d90ab5e7854cec6f1413bca64c170817de04c517cce3c6a02e5bd9acf2cdf70",
+      "sha256": "8d286bf61e4f59243c9af4b4e224d3334e2b0e4e7a348d0c8d30e62c5e82cbda"
+    },
+    {
+      "file": "ports/qcom-dma-heaps/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "c262e204642072d809567c9830aa0e3398156f3391af511b832d3ad67ff85091"
+    }
+  ],
+  "patch_sha256": "570dcae705347b67d27d7c8cfb40c9f2e52440dd36188c1f55d03bd932136d8e",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Qualcomm DMA-BUF heaps (system/secure/CMA/carveout), mem_buf + msgq, msm_dma_iommu_mapping, deferred-free-helper, mem-prot (LCP), gh_mem_notifier, gh_rm_heap_manager from the AVR 6.12 qcom-soc tree on android18-7.3",
+  "reviewed_changes": [
+    "relative includes normalized and TRACE_INCLUDE_PATH='.' for trace-mem-buf.h (out-of-tree build)",
+    "MODULE_IMPORT_NS string form (7.3); qcom_dma_heap.c imports DMA_BUF_HEAP for dma_heap_add",
+    "free_area_empty() (dropped from 7.3) replaced by list_empty(&area->free_list[mt])",
+    "sched_setattr (not exported on 7.3) -> sched_setattr_nocheck for the pool refill thread",
+    "QCOM_SCM_VMID_GH_RM 0xFF and KVM_FFA_MAX_NR_CONSTITUENTS 4096 fallbacks where 7.3 headers lack them",
+    "core: dma_heap get_pool_size/total_pools_kb restored; qcom_scm_cfg_pddr_protected_region on TZMEM (patches/dma-heap-lcp-7.3.patch)"
+  ],
+  "pending": [
+    "LCP DARE protected-region SCM call and Gunyah heap manager need the phone (QEMU has no TZ/Gunyah)"
+  ]
+}

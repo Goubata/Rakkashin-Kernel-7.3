@@ -1,0 +1,9 @@
+{
+  "scope": "Image#34: dma-heap pool accounting (total_pools_kb) + LCP protected-DDR SCM call on TZMEM; QEMU only",
+  "core_image": "7.3.0-4k #34",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "source_commit": "6b1cbb295687e038b0f717bbaa13607ba33bc1dd",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

@@ -1,0 +1,143 @@
+--- a/ports/qcom-dma-heaps/gh_rm_heap_manager.c
++++ b/ports/qcom-dma-heaps/gh_rm_heap_manager.c
+@@ -15,7 +15,13 @@
+ #include <soc/qcom/secure_buffer.h>
+ #include <linux/sizes.h>
+ #include "gh_rm_drv_private.h"
+-#include "mem-prot.h"
++#include <linux/mem-prot.h>
++
++/* Factory qcom_scm.h value; android18-7.3 dt-bindings/firmware/qcom,scm.h lacks it
++ * (all other VMIDs match between the two headers). */
++#ifndef QCOM_SCM_VMID_GH_RM
++#define QCOM_SCM_VMID_GH_RM 0xFF
++#endif
+ 
+ /* heap mem parcel flags */
+ #define RM_HEAP_MEM_ADDED	((uint8_t)0x1)
+--- a/ports/qcom-dma-heaps/include/linux/mem-buf-altmap.h
++++ b/ports/qcom-dma-heaps/include/linux/mem-buf-altmap.h
+@@ -11,7 +11,7 @@
+ #include <linux/mem-buf.h>
+ #include <uapi/linux/mem-buf.h>
+ #include <linux/gunyah/gh_rm_drv.h>
+-#include "../../drivers/dma-buf/heaps/qcom_sg_ops.h"
++#include "qcom_sg_ops.h"
+ 
+ extern struct gen_pool *dmabuf_mem_pool;
+ 
+--- a/ports/qcom-dma-heaps/mem-buf-dev.c
++++ b/ports/qcom-dma-heaps/mem-buf-dev.c
+@@ -290,4 +290,4 @@
+ 
+ MODULE_DESCRIPTION("Qualcomm Technologies, Inc. Memory Buffer Sharing driver");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");	/* 7.3: string namespace */
+--- a/ports/qcom-dma-heaps/mem-buf-gh.c
++++ b/ports/qcom-dma-heaps/mem-buf-gh.c
+@@ -20,7 +20,7 @@
+ #include <linux/mem-buf-altmap.h>
+ #include <linux/of.h>
+ 
+-#include "../../../../drivers/dma-buf/heaps/qcom_sg_ops.h"
++#include "qcom_sg_ops.h"
+ #include "mem-buf-gh.h"
+ #include "mem-buf-msgq.h"
+ #include "mem-buf-ids.h"
+--- a/ports/qcom-dma-heaps/mem-buf.c
++++ b/ports/qcom-dma-heaps/mem-buf.c
+@@ -496,4 +496,4 @@
+ 
+ MODULE_DESCRIPTION("Qualcomm Technologies, Inc. Memory Buffer Sharing driver");
+ MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS(DMA_BUF);
++MODULE_IMPORT_NS("DMA_BUF");	/* 7.3: string namespace */
+--- a/ports/qcom-dma-heaps/qcom_dma_heap.c
++++ b/ports/qcom-dma-heaps/qcom_dma_heap.c
+@@ -167,4 +167,5 @@
+ }
+ module_init(init_heap_driver);
+ 
++MODULE_IMPORT_NS("DMA_BUF_HEAP");	/* 7.3: dma_heap_add namespace */
+ MODULE_LICENSE("GPL");
+--- a/ports/qcom-dma-heaps/qcom_secure_system_heap.c
++++ b/ports/qcom-dma-heaps/qcom_secure_system_heap.c
+@@ -63,6 +63,11 @@
+ #include "qcom_sg_ops.h"
+ #include "qcom_secure_system_heap.h"
+ #include "qcom_system_heap.h"
++
++/* android16-6.12 arch/arm64/include/asm/kvm_pkvm.h; only a reclaim heuristic here. */
++#ifndef KVM_FFA_MAX_NR_CONSTITUENTS
++#define KVM_FFA_MAX_NR_CONSTITUENTS	4096
++#endif
+ 
+ static LIST_HEAD(secure_heaps);
+ 
+--- a/ports/qcom-dma-heaps/qcom_system_heap.c
++++ b/ports/qcom-dma-heaps/qcom_system_heap.c
+@@ -167,7 +167,7 @@
+ 			if (mt == MIGRATE_CMA)
+ 				continue;
+ #endif
+-			if (!free_area_empty(area, mt))
++			if (list_empty(&area->free_list[mt]))	/* 6.12 mm/internal.h free_area_empty() */
+ 				return true;
+ 		}
+ 	}
+@@ -285,7 +285,7 @@
+ 		return PTR_ERR(refill_worker);
+ 	}
+ 
+-	ret = sched_setattr(refill_worker, &attr);
++	ret = sched_setattr_nocheck(refill_worker, &attr);	/* 7.3 exports only the nocheck variant */
+ 	if (ret) {
+ 		pr_warn("%s: failed to set task priority for %s-pool-refill-thread: ret = %d\n",
+ 			__func__, name, ret);
+--- a/ports/qcom-dma-heaps/trace-mem-buf.h
++++ b/ports/qcom-dma-heaps/trace-mem-buf.h
+@@ -327,7 +327,7 @@
+ #endif /* _TRACE_MEM_BUF_H */
+ 
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH ../../../drivers/soc/qcom/mem_buf/
++#define TRACE_INCLUDE_PATH .
+ 
+ #undef TRACE_INCLUDE_FILE
+ #define TRACE_INCLUDE_FILE trace-mem-buf
+--- a/ports/qcom-dma-heaps/Makefile
++++ b/ports/qcom-dma-heaps/Makefile
+@@ -0,0 +1,32 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# canoe_perf: QCOM_DMABUF_HEAPS=m (SYSTEM, SYSTEM_SECURE, CMA, CARVEOUT, PAGE_POOL_REFILL;
++# DEFERRED_FREE=m), QCOM_MEM_BUF(_DEV,_MSGQ)=m with GH, QCOM_LAZY_MAPPING=m,
++# GH_MEM_NOTIFIER=m, GH_RM_HEAP_MANAGER=m (+ mem-prot).
++obj-m += deferred-free-helper.o msm_dma_iommu_mapping.o mem-prot.o gh_mem_notifier.o \
++	gh_rm_heap_manager.o mem_buf_msgq.o mem_buf_dev.o mem_buf.o qcom_dma_heaps.o
++mem_buf_msgq-y := mem-buf-msgq.o
++mem_buf_dev-y := mem-buf-dev.o mem-buf-ids.o mem_buf_dma_buf.o mem-buf-dev-gh.o
++mem_buf-y := mem-buf.o mem-buf-gh.o
++qcom_dma_heaps-y := qcom_dma_heap.o qcom_dt_parser.o qcom_sg_ops.o qcom_system_heap.o \
++	qcom_dynamic_page_pool.o qcom_secure_system_heap.o qcom_dma_heap_secure_utils.o \
++	qcom_cma_heap.o qcom_carveout_heap.o
++ccflags-y += -I$(src) -I$(src)/include -I$(src)/../gunyah/include -I$(src)/../gunyah-rm \
++	-I$(src)/../qti-fence/include -I$(src)/../gunyah-rm/include -I$(src)/../gunyah-core/include -I$(src)/../qcom-iommu-util/include -I$(src)/../secure-buffer/include \
++	-I$(srctree)
++ccflags-y += -DCONFIG_QCOM_DMABUF_HEAPS_MODULE=1 -DCONFIG_QCOM_DMABUF_HEAPS_SYSTEM=1 \
++	-DCONFIG_QCOM_DMABUF_HEAPS_SYSTEM_SECURE=1 -DCONFIG_QCOM_DMABUF_HEAPS_CMA=1 \
++	-DCONFIG_QCOM_DMABUF_HEAPS_CARVEOUT=1 -DCONFIG_QCOM_DMABUF_HEAPS_PAGE_POOL_REFILL=1 \
++	-DCONFIG_QCOM_DMABUF_HEAPS_DEFERRED_FREE_MODULE=1 -DCONFIG_QCOM_MEM_BUF_MODULE=1 \
++	-DCONFIG_QCOM_MEM_BUF_DEV_MODULE=1 -DCONFIG_QCOM_MEM_BUF_DEV_GH=1 -DCONFIG_QCOM_MEM_BUF_GH=1 \
++	-DCONFIG_QCOM_MEM_BUF_MSGQ_MODULE=1 -DCONFIG_QCOM_LAZY_MAPPING_MODULE=1 \
++	-DCONFIG_GH_MEM_NOTIFIER_MODULE=1 -DCONFIG_GH_RM_HEAP_MANAGER_MODULE=1 -DCONFIG_MEM_PROT_MODULE=1 \
++	-DCONFIG_GH_RM_DRV_MODULE=1 -DCONFIG_GH_MSGQ_MODULE=1 -DCONFIG_GH_DBL_MODULE=1 -DCONFIG_GUNYAH_MODULE=1 \
++	-DCONFIG_GH_ARM64_DRV_MODULE=1 -DCONFIG_QCOM_SECURE_BUFFER_MODULE=1 -DCONFIG_QTVM_WITH_AVF=1 \
++	-Wno-missing-prototypes
++
++CFLAGS_mem-buf-msgq.o := -I$(src)
++CFLAGS_mem-buf-gh.o := -I$(src)
++CFLAGS_mem-buf-dev.o := -I$(src)
++KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah/Module.symvers $(src)/../gunyah-core/Module.symvers \
++	$(src)/../gunyah-rm/Module.symvers $(src)/../secure-buffer/Module.symvers \
++	$(src)/../qcom-iommu-util/Module.symvers

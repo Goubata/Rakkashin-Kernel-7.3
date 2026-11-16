@@ -1,0 +1,56 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-dma-heaps/deferred-free-helper.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/gh_mem_notifier.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/gh_rm_heap_manager.ko",
+      "imports_checked": 19,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/mem-prot.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/mem_buf.ko",
+      "imports_checked": 131,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/mem_buf_dev.ko",
+      "imports_checked": 116,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/mem_buf_msgq.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/msm_dma_iommu_mapping.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dma-heaps/qcom_dma_heaps.ko",
+      "imports_checked": 110,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/dma-heaps/avr-gunyah-stub.ko",
+      "imports_checked": 1,
+      "mismatches": {}
+    }
+  ]
+}

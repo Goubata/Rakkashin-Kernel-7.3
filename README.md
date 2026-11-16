@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage108ではQualcommのDMA-BUFヒープ一式（`qcom_dma_heaps`：system/secure/CMA/carveoutヒープ、`mem_buf`・`mem_buf_msgq`・`mem_buf_dev`、`msm_dma_iommu_mapping`、`deferred-free-helper`、LCP保護領域の`mem-prot`、Gunyahの`gh_mem_notifier`・`gh_rm_heap_manager`）を7.3へ移植しました。Androidのメモリ集計が読む`/sys/kernel/dma_heap/total_pools_kb`とヒープのプール量取得を7.3本体に戻し、`mem-prot`が使うLCP保護DDR設定のSCM呼び出しをTZMEM上で実装。Image#34のQEMUで、実機DTと同じ形のヒープ6種を`/dev/dma_heap`から確保・mmap・CPU同期・内容検証、4スレッド並列確保、carveoutの枯渇と回復、プール量の増加（34824→36872 kB）を3回とも確認。既存20試験群、144モジュールCRC、コアパッチ再適用（26本・91ファイル一致）も合格。QEMUにTZ/Gunyahが無いため、LCP保護設定とGunyahヒープ管理は実機で確認が必要です（QEMUではGunyah部分を試験専用の代替モジュールで置換）。証拠は `reports/dma-heaps-stage108-validation.json`。
+
 Stage107ではMotorola独自のスケジューラ拡張 `moto_sched`（mutex/rwsemの優先度継承、UXタスク優先、MDPF）を、実機ファームウェアと一致するソースから7.3へ移植しました。7.3本体に必要なフック群を戻し、ロック待ちフックはproxy executionとのロック順逆転を避ける位置に移動。`moto_sched` 側ではproxy execution非対応の再スケジュール処理がCFSを壊す問題を修正し、7.3で作り直された待ち行列に並べ替え処理を合わせました。あわせてWALT初期化の間欠的な誤検出（古いルートドメイン参照）も修正。Image#33でlockdep有効の7テスト×6回、prctl・binder、WALT・thermal_pause・既存16試験群、135モジュールCRCがすべて合格。証拠は `reports/moto-sched-stage107-validation.json`。
 
 Stage106ではCPU一時停止による温度制御 `thermal_pause`（実機の `thermal-pause-*`／`pause-cpuN`）を、本物のWALT halt経路の上で移植しました。最初の版はビルド設定漏れでWALTのAPIが「何もしないスタブ」になり、停止したと報告するだけでした（ftraceでhaltが一度も起きていないことを確認して発見）。工場版の重なり解除の不具合とWALT haltの時計フラグ（7.3でSCHED_DEBUG廃止）も修正し、6回連続で8項目合格・警告ゼロ。証拠は `reports/thermal-pause-stage106-validation.json`。

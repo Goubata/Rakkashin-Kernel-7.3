@@ -1,0 +1,23 @@
+{
+  "scope": "Unaccepted draft; QEMU-verified heap allocation only (gunyah-stub is a QEMU fixture, never shipped)",
+  "core_image": "changed",
+  "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+  "modules": [
+    "deferred-free-helper.ko",
+    "gh_mem_notifier.ko",
+    "gh_rm_heap_manager.ko",
+    "mem-prot.ko",
+    "mem_buf.ko",
+    "mem_buf_dev.ko",
+    "mem_buf_msgq.ko",
+    "msm_dma_iommu_mapping.ko",
+    "qcom_dma_heaps.ko",
+    "avr-gunyah-stub.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

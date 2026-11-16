@@ -1,0 +1,22 @@
+/dts-v1/;
+/plugin/;
+/* AVR-shaped qcom,dma-heaps (display=CMA reusable, qseecom-ta=carveout no-map),
+ * scaled to QEMU RAM. Private fixture only. */
+/ {
+ fragment@0 { target-path="/"; __overlay__ {
+  reserved-memory {
+   #address-cells=<2>; #size-cells=<2>; ranges;
+   avr_display_mem: non_secure_display_region { compatible="shared-dma-pool"; reusable;
+     alloc-ranges=<0x0 0x40000000 0x0 0x40000000>; size=<0x0 0x2000000>; };
+   avr_ta_mem: qseecom_ta_region { compatible="shared-dma-pool"; no-map;
+     alloc-ranges=<0x0 0x40000000 0x0 0x40000000>; size=<0x0 0x800000>; };
+  };
+  qcom,dma-heaps {
+   compatible="qcom,dma-heaps";
+   qcom,display { qcom,dma-heap-name="qcom,display"; qcom,dma-heap-type=<2>;
+     qcom,max-align=<9>; memory-region=<&avr_display_mem>; };
+   qcom,qseecom_ta { qcom,dma-heap-name="qcom,qseecom-ta"; qcom,dma-heap-type=<1>;
+     memory-region=<&avr_ta_mem>; };
+  };
+ }; };
+};

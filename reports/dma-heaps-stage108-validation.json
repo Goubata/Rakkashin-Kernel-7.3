@@ -1,0 +1,43 @@
+{
+ "stage": 108,
+ "scope": "Qualcomm DMA-BUF heaps, mem_buf, mem-prot, gunyah mem notifier/heap manager on android18-7.3",
+ "source": "qcom-soc 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "core_patch": "patches/dma-heap-lcp-7.3.patch",
+ "source_commit": "6b1cbb295687e038b0f717bbaa13607ba33bc1dd",
+ "core_image": "7.3.0-4k #34",
+ "image_sha256": "74de67103de9994eb77f25a33ba0187f7c990cb18a05b99e9ba1888f5e094c34",
+ "qemu_runs": [
+  "reports/dma-heaps-stage108-qemu.log",
+  "reports/dma-heaps-stage108-r2.log",
+  "reports/dma-heaps-stage108-r3.log",
+  "reports/regress-stage108-dma-heaps.log"
+ ],
+ "result": {
+  "heaps": [
+   "system",
+   "qcom,system",
+   "qcom,secure-pixel",
+   "qcom,secure-non-pixel",
+   "qcom,display",
+   "qcom,qseecom-ta"
+  ],
+  "userspace_test": "AVR_DMA_HEAP_USER_PASS 4/4",
+  "pools_kb": [
+   34824,
+   36872
+  ]
+ },
+ "regression": "reports/regress-stage108-summary.txt",
+ "crc": "reports/dma-heaps-stage108-crc.json",
+ "core_replay": "reports/core-patch-replay.json (26 patches, 91 files)",
+ "qemu_substitutes": [
+  "tests/dma-heaps/avr-gunyah-stub.ko replaces gunyah core + gh_rm_heap_manager exports (QEMU is not a Gunyah guest)"
+ ],
+ "not_verified": [
+  "qcom_scm_cfg_pddr_protected_region on TZ",
+  "gh_rm_heap_manager with real hypervisor heap",
+  "secure heap TZ assignment"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

@@ -114,13 +114,13 @@
       "file": "ports/sched-walt/walt.c",
       "source": "kernel/sched/walt/walt.c",
       "original_sha256": "2e226e718fd7a564daa326060895dc855474c3b0ed4869677ba36d8af4408e3c",
-      "sha256": "100657c46f105b19abd348fb2884f50d801a65300f1f68da9abccf151a4719b4"
+      "sha256": "18d70f83b94462fe72395dc0a62bec004a583448260b6899bce09c841e5576a4"
     },
     {
       "file": "ports/sched-walt/walt.h",
       "source": "kernel/sched/walt/walt.h",
       "original_sha256": "e1e1fbacadace292fba41c723581ba11e6a4886a183c882d9d6b6d217c9b068a",
-      "sha256": "a8773335f334cf875c9c501b291af515a69ffc98173b243b224f08bcb948fd7c"
+      "sha256": "45c249703b746879be4372e8fe6b3428a50bd6c7407d36aaeeb0468867719e32"
     },
     {
       "file": "ports/sched-walt/walt_cfs.c",
@@ -162,13 +162,13 @@
       "file": "ports/sched-walt/walt_halt.c",
       "source": "kernel/sched/walt/walt_halt.c",
       "original_sha256": "fde9a54564f95e7b86df330cad997ecdf6b13890a08f6b197d7752e1815c7601",
-      "sha256": "1860175003875793ce23a1ae3729ea60db0529f913cec065986e1deb418ada0d"
+      "sha256": "16eea45857cefa4f4b42f244590a3a6d7d610f19f10f5419c0de83363a90e1c3"
     },
     {
       "file": "ports/sched-walt/walt_lb.c",
       "source": "kernel/sched/walt/walt_lb.c",
       "original_sha256": "b88c98b87c3a3379f7af7b9d1ef75d6ddc8994f70f24ec124c5a5da3ec6f039b",
-      "sha256": "efd55885b0204f5a65aa5bd0f8d179a8b79b253936da4e39054c0dc99cb135aa"
+      "sha256": "79013392d46785294f82b2c284169eeb1f6fee40a1fabe7edf97b0fb5490e05d"
     },
     {
       "file": "ports/sched-walt/walt_rt.c",
@@ -180,7 +180,7 @@
       "file": "ports/sched-walt/walt_storage_lb.c",
       "source": "kernel/sched/walt/walt_storage_lb.c",
       "original_sha256": "8a6f23b4d49100b5c686aad7f510374a834756a530f1d5203564960583d7dd9d",
-      "sha256": "ba20c0a7d09a0573ce585da55576c8989166c6a3149c97779ff392ff0e5da171"
+      "sha256": "d4e1e1da6428cc4b833065c2e10a76b43d69910b9baa98880e358ab3c9104f5a"
     },
     {
       "file": "ports/sched-walt/walt_tp.c",
@@ -201,7 +201,7 @@
       "sha256": "240d795871db15623735f7241cb04f4d6fd1c957caf84513bf40c7fed949040b"
     }
   ],
-  "patch_sha256": "424d035850a7f4b84ea3f4f6a2f95b132cd69428ebca3d0a019d449472b162f7",
+  "patch_sha256": "2a30c7ac25f1c3c1b2ac0020b536577de109de9c619d4ee64af6cd3a69b0d45c",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "Pinned Motorola/Qualcomm sched_walt (canoe: WALT=m, MIDPOINT, MOTO_UNFAIR; DEBUG/STATS off) ported to android18-7.3",
@@ -214,11 +214,11 @@
     "7.3 asserts rq clock under lock: update_rq_clock() before detach/attach and MOTO long-wait timestamp read under the src lock",
     "Refuse to load if the task vendor area is smaller than walt_task_struct (android_arch_task_struct_size missing); BUILD_BUG_ON size > 512",
     "sw_cycle_counter module parameter (default off) selects the shipped software cycle counter; used in QEMU where qcom,gclk MMIO is absent",
-    "sched_ext enable-state hook not registered (7.3 lacks it; sched_ext unused on device)"
+    "sched_ext enable-state hook not registered (7.3 lacks it; sched_ext unused on device)",
+    "SCHED_PROXY_EXEC (7.3): never migrate mutex-blocked tasks or rq->donor (native can_migrate_task rule); 6.12 had no proxy execution"
   ],
   "pending": [
     "qcom,gclk MMIO counters, SCMI cpufreq, perf HAL / thermal_pause / moto_sched consumers on hardware",
-    "waltgov_init partial-failure path (seen only with duplicate sysfs from a misconfigured fixture)",
     "performance/power parity measurement vs 6.12"
   ]
 }

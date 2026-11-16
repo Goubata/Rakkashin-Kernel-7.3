@@ -2460,3 +2460,26 @@ Image#33: moto_sched 6/6 runs x 7 KUnit (inherit/clear for mutex and rwsem, UX q
 for both, RT reader steal, percpu-rwsem, 8-thread storm) with lockdep, plus PR_SET_VMA and
 binder PI, no WARN/BUG/circular-locking. sched_walt 3/3, thermal_pause 2/2, 16 regression
 suites, 135 module CRCs pass. Evidence: reports/moto-sched-stage107-validation.json.
+
+## Stage108: Qualcomm DMA-BUF heaps and mem_buf on android18-7.3
+
+ports/qcom-dma-heaps from qcom-soc 037aa1c (50 files, source lock reports/qcom-dma-heaps-source-lock.json):
+qcom_dma_heaps (system, secure system, CMA, carveout, dynamic page pools, DT parser), mem_buf,
+mem_buf_msgq, mem_buf_dev, msm_dma_iommu_mapping, deferred-free-helper, mem-prot, gh_mem_notifier,
+gh_rm_heap_manager. Core (6b1cbb295, patches/dma-heap-lcp-7.3.patch): dma_heap_ops.get_pool_size,
+dma_heap_try_get_pool_size_kb() and /sys/kernel/dma_heap/total_pools_kb (read by libmeminfo; dropped
+in 7.3), and qcom_scm_cfg_pddr_protected_region() (LCP DARE pool in the phone DT) on the SCM TZMEM
+pool instead of 6.12 qtee_shmbridge buffers, polling GET_CMD_RESULT while TZ reports PROCESSING.
+Port changes: string MODULE_IMPORT_NS + DMA_BUF_HEAP import, free_area_empty() -> list_empty(),
+sched_setattr -> sched_setattr_nocheck (not exported on 7.3), relative includes/trace path.
+QEMU (Image#34): AVR-shaped qcom,dma-heaps DT (display = reusable CMA, qseecom-ta = no-map carveout).
+All six heaps appear (system, qcom,system, qcom,secure-pixel, qcom,secure-non-pixel, qcom,display,
+qcom,qseecom-ta); a static userspace test allocates 4 KiB/1 MiB/8 MiB through /dev/dma_heap, mmaps,
+writes and verifies under DMA_BUF_IOCTL_SYNC, runs 4 threads x 100 allocations, exhausts and recovers
+the carveout, and sees total_pools_kb grow after frees (34824 -> 36872 kB). 3/3 runs, no WARN/BUG.
+QEMU is not a Gunyah guest: gunyah.ko refuses to load (correct) and gh_rm_heap_manager needs
+hypervisor heap resources, so a test-only stub (tests/dma-heaps/avr-gunyah-stub.c, CRC-identical
+exports, never shipped) stands in for those symbols. Not verified: LCP SCM call, Gunyah heap
+manager, secure heap assignment to TZ (phone only).
+Regression: 15 base suites + task-vendor-data, sched-walt, thermal-pause, moto-sched, dma-heaps
+pass; 144 port module CRCs; core patch replay 26 patches / 91 exact files.

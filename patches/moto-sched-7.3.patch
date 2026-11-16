@@ -1,0 +1,327 @@
+--- a/ports/moto-sched/locking/locking_trace.h
++++ b/ports/moto-sched/locking/locking_trace.h
+@@ -218,7 +218,7 @@
+ #endif /* _LOCKING_TRACE_H */
+ 
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH ../../../motorola/kernel/modules/drivers/moto_sched/locking
++#define TRACE_INCLUDE_PATH .
+ 
+ /* This part must be outside the header guard */
+ #include <trace/define_trace.h>
+--- a/ports/moto-sched/locking/mutex.c
++++ b/ports/moto-sched/locking/mutex.c
+@@ -34,51 +34,43 @@
+ 	return (struct task_struct *)(atomic_long_read(&lock->owner) & ~MUTEX_FLAGS);
+ }
+ 
+-static void mutex_list_add_ux(struct list_head *entry, struct list_head *head)
++/*
++ * 7.3 port: the mutex queue is first_waiter + a headless ring and the core inserts
++ * at a vendor-chosen position. Policy unchanged from 6.12: an important-UX waiter
++ * goes in front of the first non-RT waiter with a lower MVP priority.
++ */
++static struct mutex_waiter *mutex_pick_pos(struct mutex *lock)
+ {
+-	struct list_head *pos = NULL;
+-	struct list_head *n = NULL;
+-	struct mutex_waiter *waiter = NULL;
++	struct mutex_waiter *first = lock->first_waiter, *cur;
++	int prio = task_get_mvp_prio(current, true);
+ 	int index = 0;
+-	int prio = task_get_mvp_prio(current, true);
+ 
+-	list_for_each_safe(pos, n, head) {
+-		waiter = list_entry(pos, struct mutex_waiter, list);
+-		if (waiter && waiter->task && (waiter->task->prio > MAX_RT_PRIO) && prio > task_get_mvp_prio(waiter->task, true)) {
++	if (!first)
++		return NULL;
++	cur = first;
++	do {
++		if (cur->task && cur->task->prio > MAX_RT_PRIO &&
++		    prio > task_get_mvp_prio(cur->task, true)) {
+ 			cond_trace_printk(unlikely(is_debuggable(DEBUG_BASE)),
+-					"mutex_list_add_ux %d  prio=%d(%d)index=%d\n", current->pid, prio, task_get_mvp_prio(waiter->task, true), index);
+-			list_add(entry, waiter->list.prev);
+-			return;
++				"mutex_list_add_ux %d  prio=%d(%d)index=%d\n", current->pid, prio,
++				task_get_mvp_prio(cur->task, true), index);
++			return cur;
+ 		}
+-		index += 1;
+-	}
+-	if (pos == head)
+-		list_add_tail(entry, head);
+-}
+-
+-static bool mutex_list_add(struct task_struct *task, struct list_head *entry, struct list_head *head, struct mutex *lock)
+-{
+-	bool is_ux = task_is_important_ux(task);
+-
+-	if (!entry || !head || !lock)
+-		return false;
+-
+-	if (is_ux) {
+-		mutex_list_add_ux(entry, head);
+-		return true;
+-	}
+-
+-	return false;
++		index++;
++		cur = list_next_entry(cur, list);
++	} while (cur != first);
++	return NULL;
+ }
+ 
+ /* implement vender hook in kernel/locking/mutex.c */
+ static void android_vh_alter_mutex_list_add_handler(void *unused, struct mutex *lock,
+-			struct mutex_waiter *waiter, struct list_head *list, bool *already_on_list)
++			struct mutex_waiter *waiter, struct mutex_waiter **pos)
+ {
+-	if (unlikely(!locking_opt_enable()))
++	if (unlikely(!locking_opt_enable()) || !lock || !pos)
+ 		return;
+ 
+-	*already_on_list = mutex_list_add(current, &waiter->list, list, lock);
++	if (task_is_important_ux(current))
++		*pos = mutex_pick_pos(lock);
+ }
+ 
+ static void android_vh_mutex_wait_start_handler(void *unused, struct mutex *lock)
+@@ -122,14 +114,14 @@
+ 
+ void register_mutex_vendor_hooks(void)
+ {
+-	register_trace_android_vh_alter_mutex_list_add(android_vh_alter_mutex_list_add_handler, NULL);
++	register_trace_android_vh_mutex_add_waiter_pos(android_vh_alter_mutex_list_add_handler, NULL);
+ 	register_trace_android_vh_mutex_wait_start(android_vh_mutex_wait_start_handler, NULL);
+ 	register_trace_android_vh_mutex_unlock_slowpath(android_vh_mutex_unlock_slowpath_handler, NULL);
+ }
+ 
+ void unregister_mutex_vendor_hooks(void)
+ {
+-	unregister_trace_android_vh_alter_mutex_list_add(android_vh_alter_mutex_list_add_handler, NULL);
++	unregister_trace_android_vh_mutex_add_waiter_pos(android_vh_alter_mutex_list_add_handler, NULL);
+ 	unregister_trace_android_vh_mutex_wait_start(android_vh_mutex_wait_start_handler, NULL);
+ 	unregister_trace_android_vh_mutex_unlock_slowpath(android_vh_mutex_unlock_slowpath_handler, NULL);
+ }
+--- a/ports/moto-sched/locking/rwsem.c
++++ b/ports/moto-sched/locking/rwsem.c
+@@ -16,7 +16,7 @@
+ #include <linux/sched/cputime.h>
+ #endif
+ 
+-#include <trace/hooks/rwsem.h>
++/* 7.3: the rwsem vendor hooks are declared in dtask.h (no trace/hooks/rwsem.h) */
+ #include <trace/hooks/dtask.h>
+ 
+ #include <../kernel/sched/sched.h>
+@@ -27,10 +27,9 @@
+ #define ENABLE_REORDER_LIST 1
+ #define ENABLE_INHERITE 1
+ 
++/* must match android18-7.3 kernel/locking/rwsem.c */
+ #define RWSEM_READER_OWNED	(1UL << 0)
+-#define RWSEM_RD_NONSPINNABLE	(1UL << 1)
+-#define RWSEM_WR_NONSPINNABLE	(1UL << 2)
+-#define RWSEM_NONSPINNABLE	(RWSEM_RD_NONSPINNABLE | RWSEM_WR_NONSPINNABLE)
++#define RWSEM_NONSPINNABLE	(1UL << 1)
+ #define RWSEM_OWNER_FLAGS_MASK	(RWSEM_READER_OWNED | RWSEM_NONSPINNABLE)
+ 
+ #define RWSEM_WRITER_LOCKED	(1UL << 0)
+@@ -55,11 +54,12 @@
+ 	enum rwsem_waiter_type type;
+ 	unsigned long timeout;
+ 	bool handoff_set;
++	bool donor_wakeup;	/* 7.3 */
+ };
+ #endif
+ 
+-#define rwsem_first_waiter(sem) \
+-	list_first_entry(&sem->wait_list, struct rwsem_waiter, list)
++/* 7.3: headless waiter ring anchored at sem->first_waiter */
++#define rwsem_first_waiter(sem) ((sem)->first_waiter)
+ 
+ #if IS_ENABLED(CONFIG_MOTO_LOCKING_2)
+ static DEFINE_SPINLOCK(RWSEM_SPIN_LOCK);
+@@ -102,44 +102,32 @@
+ }
+ 
+ #ifdef ENABLE_REORDER_LIST
+-bool rwsem_list_add(struct task_struct *tsk, struct list_head *entry, struct list_head *head)
+-{
+-	struct list_head *pos = NULL;
+-	struct list_head *n = NULL;
+-	struct rwsem_waiter *waiter = NULL;
+-	struct rwsem_waiter *entry_waiter;
++/*
++ * 7.3 port of rwsem_list_add(): the core inserts, the vendor only chooses the waiter
++ * to precede (first non-RT waiter with a lower MVP priority). The core moves the head's
++ * handoff to the new head, as 6.12 rwsem_list_add() did.
++ */
++static struct rwsem_waiter *rwsem_pick_pos(struct rw_semaphore *sem)
++{
++	struct rwsem_waiter *first = sem->first_waiter, *cur;
++	int prio = task_get_mvp_prio(current, true);
+ 	int index = 0;
+-	int prio = 0;
+-
+-	if (!entry || !head) {
+-		printk(KERN_ERR "rwsem_list_add %p %p is NULL", entry, head);
+-		return false;
+-	}
+-	prio = task_get_mvp_prio(current, true);
+-	entry_waiter = list_entry(entry, struct rwsem_waiter, list);
+-	if (prio > 0) {
+-		list_for_each_safe(pos, n, head) {
+-			waiter = list_entry(pos, struct rwsem_waiter, list);
+-			if (waiter && waiter->task->prio > MAX_RT_PRIO && prio > task_get_mvp_prio(waiter->task, true)) {
+-				cond_trace_printk(unlikely(is_debuggable(DEBUG_BASE)),
+-					"rwsem_list_add %d prio=%d(%d)index=%d\n", tsk->pid, prio, task_get_mvp_prio(waiter->task, true), index);
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0)
+-				entry_waiter->handoff_set = waiter->handoff_set;
+-				waiter->handoff_set = false;
+-#endif
+-				list_add(entry, waiter->list.prev);
+-				return true;
+-			}
+-			index +=1;
++
++	if (prio <= 0 || !first)
++		return NULL;
++	cur = first;
++	do {
++		if (cur->task && cur->task->prio > MAX_RT_PRIO &&
++		    prio > task_get_mvp_prio(cur->task, true)) {
++			cond_trace_printk(unlikely(is_debuggable(DEBUG_BASE)),
++				"rwsem_list_add %d prio=%d(%d)index=%d\n", current->pid, prio,
++				task_get_mvp_prio(cur->task, true), index);
++			return cur;
+ 		}
+-
+-		if (pos == head) {
+-			list_add_tail(entry, head);
+-		}
+-		return true;
+-	}
+-
+-	return false;
++		index++;
++		cur = list_next_entry(cur, list);
++	} while (cur != first);
++	return NULL;
+ }
+ 
+ /* timeout is 5s */
+@@ -183,11 +171,10 @@
+ 	return ret;
+ }
+ 
+-static void android_vh_alter_rwsem_list_add_handler(void *unused, struct rwsem_waiter *waiter,
+-			struct rw_semaphore *sem, bool *already_on_list)
+-{
+-	bool ret = false;
+-	if (!waiter || !sem)
++static void android_vh_alter_rwsem_list_add_handler(void *unused, struct rw_semaphore *sem,
++			struct rwsem_waiter *waiter, struct rwsem_waiter **pos)
++{
++	if (!waiter || !sem || !pos)
+ 		return;
+ 
+ 	if (unlikely(!locking_opt_enable()))
+@@ -199,10 +186,7 @@
+ 	if (test_wait_timeout(sem))
+ 		return;
+ 
+-	ret = rwsem_list_add(waiter->task, &waiter->list, &sem->wait_list);
+-
+-	if (ret)
+-		*already_on_list = true;
++	*pos = rwsem_pick_pos(sem);
+ }
+ #endif
+ 
+@@ -563,7 +547,7 @@
+ void register_rwsem_vendor_hooks(void)
+ {
+ #ifdef ENABLE_REORDER_LIST
+-	register_trace_android_vh_alter_rwsem_list_add(android_vh_alter_rwsem_list_add_handler, NULL);
++	register_trace_android_vh_rwsem_add_waiter_pos(android_vh_alter_rwsem_list_add_handler, NULL);
+ #endif
+ 
+ #ifdef ENABLE_INHERITE
+@@ -602,7 +586,7 @@
+ void unregister_rwsem_vendor_hooks(void)
+ {
+ #ifdef ENABLE_REORDER_LIST
+-	unregister_trace_android_vh_alter_rwsem_list_add(android_vh_alter_rwsem_list_add_handler, NULL);
++	unregister_trace_android_vh_rwsem_add_waiter_pos(android_vh_alter_rwsem_list_add_handler, NULL);
+ #endif
+ #ifdef ENABLE_INHERITE
+ #if IS_ENABLED(CONFIG_MOTO_LOCKING_2)
+--- a/ports/moto-sched/msched_common.c
++++ b/ports/moto-sched/msched_common.c
+@@ -51,7 +51,8 @@
+ static inline bool task_in_top_app_group(struct task_struct *p)
+ {
+ #if IS_ENABLED(CONFIG_SCHED_WALT)
+-	struct walt_task_struct *wts = (struct walt_task_struct *) p->android_vendor_data1;
++	/* WALT state lives behind task_struct (android_task_vendor_data), not in android_vendor_data1 */
++	struct walt_task_struct *wts = (struct walt_task_struct *)android_task_vendor_data(p);
+ 	return (rcu_access_pointer(wts->grp) != NULL);
+ #else
+ 	return get_task_cgroup_id(p) == CGROUP_TOP_APP;
+@@ -420,7 +421,12 @@
+ 		update_rq_clock(rq);
+ 
+ 		queued = task_on_rq_queued(p);
+-		running = task_current(rq, p);
++		/*
++		 * 7.3 port: with proxy execution the scheduling context is rq->donor, which
++		 * may differ from rq->curr; put_prev/set_next must follow the donor, exactly
++		 * as native sched_change_begin() does (6.12 had no proxy exec).
++		 */
++		running = task_current_donor(rq, p);
+ 
+ 		if (queued)
+ 			deactivate_task(rq, p, DEQUEUE_SAVE | DEQUEUE_NOCLOCK);
+--- a/ports/moto-sched/msched_common.h
++++ b/ports/moto-sched/msched_common.h
+@@ -192,7 +192,8 @@
+ static inline unsigned long moto_task_util(struct task_struct *p)
+ {
+ #if IS_ENABLED(CONFIG_SCHED_WALT)
+-	struct walt_task_struct *wts = (struct walt_task_struct *) p->android_vendor_data1;
++	/* WALT state lives behind task_struct (android_task_vendor_data), not in android_vendor_data1 */
++	struct walt_task_struct *wts = (struct walt_task_struct *)android_task_vendor_data(p);
+ 	return wts->demand_scaled;
+ #else
+ 	return READ_ONCE(p->se.avg.util_avg);
+--- a/ports/moto-sched/msched_uclamp.c
++++ b/ports/moto-sched/msched_uclamp.c
+@@ -211,7 +211,7 @@
+ 		}
+ 	}
+ 	if(type == VENDOR_INHERITANCE_RTMUTEX)
+-		__task_rq_unlock(rq, &rf);
++		__task_rq_unlock(rq, p, &rf);	/* 7.3 signature */
+ 	else
+ 		task_rq_unlock(rq, p, &rf);
+ }
+--- a/ports/moto-sched/Makefile
++++ b/ports/moto-sched/Makefile
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# canoe (moto-canoe.config): MOTO_MUTEX_INHERIT=y, MOTO_RWSEM_INHERIT=y, MOTO_ENABLE_MDPF=y;
++# FUTEX_INHERIT and LOCKING_2 off. Depends on sched_walt (MOTO_UNFAIR build).
++obj-m += moto_sched.o
++moto_sched-y := msched_main.o msched_common.o msched_sysfs.o msched_oemdata.o \
++	locking/locking_main.o locking/locking_trace.o locking/mutex.o locking/rwsem.o \
++	msched_trace.o msched_uclamp.o mdpf/mdpf_sysfs.o
++ccflags-y += -I$(src) -I$(src)/../sched-walt/include -I$(src)/../sched-walt -I$(srctree) \
++	-DCONFIG_MOTO_MUTEX_INHERIT=1 -DCONFIG_MOTO_RWSEM_INHERIT=1 -DCONFIG_MOTO_ENABLE_MDPF=1 \
++	-DCONFIG_SCHED_WALT_MODULE=1 -DCONFIG_SCHED_WALT_NR_CPUS=8 -DCONFIG_SCHED_MOTO_UNFAIR_MODULE=1 \
++	-Wno-missing-prototypes
++CFLAGS_msched_trace.o := -I$(src)
++CFLAGS_locking/locking_trace.o := -I$(src)/locking
++KBUILD_EXTRA_SYMBOLS += $(src)/../sched-walt/Module.symvers

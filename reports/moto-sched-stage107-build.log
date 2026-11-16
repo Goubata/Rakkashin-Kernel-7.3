@@ -1,0 +1,33 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  mvp_locking.o
+  LD [M]  sched-walt.o
+  MODPOST Module.symvers
+WARNING: modpost: sched-walt.ko: missing MODULE_DESCRIPTION()
+  LD [M]  sched-walt.ko
+  BTF [M] sched-walt.ko
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/sched-walt'
+  MODPOST Module.symvers
+WARNING: modpost: avr-walt-fixture.ko: missing MODULE_DESCRIPTION()
+make[1]: Leaving directory '/work/avr-port/tests/sched-walt'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/moto-sched'
+  CC [M]  msched_common.o
+  CC [M]  locking/mutex.o
+  CC [M]  locking/rwsem.o
+  LD [M]  moto_sched.o
+  MODPOST Module.symvers
+  LD [M]  moto_sched.ko
+  BTF [M] moto_sched.ko
+make[1]: Leaving directory '/work/avr-port/ports/moto-sched'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/moto-sched'
+  MODPOST Module.symvers
+WARNING: modpost: avr-moto-sched-test.ko: missing MODULE_DESCRIPTION()
+make[1]: Leaving directory '/work/avr-port/tests/moto-sched'
+make: Leaving directory '/work/avr-src'

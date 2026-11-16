@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-sched/moto_sched.ko",
+      "imports_checked": 115,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/sched-walt/sched-walt.ko",
+      "imports_checked": 340,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/moto-sched/avr-moto-sched-test.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    }
+  ]
+}

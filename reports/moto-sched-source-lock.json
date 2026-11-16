@@ -1,0 +1,145 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "source_repo": "vendor-repos/motorola-kernel-modules",
+  "files": [
+    {
+      "file": "ports/moto-sched/locking/futex.c",
+      "source": "drivers/moto_sched/locking/futex.c",
+      "original_sha256": "6c28ff1322d5298ac93b8b097f144bf427bcb765c5b4ef6c58f88eee11dbff1c",
+      "sha256": "6c28ff1322d5298ac93b8b097f144bf427bcb765c5b4ef6c58f88eee11dbff1c"
+    },
+    {
+      "file": "ports/moto-sched/locking/locking_main.c",
+      "source": "drivers/moto_sched/locking/locking_main.c",
+      "original_sha256": "86c89561d92ab8e40277c0673ab01a2b8ee7256170c9a8a06d76baf98e686c43",
+      "sha256": "86c89561d92ab8e40277c0673ab01a2b8ee7256170c9a8a06d76baf98e686c43"
+    },
+    {
+      "file": "ports/moto-sched/locking/locking_main.h",
+      "source": "drivers/moto_sched/locking/locking_main.h",
+      "original_sha256": "7daa9ec1a39f57626872c1d04313ff45037e25178c97f9976d0c882fd058dd43",
+      "sha256": "7daa9ec1a39f57626872c1d04313ff45037e25178c97f9976d0c882fd058dd43"
+    },
+    {
+      "file": "ports/moto-sched/locking/locking_trace.c",
+      "source": "drivers/moto_sched/locking/locking_trace.c",
+      "original_sha256": "7ddb4bb7983200a31fb65e3495bee48852b1983b28ee15c561b3f5bdce3702a4",
+      "sha256": "7ddb4bb7983200a31fb65e3495bee48852b1983b28ee15c561b3f5bdce3702a4"
+    },
+    {
+      "file": "ports/moto-sched/locking/locking_trace.h",
+      "source": "drivers/moto_sched/locking/locking_trace.h",
+      "original_sha256": "73af7d55088b7afe7ee765353485a8d18921b09862e9693ee282d4e0f411c169",
+      "sha256": "d75f45692c018649d66cad1ab49e94a6cf9ead529e5eef7ddf27983b10041a87"
+    },
+    {
+      "file": "ports/moto-sched/locking/mutex.c",
+      "source": "drivers/moto_sched/locking/mutex.c",
+      "original_sha256": "a94b466a27e96d9b8b513e3b8aae9441fcea9cbfdf132c46ca7e51539e56cdb0",
+      "sha256": "4791d012216550771525621845e602866f60e97ae6834629c8fe79d6934627fd"
+    },
+    {
+      "file": "ports/moto-sched/locking/rwsem.c",
+      "source": "drivers/moto_sched/locking/rwsem.c",
+      "original_sha256": "d90bc8448a0c5400095853ea271853339dfd39014600958c1f5ac49c604ebe22",
+      "sha256": "efb5abc8bb4d97ee8c62725b87e019caec1fb81a89aa97a5aeb6cea07c2d500b"
+    },
+    {
+      "file": "ports/moto-sched/mdpf/mdpf_sysfs.c",
+      "source": "drivers/moto_sched/mdpf/mdpf_sysfs.c",
+      "original_sha256": "686faec08eda089b05113ac594d5e49153598f1b9af6e7f2df0b99b73bc1c0d3",
+      "sha256": "686faec08eda089b05113ac594d5e49153598f1b9af6e7f2df0b99b73bc1c0d3"
+    },
+    {
+      "file": "ports/moto-sched/mdpf/mdpf_sysfs.h",
+      "source": "drivers/moto_sched/mdpf/mdpf_sysfs.h",
+      "original_sha256": "efcc779a22a2541ef0dbc57860973735711fa4ad444d23152092ef772cdfb906",
+      "sha256": "efcc779a22a2541ef0dbc57860973735711fa4ad444d23152092ef772cdfb906"
+    },
+    {
+      "file": "ports/moto-sched/msched_common.c",
+      "source": "drivers/moto_sched/msched_common.c",
+      "original_sha256": "c51882bce4a85947677d3d254d021727a1c2505eb7a5204a40c08d993279292f",
+      "sha256": "0d2c8a59c85c84a1f3b85d1800f0451ac1a61b04ab4471b8820db6f26eb69793"
+    },
+    {
+      "file": "ports/moto-sched/msched_common.h",
+      "source": "drivers/moto_sched/msched_common.h",
+      "original_sha256": "a792f1a7c7d7ab0c66d9516f1269e3b47af776905bc75979b162a0622c83e022",
+      "sha256": "3702b02057c53e505712974e725510b0d428dbacc9b9d20f6a1d24e7fd0202f1"
+    },
+    {
+      "file": "ports/moto-sched/msched_main.c",
+      "source": "drivers/moto_sched/msched_main.c",
+      "original_sha256": "a4e25b090ac43c909f5a44c98fec10682f104613fcbbb7b4a18921acddb3e8a6",
+      "sha256": "a4e25b090ac43c909f5a44c98fec10682f104613fcbbb7b4a18921acddb3e8a6"
+    },
+    {
+      "file": "ports/moto-sched/msched_oemdata.c",
+      "source": "drivers/moto_sched/msched_oemdata.c",
+      "original_sha256": "b8fd78de93f4dff5d9928ab1330716f88ad1bc6b5ebbbf39a6127c7ca926d035",
+      "sha256": "b8fd78de93f4dff5d9928ab1330716f88ad1bc6b5ebbbf39a6127c7ca926d035"
+    },
+    {
+      "file": "ports/moto-sched/msched_oemdata.h",
+      "source": "drivers/moto_sched/msched_oemdata.h",
+      "original_sha256": "488baa78e7ada45daaddc19208e5829cc4a6b2cfaa00a8163ca1436f0caf71a1",
+      "sha256": "488baa78e7ada45daaddc19208e5829cc4a6b2cfaa00a8163ca1436f0caf71a1"
+    },
+    {
+      "file": "ports/moto-sched/msched_sysfs.c",
+      "source": "drivers/moto_sched/msched_sysfs.c",
+      "original_sha256": "c0755cf53c9cc70fb172b0476474b704e65edae89206e386665b0f71ccb3139d",
+      "sha256": "c0755cf53c9cc70fb172b0476474b704e65edae89206e386665b0f71ccb3139d"
+    },
+    {
+      "file": "ports/moto-sched/msched_sysfs.h",
+      "source": "drivers/moto_sched/msched_sysfs.h",
+      "original_sha256": "55a6e2164c27a92ce7f92bb222b9fe572507e0faf89913f5b2ed252f0141a209",
+      "sha256": "55a6e2164c27a92ce7f92bb222b9fe572507e0faf89913f5b2ed252f0141a209"
+    },
+    {
+      "file": "ports/moto-sched/msched_trace.c",
+      "source": "drivers/moto_sched/msched_trace.c",
+      "original_sha256": "d8be22350401cb6905dc187d0c5f24920a997c3c8780a22391a89782c1874989",
+      "sha256": "d8be22350401cb6905dc187d0c5f24920a997c3c8780a22391a89782c1874989"
+    },
+    {
+      "file": "ports/moto-sched/msched_trace.h",
+      "source": "drivers/moto_sched/msched_trace.h",
+      "original_sha256": "3285bb830d3802b2610999edcf18b7e143043d26e753ff18f02d4f5fe303c410",
+      "sha256": "3285bb830d3802b2610999edcf18b7e143043d26e753ff18f02d4f5fe303c410"
+    },
+    {
+      "file": "ports/moto-sched/msched_uclamp.c",
+      "source": "drivers/moto_sched/msched_uclamp.c",
+      "original_sha256": "e464300f63181bc14dc9f3bb14e88406c21d6150c6ab1aac1c44b73884d9453d",
+      "sha256": "286a3135ec15e8252fc31e4880d669c7dd26f1af5bc714b0b05a0c15ec65bcab"
+    },
+    {
+      "file": "ports/moto-sched/msched_uclamp.h",
+      "source": "drivers/moto_sched/msched_uclamp.h",
+      "original_sha256": "2a9be5b1913828b2ae1d96b69e011ec1111d5a51e4a2886f2bb26dc928bf6afe",
+      "sha256": "2a9be5b1913828b2ae1d96b69e011ec1111d5a51e4a2886f2bb26dc928bf6afe"
+    },
+    {
+      "file": "ports/moto-sched/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "0abb49cb022a5bbdef50a50144c916dc8edcb885742c863e5fa7c358fc4fd64d"
+    }
+  ],
+  "patch_sha256": "00fe6e4120f84f9050402b28a09d85271c45aa366182610849af47c5b0fa46ba",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned Motorola moto_sched (w3wwl36.65-11-18; canoe MUTEX/RWSEM inherit + MDPF) on android18-7.3",
+  "reviewed_changes": [
+    "mutex/rwsem ordering moved to the 7.3 position hooks (first_waiter rings); handoff owner never displaced instead of 6.12 handoff_set transfer",
+    "rwsem_waiter/owner flags updated to 7.3 layout",
+    "trace include paths relative to the module"
+  ],
+  "pending": [
+    "Runtime with WALT MVP/UX in QEMU and on the phone",
+    "futex inherit (off on canoe) and LOCKING_2 (off) not ported"
+  ]
+}

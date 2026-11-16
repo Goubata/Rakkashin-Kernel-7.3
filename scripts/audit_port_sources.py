@@ -14,7 +14,7 @@ p=argparse.ArgumentParser(description=__doc__,formatter_class=argparse.RawDescri
 p.add_argument('spec',type=Path);p.add_argument('--record',action='store_true');a=p.parse_args()
 spec=json.loads((ROOT/a.spec if not a.spec.is_absolute() else a.spec).read_text())
 name,commit,files=spec['name'],spec['commit'],spec['files']
-repo=ROOT.parent/'avr-upstream-audit'/spec.get('repo','qcom-soc')
+repo=ROOT.parent/"avr-upstream-audit"/spec.get("repo","qcom-soc")
 originals={n:subprocess.check_output(['git','-C',str(repo),'show',commit+':'+src]) if src else b'' for n,src in files.items()}
 def sha(b):return hashlib.sha256(b).hexdigest()
 patch=ROOT/f'patches/{name}-7.3.patch';lock=ROOT/f'reports/{name}-source-lock.json'

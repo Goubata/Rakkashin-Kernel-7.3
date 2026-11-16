@@ -2440,3 +2440,23 @@ vote bit per client, so resume only CPUs no other paused cdev holds. WALT halt s
 RQCF_UPDATED only under CONFIG_SCHED_DEBUG (gone in 7.3, checks always on): now always, and
 the clock is updated after relocking. Lifetime fixes as in cpu_hotplug.
 Six QEMU runs pass 8 checks each with zero warnings; WALT re-verified (2/2, 4/4 sustained).
+
+## Stage107: moto_sched on android18-7.3
+
+ports/moto-sched from motorola-kernel-modules a24357771 (firmware branch), canoe config
+MUTEX/RWSEM inherit + MDPF. Core (eb6d0f515, patches/moto-core-hooks-7.3.patch): binder
+transaction finish, PR_SET_VMA name bypass (now in set_anon_vma_name), percpu-rwsem hooks
+and start-time wrapper, mutex wait/unlock, rwsem wake/wake_finish/reader steal, a rwsem
+waiter-position hook for the 7.3 ring (new head takes over the handoff, as 6.12 did), and
+the 6.12 cgroup_threadgroup_rwsem export. 6.12 invoked wait/wake hooks under wait_lock;
+moto_sched takes the owner's rq lock there while 7.3 proxy execution nests wait_lock in rq
+locks, so those calls now run just after wait_lock is dropped.
+moto_sched fixes: resched_task() used task_current() and put_prev_task() on a non-donor
+(proxy exec) -> CFS corruption/Oops on the first inheritance test; now task_current_donor().
+Reordering moved to position hooks; WALT data via android_task_vendor_data().
+WALT: walt_init re-reads the root domain after rebuilding sched domains; the stale pointer
+caused an intermittent false WALT_BUG panic.
+Image#33: moto_sched 6/6 runs x 7 KUnit (inherit/clear for mutex and rwsem, UX queue jump
+for both, RT reader steal, percpu-rwsem, 8-thread storm) with lockdep, plus PR_SET_VMA and
+binder PI, no WARN/BUG/circular-locking. sched_walt 3/3, thermal_pause 2/2, 16 regression
+suites, 135 module CRCs pass. Evidence: reports/moto-sched-stage107-validation.json.

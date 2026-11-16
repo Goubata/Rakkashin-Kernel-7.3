@@ -1,0 +1,17 @@
+{
+  "scope": "moto_sched on sched_walt, Image#33; QEMU only",
+  "core_image": "changed",
+  "image_sha256": "0a0897d4f48a87348dec2cb24983225de7a5a4043aa42aa7f710b88f922d7327",
+  "modules": [
+    "moto_sched.ko",
+    "sched-walt.ko"
+  ],
+  "test_modules": [
+    "avr-moto-sched-test.ko"
+  ],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

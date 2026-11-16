@@ -1,0 +1,38 @@
+{
+ "name": "moto-sched",
+ "repo": "vendor-repos/motorola-kernel-modules",
+ "commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+ "files": {
+  "ports/moto-sched/locking/futex.c": "drivers/moto_sched/locking/futex.c",
+  "ports/moto-sched/locking/locking_main.c": "drivers/moto_sched/locking/locking_main.c",
+  "ports/moto-sched/locking/locking_main.h": "drivers/moto_sched/locking/locking_main.h",
+  "ports/moto-sched/locking/locking_trace.c": "drivers/moto_sched/locking/locking_trace.c",
+  "ports/moto-sched/locking/locking_trace.h": "drivers/moto_sched/locking/locking_trace.h",
+  "ports/moto-sched/locking/mutex.c": "drivers/moto_sched/locking/mutex.c",
+  "ports/moto-sched/locking/rwsem.c": "drivers/moto_sched/locking/rwsem.c",
+  "ports/moto-sched/mdpf/mdpf_sysfs.c": "drivers/moto_sched/mdpf/mdpf_sysfs.c",
+  "ports/moto-sched/mdpf/mdpf_sysfs.h": "drivers/moto_sched/mdpf/mdpf_sysfs.h",
+  "ports/moto-sched/msched_common.c": "drivers/moto_sched/msched_common.c",
+  "ports/moto-sched/msched_common.h": "drivers/moto_sched/msched_common.h",
+  "ports/moto-sched/msched_main.c": "drivers/moto_sched/msched_main.c",
+  "ports/moto-sched/msched_oemdata.c": "drivers/moto_sched/msched_oemdata.c",
+  "ports/moto-sched/msched_oemdata.h": "drivers/moto_sched/msched_oemdata.h",
+  "ports/moto-sched/msched_sysfs.c": "drivers/moto_sched/msched_sysfs.c",
+  "ports/moto-sched/msched_sysfs.h": "drivers/moto_sched/msched_sysfs.h",
+  "ports/moto-sched/msched_trace.c": "drivers/moto_sched/msched_trace.c",
+  "ports/moto-sched/msched_trace.h": "drivers/moto_sched/msched_trace.h",
+  "ports/moto-sched/msched_uclamp.c": "drivers/moto_sched/msched_uclamp.c",
+  "ports/moto-sched/msched_uclamp.h": "drivers/moto_sched/msched_uclamp.h",
+  "ports/moto-sched/Makefile": null
+ },
+ "scope": "Pinned Motorola moto_sched (w3wwl36.65-11-18; canoe MUTEX/RWSEM inherit + MDPF) on android18-7.3",
+ "reviewed_changes": [
+  "mutex/rwsem ordering moved to the 7.3 position hooks (first_waiter rings); handoff owner never displaced instead of 6.12 handoff_set transfer",
+  "rwsem_waiter/owner flags updated to 7.3 layout",
+  "trace include paths relative to the module"
+ ],
+ "pending": [
+  "Runtime with WALT MVP/UX in QEMU and on the phone",
+  "futex inherit (off on canoe) and LOCKING_2 (off) not ported"
+ ]
+}

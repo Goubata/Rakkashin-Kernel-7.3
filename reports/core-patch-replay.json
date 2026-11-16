@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "d3ada49940b1fc996b529424ca9bc3431e3d752b",
-  "patch_count": 24,
+  "target_commit": "eb6d0f515132dba627c0c2fd6eb101d11a24f55a",
+  "patch_count": 25,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -10,7 +10,7 @@
     },
     {
       "file": "drivers/android/binder.c",
-      "sha256": "3ffa70da68092ca89173e8f7a65a279c43400b5cb5feed7f4c544260d591ca70"
+      "sha256": "04f200024fcf6f58221071e56f41e2c9f2e223af00b250d1645e5504b71ca416"
     },
     {
       "file": "drivers/android/binder_internal.h",
@@ -18,7 +18,7 @@
     },
     {
       "file": "drivers/android/vendor_hooks.c",
-      "sha256": "fb513bb7c9de35d8c82478b0e8cc62c15d034f2aa46e05ab9882a8d7fdfbc75d"
+      "sha256": "f39de5c5f35d0bc8dba8048fa669c4cc6efe005e4c6e6db1cc1b3c7b2967012f"
     },
     {
       "file": "drivers/base/power/Makefile",
@@ -189,6 +189,10 @@
       "sha256": "d97cc2b6d35410eb35f3e84a47dbbfaa37b00ab83a609814e1cea34629b39653"
     },
     {
+      "file": "include/linux/percpu-rwsem.h",
+      "sha256": "6732c0f48fe28da2d70b5f828e39c21f63b103a7a5700ee539f49c2efb7e605d"
+    },
+    {
       "file": "include/linux/rk_tboost.h",
       "sha256": "1b0b49c2603b68e19cf1908d0c241d5506748829d97e292761bf422646d12fbf"
     },
@@ -206,11 +210,11 @@
     },
     {
       "file": "include/trace/hooks/binder.h",
-      "sha256": "a2003f006e43c6aab529fa6eab8704ef1ea2a960d80a5147618722338ebf8392"
+      "sha256": "ab18f99a8449ec20ba6ef344d97fa5318fec9b8a441ac849357fba7da882fb00"
     },
     {
       "file": "include/trace/hooks/dtask.h",
-      "sha256": "22266e4d93a508ef43bee08f8c142ac2b3a6b9ed2cf9b56b85146b5ba0024836"
+      "sha256": "4056cd24cbad7ea013e617e253189a37068380fc2db3300760a1abe64f2d09da"
     },
     {
       "file": "include/trace/hooks/gunyah.h",
@@ -219,6 +223,10 @@
     {
       "file": "include/trace/hooks/sched.h",
       "sha256": "1d3daf80070da18ef9d7446defc57b5a28d394825dfd66211f698af7adfdd059"
+    },
+    {
+      "file": "include/trace/hooks/sys.h",
+      "sha256": "4d88ef94d1c94ae224088b4dbfabcb3d9871c1169638239d70cfa5f8b37689b1"
     },
     {
       "file": "include/uapi/linux/ntsync.h",
@@ -253,6 +261,10 @@
       "sha256": "a809535a9d578def82b5e69ce8884ab31e28e9210092bbbbd3bd050c36a28915"
     },
     {
+      "file": "kernel/cgroup/cgroup.c",
+      "sha256": "6d100dc28e45b25a4fd5b46cb4897e306e0d76bbf5e06119d8edc8487d355389"
+    },
+    {
       "file": "kernel/cgroup/cpuset.c",
       "sha256": "22999f9050798f808595f1aef664d8b8b214bc2656b6ea1be60bdf2efdafc23d"
     },
@@ -274,7 +286,15 @@
     },
     {
       "file": "kernel/locking/mutex.c",
-      "sha256": "2d7cce7a36baf1e4c7a1d5673ab10f026268018020c65b67227a80d23fa9b870"
+      "sha256": "35e649a318d037b83eef96340dcc71f5feca8e31648c42036a9d411b685fb29a"
+    },
+    {
+      "file": "kernel/locking/percpu-rwsem.c",
+      "sha256": "7327f5b5b60d58362e81358607a8cea8f449e9c0df92f973d83cbe6c15528222"
+    },
+    {
+      "file": "kernel/locking/rwsem.c",
+      "sha256": "b84d054dc7fd8022d71e4a969968c5b6d70deb87beec4d8339ea89255cdac51f"
     },
     {
       "file": "kernel/power/Kconfig",
@@ -325,10 +345,14 @@
       "sha256": "ab5919441ded8a83c5ac629dc25b51fba4c639950d608e5f5744f6cd29451f6a"
     },
     {
+      "file": "mm/madvise.c",
+      "sha256": "117dc1ef86148f6594e20a276c6884bc376d1769f01a50cb73e57be93584dcd1"
+    },
+    {
       "file": "mm/shmem.c",
       "sha256": "6e68ed3430db44bf81e2f24552ab4f395d5dd366ac91a267987456998af75aa9"
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "adcf697a828b9887e01c7ac972ee42e6a6a3e8256437b8a4a865ee0d150eec40"
+  "checkpoint_sha256": "ada374d377d15c93192e624dd7232e0f37a5cd13b99f1496288e1ff1bbf4998f"
 }

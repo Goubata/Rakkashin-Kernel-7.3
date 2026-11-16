@@ -1,0 +1,9 @@
+{
+  "scope": "Image#33: moto_sched vendor hooks + cgroup_threadgroup_rwsem export; QEMU only",
+  "core_image": "7.3.0-4k #33",
+  "image_sha256": "0a0897d4f48a87348dec2cb24983225de7a5a4043aa42aa7f710b88f922d7327",
+  "source_commit": "eb6d0f515132dba627c0c2fd6eb101d11a24f55a",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

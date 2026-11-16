@@ -6198,6 +6198,7 @@ static void walt_init(struct work_struct *work)
 {
 	static atomic_t already_inited = ATOMIC_INIT(0);
 	struct root_domain *rd = cpu_rq(cpumask_first(cpu_active_mask))->rd;
+	bool pd_ok;
 	int i;
 
 	if (IS_ENABLED(CONFIG_ARM64_AMU_EXTN))
@@ -6252,7 +6253,16 @@ static void walt_init(struct work_struct *work)
 	 * see walt_find_energy_efficient_cpu(), and
 	 * create_freq_to_cost().
 	 */
-	if (!rcu_access_pointer(rd->pd) && num_sched_clusters > 1)
+	/*
+	 * 7.3 port: rebuild_sched_domains() above installs a *new* root domain, so the
+	 * rd sampled at entry can be stale (seen intermittently in QEMU as a false
+	 * WALT_BUG). Re-read the current one before validating it.
+	 */
+	rcu_read_lock();
+	rd = cpu_rq(cpumask_first(cpu_active_mask))->rd;
+	pd_ok = rcu_access_pointer(rd->pd) != NULL;
+	rcu_read_unlock();
+	if (!pd_ok && num_sched_clusters > 1)
 		WALT_BUG(WALT_BUG_WALT, NULL,
 			 "root domain's perf-domain values not initialized rd->pd=%p.",
 			 rd->pd);

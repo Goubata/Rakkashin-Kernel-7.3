@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: GPL-2.0
+
+config MOTO_FUTEX_INHERIT
+    tristate "futex inherit"
+    default n
+    help
+      boost futex owner for the blocked ux thread.
+
+config MOTO_RWSEM_INHERIT
+    tristate "rwsem inherit"
+    default n
+    help
+      boost rwsem owner for the blocked ux thread.
+
+config MOTO_MUTEX_INHERIT
+    tristate "mutex inherit"
+    default n
+    help
+      boost mutex owner for the blocked ux thread.
+
+config MOTO_ENABLE_MDPF
+    tristate "Enable moto dynamic performance feature"
+    default n
+    help
+      This feature will allow the scheduler to maintain more detailed
+      mvp scheduling of MDPF tasks (uclmap inheritance).
+      
+config MOTO_LOCKING_2
+    tristate "locking v2"
+    default n
+    help
+      boost rwsem owner for the blocked ux thread.
+      this locking v2
+

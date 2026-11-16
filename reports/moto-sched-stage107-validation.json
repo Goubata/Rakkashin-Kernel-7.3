@@ -1,0 +1,73 @@
+{
+ "stage": 107,
+ "scope": "Port Motorola moto_sched (canoe: MUTEX/RWSEM inherit, MDPF) on android18-7.3 with sched_walt and proxy execution",
+ "source": "vendor-repos/motorola-kernel-modules a24357771 (w3wwl36.65-11-18, matches firmware)",
+ "core_patch": "patches/moto-core-hooks-7.3.patch",
+ "source_commit": "eb6d0f515132dba627c0c2fd6eb101d11a24f55a",
+ "core_image": "7.3.0-4k #33",
+ "image_sha256": "0a0897d4f48a87348dec2cb24983225de7a5a4043aa42aa7f710b88f922d7327",
+ "core_hooks_restored": [
+  "binder_proc_transaction_finish",
+  "rvh pr_set_vma_name_bypass (7.3 moved PR_SET_VMA naming into set_anon_vma_name)",
+  "percpu_rwsem_down_read/up_write, rvh percpu_rwsem_wait_complete, record_pcpu_rwsem_starttime (out-of-line wrapper as 6.12)",
+  "mutex_wait_start, mutex_unlock_slowpath",
+  "rwsem_wake, rwsem_wake_finish, rwsem_read_trylock_failed (reader steal)",
+  "rwsem_add_waiter_pos (7.3 waiter ring; new head takes over handoff as 6.12)",
+  "EXPORT cgroup_threadgroup_rwsem (6.12 parity)"
+ ],
+ "lock_order_fix": "6.12 called mutex_wait_start/rwsem_wake/rwsem_wake_finish under wait_lock; moto_sched takes the owner rq lock there, and 7.3 proxy execution takes wait_lock under rq locks (find_proxy_task), so the calls run right after wait_lock is released (once per slowpath).",
+ "module_fixes": [
+  "resched_task(): running = task_current_donor() (proxy exec); 6.12 task_current() made put_prev_task warn and corrupted CFS (Oops) on the first inheritance test",
+  "mutex/rwsem reordering ported to position hooks",
+  "WALT data via android_task_vendor_data() instead of android_vendor_data1",
+  "rwsem_waiter/owner flags to 7.3 layout; trace paths; __task_rq_unlock(p); rwsem hooks in dtask.h"
+ ],
+ "walt_fix": "walt_init re-reads the root domain after rebuild_sched_domains (7.3 installs a new rd); stale rd caused an intermittent false WALT_BUG panic (seen 2 times before the fix)",
+ "test_bugs_fixed": [
+  "worker done completion consumed twice (complete_all)"
+ ],
+ "checks": {
+  "moto_sched": {
+   "runs": 6,
+   "totals_each": [
+    7,
+    0,
+    0,
+    7
+   ],
+   "extras": [
+    "PR_SET_VMA_ANON_NAME visible in maps",
+    "binderfs transaction FIFO 42 inherit/restore",
+    "dmesg scan for WARNING/BUG/Oops/possible circular locking with lockdep on: none"
+   ]
+  },
+  "sched_walt": "3/3 (6 checks)",
+  "thermal_pause": "2/2 (8 checks)",
+  "regression": [
+   "smoke True  []",
+   "clock True [35, 0, 0, 35] []",
+   "oplus True 1283 []",
+   "rakkashin True 122 []",
+   "ntsync True  []",
+   "fence True [5, 0, 0, 5] []",
+   "walt-hooks True [3, 0, 0, 3] []",
+   "ddr-cooling True [14, 0, 0, 14] []",
+   "devfreq-cooling True [9, 0, 0, 9] []",
+   "cpufreq-cooling True [9, 0, 0, 9] []",
+   "cpu-hotplug True [8, 0, 0, 8] []",
+   "userspace-cdev True [6, 0, 0, 6] []",
+   "qmi-cooling True [38, 0, 0, 38] []",
+   "bcl-soc True [26, 0, 0, 26] []",
+   "bcl-pmic True [44, 0, 0, 44] []",
+   "task-vendor-data True [4, 0, 0, 4] []"
+  ],
+  "module_crc": "135 port modules match"
+ },
+ "not_ported": [
+  "futex inherit (off on canoe)",
+  "LOCKING_2 (off)"
+ ],
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

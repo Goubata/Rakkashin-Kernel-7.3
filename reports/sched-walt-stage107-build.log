@@ -1,0 +1,10 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt.o
+  LD [M]  sched-walt.o
+  MODPOST Module.symvers
+WARNING: modpost: sched-walt.ko: missing MODULE_DESCRIPTION()
+  LD [M]  sched-walt.ko
+  BTF [M] sched-walt.ko
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: Leaving directory '/work/avr-src'

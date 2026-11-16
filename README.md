@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage102ではWALT（Qualcommのスケジューラ拡張、実機のCPUガバナー `walt`）の前提として、6.12にあった「task_structの後ろに付くベンダー領域」（`android_arch_task_struct_size`／`android_task_vendor_data`）を7.3本体へ戻しました。実機の起動パラメーターは `android_arch_task_struct_size=512` です。新Image#28で、512指定時に64回のfork/kthreadで子の領域がゼロ初期化・親と分離されること、指定なし・上限超え（4096）では領域が付かないことを確認。既存の冷却・QMI・BCL・clock・oplus・Rakkashin・fence・ntsync試験も通過し、外部モジュールのCRCは不変。証拠は `reports/core-stage102-validation.json`。
+
 Stage101ではフレームレート制限用の `qti_userspace_cdev`（`display-fps`、最大16）を移植しました。工場版のデバイスノード過剰解放を修正し、7.3では子ノードごとにOF冷却デバイスを登録します。保存DTと同じ3段階の冷却マップを持つ仮想温度ゾーンでstep_wiseが1→2→3→0と選ぶことを含む6テストが通過。実機の `display-fps` 最大16とも一致。表示HAL側での反映は未確認です。今回からソース固定は `scripts/audit_port_sources.py` と `source-spec.json` の汎用方式にしました。
 
 Stage100ではCPU隔離による温度制御 `cpu_hotplug`（`cpu-hotplug0〜7`）を移植しました。工場版はプローブ毎にグローバルリストを初期化、コールバックと同じロック下での登録解除（デッドロック）、ワーク未取消、OFノード参照の未保持などがあり、デバイス単位の管理で作り直しました。最初のマルチインスタンス版はオンライン拒否時に7.3本体のロールバックで警告が出たため、工場版と同じ単一インスタンス方式に戻しています。QEMUの実CPUホットプラグで8テストが通過し、仮想温度ゾーンのDT冷却マップから60℃でCPU2を隔離・20℃で復帰するところまで確認（Image#27変更なし）。保存DTの8子ノード・20冷却マップ参照、実機の `cpu-hotplug0〜7` とも一致。実機での隔離動作は未確認です。証拠は `reports/cpu-hotplug-stage100-validation.json`。

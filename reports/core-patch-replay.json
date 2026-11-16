@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "7e2663c534fe7a02c8595a62b8af041bd4bd450f",
-  "patch_count": 21,
+  "target_commit": "81604dc82a00629a1e8b128b94447b5125a04210",
+  "patch_count": 22,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -185,6 +185,10 @@
       "sha256": "1b0b49c2603b68e19cf1908d0c241d5506748829d97e292761bf422646d12fbf"
     },
     {
+      "file": "include/linux/sched/task.h",
+      "sha256": "d4e291ccd392713323304f20d0547882e45ec923d43b76a1a81a6bd8afc46846"
+    },
+    {
       "file": "include/linux/shmem_fs.h",
       "sha256": "ad1bb9f5ac92ad396660698c16499d1bfcc3e549cc9929d25648ae03c7b0a9b6"
     },
@@ -213,6 +217,18 @@
       "sha256": "c22fe92a2b3907239193778e0424dce9adca3685d1aedeeaac7e115e198e346c"
     },
     {
+      "file": "init/Kconfig.gki",
+      "sha256": "9166c8a07c566811236a348f64ce3c15ebcc30b470e82a630d75bece2c5702ad"
+    },
+    {
+      "file": "init/init_task.c",
+      "sha256": "39526c139c41efcf4a4f166d21d7e7b7dfb1a2bbeeabb09313bf689f8874c5d7"
+    },
+    {
+      "file": "init/main.c",
+      "sha256": "cea9ca8d23cbd4ac403ad524575dc1153d9703f9735b0a97bfb734f2e87333a9"
+    },
+    {
       "file": "kernel/Makefile",
       "sha256": "290e15077e520b910d56e2085c93fdd8fb7801dec5375e5eac56a4d5a61f8755"
     },
@@ -223,6 +239,10 @@
     {
       "file": "kernel/cgroup/cpuset.c",
       "sha256": "22999f9050798f808595f1aef664d8b8b214bc2656b6ea1be60bdf2efdafc23d"
+    },
+    {
+      "file": "kernel/fork.c",
+      "sha256": "344bc2411bbadbfd5e1974e01bcd922dff895f789f53e910f1b2c35f0236de5f"
     },
     {
       "file": "kernel/irq/manage.c",
@@ -278,5 +298,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "0922624cb80cbf7606e74d86ae456887f9ccf0c1bd00abe89e5c6cc6df59f7e1"
+  "checkpoint_sha256": "9b3b2082aab03175a1966d4b63c32f00f7c8024c2e72c54c0c54b68132d8d8c0"
 }

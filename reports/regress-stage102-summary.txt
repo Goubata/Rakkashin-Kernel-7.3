@@ -1,0 +1,30 @@
+smoke: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;d=json.load(sys.stdin);print(d["passed"],d["totals"],d["failures"][:2])
+                                                             ~^^^^^^^^^^
+KeyError: 'totals'
+clock: True [35, 0, 0, 35] []
+oplus: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;d=json.load(sys.stdin);print(d["passed"],d["totals"],d["failures"][:2])
+                                                             ~^^^^^^^^^^
+KeyError: 'totals'
+rakkashin: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;d=json.load(sys.stdin);print(d["passed"],d["totals"],d["failures"][:2])
+                                                             ~^^^^^^^^^^
+KeyError: 'totals'
+ntsync: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json,sys;d=json.load(sys.stdin);print(d["passed"],d["totals"],d["failures"][:2])
+                                                             ~^^^^^^^^^^
+KeyError: 'totals'
+fence: True [5, 0, 0, 5] []
+ddr-cooling: True [14, 0, 0, 14] []
+devfreq-cooling: True [9, 0, 0, 9] []
+cpufreq-cooling: True [9, 0, 0, 9] []
+cpu-hotplug: True [8, 0, 0, 8] []
+userspace-cdev: True [6, 0, 0, 6] []
+qmi-cooling: True [38, 0, 0, 38] []
+bcl-soc: True [26, 0, 0, 26] []
+bcl-pmic: True [44, 0, 0, 44] []

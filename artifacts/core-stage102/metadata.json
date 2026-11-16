@@ -1,0 +1,9 @@
+{
+  "scope": "Image#28: GKI dynamic task_struct vendor area restored (WALT prerequisite); QEMU only",
+  "core_image": "7.3.0-4k #28",
+  "image_sha256": "ed06a2bb6e9b08a01437508a1194e9e6c2fda895a4ab7dce0b558ed069c1b4f5",
+  "source_commit": "81604dc82a00629a1e8b128b94447b5125a04210",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

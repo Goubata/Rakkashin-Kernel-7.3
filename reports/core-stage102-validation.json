@@ -1,0 +1,88 @@
+{
+ "stage": 102,
+ "scope": "Restore android16-6.12 GKI dynamic task_struct vendor area (android_arch_task_struct_size, android_task_vendor_data) in 7.3 core; WALT prerequisite",
+ "phone_evidence": "read-only /proc/cmdline contains android_arch_task_struct_size=512 and sched_walt.* parameters; policy governor walt",
+ "core_patch": "patches/dynamic-task-vendor-data-7.3.patch",
+ "source_commit": "81604dc82a00629a1e8b128b94447b5125a04210",
+ "core_image": "7.3.0-4k #28",
+ "image_sha256": "ed06a2bb6e9b08a01437508a1194e9e6c2fda895a4ab7dce0b558ed069c1b4f5",
+ "config": [
+  "CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE=y",
+  "CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX=512 (configs/avr-platform.fragment)"
+ ],
+ "checks": {
+  "vendor_area_512": {
+   "log": "reports/task-vendor-data-stage102-512-qemu.log",
+   "passed": true,
+   "totals": [
+    4,
+    0,
+    0,
+    4
+   ]
+  },
+  "no_param": {
+   "log": "reports/task-vendor-data-stage102-0-qemu.log",
+   "totals": [
+    3,
+    0,
+    1,
+    4
+   ],
+   "note": "fork isolation case correctly skipped: no area; size check proves no area added"
+  },
+  "oversize_4096_rejected": {
+   "log": "reports/task-vendor-data-stage102-4096-qemu.log",
+   "totals": [
+    3,
+    0,
+    1,
+    4
+   ],
+   "note": "parameter above CONFIG max rejected, no area"
+  },
+  "regression": [
+   "smoke: Traceback (most recent call last):",
+   "  File \"<string>\", line 1, in <module>",
+   "    import json,sys;d=json.load(sys.stdin);print(d[\"passed\"],d[\"totals\"],d[\"failures\"][:2])",
+   "                                                             ~^^^^^^^^^^",
+   "KeyError: 'totals'",
+   "clock: True [35, 0, 0, 35] []",
+   "oplus: Traceback (most recent call last):",
+   "  File \"<string>\", line 1, in <module>",
+   "    import json,sys;d=json.load(sys.stdin);print(d[\"passed\"],d[\"totals\"],d[\"failures\"][:2])",
+   "                                                             ~^^^^^^^^^^",
+   "KeyError: 'totals'",
+   "rakkashin: Traceback (most recent call last):",
+   "  File \"<string>\", line 1, in <module>",
+   "    import json,sys;d=json.load(sys.stdin);print(d[\"passed\"],d[\"totals\"],d[\"failures\"][:2])",
+   "                                                             ~^^^^^^^^^^",
+   "KeyError: 'totals'",
+   "ntsync: Traceback (most recent call last):",
+   "  File \"<string>\", line 1, in <module>",
+   "    import json,sys;d=json.load(sys.stdin);print(d[\"passed\"],d[\"totals\"],d[\"failures\"][:2])",
+   "                                                             ~^^^^^^^^^^",
+   "KeyError: 'totals'",
+   "fence: True [5, 0, 0, 5] []",
+   "ddr-cooling: True [14, 0, 0, 14] []",
+   "devfreq-cooling: True [9, 0, 0, 9] []",
+   "cpufreq-cooling: True [9, 0, 0, 9] []",
+   "cpu-hotplug: True [8, 0, 0, 8] []",
+   "userspace-cdev: True [6, 0, 0, 6] []",
+   "qmi-cooling: True [38, 0, 0, 38] []",
+   "bcl-soc: True [26, 0, 0, 26] []",
+   "bcl-pmic: True [44, 0, 0, 44] []"
+  ],
+  "ntsync_flake": "first ntsync run timed out in stress_wait under TCG; reruns on Image#28 (2x) and Image#27 all 13/13"
+ },
+ "verified": [
+  "64 kthread forks: child vendor area zeroed, parent pattern not copied and parent area untouched by child writes",
+  "init_task uses exported vendor_data_pad; other tasks use p+1",
+  "slab object covers task_struct+512",
+  "existing cooling/QMI/BCL/clock/oplus/rakkashin/fence suites pass on Image#28; external port CRCs unchanged"
+ ],
+ "abi_note": "arch_task_struct_size stays unexported (as in 6.12); vendor_data_pad exported GPL as in 6.12",
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

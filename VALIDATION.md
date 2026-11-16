@@ -2338,3 +2338,22 @@ display-fps max16, maps1/2/3; phone display-fps max_state16. Source replay now u
 generic scripts/audit_port_sources.py with ports/qti-userspace-cdev/source-spec.json.
 Evidence: reports/userspace-cdev-stage101-validation.json. Limits: display HAL use,
 boot and daily use remain. No writes/reboot.
+
+## Stage102: GKI dynamic task_struct vendor area (WALT prerequisite)
+
+The phone's sched_walt keeps per-task state through android_task_vendor_data(), backed in
+android16-6.12 by CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE: the bootloader passes
+android_arch_task_struct_size=512 (read-only /proc/cmdline) and the task_struct slab grows
+by that amount. android18-7.3 dropped the feature. Restored as in Motorola kernel-common
+479a9e4ae: Kconfig.gki options, exported vendor_data_pad for init_task, early_param
+setup before setup_arch, inline accessors in sched/task.h and zeroing in dup_task_struct.
+android-7.3 commit 81604dc82, patches/dynamic-task-vendor-data-7.3.patch, config fragment.
+arch_task_struct_size stays unexported, as in 6.12.
+
+Image#28 boots three ways: =512 passes4/4 (size, init pad, 64 forks zeroed/isolated, slab
+cover); no parameter and =4096 (above max, rejected) add no area (3 pass, fork case skipped
+by design). Regression on Image#28: smoke, clock35, oplus1283 checks, rakkashin122, fence5,
+ntsync13, ddr14, devfreq9, cpufreq9, cpu-hotplug8, userspace6, qmi38, bcl-soc26, bcl-pmic44.
+One ntsync stress_wait TCG timeout did not reproduce (2 reruns on #28, 1 on #27: 13/13).
+External port CRCs unchanged. Evidence: reports/core-stage102-validation.json,
+artifacts/core-stage102. Next: five sched/binder hooks WALT needs, then WALT itself.

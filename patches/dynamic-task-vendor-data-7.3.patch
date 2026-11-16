@@ -1,0 +1,143 @@
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index e9288e68b..850cf5af5 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -58,6 +58,9 @@ extern spinlock_t mmlist_lock;
+ 
+ extern union thread_union init_thread_union;
+ extern struct task_struct init_task;
++#ifdef CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE
++extern u64 vendor_data_pad[CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX / sizeof(u64)];
++#endif
+ 
+ extern int lockdep_tasklist_lock_is_held(void);
+ 
+@@ -231,4 +234,27 @@ DEFINE_LOCK_GUARD_1(task_lock, struct task_struct, task_lock(_T->lock), task_unl
+ DECLARE_LOCK_GUARD_1_ATTRS(task_lock, __acquires(&_T->alloc_lock), __releases(&(*(struct task_struct **)_T)->alloc_lock))
+ #define class_task_lock_constructor(_T) WITH_LOCK_GUARD_1_ATTRS(task_lock, _T)
+ 
++#ifdef CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE
++/*
++ * Vendor area directly after task_struct, sized by android_arch_task_struct_size
++ * (bounded by CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX). init_task uses a static pad.
++ */
++static inline void *android_task_vendor_data(struct task_struct *p)
++{
++	if (p == &init_task)
++		return &vendor_data_pad[0];
++
++	return p + 1;
++}
++
++static inline void android_init_dynamic_vendor_data(struct task_struct *p)
++{
++	if (arch_task_struct_size > sizeof(struct task_struct))
++		memset((void *)android_task_vendor_data(p), 0x0,
++		       arch_task_struct_size - sizeof(struct task_struct));
++}
++#else /* !CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE */
++static inline void android_init_dynamic_vendor_data(struct task_struct *p) {}
++#endif /* CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE */
++
+ #endif /* _LINUX_SCHED_TASK_H */
+diff --git a/init/Kconfig.gki b/init/Kconfig.gki
+index af3419bed..5e3e423ce 100644
+--- a/init/Kconfig.gki
++++ b/init/Kconfig.gki
+@@ -309,6 +309,22 @@ config GKI_HIDDEN_XFRM_OFFLOAD_CONFIGS
+ # All of these should be reworked into an upstream solution
+ # if possible.
+ #
++config GKI_DYNAMIC_TASK_STRUCT_SIZE
++	bool "Dynamic task_struct size needed for GKI"
++	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
++	help
++	  Avoid static allocation of memory for vendor data in task_struct.
++	  The bootloader passes android_arch_task_struct_size=<bytes>; vendor
++	  modules (WALT) reach the area through android_task_vendor_data().
++
++config GKI_TASK_STRUCT_VENDOR_SIZE_MAX
++	int "Max vendor data size in bytes"
++	default 512
++	depends on GKI_DYNAMIC_TASK_STRUCT_SIZE
++	help
++	  Maximum size which can be added to task_struct dynamically when
++	  GKI_DYNAMIC_TASK_STRUCT_SIZE is enabled.
++
+ config GKI_HACKS_TO_FIX
+ 	bool "GKI Dummy config options"
+ 	select GKI_HIDDEN_CRYPTO_CONFIGS
+diff --git a/init/init_task.c b/init/init_task.c
+index 3000a587a..15d325a16 100644
+--- a/init/init_task.c
++++ b/init/init_task.c
+@@ -276,6 +276,11 @@ struct task_struct init_task __aligned(L1_CACHE_BYTES) = {
+ };
+ EXPORT_SYMBOL(init_task);
+ 
++#ifdef CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE
++u64 vendor_data_pad[CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX / sizeof(u64)];
++EXPORT_SYMBOL_GPL(vendor_data_pad);
++#endif
++
+ /*
+  * Initial thread structure. Alignment of this is handled by a special
+  * linker map entry.
+diff --git a/init/main.c b/init/main.c
+index 7bf9f2b31..937260ef1 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -984,6 +984,31 @@ static void __init print_kernel_cmdline(const char *cmdline)
+ 		pr_notice("%s%s\n", KERNEL_CMDLINE_PREFIX, cmdline);
+ }
+ 
++#ifdef CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE
++static void __init setup_arch_task_struct_size(void)
++{
++	arch_task_struct_size = sizeof(struct task_struct);
++}
++
++static int __init task_struct_vendor_size_setup(char *str)
++{
++	u64 size;
++
++	if (!str)
++		return -EINVAL;
++
++	size = memparse(str, &str);
++
++	if (size > CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX)
++		return -EINVAL;
++
++	arch_task_struct_size = sizeof(struct task_struct) + size;
++
++	return 0;
++}
++early_param("android_arch_task_struct_size", task_struct_vendor_size_setup);
++#endif
++
+ asmlinkage __visible __init __no_sanitize_address __noreturn __no_stack_protector
+ void start_kernel(void)
+ {
+@@ -1007,6 +1032,9 @@ void start_kernel(void)
+ 	boot_cpu_init();
+ 	page_address_init();
+ 	pr_notice("%s", linux_banner);
++#ifdef CONFIG_GKI_DYNAMIC_TASK_STRUCT_SIZE
++	setup_arch_task_struct_size();
++#endif
+ 	setup_arch(&command_line);
+ 	mm_core_init_early();
+ 	/* Static keys and static calls are needed by LSMs */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 31b12f185..aaca496f3 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1028,6 +1028,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	tsk->bpf_ctx = NULL;
+ #endif
+ 	android_init_vendor_data(tsk, 1);
++	android_init_dynamic_vendor_data(tsk);
+ 	android_init_oem_data(tsk, 1);
+ 
+ 	trace_android_vh_dup_task_struct(tsk, orig);

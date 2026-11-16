@@ -2933,6 +2933,92 @@ static int qcom_scm_qseecom_init(struct qcom_scm *scm)
 
 #endif /* CONFIG_QCOM_QSEECOM */
 
+/*
+ * ANDROID: 6.12 vendor SMCInvoke calls. No -EBUSY replay (the caller backs off),
+ * results are reported even on error exactly as 6.12 did.
+ */
+static int qcom_scm_vendor_invoke(struct qcom_scm_desc *desc, int32_t *result,
+				  u64 *response_type, unsigned int *data)
+{
+	enum qcom_scm_convention convention = __get_convention();
+	struct qcom_scm_res res = {};
+	int ret;
+
+	if (!__scm)
+		return -EPROBE_DEFER;
+	if (convention != SMC_CONVENTION_ARM_32 &&
+	    convention != SMC_CONVENTION_ARM_64)
+		return -EOPNOTSUPP;
+
+	might_sleep();
+	ret = __scm_smc_call_noretry(__scm->dev, desc, convention, &res);
+	if (result)
+		*result = res.result[1];
+	if (response_type)
+		*response_type = res.result[0];
+	if (data)
+		*data = res.result[2];
+	return ret;
+}
+
+int qcom_scm_invoke_smc(phys_addr_t in_buf, size_t in_buf_size,
+			phys_addr_t out_buf, size_t out_buf_size, int32_t *result,
+			u64 *response_type, unsigned int *data)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.cmd = QCOM_SCM_SMCINVOKE_INVOKE,
+		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
+		.args[0] = in_buf,
+		.args[1] = in_buf_size,
+		.args[2] = out_buf,
+		.args[3] = out_buf_size,
+		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_RW, QCOM_SCM_VAL,
+					 QCOM_SCM_RW, QCOM_SCM_VAL),
+	};
+
+	return qcom_scm_vendor_invoke(&desc, result, response_type, data);
+}
+EXPORT_SYMBOL(qcom_scm_invoke_smc);
+
+int qcom_scm_invoke_smc_legacy(phys_addr_t in_buf, size_t in_buf_size,
+			       phys_addr_t out_buf, size_t out_buf_size,
+			       int32_t *result, u64 *response_type,
+			       unsigned int *data)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.cmd = QCOM_SCM_SMCINVOKE_INVOKE_LEGACY,
+		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
+		.args[0] = in_buf,
+		.args[1] = in_buf_size,
+		.args[2] = out_buf,
+		.args[3] = out_buf_size,
+		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_RW, QCOM_SCM_VAL,
+					 QCOM_SCM_RW, QCOM_SCM_VAL),
+	};
+
+	return qcom_scm_vendor_invoke(&desc, result, response_type, data);
+}
+EXPORT_SYMBOL(qcom_scm_invoke_smc_legacy);
+
+int qcom_scm_invoke_callback_response(phys_addr_t out_buf, size_t out_buf_size,
+				      int32_t *result, u64 *response_type,
+				      unsigned int *data)
+{
+	struct qcom_scm_desc desc = {
+		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.cmd = QCOM_SCM_SMCINVOKE_CB_RSP,
+		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
+		.args[0] = out_buf,
+		.args[1] = out_buf_size,
+		.arginfo = QCOM_SCM_ARGS(2, QCOM_SCM_RW, QCOM_SCM_VAL),
+	};
+
+	return qcom_scm_vendor_invoke(&desc, result, response_type, data);
+}
+EXPORT_SYMBOL(qcom_scm_invoke_callback_response);
+
 /**
  * qcom_scm_qtee_invoke_smc() - Invoke a QTEE object.
  * @inbuf: start address of memory area used for inbound buffer.

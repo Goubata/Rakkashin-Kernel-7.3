@@ -270,6 +270,18 @@ static inline int qcom_scm_qseecom_app_send(u32 app_id,
 
 #endif /* CONFIG_QCOM_QSEECOM */
 
+/* ANDROID: vendor SMCInvoke entry points (android16-6.12 signatures) */
+int qcom_scm_invoke_smc(phys_addr_t in_buf, size_t in_buf_size,
+			phys_addr_t out_buf, size_t out_buf_size, int32_t *result,
+			u64 *response_type, unsigned int *data);
+int qcom_scm_invoke_smc_legacy(phys_addr_t in_buf, size_t in_buf_size,
+			       phys_addr_t out_buf, size_t out_buf_size,
+			       int32_t *result, u64 *response_type,
+			       unsigned int *data);
+int qcom_scm_invoke_callback_response(phys_addr_t out_buf, size_t out_buf_size,
+				      int32_t *result, u64 *response_type,
+				      unsigned int *data);
+
 int qcom_scm_qtee_invoke_smc(phys_addr_t inbuf, size_t inbuf_size,
 			     phys_addr_t outbuf, size_t outbuf_size,
 			     u64 *result, u64 *response_type);

@@ -47,7 +47,7 @@ if a.test=='ufs':
                 '-device','ufs-lu,drive=avrufsdata,lun=0']
     metadata.update(ufs_mcq=a.ufs_mcq,virtual_backing_file=str(disk.relative_to(ROOT)),
                     backing_scope='new private regular file; no phone block device exposed')
-if a.test in ('bcl-soc','geni-bus','usb-repeater','regulators','smem-state','remoteproc-services','moto-touch-of','mmi-annotate-driver','mmi-annotate-native','mmi-info','mmi-info-native'):
+if a.test in ('bcl-pmic','bcl-soc','geni-bus','usb-repeater','regulators','smem-state','remoteproc-services','moto-touch-of','mmi-annotate-driver','mmi-annotate-native','mmi-info','mmi-info-native'):
     folder=ROOT/'artifacts'/('qemu-'+a.test)
     folder.mkdir(parents=True,exist_ok=True)
     guest='/work/avr-port/artifacts/qemu-'+a.test+'/'
@@ -55,7 +55,7 @@ if a.test in ('bcl-soc','geni-bus','usb-repeater','regulators','smem-state','rem
     dump[dump.index('-machine')+1] += ',dumpdtb='+guest+'virt-original.dtb'
     dtc='/work/avr-port/out/native-gki/scripts/dtc/'
     prefix=['chroot',str(ROOTFS),'/usr/bin/env','-i','PATH=/usr/sbin:/usr/bin:/sbin:/bin']
-    overlay='/work/avr-port/tests/'+('bcl-soc/qemu-bcl.dtso' if a.test=='bcl-soc' else 'geni-bus/qemu-geni.dtso' if a.test=='geni-bus' else 'usb-repeater/qemu-repeater.dtso' if a.test=='usb-repeater' else 'mmi-info/qemu-info.dtso' if a.test in ('mmi-info','mmi-info-native') else 'mmi-annotate-native/qemu-annotate.dtso' if a.test=='mmi-annotate-native' else 'mmi-annotate-driver/qemu-annotate.dtso' if a.test=='mmi-annotate-driver' else 'moto-touch-of/qemu-relay.dtso' if a.test=='moto-touch-of' else 'regulators/qemu-rail.dtso' if a.test=='regulators' else 'remoteproc-services/qemu-services.dtso' if a.test=='remoteproc-services' else 'smem-state/qemu-state.dtso')
+    overlay='/work/avr-port/tests/'+('bcl-pmic/qemu-probe.dtso' if a.test=='bcl-pmic' else 'bcl-soc/qemu-bcl.dtso' if a.test=='bcl-soc' else 'geni-bus/qemu-geni.dtso' if a.test=='geni-bus' else 'usb-repeater/qemu-repeater.dtso' if a.test=='usb-repeater' else 'mmi-info/qemu-info.dtso' if a.test in ('mmi-info','mmi-info-native') else 'mmi-annotate-native/qemu-annotate.dtso' if a.test=='mmi-annotate-native' else 'mmi-annotate-driver/qemu-annotate.dtso' if a.test=='mmi-annotate-driver' else 'moto-touch-of/qemu-relay.dtso' if a.test=='moto-touch-of' else 'regulators/qemu-rail.dtso' if a.test=='regulators' else 'remoteproc-services/qemu-services.dtso' if a.test=='remoteproc-services' else 'smem-state/qemu-state.dtso')
     with (ROOT/'reports'/(a.test+'-dtb-build.log')).open('wb') as stream:
         for step in [dump,
                      prefix+[dtc+'dtc','-@','-I','dts','-O','dtb','-o',guest+'rail.dtbo',overlay],

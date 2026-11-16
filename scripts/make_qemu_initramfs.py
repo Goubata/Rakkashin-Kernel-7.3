@@ -309,12 +309,13 @@ devno=$(/bin/busybox cat /sys/class/misc/oplus_sync/dev)
         commands.append('echo AVR_WATCHDOG_TESTS_PASS scope=private-ram-recorded-firmware-and-registration-only')
         init=init.replace(b'echo AVR_QEMU_SMOKE_PASS','\n'.join(commands).encode())
     if args.bcl_pmic_tests:
-        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+[ROOT/'ports'/name for name in ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-minidump/minidump.ko','qcom-ipc-logging/qcom_ipc_logging.ko']]+[ROOT/'ports/qcom-bcl-pmic/bcl_pmic5.ko',ROOT/'tests/bcl-pmic/avr-bcl-pmic-test.ko']
+        sources=[ROOT/'out/native-gki/lib/kunit/kunit.ko']+[ROOT/'ports'/name for name in ['qcom-hwspinlock/qcom_hwspinlock.ko','qcom-smem/smem.ko','qcom-minidump/minidump.ko','qcom-ipc-logging/qcom_ipc_logging.ko']]+[ROOT/'ports/qcom-bcl-pmic/bcl_pmic5.ko',ROOT/'tests/bcl-pmic/avr-bcl-pmic-test.ko',ROOT/'tests/bcl-pmic/avr-bcl-pmic-probe-test.ko']
         commands=[]
         for source in sources:
             add('modules/'+source.name,stat.S_IFREG|0o644,source.read_bytes())
             params=' enable=1' if source.name=='kunit.ko' else ''
             commands.append(f'/bin/busybox insmod /modules/{source.name}{params} || {{ echo AVR_BCL_PMIC_LOAD_FAIL; /bin/busybox poweroff -f; }}')
+        commands.append('/bin/busybox rmmod avr_bcl_pmic_probe_test || { echo AVR_BCL_PMIC_UNLOAD_FAIL; /bin/busybox poweroff -f; }')
         commands.append('/bin/busybox rmmod avr_bcl_pmic_test || { echo AVR_BCL_PMIC_UNLOAD_FAIL; /bin/busybox poweroff -f; }')
         commands.append('/bin/busybox rmmod bcl_pmic5 || { echo AVR_BCL_PMIC_UNLOAD_FAIL; /bin/busybox poweroff -f; }')
         commands.append('echo AVR_BCL_PMIC_TESTS_PASS scope=native-regmap-thermal-irq-debugfs-private-guest-only')

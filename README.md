@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage91ではPMIC BCLを標準のOF・NVMEM・ドライバ登録から検証し、割り込みスレッドと再接続を含む36件が4コア仮想環境で通過しました。候補DTの2S名が7.3の文字数上限を超える問題と、39組のtrip順の違いを修正した別候補を作成。GPUの21段階と全ハードウェア値を保持しています。ROMのthermal HALには名前とC++長さ情報の調整案も用意しましたが、HAL全体の動作は未確認です。証拠は `reports/bcl-stage91-validation.json`。実機への適用・常用確認は未完了です。
+
 Stage90ではPMIC BCL本体と統計処理を7.3向けのドラフトとしてビルドしました。電流・電圧換算、BPM通信エラー、IRQ wakeとfreeze／restore、debugfs所有権、PMIC間通知の22テストが4コア仮想環境で通過。新モジュールの60インポートCRCが一致し、DTのセンサーID・補正値も照合しました。成果物は `artifacts/bcl-pmic-draft-stage90/`、証拠は `reports/bcl-pmic-stage90-validation.json`。実機の保護回路・OF probe・全機能の常用動作は未確認です。
 
 Stage89ではBCL SoCの通知登録前に電源が現れる境界条件も確認し、26件の4コアQEMUテストが通過。PMIC BCLは2有効ノード・11 zone宣言・16 trip・6冷却マップのDT接続を監査しました（`reports/bcl-stage89-validation.json`）。PMIC BCLドライバ自体の移植はまだ未完了です。

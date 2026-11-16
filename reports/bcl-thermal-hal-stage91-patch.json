@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "scope": "Pinned name/SSO-length draft and selected-instruction harness input only; not full HAL/runtime acceptance",
+  "source": "device-baseline/thermal-service.qti",
+  "source_sha256": "dc4b68fa0103ca2cefec856b7eef90977f44d6edbfa7f373d4dfcf0d5db0237f",
+  "output": "artifacts/bcl-thermal-hal-stage91/thermal-service.qti.name-draft",
+  "output_sha256": "ab8ba75d81edc0a8cbdd85c8d332ffa3b57335475bda9ac959330048126d25cf",
+  "old_name": "pmih010x-2s-ibat-lvl0",
+  "new_name": "pmih010x-2s-ibat0",
+  "literal_file_offset": 25145,
+  "length_tag_instruction_pc": 124432,
+  "original_length_tag_word": "0x52800548",
+  "candidate_length_tag_word": "0x52800448",
+  "changed_byte_offsets": [
+    25161,
+    25162,
+    25163,
+    25164,
+    25165,
+    124433
+  ],
+  "file_size_unchanged": true,
+  "elf_headers_sections_and_relocations_unchanged": true,
+  "constructor_pcs": [
+    124432,
+    124436,
+    124440,
+    124444,
+    124456,
+    124460,
+    124464
+  ],
+  "constructor_original_words": [
+    "0x52800548",
+    "0x3dc00120",
+    "0x39030348",
+    "0xf840d128",
+    "0x3c8c1340",
+    "0xf80ce348",
+    "0x39035b5f"
+  ],
+  "constructor_asm_sha256": "d48d7bbc2d7844fc4ab8edd56de994ece5d2f589685a11276f4ded3d953603f7",
+  "modified_hal_executed": false,
+  "installed": false,
+  "partition_written": false,
+  "promoted": false,
+  "build_id_note": "Original note retained; use new SHA256 to distinguish modified file",
+  "limitations": [
+    "Selected constructor sequence only; no proof of every indirect reference or full binary policy path",
+    "HAL found literal lvl0 only; dynamic/other binaries/SELinux/AVB and firmware variants remain unverified",
+    "Actual Android service execution and DT pairing need target 7.3 acceptance; never deploy candidate DT alone"
+  ]
+}

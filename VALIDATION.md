@@ -1878,3 +1878,69 @@ unbind races. Hardware variants/ROM diagnostic paths and initialized firmware
 IPC/minidump state are not accepted by these tests. Whole-board drivers, DT
 schema, boot/vendor_boot/dtbo/DLKM/SELinux and daily-use acceptance remain pending.
 No phone partition writes, 7.3 phone boot or physical BCL operations performed.
+
+## Stage91: native OF/NVMEM/probe/IRQ integration and thermal compatibility
+
+Thirty-six SMP4 cases pass without WARN/panic/skip: the previous 22 plus 14 native
+probe cases. Compile the complete production source in a separate test module;
+register a private compatible to the same factory descriptor, and a real native
+RAM-backed supplier platform driver. It creates the actual regmap and NVMEM
+provider in probe. Do not allocate device resources before driver probing or
+bypass firmware/device-link checks. Late supplier-driver binding automatically
+retries the consumer. Probe uses actual OF thermal registration, SDAM byte 0x5d
+bit 5 lookup, IRQ resources/wake actions, IPC logging and debugfs. Both standard
+and 2S bits yield six registered zones from eight PMIH declarations. No native
+successful-operation stub is installed; selected zone errors are injected only
+before calling the real API.
+
+Cover eleven failure conditions: two NVMEM reads, four revision reads, three
+zone registrations, monitor enable and BPM enable after notifier registration.
+Check native registries are empty and IRQs can be requested again after rollback.
+Release/rebind the actual device three times. Dispatch a private IRQ through the
+native core into the real BCL thread, observe trip/IRQ disabling, clear the RAM
+status and update thermal to re-arm it. The physical IRQ chip/SPMI is not modeled.
+Verify OF voltage trip indices 2800/2600/2300 program offsets 0x48/0x49/0x4a as
+56/14/2. Production Image#25 and bcl_pmic5.ko remain identical to Stage90.
+
+The new native OF tests reject both saved pmih010x-2s-ibat-lvl0/1 names (21
+characters): the actual 7.3 thermal type array is 20 bytes including NUL. Also,
+ordered fixture comparison reveals that the Stage53 candidate has 39 trip sibling
+groups in a different order from the saved running tree. This matters because
+BCL voltage trip indices select different comparator registers, and userspace
+can address trip indices. Keep the kernel thermal ABI unchanged. Build a new,
+unpromoted DT file from Stage53: restore those 39 entire sibling groups to saved
+order and rename only the two overlength zones to pmih010x-2s-ibat0/1. Preserve
+all physical property values, unrelated node order, reservations, strings table
+and 21 GPU levels. No trip-child set lacks a saved counterpart. Verify with native
+DTC for parse/build only (its inherited binding warnings remain, and no full
+DT-schema acceptance is claimed) and compare the private fixture's eight ordered PMIH zone definitions,
+provider ID/flags, polling and NVMEM bit to this new candidate.
+
+Read-only live inspection still shows normal current-zone names and nine BCL-
+related types on 6.12 with SELinux Enforcing. Do not infer the actual bit value
+from this snapshot. Vendor thermal HAL SHA256 dc4b68fa0103ca2cefec856b7eef90977f44d6edbfa7f373d4dfcf0d5db0237f
+contains the old 2S lvl0 string at file offset0x6239; lvl1 is not a literal in this
+binary. Disassembly at 0x1e5cc..0x1e630 identifies the address and an inlined
+short-string size tag at 0x1e610. A literal-only replacement is insufficient.
+Prepare a local draft that changes the literal and its length tag (six changed
+bytes) while retaining ELF layout/headers/relocations. The original build-id note
+remains, so use the new SHA256 to identify the modified file. Do not execute or
+install the modified HAL. A static native ARM64 harness executes only seven
+selected original/candidate constructor instructions on private buffers. Both
+cases verify names, tagged lengths, terminator and surrounding guards. This is
+not execution of the complete constructor/control flow, a proof of every indirect
+reference or acceptance of the Android service. Full binary/ROM integration and
+DT pairing remain unverified; the DT-name candidate is not independently ready
+for deployment in 2S mode.
+
+Evidence: reports/bcl-stage91-validation.json. Build tests with build_bcl_pmic.py
+--tests and run QEMU mode bcl-pmic --cpus 4 (36 cases); build_bcl_name_dt.py and
+audit_bcl_probe_fixture.py reproduce DT preparation/audit. prepare_bcl_thermal_hal.py
+requires the pinned dump (or the included original file) and prepares the exact
+local draft and constructor.S. Compile tests/bcl-pmic/thermal-hal-constructor.c
+with that assembly in the native arm64 Linux rootfs to reproduce the two-case
+selected-instruction check. Artifacts: dt-bcl-name-stage91 and
+bcl-thermal-hal-stage91. These are review drafts, not flashable boot packages.
+No partition/vendor file writes or phone 7.3 boot. Physical PMIC/calibration,
+full service behavior, forced supplier removal/concurrent teardown/hardware
+errors, SID4 and remaining board drivers/DT/boot/DLKM/SELinux acceptance are pending.

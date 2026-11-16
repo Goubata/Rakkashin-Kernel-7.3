@@ -1,0 +1,82 @@
+{
+  "stage": 91,
+  "scope": "Native private PMIC BCL OF/platform/NVMEM/probe/IRQ-thread integration, separate DT-name/trip-order candidate and pinned HAL-name draft; not physical Android acceptance",
+  "checks": {
+    "log": "reports/bcl-pmic-stage91-qemu.log",
+    "test": "bcl-pmic",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      36,
+      0,
+      0,
+      36
+    ]
+  },
+  "new_probe_cases": 14,
+  "distinct_probe_failure_conditions": 11,
+  "production_artifact": "artifacts/bcl-pmic-draft-stage90",
+  "production_module_and_image_unchanged": true,
+  "no_core_thermal_abi_change": true,
+  "probe_scope": [
+    "Actual native driver attach and fw/device-link defaults; private OF matches select the unchanged factory descriptors",
+    "Actual registered NVMEM provider driver supplies byte0x5d bit5; standard and 2S masks select six active zones out of eight PMIH declarations",
+    "Supplier driver binding automatically retries the deferred consumer without explicit attach or dependency bypass",
+    "Two NVMEM read positions, four revision reads, three injected zone failures, monitor enable and post-notifier BPM enable errors unwind real native zone/IRQ/wake/debugfs/notifier resources",
+    "Real device_release_driver and device_driver_attach cycle three times; source generic IRQ dispatch invokes actual threaded handler and re-arms on clear",
+    "OF voltage trip indices 2800/2600/2300 program bytes56/14/2 at offsets0x48/0x49/0x4a; raw IRQ hardware and all register values remain recorded private RAM"
+  ],
+  "dt_findings": [
+    "Native thermal name capacity is20 including NUL; two saved 2S names have length21 and are rejected with EINVAL",
+    "Separate candidate shortens them to pmih010x-2s-ibat0/1; all physical property bytes, reserve map and21 GPU levels preserved",
+    "Thirty-nine candidate trip sibling groups differed from saved order; restore those groups without changing values; no unmatched trip-child sets",
+    "Private fixture ordered trip metrics, provider IDs, polling and NVMEM bit match eight declarations in the new candidate"
+  ],
+  "hal_scope": [
+    "Read-only live inspection finds standard current zones and nine BCL-related type names on running6.12 Enforcing; no 2S type is active in this snapshot",
+    "Pinned vendor HAL contains the old lvl0 name at file offset0x6239; disassembly exposes an inlined short-string length tag at PC0x1e610",
+    "Local modified copy changes the literal and its length tag only; ELF size, headers, relocation data and control-flow layout remain unchanged; original build-id retained so use SHA256 provenance",
+    "Execute only seven selected original/candidate constructor instructions in private buffers: two cases validate lengths, names, terminator and guards; full modified HAL is never executed"
+  ],
+  "initial_findings": [
+    "First private fixtures did not bind until the supplier was represented by a real native platform driver; allocating regmap inside its probe satisfies native devres ownership rules",
+    "Native framework then exposed the actual overlength 2S-zone names; shorten the private fixture only together with an explicit real-DT/HAL compatibility candidate",
+    "Ordered fixture audit exposed candidate trip-order reversal and led to preservation of saved order rather than relaxing the audit"
+  ],
+  "physical_verified": false,
+  "modified_hal_executed": false,
+  "partition_written": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "pending": [
+    "Full modified HAL/service behavior, every indirect string reference and remaining ROM consumers; DT-name candidate must not be deployed alone for 2S compatibility",
+    "Actual AVR7.3 boot, physical SPMI/IRQ/calibration/charging/cooling and firmware behavior",
+    "Forced supplier unbind/removal and exhaustive concurrent notifier/IRQ/thermal/PM/sysfs teardown or hardware-error recovery",
+    "Existing whole-board SID4 conflict, remaining drivers/DT schema, boot/vendor_boot/dtbo/DLKM/SELinux and daily-use acceptance",
+    "Native DTC retains inherited whole-board binding warnings; parse/build success is not DT-schema acceptance"
+  ],
+  "evidence_sha256": {
+    "tests/bcl-pmic/avr-bcl-pmic-probe-test.c": "d65560c3aa0558d72104cefdb8603a310ec8890cf3b453a0eaaba28d3776ded6",
+    "tests/bcl-pmic/avr-bcl-pmic-probe-test.ko": "05d3b910374c527556d4f0e257c9d3497c73abc7390740fc6d612520de28677e",
+    "tests/bcl-pmic/qemu-probe.dtso": "60007a8c3ad91d27f7bc4a1391c0531be01289e25e18d32a006c23658119230c",
+    "tests/bcl-pmic/thermal-hal-constructor.c": "c0d756ce6816f0a48bd310fc58876b528e4bf61cc2be9627c6eeb70c9862a9b1",
+    "tests/qemu/bcl-pmic-tests.cpio.gz": "27826ba4edbbc46b9a30c5680d01516781a32eb3bf160d857c030919e0826d16",
+    "scripts/build_bcl_name_dt.py": "da5e854c430659782d2b023ae31ccc7e7305cee061f01c80df68d36dbe4a023f",
+    "scripts/prepare_bcl_thermal_hal.py": "cc235cf3373c161678b16d7d428820832c50551c1952ea657ac3fe0989d60006",
+    "scripts/audit_bcl_probe_fixture.py": "771a85717dcad93b66af32492b8717c6830e1e66bc3b0f4dcc02bb473774c58b",
+    "reports/bcl-pmic-stage91-check.json": "a878da270da6ce5a2a10a036fe20e8cedbe8a1d774ca705bded6f0b4c7cfcfed",
+    "reports/bcl-pmic-stage91-qemu.log": "f70917d7fb90eb785fd5f1a54f5c4f3cd091914a8ec338f8604a5658edae0980",
+    "reports/bcl-pmic-stage91-qemu.json": "21dccfaf8fc1f34a3ae81435a53a699f52ac256a336a41fb1d247641da5514fd",
+    "reports/bcl-pmic-stage91-build.log": "03cccf20bb3d4c29ae32c5c281ff4836064a62f127c459773300060e705b7fc7",
+    "reports/bcl-probe-stage91-dt.json": "0a784ef179bdb092708427918065f51f75eda5241f9959ff3aac34311b562b43",
+    "reports/bcl-names-stage91-dt.json": "5e6fd29531885792a59030b867dcc976cbce89e9af55071afd6192d435dd7d33",
+    "reports/bcl-thermal-hal-stage91-patch.json": "c0147e9467774940432af8082186d5311db4e9f23c8348095b11d38b1ae069f1",
+    "reports/bcl-thermal-hal-stage91-constructor.log": "53b4f2b302581ef7c6d2eafb19007632112bb7f07205d44e8f4d56a9642f6fe8",
+    "reports/bcl-thermal-hal-stage91-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "reports/bcl-thermal-hal-stage91-elf.log": "b37d600fda1f07b1a1f042d28f8bace6eede4f602ee374363f0e573d7b40a0be",
+    "reports/bcl-thermal-hal-stage91-disassembly.log": "ae86a7000f9b9d45d681eaa0b582eb446b07c0033e4c9a2b737f71629c16103d",
+    "reports/bcl-runtime-stage91.txt": "38e46b13ad7f4e45bb7a3e2ce1ef2d4ee060ba8b54ed1ee50971484a26828571",
+    "artifacts/bcl-thermal-hal-stage91/SHA256SUMS": "c8ec7d96c6548d795e295be976c5bbe244928b652c941c1401e9bae556a172b2",
+    "artifacts/dt-bcl-name-stage91/SHA256SUMS": "c844ea0c4b3b15a8bf49c8f3494448f4889ef0c36f22d660509f7edd2e76c773"
+  }
+}

@@ -1,0 +1,524 @@
+{
+  "passed": true,
+  "scope": "Separate native-name-length candidate, not whole-board DT or ROM acceptance",
+  "base_file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+  "base_sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+  "candidate_file": "artifacts/dt-bcl-name-stage91/avr-bcl-name-candidate.dtb",
+  "candidate_sha256": "18cf3ab832d8a23219f0991e6d6147fda5384dfe2bae39efce7810fac4a30c4e",
+  "renames": {
+    "/soc/thermal-zones/pmih010x-2s-ibat-lvl0": "/soc/thermal-zones/pmih010x-2s-ibat0",
+    "/soc/thermal-zones/pmih010x-2s-ibat-lvl1": "/soc/thermal-zones/pmih010x-2s-ibat1"
+  },
+  "symbol_path_properties_updated": [
+    [
+      "/__symbols__",
+      "ibat_2s_lvl0"
+    ],
+    [
+      "/__symbols__",
+      "ibat_2s_lvl1"
+    ]
+  ],
+  "all_hardware_property_values_preserved": true,
+  "trip_subtrees_restored_to_saved_order": [
+    {
+      "parent": "/soc/thermal-zones/quiet-therm/trips",
+      "before": [
+        "/soc/thermal-zones/quiet-therm/trips/active-config1",
+        "/soc/thermal-zones/quiet-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/quiet-therm/trips/active-config0",
+        "/soc/thermal-zones/quiet-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/batt-therm/trips",
+      "before": [
+        "/soc/thermal-zones/batt-therm/trips/active-config1",
+        "/soc/thermal-zones/batt-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/batt-therm/trips/active-config0",
+        "/soc/thermal-zones/batt-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/conn-therm/trips",
+      "before": [
+        "/soc/thermal-zones/conn-therm/trips/active-config1",
+        "/soc/thermal-zones/conn-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/conn-therm/trips/active-config0",
+        "/soc/thermal-zones/conn-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/chg-therm/trips",
+      "before": [
+        "/soc/thermal-zones/chg-therm/trips/active-config1",
+        "/soc/thermal-zones/chg-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/chg-therm/trips/active-config0",
+        "/soc/thermal-zones/chg-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/wchg-therm/trips",
+      "before": [
+        "/soc/thermal-zones/wchg-therm/trips/active-config1",
+        "/soc/thermal-zones/wchg-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/wchg-therm/trips/active-config0",
+        "/soc/thermal-zones/wchg-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/mchg-therm/trips",
+      "before": [
+        "/soc/thermal-zones/mchg-therm/trips/active-config1",
+        "/soc/thermal-zones/mchg-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/mchg-therm/trips/active-config0",
+        "/soc/thermal-zones/mchg-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/xog-therm/trips",
+      "before": [
+        "/soc/thermal-zones/xog-therm/trips/active-config1",
+        "/soc/thermal-zones/xog-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/xog-therm/trips/active-config0",
+        "/soc/thermal-zones/xog-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pa2-therm/trips",
+      "before": [
+        "/soc/thermal-zones/pa2-therm/trips/active-config1",
+        "/soc/thermal-zones/pa2-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pa2-therm/trips/active-config0",
+        "/soc/thermal-zones/pa2-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/spkr-therm/trips",
+      "before": [
+        "/soc/thermal-zones/spkr-therm/trips/active-config1",
+        "/soc/thermal-zones/spkr-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/spkr-therm/trips/active-config0",
+        "/soc/thermal-zones/spkr-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pa1-therm/trips",
+      "before": [
+        "/soc/thermal-zones/pa1-therm/trips/active-config1",
+        "/soc/thermal-zones/pa1-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pa1-therm/trips/active-config0",
+        "/soc/thermal-zones/pa1-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/wifi-therm/trips",
+      "before": [
+        "/soc/thermal-zones/wifi-therm/trips/active-config1",
+        "/soc/thermal-zones/wifi-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/wifi-therm/trips/active-config0",
+        "/soc/thermal-zones/wifi-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/cam-therm/trips",
+      "before": [
+        "/soc/thermal-zones/cam-therm/trips/active-config1",
+        "/soc/thermal-zones/cam-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/cam-therm/trips/active-config0",
+        "/soc/thermal-zones/cam-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/msm-therm/trips",
+      "before": [
+        "/soc/thermal-zones/msm-therm/trips/active-config1",
+        "/soc/thermal-zones/msm-therm/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/msm-therm/trips/active-config0",
+        "/soc/thermal-zones/msm-therm/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/vbat/trips",
+      "before": [
+        "/soc/thermal-zones/vbat/trips/vbat-lvl2",
+        "/soc/thermal-zones/vbat/trips/vbat-lvl1",
+        "/soc/thermal-zones/vbat/trips/vbat-lvl0"
+      ],
+      "after": [
+        "/soc/thermal-zones/vbat/trips/vbat-lvl0",
+        "/soc/thermal-zones/vbat/trips/vbat-lvl1",
+        "/soc/thermal-zones/vbat/trips/vbat-lvl2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips",
+      "before": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2",
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip",
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips",
+      "before": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1",
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip",
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips",
+      "before": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0",
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip",
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/socd/trips",
+      "before": [
+        "/soc/thermal-zones/socd/trips/socd-trip",
+        "/soc/thermal-zones/socd/trips/thermal-hal-trip"
+      ],
+      "after": [
+        "/soc/thermal-zones/socd/trips/thermal-hal-trip",
+        "/soc/thermal-zones/socd/trips/socd-trip"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-8/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-8/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-8/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-8/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-8/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-7/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-7/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-7/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-7/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-7/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmd802x_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmd802x_tz/trips/trip2",
+        "/soc/thermal-zones/pmd802x_tz/trips/trip1",
+        "/soc/thermal-zones/pmd802x_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmd802x_tz/trips/trip0",
+        "/soc/thermal-zones/pmd802x_tz/trips/trip1",
+        "/soc/thermal-zones/pmd802x_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmih010x_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmih010x_tz/trips/trip2",
+        "/soc/thermal-zones/pmih010x_tz/trips/trip1",
+        "/soc/thermal-zones/pmih010x_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmih010x_tz/trips/trip0",
+        "/soc/thermal-zones/pmih010x_tz/trips/trip1",
+        "/soc/thermal-zones/pmih010x_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-12/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-12/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-12/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-12/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-12/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-6/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-6/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-6/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-6/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-6/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-5/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-5/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-5/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-5/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-5/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-3/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-3/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-3/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-3/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-3/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-2/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-2/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-2/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-2/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-2/trips/active-config1"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/sys-therm-0/trips",
+      "before": [
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config3",
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config2",
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config1",
+        "/soc/thermal-zones/sys-therm-0/trips/shutdown-trip",
+        "/soc/thermal-zones/sys-therm-0/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-0/trips/active-config0"
+      ],
+      "after": [
+        "/soc/thermal-zones/sys-therm-0/trips/active-config0",
+        "/soc/thermal-zones/sys-therm-0/trips/active-config1",
+        "/soc/thermal-zones/sys-therm-0/trips/shutdown-trip",
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config1",
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config2",
+        "/soc/thermal-zones/sys-therm-0/trips/display-test-config3"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmg1110l_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip2",
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip0",
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110l_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmg1110j_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip2",
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip0",
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110j_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmg1110c_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip2",
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip0",
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip1",
+        "/soc/thermal-zones/pmg1110c_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pmr735d_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pmr735d_tz/trips/trip2",
+        "/soc/thermal-zones/pmr735d_tz/trips/trip1",
+        "/soc/thermal-zones/pmr735d_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pmr735d_tz/trips/trip0",
+        "/soc/thermal-zones/pmr735d_tz/trips/trip1",
+        "/soc/thermal-zones/pmr735d_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8010n_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8010n_tz/trips/trip2",
+        "/soc/thermal-zones/pm8010n_tz/trips/trip1",
+        "/soc/thermal-zones/pm8010n_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8010n_tz/trips/trip0",
+        "/soc/thermal-zones/pm8010n_tz/trips/trip1",
+        "/soc/thermal-zones/pm8010n_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8010m_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8010m_tz/trips/trip2",
+        "/soc/thermal-zones/pm8010m_tz/trips/trip1",
+        "/soc/thermal-zones/pm8010m_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8010m_tz/trips/trip0",
+        "/soc/thermal-zones/pm8010m_tz/trips/trip1",
+        "/soc/thermal-zones/pm8010m_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8550ve_i_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip2",
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip0",
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_i_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8550ve_g_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip2",
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip0",
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_g_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8550ve_f_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip2",
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip0",
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_f_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8550ve_d_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip2",
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip0",
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550ve_d_tz/trips/trip2"
+      ]
+    },
+    {
+      "parent": "/soc/thermal-zones/pm8550_tz/trips",
+      "before": [
+        "/soc/thermal-zones/pm8550_tz/trips/trip2",
+        "/soc/thermal-zones/pm8550_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550_tz/trips/trip0"
+      ],
+      "after": [
+        "/soc/thermal-zones/pm8550_tz/trips/trip0",
+        "/soc/thermal-zones/pm8550_tz/trips/trip1",
+        "/soc/thermal-zones/pm8550_tz/trips/trip2"
+      ]
+    }
+  ],
+  "trip_groups_without_matching_saved_children": [],
+  "unrelated_node_order_preserved": true,
+  "reservation_map_and_strings_preserved": true,
+  "gpu_levels_unchanged": 21,
+  "native_dtc_passed": true,
+  "thermal_abi_changed": false,
+  "promoted": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "packaging_allowed": false,
+  "required_pairing": "Vendor thermal HAL contains the old lvl0 name and an inlined C++ string length; DT must not be deployed alone",
+  "pending": [
+    "Paired HAL binary adjustment and ROM/HAL acceptance",
+    "SID4 conflict and all previous whole-board DT/boot gaps"
+  ],
+  "saved_order_file": "device-baseline/running.dtb",
+  "saved_order_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+  "dtc_warning_categories": [
+    "avoid_default_addr_size",
+    "avoid_unnecessary_addr_size",
+    "gpios_property",
+    "i2c_bus_reg",
+    "pci_device_bus_num",
+    "pci_device_reg",
+    "ranges_format",
+    "reg_format",
+    "simple_bus_reg",
+    "spi_bus_reg",
+    "unique_unit_address",
+    "unit_address_format",
+    "unit_address_vs_reg"
+  ],
+  "dt_schema_validated": false,
+  "whole_board_dt_accepted": false
+}

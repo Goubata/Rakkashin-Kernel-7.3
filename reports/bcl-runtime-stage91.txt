@@ -1,0 +1,11 @@
+/sys/class/thermal/thermal_zone52/type pm8550-bcl-lvl0
+/sys/class/thermal/thermal_zone59/type pm8550-bcl-lvl1
+/sys/class/thermal/thermal_zone63/type pm8550-bcl-lvl2
+/sys/class/thermal/thermal_zone65/type vbat
+/sys/class/thermal/thermal_zone67/type pmih010x-ibat-lvl0
+/sys/class/thermal/thermal_zone69/type pmih010x-ibat-lvl1
+/sys/class/thermal/thermal_zone71/type pmih010x-bcl-lvl0
+/sys/class/thermal/thermal_zone73/type pmih010x-bcl-lvl1
+/sys/class/thermal/thermal_zone75/type pmih010x-bcl-lvl2
+6.12.113-android16-6-g18b507169406-ab14630870-4k
+Enforcing

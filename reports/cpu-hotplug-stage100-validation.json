@@ -1,0 +1,76 @@
+{
+ "stage": 100,
+ "scope": "Port Qualcomm CPU hotplug cooling (cpu_hotplug) to native 7.3 cpuhp/thermal_of with real QEMU CPU hotplug; private recorded sensor only",
+ "checks": {
+  "cpu_hotplug": {
+   "log": "reports/cpu-hotplug-stage100-qemu.log",
+   "test": "cpu-hotplug",
+   "passed": true,
+   "totals": [
+    8,
+    0,
+    0,
+    8
+   ],
+   "cpus": 4,
+   "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+   "guest_dtb_sha256": "9c28bbe836ccc3af58a83f3b0d2084aece6b8f79e057c4a3288336e2343891ac"
+  },
+  "saved_dt_and_phone": {
+   "report": "reports/cpu-hotplug-stage100-dt.json",
+   "passed": true
+  },
+  "import_crc": {
+   "report": "reports/cpu-hotplug-stage100-crc.json",
+   "passed": true,
+   "imports": [
+    36,
+    57
+   ]
+  },
+  "source_replay": {
+   "lock": "reports/cpu-hotplug-source-lock.json",
+   "patch": "patches/cpu-hotplug-7.3.patch",
+   "passed": true
+  }
+ },
+ "new_cases": 8,
+ "total_passed_cases": 8,
+ "artifact": "artifacts/cpu-hotplug-draft-stage100",
+ "core_image": "7.3.0-4k #27",
+ "core_changed": false,
+ "phone_partition_written": false,
+ "phone_dt_modified": false,
+ "physical_verified": false,
+ "promoted": false,
+ "software_readiness_target_complete": false,
+ "factory_defects_found_by_review": [
+  "INIT_LIST_HEAD on every probe drops/corrupts global list; devm entries never removed safely",
+  "thermal_cooling_device_unregister called under cpu_hot_lock while get_cur_state takes it: deadlock",
+  "reg/exec work not cancelled at remove (use-after-free)",
+  "child OF node stored without reference",
+  "returns NOTIFY_BAD from a cpuhp callback"
+ ],
+ "regressions_before": [
+  "Multi-instance cpuhp draft: veto test passed but native rollback hit WARN kernel/cpu.c:190 (stale cpuhp last instance). Switched to single-instance state + context list like the factory. Also one test bug (toggle parity) fixed in the test."
+ ],
+ "implemented": [
+  "OF cdev per child with alias, max state 1, -EBUSY online veto while mitigated",
+  "Per-device context on a global list, refcounted single-instance cpuhp state, cdev registration via work",
+  "Exec work converges to latest request; only CPUs offlined by this driver are restored; teardown cancels work, unregisters outside callback locks, restores CPUs"
+ ],
+ "verified": [
+  "8 KUnit cases on 4-CPU QEMU with real CPU hotplug: aliases/default name/OF node, -EINVAL bound, mitigation offlines CPU2 and vetoes add_cpu, release restores",
+  "unbind with mitigation restores CPU3, 3 cycles",
+  "CPU offline at probe registers on later online",
+  "51-step rapid toggles converge both ways",
+  "user-offlined CPU is not onlined by the driver",
+  "private thermal zone with DT cooling-map: 60C isolates CPU2 via step_wise, 20C restores",
+  "no valid CPU rejected; duplicate/bad/disabled children skipped; no WARN",
+  "Saved DT: 8 children -> CPUs0-7 with cpu-hotplugN aliases and 20 cooling-map refs; phone cpu-hotplug0-7 max 1"
+ ],
+ "limits": [
+  "Physical CPU isolation with vendor thermal hooks/thermal HAL and suspend interaction unverified",
+  "Whole-board boot, remaining drivers/DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain"
+ ]
+}

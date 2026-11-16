@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qti-cpu-hotplug/cpu_hotplug.ko",
+      "imports_checked": 36,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/cpu-hotplug/avr-cpu-hotplug-test.ko",
+      "imports_checked": 57,
+      "mismatches": {}
+    }
+  ]
+}

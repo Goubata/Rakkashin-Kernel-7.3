@@ -1,0 +1,4 @@
+1b6184b14d62ec931b44d6f865b7ad700701af37bf46fe9ea12b3f1fdae7e1e3  avr-cpu-hotplug-test.ko
+b2bcf00a930cc652dffb2219692dbb85bebdc0475389981d8bf03d231c43f0fb  cpu_hotplug.ko
+2b77990e0099ad85d81d056e18a5fd8814746cda81c125dd3ed31af2f772e5e1  metadata.json
+9c28bbe836ccc3af58a83f3b0d2084aece6b8f79e057c4a3288336e2343891ac  virt-cpu-hotplug.dtb

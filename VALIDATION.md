@@ -2300,3 +2300,27 @@ no kernel cooling-map references (userspace HAL by type). Read-only phone sysfs
 (reports/cpufreq-stage99-phone-tables.txt): max_state23/24 equal the table sizes.
 Evidence: reports/cpufreq-cooling-stage99-validation.json. Limits: SCMI enforcement on
 hardware, HAL use, whole-board boot and daily use remain. No partition writes/reboot.
+
+## Stage100: CPU hotplug cooling on native cpuhp/thermal_of
+
+Port pinned factory drivers/thermal/qcom/cpu_hotplug.c (037aa1c) as ports/qti-cpu-hotplug.
+Factory ABI kept: one OF cooling device per available child (DT cooling maps bind it),
+type qcom,cdev-alias or cpu-hotplugN, max state1, mitigation offlines the CPU and the
+online callback vetoes onlining while mitigated (now -EBUSY instead of NOTIFY_BAD).
+Review found: INIT_LIST_HEAD on every probe, cdev unregister under the lock its
+get_cur_state takes (deadlock), uncancelled reg/exec work, unreferenced child nodes.
+The draft uses a per-device context on a global list, a refcounted single-instance
+cpuhp state, lifecycle vs callback locks, converging exec work that restores only CPUs
+it offlined, and teardown that cancels work, unregisters and restores CPUs.
+
+A multi-instance cpuhp draft vetoed correctly but native rollback hit WARN
+kernel/cpu.c:190 (stale last instance), so the single-instance factory shape was kept.
+Image#27 (unchanged) passes8 KUnit cases on4 CPUs with real CPU hotplug: alias/default
+names and OF node, bound rejection, isolation+veto+restore, unbind restores (3x), late
+registration after online, 51-step toggles converge, user-offlined CPU left offline,
+private thermal zone cooling-map isolates CPU2 at60C and restores at20C via step_wise,
+invalid/duplicate/disabled children skipped. No WARN/panic. Import CRCs match.
+Saved DT (scripts/audit_cpu_hotplug_dt.py): 8 children -> CPUs0-7, aliases cpu-hotplugN,
+20 cooling-map references; phone cpu-hotplug0-7 max_state1. Evidence:
+reports/cpu-hotplug-stage100-validation.json. Limits: physical isolation with vendor
+hooks/HAL, suspend interaction, whole-board boot and daily use remain. No writes/reboot.

@@ -1,0 +1,18 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qti-cpu-hotplug'
+  CC [M]  cpu_hotplug.o
+  MODPOST Module.symvers
+  CC [M]  cpu_hotplug.mod.o
+  LD [M]  cpu_hotplug.ko
+  BTF [M] cpu_hotplug.ko
+make[1]: Leaving directory '/work/avr-port/ports/qti-cpu-hotplug'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/cpu-hotplug'
+  CC [M]  avr-cpu-hotplug-test.o
+  MODPOST Module.symvers
+  CC [M]  avr-cpu-hotplug-test.mod.o
+  LD [M]  avr-cpu-hotplug-test.ko
+  BTF [M] avr-cpu-hotplug-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/cpu-hotplug'
+make: Leaving directory '/work/avr-src'

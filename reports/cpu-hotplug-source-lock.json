@@ -1,0 +1,32 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qti-cpu-hotplug/cpu_hotplug.c",
+      "source": "drivers/thermal/qcom/cpu_hotplug.c",
+      "original_sha256": "7875f7fb937c66f8d450fed2364e2c8359c896eaa6b2ecc71b1d726a3d021496",
+      "sha256": "e7ff5d4304e25eea60a38b0d41c246896d6de9a49755e5f227b4951a335a927b"
+    },
+    {
+      "file": "ports/qti-cpu-hotplug/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "66c4347846b85b38d4ac9825dd7300242eeeda9d7fce9962f7a1aa69eb0f9e44"
+    }
+  ],
+  "patch_sha256": "177b392ce7a9c17d08e6eb56d8c38101e986026aa3aa2e0b5074f902c6e8793e",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned factory CPU hotplug cooling OF cdev/alias/veto semantics; native 7.3 per-device lifetime, lock order and restore port",
+  "reviewed_changes": [
+    "Keep OF cdev on each child (DT cooling maps), qcom,cdev-alias or cpu-hotplugN, max state 1, online veto while mitigated",
+    "Per-device context and multi-instance cpuhp replace global list reset by INIT_LIST_HEAD on every probe",
+    "Unregister cdevs outside callback lock (factory held cpu_hot_lock across thermal unregister that drains get_cur_state: deadlock)",
+    "Cancel reg/exec work before teardown, restore only CPUs this driver offlined, hold child OF node references",
+    "Exec work converges to the latest request; does not online a CPU the user offlined; veto returns -EBUSY instead of NOTIFY_BAD"
+  ],
+  "pending": [
+    "Physical CPU isolation under thermal HAL/vendor hooks and suspend interaction",
+    "Whole-board drivers/DT/boot/DLKM/SELinux and daily-use acceptance"
+  ]
+}

@@ -1,0 +1,25 @@
+/dts-v1/;
+/plugin/;
+/* AVR-shaped qcom,cpu-hotplug children; 0x8003..0x8001 are QEMU virt -smp4
+ * cpu@1..3 phandles (the test verifies them). Private sensor/zone only. */
+/ { fragment@0 { target-path="/"; __overlay__ {
+ avr_hp_sensor: avr-hp-sensor { #thermal-sensor-cells=<0>; };
+ thermal-zones {
+  avr-hotplug-zone { polling-delay-passive=<0>; polling-delay=<0>; thermal-sensors=<&avr_hp_sensor>;
+   trips { avr_hp_trip: hot { temperature=<50000>; hysteresis=<5000>; type="passive"; }; };
+   cooling-maps { cpu2-isolate { trip=<&avr_hp_trip>; cooling-device=<&avr_hp2 1 1>; }; };
+  };
+ };
+ avr-hotplug-fixture {
+  avr_not_cpu: not-cpu { };
+  good { compatible="avr,cpu-hotplug-private";
+   avr_hp1: cpu1-hotplug { qcom,cpu=<0x8003>; qcom,cdev-alias="cpu-hotplug1"; #cooling-cells=<2>; };
+   avr_hp2: cpu2-hotplug { qcom,cpu=<0x8002>; qcom,cdev-alias="cpu-hotplug2"; #cooling-cells=<2>; };
+   cpu3-hotplug { qcom,cpu=<0x8001>; #cooling-cells=<2>; };
+   duplicate { qcom,cpu=<0x8001>; #cooling-cells=<2>; };
+   bad { qcom,cpu=<&avr_not_cpu>; #cooling-cells=<2>; };
+   off { status="disabled"; qcom,cpu=<0x8003>; };
+  };
+  none { compatible="avr,cpu-hotplug-private"; bad { qcom,cpu=<&avr_not_cpu>; }; };
+ };
+}; }; };

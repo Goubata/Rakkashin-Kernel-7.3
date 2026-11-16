@@ -2573,6 +2573,6 @@ policies {0,1} and {2,3} with exactly the phone's scaling_available_frequencies,
 performance -> 3801600, boost 0 -> 3436800, boost 1 -> 3801600, scaling_max 2000000 -> 1996800,
 policy0 max 1555200 -> LEVEL_SET 1555200; KUnit vendor set/get/start/stop roundtrip via
 get_qcom_scmi_device(); qcom_cpucp, cpucp_log, cpu_phys_log_map, qcom-cpufreq-hw, scmi-clk load.
-Regression on Image#35: 23 suites + scm, secure, pas-driver, ice, iommu; 158 CRCs; replay 31 patches.
+Regression on Image#36: 23 suites + scm, secure, pas-driver, ice, iommu; 158 CRCs; replay 31 patches.
 Not verified: CPUCP MMIO mailbox/IRQ, cpucp_fast (needs WALT + CPUCP), perf notifications/
 fastchannels support of the real PDP firmware.

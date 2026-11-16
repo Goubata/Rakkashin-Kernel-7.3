@@ -24,6 +24,8 @@ struct dma_heap_ops {
 				    unsigned long len,
 				    u32 fd_flags,
 				    u64 heap_flags);
+	/* ANDROID: if heap maintains memory pools, get pool size in bytes */
+	long (*get_pool_size)(struct dma_heap *heap);
 };
 
 /**
@@ -118,4 +120,10 @@ int dma_heap_bufferfd_alloc(struct dma_heap *heap, size_t len,
 
 extern bool mem_accounting;
 
+/**
+ * dma_heap_try_get_pool_size_kb - Returns total dma-heap pool size in kb
+ * if there is no lock contention. The pool size will always be 0 if no heaps
+ * use pools, or do not implement get_pool_size.
+ **/
+long dma_heap_try_get_pool_size_kb(void);
 #endif /* _DMA_HEAPS_H */

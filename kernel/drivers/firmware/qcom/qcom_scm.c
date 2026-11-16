@@ -42,6 +42,7 @@
 #include "qcom_pas_retry.h"
 #include "qcom_scm.h"
 #include "qcom_tzmem.h"
+#include "lcp-ppddr-internal.h"
 
 static u32 download_mode;
 
@@ -1526,6 +1527,116 @@ int qcom_scm_assign_mem(phys_addr_t mem_addr, size_t mem_sz,
 	return 0;
 }
 EXPORT_SYMBOL_GPL(qcom_scm_assign_mem);
+
+/*
+ * ANDROID/QCOM: LCP physically protected DDR regions (android16-6.12 qcom_scm.c,
+ * used by mem-prot for the DT "qcom,mem-prot-pool" carve-outs). 6.12 allocated
+ * the argument/response buffers from qtee_shmbridge; 7.3 uses the SCM TZMEM pool,
+ * which is SHM-bridge registered in CONFIG_QCOM_TZMEM_MODE_SHMBRIDGE.
+ */
+#define QCOM_SCM_SVC_DDR					0x27U
+#define QCOM_SCM_SVC_DDR_CFG_PHYS_DDR_PROTECTION_FOR_REGIONS	0x02U
+#define CFG_PHYS_DDR_PROTECTIONS_FOR_REGIONS_API_VERSION	1
+
+static int qcom_scm_lcp_map_error(u32 resp)
+{
+	switch (resp) {
+	case CFG_PHYS_DDR_PROTECTION_RSP_CMD_COMPLETE:
+		return 0;
+	case CFG_PHYS_DDR_PROTECTION_RSP_ERR_HW_IS_BUSY:
+		return -EBUSY;
+	case CFG_PHYS_DDR_PROTECTION_RSP_ERR_REGION_NOT_PROTECTABLE:
+	case CFG_PHYS_DDR_PROTECTION_RSP_ERR_NO_CFG_ALLOWED:
+	case CFG_PHYS_DDR_PROTECTION_RSP_ERR_REGION_ALREADY_IN_USE:
+		return -EINVAL;
+	case CFG_PHYS_DDR_PROTECTION_RSP_ERR_PARTIAL_ENABLE_NOT_SUPPORTED:
+		return -EOPNOTSUPP;
+	default:
+		return -EIO;
+	}
+}
+
+int qcom_scm_cfg_pddr_protected_region(struct ppddr_region *cfg_region)
+{
+	struct phys_protected_ddr_region *ppddr;
+	struct qcom_scm_res res;
+	enum cfg_phys_ddr_protection_cmd cmd;
+	u32 *resp;
+	int ret;
+
+	if (!cfg_region)
+		return 0;
+	if (!__scm || !__scm->mempool)
+		return -EPROBE_DEFER;
+
+	cmd = cfg_region->lcp_mem_type;
+	switch (cmd) {
+	case CFG_PHYS_DDR_PROTECTION_CMD_DISABLE_REGIONS:
+	case CFG_PHYS_DDR_PROTECTION_CMD_ENABLE_DE:
+	case CFG_PHYS_DDR_PROTECTION_CMD_ENABLE_AND_INIT_DAE:
+	case CFG_PHYS_DDR_PROTECTION_CMD_ENABLE_AND_INIT_DARE:
+	case CFG_PHYS_DDR_PROTECTION_CMD_ENABLE_MTE:
+	case CFG_PHYS_DDR_PROTECTION_CMD_ENABLE_DE_AND_MTE:
+		break;
+	default:
+		/* GET_CMD_RESULT is internal to the polling loop */
+		return -EINVAL;
+	}
+
+	resp = qcom_tzmem_alloc(__scm->mempool, sizeof(*resp), GFP_KERNEL);
+	if (!resp)
+		return -ENOMEM;
+	ppddr = qcom_tzmem_alloc(__scm->mempool, sizeof(*ppddr), GFP_KERNEL);
+	if (!ppddr) {
+		qcom_tzmem_free(resp);
+		return -ENOMEM;
+	}
+	memset(resp, 0, sizeof(*resp));
+	memset(ppddr, 0, sizeof(*ppddr));
+	ppddr->ppddr_data_region.start_addr = cfg_region->data_region.start_addr;
+	ppddr->ppddr_data_region.end_addr = cfg_region->data_region.end_addr;
+	ppddr->ppddr_init_data_region.start_addr = cfg_region->data_region.start_addr;
+	ppddr->ppddr_init_data_region.end_addr = cfg_region->data_region.end_addr;
+	/* TZ manages the tag regions (pointers stay NULL, sizes 0) */
+
+	{
+		struct qcom_scm_desc desc = {
+			.svc = QCOM_SCM_SVC_DDR,
+			.cmd = QCOM_SCM_SVC_DDR_CFG_PHYS_DDR_PROTECTION_FOR_REGIONS,
+			.arginfo = QCOM_SCM_ARGS(6, QCOM_SCM_VAL, QCOM_SCM_RW, QCOM_SCM_VAL,
+						 QCOM_SCM_RW, QCOM_SCM_VAL, QCOM_SCM_VAL),
+			.args[0] = CFG_PHYS_DDR_PROTECTIONS_FOR_REGIONS_API_VERSION,
+			.args[1] = qcom_tzmem_to_phys(ppddr),
+			.args[2] = sizeof(*ppddr),
+			.args[3] = qcom_tzmem_to_phys(resp),
+			.args[4] = sizeof(*resp),
+			.args[5] = cmd,
+			.owner = ARM_SMCCC_OWNER_SIP,
+		};
+
+		for (;;) {
+			ret = qcom_scm_call(__scm->dev, &desc, &res);
+			if (ret)
+				goto out;
+			if (READ_ONCE(*resp) != CFG_PHYS_DDR_PROTECTION_RSP_CMD_PROCESSING)
+				break;
+			/* request submitted; poll for its result */
+			desc.args[5] = CFG_PHYS_DDR_PROTECTION_CMD_GET_CMD_RESULT_FOR_REGIONS;
+		}
+		ret = res.result[0];
+	}
+	if (!ret)
+		ret = qcom_scm_lcp_map_error(READ_ONCE(*resp));
+out:
+	if (ret)
+		pr_err("cfg_pddr_protected_region [%#llx, %#llx) type %d: resp %u ret %d\n",
+		       (u64)cfg_region->data_region.start_addr,
+		       (u64)cfg_region->data_region.end_addr, cmd, READ_ONCE(*resp), ret);
+	qcom_tzmem_free(ppddr);
+	qcom_tzmem_free(resp);
+	return ret;
+}
+EXPORT_SYMBOL_GPL(qcom_scm_cfg_pddr_protected_region);
 
 /**
  * qcom_scm_ocmem_lock_available() - is OCMEM lock/unlock interface available

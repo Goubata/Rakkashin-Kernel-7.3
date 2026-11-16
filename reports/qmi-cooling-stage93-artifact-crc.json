@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "artifacts/qmi-cooling-draft-stage93/qmi_cooling.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/qmi-cooling-draft-stage93/qmi_helpers.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/qmi-cooling-draft-stage93/qrtr.ko",
+      "imports_checked": 138,
+      "mismatches": {}
+    }
+  ]
+}

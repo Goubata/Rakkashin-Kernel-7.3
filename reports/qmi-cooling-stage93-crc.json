@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-qmi-cooling/qmi_cooling.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qmi-cooling/avr-qmi-cooling-test.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    }
+  ]
+}

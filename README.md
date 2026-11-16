@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage93ではモデム／CDSP向けQMI温度制御ドライバを7.3へ移植しました。実際のnative QMI／QRTRローカル通信とthermal登録を使う15テストが通過し、3モジュール計222インポートCRCが一致。保存DTの27冷却デバイス宣言と正規化したcooling-map参照が一致しています。実機ファームウェア・OF probe統合・全競合条件は未確認です。成果物は `artifacts/qmi-cooling-draft-stage93/`、証拠は `reports/qmi-cooling-stage93-validation.json`。同名のビルド候補は544個中122個（22.4%）ですが、異なる段階の候補を合わせた名前の対応率であり、機能・作業の完成率ではありません。Stage57の118モジュールの統合版は未更新、常用版ではありません。
+
 Stage92ではPMIC BCLのIRQ wake解除失敗・freeze／restoreの再試行と、regmap供給元の解除順序を修正しました。IRQ処理中の供給元解除を含む44テストが4コア仮想環境で警告なしに通過し、新モジュールの62インポートCRCが一致。成果物は `artifacts/bcl-pmic-draft-stage92/`、証拠は `reports/bcl-pmic-stage92-validation.json`。恒久的なwake解除失敗の最終復旧と実機常用動作は未確認です。
 
 Stage91ではPMIC BCLを標準のOF・NVMEM・ドライバ登録から検証し、割り込みスレッドと再接続を含む36件が4コア仮想環境で通過しました。候補DTの2S名が7.3の文字数上限を超える問題と、39組のtrip順の違いを修正した別候補を作成。GPUの21段階と全ハードウェア値を保持しています。ROMのthermal HALには名前とC++長さ情報の調整案も用意しましたが、HAL全体の動作は未確認です。証拠は `reports/bcl-stage91-validation.json`。実機への適用・常用確認は未完了です。

@@ -1,0 +1,897 @@
+{
+  "scope": "Same-name built-candidate count only, including mixed draft outputs and frozen Stage57; not one accepted package, functionality, stability or work completion",
+  "baseline_sha256": "1d5fe3b4c3e52dc5ee0d606a13e720593728a8efdace7c5fc35238b552ca011e",
+  "archived_unique_names": 544,
+  "matched_candidate_names": 122,
+  "name_coverage_percent": 22.4,
+  "physical_completion_percent": null,
+  "candidates": {
+    "arm_smmu": [
+      "ports/arm-smmu-vendor/arm_smmu.ko",
+      "artifacts/android73-info-stage57/modules/arm-smmu-vendor/arm_smmu.ko"
+    ],
+    "gcc_alor": [
+      "ports/gcc-alor-vendor-core/gcc-alor.ko",
+      "ports/qcom-clock-controllers/gcc-alor.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/gcc-alor.ko"
+    ],
+    "i2c_msm_geni": [
+      "ports/geni-bus/i2c-msm-geni.ko"
+    ],
+    "msm_gpi": [
+      "ports/geni-bus/msm_gpi.ko"
+    ],
+    "spi_msm_geni": [
+      "ports/geni-bus/spi-msm-geni.ko"
+    ],
+    "goodix_brl_thp": [
+      "ports/goodix-touch/goodix_brl_thp.ko"
+    ],
+    "touchscreen_mmi": [
+      "ports/goodix-touch/touchscreen_mmi.ko"
+    ],
+    "governor_msm_adreno_ro": [
+      "ports/governor-adreno-ro/governor_msm_adreno_ro.ko",
+      "artifacts/android73-info-stage57/modules/governor-adreno-ro/governor_msm_adreno_ro.ko"
+    ],
+    "governor_msm_adreno_tz": [
+      "ports/governor-adreno-tz/governor_msm_adreno_tz.ko",
+      "artifacts/android73-info-stage57/modules/governor-adreno-tz/governor_msm_adreno_tz.ko"
+    ],
+    "governor_gpubw_mon": [
+      "ports/governor-gpubw/governor_gpubw_mon.ko",
+      "artifacts/android73-info-stage57/modules/governor-gpubw/governor_gpubw_mon.ko"
+    ],
+    "gh_arm_drv": [
+      "ports/gunyah/gh_arm_drv.ko",
+      "artifacts/android73-info-stage57/modules/gunyah/gh_arm_drv.ko"
+    ],
+    "gh_dbl": [
+      "ports/gunyah/gh_dbl.ko",
+      "artifacts/android73-info-stage57/modules/gunyah/gh_dbl.ko"
+    ],
+    "gh_msgq": [
+      "ports/gunyah/gh_msgq.ko",
+      "artifacts/android73-info-stage57/modules/gunyah/gh_msgq.ko"
+    ],
+    "gh_rm_drv": [
+      "ports/gunyah-rm/gh_rm_drv.ko",
+      "artifacts/android73-info-stage57/modules/gunyah-rm/gh_rm_drv.ko"
+    ],
+    "iommu_logger": [
+      "ports/iommu-logger/iommu_logger.ko",
+      "artifacts/android73-info-stage57/modules/iommu-logger/iommu_logger.ko"
+    ],
+    "msm_kgsl": [
+      "ports/kgsl/msm_kgsl.ko",
+      "artifacts/android73-info-stage57/modules/kgsl/msm_kgsl.ko"
+    ],
+    "mmi_annotate": [
+      "ports/moto-info/mmi_annotate.ko",
+      "artifacts/android73-info-stage57/modules/moto-info/mmi_annotate.ko"
+    ],
+    "mmi_info": [
+      "ports/moto-info/mmi_info.ko",
+      "artifacts/android73-info-stage57/modules/moto-info/mmi_info.ko"
+    ],
+    "mmi_relay": [
+      "ports/moto-touch-deps/mmi_relay.ko",
+      "artifacts/android73-info-stage57/modules/moto-touch-deps/mmi_relay.ko"
+    ],
+    "sensors_class": [
+      "ports/moto-touch-deps/sensors_class.ko",
+      "artifacts/android73-info-stage57/modules/moto-touch-deps/sensors_class.ko"
+    ],
+    "msm_sysstats": [
+      "ports/msm-sysstats/msm_sysstats.ko",
+      "artifacts/android73-info-stage57/modules/msm-sysstats/msm_sysstats.ko"
+    ],
+    "pinctrl_alor": [
+      "ports/pinctrl-alor-vendor-core/pinctrl-alor.ko",
+      "artifacts/android73-info-stage57/modules/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+    ],
+    "pinctrl_msm": [
+      "ports/pinctrl-alor-vendor-core/pinctrl-msm.ko",
+      "artifacts/android73-info-stage57/modules/pinctrl-alor-vendor-core/pinctrl-msm.ko"
+    ],
+    "pinctrl_spmi_gpio": [
+      "ports/pmic-pinctrl/pinctrl-spmi-gpio.ko",
+      "artifacts/android73-info-stage57/modules/pmic-pinctrl/pinctrl-spmi-gpio.ko"
+    ],
+    "pinctrl_spmi_mpp": [
+      "ports/pmic-pinctrl/pinctrl-spmi-mpp.ko",
+      "artifacts/android73-info-stage57/modules/pmic-pinctrl/pinctrl-spmi-mpp.ko"
+    ],
+    "qcom_spmi_adc5_gen3": [
+      "ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko",
+      "artifacts/android73-info-stage57/modules/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
+    ],
+    "qcom_spmi_temp_alarm": [
+      "ports/qcom-adc-thermal/qcom-spmi-temp-alarm.ko",
+      "artifacts/android73-info-stage57/modules/qcom-adc-thermal/qcom-spmi-temp-alarm.ko"
+    ],
+    "qcom_vadc_common": [
+      "ports/qcom-adc-thermal/qcom-vadc-common.ko",
+      "artifacts/android73-info-stage57/modules/qcom-adc-thermal/qcom-vadc-common.ko"
+    ],
+    "bcl_pmic5": [
+      "ports/qcom-bcl-pmic/bcl_pmic5.ko"
+    ],
+    "bcl_soc": [
+      "ports/qcom-bcl-soc/bcl_soc.ko"
+    ],
+    "cambistmclkcc_canoe": [
+      "ports/qcom-clock-controllers/cambistmclkcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/cambistmclkcc-canoe.ko"
+    ],
+    "camcc_alor": [
+      "ports/qcom-clock-controllers/camcc-alor.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/camcc-alor.ko"
+    ],
+    "camcc_canoe": [
+      "ports/qcom-clock-controllers/camcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/camcc-canoe.ko"
+    ],
+    "camcc_chora": [
+      "ports/qcom-clock-controllers/camcc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/camcc-chora.ko"
+    ],
+    "clk_dummy": [
+      "ports/qcom-clock-controllers/clk-dummy.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/clk-dummy.ko"
+    ],
+    "clk_rpmh": [
+      "ports/qcom-clock-controllers/clk-rpmh.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/clk-rpmh.ko"
+    ],
+    "debugcc_alor": [
+      "ports/qcom-clock-controllers/debugcc-alor.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/debugcc-alor.ko"
+    ],
+    "debugcc_canoe": [
+      "ports/qcom-clock-controllers/debugcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/debugcc-canoe.ko"
+    ],
+    "debugcc_chora": [
+      "ports/qcom-clock-controllers/debugcc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/debugcc-chora.ko"
+    ],
+    "dispcc_canoe": [
+      "ports/qcom-clock-controllers/dispcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/dispcc-canoe.ko"
+    ],
+    "dispcc_chora": [
+      "ports/qcom-clock-controllers/dispcc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/dispcc-chora.ko"
+    ],
+    "evacc_canoe": [
+      "ports/qcom-clock-controllers/evacc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/evacc-canoe.ko"
+    ],
+    "gcc_canoe": [
+      "ports/qcom-clock-controllers/gcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/gcc-canoe.ko"
+    ],
+    "gcc_chora": [
+      "ports/qcom-clock-controllers/gcc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/gcc-chora.ko"
+    ],
+    "gpucc_canoe": [
+      "ports/qcom-clock-controllers/gpucc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/gpucc-canoe.ko"
+    ],
+    "gpucc_chora": [
+      "ports/qcom-clock-controllers/gpucc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/gpucc-chora.ko"
+    ],
+    "tcsrcc_canoe": [
+      "ports/qcom-clock-controllers/tcsrcc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/tcsrcc-canoe.ko"
+    ],
+    "tcsrcc_chora": [
+      "ports/qcom-clock-controllers/tcsrcc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/tcsrcc-chora.ko"
+    ],
+    "videocc_canoe": [
+      "ports/qcom-clock-controllers/videocc-canoe.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/videocc-canoe.ko"
+    ],
+    "videocc_chora": [
+      "ports/qcom-clock-controllers/videocc-chora.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-controllers/videocc-chora.ko"
+    ],
+    "clk_qcom": [
+      "ports/qcom-clock-core/clk-qcom.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-core/clk-qcom.ko"
+    ],
+    "crm_v2": [
+      "ports/qcom-clock-core/crm-v2.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-core/crm-v2.ko"
+    ],
+    "gdsc_regulator": [
+      "ports/qcom-clock-core/gdsc-regulator.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-core/gdsc-regulator.ko"
+    ],
+    "proxy_consumer": [
+      "ports/qcom-clock-core/proxy-consumer.ko",
+      "artifacts/android73-info-stage57/modules/qcom-clock-core/proxy-consumer.ko"
+    ],
+    "dcvs_fp": [
+      "ports/qcom-dcvs/dcvs_fp.ko",
+      "artifacts/android73-info-stage57/modules/qcom-dcvs/dcvs_fp.ko"
+    ],
+    "qcom_dcvs": [
+      "ports/qcom-dcvs/qcom-dcvs.ko",
+      "artifacts/android73-info-stage57/modules/qcom-dcvs/qcom-dcvs.ko"
+    ],
+    "qcom_glink": [
+      "ports/qcom-glink-transport/qcom_glink.ko",
+      "artifacts/android73-info-stage57/modules/qcom-glink-transport/qcom_glink.ko"
+    ],
+    "qcom_glink_smem": [
+      "ports/qcom-glink-transport/qcom_glink_smem.ko",
+      "artifacts/android73-info-stage57/modules/qcom-glink-transport/qcom_glink_smem.ko"
+    ],
+    "qcom_hwspinlock": [
+      "ports/qcom-hwspinlock/qcom_hwspinlock.ko",
+      "artifacts/android73-info-stage57/modules/qcom-hwspinlock/qcom_hwspinlock.ko"
+    ],
+    "qcom_ice": [
+      "ports/qcom-ice/qcom_ice.ko",
+      "artifacts/android73-info-stage57/modules/qcom-ice/qcom_ice.ko"
+    ],
+    "icc_bcm_voter": [
+      "ports/qcom-interconnect/icc-bcm-voter.ko",
+      "artifacts/android73-info-stage57/modules/qcom-interconnect/icc-bcm-voter.ko"
+    ],
+    "icc_debug": [
+      "ports/qcom-interconnect/icc-debug.ko",
+      "artifacts/android73-info-stage57/modules/qcom-interconnect/icc-debug.ko"
+    ],
+    "icc_rpmh": [
+      "ports/qcom-interconnect/icc-rpmh.ko",
+      "artifacts/android73-info-stage57/modules/qcom-interconnect/icc-rpmh.ko"
+    ],
+    "qnoc_alor": [
+      "ports/qcom-interconnect/qnoc-alor.ko",
+      "artifacts/android73-info-stage57/modules/qcom-interconnect/qnoc-alor.ko"
+    ],
+    "qnoc_qos": [
+      "ports/qcom-interconnect/qnoc-qos.ko",
+      "artifacts/android73-info-stage57/modules/qcom-interconnect/qnoc-qos.ko"
+    ],
+    "qcom_iommu_util": [
+      "ports/qcom-iommu-util/qcom_iommu_util.ko",
+      "artifacts/android73-info-stage57/modules/qcom-iommu-util/qcom_iommu_util.ko"
+    ],
+    "qcom_ipc_logging": [
+      "ports/qcom-ipc-logging/qcom_ipc_logging.ko",
+      "artifacts/android73-info-stage57/modules/qcom-ipc-logging/qcom_ipc_logging.ko"
+    ],
+    "qcom_ipcc": [
+      "ports/qcom-ipcc/qcom-ipcc.ko",
+      "artifacts/android73-info-stage57/modules/qcom-ipcc/qcom-ipcc.ko"
+    ],
+    "cpu_phys_log_map": [
+      "ports/qcom-irq/cpu_phys_log_map.ko",
+      "artifacts/android73-info-stage57/modules/qcom-irq/cpu_phys_log_map.ko"
+    ],
+    "gic_intr_routing": [
+      "ports/qcom-irq/gic_intr_routing.ko",
+      "artifacts/android73-info-stage57/modules/qcom-irq/gic_intr_routing.ko"
+    ],
+    "qcom_pdc": [
+      "ports/qcom-irq/qcom-pdc.ko",
+      "artifacts/android73-info-stage57/modules/qcom-irq/qcom-pdc.ko"
+    ],
+    "llcc_qcom": [
+      "ports/qcom-llcc/llcc-qcom.ko",
+      "artifacts/android73-info-stage57/modules/qcom-llcc/llcc-qcom.ko"
+    ],
+    "minidump": [
+      "ports/qcom-minidump/minidump.ko",
+      "artifacts/android73-info-stage57/modules/qcom-minidump/minidump.ko"
+    ],
+    "panel_event_notifier": [
+      "ports/qcom-panel-event/panel_event_notifier.ko",
+      "artifacts/android73-info-stage57/modules/qcom-panel-event/panel_event_notifier.ko"
+    ],
+    "mdt_loader": [
+      "ports/qcom-pas-alor/mdt_loader.ko"
+    ],
+    "qcom_pil_info": [
+      "ports/qcom-pas-alor/qcom_pil_info.ko"
+    ],
+    "qcom_q6v5_pas": [
+      "ports/qcom-pas-alor/qcom_q6v5_pas.ko"
+    ],
+    "qti_pmic_glink": [
+      "ports/qcom-pmic-glink/qti_pmic_glink.ko",
+      "artifacts/android73-info-stage57/modules/qcom-pmic-glink/qti_pmic_glink.ko"
+    ],
+    "pm8941_pwrkey": [
+      "ports/qcom-power-key/pm8941-pwrkey.ko",
+      "artifacts/android73-info-stage57/modules/qcom-power-key/pm8941-pwrkey.ko"
+    ],
+    "qcom_pon": [
+      "ports/qcom-power-key/qcom-pon.ko",
+      "artifacts/android73-info-stage57/modules/qcom-power-key/qcom-pon.ko"
+    ],
+    "reboot_mode": [
+      "ports/qcom-power-key/reboot-mode.ko",
+      "artifacts/android73-info-stage57/modules/qcom-power-key/reboot-mode.ko"
+    ],
+    "debug_regulator": [
+      "ports/qcom-regulators/debug-regulator.ko",
+      "artifacts/android73-info-stage57/modules/qcom-regulators/debug-regulator.ko"
+    ],
+    "rpmh_regulator": [
+      "ports/qcom-regulators/rpmh-regulator.ko",
+      "artifacts/android73-info-stage57/modules/qcom-regulators/rpmh-regulator.ko"
+    ],
+    "stub_regulator": [
+      "ports/qcom-regulators/stub-regulator.ko",
+      "artifacts/android73-info-stage57/modules/qcom-regulators/stub-regulator.ko"
+    ],
+    "qcom_aoss": [
+      "ports/qcom-remoteproc-services/qcom_aoss.ko",
+      "artifacts/android73-info-stage57/modules/qcom-remoteproc-services/qcom_aoss.ko"
+    ],
+    "qcom_q6v5": [
+      "ports/qcom-remoteproc-services/qcom_q6v5.ko",
+      "artifacts/android73-info-stage57/modules/qcom-remoteproc-services/qcom_q6v5.ko"
+    ],
+    "qcom_sysmon": [
+      "ports/qcom-remoteproc-services/qcom_sysmon.ko",
+      "artifacts/android73-info-stage57/modules/qcom-remoteproc-services/qcom_sysmon.ko"
+    ],
+    "qcom_rng": [
+      "ports/qcom-rng/qcom-rng.ko"
+    ],
+    "cmd_db": [
+      "ports/qcom-rpmh/cmd-db.ko",
+      "artifacts/android73-info-stage57/modules/qcom-rpmh/cmd-db.ko"
+    ],
+    "qcom_rpmh": [
+      "ports/qcom-rpmh/qcom_rpmh.ko",
+      "artifacts/android73-info-stage57/modules/qcom-rpmh/qcom_rpmh.ko"
+    ],
+    "rtc_pm8xxx": [
+      "ports/qcom-rtc/rtc-pm8xxx.ko",
+      "artifacts/android73-info-stage57/modules/qcom-rtc/rtc-pm8xxx.ko"
+    ],
+    "nvmem_qcom_spmi_sdam": [
+      "ports/qcom-sdam/nvmem_qcom-spmi-sdam.ko",
+      "artifacts/android73-info-stage57/modules/qcom-sdam/nvmem_qcom-spmi-sdam.ko"
+    ],
+    "smem": [
+      "ports/qcom-smem/smem.ko",
+      "artifacts/android73-info-stage57/modules/qcom-smem/smem.ko"
+    ],
+    "smp2p": [
+      "ports/qcom-smp2p/smp2p.ko",
+      "artifacts/android73-info-stage57/modules/qcom-smp2p/smp2p.ko"
+    ],
+    "socinfo": [
+      "ports/qcom-socinfo/socinfo.ko",
+      "artifacts/android73-info-stage57/modules/qcom-socinfo/socinfo.ko"
+    ],
+    "qcom_spmi_pmic": [
+      "ports/qcom-spmi/qcom-spmi-pmic.ko",
+      "artifacts/android73-info-stage57/modules/qcom-spmi/qcom-spmi-pmic.ko"
+    ],
+    "qti_regmap_debugfs": [
+      "ports/qcom-spmi/qti-regmap-debugfs.ko",
+      "artifacts/android73-info-stage57/modules/qcom-spmi/qti-regmap-debugfs.ko"
+    ],
+    "spmi_pmic_arb_debug": [
+      "ports/qcom-spmi/spmi-pmic-arb-debug.ko",
+      "artifacts/android73-info-stage57/modules/qcom-spmi/spmi-pmic-arb-debug.ko"
+    ],
+    "spmi_pmic_arb": [
+      "ports/qcom-spmi/spmi-pmic-arb.ko",
+      "artifacts/android73-info-stage57/modules/qcom-spmi/spmi-pmic-arb.ko"
+    ],
+    "qcom_tsens": [
+      "ports/qcom-tsens/qcom_tsens.ko"
+    ],
+    "qcom_sdei": [
+      "ports/qcom-watchdog/qcom_sdei.ko"
+    ],
+    "qcom_soc_wdt": [
+      "ports/qcom-watchdog/qcom_soc_wdt.ko"
+    ],
+    "qcom_wdt_core": [
+      "ports/qcom-watchdog/qcom_wdt_core.ko"
+    ],
+    "ipclite": [
+      "ports/qti-fence/ipclite.ko",
+      "artifacts/android73-info-stage57/modules/qti-fence/ipclite.ko"
+    ],
+    "msm_hw_fence": [
+      "ports/qti-fence/msm_hw_fence.ko",
+      "artifacts/android73-info-stage57/modules/qti-fence/msm_hw_fence.ko"
+    ],
+    "synx_driver": [
+      "ports/qti-fence/synx-driver.ko",
+      "artifacts/android73-info-stage57/modules/qti-fence/synx-driver.ko"
+    ],
+    "secure_buffer": [
+      "ports/secure-buffer/secure_buffer.ko",
+      "artifacts/android73-info-stage57/modules/secure-buffer/secure_buffer.ko"
+    ],
+    "ufs_qcom": [
+      "ports/ufs-host/ufs-qcom.ko",
+      "artifacts/android73-info-stage57/modules/ufs-host/ufs-qcom.ko"
+    ],
+    "ufshcd_crypto_qti": [
+      "ports/ufs-host/ufshcd-crypto-qti.ko",
+      "artifacts/android73-info-stage57/modules/ufs-host/ufshcd-crypto-qti.ko"
+    ],
+    "phy_qcom_ufs_qmp_v4_canoe": [
+      "ports/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko",
+      "artifacts/android73-info-stage57/modules/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
+    ],
+    "phy_qcom_ufs": [
+      "ports/ufs-phy-canoe/phy-qcom-ufs.ko",
+      "artifacts/android73-info-stage57/modules/ufs-phy-canoe/phy-qcom-ufs.ko"
+    ],
+    "phy_msm_m31_eusb2": [
+      "ports/usb-repeater/phy-msm-m31-eusb2.ko"
+    ],
+    "repeater_qti_pmic_eusb2": [
+      "ports/usb-repeater/repeater-qti-pmic-eusb2.ko"
+    ],
+    "repeater": [
+      "ports/usb-repeater/repeater.ko"
+    ],
+    "qcom_scm": [
+      "artifacts/android73-info-stage57/modules/firmware/qcom-scm.ko"
+    ],
+    "coresight": [
+      "artifacts/android73-info-stage57/modules/native/coresight.ko"
+    ],
+    "nvmem_qfprom": [
+      "artifacts/android73-info-stage57/modules/native/nvmem_qfprom.ko"
+    ],
+    "pdr_interface": [
+      "artifacts/android73-info-stage57/modules/native-ipc/pdr_interface.ko"
+    ],
+    "qcom_pdr_msg": [
+      "artifacts/android73-info-stage57/modules/native-ipc/qcom_pdr_msg.ko"
+    ],
+    "qmi_helpers": [
+      "artifacts/android73-info-stage57/modules/native-ipc/qmi_helpers.ko"
+    ],
+    "qrtr_smd": [
+      "artifacts/android73-info-stage57/modules/native-ipc/qrtr-smd.ko"
+    ],
+    "qrtr": [
+      "artifacts/android73-info-stage57/modules/native-ipc/qrtr.ko"
+    ]
+  },
+  "missing_names": [
+    "6lowpan",
+    "8021q",
+    "9pnet",
+    "9pnet_fd",
+    "adsp_loader_dlkm",
+    "adsp_sleepmon",
+    "altmode_glink",
+    "anc_fps_mmi",
+    "aqc111",
+    "arm_smmu_pmu",
+    "asix",
+    "audio_pkt_dlkm",
+    "audio_prm_dlkm",
+    "audpkt_ion_dlkm",
+    "aw882xx_dlkm",
+    "awinic_sar",
+    "ax88179_178a",
+    "bam_dma",
+    "bluetooth",
+    "bm_adsp_ulog",
+    "boot_stats",
+    "bsd_comp",
+    "bt_fm_swr",
+    "btbcm",
+    "btfm_slim_codec",
+    "btfmcodec",
+    "btpower",
+    "btqca",
+    "btsdio",
+    "bwmon",
+    "cam_aw37004",
+    "camera",
+    "can",
+    "can_bcm",
+    "can_dev",
+    "can_gw",
+    "can_raw",
+    "cctrng",
+    "cdc_acm",
+    "cdc_eem",
+    "cdc_ether",
+    "cdc_ncm",
+    "cdsprm",
+    "cfg80211",
+    "charger_ulog_glink",
+    "clk_gate_test",
+    "clk_kunit_helpers",
+    "clk_scmi",
+    "clk_test",
+    "cnss2",
+    "cnss_nl",
+    "cnss_plat_ipc_qmi_svc",
+    "cnss_prealloc",
+    "cnss_utils",
+    "core_hang_detect",
+    "coresight_csr",
+    "coresight_cti",
+    "coresight_dummy",
+    "coresight_funnel",
+    "coresight_qmi",
+    "coresight_remote_etm",
+    "coresight_replicator",
+    "coresight_stm",
+    "coresight_tgu",
+    "coresight_tmc",
+    "coresight_tmc_sec",
+    "coresight_tpda",
+    "coresight_tpdm",
+    "coresight_trace_noc",
+    "coresight_uetm",
+    "cpu_hotplug",
+    "cpu_mpam",
+    "cpucp_fast",
+    "cpucp_log",
+    "cpuss_telemetry",
+    "cqhci",
+    "dcc_v2",
+    "ddr_cdev",
+    "debug_symbol",
+    "deferred_free_helper",
+    "dev_addr_lists_test",
+    "dmesg_dumper",
+    "drm_display_helper",
+    "dwc3_msm",
+    "eom_driver",
+    "eud",
+    "ext4_inode_test",
+    "exynos_hvm",
+    "f_fs_ipc_log",
+    "fat_test",
+    "frpc_adsprpc",
+    "fsa4480_i2c",
+    "ftdi_sio",
+    "gh_ctrl",
+    "gh_irq_lend",
+    "gh_mem_notifier",
+    "gh_panic_notifier",
+    "gh_rm_booster",
+    "gh_rm_heap_manager",
+    "gh_tlmm_vm_mem_access",
+    "gh_vcpu_mgr",
+    "glink_pkt",
+    "glink_probe",
+    "gnss",
+    "goodix_fod_mmi",
+    "gpr_dlkm",
+    "gsim",
+    "gunyah_trace",
+    "gzvm",
+    "hall_phone_case",
+    "hci_uart",
+    "hdcp_qseecom_dlkm",
+    "hdmi_dlkm",
+    "heap_mem_ext_v01",
+    "hid_uclogic_test",
+    "hidp",
+    "hung_task_enh",
+    "hvc_gunyah",
+    "hwmon",
+    "i2c_qcom_geni",
+    "i3c_master_msm_geni",
+    "icc_clk",
+    "icnss2",
+    "ieee802154",
+    "ieee802154_6lowpan",
+    "ieee802154_socket",
+    "iio_test_format",
+    "input_test",
+    "ipam",
+    "ipanetm",
+    "ipclite_test",
+    "kheaders",
+    "kryo_arm64_edac",
+    "kunit",
+    "kunit_example_test",
+    "kunit_test",
+    "l2tp_core",
+    "l2tp_ppp",
+    "leds_qcom_flash",
+    "leds_qcom_lpg",
+    "leds_qpnp_vibrator_ldo",
+    "ledtrig_pattern",
+    "lib_test",
+    "libarc4",
+    "llcc_heuristics",
+    "lmh_stats",
+    "lpass_bt_swr_dlkm",
+    "lpass_cdc_dlkm",
+    "lpass_cdc_rx_macro_dlkm",
+    "lpass_cdc_tx_macro_dlkm",
+    "lpass_cdc_va_macro_dlkm",
+    "lpass_cdc_wsa2_macro_dlkm",
+    "lpass_cdc_wsa_macro_dlkm",
+    "lt9611uxc",
+    "mac80211",
+    "mac802154",
+    "machine_dlkm",
+    "macsec",
+    "mbhc_dlkm",
+    "mem_buf",
+    "mem_buf_dev",
+    "mem_buf_msgq",
+    "mem_hooks",
+    "mem_offline",
+    "mem_prot",
+    "memlat",
+    "memory_dump_v2",
+    "mhi",
+    "mhi_dev_satellite",
+    "mhi_dev_uci",
+    "microdump_collector",
+    "mii",
+    "mmi_glink_charger",
+    "mmi_sys_temp",
+    "moto_binder",
+    "moto_f_usbnet",
+    "moto_mmap_fault",
+    "moto_reboot_reason",
+    "moto_sched",
+    "moto_swap5",
+    "mpam",
+    "mpam_msc",
+    "mpam_msc_slc",
+    "msm_dma_iommu_mapping",
+    "msm_drm",
+    "msm_eva",
+    "msm_ext_display",
+    "msm_geni_serial",
+    "msm_hfi_core",
+    "msm_memshare",
+    "msm_mmrm",
+    "msm_performance",
+    "msm_qmp",
+    "msm_sharedmem",
+    "msm_show_epoch",
+    "msm_show_resume_irq",
+    "msm_video",
+    "nb7vpq904m",
+    "netfs",
+    "nfc",
+    "nhc_dest",
+    "nhc_fragment",
+    "nhc_hop",
+    "nhc_ipv6",
+    "nhc_mobility",
+    "nhc_routing",
+    "nhc_udp",
+    "nxp_nci",
+    "of_kunit_helpers",
+    "open_dice",
+    "pci_msm_drv",
+    "pci_phy_access",
+    "pcie_pdc",
+    "phy_generic",
+    "phy_msm_snps_eusb2",
+    "phy_msm_snps_hs",
+    "phy_msm_ssusb_qmp",
+    "phy_qcom_emu",
+    "phy_qcom_eusb2_repeater",
+    "phy_qcom_m31_eusb2",
+    "phy_qcom_qmp_combo",
+    "phy_qcom_ufs_qmp_v4_crow",
+    "phy_qcom_ufs_qrbtc_sdm845",
+    "pinctrl_canoe",
+    "pinctrl_chora",
+    "pinctrl_lpi_dlkm",
+    "pinctrl_ravelin",
+    "platform_mpam",
+    "platform_test",
+    "pmic_glink_debug",
+    "pmic_pon_log",
+    "ppp_deflate",
+    "ppp_generic",
+    "ppp_mppe",
+    "pppox",
+    "pps_core",
+    "pptp",
+    "ps5169",
+    "ptp",
+    "ptp_kvm",
+    "pwrseq_core",
+    "q6_dlkm",
+    "q6_notifier_dlkm",
+    "q6_pdr_dlkm",
+    "qbt_handler",
+    "qca_cld3_wcn7750",
+    "qce50_dlkm",
+    "qcedev_mod_dlkm",
+    "qcom_amoled_regulator",
+    "qcom_cache_allocation",
+    "qcom_cpu_vendor_hooks",
+    "qcom_cpucp",
+    "qcom_cpufreq_hw",
+    "qcom_cpufreq_hw_debug",
+    "qcom_cpuss_sleep_stats",
+    "qcom_cpuss_sleep_stats_v4",
+    "qcom_dload_mode",
+    "qcom_dma_heaps",
+    "qcom_dynamic_ramoops",
+    "qcom_edac",
+    "qcom_fdcvs",
+    "qcom_glink_spss",
+    "qcom_hv_haptics",
+    "qcom_i2c_pmic",
+    "qcom_iommu_debug",
+    "qcom_llcc_pmu",
+    "qcom_logbuf_boot_log",
+    "qcom_logbuf_vendor_hooks",
+    "qcom_lpm",
+    "qcom_lpm_monitor",
+    "qcom_pd_mapper",
+    "qcom_pmic_ecid",
+    "qcom_pmu_lib",
+    "qcom_ramdump",
+    "qcom_reboot_reason",
+    "qcom_scmi_client",
+    "qcom_scmi_vendor",
+    "qcom_smd",
+    "qcom_spmi_wled",
+    "qcom_spss",
+    "qcom_stats",
+    "qcom_va_minidump",
+    "qcom_voltage_adj",
+    "qcrypto_msm_dlkm",
+    "qmp_dlkm",
+    "qnoc_canoe",
+    "qnoc_chora",
+    "qnoc_ravelin",
+    "qpnp_adaptive_charge",
+    "qpnp_lcdb_regulator",
+    "qptf",
+    "qrng_dlkm",
+    "qrtr_gunyah",
+    "qrtr_mhi",
+    "qsee_ipc_irq_bridge",
+    "qseecom_proxy",
+    "qti_amoled_ecm",
+    "qti_battery_charger",
+    "qti_battery_debug",
+    "qti_btl",
+    "qti_cpufreq_cdev",
+    "qti_devfreq_cdev",
+    "qti_dynamic_hw_trip",
+    "qti_fixed_regulator",
+    "qti_glink_adc",
+    "qti_glink_charger_v2",
+    "qti_ocp_notifier",
+    "qti_power_telemetry",
+    "qti_ptd_share",
+    "qti_qmi_cdev",
+    "qti_qmi_sensor_v2",
+    "qti_thermal_vendor_hooks",
+    "qti_userspace_cdev",
+    "r8152",
+    "r8153_ecm",
+    "radio_i2c_rtc6226_qca",
+    "rdbg",
+    "redriver",
+    "regmap_kunit",
+    "regmap_ram",
+    "regmap_raw_ram",
+    "rfcomm",
+    "rfkill",
+    "rmnet_aps",
+    "rmnet_core",
+    "rmnet_ctl",
+    "rmnet_mem",
+    "rmnet_offload",
+    "rmnet_perf",
+    "rmnet_perf_tether",
+    "rmnet_sch",
+    "rmnet_shs",
+    "rmnet_wlan",
+    "rproc_qcom_common",
+    "rtl8150",
+    "rust_binder",
+    "sched_walt",
+    "sdca_registers_dlkm",
+    "sdhci_msm",
+    "sg",
+    "si_core_module",
+    "simple_amp_dlkm",
+    "slc_mpam",
+    "slc_perfmon",
+    "slcan",
+    "slhc",
+    "slim_qcom_ngd_ctrl",
+    "slimbus",
+    "smcinvoke_dlkm",
+    "smem_mailbox",
+    "smmu_proxy_dlkm",
+    "smp2p_sleepstate",
+    "snd_event_dlkm",
+    "snd_usb_audio_qmi",
+    "soc_topology_test",
+    "soc_utils_test",
+    "spf_core_dlkm",
+    "spi_cnss_proto",
+    "spi_geni_qcom",
+    "spmi_pmic_err_debug",
+    "sps_drv",
+    "stm_console",
+    "stm_core",
+    "stm_ftrace",
+    "stm_heartbeat",
+    "stm_nfc_i2c",
+    "stm_p_ost",
+    "stm_st54se_gpio",
+    "stub_dlkm",
+    "swr_ctrl_dlkm",
+    "swr_dlkm",
+    "swr_dmic_dlkm",
+    "swr_haptics_dlkm",
+    "sx937x_sar",
+    "sync_fence",
+    "sys_pm_vx",
+    "sysmon_subsystem_stats",
+    "thermal_config",
+    "thermal_pause",
+    "time_test",
+    "tipc",
+    "tipc_diag",
+    "tls",
+    "tmecom_intf_dlkm",
+    "tz_log_dlkm",
+    "ucsi_qti_glink",
+    "usb_f_ccid",
+    "usb_f_cdev",
+    "usb_f_gsi",
+    "usb_f_qdss",
+    "usbmon",
+    "usbnet",
+    "usbserial",
+    "utags",
+    "vcan",
+    "vcpu_stall_detector",
+    "virtio_balloon",
+    "virtio_blk",
+    "virtio_console",
+    "virtio_pci",
+    "virtio_pci_legacy_dev",
+    "virtio_pci_modern_dev",
+    "vmw_vsock_virtio_transport",
+    "watchdogtest",
+    "wcd9378_dlkm",
+    "wcd9378_slave_dlkm",
+    "wcd937x_dlkm",
+    "wcd937x_slave_dlkm",
+    "wcd938x_dlkm",
+    "wcd938x_slave_dlkm",
+    "wcd939x_dlkm",
+    "wcd939x_slave_dlkm",
+    "wcd9xxx_dlkm",
+    "wcd_core_dlkm",
+    "wcd_usbss_i2c",
+    "wlan_firmware_service",
+    "wsa883x_dlkm",
+    "wsa884x_dlkm",
+    "wsa885x_i2c_dlkm",
+    "wwan",
+    "zram",
+    "zsmalloc"
+  ]
+}

@@ -1,0 +1,12 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-qmi-cooling'
+  CC [M]  qmi-cooling-main.o
+  CC [M]  thermal_mitigation_device_service_v01.o
+  LD [M]  qmi_cooling.o
+  MODPOST Module.symvers
+  CC [M]  qmi_cooling.mod.o
+  CC [M]  .module-common.o
+  LD [M]  qmi_cooling.ko
+  BTF [M] qmi_cooling.ko
+make[1]: Leaving directory '/work/avr-port/ports/qcom-qmi-cooling'
+make: Leaving directory '/work/avr-src'

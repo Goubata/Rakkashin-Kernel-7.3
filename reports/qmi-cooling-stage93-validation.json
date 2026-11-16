@@ -1,0 +1,75 @@
+{
+  "stage": 93,
+  "scope": "New QMI thermal cooling driver with actual native local QRTR/QMI transport and thermal registration; firmware endpoint replies recorded",
+  "checks": {
+    "log": "reports/qmi-cooling-stage93-fixed-qemu.log",
+    "test": "qmi-cooling",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      15,
+      0,
+      0,
+      15
+    ]
+  },
+  "new_module_imports_checked": 42,
+  "artifact_modules": 3,
+  "artifact_imports_checked": 222,
+  "artifact": "artifacts/qmi-cooling-draft-stage93",
+  "core_image_unchanged": true,
+  "dt_cooling_declarations": 27,
+  "dt_modified": false,
+  "physical_verified": false,
+  "partition_written": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "candidate_name_coverage": {
+    "archived_unique_names": 544,
+    "matched_candidate_names": 122,
+    "name_coverage_percent": 22.4,
+    "scope": "Same-name built-candidate count only, including mixed draft outputs and frozen Stage57; not one accepted package, functionality, stability or work completion"
+  },
+  "bugs_caught": [
+    "Private local server fixture initially used unbound port0; bind native QRTR endpoint explicitly",
+    "Treat positive native qmi_txn_init transaction IDs as success, then always wait/cancel; earlier implementation leaked stack-backed transaction on nonzero IDs",
+    "Accept nonnegative native decode completion and return conventional driver success0"
+  ],
+  "verified": [
+    "Golden QMI set-state bytes; 32-byte wire ID and all truncated frame lengths",
+    "Base/extended array bounds and validity flags; terminated nonempty IDs; conflicting duplicates rejected",
+    "Native local encoded QMI discovery and acknowledged state; real native cooling registry",
+    "Repeated transactions with empty native transaction IDR after each request",
+    "Negative remote rejection and timeout; identical unconfirmed targets really retransmitted",
+    "Discard acknowledgement after recorded peer removal during real response transaction",
+    "Offline desired-state retention and replay via actual workqueue and native local peer",
+    "Ignore stale peer removal; reset invalidates state",
+    "Maximum change unregisters/re-registers native cooling device and clamps requested state",
+    "No registration on failed initial acknowledgement or absent advertised device",
+    "Repeated cleanup drains sockets/work/native cdevs; production module loads/unloads unbound in guest"
+  ],
+  "pending": [
+    "Native OF probe/partial-probe and actual QRTR name-service discovery integration",
+    "Exhaustive concurrent thermal callbacks, multiple peer replacement, suspend/teardown stress",
+    "Physical modem/CDSP and all saved cooling consumers",
+    "Display/camera/audio/wireless and other remaining board drivers",
+    "Full DT-schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux and daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/qcom-qmi-cooling/qmi_cooling.c": "f551ff6c43a1ce001ae5605da315c81d1a68d80dace91846d3b341bf386d566b",
+    "reports/qmi-cooling-source-lock.json": "27fedd8c550045ec42e22fa676acfb4808ff058166fce0d5f3c77e3e1ae2d099",
+    "patches/qmi-cooling-7.3.patch": "686d3ecc30207a7d89b5ddcff945026bec93b40548e1226579851658750f9b5e",
+    "tests/qmi-cooling/avr-qmi-cooling-test.c": "7d832e9e9ce62807852ccca071f968aa3859bcaa9058aded9f65fc220a9b311e",
+    "tests/qmi-cooling/avr-qmi-cooling-test.ko": "060292ddb4985cf32140cb23f86008a5ae593551be9ae091c241876f44c5e6d5",
+    "tests/qemu/qmi-cooling-tests.cpio.gz": "01c10f53f1671f6c5840844aabefea9cbf152dfd79a24a8d4e8ab29df4d2da16",
+    "reports/qmi-cooling-stage93-build.log": "804b4ed4bc90d277b2fd1e6f7600e7f4fb005a8dca3649c7d3c3e7fa18e36dc5",
+    "reports/qmi-cooling-stage93-fixed-qemu.log": "34ececc80c39f4d1d197cf38e7716e4b350629c6976ebc34f6b97ae7ec3f64eb",
+    "reports/qmi-cooling-stage93-fixed-qemu.json": "2a65272be6000aa70d8efe8de4d47087204c30ccb3e17cee7a9408ae58122a22",
+    "reports/qmi-cooling-stage93-check.json": "b698d2d9936972e5e2e0a02078fb0837659162e81c74e3a61231f04536ebb324",
+    "reports/qmi-cooling-stage93-artifact-crc.json": "7ddb5f257baa8a9c6255baa38ef60d4219e62bc78730ad24554eaa053d4dfd52",
+    "reports/qmi-cooling-stage93-dt.json": "b3d53f6d0437c7de81a4ef20ad63b310d1948cb0704093d35ceb01cfae668ee3",
+    "reports/module-candidate-stage93-coverage.json": "1307e2a5948d503d0890bfe61853874dd76c9d38f24ad26744265c66de1bf3ce",
+    "reports/qmi-cooling-stage93-phone-state.txt": "0e2a5499f8529ddfa8c6b122a33c8787ad1cbb7fe272c22d82413a85f866783b",
+    "artifacts/qmi-cooling-draft-stage93/metadata.json": "afadf032660b6077f6b7d9624d76013bae56039a1fa3e7a74b3fe74e7a7e0f35"
+  }
+}

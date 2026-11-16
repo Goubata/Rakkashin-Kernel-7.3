@@ -1,0 +1,53 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qcom-qmi-cooling/qmi_cooling.c",
+      "source": "drivers/thermal/qcom/qmi_cooling.c",
+      "original_sha256": "e026d21cfc819e274b9f75c5c3814f4cea389bbfe5da545ee69a7eae740e3140",
+      "sha256": "f551ff6c43a1ce001ae5605da315c81d1a68d80dace91846d3b341bf386d566b"
+    },
+    {
+      "file": "ports/qcom-qmi-cooling/thermal_mitigation_device_service_v01.c",
+      "source": "drivers/thermal/qcom/thermal_mitigation_device_service_v01.c",
+      "original_sha256": "f4030b467dec34bc18af1b0649a37c6689ffd535d001d2049459376a04cf342c",
+      "sha256": "f4030b467dec34bc18af1b0649a37c6689ffd535d001d2049459376a04cf342c"
+    },
+    {
+      "file": "ports/qcom-qmi-cooling/thermal_mitigation_device_service_v01.h",
+      "source": "drivers/thermal/qcom/thermal_mitigation_device_service_v01.h",
+      "original_sha256": "c6fe815bb53b676d406f046461db255d786ac5fb43cea99f4dc977b9e0ad7e5d",
+      "sha256": "c6fe815bb53b676d406f046461db255d786ac5fb43cea99f4dc977b9e0ad7e5d"
+    },
+    {
+      "file": "ports/qcom-qmi-cooling/qmi-cooling-main.c",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "96ca3b3de7adbfc0e1cfe257c1b0521b2ce6aa8623818e86b139d53cdf092564"
+    },
+    {
+      "file": "ports/qcom-qmi-cooling/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "03c9cb60a635abb5ac1dc4a8b990be0aa23c7c2badc123e882a120de692262c1"
+    }
+  ],
+  "patch_sha256": "686d3ecc30207a7d89b5ddcff945026bec93b40548e1226579851658750f9b5e",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Exact pinned protocol tables; rewritten per-device lifecycle and acknowledged state driver draft",
+  "reviewed_changes": [
+    "Native 7.3 thermal registration and unbound default workqueue",
+    "Keep desired and acknowledged states separate; return negative transport/remote errors; retry unconfirmed identical requests",
+    "Explicit peer endpoints and generation checks reject stale acknowledgements",
+    "Validate base/extended protocol list bounds, string termination and contradictory duplicates",
+    "Do not hold state or IO mutex during thermal registration/unregistration; drain work and transactions before QMI release",
+    "Managed per-device instances and OF references; idempotent removal and partial probe unwind"
+  ],
+  "pending": [
+    "Actual OF probe and firmware service discovery integration",
+    "Exhaustive concurrent thermal setter, server replacement, suspend and teardown stress",
+    "Physical modem/CDSP replies and all 27 DT consumers",
+    "Whole-board boot/DLKM/SELinux and daily-use acceptance"
+  ]
+}

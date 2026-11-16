@@ -1,0 +1,12 @@
+{
+  "log": "reports/qmi-cooling-stage93-fixed-qemu.log",
+  "test": "qmi-cooling",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    15,
+    0,
+    0,
+    15
+  ]
+}

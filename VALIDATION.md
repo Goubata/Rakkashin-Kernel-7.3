@@ -1999,3 +1999,53 @@ Permanent wake-release failure, concurrent probe/PM/forced-unbind/hotplug varian
 physical calibration/charging/cooling/firmware, full HAL/ROM and DT-schema work,
 SID4 and remaining board drivers/boot/vendor_boot/dtbo/DLKM/SELinux/daily-use
 acceptance remain pending. No phone partition or vendor file writes.
+
+## Stage93: QMI modem/CDSP thermal mitigation draft
+
+New ports/qcom-qmi-cooling driver uses the exact pinned factory generated QMI
+protocol tables and whitelist with a rewritten native lifecycle. Desired state
+and acknowledged state are separate: negative transport/remote errors invalidate
+confirmation; identical unconfirmed targets retransmit. Explicit peer endpoints
+and epochs discard replies after peer loss. Validate all base/extended list
+bounds/flags/terminated IDs and contradictory duplicate limits before publishing
+capabilities. Changing a maximum replaces the native cooling device and clamps
+the desired state. Never store ERR_PTR cooling pointers or hold the state/IO mutex
+across native cooling registration/unregistration. Drain own work and transactions
+before releasing QMI; cleanup is idempotent and state belongs to each device.
+
+Fifteen private ARM64 QEMU cases use the full driver methods and real native QMI
+encoding/decoding, QRTR socket requests/responses and thermal cdev registration.
+The server replies are recorded local firmware behavior, not physical modem/CDSP
+validation. Tests cover golden bytes, 32-byte wire strings/truncation, malformed
+lists and contradictory duplicates, repeated transactions, ACK/rejection/timeout,
+identical-request retry, peer-loss stale ACK, offline replay, old-peer deletion,
+reset, changed max/clamp, unsupported/no-ACK registration and repeated cleanup.
+Only automatic platform-driver registration is suppressed in the source-included
+test module; the production module also registers/unregisters unbound in the guest.
+The real OF probe, name-service discovery and physical firmware paths remain
+unaccepted, as do exhaustive concurrency/PM/unbind variants.
+
+The initial local fixture used port0 from an unbound QMI server; explicitly bind
+its native QRTR socket. Integration then exposed the draft's incorrect treatment
+of positive qmi_txn_init IDs as errors: native API returns transaction ID >=0 and
+requires wait/cancel for every success. Correct the negative-only test and
+normalize nonnegative decode completion. The repeated-transaction test inspects
+that the native transaction IDR is empty after every completed request. Failed
+before/final-named diagnostic logs are retained as failures; only fixed-qemu is
+accepted by reports/qmi-cooling-stage93-check.json (15/0/0/15, no WARN/panic/skip).
+
+Reproduce: build_qmi_cooling.py --tests, then run_qemu.py --test qmi-cooling
+--log reports/NEW-qmi-cooling.log. Source replay: audit_qmi_cooling_sources.py.
+DT audit: audit_qmi_cooling_dt.py; the saved tree and Stage91 candidate retain all
+27 QMI declarations and normalized cooling-map references, ignoring renumbered
+phandle identities. No DT bytes are changed here. This is not full DT-schema or
+runtime binding acceptance. Image#25 is unchanged; the draft has three modules
+with 222 matching imports (new driver 42). Stage57 and Stage91 DT/HAL remain
+unchanged and unaccepted for daily use. Phone remains 6.12/Enforcing.
+
+report_module_candidate_coverage.py counts 122 same-name 7.3 build candidates
+among 544 archived unique names (22.4%). It combines individual drafts and frozen
+Stage57; it is not one accepted package, functionality coverage, effort completed
+or a daily-use completion percentage. Display/camera/audio/wireless, physical
+firmware, remaining board drivers, whole DT/SID4 and boot/vendor_boot/dtbo/DLKM/
+SELinux/physical stability remain pending. No phone partition writes.

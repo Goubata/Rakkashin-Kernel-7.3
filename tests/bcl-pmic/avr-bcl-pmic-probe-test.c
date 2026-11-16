@@ -9,6 +9,8 @@
 #include <linux/irq.h>
 #include <linux/irqdesc.h>
 #include <linux/delay.h>
+#include <linux/completion.h>
+#include <linux/kthread.h>
 static struct thermal_zone_device *probe_zone(struct device *, int, void *, const struct thermal_zone_device_ops *);
 #undef module_platform_driver
 #define module_platform_driver(...)
@@ -27,12 +29,22 @@ struct fixture {
  int fail_read_reg,fail_write_reg,nvmem_fail_read,nvmem_reads;
  bool driver_registered,provider_registered,skip_map;
  int provider_ret;
+ struct completion irq_entered,irq_allow,release_entered,release_done;
+ struct task_struct *release_task;
+ bool block_irq,stop_marker;
+ atomic_t reads_after_stop;
 };
 static struct fixture *backend;
 static const char *zone_names[]={"avr-probe-current0","avr-probe-current1","pmih010x-2s-ibat0","pmih010x-2s-ibat1","avr-probe-voltage","avr-probe-level0","avr-probe-level1","avr-probe-level2"};
 static int ram_read(void *ctx,unsigned int reg,unsigned int *val)
 {
  struct fixture *f=ctx;
+ if(READ_ONCE(f->stop_marker))atomic_inc(&f->reads_after_stop);
+ if(READ_ONCE(f->block_irq) && reg==0x4708 && !strncmp(current->comm,"irq/",4)){
+  complete(&f->irq_entered);
+  /* Every fixture exit releases this gate before waiting for removal. */
+  wait_for_completion(&f->irq_allow);
+ }
  if(reg==f->fail_read_reg)return -EIO;
  *val=READ_ONCE(f->ram[reg]);return 0;
 }
@@ -123,7 +135,10 @@ static void stop_child(struct fixture *f)
 }
 static void release(struct fixture *f)
 {
- int i;stop_child(f);
+ int i;
+ complete_all(&f->irq_allow);
+ if(f->release_task){kthread_stop(f->release_task);f->release_task=NULL;}
+ stop_child(f);
  if(f->driver_registered){platform_driver_unregister(&bcl_driver);f->driver_registered=false;}
  wait_for_device_probe();
  if(f->provider_registered){platform_driver_unregister(&provider_driver);f->provider_registered=false;}
@@ -135,7 +150,8 @@ static void release(struct fixture *f)
 static int setup(struct kunit *test)
 {
  struct fixture *f=kunit_kzalloc(test,sizeof(*f),GFP_KERNEL);int i,ret;
- if(!f)return -ENOMEM;test->priv=f;backend=f;f->irq_base=-1;f->zone_error_id=-1;f->fail_read_reg=f->fail_write_reg=-1;f->probe_ret=INT_MIN;f->provider_ret=INT_MIN;
+ if(!f)return -ENOMEM;test->priv=f;backend=f;
+ init_completion(&f->irq_entered);init_completion(&f->irq_allow);init_completion(&f->release_entered);init_completion(&f->release_done);atomic_set(&f->reads_after_stop,0);f->irq_base=-1;f->zone_error_id=-1;f->fail_read_reg=f->fail_write_reg=-1;f->probe_ret=INT_MIN;f->provider_ret=INT_MIN;
  f->sensor=of_find_node_by_path("/avr-bcl-probe-bus/bcl@4700");f->nvmem_node=of_find_node_by_path("/avr-bcl-probe-bus/nvmem-test");
  if(!f->sensor || !f->nvmem_node){ret=-ENODEV;goto fail;}
  f->ram=kunit_kzalloc(test,65536,GFP_KERNEL);if(!f->ram){ret=-ENOMEM;goto fail;}
@@ -168,7 +184,10 @@ static void assert_empty(struct kunit *test)
 static void cleanup(struct kunit *test)
 {
  struct fixture *f=test->priv;
- f->fail_read_reg=f->fail_write_reg=-1;f->nvmem_fail_read=0;stop_child(f);assert_empty(test);release(f);
+ f->fail_read_reg=f->fail_write_reg=-1;f->nvmem_fail_read=0;
+ complete_all(&f->irq_allow);
+ if(f->release_task){kthread_stop(f->release_task);f->release_task=NULL;}
+ stop_child(f);assert_empty(test);release(f);
 }
 static void assert_bound(struct kunit *test,bool alternate)
 {
@@ -261,6 +280,43 @@ static void of_voltage_trip_indices_program_expected_registers(struct kunit *tes
   KUNIT_EXPECT_EQ(test,f->ram[0x4748+i],expected[i]);
  }
 }
-static struct kunit_case cases[]={KUNIT_CASE(native_probe_standard_pair),KUNIT_CASE(native_probe_2s_pair),KUNIT_CASE(late_nvmem_supplier_bind_retries),KUNIT_CASE(first_nvmem_read_error_propagates),KUNIT_CASE(second_nvmem_read_unwinds_voltage_zone),KUNIT_CASE(revision_failures_leave_no_resources),KUNIT_CASE(zone_failures_unwind_owned_irqs),KUNIT_CASE(monitor_enable_error_unwinds_all_zones),KUNIT_CASE(bpm_error_unwinds_registered_notifier),KUNIT_CASE(native_release_and_rebind),KUNIT_CASE(native_irq_thread_and_level_rearm),KUNIT_CASE(missing_parent_regmap_defers),KUNIT_CASE(original_2s_names_exceed_native_limit),KUNIT_CASE(of_voltage_trip_indices_program_expected_registers),{}};
+static void native_supplier_unbind_then_rebind(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;KUNIT_ASSERT_EQ(test,publish_nvmem(f),0);KUNIT_ASSERT_EQ(test,start_child(f),0);assert_bound(test,false);
+ for(i=0;i<3;i++){
+  device_release_driver(&f->parent->dev);assert_empty(test);KUNIT_EXPECT_PTR_EQ(test,f->map,NULL);KUNIT_EXPECT_PTR_EQ(test,f->nvmem,NULL);
+  KUNIT_ASSERT_EQ(test,device_driver_attach(&provider_driver.driver,&f->parent->dev),0);wait_for_device_probe();
+  /* Explicit native attach also supports intentionally unbound consumers. */
+  if(!f->child->dev.driver)KUNIT_ASSERT_EQ(test,device_driver_attach(&bcl_driver.driver,&f->child->dev),0);
+  assert_bound(test,false);
+ }
+}
+static int release_supplier_thread(void *data)
+{
+ struct fixture *f=data;
+ complete(&f->release_entered);device_release_driver(&f->parent->dev);complete(&f->release_done);
+ while(!kthread_should_stop())schedule_timeout_interruptible(HZ);
+ return 0;
+}
+static void supplier_removal_waits_for_native_irq_thread(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct bcl_device *bcl;unsigned long end;
+ KUNIT_ASSERT_EQ(test,publish_nvmem(f),0);KUNIT_ASSERT_EQ(test,start_child(f),0);assert_bound(test,false);
+ bcl=platform_get_drvdata(f->child);KUNIT_ASSERT_NOT_NULL(test,bcl);
+ WRITE_ONCE(f->block_irq,true);WRITE_ONCE(f->ram[0x4708],1);
+ KUNIT_ASSERT_EQ(test,generic_handle_irq_safe(f->irq_base),0);
+ KUNIT_ASSERT_NE(test,wait_for_completion_timeout(&f->irq_entered,5*HZ),0ul);
+ f->release_task=kthread_run(release_supplier_thread,f,"avr-bcl-supplier-remove");
+ if(IS_ERR(f->release_task)){f->release_task=NULL;KUNIT_FAIL(test,"create supplier removal task");return;}
+ KUNIT_ASSERT_NE(test,wait_for_completion_timeout(&f->release_entered,5*HZ),0ul);
+ end=jiffies+2*HZ;while(!READ_ONCE(bcl->stopping) && time_before(jiffies,end))usleep_range(1000,2000);
+ KUNIT_EXPECT_TRUE(test,READ_ONCE(bcl->stopping));KUNIT_EXPECT_FALSE(test,completion_done(&f->release_done));
+ KUNIT_EXPECT_NOT_NULL(test,f->map);KUNIT_EXPECT_NOT_NULL(test,f->nvmem);
+ WRITE_ONCE(f->stop_marker,true);complete_all(&f->irq_allow);
+ KUNIT_ASSERT_NE(test,wait_for_completion_timeout(&f->release_done,5*HZ),0ul);
+ kthread_stop(f->release_task);f->release_task=NULL;
+ KUNIT_EXPECT_EQ(test,atomic_read(&f->reads_after_stop),0);assert_empty(test);KUNIT_EXPECT_PTR_EQ(test,f->map,NULL);KUNIT_EXPECT_PTR_EQ(test,f->nvmem,NULL);
+}
+static struct kunit_case cases[]={KUNIT_CASE(native_probe_standard_pair),KUNIT_CASE(native_probe_2s_pair),KUNIT_CASE(late_nvmem_supplier_bind_retries),KUNIT_CASE(first_nvmem_read_error_propagates),KUNIT_CASE(second_nvmem_read_unwinds_voltage_zone),KUNIT_CASE(revision_failures_leave_no_resources),KUNIT_CASE(zone_failures_unwind_owned_irqs),KUNIT_CASE(monitor_enable_error_unwinds_all_zones),KUNIT_CASE(bpm_error_unwinds_registered_notifier),KUNIT_CASE(native_release_and_rebind),KUNIT_CASE(native_irq_thread_and_level_rearm),KUNIT_CASE(missing_parent_regmap_defers),KUNIT_CASE(original_2s_names_exceed_native_limit),KUNIT_CASE(of_voltage_trip_indices_program_expected_registers),KUNIT_CASE(native_supplier_unbind_then_rebind),KUNIT_CASE(supplier_removal_waits_for_native_irq_thread),{}};
 static struct kunit_suite suite={.name="avr-bcl-pmic-probe",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);

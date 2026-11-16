@@ -1944,3 +1944,58 @@ bcl-thermal-hal-stage91. These are review drafts, not flashable boot packages.
 No partition/vendor file writes or phone 7.3 boot. Physical PMIC/calibration,
 full service behavior, forced supplier removal/concurrent teardown/hardware
 errors, SID4 and remaining board drivers/DT/boot/DLKM/SELinux acceptance are pending.
+
+## Stage92: fallible wake references and native regmap supplier lifetime
+
+Forty-four SMP4 cases pass without WARN/panic/skip: the previous 36 plus six wake/
+PM fault cases and two native supplier-unbind cases. Inspect actual native private
+IRQ descriptor wake_depth as well as driver flags and recorded IRQ-chip balances.
+The native core restores wake_depth to 1 if disable_irq_wake fails. Clear driver
+ownership only on successful disable. On threshold disable failure preserve both
+armed action and wake ownership, return the error, and allow retry. A failed
+rearm no longer clears trigger statistics before wake acquisition succeeds.
+
+Freeze records all original IRQ actions before a fallible step. A tested partial
+wake-drop failure restores the complete original set. Restore skips retained
+wake references, records only references acquired by the current attempt, and
+unwinds only that set. If rollback cannot drop one reference, keep its ownership
+flag; a later retry must not increase native depth from 1 to 2. Wake-enable and
+monitor-write failures retain retry state. Quiesce reports a failed wake release
+and keeps the flag for a subsequent cleanup attempt while its mapping remains
+alive; the transient-error case demonstrates that retry. This is not guaranteed
+recovery from permanent hardware failure during final removal: remove is void,
+and no persistent owner/retry facility is implemented after context destruction.
+
+A parent device relationship alone did not protect the shared regmap from driver
+unbind. In the before-link guest the BCL consumer stayed bound while its supplier
+removed a map whose mutex was held by the actual IRQ thread; strict validation
+rejected failed assertions and a mutex_destroy WARN. Add a native managed
+DL_FLAG_AUTOREMOVE_CONSUMER link to the regmap-owning parent before using its
+resources. The driver core now unbinds/drains the consumer before supplier remove,
+and owns link cleanup. No caller-side deletion of a managed link, runtime-PM
+reference manipulation or dependency-check bypass is introduced.
+
+Three native supplier release/rebind cycles pass (normal native consumer attach
+is explicitly used if intentional unbind requires it). The controlled concurrency
+case blocks the real threaded IRQ inside a RAM bus read, starts supplier removal
+in a native kthread, and observes BCL stopping while regmap/NVMEM remain alive and
+removal is incomplete. Releasing the gate lets teardown finish with no remaining
+zone/notifier/debugfs/IRQ/wake ownership. The IRQ checks stopping again after its
+sleeping status read; no later bus read begins after the test stop marker. All
+fixture exit paths release the gate before waiting for the removal task. The bus
+and IRQ-chip operations remain recorded private hardware; physical SPMI/IRQ/reset
+behavior and exhaustive races are not accepted by this test.
+
+Evidence: reports/bcl-pmic-stage92-validation.json. Reproduce build_bcl_pmic.py
+--tests and QEMU mode bcl-pmic --cpus 4 (44 cases). audit_bcl_pmic_dt.py --port
+--output reports/bcl-pmic-stage92-dt.json and audit_bcl_probe_fixture.py --output
+reports/bcl-probe-stage92-dt.json preserve the historical reports. Selected
+calibration/ID/order/scalar contracts remain intact. Image#25 is unchanged; draft
+contains five modules with 290 matching imports (new BCL module 62). Main Stage57
+bundle stays unchanged at 118. Stage91 DT/HAL candidates are unchanged and remain
+unaccepted; no full modified HAL execution or phone 7.3 boot is performed.
+
+Permanent wake-release failure, concurrent probe/PM/forced-unbind/hotplug variants,
+physical calibration/charging/cooling/firmware, full HAL/ROM and DT-schema work,
+SID4 and remaining board drivers/boot/vendor_boot/dtbo/DLKM/SELinux/daily-use
+acceptance remain pending. No phone partition or vendor file writes.

@@ -1,0 +1,12 @@
+{
+  "log": "reports/bcl-pmic-stage92-qemu.log",
+  "test": "bcl-pmic",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    44,
+    0,
+    0,
+    44
+  ]
+}

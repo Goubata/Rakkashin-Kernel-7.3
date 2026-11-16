@@ -1,0 +1,73 @@
+{
+  "stage": 92,
+  "scope": "Native private PMIC BCL wake-failure recovery, managed parent regmap dependency, supplier release/rebind and controlled in-flight IRQ removal; not physical PMIC acceptance",
+  "checks": {
+    "log": "reports/bcl-pmic-stage92-qemu.log",
+    "test": "bcl-pmic",
+    "passed": true,
+    "failures": [],
+    "totals": [
+      44,
+      0,
+      0,
+      44
+    ]
+  },
+  "new_cases": 8,
+  "new_module_imports_checked": 62,
+  "artifact_modules": 5,
+  "artifact_imports_checked": 290,
+  "artifact": "artifacts/bcl-pmic-draft-stage92",
+  "core_image_unchanged": true,
+  "dt_hal_stage91_candidates_unchanged": true,
+  "physical_verified": false,
+  "partition_written": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "implemented": [
+    "Track successful native disable_irq_wake before clearing ownership; on threshold disable error preserve armed state and return real error",
+    "Do not clear trigger statistics until rearm wake acquisition succeeds",
+    "Freeze captures all original actions and restores them on a tested partial wake-drop failure",
+    "Restore only acquires missing wake references, records references acquired by that attempt, and unwinds only those; failed unwind retains ownership for a later retry",
+    "Quiesce logs a failed wake release and retains its ownership flag for another cleanup attempt instead of falsely claiming native wake_depth zero",
+    "Create native managed DL_FLAG_AUTOREMOVE_CONSUMER link to regmap-owning parent before using its resources; the driver core drains BCL before supplier driver remove",
+    "After a sleeping status read, an IRQ thread rechecks stopping before further processing"
+  ],
+  "verified": [
+    "Six new fault cases inspect actual private native IRQ descriptor wake_depth as well as driver flags and recorded chip balances",
+    "Disable/drop error leaves native depth1 and armed IRQ; retry releases depth to0 without unbalanced disable",
+    "Freeze partial failure restores all original actions; restore rollback failure retains depth1 and retry does not increase it to2",
+    "One transient cleanup failure can be retried while the mapping owner remains alive; statistics and bus-restore errors retain retry state",
+    "Supplier driver release/rebind repeats three times; consumer reattach uses normal native attach where required after intentional unbind",
+    "Hold the actual native IRQ thread inside a RAM status read; concurrent supplier release reaches BCL stopping but cannot destroy regmap/NVMEM until IRQ gate is released; no later RAM reads start after the stop marker",
+    "Previous OF/NVMEM/probe, name-limit, ordered voltage-trip and calibration/DT scalar checks remain covered"
+  ],
+  "baseline_failure": "Without the explicit regmap supplier link, native supplier release leaves BCL bound and destroys a regmap with an active IRQ-held mutex. The before-link guest was rejected for failed assertions and a mutex_destroy WARN; the final fresh guest passes strict checks",
+  "pending": [
+    "Permanent wake-disable failure during final unbind cannot be reported back through the void driver remove callback; flags/logs are truthful while context exists, but guaranteed final wake release after context destruction/hardware failure is not implemented",
+    "Exhaustive concurrent probe/remove/PM/sysfs/hotplug behavior and actual parent driver/IRQ controller variants",
+    "Physical SPMI/calibration/charging/cooling/firmware behavior and phone7.3 boot",
+    "Full Stage91 modified HAL/service, every indirect reference and remaining ROM consumers, paired DT/HAL and DT-schema acceptance",
+    "SID4 conflict and all remaining board drivers/boot/vendor_boot/dtbo/DLKM/SELinux/daily-use acceptance"
+  ],
+  "evidence_sha256": {
+    "ports/qcom-bcl-pmic/qti_bcl_pmic5.c": "f712f39c5bdef7cba8e92d5c0bddf319abb16f8c3b7f83a8739d6e001554cba5",
+    "reports/bcl-pmic-source-lock.json": "44b987805f56f33a92b68299f6c85bc7aa8b20dc9c106c78017b7757e24e8879",
+    "patches/bcl-pmic-7.3.patch": "6a6073da2e1141fa26aff12e8a92643c243b736b98280e90ec6e79c73630ee21",
+    "tests/bcl-pmic/avr-bcl-pmic-test.c": "0ea0cb4d0ab0c110963495c65d482093c77847eb464088648c3334a849f2e58d",
+    "tests/bcl-pmic/avr-bcl-pmic-probe-test.c": "9368d28744af4064dcdceff7a4a8f4495b0017fdd96c0c0da898a1a0ff09dabb",
+    "tests/bcl-pmic/avr-bcl-pmic-test.ko": "fe74a0002940ecd86dab368f39e175ea7fe4817fdcb1427b65aed22d66bd621d",
+    "tests/bcl-pmic/avr-bcl-pmic-probe-test.ko": "e2d660862a19e9b72ce67eea0b628085baf270d95807ed250df739914171fb83",
+    "tests/qemu/bcl-pmic-tests.cpio.gz": "7f39e75b65279ad775d8e1b3d92e010c2c401a626ee4291a56b7cc0e1a755357",
+    "reports/bcl-pmic-stage92-build.log": "60982949ee1a5f65ca24214ff2d9c48305d02cf6a439a90cd60744cce2c54e13",
+    "reports/bcl-pmic-stage92-check.json": "d16a4ab1904fde1fc2205d36a44527580f8aeba741d74cce93ddf62018f15b22",
+    "reports/bcl-pmic-stage92-qemu.log": "38b190a1c0578097bcfbf2246e8f7312e946e7f7f014fd637462c3479e6b0cbc",
+    "reports/bcl-pmic-stage92-qemu.json": "b61c7a3c3c63026b7a4dfbdb70ca8d9c815882594fe214cf753322ff2d875c60",
+    "reports/bcl-pmic-stage92-before-link-qemu.log": "d612b62f8a95dd4a50e51c6fb7ce1e787b41fb6d327135a45d45ff7d13818c27",
+    "reports/bcl-pmic-stage92-crc.json": "4c262acad399b0e0dd758f2c4fdef1f8ebb18dbd6d5ebee9d820ff56c6e1ef0e",
+    "reports/bcl-pmic-stage92-artifact-crc.json": "273be7399dd929a80cda06a3e1630a761fb16f104f273dce6c4d5fc1d9a9162d",
+    "reports/bcl-pmic-stage92-dt.json": "2cc0431ab25ee9963dcded2a1a1d915e71214beb0c94f4c3f66c8bd3d3ac29b1",
+    "reports/bcl-probe-stage92-dt.json": "564e67764e3f26458d8edddcc12d0a8c1d85d119c922c5e9f7f44127831d5a79",
+    "artifacts/bcl-pmic-draft-stage92/SHA256SUMS": "c4f7a7b5e634167b3959e97f2ec48892659ac3832a96a56cd988b115ede28cd7"
+  }
+}

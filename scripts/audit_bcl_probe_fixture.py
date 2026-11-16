@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Compare private native-probe DT to selected AVR name-candidate semantics."""
 from pathlib import Path
-import hashlib,json,struct
+import argparse,hashlib,json,struct
+p=argparse.ArgumentParser(description=__doc__);p.add_argument("--output",type=Path,default=Path("reports/bcl-probe-stage91-dt.json"));args=p.parse_args()
 from audit_boot_tree import fdt
 ROOT=Path(__file__).resolve().parents[1]
 files={'guest':'artifacts/qemu-bcl-pmic/virt-rail.dtb','candidate':'artifacts/dt-bcl-name-stage91/avr-bcl-name-candidate.dtb'}
@@ -30,4 +31,4 @@ for guest,board in mapping.items():
  need(len(guest)<20 and len(board)<20,board+': native thermal type fits')
  rows.append({'guest':a,'candidate':b,'sensor_id':gs[1],'trip_count':len(trips('guest',a))})
 report={'passed':True,'scope':'Selected PMIH source IDs, NVMEM bit, ordered trips and polling scalar fixture only; guest IRQ chip/regmap are recorded, physical SPMI/cooling links not simulated','inputs':{k:{'file':files[k],'sha256':hashlib.sha256(v).hexdigest()} for k,v in raw.items()},'checks':checks,'zones':rows,'physical_verified':False,'whole_board_accepted':False}
-(ROOT/'reports/bcl-probe-stage91-dt.json').write_text(json.dumps(report,indent=2)+'\n');print('Probe fixture matches eight declared PMIH zones, including ordered voltage trips')
+(ROOT/args.output).write_text(json.dumps(report,indent=2)+'\n');print('Probe fixture matches eight declared PMIH zones, including ordered voltage trips')

@@ -17,6 +17,7 @@ struct fixture {
  u8 *ram;
  unsigned int calls,fail_at,reads,writes,last_reg,last_value,wake_calls,fail_wake;
  int irq_base,wake_balance[3];bool irqs;
+ unsigned int drop_calls,fail_drop;
 };
 static int ram_read(void *ctx,unsigned int reg,unsigned int *val)
 {
@@ -38,6 +39,7 @@ static int irq_wake(struct irq_data *d,unsigned int on)
 {
  struct fixture *f=irq_data_get_irq_chip_data(d);int idx=d->irq-f->irq_base;
  if(on && ++f->wake_calls==f->fail_wake)return -EIO;
+ if(!on && ++f->drop_calls==f->fail_drop)return -EIO;
  f->wake_balance[idx]+=on ? 1 : -1;return 0;
 }
 static struct irq_chip chip={.name="avr-bcl-private",.irq_mask=irq_nop,.irq_unmask=irq_nop,.irq_ack=irq_nop,.irq_set_type=irq_type,.irq_set_wake=irq_wake};
@@ -73,7 +75,7 @@ static int setup(struct kunit *test)
 static void cleanup(struct kunit *test)
 {
  struct fixture *f=test->priv;int i;
- f->fail_at=f->fail_wake=0;bcl_quiesce(&f->bcl);
+ f->fail_at=f->fail_wake=f->fail_drop=0;bcl_quiesce(&f->bcl);
  for(i=0;i<BCL_TYPE_MAX;i++)if(f->bcl.param[i].tz_dev)thermal_zone_device_unregister(f->bcl.param[i].tz_dev);
  regmap_exit(f->bcl.regmap);platform_device_unregister(f->pdev);
  for(i=0;i<3;i++){KUNIT_EXPECT_EQ(test,f->wake_balance[i],0);irq_set_chip_data(f->irq_base+i,NULL);}
@@ -248,11 +250,63 @@ static void peer_threshold_error_reaches_caller(struct kunit *test)
  }
  thermal_zone_device_unregister(tz);
 }
+static unsigned int wake_depth(struct fixture *f,int slot)
+{
+ return READ_ONCE(irq_data_to_desc(irq_get_irq_data(f->irq_base+slot))->wake_depth);
+}
+static void arm_all(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;acquire_irqs(test);
+ for(i=0;i<3;i++)KUNIT_ASSERT_EQ(test,bcl_set_lbat(f->bcl.param[5+i].tz_dev,0,1),0);
+}
+static void drop_error_preserves_armed_state(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct bcl_peripheral_data *p=&f->bcl.param[5];arm_all(test);f->fail_drop=1;
+ KUNIT_EXPECT_EQ(test,bcl_set_lbat(p->tz_dev,0,INT_MAX),-EIO);KUNIT_EXPECT_TRUE(test,p->irq_wake);KUNIT_EXPECT_TRUE(test,p->irq_enabled);KUNIT_EXPECT_EQ(test,wake_depth(f,0),1u);KUNIT_EXPECT_EQ(test,f->wake_balance[0],1);
+ f->fail_drop=0;KUNIT_EXPECT_EQ(test,bcl_set_lbat(p->tz_dev,0,INT_MAX),0);KUNIT_EXPECT_FALSE(test,p->irq_wake);KUNIT_EXPECT_FALSE(test,p->irq_enabled);KUNIT_EXPECT_EQ(test,wake_depth(f,0),0u);
+ KUNIT_EXPECT_EQ(test,bcl_set_lbat(p->tz_dev,0,INT_MAX),0);
+}
+static void freeze_drop_error_restores_original_actions(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;arm_all(test);f->fail_drop=2;
+ KUNIT_EXPECT_EQ(test,bcl_freeze(&f->pdev->dev),-EIO);KUNIT_EXPECT_FALSE(test,f->bcl.frozen);
+ for(i=0;i<3;i++){KUNIT_EXPECT_TRUE(test,f->bcl.param[5+i].irq_enabled);KUNIT_EXPECT_TRUE(test,f->bcl.param[5+i].irq_wake);KUNIT_EXPECT_EQ(test,wake_depth(f,i),1u);KUNIT_EXPECT_EQ(test,f->wake_balance[i],1);}
+ f->fail_drop=0;KUNIT_ASSERT_EQ(test,bcl_freeze(&f->pdev->dev),0);KUNIT_ASSERT_EQ(test,bcl_restore(&f->pdev->dev),0);
+ for(i=0;i<3;i++)KUNIT_EXPECT_EQ(test,wake_depth(f,i),1u);
+}
+static void failed_restore_unwind_retains_reference_for_retry(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;arm_all(test);KUNIT_ASSERT_EQ(test,bcl_freeze(&f->pdev->dev),0);
+ f->wake_calls=f->drop_calls=0;f->fail_wake=2;f->fail_drop=1;
+ KUNIT_EXPECT_EQ(test,bcl_restore(&f->pdev->dev),-EIO);KUNIT_EXPECT_TRUE(test,f->bcl.frozen);KUNIT_EXPECT_TRUE(test,f->bcl.param[5].irq_wake);KUNIT_EXPECT_EQ(test,wake_depth(f,0),1u);KUNIT_EXPECT_FALSE(test,f->bcl.param[5].irq_enabled);
+ f->fail_wake=f->fail_drop=0;KUNIT_ASSERT_EQ(test,bcl_restore(&f->pdev->dev),0);
+ for(i=0;i<3;i++){KUNIT_EXPECT_EQ(test,wake_depth(f,i),1u);KUNIT_EXPECT_EQ(test,f->wake_balance[i],1);KUNIT_EXPECT_TRUE(test,f->bcl.param[5+i].irq_enabled);}
+}
+static void quiesce_transient_drop_failure_can_retry(struct kunit *test)
+{
+ struct fixture *f=test->priv;arm_all(test);f->fail_drop=1;
+ bcl_quiesce(&f->bcl);KUNIT_EXPECT_TRUE(test,f->bcl.param[5].irq_wake);KUNIT_EXPECT_FALSE(test,f->bcl.param[5].irq_requested);KUNIT_EXPECT_EQ(test,wake_depth(f,0),1u);
+ f->fail_drop=0;bcl_quiesce(&f->bcl);KUNIT_EXPECT_FALSE(test,f->bcl.param[5].irq_wake);KUNIT_EXPECT_EQ(test,wake_depth(f,0),0u);
+}
+static void failed_rearm_preserves_trigger_statistics(struct kunit *test)
+{
+ struct fixture *f=test->priv;acquire_irqs(test);bcl_update_trigger_stats(&f->bcl.stats[0],0,0,sched_clock());f->fail_wake=1;
+ KUNIT_EXPECT_EQ(test,bcl_set_lbat(f->bcl.param[5].tz_dev,0,1),-EIO);KUNIT_EXPECT_TRUE(test,f->bcl.stats[0].trigger_state);KUNIT_EXPECT_EQ(test,f->bcl.stats[0].counter,0u);
+ f->fail_wake=0;KUNIT_EXPECT_EQ(test,bcl_set_lbat(f->bcl.param[5].tz_dev,0,1),0);KUNIT_EXPECT_FALSE(test,f->bcl.stats[0].trigger_state);KUNIT_EXPECT_EQ(test,f->bcl.stats[0].counter,1u);
+}
+static void restore_bus_failure_keeps_retry_state(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;arm_all(test);KUNIT_ASSERT_EQ(test,bcl_freeze(&f->pdev->dev),0);f->fail_at=f->calls+1;
+ KUNIT_EXPECT_EQ(test,bcl_restore(&f->pdev->dev),-EIO);KUNIT_EXPECT_TRUE(test,f->bcl.frozen);
+ for(i=0;i<3;i++){KUNIT_EXPECT_EQ(test,wake_depth(f,i),0u);KUNIT_EXPECT_TRUE(test,f->bcl.param[5+i].resume_irq);}
+ f->fail_at=0;KUNIT_ASSERT_EQ(test,bcl_restore(&f->pdev->dev),0);
+ for(i=0;i<3;i++)KUNIT_EXPECT_EQ(test,wake_depth(f,i),1u);
+}
 static struct kunit_case cases[]={
  KUNIT_CASE(voltage_gen5_samples),KUNIT_CASE(signed_current_gen5),KUNIT_CASE(cached_no_reading),KUNIT_CASE(legacy_signed_and_voltage),KUNIT_CASE(read_errors_preserve_output),
  KUNIT_CASE(bpm_snapshot_endianness_and_scale),KUNIT_CASE(bpm_all_bus_failures_are_transactional),KUNIT_CASE(voltage_thresholds_and_bounds),KUNIT_CASE(voltage_threshold_write_error),
  KUNIT_CASE(ccm_clamps_before_narrowing),KUNIT_CASE(current_threshold_native_io),KUNIT_CASE(logical_level_metrics_and_trend),KUNIT_CASE(revision_read_errors_propagate),KUNIT_CASE(stopped_callbacks_do_not_access_bus),
- KUNIT_CASE(native_irq_wake_remove_ownership),KUNIT_CASE(native_irq_wake_error_does_not_arm),KUNIT_CASE(freeze_restore_keeps_native_irq_actions),KUNIT_CASE(restore_wake_failure_unwinds),KUNIT_CASE(debugfs_subtree_ownership),KUNIT_CASE(bpm_reset_native_error),KUNIT_CASE(frozen_threshold_updates_request_retry),KUNIT_CASE(peer_threshold_error_reaches_caller),{}
+ KUNIT_CASE(native_irq_wake_remove_ownership),KUNIT_CASE(native_irq_wake_error_does_not_arm),KUNIT_CASE(freeze_restore_keeps_native_irq_actions),KUNIT_CASE(restore_wake_failure_unwinds),KUNIT_CASE(debugfs_subtree_ownership),KUNIT_CASE(bpm_reset_native_error),KUNIT_CASE(frozen_threshold_updates_request_retry),KUNIT_CASE(peer_threshold_error_reaches_caller),KUNIT_CASE(drop_error_preserves_armed_state),KUNIT_CASE(freeze_drop_error_restores_original_actions),KUNIT_CASE(failed_restore_unwind_retains_reference_for_retry),KUNIT_CASE(quiesce_transient_drop_failure_can_retry),KUNIT_CASE(failed_rearm_preserves_trigger_statistics),KUNIT_CASE(restore_bus_failure_keeps_retry_state),{}
 };
 static struct kunit_suite suite={.name="avr-bcl-pmic",.init=setup,.exit=cleanup,.test_cases=cases};
 kunit_test_suite(suite);

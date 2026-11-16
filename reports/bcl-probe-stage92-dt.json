@@ -1,0 +1,252 @@
+{
+  "passed": true,
+  "scope": "Selected PMIH source IDs, NVMEM bit, ordered trips and polling scalar fixture only; guest IRQ chip/regmap are recorded, physical SPMI/cooling links not simulated",
+  "inputs": {
+    "guest": {
+      "file": "artifacts/qemu-bcl-pmic/virt-rail.dtb",
+      "sha256": "1ba77115b4457a1a642971756322b1085b73b32bcce0b0515ed5efff829dddd5"
+    },
+    "candidate": {
+      "file": "artifacts/dt-bcl-name-stage91/avr-bcl-name-candidate.dtb",
+      "sha256": "18cf3ab832d8a23219f0991e6d6147fda5384dfe2bae39efce7810fac4a30c4e"
+    }
+  },
+  "checks": [
+    {
+      "check": "reg provider contract matches",
+      "passed": true
+    },
+    {
+      "check": "#thermal-sensor-cells provider contract matches",
+      "passed": true
+    },
+    {
+      "check": "qcom,pmic7-threshold provider contract matches",
+      "passed": true
+    },
+    {
+      "check": "nvmem-cell-names provider contract matches",
+      "passed": true
+    },
+    {
+      "check": "guest: SDAM bit5 byte0x5d",
+      "passed": true
+    },
+    {
+      "check": "candidate: SDAM bit5 byte0x5d",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl0: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl0: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl0: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl0: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl0: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl1: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl1: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl1: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl1: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-ibat-lvl1: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat0: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat0: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat0: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat0: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat0: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat1: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat1: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat1: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat1: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-2s-ibat1: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "vbat: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "vbat: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "vbat: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "vbat: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "vbat: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl0: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl0: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl0: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl0: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl0: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl1: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl1: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl1: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl1: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl1: native thermal type fits",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl2: same sensor ID",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl2: polling-delay",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl2: polling-delay-passive",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl2: trip metrics AND ordering match",
+      "passed": true
+    },
+    {
+      "check": "pmih010x-bcl-lvl2: native thermal type fits",
+      "passed": true
+    }
+  ],
+  "zones": [
+    {
+      "guest": "/thermal-zones/avr-probe-current0",
+      "candidate": "/soc/thermal-zones/pmih010x-ibat-lvl0",
+      "sensor_id": 0,
+      "trip_count": 1
+    },
+    {
+      "guest": "/thermal-zones/avr-probe-current1",
+      "candidate": "/soc/thermal-zones/pmih010x-ibat-lvl1",
+      "sensor_id": 1,
+      "trip_count": 1
+    },
+    {
+      "guest": "/thermal-zones/pmih010x-2s-ibat0",
+      "candidate": "/soc/thermal-zones/pmih010x-2s-ibat0",
+      "sensor_id": 8,
+      "trip_count": 1
+    },
+    {
+      "guest": "/thermal-zones/pmih010x-2s-ibat1",
+      "candidate": "/soc/thermal-zones/pmih010x-2s-ibat1",
+      "sensor_id": 9,
+      "trip_count": 1
+    },
+    {
+      "guest": "/thermal-zones/avr-probe-voltage",
+      "candidate": "/soc/thermal-zones/vbat",
+      "sensor_id": 2,
+      "trip_count": 3
+    },
+    {
+      "guest": "/thermal-zones/avr-probe-level0",
+      "candidate": "/soc/thermal-zones/pmih010x-bcl-lvl0",
+      "sensor_id": 5,
+      "trip_count": 2
+    },
+    {
+      "guest": "/thermal-zones/avr-probe-level1",
+      "candidate": "/soc/thermal-zones/pmih010x-bcl-lvl1",
+      "sensor_id": 6,
+      "trip_count": 2
+    },
+    {
+      "guest": "/thermal-zones/avr-probe-level2",
+      "candidate": "/soc/thermal-zones/pmih010x-bcl-lvl2",
+      "sensor_id": 7,
+      "trip_count": 2
+    }
+  ],
+  "physical_verified": false,
+  "whole_board_accepted": false
+}

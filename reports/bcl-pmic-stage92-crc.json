@@ -1,0 +1,11 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-bcl-pmic/bcl_pmic5.ko",
+      "imports_checked": 62,
+      "mismatches": {}
+    }
+  ]
+}

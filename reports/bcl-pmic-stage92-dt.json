@@ -1,0 +1,1711 @@
+{
+  "stage": 90,
+  "passed": true,
+  "scope": "Pinned source IDs and selected DT interrupt, thermal, NVMEM and cooling-link shape only; driver not ported by this audit",
+  "port_contract": {
+    "source_sha256": "f712f39c5bdef7cba8e92d5c0bddf319abb16f8c3b7f83a8739d6e001554cba5",
+    "header_sha256": "bdba9fc11482afd551b91bca42fa8898ca0e1242f856ed1e8c6c2087b02c2bf8",
+    "checks": [
+      {
+        "check": "sensor ID enum unchanged",
+        "passed": true
+      },
+      {
+        "check": "IRQ names and sensor indices unchanged",
+        "passed": true
+      },
+      {
+        "check": "compatible to calibration descriptor matches unchanged",
+        "passed": true
+      },
+      {
+        "check": "pmih010x_data: calibration registers and factors unchanged",
+        "passed": true
+      },
+      {
+        "check": "pm8550_data: calibration registers and factors unchanged",
+        "passed": true
+      },
+      {
+        "check": "pmiv010x_data: calibration registers and factors unchanged",
+        "passed": true
+      },
+      {
+        "check": "pmh0101_data: calibration registers and factors unchanged",
+        "passed": true
+      },
+      {
+        "check": "factory BCL numerical constants unchanged",
+        "passed": true
+      }
+    ],
+    "scope": "Selected ID, IRQ-name, match and calibration constants only; does not prove conversion/control/hardware behavior"
+  },
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_sha256": {
+    "drivers/thermal/qcom/qti_bcl_pmic5.c": "8a1a15ffcc2de47951d3037b4a119d49b4d9aa87211e2b352380e343ecba40fc",
+    "drivers/thermal/qcom/qti_bcl_common.h": "515655dfebb3987a512a20f933231679e05aaf7860d8ea4966cf912aaa6aecc3",
+    "drivers/thermal/qcom/qti_bcl_stats.c": "8a0e6c6453b022a4c0f95f000d55352d745201f06623ad75abbbcee8b813f100"
+  },
+  "sensor_ids": {
+    "0": "BCL_IBAT_LVL0",
+    "1": "BCL_IBAT_LVL1",
+    "2": "BCL_VBAT_LVL0",
+    "3": "BCL_VBAT_LVL1",
+    "4": "BCL_VBAT_LVL2",
+    "5": "BCL_LVL0",
+    "6": "BCL_LVL1",
+    "7": "BCL_LVL2",
+    "8": "BCL_2S_IBAT_LVL0",
+    "9": "BCL_2S_IBAT_LVL1"
+  },
+  "compatible_matches": {
+    "qcom,bcl-v5": "pmih010x_data",
+    "qcom,pmh0101-bcl-v5": "pmh0101_data",
+    "qcom,pmiv010x-bcl-v5": "pmiv010x_data",
+    "qcom,pm8550-bcl-v5": "pm8550_data"
+  },
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "providers": [
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700"
+      ],
+      "zones": {
+        "/soc/thermal-zones/pmih010x-ibat-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 0,
+          "name": "BCL_IBAT_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 1,
+          "name": "BCL_IBAT_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 8,
+          "name": "BCL_2S_IBAT_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 9,
+          "name": "BCL_2S_IBAT_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 5,
+          "name": "BCL_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 6,
+          "name": "BCL_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 7,
+          "name": "BCL_LVL2"
+        },
+        "/soc/thermal-zones/vbat": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 2,
+          "name": "BCL_VBAT_LVL0"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 5,
+          "name": "BCL_LVL0"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 6,
+          "name": "BCL_LVL1"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 7,
+          "name": "BCL_LVL2"
+        }
+      },
+      "selected": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700": {
+          "compatible": "71636f6d2c62636c2d763500",
+          "reg": "0000470000000100",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "qcom,pmic7-threshold": "",
+          "#thermal-sensor-cells": "00000001",
+          "active": true,
+          "source_match": "pmih010x_data",
+          "interrupt_routes": {
+            "controller": "/soc/arbiter@c400000/spmi@c426000",
+            "cells": [
+              1,
+              71,
+              0,
+              0,
+              1,
+              71,
+              1,
+              0,
+              1,
+              71,
+              2,
+              0
+            ]
+          },
+          "nvmem": []
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700": {
+          "compatible": "71636f6d2c62636c2d763500",
+          "reg": "0000470000000100",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "qcom,pmic7-threshold": "",
+          "#thermal-sensor-cells": "00000001",
+          "nvmem-cell-names": "736d62313531305f70726573656e7400",
+          "active": true,
+          "source_match": "pmih010x_data",
+          "interrupt_routes": {
+            "controller": "/soc/arbiter@c400000/spmi@c426000",
+            "cells": [
+              7,
+              71,
+              0,
+              0,
+              7,
+              71,
+              1,
+              0,
+              7,
+              71,
+              2,
+              0
+            ]
+          },
+          "nvmem": [
+            {
+              "name": "smb1510_present",
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d",
+              "cell": {
+                "reg": "0000005d00000001",
+                "bits": "0000000500000001"
+              },
+              "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000",
+              "provider_props": {
+                "compatible": "71636f6d2c73706d692d7364616d00",
+                "reg": "00007000",
+                "#address-cells": "00000001",
+                "#size-cells": "00000001"
+              }
+            }
+          ]
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4900": {
+          "compatible": "71636f6d2c62636c2d763500",
+          "reg": "0000490000000100",
+          "interrupts": "000000070000004900000000000000000000000700000049000000010000000000000007000000490000000200000000",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "qcom,pmic7-threshold": "",
+          "#thermal-sensor-cells": "00000001",
+          "status": "64697361626c656400",
+          "active": false,
+          "source_match": "pmih010x_data"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl0": {
+          "polling-delay-passive": "00000000",
+          "polling-delay": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            0,
+            "BCL_IBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0": {
+          "temperature": "00002af8",
+          "hysteresis": "000000c8",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1": {
+          "polling-delay-passive": "00000000",
+          "polling-delay": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            1,
+            "BCL_IBAT_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1": {
+          "temperature": "00002e18",
+          "hysteresis": "000000c8",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0": {
+          "polling-delay-passive": "00000000",
+          "polling-delay": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            8,
+            "BCL_2S_IBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0": {
+          "temperature": "00001388",
+          "hysteresis": "000000c8",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1": {
+          "polling-delay-passive": "00000000",
+          "polling-delay": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            9,
+            "BCL_2S_IBAT_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1": {
+          "temperature": "00001b58",
+          "hysteresis": "000000c8",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            5,
+            "BCL_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip": {
+          "temperature": "00000064",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              1
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              1
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            6,
+            "BCL_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip": {
+          "temperature": "00000064",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              2
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              2
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            7,
+            "BCL_LVL2"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip": {
+          "temperature": "00000064",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2",
+          "cooling": [
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              3
+            ]
+          ]
+        },
+        "/soc/thermal-zones/vbat": {
+          "polling-delay-passive": "00000000",
+          "polling-delay": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            2,
+            "BCL_VBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl0": {
+          "temperature": "00000af0",
+          "hysteresis": "00000064",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl1": {
+          "temperature": "00000a28",
+          "hysteresis": "00000064",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl2": {
+          "temperature": "000008fc",
+          "hysteresis": "00000064",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0": {
+          "polling-delay-passive": "00000032",
+          "polling-delay": "00000000",
+          "thermal-governor": "737465705f7769736500",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            5,
+            "BCL_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              1
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              1
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1": {
+          "polling-delay-passive": "00000032",
+          "polling-delay": "00000000",
+          "thermal-governor": "737465705f7769736500",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            6,
+            "BCL_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              2
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              2
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2": {
+          "polling-delay-passive": "00000032",
+          "polling-delay": "00000000",
+          "thermal-governor": "737465705f7769736500",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            7,
+            "BCL_LVL2"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2": {
+          "temperature": "00000001",
+          "hysteresis": "00000000",
+          "type": "7061737369766500"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2",
+          "cooling": [
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              3
+            ]
+          ]
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: factory one-address zero-size parent semantics",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: saved two raw reg cells, first address fits native factory register reads",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: one sensor ID argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: active four-cell interrupt controller",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: three pinned level IRQ names/routes",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: SID/peripheral/level routes match parent and register base",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: named NVMEM cells",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: factory one-address zero-size parent semantics",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: saved two raw reg cells, first address fits native factory register reads",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: one sensor ID argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: active four-cell interrupt controller",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: three pinned level IRQ names/routes",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: SID/peripheral/level routes match parent and register base",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: named NVMEM cells",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: active NVMEM configuration cell",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: saved SMB1510 selection bit shape",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: pinned standard/2S selection name",
+          "passed": true
+        },
+        {
+          "check": "two active PMIC BCL providers; disabled duplicate kept unchanged",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "eleven declared selected thermal zones, including alternative current pairs",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: exact saved channel ID set",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: exact saved channel ID set",
+          "passed": true
+        }
+      ]
+    },
+    "candidate": {
+      "file": "artifacts/dt-moto-relay-stage53/avr-moto-relay-candidate.dtb",
+      "sha256": "3be18d497455efab2267a998fbc3e7a5729567b0605b80c465eb85133a085774",
+      "providers": [
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700"
+      ],
+      "zones": {
+        "/soc/thermal-zones/pm8550-bcl-lvl2": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 7,
+          "name": "BCL_LVL2"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 6,
+          "name": "BCL_LVL1"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+          "id": 5,
+          "name": "BCL_LVL0"
+        },
+        "/soc/thermal-zones/vbat": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 2,
+          "name": "BCL_VBAT_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 7,
+          "name": "BCL_LVL2"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 6,
+          "name": "BCL_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 5,
+          "name": "BCL_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 9,
+          "name": "BCL_2S_IBAT_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 8,
+          "name": "BCL_2S_IBAT_LVL0"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 1,
+          "name": "BCL_IBAT_LVL1"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl0": {
+          "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+          "id": 0,
+          "name": "BCL_IBAT_LVL0"
+        }
+      },
+      "selected": {
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700": {
+          "#thermal-sensor-cells": "00000001",
+          "qcom,pmic7-threshold": "",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "reg": "0000470000000100",
+          "compatible": "71636f6d2c62636c2d763500",
+          "active": true,
+          "source_match": "pmih010x_data",
+          "interrupt_routes": {
+            "controller": "/soc/arbiter@c400000/spmi@c426000",
+            "cells": [
+              1,
+              71,
+              0,
+              0,
+              1,
+              71,
+              1,
+              0,
+              1,
+              71,
+              2,
+              0
+            ]
+          },
+          "nvmem": []
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4900": {
+          "status": "64697361626c656400",
+          "#thermal-sensor-cells": "00000001",
+          "qcom,pmic7-threshold": "",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "interrupts": "000000070000004900000000000000000000000700000049000000010000000000000007000000490000000200000000",
+          "reg": "0000490000000100",
+          "compatible": "71636f6d2c62636c2d763500",
+          "active": false,
+          "source_match": "pmih010x_data"
+        },
+        "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700": {
+          "nvmem-cell-names": "736d62313531305f70726573656e7400",
+          "#thermal-sensor-cells": "00000001",
+          "qcom,pmic7-threshold": "",
+          "interrupt-names": "62636c2d6c766c300062636c2d6c766c310062636c2d6c766c3200",
+          "reg": "0000470000000100",
+          "compatible": "71636f6d2c62636c2d763500",
+          "active": true,
+          "source_match": "pmih010x_data",
+          "interrupt_routes": {
+            "controller": "/soc/arbiter@c400000/spmi@c426000",
+            "cells": [
+              7,
+              71,
+              0,
+              0,
+              7,
+              71,
+              1,
+              0,
+              7,
+              71,
+              2,
+              0
+            ]
+          },
+          "nvmem": [
+            {
+              "name": "smb1510_present",
+              "node": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000/smb1510_present@5d",
+              "cell": {
+                "bits": "0000000500000001",
+                "reg": "0000005d00000001"
+              },
+              "provider": "/soc/arbiter@c400000/spmi@c426000/qcom,pmk8550@0/sdam@7000",
+              "provider_props": {
+                "#size-cells": "00000001",
+                "#address-cells": "00000001",
+                "reg": "00007000",
+                "compatible": "71636f6d2c73706d692d7364616d00"
+              }
+            }
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2": {
+          "thermal-governor": "737465705f7769736500",
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000032",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            7,
+            "BCL_LVL2"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2",
+          "cooling": [
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              3
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1": {
+          "thermal-governor": "737465705f7769736500",
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000032",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            6,
+            "BCL_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              2
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              2
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0": {
+          "thermal-governor": "737465705f7769736500",
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000032",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700",
+            5,
+            "BCL_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0": {
+          "trip": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              1
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              1
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/vbat": {
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            2,
+            "BCL_VBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl2": {
+          "type": "7061737369766500",
+          "hysteresis": "00000064",
+          "temperature": "000008fc"
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl1": {
+          "type": "7061737369766500",
+          "hysteresis": "00000064",
+          "temperature": "00000a28"
+        },
+        "/soc/thermal-zones/vbat/trips/vbat-lvl0": {
+          "type": "7061737369766500",
+          "hysteresis": "00000064",
+          "temperature": "00000af0"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            7,
+            "BCL_LVL2"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2",
+          "cooling": [
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              3
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000064"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            6,
+            "BCL_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              2
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              2
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000064"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0": {
+          "polling-delay-passive": "00000064",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            5,
+            "BCL_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0": {
+          "trip": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0",
+          "cooling": [
+            [
+              "/soc/qmi-tmd-devices/modem/modem_bcl",
+              0,
+              1
+            ],
+            [
+              "/soc/qcom,kgsl-3d0@3d00000",
+              0,
+              1
+            ]
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000001"
+        },
+        "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip": {
+          "type": "7061737369766500",
+          "hysteresis": "00000000",
+          "temperature": "00000064"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1": {
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            9,
+            "BCL_2S_IBAT_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1": {
+          "type": "7061737369766500",
+          "hysteresis": "000000c8",
+          "temperature": "00001b58"
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0": {
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            8,
+            "BCL_2S_IBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0": {
+          "type": "7061737369766500",
+          "hysteresis": "000000c8",
+          "temperature": "00001388"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1": {
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            1,
+            "BCL_IBAT_LVL1"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1": {
+          "type": "7061737369766500",
+          "hysteresis": "000000c8",
+          "temperature": "00002e18"
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl0": {
+          "polling-delay": "00000000",
+          "polling-delay-passive": "00000000",
+          "sensor": [
+            "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700",
+            0,
+            "BCL_IBAT_LVL0"
+          ]
+        },
+        "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0": {
+          "type": "7061737369766500",
+          "hysteresis": "000000c8",
+          "temperature": "00002af8"
+        }
+      },
+      "checks": [
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: factory one-address zero-size parent semantics",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: saved two raw reg cells, first address fits native factory register reads",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: one sensor ID argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: active four-cell interrupt controller",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: three pinned level IRQ names/routes",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: SID/peripheral/level routes match parent and register base",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: named NVMEM cells",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: factory one-address zero-size parent semantics",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: saved two raw reg cells, first address fits native factory register reads",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: one sensor ID argument",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: active four-cell interrupt controller",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: three pinned level IRQ names/routes",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: SID/peripheral/level routes match parent and register base",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: named NVMEM cells",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: active NVMEM configuration cell",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: saved SMB1510 selection bit shape",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: pinned standard/2S selection name",
+          "passed": true
+        },
+        {
+          "check": "two active PMIC BCL providers; disabled duplicate kept unchanged",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/cooling-maps/vph_lvl_2: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl2/trips/bcl-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/cooling-maps/vph_lvl_1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl1/trips/bcl-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/cooling-maps/vph_lvl_0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pm8550-bcl-lvl0/trips/bcl-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/vbat/trips/vbat-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/cooling-maps/lbat_gpu2: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/b-bcl-lvl2: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl2/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/cooling-maps/lbat_lvl1: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/b-bcl-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl1/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: local trip phandle",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: active cooling provider",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: two cooling bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/cooling-maps/lbat_lvl0: ordered bounds",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/b-bcl-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-bcl-lvl0/trips/thermal-hal-trip: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl1/trips/ibat-2s-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-2s-ibat-lvl0/trips/ibat-2s-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl1/trips/ibat-lvl1: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0: active single source-enumerated sensor",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0: single nonnegative factory metric/hysteresis",
+          "passed": true
+        },
+        {
+          "check": "/soc/thermal-zones/pmih010x-ibat-lvl0/trips/ibat-lvl0: passive factory trip",
+          "passed": true
+        },
+        {
+          "check": "eleven declared selected thermal zones, including alternative current pairs",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pm8550@1/bcl@4700: exact saved channel ID set",
+          "passed": true
+        },
+        {
+          "check": "/soc/arbiter@c400000/spmi@c426000/qcom,pmih010x@7/bcl@4700: exact saved channel ID set",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "saved_semantics_preserved": true,
+  "dt_modified": false,
+  "driver_port_complete": false,
+  "physical_verified": false,
+  "whole_board_accepted": false,
+  "observations": [
+    "Both active saved nodes use qcom,bcl-v5 and therefore select pmih010x_data in pinned factory source; no speculative PM8550 compatible change made",
+    "Parent has zero size cells: the factory of_get_address(...,0) consumes the first raw reg cell; the trailing 0x100 is not treated as a validated native resource size here",
+    "DT declares standard IDs0/1 and 2S IDs8/9 simultaneously; factory NVMEM chooses one current pair, so eleven declarations are not eleven proven active sensors",
+    "NVMEM reference denotes SMB1510 bit5 at SDAM offset0x5d; its physical value was not read or guessed",
+    "BCL event channels5/6/7 carry a logical asserted metric; VBAT/current channels use factory mV/mA scales rather than millidegree temperature"
+  ],
+  "errors": [],
+  "port_acceptance_requirements": [
+    "Use real native thermal private layout/accessors, remove vendor change_mode helper dependency",
+    "Propagate NVMEM/IRQ/thermal/register-write errors instead of reporting successful partial probe",
+    "Own all per-device IRQ wake/enable, notifier, IPC-log and debugfs resources; fix probe/remove and freeze/restore unwind",
+    "Initialize notifier callback before registration and remove stale global allocation/count state",
+    "Retain physical calibration and validate conversions/endianness/threshold mapping with native regmap fault tests before hardware acceptance"
+  ],
+  "implementation_status": "Initial full-source 7.3 module draft exists; this audit checks selected DT/calibration contracts only"
+}

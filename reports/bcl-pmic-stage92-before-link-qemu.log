@@ -1,0 +1,714 @@
+[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000][    T0] Linux version 7.3.0-4k (root@localhost) (Ubuntu clang version 21.1.8 (6ubuntu1), Ubuntu LLD 21.1.8) #25 SMP PREEMPT Mon Nov 16 01:11:19 JST 2026
+[    0.000000][    T0] KASLR enabled
+[    0.000000][    T0] random: crng init done
+[    0.000000][    T0] Machine model: linux,dummy-virt
+[    0.000000][    T0] earlycon: pl11 MMIO:0x0000000009000000 (options '')
+[    0.000000][    T0] printk: legacy bootconsole [pl11] enabled
+[    0.000000][    T0] efi: UEFI not found.
+[    0.000000][    T0] OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+[    0.000000][    T0] cma: Reserved 16 MiB at 0x000000007ec00000
+[    0.000000][    T0] psci: probing for conduit method from DT.
+[    0.000000][    T0] psci: PSCIv1.1 detected in firmware.
+[    0.000000][    T0] psci: Using standard PSCI v0.2 function IDs
+[    0.000000][    T0] psci: Trusted OS migration not required
+[    0.000000][    T0] psci: SMC Calling Convention v1.0
+[    0.000000][    T0] Zone ranges:
+[    0.000000][    T0]   DMA32    [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0]   Normal   empty
+[    0.000000][    T0] Movable zone start for each node
+[    0.000000][    T0] Early memory node ranges
+[    0.000000][    T0]   node   0: [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] Initmem setup node 0 [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] percpu: Embedded 56 pages/cpu s192144 r8192 d29040 u229376
+[    0.000000][    T0] Detected PIPT I-cache on CPU0
+[    0.000000][    T0] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000][    T0] CPU features: detected: GICv3 CPU interface
+[    0.000000][    T0] CPU features: detected: HCRX_EL2 register
+[    0.000000][    T0] CPU features: detected: Stage-1 Permission Indirection Extension (S1PIE)
+[    0.000000][    T0] CPU features: detected: Spectre-v4
+[    0.000000][    T0] alternatives: applying boot alternatives
+[    0.000000][    T0] Kernel command line: console=ttyAMA0 earlycon=pl011,0x09000000 rdinit=/init panic=1 
+[    0.000000][    T0] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000][    T0] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000][    T0] software IO TLB: SWIOTLB bounce buffer size adjusted to 1MB
+[    0.000000][    T0] software IO TLB: area num 4.
+[    0.000000][    T0] software IO TLB: mapped [mem 0x000000007d980000-0x000000007da80000] (1MB)
+[    0.000000][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 262144
+[    0.000000][    T0] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.000000][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.000000][    T0] stackdepot hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.000000][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000][    T0] Running RCU self tests
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000][    T0] rcu: 	RCU event tracing is enabled.
+[    0.000000][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.000000][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+[    0.000000][    T0] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[    0.000000][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.000000][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000][    T0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000][    T0] GICv3: 256 SPIs implemented
+[    0.000000][    T0] GICv3: 0 Extended SPIs implemented
+[    0.000000][    T0] Root IRQ handler: gic_handle_irq
+[    0.000000][    T0] GICv3: GICv3 features: 16 PPIs
+[    0.000000][    T0] GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.000000][    T0] GICv3: CPU0: found redistributor 0 region 0:0x00000000080a0000
+[    0.000000][    T0] ITS [mem 0x08080000-0x0809ffff]
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Devices @43d20000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Interrupt Collections @43d30000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] GICv3: using LPI property table @0x0000000043d40000
+[    0.000000][    T0] GICv3: CPU0: using allocated LPI pending table @0x0000000043d50000
+[    0.000000][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.000000][    T0] arch_timer: cp15 timer running at 1000.00MHz (virt).
+[    0.000000][    T0] clocksource: arch_sys_counter: mask: 0x1fffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000040][    T0] sched_clock: 61 bits at 1000MHz, resolution 1ns, wraps every 4398046511103ns
+[    0.004751][    T0] kfence: initialized - using 524288 bytes for 63 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.027178][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.029459][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.029635][    T0] ... MAX_LOCK_DEPTH:          48
+[    0.029949][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    0.030115][    T0] ... CLASSHASH_SIZE:          4096
+[    0.030266][    T0] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.030423][    T0] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.030571][    T0] ... CHAINHASH_SIZE:          32768
+[    0.030719][    T0]  memory used by lock dependency info: 6429 kB
+[    0.030906][    T0]  memory used for stack traces: 4224 kB
+[    0.031058][    T0]  per task-struct memory footprint: 1920 bytes
+[    0.032677][    T0] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.00 BogoMIPS (lpj=4000000)
+[    0.033394][    T0] pid_max: default: 32768 minimum: 301
+[    0.050288][    T0] landlock: Up and running.
+[    0.050863][    T0] SELinux:  Initializing.
+[    0.090378][    T0] LSM support for eBPF active
+[    0.102147][    T0] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.102535][    T0] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.115814][    T0] VFS: Finished mounting rootfs on nullfs
+[    0.134660][    T0] Running RCU synchronous self tests
+[    0.135313][    T0] Running RCU synchronous self tests
+[    0.182283][    T1] rcu: Hierarchical SRCU implementation.
+[    0.182516][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    0.189744][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.201787][    T1] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.204191][    T1] EFI services will not be available.
+[    0.213338][    T1] smp: Bringing up secondary CPUs ...
+[    0.230587][    T0] Detected PIPT I-cache on CPU1
+[    0.232953][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    0.234041][    T0] GICv3: CPU1: using allocated LPI pending table @0x0000000043d60000
+[    0.236878][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    0.258626][    T0] Detected PIPT I-cache on CPU2
+[    0.259030][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    0.259313][    T0] GICv3: CPU2: using allocated LPI pending table @0x0000000043d70000
+[    0.260221][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    0.286697][    T0] Detected PIPT I-cache on CPU3
+[    0.287142][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    0.287429][    T0] GICv3: CPU3: using allocated LPI pending table @0x0000000043d80000
+[    0.288567][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    0.293458][    T1] smp: Brought up 1 node, 4 CPUs
+[    0.296852][    T1] SMP: Total of 4 processors activated.
+[    0.297135][    T1] CPU: All CPU(s) started at EL1
+[    0.297670][    T1] CPU features: detected: Branch Target Identification
+[    0.298102][    T1] CPU features: detected: 32-bit EL0 Support
+[    0.298352][    T1] CPU features: detected: 32-bit EL1 Support
+[    0.298625][    T1] CPU features: detected: ARMv8.4 Translation Table Level
+[    0.298911][    T1] CPU features: detected: Instruction cache invalidation not required for I/D coherence
+[    0.299239][    T1] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.299583][    T1] CPU features: detected: Common not Private translations
+[    0.299927][    T1] CPU features: detected: CRC32 instructions
+[    0.300220][    T1] CPU features: detected: Data cache clean to Point of Deep Persistence
+[    0.300581][    T1] CPU features: detected: Data cache clean to Point of Persistence
+[    0.301001][    T1] CPU features: detected: Data independent timing control (DIT)
+[    0.301340][    T1] CPU features: detected: E0PD
+[    0.301729][    T1] CPU features: detected: Enhanced Counter Virtualization
+[    0.302081][    T1] CPU features: detected: Enhanced Counter Virtualization (CNTPOFF)
+[    0.303455][    T1] CPU features: detected: Enhanced Privileged Access Never
+[    0.303817][    T1] CPU features: detected: Enhanced Virtualization Traps
+[    0.304171][    T1] CPU features: detected: Fine Grained Traps
+[    0.304475][    T1] CPU features: detected: Guarded Control Stack (GCS)
+[    0.305049][    T1] CPU features: detected: Generic authentication (IMP DEF algorithm)
+[    0.305602][    T1] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.306110][    T1] CPU features: detected: 52-bit Virtual Addressing for KVM (LPA2)
+[    0.306860][    T1] CPU features: detected: LSE atomic instructions
+[    0.307216][    T1] CPU features: detected: Memory Copy and Memory Set instructions
+[    0.307637][    T1] CPU features: detected: Privileged Access Never
+[    0.308310][    T1] CPU features: detected: PMUv3
+[    0.308571][    T1] CPU features: detected: SCTLR2
+[    0.308820][    T1] CPU features: detected: RAS Extension Support
+[    0.309132][    T1] CPU features: detected: RASv1p1 Extension Support
+[    0.309476][    T1] CPU features: detected: Random Number Generator
+[    0.309761][    T1] CPU features: detected: Speculation barrier (SB)
+[    0.310149][    T1] CPU features: detected: Stage-2 Force Write-Back
+[    0.310447][    T1] CPU features: detected: Trap EL0 IMPLEMENTATION DEFINED functionality
+[    0.310985][    T1] CPU features: detected: TLB range maintenance instructions
+[    0.311432][    T1] CPU features: detected: WFx with timeout
+[    0.311699][    T1] CPU features: detected: XNX
+[    0.312087][    T1] CPU features: detected: Scalable Matrix Extension
+[    0.312376][    T1] CPU features: detected: FA64
+[    0.312615][    T1] CPU features: detected: SME2
+[    0.312855][    T1] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.313171][    T1] CPU features: detected: Scalable Vector Extension
+[    0.343007][    T1] alternatives: applying system-wide alternatives
+[    0.361603][    T1] CPU features: detected: Hardware dirty bit management on CPU0-3
+[    0.362316][    T1] SVE: maximum available vector length 256 bytes per vector
+[    0.362493][    T1] SVE: default vector length 64 bytes per vector
+[    0.362686][    T1] SME: minimum available vector length 16 bytes per vector
+[    0.362849][    T1] SME: maximum available vector length 256 bytes per vector
+[    0.363014][    T1] SME: default vector length 32 bytes per vector
+[    0.393670][    T1] Memory: 942892K/1048576K available (21376K kernel code, 2718K rwdata, 16056K rodata, 5184K init, 11476K bss, 84040K reserved, 16384K cma-reserved)
+[    0.546032][    T1] Running RCU synchronous self tests
+[    0.548653][    T1] Running RCU synchronous self tests
+[    0.556460][    T1] Running RCU Tasks wait API self tests
+[    0.561982][    T1] Running RCU Tasks Trace wait API self tests
+[    0.578346][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    0.582423][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.591050][    T1] 18512 pages in range for non-PLT usage
+[    0.591229][    T1] 510032 pages in range for PLT usage
+[    0.601867][    T9] Callback from call_rcu_tasks_trace() invoked.
+[    0.660362][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.684862][    T1] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.686054][    T1] audit: initializing netlink subsys (disabled)
+[    0.692820][   T44] audit: type=2000 audit(0.592:1): state=initialized audit_enabled=0 res=1
+[    0.812199][    T1] thermal_sys: Registered thermal governor 'bang_bang'
+[    0.812323][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    0.812627][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    0.812826][    T1] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.819898][    T1] cpuidle: using governor menu
+[    0.823621][    T1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.830742][    T1] ASID allocator initialised with 65536 entries
+[    0.842216][    T1] Serial: AMBA PL011 UART driver
+[    1.038457][    T1] 9000000.pl011: ttyAMA0 MMIO:0x0000000009000000 (irq = 13, base_baud = 0) is a PL011 rev1
+[    1.041257][    T1] printk: console [ttyAMA0] enabled
+[    1.041257][    T1] printk: console [ttyAMA0] enabled
+[    1.042284][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.042284][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.090873][   T42] Callback from call_rcu_tasks() invoked.
+[    1.255139][    T1] iommu: Default domain type: Translated
+[    1.255268][    T1] iommu: DMA domain TLB invalidation policy: strict mode
+[    1.293569][    T1] SCSI subsystem initialized
+[    1.304033][    T1] usbcore: registered new interface driver usbfs
+[    1.306122][    T1] usbcore: registered new interface driver hub
+[    1.306990][    T1] usbcore: registered new device driver usb
+[    1.311642][    T1] mc: Linux media interface: v0.10
+[    1.312648][    T1] videodev: Linux video capture interface: v2.00
+[    1.316102][    T1] EDAC MC: Ver: 3.0.0
+[    1.326590][    T1] scmi_core: SCMI protocol bus registered
+[    1.336026][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    1.366304][    T1] clocksource: Switched to clocksource arch_sys_counter
+[    1.384672][    T1] VFS: Disk quotas dquot_6.6.0
+[    1.385107][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    1.411941][    T1] NET: Registered PF_INET protocol family
+[    1.413504][    T1] IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.442902][    T1] tcp_listen_portaddr_hash hash table entries: 512 (order: 4, 36864 bytes, linear)
+[    1.443509][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.445031][    T1] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    1.450893][    T1] TCP bind hash table entries: 8192 (order: 9, 1179648 bytes, linear)
+[    1.458804][    T1] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.460039][    T1] UDP hash table entries: 512 (order: 5, 131072 bytes, linear)
+[    1.464040][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.465080][    T1] NET: Registered PF_XDP protocol family
+[    1.465578][    T1] PCI: CLS 0 bytes, default 64
+[    1.484481][    T1] kvm [1]: HYP mode not available
+[    1.497271][   T13] Trying to unpack rootfs image as initramfs...
+[    1.527965][    T1] Initialise system trusted keyrings
+[    1.535146][    T1] workingset: timestamp_bits=46 (anon: 41) max_order=18 bucket_order=0 (anon: 0)
+[    1.538150][    T1] Memory allocation profiling is not supported!
+[    1.573594][    T1] fuse: init (API version 7.46)
+[    1.648296][    T1] Key type asymmetric registered
+[    1.648502][    T1] Asymmetric key parser 'x509' registered
+[    1.649650][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    1.652298][    T1] io scheduler mq-deadline registered
+[    1.652387][    T1] io scheduler kyber registered
+[    1.654742][    T1] io scheduler bfq registered
+[    1.687482][    T1] pl061_gpio 9030000.pl061: PL061 GPIO chip registered
+[    1.696836][    T1] pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+[    1.697596][    T1] pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 0x0000000000
+[    1.698545][    T1] pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 0x0010000000
+[    1.698716][    T1] pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 0x8000000000
+[    1.699227][    T1] pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 32 bits
+[    1.699861][    T1] pci-host-generic 4010000000.pcie: ECAM at [mem 0x4010000000-0x401fffffff] for [bus 00-ff]
+[    1.705074][    T1] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    1.705417][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.705499][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    1.705544][    T1] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    1.705577][    T1] pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+[    1.707340][    T1] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    1.718887][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    1.718948][    T1] pci_bus 0000:00: resource 5 [mem 0x10000000-0x3efeffff]
+[    1.718975][    T1] pci_bus 0000:00: resource 6 [mem 0x8000000000-0xffffffffff]
+[    1.790290][   T13] Freeing initrd memory: 3164K
+[    2.059701][    T1] brd: module loaded
+[    2.358700][    T1] loop: module loaded
+[    2.370262][    T1] encore_fas: version 9, branch main-f408a00, counter 1000000000 Hz
+[    2.392818][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    2.392891][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    2.436816][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    2.477234][    T1] usbcore: registered new interface driver uas
+[    2.478469][    T1] usbcore: registered new interface driver usb-storage
+[    2.496674][    T1] usbcore: registered new interface driver xpad
+[    2.538767][    T1] rtc-pl031 9010000.pl031: registered as rtc0
+[    2.539643][    T1] rtc-pl031 9010000.pl031: setting system clock to 2026-11-16T03:33:32 UTC (1794800012)
+[    2.546872][    T1] usbcore: registered new interface driver uvcvideo
+[    2.554762][    T1] device-mapper: uevent: version 1.0.3
+[    2.560094][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    2.601637][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    2.651396][    T1] usbcore: registered new interface driver usbhid
+[    2.651509][    T1] usbhid: USB HID core driver
+[    2.654185][    T1] ashmem_rust: Using Rust implementation.
+[    2.688830][    T1] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 (0,8000003f) counters available
+[    2.711153][    T1] usbcore: registered new interface driver snd-usb-audio
+[    2.719982][    T1] GACT probability NOT on
+[    2.720536][    T1] Mirror/redirect action on
+[    2.722417][    T1] u32 classifier
+[    2.722485][    T1]     input device check on
+[    2.722508][    T1]     Actions configured
+[    2.732362][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    2.732362][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.732661][    T1] The pptp conntrack helper is scheduled for removal.
+[    2.732661][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.751634][    T1] xt_time: kernel timezone is -0000
+[    2.752334][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    2.775326][    T1] gre: GRE over IPv4 demultiplexer driver
+[    2.775414][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    2.807966][    T1] IPv4 over IPsec tunneling driver
+[    2.821730][    T1] Initializing XFRM netlink socket
+[    2.822461][    T1] IPsec XFRM device driver
+[    2.826205][    T1] NET: Registered PF_INET6 protocol family
+[    2.859678][    T1] Segment Routing with IPv6
+[    2.860152][    T1] In-situ OAM (IOAM) with IPv6
+[    2.862166][    T1] mip6: Mobile IPv6
+[    2.877203][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    2.900923][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    2.914947][    T1] NET: Registered PF_PACKET protocol family
+[    2.915030][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    2.915313][    T1] NET: Registered PF_KEY protocol family
+[    2.918876][    T1] NET: Registered PF_VSOCK protocol family
+[    3.425534][    T1] sched_proxy_exec: enabled
+[    3.439851][    T1] registered taskstats version 1
+[    3.450863][    T1] workqueue: work func tboost_fn enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
+[    3.451369][    T1] Rakkashin v3.2 features (avr, Android 7.3 port)
+[    3.451420][    T1] Loading compiled-in X.509 certificates
+[    3.469352][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 877395b53bfc9825fc15d9fe6e9400be628ea3ba'
+[    3.469432][    T1] Problem parsing in-kernel X.509 certificate list
+[    4.296366][    T1] page_owner is disabled
+[    4.302186][    T1] Key type .fscrypt registered
+[    4.302243][    T1] Key type fscrypt-provisioning registered
+[    4.317437][    T1] Boeffla WL blocker: driver version 1.1.0-7.3 started
+[    4.332916][    T1] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    4.365523][    T1] clk: Disabling unused clocks
+[    4.367436][    T1] PM: genpd: Disabling unused power domains
+[    4.367883][    T1] ALSA device list:
+[    4.368351][    T1]   No soundcards found.
+[    4.706414][    T1] Freeing unused kernel memory: 5184K
+[    4.710731][    T1] Run /init as init process
+AVR_QEMU_SMOKE_BEGIN
+Linux (none) 7.3.0-4k #25 SMP PREEMPT Mon Nov 16 01:11:19 JST 2026 aarch64 GNU/Linux
+[    5.000742][   T71] kunit: module verification failed: signature and/or required key missing - tainting kernel
+[    5.075447][   T72] qcom_hwspinlock: loading out-of-tree module taints kernel.
+[    5.460965][   T77] KTAP version 1
+[    5.461025][   T77] 1..1
+[    5.464953][   T77]     KTAP version 1
+[    5.464994][   T77]     # Subtest: avr-bcl-pmic
+[    5.465150][   T77]     # module: avr_bcl_pmic_test
+[    5.465481][   T77]     1..28
+[    5.576394][   T77]     ok 1 voltage_gen5_samples
+[    5.652821][   T77]     ok 2 signed_current_gen5
+[    5.738922][   T77]     ok 3 cached_no_reading
+[    5.871293][   T77]     ok 4 legacy_signed_and_voltage
+[    5.919000][   T86] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4786 len:2 err:-5
+[    5.919165][   T86] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4776 len:2 err:-5
+[    5.919251][   T86] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4786 len:2 err:-5
+[    5.919292][   T86] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4776 len:2 err:-5
+[    5.994343][   T77]     ok 5 read_errors_preserve_output
+[    6.078882][   T77]     ok 6 bpm_snapshot_endianness_and_scale
+[    6.122631][   T90] avr_bcl_pmic_test:bcl_write_register Error reading register:0x47a0 val:0x81 err:-5
+[    6.122773][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.122836][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.122879][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.122922][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.122964][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123007][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123050][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123093][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123137][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123180][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123225][   T90] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.123279][   T90] avr_bcl_pmic_test:bcl_write_register Error reading register:0x47a0 val:0x80 err:-5
+[    6.188256][   T77]     ok 7 bpm_all_bus_failures_are_transactional
+[    6.230636][   T92] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x38
+[    6.230758][   T92] avr_bcl_pmic_test:bcl_set_adc_value threshold:2600 mV ADC:0xe
+[    6.230811][   T92] avr_bcl_pmic_test:bcl_set_adc_value input temp is 2249, lower than MIN
+[    6.230840][   T92] avr_bcl_pmic_test:bcl_set_adc_value input temp is 3601, higher than MAX
+[    6.276866][   T77]     ok 8 voltage_thresholds_and_bounds
+[    6.301530][   T94] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4748 val:0x70 err:-5
+[    6.301586][   T94] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    6.352497][   T77]     ok 9 voltage_threshold_write_error
+[    6.389325][   T96] avr_bcl_pmic_test:convert_ibat_to_ccm_val CCM thresh:2147483647 is invalid, use MAX supported threshold
+[    6.389404][   T96] avr_bcl_pmic_test:convert_ibat_to_ccm_val CCM thresh:2147483647 is invalid, use MAX supported threshold
+[    6.437392][   T77]     ok 10 ccm_clamps_before_narrowing
+[    6.475615][   T98] avr_bcl_pmic_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    6.475775][   T98] avr_bcl_pmic_test:bcl_set_ibat ibat high threshold:11500 mA ADC:0x49
+[    6.475815][   T98] avr_bcl_pmic_test:bcl_write_register Error reading register:0x474b val:0x49 err:-5
+[    6.531291][   T77]     ok 11 current_threshold_native_io
+[    6.627851][   T77]     ok 12 logical_level_metrics_and_trend
+[    6.665997][  T102] avr_bcl_pmic_test:bcl_read_register Error reading register 0x4701 err:-5
+[    6.666118][  T102] avr_bcl_pmic_test:bcl_read_register Error reading register 0x4700 err:-5
+[    6.666190][  T102] avr_bcl_pmic_test:bcl_read_register Error reading register 0x470e err:-5
+[    6.666254][  T102] avr_bcl_pmic_test:bcl_read_register Error reading register 0x470f err:-5
+[    6.754342][   T77]     ok 13 revision_read_errors_propagate
+[    6.851230][   T77]     ok 14 stopped_callbacks_do_not_access_bus
+[    6.956392][   T77]     ok 15 native_irq_wake_remove_ownership
+[    7.104306][   T77]     ok 16 native_irq_wake_error_does_not_arm
+[    7.211638][   T77]     ok 17 freeze_restore_keeps_native_irq_actions
+[    7.339387][   T77]     ok 18 restore_wake_failure_unwinds
+[    7.436238][   T77]     ok 19 debugfs_subtree_ownership
+[    7.469375][  T128] avr_bcl_pmic_test:bpm_reset Error reading register:0x47a1 val:0x01 err:-5
+[    7.529226][   T77]     ok 20 bpm_reset_native_error
+[    7.604711][   T77]     ok 21 frozen_threshold_updates_request_retry
+[    7.643268][  T132] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    7.643437][  T132] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4947 val:0x16 err:-5
+[    7.643469][  T132] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x16
+[    7.643501][  T132] avr_bcl_pmic_test:bcl_config_vph_cb Fail to set vph regs, err: -5
+[    7.643530][  T132] avr_bcl_pmic_test:bcl_config_vph_cb trip_id: 0, vph:2800 mV, ADC: 0x16
+[    7.643590][  T132] avr_bcl_pmic_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x70
+[    7.643669][  T132] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    7.643700][  T132] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x16
+[    7.643723][  T132] avr_bcl_pmic_test:bcl_config_vph_cb trip_id: 0, vph:2800 mV, ADC: 0x16
+[    7.643748][  T132] avr_bcl_pmic_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x70
+[    7.698550][   T77]     ok 22 peer_threshold_error_reaches_caller
+[    7.819371][   T77]     ok 23 drop_error_preserves_armed_state
+[    7.950469][   T77]     ok 24 freeze_drop_error_restores_original_actions
+[    8.008045][  T144] platform avr-bcl-pmic-private.1.auto: BCL wake rollback failed for IRQ 32: -5
+[    8.069728][   T77]     ok 25 failed_restore_unwind_retains_reference_for_retry
+[    8.134243][  T149] platform avr-bcl-pmic-private.1.auto: BCL wake release failed for IRQ 32; ownership retained
+[    8.211717][   T77]     ok 26 quiesce_transient_drop_failure_can_retry
+[    8.341157][   T77]     ok 27 failed_rearm_preserves_trigger_statistics
+[    8.382627][  T159] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4746 val:0x80 err:-5
+[    8.435865][   T77]     ok 28 restore_bus_failure_keeps_retry_state
+[    8.436560][   T77] # avr-bcl-pmic: pass:28 fail:0 skip:0 total:28
+[    8.436986][   T77] # Totals: pass:28 fail:0 skip:0 total:28
+[    8.437450][   T77] ok 1 avr-bcl-pmic
+[    8.533606][  T164] KTAP version 1
+[    8.533663][  T164] 1..1
+[    8.537262][  T164]     KTAP version 1
+[    8.537293][  T164]     # Subtest: avr-bcl-pmic-probe
+[    8.537322][  T164]     # module: avr_bcl_pmic_probe_test
+[    8.537378][  T164]     1..16
+[    8.592428][  T165] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    8.596609][  T165] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    8.713339][  T164]     ok 1 native_probe_standard_pair
+[    8.756643][  T170] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:5000 mA ADC:0x0f
+[    8.760716][  T170] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:7000 mA ADC:0x16
+[    8.912941][  T164]     ok 2 native_probe_2s_pair
+[    8.984685][   T51] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    8.994762][   T51] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.124572][  T164]     ok 3 late_nvmem_supplier_bind_retries
+[    9.154101][  T180] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: failed to read nvmem cell smb1510_present
+[    9.154204][  T180] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.182663][  T164]     ok 4 first_nvmem_read_error_propagates
+[    9.218900][  T182] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: failed to read nvmem cell smb1510_present
+[    9.219034][  T182] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.264525][  T164]     ok 5 second_nvmem_read_unwinds_voltage_zone
+[    9.320021][  T184] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x4701 err:-5
+[    9.320102][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.332311][  T184] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x4700 err:-5
+[    9.332367][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.343246][  T184] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x470e err:-5
+[    9.343292][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.353556][  T184] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x470f err:-5
+[    9.353599][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.391332][  T164]     ok 6 revision_failures_leave_no_resources
+[    9.430106][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.434211][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.440561][  T186] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.477599][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.482029][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.517449][  T186] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.580169][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.584258][  T186] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.639193][  T186] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.722417][  T164]     ok 7 zone_failures_unwind_owned_irqs
+[    9.776805][  T194] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.781248][  T194] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.812799][  T194] avr_bcl_pmic_probe_test:bcl_write_register Error reading register:0x4746 val:0x80 err:-5
+[    9.819098][  T194] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.885420][  T164]     ok 8 monitor_enable_error_unwinds_all_zones
+[    9.939841][  T199] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.944127][  T199] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.977582][  T199] avr_bcl_pmic_probe_test:bcl_write_register Error reading register:0x47a0 val:0x80 err:-5
+[    9.983568][  T199] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[   10.080102][  T164]     ok 9 bpm_error_unwinds_registered_notifier
+[   10.118490][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.122589][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.208160][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.212331][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.292179][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.296340][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.386115][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.390412][  T204] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.512245][  T164]     ok 10 native_release_and_rebind
+[   10.574128][  T218] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.578281][  T218] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.613142][  T219] avr_bcl_pmic_probe_test:bcl_handle_irq Irq:32 triggered for bcl type:bcl-lvl0. status:1, LVL0_cnt 1, LVL1_cnt 0, LVL2_cnt 0, boot_seq 0, ibat=0 vbat=0
+[   10.740707][  T164]     ok 11 native_irq_thread_and_level_rearm
+[   10.824679][  T164]     ok 12 missing_parent_regmap_defers
+[   10.859929][  T225] thermal_sys: Thermal zone name (pmih010x-2s-ibat-lvl0) too long, should be under 20 chars
+[   10.860106][  T225] thermal_sys: Thermal zone name (pmih010x-2s-ibat-lvl1) too long, should be under 20 chars
+[   10.877600][  T164]     ok 13 original_2s_names_exceed_native_limit
+[   10.923135][  T227] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.927294][  T227] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.974907][  T227] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2800 mV ADC:0x38
+[   10.975096][  T227] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x38
+[   10.975242][  T227] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2600 mV ADC:0xe
+[   10.975300][  T227] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 1, vbat:2600 mV, ADC: 0xe
+[   10.975340][  T227] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2300 mV ADC:0x2
+[   10.975394][  T227] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 2, vbat:2300 mV, ADC: 0x2
+[   11.071124][  T164]     ok 14 of_voltage_trip_indices_program_expected_registers
+[   11.151547][  T232] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.156154][  T232] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.192954][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:174
+[   11.192954][  T232]     Expected platform_get_drvdata(f->child) == ((void *)0), but
+[   11.192954][  T232]         platform_get_drvdata(f->child) == ffffff800565b080
+[   11.192954][  T232]         ((void *)0) == 0000000000000000
+[   11.193586][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.193586][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.194139][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.194139][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.194367][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.194367][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.194574][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.194574][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.194780][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.194780][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.194984][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.194984][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.195322][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.195322][  T232]     Expected bcl_stats_users == 0u, but
+[   11.195322][  T232]         bcl_stats_users == 1 (0x1)
+[   11.195322][  T232]         0u == 0 (0x0)
+[   11.195584][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.195584][  T232]     Expected bcl_stats_parent == ((void *)0), but
+[   11.195584][  T232]         bcl_stats_parent == ffffff80041e4d68
+[   11.195584][  T232]         ((void *)0) == 0000000000000000
+[   11.195829][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.195829][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.195829][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.196003][  T232] genirq: Flags mismatch irq 32. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl0)
+[   11.196202][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.196202][  T232]     Expected ret == 0, but
+[   11.196202][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.196411][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.196411][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.196411][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.196551][  T232] genirq: Flags mismatch irq 33. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl1)
+[   11.196703][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.196703][  T232]     Expected ret == 0, but
+[   11.196703][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.196909][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.196909][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.196909][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.197028][  T232] genirq: Flags mismatch irq 34. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl2)
+[   11.197180][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.197180][  T232]     Expected ret == 0, but
+[   11.197180][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.208508][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:174
+[   11.208508][  T232]     Expected platform_get_drvdata(f->child) == ((void *)0), but
+[   11.208508][  T232]         platform_get_drvdata(f->child) == ffffff800565b080
+[   11.208508][  T232]         ((void *)0) == 0000000000000000
+[   11.208742][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.208742][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.208919][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.208919][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.209095][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.209095][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.209263][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.209263][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.209435][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.209435][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.209604][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.209604][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.212136][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.212136][  T232]     Expected bcl_stats_users == 0u, but
+[   11.212136][  T232]         bcl_stats_users == 1 (0x1)
+[   11.212136][  T232]         0u == 0 (0x0)
+[   11.212355][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.212355][  T232]     Expected bcl_stats_parent == ((void *)0), but
+[   11.212355][  T232]         bcl_stats_parent == ffffff80041e4d68
+[   11.212355][  T232]         ((void *)0) == 0000000000000000
+[   11.212565][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.212565][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.212565][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.212705][  T232] genirq: Flags mismatch irq 32. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl0)
+[   11.212854][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.212854][  T232]     Expected ret == 0, but
+[   11.212854][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.213054][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.213054][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.213054][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.213172][  T232] genirq: Flags mismatch irq 33. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl1)
+[   11.213316][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.213316][  T232]     Expected ret == 0, but
+[   11.213316][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.213515][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.213515][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.213515][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.213632][  T232] genirq: Flags mismatch irq 34. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl2)
+[   11.217061][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.217061][  T232]     Expected ret == 0, but
+[   11.217061][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.232712][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:174
+[   11.232712][  T232]     Expected platform_get_drvdata(f->child) == ((void *)0), but
+[   11.232712][  T232]         platform_get_drvdata(f->child) == ffffff800565b080
+[   11.232712][  T232]         ((void *)0) == 0000000000000000
+[   11.232950][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.232950][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.233158][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.233158][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.233356][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.233356][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.233543][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.233543][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.234100][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.234100][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.234308][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   11.234308][  T232]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   11.234538][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.234538][  T232]     Expected bcl_stats_users == 0u, but
+[   11.234538][  T232]         bcl_stats_users == 1 (0x1)
+[   11.234538][  T232]         0u == 0 (0x0)
+[   11.234774][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   11.234774][  T232]     Expected bcl_stats_parent == ((void *)0), but
+[   11.234774][  T232]         bcl_stats_parent == ffffff80041e4d68
+[   11.234774][  T232]         ((void *)0) == 0000000000000000
+[   11.235006][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.235006][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.235006][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.235146][  T232] genirq: Flags mismatch irq 32. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl0)
+[   11.235311][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.235311][  T232]     Expected ret == 0, but
+[   11.235311][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.235546][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.235546][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.235546][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.235679][  T232] genirq: Flags mismatch irq 33. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl1)
+[   11.235839][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.235839][  T232]     Expected ret == 0, but
+[   11.235839][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.236067][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   11.236067][  T232]     Expected f->wake_balance[i] == 0, but
+[   11.236067][  T232]         f->wake_balance[i] == 1 (0x1)
+[   11.236210][  T232] genirq: Flags mismatch irq 34. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl2)
+[   11.236371][  T232]     # native_supplier_unbind_then_rebind: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   11.236371][  T232]     Expected ret == 0, but
+[   11.236371][  T232]         ret == -16 (0xfffffffffffffff0)
+[   11.327414][  T164]     not ok 15 native_supplier_unbind_then_rebind
+[   11.388808][  T237] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.392884][  T237] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.435737][  T241] ------------[ cut here ]------------
+[   11.435848][  T241] DEBUG_LOCKS_WARN_ON(mutex_is_locked(lock))
+[   11.436494][  T241] WARNING: kernel/locking/mutex-debug.c:104 at mutex_destroy+0x68/0x74, CPU#0: avr-bcl-supplie/241
+[   11.438226][  T241] Modules linked in: avr_bcl_pmic_probe_test(OE) avr_bcl_pmic_test(OE) bcl_pmic5(OE) qcom_ipc_logging(OE) minidump(OE) smem(OE) qcom_hwspinlock(OE) kunit(E)
+[   11.440051][  T241] CPU: 0 UID: 0 PID: 241 Comm: avr-bcl-supplie Tainted: G           OE    N  7.3.0-4k #25 PREEMPT  cbdff5df1bdcc56e7609dba0742daa0f72e7755c
+[   11.440972][  T241] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [N]=TEST
+[   11.441218][  T241] Hardware name: linux,dummy-virt (DT)
+[   11.441673][  T241] pstate: 60402005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   11.442183][  T241] pc : mutex_destroy+0x68/0x74
+[   11.442413][  T241] lr : mutex_destroy+0x68/0x74
+[   11.442593][  T241] sp : ffffffc08080bda0
+[   11.442750][  T241] x29: ffffffc08080bda0 x28: 0000000000000000 x27: 0000000000000000
+[   11.443117][  T241] x26: 0000000000000000 x25: 0000000000000000 x24: ffffffdd4ed2812c
+[   11.443418][  T241] x23: ffffffc080633c60 x22: ffffff8006249840 x21: ffffff80056955c8
+[   11.443718][  T241] x20: ffffff80047b4810 x19: ffffff8005695400 x18: ffffffdd545f0fa0
+[   11.444037][  T241] x17: 000000008c623181 x16: 000000008c623181 x15: 0000000000000000
+[   11.444401][  T241] x14: 0000000000000011 x13: 0000000000000053 x12: 0000000000000175
+[   11.444736][  T241] x11: 882255f825277100 x10: 0000000000000001 x9 : 882255f825277100
+[   11.445061][  T241] x8 : 882255f825277100 x7 : ffffffdd52869904 x6 : ffffffdd51df4d48
+[   11.445358][  T241] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000002
+[   11.445655][  T241] x2 : 0000000000000002 x1 : 0000000000000001 x0 : 000000000000002a
+[   11.446373][  T241] Call trace:
+[   11.446651][  T241]  mutex_destroy+0x68/0x74 (P)
+[   11.446999][  T241]  regmap_exit+0x16c/0x1b4
+[   11.447192][  T241]  provider_remove+0x38/0x54 [avr_bcl_pmic_probe_test 51e17d412f4c9311a997c06a53147dc3544cd7dc]
+[   11.447862][  T241]  platform_remove+0x38/0x48
+[   11.448062][  T241]  device_release_driver_internal+0x194/0x308
+[   11.448499][  T241]  device_release_driver+0x18/0x28
+[   11.448862][  T241]  release_supplier_thread+0x28/0xed4 [avr_bcl_pmic_probe_test 51e17d412f4c9311a997c06a53147dc3544cd7dc]
+[   11.449250][  T241]  kthread+0x11c/0x14c
+[   11.449413][  T241]  ret_from_fork+0x10/0x20
+[   11.449802][  T241] irq event stamp: 183
+[   11.450084][  T241] hardirqs last  enabled at (183): [<ffffffdd51e239e0>] __call_rcu_common+0x270/0x3f0
+[   11.450660][  T241] hardirqs last disabled at (182): [<ffffffdd51e237bc>] __call_rcu_common+0x4c/0x3f0
+[   11.450986][  T241] softirqs last  enabled at (58): [<ffffffdd51d0929c>] handle_softirqs+0x5e0/0x660
+[   11.451294][  T241] softirqs last disabled at (51): [<ffffffdd51c105d8>] __do_softirq+0x14/0x20
+[   11.451661][  T241] ---[ end trace 0000000000000000 ]---
+[   13.422903][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:312
+[   13.422903][  T237]     Expected ({ do { __attribute__((__noreturn__)) extern void __compiletime_assert_728(void) __attribute__((__error__("Unsupported access size for {READ,WRITE}_ONCE()."))); if (!((sizeof(bcl->stopping) == sizeof(char) || sizeof(bcl->stopping) == sizeof(short) || sizeof(bcl->stopping) == sizeof(int) || sizeof(bcl->stopping) == sizeof(long)) || sizeof(bcl->stopping) == sizeof(long long))) __compiletime_assert_728(); } while (0); (*(const volatile __typeof_unqual__(bcl->stopping) *)&(bcl->stopping)); }) to be true, but is false
+[   13.423747][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:312
+[   13.423747][  T237]     Expected completion_done(&f->release_done) to be false, but is true
+[   13.424240][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:313
+[   13.424240][  T237]     Expected f->map != ((void *)0), but
+[   13.424240][  T237]         f->map == 0000000000000000
+[   13.424240][  T237]         ((void *)0) == 0000000000000000
+[   13.424690][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:313
+[   13.424690][  T237]     Expected f->nvmem != ((void *)0), but
+[   13.424690][  T237]         f->nvmem == 0000000000000000
+[   13.424690][  T237]         ((void *)0) == 0000000000000000
+[   13.427686][  T238] avr_bcl_pmic_probe_test:bcl_handle_irq Irq:32 triggered for bcl type:bcl-lvl0. status:1, LVL0_cnt 1, LVL1_cnt 0, LVL2_cnt 0, boot_seq 0, ibat=0 vbat=0
+[   13.428677][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:317
+[   13.428677][  T237]     Expected atomic_read(&f->reads_after_stop) == 0, but
+[   13.428677][  T237]         atomic_read(&f->reads_after_stop) == 27 (0x1b)
+[   13.429143][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:174
+[   13.429143][  T237]     Expected platform_get_drvdata(f->child) == ((void *)0), but
+[   13.429143][  T237]         platform_get_drvdata(f->child) == ffffff8005f41080
+[   13.429143][  T237]         ((void *)0) == 0000000000000000
+[   13.429517][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.429517][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.429847][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.429847][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.431038][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.431038][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.431393][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.431393][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.431716][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.431716][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.432054][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:175
+[   13.432054][  T237]     Expected IS_ERR(thermal_zone_get_zone_by_name(zone_names[i])) to be true, but is false
+[   13.432440][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   13.432440][  T237]     Expected bcl_stats_users == 0u, but
+[   13.432440][  T237]         bcl_stats_users == 1 (0x1)
+[   13.432440][  T237]         0u == 0 (0x0)
+[   13.433233][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:176
+[   13.433233][  T237]     Expected bcl_stats_parent == ((void *)0), but
+[   13.433233][  T237]         bcl_stats_parent == ffffff80041e3e78
+[   13.433233][  T237]         ((void *)0) == 0000000000000000
+[   13.433504][  T237] genirq: Flags mismatch irq 32. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl0)
+[   13.434403][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   13.434403][  T237]     Expected ret == 0, but
+[   13.434403][  T237]         ret == -16 (0xfffffffffffffff0)
+[   13.434712][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   13.434712][  T237]     Expected f->wake_balance[i] == 0, but
+[   13.434712][  T237]         f->wake_balance[i] == 1 (0x1)
+[   13.434900][  T237] genirq: Flags mismatch irq 33. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl1)
+[   13.435108][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   13.435108][  T237]     Expected ret == 0, but
+[   13.435108][  T237]         ret == -16 (0xfffffffffffffff0)
+[   13.435398][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:179
+[   13.435398][  T237]     Expected f->wake_balance[i] == 0, but
+[   13.435398][  T237]         f->wake_balance[i] == 1 (0x1)
+[   13.435573][  T237] genirq: Flags mismatch irq 34. 00200001 (avr-bcl-probe-reclaim) vs. 00082001 (bcl-lvl2)
+[   13.435772][  T237]     # supplier_removal_waits_for_native_irq_thread: EXPECTATION FAILED at avr-bcl-pmic-probe-test.c:180
+[   13.435772][  T237]     Expected ret == 0, but
+[   13.435772][  T237]         ret == -16 (0xfffffffffffffff0)
+[   13.436089][  T237]     # supplier_removal_waits_for_native_irq_thread: Test should be marked slow (runtime: 2.076016978s)
+[   13.485262][  T164]     not ok 16 supplier_removal_waits_for_native_irq_thread
+[   13.485403][  T164] # avr-bcl-pmic-probe: pass:14 fail:2 skip:0 total:16
+[   13.485473][  T164] # Totals: pass:14 fail:2 skip:0 total:16
+[   13.485596][  T164] not ok 1 avr-bcl-pmic-probe
+AVR_BCL_PMIC_TESTS_PASS scope=native-regmap-thermal-irq-debugfs-private-guest-only
+[   14.267416][  T246] reboot: Power down

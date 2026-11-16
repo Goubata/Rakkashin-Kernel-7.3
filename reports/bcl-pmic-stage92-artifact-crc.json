@@ -1,0 +1,31 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "artifacts/bcl-pmic-draft-stage92/bcl_pmic5.ko",
+      "imports_checked": 62,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/bcl-pmic-draft-stage92/minidump.ko",
+      "imports_checked": 130,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/bcl-pmic-draft-stage92/qcom_hwspinlock.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/bcl-pmic-draft-stage92/qcom_ipc_logging.ko",
+      "imports_checked": 55,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/bcl-pmic-draft-stage92/smem.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    }
+  ]
+}

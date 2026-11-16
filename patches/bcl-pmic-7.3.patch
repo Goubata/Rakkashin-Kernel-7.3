@@ -269,7 +269,24 @@
  
  	mutex_lock(&bat_data->state_trans_lock);
  	if (!bat_data->last_val)
-@@ -620,10 +650,16 @@
+@@ -616,14 +646,33 @@
+ 	return 0;
+ }
+ 
++/* The native core retains wake_depth on a failed disable. Retain ownership. */
++static int bcl_drop_irq_wake(struct bcl_peripheral_data *p)
++{
++	int ret;
++
++	if (!p->irq_wake)
++		return 0;
++	ret = disable_irq_wake(p->irq_num);
++	if (!ret)
++		p->irq_wake = false;
++	return ret;
++}
++
+ static int bcl_set_lbat(struct thermal_zone_device *tz, int low, int high)
  {
  	uint32_t bcl_lvl = 0;
  	struct bcl_peripheral_data *bat_data =
@@ -287,28 +304,36 @@
  
  	bcl_lvl = bat_data->type - BCL_LVL0;
  	if (bcl_lvl >= MAX_BCL_LVL_COUNT) {
-@@ -635,7 +671,7 @@
+@@ -634,8 +683,10 @@
+ 
  	if (high != BCL_TRIGGER_THRESHOLD &&
  		bat_data->irq_num && bat_data->irq_enabled) {
++		int ret = bcl_drop_irq_wake(bat_data);
++
++		if (ret) { mutex_unlock(&bat_data->state_trans_lock); return ret; }
  		disable_irq_nosync(bat_data->irq_num);
 -		disable_irq_wake(bat_data->irq_num);
-+		if (bat_data->irq_wake) { disable_irq_wake(bat_data->irq_num); bat_data->irq_wake = false; }
  		bat_data->irq_enabled = false;
  
  		pr_debug("lbat[%d]: disable irq:%d low: %d high: %d\n",
-@@ -645,8 +681,10 @@
+@@ -644,9 +695,15 @@
+ 				low, high);
  	} else if (high == BCL_TRIGGER_THRESHOLD &&
  		bat_data->irq_num && !bat_data->irq_enabled) {
++		int ret = 0;
++
++		if (!bat_data->irq_wake) {
++			ret = enable_irq_wake(bat_data->irq_num);
++			if (ret) { mutex_unlock(&bat_data->state_trans_lock); return ret; }
++			bat_data->irq_wake = true;
++		}
  		bcl_update_clear_stats(&bcl_perph->stats[bcl_lvl]);
-+		int ret = enable_irq_wake(bat_data->irq_num);
-+		if (ret) { mutex_unlock(&bat_data->state_trans_lock); return ret; }
-+		bat_data->irq_wake = true;
  		enable_irq(bat_data->irq_num);
 -		enable_irq_wake(bat_data->irq_num);
  		bat_data->irq_enabled = true;
  		pr_debug("lbat[%d]: enable irq:%d low: %d high: %d\n",
  				bat_data->type,
-@@ -664,16 +702,15 @@
+@@ -664,16 +721,15 @@
  	return 0;
  }
  
@@ -328,7 +353,7 @@
  	ret = bcl_read_register(bcl_perph, BCL_IRQ_STATUS, &val);
  	if (ret)
  		goto bcl_read_exit;
-@@ -695,98 +732,83 @@
+@@ -695,98 +751,85 @@
  	bat_data->last_val = *adc_value;
  	pr_debug("lbat:%d irq_status:%d lvl_val:%d\n", bat_data->type,
  			val, bat_data->last_val);
@@ -403,6 +428,8 @@
 +	if (READ_ONCE(bcl_perph->stopping) || !perph_data->tz_dev) return IRQ_HANDLED;
 +	bcl_lvl = perph_data->type - BCL_LVL0;
 +	if (bcl_read_register(bcl_perph, BCL_IRQ_STATUS, &irq_status)) return IRQ_HANDLED;
++	/* Removal can start while a sleeping bus read is in progress. */
++	if (READ_ONCE(bcl_perph->stopping)) return IRQ_HANDLED;
  	if (bcl_perph->param[BCL_IBAT_LVL0].tz_dev)
  		bcl_read_ibat(bcl_perph->param[BCL_IBAT_LVL0].tz_dev, &ibat);
  	else if (bcl_perph->param[BCL_2S_IBAT_LVL0].tz_dev)
@@ -498,7 +525,7 @@
  
  	if (bcl_lvl >= MAX_BCL_LVL_COUNT) {
  		pr_err("Invalid sensor type level:%d\n", perph_data->type);
-@@ -801,13 +823,13 @@
+@@ -801,13 +844,13 @@
  
  		switch (perph_data->type) {
  		case BCL_LVL0:
@@ -515,7 +542,7 @@
  			break;
  		default:
  			break;
-@@ -816,7 +838,7 @@
+@@ -816,7 +859,7 @@
  		pr_err(
  		"Irq:%d triggered for bcl type:%s. status:%u, LVL0_cnt %lu, LVL1_cnt %lu, LVL2_cnt %lu, boot_seq %u, ibat=%d vbat=%d\n",
  			irq, bcl_int_names[perph_data->type],
@@ -524,7 +551,7 @@
  		BCL_IPC(bcl_perph,
  		"Irq:%d triggered for bcl type:%s. status:%u ibat=%d vbat=%d\n",
  			irq, bcl_int_names[perph_data->type],
-@@ -831,6 +853,7 @@
+@@ -831,6 +874,7 @@
  		}
  
  		bcl_update_trigger_stats(&bcl_perph->stats[bcl_lvl], ibat, vbat, start_ts);
@@ -532,7 +559,7 @@
  		if (bcl_perph->stats[bcl_lvl].max_mitig_latency < (end_ts - start_ts)) {
  			bcl_perph->stats[bcl_lvl].max_mitig_latency = end_ts - start_ts;
  			bcl_perph->stats[bcl_lvl].max_mitig_ts = start_ts;
-@@ -838,8 +861,11 @@
+@@ -838,8 +882,11 @@
  
  		if (perph_data->irq_enabled)
  			++bcl_perph->stats[bcl_lvl].self_cleared_counter;
@@ -544,7 +571,7 @@
  		if (bcl_perph->enable_bpm)
  			ret = get_bpm_stats(bcl_perph, &bcl_perph->bpm_stats);
  	}
-@@ -872,7 +898,7 @@
+@@ -872,7 +919,7 @@
  
  	buf = nvmem_cell_read(cell, &len);
  	nvmem_cell_put(cell);
@@ -553,7 +580,7 @@
  		dev_err(&pdev->dev, "failed to read nvmem cell %s\n", name);
  		return PTR_ERR(buf);
  	}
-@@ -934,46 +960,25 @@
+@@ -934,46 +981,25 @@
  	return ret;
  }
  
@@ -613,7 +640,7 @@
  	vbat->dev = bcl_perph;
  	vbat->irq_num = 0;
  	vbat->irq_enabled = false;
-@@ -982,11 +987,11 @@
+@@ -982,11 +1008,11 @@
  	/* If revision 4 or above && bcl support adc, then only enable vbat */
  	if (bcl_perph->dig_major >= BCL_GEN3_MAJOR_REV) {
  		if (!(bcl_perph->bcl_param_1 & BCL_PARAM_HAS_ADC))
@@ -628,7 +655,7 @@
  	}
  
  	vbat->ops = vbat_tzd_ops;
-@@ -996,29 +1001,25 @@
+@@ -996,29 +1022,25 @@
  		pr_debug("vbat[%s] register failed. err:%ld\n",
  				bcl_int_names[type],
  				PTR_ERR(vbat->tz_dev));
@@ -670,7 +697,7 @@
  	ibat->type = type;
  	ibat->dev = bcl_perph;
  	ibat->irq_num = 0;
-@@ -1031,10 +1032,12 @@
+@@ -1031,10 +1053,12 @@
  		pr_debug("ibat:[%s] register failed. err:%ld\n",
  				bcl_int_names[type],
  				PTR_ERR(ibat->tz_dev));
@@ -684,7 +711,7 @@
  }
  
  static int bcl_get_ibat_config(struct platform_device *pdev,
-@@ -1048,6 +1051,7 @@
+@@ -1048,6 +1072,7 @@
  
  	ret = of_property_read_string(pdev->dev.of_node, "nvmem-cell-names", &name);
  	if (ret) {
@@ -692,7 +719,7 @@
  		*ibat_config = 0;
  		pr_debug("Default ibat config enabled %u\n", *ibat_config);
  		return 0;
-@@ -1061,7 +1065,7 @@
+@@ -1061,7 +1086,7 @@
  
  	buf = nvmem_cell_read(cell, &len);
  	nvmem_cell_put(cell);
@@ -701,7 +728,7 @@
  		dev_err(&pdev->dev, "failed to read nvmem cell %s\n", name);
  		return PTR_ERR(buf);
  	}
-@@ -1071,44 +1075,47 @@
+@@ -1071,44 +1096,47 @@
  		kfree(buf);
  		return -EINVAL;
  	}
@@ -766,7 +793,7 @@
  
  	lbat->tz_dev = devm_thermal_of_zone_register(&pdev->dev,
  				type, lbat, &lbat->ops);
-@@ -1116,18 +1123,22 @@
+@@ -1116,18 +1144,22 @@
  		pr_debug("lbat:[%s] register failed. err:%ld\n",
  				bcl_int_names[type],
  				PTR_ERR(lbat->tz_dev));
@@ -796,7 +823,7 @@
  }
  
  static int bcl_version_init_and_check(struct bcl_device *bcl_perph)
-@@ -1141,8 +1152,8 @@
+@@ -1141,8 +1173,8 @@
  
  	bcl_perph->dig_major = val;
  	ret = bcl_read_register(bcl_perph, BCL_REVISION1, &val);
@@ -807,7 +834,7 @@
  
  	if (bcl_perph->dig_major >= BCL_GEN3_MAJOR_REV) {
  		ret = bcl_read_register(bcl_perph, BCL_PARAM_1, &val);
-@@ -1151,7 +1162,8 @@
+@@ -1151,7 +1183,8 @@
  		bcl_perph->bcl_param_1 = val;
  
  		val = 0;
@@ -817,7 +844,7 @@
  		bcl_perph->bcl_type = val;
  	} else {
  		bcl_perph->bcl_param_1 = 0;
-@@ -1181,165 +1193,117 @@
+@@ -1181,165 +1214,201 @@
  	return 0;
  }
  
@@ -839,7 +866,8 @@
 + for (i = 0; i < BCL_TYPE_MAX; i++) {
 +  struct bcl_peripheral_data *p = &bcl->param[i];
 +  mutex_lock(&p->state_trans_lock);
-+  if (p->irq_wake) { disable_irq_wake(p->irq_num); p->irq_wake = false; }
++  if (bcl_drop_irq_wake(p))
++   dev_err(bcl->dev, "BCL wake release failed for IRQ %d; ownership retained\n", p->irq_num);
 +  if (p->irq_requested && p->irq_enabled) disable_irq_nosync(p->irq_num);
 +  p->irq_enabled = false;
 +  mutex_unlock(&p->state_trans_lock);
@@ -858,19 +886,173 @@
 -
 -	for (; i < BCL_TYPE_MAX; i++) {
 -		if (!bcl_perph->param[i].tz_dev)
--			continue;
++ struct bcl_device *bcl = platform_get_drvdata(pdev);
++ if (bcl) bcl_quiesce(bcl);
++ platform_set_drvdata(pdev, NULL);
++}
++static int bcl_probe(struct platform_device *pdev)
++{
++ struct bcl_device *bcl; char *name; int ret, i;
++ bcl = devm_kzalloc(&pdev->dev, sizeof(*bcl), GFP_KERNEL);
++ if (!bcl) return -ENOMEM;
++ bcl->dev = &pdev->dev; mutex_init(&bcl->stats_lock);
++ for (i = 0; i < MAX_BCL_LVL_COUNT; i++) bcl->stats[i].bcl_dev = bcl;
++ for (i = 0; i < BCL_TYPE_MAX; i++) {
++  mutex_init(&bcl->param[i].state_trans_lock);
++  bcl->param[i].type = i; bcl->param[i].dev = bcl; bcl->param[i].trip_thresh = INT_MAX;
++ }
++ bcl->desc = of_device_get_match_data(&pdev->dev);
++ if (!bcl->desc) return -EINVAL;
++ bcl->regmap = dev_get_regmap(pdev->dev.parent, NULL);
++ if (!bcl->regmap) return -EPROBE_DEFER;
++ /* The regmap pointer belongs to the parent driver. A parent relationship
++  * alone does not order driver unbind against this consumer's IRQ thread.
++  * Hand management of this dependency to the native driver core. */
++ if (!device_link_add(&pdev->dev, pdev->dev.parent,
++                      DL_FLAG_AUTOREMOVE_CONSUMER))
++  return dev_err_probe(&pdev->dev, -EINVAL, "Cannot link BCL regmap supplier\n");
++ ret = bcl_get_devicetree_data(pdev, bcl); if (ret) return ret;
++ ret = bcl_version_init_and_check(bcl); if (ret) return ret;
++ if (bcl->bcl_monitor_type != BCL_MON_IBAT_ONLY) { ret = bcl_probe_vbat(pdev, bcl); if (ret) goto fail; }
++ if (bcl->bcl_monitor_type != BCL_MON_VBAT_ONLY) { ret = bcl_probe_ibat(pdev, bcl); if (ret) goto fail; }
++ ret = bcl_probe_lvls(pdev, bcl); if (ret) goto fail;
++ ret = bcl_configure_bcl_peripheral(bcl); if (ret) goto fail;
++ if (!bcl->desc->vbat_zone_enabled) {
++  bcl->nb.notifier_call = bcl_config_vph_cb;
++  ret = bcl_pmic5_notifier_register(&bcl->nb); if (ret) goto fail;
++  bcl->notifier_registered = true;
++ }
++ ret = bcl_write_register(bcl, BPM_EN_OFFSET, BIT(7)); if (ret) goto fail;
++ bcl->enable_bpm = 1;
++ name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "bcl_%s", dev_name(&pdev->dev));
++ if (!name) { ret = -ENOMEM; goto fail; }
++ bcl->ipc_log = ipc_log_context_create(IPC_LOGPAGES, name, 0);
++ bcl_stats_init(name, bcl, MAX_BCL_LVL_COUNT);
++ ret = devm_add_action_or_reset(&pdev->dev, bcl_quiesce, bcl); if (ret) return ret;
++ platform_set_drvdata(pdev, bcl); mmi_get_boot_seq(); return 0;
++fail:
++ bcl_quiesce(bcl); return ret;
++}
++static int bcl_restore(struct device *dev);
++
++static int bcl_freeze(struct device *dev)
++{
++	struct bcl_device *bcl = dev_get_drvdata(dev);
++	int i, ret, restore_ret;
++
++	if (READ_ONCE(bcl->stopping))
++		return -ENODEV;
++	if (bcl->frozen)
++		return 0;
++	WRITE_ONCE(bcl->frozen, true);
++	/* Record every original action before a fallible wake operation. */
++	for (i = 0; i < BCL_TYPE_MAX; i++) {
++		struct bcl_peripheral_data *p = &bcl->param[i];
++
++		mutex_lock(&p->state_trans_lock);
++		p->resume_irq = p->irq_enabled;
++		mutex_unlock(&p->state_trans_lock);
++	}
++	for (i = 0; i < BCL_TYPE_MAX; i++) {
++		struct bcl_peripheral_data *p = &bcl->param[i];
++
++		mutex_lock(&p->state_trans_lock);
++		if (READ_ONCE(bcl->stopping)) {
++			ret = -ENODEV;
++			mutex_unlock(&p->state_trans_lock);
++			goto rollback;
++		}
++		ret = bcl_drop_irq_wake(p);
++		if (ret) {
++			mutex_unlock(&p->state_trans_lock);
++			goto rollback;
++		}
++		if (p->irq_requested && p->irq_enabled)
++			disable_irq_nosync(p->irq_num);
++		p->irq_enabled = false;
++		mutex_unlock(&p->state_trans_lock);
++		if (p->irq_requested)
++			synchronize_irq(p->irq_num);
++	}
++	return 0;
++rollback:
++	restore_ret = bcl_restore(dev);
++	if (restore_ret)
++		dev_err(dev, "BCL freeze rollback failed: %d (original %d)\n",
++			restore_ret, ret);
++	return ret;
++}
++
++static int bcl_restore(struct device *dev)
++{
++	struct bcl_device *bcl = dev_get_drvdata(dev);
++	unsigned long acquired = 0;
++	int i, ret;
++
++	if (READ_ONCE(bcl->stopping))
++		return -ENODEV;
++	if (!bcl->frozen)
++		return 0;
++	ret = bcl_configure_bcl_peripheral(bcl);
++	if (ret)
++		return ret;
++	for (i = 0; i < BCL_TYPE_MAX; i++) {
++		struct bcl_peripheral_data *p = &bcl->param[i];
++
++		mutex_lock(&p->state_trans_lock);
++		if (READ_ONCE(bcl->stopping)) {
++			ret = -ENODEV;
++			mutex_unlock(&p->state_trans_lock);
++			goto unwind;
++		}
++		/* A failed previous rollback can still own a native wake reference. */
++		if (p->resume_irq && p->irq_requested && !p->irq_wake) {
++			ret = enable_irq_wake(p->irq_num);
++			if (ret) {
++				mutex_unlock(&p->state_trans_lock);
++				goto unwind;
++			}
++			p->irq_wake = true;
++			acquired |= BIT(i);
++		}
++		mutex_unlock(&p->state_trans_lock);
++	}
++	for (i = 0; i < BCL_TYPE_MAX; i++) {
++		struct bcl_peripheral_data *p = &bcl->param[i];
++
++		mutex_lock(&p->state_trans_lock);
++		if (READ_ONCE(bcl->stopping)) {
++			ret = -ENODEV;
++			mutex_unlock(&p->state_trans_lock);
++			goto unwind;
++		}
++		if (p->resume_irq && p->irq_requested && !p->irq_enabled) {
++			enable_irq(p->irq_num);
++			p->irq_enabled = true;
++		}
++		p->resume_irq = false;
++		mutex_unlock(&p->state_trans_lock);
++	}
++	WRITE_ONCE(bcl->frozen, false);
++	for (i = 0; i < BCL_TYPE_MAX; i++)
++		if (bcl->param[i].tz_dev)
++			thermal_zone_device_update(bcl->param[i].tz_dev, THERMAL_DEVICE_UP);
++	return 0;
++unwind:
++	for (i = 0; i < BCL_TYPE_MAX; i++) {
++		struct bcl_peripheral_data *p = &bcl->param[i];
++		int drop_ret;
++
++		if (!(acquired & BIT(i)))
+ 			continue;
 -	}
 -
 -	if (!bcl_perph->desc->vbat_zone_enabled)
 -		bcl_pmic5_notifier_unregister(&bcl_perph->nb);
 -}
 -
-+ struct bcl_device *bcl = platform_get_drvdata(pdev);
-+ if (bcl) bcl_quiesce(bcl);
-+ platform_set_drvdata(pdev, NULL);
-+}
- static int bcl_probe(struct platform_device *pdev)
- {
+-static int bcl_probe(struct platform_device *pdev)
+-{
 -	struct bcl_device *bcl_perph = NULL;
 -	char bcl_name[MAX_BCL_NAME_LENGTH];
 -	int err = 0, ret = 0;
@@ -953,43 +1135,8 @@
 -	return 0;
 -}
 -
-+ struct bcl_device *bcl; char *name; int ret, i;
-+ bcl = devm_kzalloc(&pdev->dev, sizeof(*bcl), GFP_KERNEL);
-+ if (!bcl) return -ENOMEM;
-+ bcl->dev = &pdev->dev; mutex_init(&bcl->stats_lock);
-+ for (i = 0; i < MAX_BCL_LVL_COUNT; i++) bcl->stats[i].bcl_dev = bcl;
-+ for (i = 0; i < BCL_TYPE_MAX; i++) {
-+  mutex_init(&bcl->param[i].state_trans_lock);
-+  bcl->param[i].type = i; bcl->param[i].dev = bcl; bcl->param[i].trip_thresh = INT_MAX;
-+ }
-+ bcl->desc = of_device_get_match_data(&pdev->dev);
-+ if (!bcl->desc) return -EINVAL;
-+ bcl->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+ if (!bcl->regmap) return -EPROBE_DEFER;
-+ ret = bcl_get_devicetree_data(pdev, bcl); if (ret) return ret;
-+ ret = bcl_version_init_and_check(bcl); if (ret) return ret;
-+ if (bcl->bcl_monitor_type != BCL_MON_IBAT_ONLY) { ret = bcl_probe_vbat(pdev, bcl); if (ret) goto fail; }
-+ if (bcl->bcl_monitor_type != BCL_MON_VBAT_ONLY) { ret = bcl_probe_ibat(pdev, bcl); if (ret) goto fail; }
-+ ret = bcl_probe_lvls(pdev, bcl); if (ret) goto fail;
-+ ret = bcl_configure_bcl_peripheral(bcl); if (ret) goto fail;
-+ if (!bcl->desc->vbat_zone_enabled) {
-+  bcl->nb.notifier_call = bcl_config_vph_cb;
-+  ret = bcl_pmic5_notifier_register(&bcl->nb); if (ret) goto fail;
-+  bcl->notifier_registered = true;
-+ }
-+ ret = bcl_write_register(bcl, BPM_EN_OFFSET, BIT(7)); if (ret) goto fail;
-+ bcl->enable_bpm = 1;
-+ name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "bcl_%s", dev_name(&pdev->dev));
-+ if (!name) { ret = -ENOMEM; goto fail; }
-+ bcl->ipc_log = ipc_log_context_create(IPC_LOGPAGES, name, 0);
-+ bcl_stats_init(name, bcl, MAX_BCL_LVL_COUNT);
-+ ret = devm_add_action_or_reset(&pdev->dev, bcl_quiesce, bcl); if (ret) return ret;
-+ platform_set_drvdata(pdev, bcl); mmi_get_boot_seq(); return 0;
-+fail:
-+ bcl_quiesce(bcl); return ret;
-+}
- static int bcl_freeze(struct device *dev)
- {
+-static int bcl_freeze(struct device *dev)
+-{
 -	struct bcl_device *bcl_perph = dev_get_drvdata(dev);
 -	int i;
 -	struct bcl_peripheral_data *bcl_data;
@@ -1009,22 +1156,8 @@
 -	return 0;
 -}
 -
-+ struct bcl_device *bcl = dev_get_drvdata(dev); int i;
-+ if (READ_ONCE(bcl->stopping)) return -ENODEV;
-+ if (bcl->frozen) return 0;
-+ WRITE_ONCE(bcl->frozen, true);
-+ for (i = 0; i < BCL_TYPE_MAX; i++) {
-+  struct bcl_peripheral_data *p = &bcl->param[i];
-+  mutex_lock(&p->state_trans_lock); p->resume_irq = p->irq_enabled;
-+  if (p->irq_wake) { disable_irq_wake(p->irq_num); p->irq_wake = false; }
-+  if (p->irq_requested && p->irq_enabled) disable_irq_nosync(p->irq_num);
-+  p->irq_enabled = false; mutex_unlock(&p->state_trans_lock);
-+  if (p->irq_requested) synchronize_irq(p->irq_num);
-+ }
-+ return 0;
-+}
- static int bcl_restore(struct device *dev)
- {
+-static int bcl_restore(struct device *dev)
+-{
 -	struct bcl_device *bcl_perph = dev_get_drvdata(dev);
 -	struct bcl_peripheral_data *bcl_data;
 -	int ret = 0, i;
@@ -1057,36 +1190,19 @@
 -	return 0;
 -}
 -
-+ struct bcl_device *bcl = dev_get_drvdata(dev); int i, ret;
-+ if (READ_ONCE(bcl->stopping)) return -ENODEV;
-+ if (!bcl->frozen) return 0;
-+ ret = bcl_configure_bcl_peripheral(bcl); if (ret) return ret;
-+ for (i = 0; i < BCL_TYPE_MAX; i++) {
-+  struct bcl_peripheral_data *p = &bcl->param[i];
-+  if (!p->resume_irq || !p->irq_requested) continue;
-+  ret = enable_irq_wake(p->irq_num); if (ret) goto unwind;
-+  p->irq_wake = true;
-+ }
-+ for (i = 0; i < BCL_TYPE_MAX; i++) {
-+  struct bcl_peripheral_data *p = &bcl->param[i];
-+  mutex_lock(&p->state_trans_lock);
-+  if (p->resume_irq && p->irq_requested) { enable_irq(p->irq_num); p->irq_enabled = true; }
-+  p->resume_irq = false; mutex_unlock(&p->state_trans_lock);
-+ }
-+ WRITE_ONCE(bcl->frozen, false);
-+ for (i = 0; i < BCL_TYPE_MAX; i++)
-+  if (bcl->param[i].tz_dev) thermal_zone_device_update(bcl->param[i].tz_dev, THERMAL_DEVICE_UP);
-+ return 0;
-+unwind:
-+ while (--i >= 0) { struct bcl_peripheral_data *p = &bcl->param[i];
-+  if (p->irq_wake) { disable_irq_wake(p->irq_num); p->irq_wake = false; }
-+ }
-+ return ret;
++		mutex_lock(&p->state_trans_lock);
++		drop_ret = bcl_drop_irq_wake(p);
++		mutex_unlock(&p->state_trans_lock);
++		if (drop_ret)
++			dev_err(dev, "BCL wake rollback failed for IRQ %d: %d\n",
++				p->irq_num, drop_ret);
++	}
++	return ret;
 +}
  static const struct dev_pm_ops bcl_pm_ops = {
  	.freeze = bcl_freeze,
  	.restore = bcl_restore,
-@@ -1421,4 +1385,5 @@
+@@ -1421,4 +1490,5 @@
  };
  
  module_platform_driver(bcl_driver);

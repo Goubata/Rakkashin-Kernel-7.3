@@ -5,7 +5,7 @@
       "file": "ports/qcom-bcl-pmic/qti_bcl_pmic5.c",
       "source": "drivers/thermal/qcom/qti_bcl_pmic5.c",
       "original_sha256": "8a1a15ffcc2de47951d3037b4a119d49b4d9aa87211e2b352380e343ecba40fc",
-      "sha256": "418dbc2404a7ea767533fd096db0f49a8fa2bcc5ac2dd1c4b4c0ae57233f7e50"
+      "sha256": "f712f39c5bdef7cba8e92d5c0bddf319abb16f8c3b7f83a8739d6e001554cba5"
     },
     {
       "file": "ports/qcom-bcl-pmic/qti_bcl_common.h",
@@ -26,7 +26,7 @@
       "sha256": "d507196f727f2030cb992cdc13b29a93392d5f66080bd89f11addc6220c7f9ba"
     }
   ],
-  "patch_sha256": "cb5c1c322970c8af6f7d267a9edfa5e78834a07f7609770d96f62cc005530a50",
+  "patch_sha256": "6a6073da2e1141fa26aff12e8a92643c243b736b98280e90ec6e79c73630ee21",
   "experimental_packaged": false,
   "physical_verified": false,
   "scope": "Pinned source and patch replay only; unaccepted PMIC BCL draft",
@@ -36,10 +36,13 @@
     "Serialize ADC callbacks and publish successful samples only; wide intermediates and clamp before narrowing CCM requests",
     "Remove unused auxiliary ADC reads from logical level callback to avoid redundant bus traffic and same-class nested sensor locks",
     "Read BPM wire snapshot explicitly little endian and commit only after successful HOLD/read/CLR; release HOLD after read failure",
-    "Track native IRQ action/wake ownership and preserve actions across freeze/restore; own debugfs subtrees and drain callbacks before log teardown"
+    "Track native IRQ action/wake ownership and preserve actions across freeze/restore; own debugfs subtrees and drain callbacks before log teardown",
+    "Retain native wake ownership when disable fails; rollback only newly acquired references and retry without double acquisition; preserve trigger stats on failed rearm",
+    "Abort a threaded IRQ after a sleeping status read when removal has started",
+    "Declare a managed parent regmap supplier device link so the native core unbinds/drains BCL before parent driver resources are destroyed"
   ],
   "pending": [
-    "Full OF/platform probe with NVMEM, native PMIC IRQ/SPMI and partial-probe fault integration",
+    "Physical SPMI/PMIC probe and exhaustive partial-probe/hardware-error integration; native private OF/NVMEM/IRQ paths are exercised",
     "Actual calibration, register policy and physical current/voltage/thermal/cooling behavior",
     "Exhaustive concurrent notifier/IRQ/PM/forced-unbind behavior and hardware-error recovery",
     "Whole-board drivers/DT/boot/DLKM/SELinux acceptance"

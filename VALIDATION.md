@@ -2271,3 +2271,32 @@ draft-stage98. Limits: real KGSL/GMU enforcement of the ceiling and thermal HAL 
 type gpu are unverified; concurrency stress beyond devres ordering, whole-board boot,
 DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain. No partition writes or reboot.
 
+## Stage99: cpu-cluster cooling on native cpufreq/freq-QoS/cpuhp
+
+Port pinned factory drivers/thermal/qcom/qti_cpufreq_cdev.c (037aa1c) as
+ports/qti-cpufreq-cdev. Factory ABI kept: one type-only cdev per available child
+(type = node name), first qcom,cpus phandle that is a possible CPU, every valid
+cpufreq entry including boost, highest first, one FREQ_QOS_MAX request.
+Review found factory defects: devm entries stay on a global list after remove
+(use-after-free on rebind/hotplug), pending registration work is not cancelled,
+concurrent online events can double-add the QoS request, the held policy reference
+makes cpufreq driver unregister wait forever, and the table indexes raw entries
+assuming no holes. The draft uses a per-device context, a refcounted multi-instance
+cpuhp state, a lifecycle mutex separate from callback state, CREATE_POLICY
+re-registration and synchronous REMOVE_POLICY teardown, and a sorted de-duplicated
+valid-entry table. freq_qos_add_request errors are handled.
+
+First QEMU run passed4/9: the test indexed clusters by array position but fdtoverlay
+reverses child order; it now selects by type name. Driver unchanged by that fix.
+Image#27 (unchanged) passes9 KUnit cases on4 CPUs with a private cpufreq driver
+publishing the phone policy0 (24) and policy6 (21+4 boost) tables: max_state23/24,
+ceilings2611200/384000 kHz, release restores the prior aggregate, registration after
+late cpufreq, driver unregister/re-register3x, CPU2/3 offline/online, 40 duplicate
+online events without WARN, rebind3x, unsorted/invalid/duplicate table, no-match
+rejection. Import CRCs match.
+
+Saved DT (scripts/audit_cpufreq_cooling_dt.py): cluster0=CPUs0-5, cluster1=CPUs6-7,
+no kernel cooling-map references (userspace HAL by type). Read-only phone sysfs
+(reports/cpufreq-stage99-phone-tables.txt): max_state23/24 equal the table sizes.
+Evidence: reports/cpufreq-cooling-stage99-validation.json. Limits: SCMI enforcement on
+hardware, HAL use, whole-board boot and daily use remain. No partition writes/reboot.

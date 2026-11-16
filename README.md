@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage99ではCPU温度制御の `qti_cpufreq_cdev`（`cpu-cluster0/1`）を移植しました。工場版はグローバルリストから要素を外さず、解除・再結合後に解放済みメモリを触る経路、登録ワーク未取消、二重登録、cpufreqドライバ解除が永久に待つ参照保持などの不具合があり、デバイス単位の管理・cpufreqポリシー生成/削除通知・マルチインスタンスCPUホットプラグで作り直しました。実機6.12から読み取ったpolicy0（24段階）とpolicy6（21段階＋ブースト4段階）の表を載せた仮想cpufreqで9テストが4コア仮想環境で通過（Image#27変更なし）。cpufreqドライバの解除・再登録、CPUのオフライン/オンライン、重複イベントも確認。実機の `cpu-cluster0/1` 最大状態23/24と一致します。実機での周波数制限は未確認です。証拠は `reports/cpufreq-cooling-stage99-validation.json`。
+
 Stage98ではGPU温度制御の冷却デバイス `qti_devfreq_cdev` を7.3へ移植しました。工場版と同じく型名 `gpu`（OFノードなし）・kHz表・GPUの最大周波数QoS要求を維持し、工場版のphandle欠落時NULL参照、OPP 0件時の最大状態-1、GPU参照解放後の使用を修正。GPUドライバの結合待ち、管理device linkでのGPU解除時の追従、devres順での解除も実装しました。保存DTのユーザーGPU表21段階（最高1238MHz）を載せた仮想GPUで9テストが4コア仮想環境で通過（Image#27は変更なし）、65インポートCRC一致。実機6.12の読み取り専用スナップショットで `gpu`・`kgsl` とも最大状態20を確認し、GPUノードの12冷却マップはKGSL本体のOF冷却デバイス側に結びつくことも確認しました。実機GPUでの上限適用は未確認です。証拠は `reports/devfreq-cooling-stage98-validation.json`。
 
 Stage97ではDDR冷却ドライバ `ddr_cdev` を7.3へ移植しました。工場ソースの「状態0=0、状態N=周波数×バス幅」の帯域要求を維持し、DT値の検証、ICC要求が成功した時だけ現在状態を報告する処理、失敗時の再試行と解除時の排出を追加。実際のOF／platform／devres／interconnect core／thermal登録を使う14テストが4コア仮想環境で通過し（Image#27は変更なし）、2モジュール計74インポートCRCが一致。保存DT（幅4・表888→要求3552、mc_virt MASTER_LLCC→SLAVE_EBI1、ddrゾーン100℃のpassive map）とも照合しました。実機のDDR帯域制御は未確認です。証拠は `reports/ddr-cooling-stage97-validation.json`、成果物は `artifacts/ddr-cooling-draft-stage97/`。

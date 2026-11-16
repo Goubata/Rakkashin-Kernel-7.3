@@ -1,0 +1,160 @@
+{
+ "scope": "saved 6.12 DT + read-only phone sysfs; no phone DT edit",
+ "dtb_sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+ "clusters": {
+  "cpu-cluster0": {
+   "cpus": [
+    "/cpus/cpu@0",
+    "/cpus/cpu@100",
+    "/cpus/cpu@200",
+    "/cpus/cpu@300",
+    "/cpus/cpu@400",
+    "/cpus/cpu@500"
+   ],
+   "mpidr": [
+    0,
+    256,
+    512,
+    768,
+    1024,
+    1280
+   ],
+   "first_cpu_index": 0,
+   "logical": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "cpu-cluster1": {
+   "cpus": [
+    "/cpus/cpu@10000",
+    "/cpus/cpu@10100"
+   ],
+   "mpidr": [
+    65536,
+    65792
+   ],
+   "first_cpu_index": 6,
+   "logical": [
+    6,
+    7
+   ]
+  }
+ },
+ "phone_tables": {
+  "policy0": [
+   384000,
+   556800,
+   710400,
+   806400,
+   902400,
+   1036800,
+   1152000,
+   1267200,
+   1401600,
+   1555200,
+   1651200,
+   1747200,
+   1900800,
+   2016000,
+   2188800,
+   2265600,
+   2361600,
+   2476800,
+   2611200,
+   2707200,
+   2841600,
+   3033600,
+   3129600,
+   3321600
+  ],
+  "policy6": [
+   384000,
+   556800,
+   806400,
+   921600,
+   1017600,
+   1152000,
+   1248000,
+   1382400,
+   1497600,
+   1651200,
+   1862400,
+   1996800,
+   2112000,
+   2227200,
+   2476800,
+   2688000,
+   2841600,
+   2995200,
+   3091200,
+   3244800,
+   3436800
+  ]
+ },
+ "phone_boost": {
+  "policy0": [],
+  "policy6": [
+   3532800,
+   3648000,
+   3724800,
+   3801600
+  ]
+ },
+ "checks": [
+  {
+   "check": "one qcom,cpufreq-cdev node",
+   "passed": true
+  },
+  {
+   "check": "two clusters cpu-cluster0/1",
+   "passed": true
+  },
+  {
+   "check": "cpu-cluster0: every qcom,cpus phandle is a CPU node",
+   "passed": true
+  },
+  {
+   "check": "cpu-cluster1: every qcom,cpus phandle is a CPU node",
+   "passed": true
+  },
+  {
+   "check": "cluster0 = CPUs 0-5",
+   "passed": true
+  },
+  {
+   "check": "cluster1 = CPUs 6-7",
+   "passed": true
+  },
+  {
+   "check": "type names fit THERMAL_NAME_LENGTH",
+   "passed": true
+  },
+  {
+   "check": "phone cpu-cluster0 max_state == policy0 valid entries-1 (23)",
+   "passed": true
+  },
+  {
+   "check": "phone cpu-cluster1 max_state == policy6 entries incl. 4 boost -1 (24)",
+   "passed": true
+  },
+  {
+   "check": "fixture policy0 table equals phone",
+   "passed": true
+  },
+  {
+   "check": "fixture policy6 table+boost equals phone",
+   "passed": true
+  },
+  {
+   "check": "no kernel DT cooling-map references cpu-cluster cdevs (userspace HAL by type)",
+   "passed": true
+  }
+ ],
+ "passed": true,
+ "errors": []
+}

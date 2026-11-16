@@ -1,0 +1,393 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2021-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+ * Native 7.3 per-device lifetime, cpufreq policy lifecycle and table port.
+ */
+#define pr_fmt(fmt) "%s:%s " fmt, KBUILD_MODNAME, __func__
+
+#include <linux/cpu.h>
+#include <linux/cpufreq.h>
+#include <linux/cpuhotplug.h>
+#include <linux/module.h>
+#include <linux/mutex.h>
+#include <linux/of.h>
+#include <linux/platform_device.h>
+#include <linux/pm_qos.h>
+#include <linux/slab.h>
+#include <linux/sort.h>
+#include <linux/thermal.h>
+#include <linux/workqueue.h>
+
+#define CPUFREQ_CDEV "qcom-cpufreq-cdev"
+
+struct cpufreq_cdev_ctx;
+
+struct cpufreq_cdev_device {
+	struct cpufreq_cdev_ctx *ctx;
+	struct thermal_cooling_device *cdev;	/* ctx->lock */
+	struct cpufreq_policy *policy;		/* ctx->lock, referenced */
+	int cpu;
+	struct mutex state_lock;		/* callbacks only */
+	unsigned long cur_state;
+	unsigned long max_state;
+	unsigned int *freq_table;		/* kHz, descending, valid entries */
+	struct freq_qos_request qos_max_freq_req;
+	char cdev_name[THERMAL_NAME_LENGTH];
+	struct work_struct reg_work;
+};
+
+struct cpufreq_cdev_ctx {
+	struct mutex lock;			/* lifecycle; never taken in callbacks */
+	bool stopping;
+	struct notifier_block policy_nb;
+	struct hlist_node cpuhp_node;
+	int count;
+	struct cpufreq_cdev_device cl[] __counted_by(count);
+};
+
+/* Multi-instance hotplug state shared by all bound devices. */
+static DEFINE_MUTEX(cpufreq_cdev_hp_lock);
+static int cpufreq_cdev_hp_users;
+static enum cpuhp_state cpufreq_cdev_hp_state;
+
+static int cpufreq_cdev_set_state(struct thermal_cooling_device *cdev,
+				  unsigned long state)
+{
+	struct cpufreq_cdev_device *c = cdev->devdata;
+	int ret = 0;
+
+	mutex_lock(&c->state_lock);
+	if (state > c->max_state) {
+		ret = -EINVAL;
+		goto out;
+	}
+	if (state == c->cur_state)
+		goto out;
+	pr_debug("cdev:%s Limit:%u\n", cdev->type, c->freq_table[state]);
+	/* The request is active for the whole cdev registration. */
+	ret = freq_qos_update_request(&c->qos_max_freq_req, c->freq_table[state]);
+	if (ret < 0) {
+		pr_err("Error placing qos request:%u. cdev:%s err:%d\n",
+		       c->freq_table[state], cdev->type, ret);
+		goto out;
+	}
+	c->cur_state = state;
+	ret = 0;
+out:
+	mutex_unlock(&c->state_lock);
+	return ret;
+}
+
+static int cpufreq_cdev_get_state(struct thermal_cooling_device *cdev,
+				  unsigned long *state)
+{
+	struct cpufreq_cdev_device *c = cdev->devdata;
+
+	mutex_lock(&c->state_lock);
+	*state = c->cur_state;
+	mutex_unlock(&c->state_lock);
+	return 0;
+}
+
+static int cpufreq_cdev_get_max_state(struct thermal_cooling_device *cdev,
+				      unsigned long *state)
+{
+	struct cpufreq_cdev_device *c = cdev->devdata;
+
+	*state = c->max_state;
+	return 0;
+}
+
+static const struct thermal_cooling_device_ops cpufreq_cdev_ops = {
+	.set_cur_state = cpufreq_cdev_set_state,
+	.get_cur_state = cpufreq_cdev_get_state,
+	.get_max_state = cpufreq_cdev_get_max_state,
+};
+
+static int cmp_desc(const void *a, const void *b)
+{
+	unsigned int x = *(const unsigned int *)a, y = *(const unsigned int *)b;
+
+	return x < y ? 1 : x > y ? -1 : 0;
+}
+
+/* Factory semantics: every valid entry (boost included), highest first. */
+static int cpufreq_cdev_build_table(struct cpufreq_cdev_device *c,
+				    struct cpufreq_policy *policy)
+{
+	struct cpufreq_frequency_table *pos;
+	unsigned int *table;
+	int count, n = 0, i, out;
+
+	if (!policy->freq_table)
+		return -ENODATA;
+	count = cpufreq_table_count_valid_entries(policy);
+	if (count <= 0)
+		return -ENODATA;
+	table = kmalloc_array(count, sizeof(*table), GFP_KERNEL);
+	if (!table)
+		return -ENOMEM;
+	cpufreq_for_each_valid_entry(pos, policy->freq_table) {
+		if (n == count)
+			break;
+		table[n++] = pos->frequency;
+	}
+	sort(table, n, sizeof(*table), cmp_desc, NULL);
+	for (i = 1, out = 1; i < n; i++)
+		if (table[i] != table[out - 1])
+			table[out++] = table[i];
+	if (!n || !table[0] || table[0] > S32_MAX) {
+		kfree(table);
+		return -ERANGE;
+	}
+	c->freq_table = table;
+	c->max_state = out - 1;
+	c->cur_state = 0;
+	return 0;
+}
+
+/* ctx->lock held. */
+static void cpufreq_cdev_unregister_locked(struct cpufreq_cdev_device *c)
+{
+	if (!c->cdev)
+		return;
+	/* Drains callbacks; they never take ctx->lock. */
+	thermal_cooling_device_unregister(c->cdev);
+	c->cdev = NULL;
+	freq_qos_remove_request(&c->qos_max_freq_req);
+	cpufreq_cpu_put(c->policy);
+	c->policy = NULL;
+	kfree(c->freq_table);
+	c->freq_table = NULL;
+}
+
+static void cpufreq_cdev_register(struct work_struct *work)
+{
+	struct cpufreq_cdev_device *c = container_of(work, struct cpufreq_cdev_device, reg_work);
+	struct cpufreq_cdev_ctx *ctx = c->ctx;
+	struct thermal_cooling_device *cdev;
+	struct cpufreq_policy *policy;
+	int ret;
+
+	mutex_lock(&ctx->lock);
+	if (ctx->stopping || c->cdev)
+		goto out;
+	policy = cpufreq_cpu_get(c->cpu);
+	if (!policy) {
+		/* A later CPUFREQ_CREATE_POLICY or CPU online retries. */
+		pr_debug("No policy for CPU:%d yet\n", c->cpu);
+		goto out;
+	}
+	ret = cpufreq_cdev_build_table(c, policy);
+	if (ret) {
+		pr_err("CPU%d freq table unusable: %d\n", c->cpu, ret);
+		goto put;
+	}
+	ret = freq_qos_add_request(&policy->constraints, &c->qos_max_freq_req,
+				   FREQ_QOS_MAX, c->freq_table[0]);
+	if (ret < 0) {
+		pr_err("QoS request failed for %s: %d\n", c->cdev_name, ret);
+		goto free;
+	}
+	cdev = thermal_cooling_device_register(c->cdev_name, c, &cpufreq_cdev_ops);
+	if (IS_ERR(cdev)) {
+		pr_err("Cdev register failed for %s, ret:%ld\n", c->cdev_name, PTR_ERR(cdev));
+		freq_qos_remove_request(&c->qos_max_freq_req);
+		goto free;
+	}
+	c->policy = policy;
+	c->cdev = cdev;
+	pr_debug("Cdev %s registered\n", c->cdev_name);
+	goto out;
+free:
+	kfree(c->freq_table);
+	c->freq_table = NULL;
+put:
+	cpufreq_cpu_put(policy);
+out:
+	mutex_unlock(&ctx->lock);
+}
+
+static void cpufreq_cdev_queue(struct cpufreq_cdev_ctx *ctx, const struct cpumask *cpus)
+{
+	int i;
+
+	for (i = 0; i < ctx->count; i++)
+		if (cpumask_test_cpu(ctx->cl[i].cpu, cpus))
+			queue_work(system_highpri_wq, &ctx->cl[i].reg_work);
+}
+
+static int cpufreq_cdev_policy_notify(struct notifier_block *nb, unsigned long event, void *data)
+{
+	struct cpufreq_cdev_ctx *ctx = container_of(nb, struct cpufreq_cdev_ctx, policy_nb);
+	struct cpufreq_policy *policy = data;
+	int i;
+
+	if (event == CPUFREQ_CREATE_POLICY) {
+		cpufreq_cdev_queue(ctx, policy->related_cpus);
+	} else if (event == CPUFREQ_REMOVE_POLICY) {
+		/* Must drop our QoS request and policy reference before it is freed. */
+		mutex_lock(&ctx->lock);
+		for (i = 0; i < ctx->count; i++)
+			if (ctx->cl[i].policy == policy)
+				cpufreq_cdev_unregister_locked(&ctx->cl[i]);
+		mutex_unlock(&ctx->lock);
+	}
+	return NOTIFY_OK;
+}
+
+static int cpufreq_cdev_hp_online(unsigned int cpu, struct hlist_node *node)
+{
+	struct cpufreq_cdev_ctx *ctx = hlist_entry(node, struct cpufreq_cdev_ctx, cpuhp_node);
+
+	cpufreq_cdev_queue(ctx, cpumask_of(cpu));
+	return 0;
+}
+
+static int cpufreq_cdev_hp_get(void)
+{
+	int ret = 0;
+
+	mutex_lock(&cpufreq_cdev_hp_lock);
+	if (!cpufreq_cdev_hp_users) {
+		ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, "thermal-cpu/cdev:online",
+					      cpufreq_cdev_hp_online, NULL);
+		if (ret < 0)
+			goto out;
+		cpufreq_cdev_hp_state = ret;
+		ret = 0;
+	}
+	cpufreq_cdev_hp_users++;
+out:
+	mutex_unlock(&cpufreq_cdev_hp_lock);
+	return ret;
+}
+
+static void cpufreq_cdev_hp_put(void *unused)
+{
+	mutex_lock(&cpufreq_cdev_hp_lock);
+	if (!--cpufreq_cdev_hp_users)
+		cpuhp_remove_multi_state(cpufreq_cdev_hp_state);
+	mutex_unlock(&cpufreq_cdev_hp_lock);
+}
+
+static void cpufreq_cdev_teardown(void *data)
+{
+	struct cpufreq_cdev_ctx *ctx = data;
+	int i;
+
+	mutex_lock(&ctx->lock);
+	ctx->stopping = true;
+	mutex_unlock(&ctx->lock);
+	cpuhp_state_remove_instance_nocalls(cpufreq_cdev_hp_state, &ctx->cpuhp_node);
+	cpufreq_unregister_notifier(&ctx->policy_nb, CPUFREQ_POLICY_NOTIFIER);
+	for (i = 0; i < ctx->count; i++)
+		cancel_work_sync(&ctx->cl[i].reg_work);
+	mutex_lock(&ctx->lock);
+	for (i = 0; i < ctx->count; i++)
+		cpufreq_cdev_unregister_locked(&ctx->cl[i]);
+	mutex_unlock(&ctx->lock);
+}
+
+/* Factory: first listed phandle that is a possible CPU's node selects the CPU. */
+static int cpufreq_cdev_find_cpu(struct device_node *np)
+{
+	struct of_phandle_iterator it;
+	struct device *cpu_dev;
+	int cpu, err;
+
+	of_for_each_phandle(&it, err, np, "qcom,cpus", NULL, 0) {
+		for_each_possible_cpu(cpu) {
+			cpu_dev = get_cpu_device(cpu);
+			if (cpu_dev && cpu_dev->of_node == it.node) {
+				of_node_put(it.node);
+				return cpu;
+			}
+		}
+	}
+	return -ENODEV;
+}
+
+static int cpufreq_cdev_probe(struct platform_device *pdev)
+{
+	struct device *dev = &pdev->dev;
+	struct device_node *child;
+	struct cpufreq_cdev_ctx *ctx;
+	int n = 0, cpu, ret;
+
+	for_each_available_child_of_node(dev->of_node, child)
+		n++;
+	if (!n)
+		return -ENODEV;
+	ctx = devm_kzalloc(dev, struct_size(ctx, cl, n), GFP_KERNEL);
+	if (!ctx)
+		return -ENOMEM;
+	mutex_init(&ctx->lock);
+	ctx->count = n;	/* allocation bound for __counted_by; trimmed below */
+	n = 0;
+	for_each_available_child_of_node(dev->of_node, child) {
+		struct cpufreq_cdev_device *c;
+
+		cpu = cpufreq_cdev_find_cpu(child);
+		if (cpu < 0)
+			continue;
+		if (n == ctx->count) {
+			of_node_put(child);
+			break;
+		}
+		c = &ctx->cl[n++];
+		c->ctx = ctx;
+		c->cpu = cpu;
+		mutex_init(&c->state_lock);
+		if (strscpy(c->cdev_name, child->name, sizeof(c->cdev_name)) < 0) {
+			of_node_put(child);
+			return -ENAMETOOLONG;
+		}
+		INIT_WORK(&c->reg_work, cpufreq_cdev_register);
+	}
+	ctx->count = n;
+	if (!ctx->count)
+		return dev_err_probe(dev, -ENODEV, "no cluster matches a possible CPU\n");
+
+	ret = cpufreq_cdev_hp_get();
+	if (ret)
+		return ret;
+	ret = devm_add_action_or_reset(dev, cpufreq_cdev_hp_put, NULL);
+	if (ret)
+		return ret;
+	ctx->policy_nb.notifier_call = cpufreq_cdev_policy_notify;
+	ret = cpufreq_register_notifier(&ctx->policy_nb, CPUFREQ_POLICY_NOTIFIER);
+	if (ret)
+		return ret;
+	ret = cpuhp_state_add_instance(cpufreq_cdev_hp_state, &ctx->cpuhp_node);
+	if (ret) {
+		cpufreq_unregister_notifier(&ctx->policy_nb, CPUFREQ_POLICY_NOTIFIER);
+		return ret;
+	}
+	ret = devm_add_action_or_reset(dev, cpufreq_cdev_teardown, ctx);
+	if (ret)
+		return ret;
+	/* Policies may already exist for CPUs that are currently offline. */
+	cpufreq_cdev_queue(ctx, cpu_possible_mask);
+	platform_set_drvdata(pdev, ctx);
+	return 0;
+}
+
+static const struct of_device_id cpufreq_cdev_match[] = {
+	{ .compatible = "qcom,cpufreq-cdev" },
+	{}
+};
+MODULE_DEVICE_TABLE(of, cpufreq_cdev_match);
+
+static struct platform_driver cpufreq_cdev_driver = {
+	.probe = cpufreq_cdev_probe,
+	.driver = {
+		.name = CPUFREQ_CDEV,
+		.of_match_table = cpufreq_cdev_match,
+	},
+};
+module_platform_driver(cpufreq_cdev_driver);
+
+MODULE_DESCRIPTION("Qualcomm Technologies, Inc. cpufreq cooling driver");
+MODULE_LICENSE("GPL");

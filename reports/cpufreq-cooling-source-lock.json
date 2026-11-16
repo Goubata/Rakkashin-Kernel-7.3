@@ -1,0 +1,32 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": [
+    {
+      "file": "ports/qti-cpufreq-cdev/qti_cpufreq_cdev.c",
+      "source": "drivers/thermal/qcom/qti_cpufreq_cdev.c",
+      "original_sha256": "06681e96d4e503f8e0fe84a5c730d515983c7807b22cb8c86537cf4ae376a59e",
+      "sha256": "43c6248c5305485b1bf4c44f12683d07a1c543481bdd8f3cc10ebdf0f2f70c0d"
+    },
+    {
+      "file": "ports/qti-cpufreq-cdev/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "6dbd216d430a442c62dbd22fe3fc875955378d1b4eee97b9c5f9c48db175b536"
+    }
+  ],
+  "patch_sha256": "061a6e49cc22db351d60966a9db32ec10a2cd9ca824b52e58767b005a1c9b83e",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned factory cpu-cluster cooling type/table/freq-QoS semantics; native 7.3 per-device lifetime and cpufreq policy lifecycle port",
+  "reviewed_changes": [
+    "Keep cdev type = cluster node name without OF node, first matching possible CPU, every valid entry incl. boost highest-first, FREQ_QOS_MAX request",
+    "Replace never-pruned global list (use-after-free after remove/rebind) with per-device context and multi-instance cpuhp state",
+    "Cancel registration work on teardown; serialize registration so repeated online events cannot double-add the QoS request",
+    "Drop QoS request and policy reference on CPUFREQ_REMOVE_POLICY (factory reference blocked cpufreq driver unregister) and re-register on CREATE_POLICY",
+    "Build table from valid entries and sort descending explicitly (factory indexed raw table with holes/unsorted order); check freq_qos_add_request"
+  ],
+  "pending": [
+    "Physical SCMI cpufreq enforcement and thermal HAL use of cpu-cluster types",
+    "Whole-board drivers/DT/boot/DLKM/SELinux and daily-use acceptance"
+  ]
+}

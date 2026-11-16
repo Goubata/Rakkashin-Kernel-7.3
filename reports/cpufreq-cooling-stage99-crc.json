@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qti-cpufreq-cdev/qti_cpufreq_cdev.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/cpufreq-cooling/avr-cpufreq-cooling-test.ko",
+      "imports_checked": 65,
+      "mismatches": {}
+    }
+  ]
+}

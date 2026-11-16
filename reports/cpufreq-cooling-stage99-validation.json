@@ -1,0 +1,78 @@
+{
+ "stage": 99,
+ "scope": "Port Qualcomm cpu-cluster cooling devices (qti_cpufreq_cdev) to native 7.3 cpufreq/freq-QoS/cpuhp/thermal; private cpufreq driver with phone tables only",
+ "checks": {
+  "cpufreq_cooling": {
+   "log": "reports/cpufreq-cooling-stage99-qemu.log",
+   "test": "cpufreq-cooling",
+   "passed": true,
+   "totals": [
+    9,
+    0,
+    0,
+    9
+   ],
+   "cpus": 4,
+   "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+   "initramfs_sha256": "d32bdfbde71f0443862dd8e408093545e4f09918dcb5d26e30dac55c8a79397e",
+   "guest_dtb_sha256": "9e41d8c67f383e08f4aca73dc404b3e87e02d0b4e5c30d2b2a076f8b13424e17"
+  },
+  "saved_dt_and_phone": {
+   "report": "reports/cpufreq-cooling-stage99-dt.json",
+   "passed": true,
+   "phone_tables": "reports/cpufreq-stage99-phone-tables.txt"
+  },
+  "import_crc": {
+   "report": "reports/cpufreq-cooling-stage99-crc.json",
+   "passed": true,
+   "imports": [
+    41,
+    65
+   ]
+  },
+  "source_replay": {
+   "lock": "reports/cpufreq-cooling-source-lock.json",
+   "patch": "patches/cpufreq-cooling-7.3.patch",
+   "passed": true
+  }
+ },
+ "new_cases": 9,
+ "total_passed_cases": 9,
+ "artifact": "artifacts/cpufreq-cooling-draft-stage99",
+ "core_image": "7.3.0-4k #27",
+ "core_changed": false,
+ "phone_partition_written": false,
+ "phone_dt_modified": false,
+ "physical_verified": false,
+ "promoted": false,
+ "software_readiness_target_complete": false,
+ "factory_defects_found_by_review": [
+  "Global list entries are devm memory but never removed: after remove/rebind, list walk and hotplug callback touch freed memory",
+  "reg_work not cancelled on remove (UAF if pending)",
+  "Concurrent online events can run registration twice: double freq_qos_add_request",
+  "Policy reference held until remove: cpufreq driver unregister waits forever in cpufreq_policy_put_kobj",
+  "Table built by raw index assuming no invalid holes and trusting sorted flag; freq_qos_add_request result ignored"
+ ],
+ "regressions_before": [
+  "First QEMU run: 4/9 because the test indexed clusters by array position; fdtoverlay reverses child order. Test now selects clusters by type name (as the HAL does); driver unchanged."
+ ],
+ "implemented": [
+  "Per-device context with counted cluster array; multi-instance cpuhp state shared by refcount",
+  "Lifecycle mutex separate from callback state mutex (thermal register/unregister call ops)",
+  "CPUFREQ_CREATE_POLICY re-registers; CPUFREQ_REMOVE_POLICY drops cdev/QoS/policy ref synchronously",
+  "Valid entries (boost included, factory semantics) sorted descending and de-duplicated"
+ ],
+ "verified": [
+  "9 KUnit cases on 4-CPU QEMU: phone tables -> cpu-cluster0 max 23 / cpu-cluster1 max 24 incl. 4 boost; ceilings 2611200 and 384000 kHz; release restores prior aggregate",
+  "Consumer before cpufreq driver registers on CREATE_POLICY",
+  "cpufreq driver unregister/re-register 3x completes and recovers",
+  "CPU2/3 offline/online keeps cdev and ceiling",
+  "40 duplicate online events: single registration, no WARN",
+  "Consumer rebind 3x; unsorted/invalid/duplicate table; no matching CPU rejected",
+  "Saved DT: cluster0=CPUs0-5, cluster1=CPUs6-7, no kernel cooling-map refs; phone sysfs max_state 23/24 equals table sizes"
+ ],
+ "limits": [
+  "SCMI cpufreq enforcement on hardware and thermal HAL use unverified",
+  "Whole-board boot, remaining drivers/DT/vendor_boot/dtbo/DLKM/SELinux and daily use remain"
+ ]
+}

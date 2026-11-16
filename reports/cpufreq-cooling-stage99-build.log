@@ -1,0 +1,12 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qti-cpufreq-cdev'
+make[1]: Leaving directory '/work/avr-port/ports/qti-cpufreq-cdev'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/cpufreq-cooling'
+  CC [M]  avr-cpufreq-cooling-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-cpufreq-cooling-test.ko
+  BTF [M] avr-cpufreq-cooling-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/cpufreq-cooling'
+make: Leaving directory '/work/avr-src'

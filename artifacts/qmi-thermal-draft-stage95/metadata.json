@@ -1,0 +1,17 @@
+{
+  "scope": "Unaccepted QMI thermal draft and native governor failed-read fix; selected saved cooling maps exercised only with recorded sensors/firmware",
+  "core_image": "7.3.0-4k #26",
+  "source_commit": "a682e5725b266e5e94b7908f0dc2fd4bb2eaa0f6",
+  "modules": [
+    "qrtr.ko",
+    "qmi_helpers.ko",
+    "qmi_cooling.ko"
+  ],
+  "test_module": "avr-qmi-cooling-test.ko",
+  "image_sha256": "73c7a90e09a9a49e6aad9beb62446bd5f0b515dfc5a44c57c6ee058fb0e94bf3",
+  "physical_verified": false,
+  "promoted": false,
+  "flashable_boot_image": false,
+  "phone_dt_modified": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57"
+}

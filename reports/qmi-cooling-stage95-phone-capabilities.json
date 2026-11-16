@@ -1,0 +1,210 @@
+{
+  "scope": "Read-only current 6.12 sysfs snapshot; cached running-driver capabilities, not 7.3 firmware acceptance or proof of permanently absent devices",
+  "observed_cooling_devices": [
+    {
+      "name": "cdsp_hw",
+      "max_state": 1,
+      "current_state": 0
+    },
+    {
+      "name": "cdsp",
+      "max_state": 8,
+      "current_state": 0
+    },
+    {
+      "name": "cdsp_sw_hvx",
+      "max_state": 8,
+      "current_state": 0
+    },
+    {
+      "name": "cdsp_sw_hmx",
+      "max_state": 7,
+      "current_state": 0
+    },
+    {
+      "name": "modem_lte_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_lte_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_nr_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_nr_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_nr_scg_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_nr_scg_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_lte_sdr0_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_lte_sdr0_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_nr_sdr0_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_nr_sdr0_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_nr_sdr0_scg_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "pa_nr_sdr0_scg_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw0_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw0_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw1_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw2_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw2_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw3_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "mmw3_sub1_dsc",
+      "max_state": 255,
+      "current_state": 0
+    },
+    {
+      "name": "modem_bcl",
+      "max_state": 255,
+      "current_state": 0
+    }
+  ],
+  "matching_saved_declarations": 25,
+  "saved_declarations_without_matching_snapshot": [
+    "modem_vdd",
+    "modem_bcl_mtpl_dsc"
+  ],
+  "selected_map_limits_within_observed_max": [
+    {
+      "zone": "pmih010x-bcl-lvl0",
+      "cooling_name": "modem_bcl",
+      "limits": [
+        0,
+        1
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "pmih010x-bcl-lvl1",
+      "cooling_name": "modem_bcl",
+      "limits": [
+        0,
+        2
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "socd",
+      "cooling_name": "cdsp",
+      "limits": [
+        0,
+        4
+      ],
+      "observed_max": 8
+    },
+    {
+      "zone": "mdmss-0",
+      "cooling_name": "modem_lte_dsc",
+      "limits": [
+        8,
+        8
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "mdmss-0",
+      "cooling_name": "modem_nr_scg_dsc",
+      "limits": [
+        100,
+        100
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "mdmss-0",
+      "cooling_name": "modem_nr_dsc",
+      "limits": [
+        10,
+        10
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "mdmss-0",
+      "cooling_name": "modem_lte_dsc",
+      "limits": [
+        255,
+        255
+      ],
+      "observed_max": 255
+    },
+    {
+      "zone": "mdmss-0",
+      "cooling_name": "modem_nr_dsc",
+      "limits": [
+        255,
+        255
+      ],
+      "observed_max": 255
+    }
+  ],
+  "phone_partition_written": false
+}

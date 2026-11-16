@@ -1,0 +1,12 @@
+{
+  "log": "reports/thermal-stage95-bcl-pmic-qemu.log",
+  "test": "bcl-pmic",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    44,
+    0,
+    0,
+    44
+  ]
+}

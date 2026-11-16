@@ -1,0 +1,13 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/bcl-pmic-tests.cpio.gz 6944836 uncompressed bytes
+{
+  "log": "reports/thermal-stage95-bcl-pmic-qemu.log",
+  "test": "bcl-pmic",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    44,
+    0,
+    0,
+    44
+  ]
+}

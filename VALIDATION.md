@@ -2097,3 +2097,58 @@ exhaustive PM/concurrency/unbind and all remaining board drivers/full DT/SID4/bo
 vendor_boot/dtbo/DLKM/SELinux/daily-use work remain pending. Candidate count stays
 122/544, a module-name proxy only; this integration milestone does not imply a
 new functional completion percentage or physical daily-use acceptance.
+
+## Stage95: saved cooling maps, native governor and failed-read fix
+
+Core Image#25 ignored get_cur_state errors in step_wise and used an uninitialized
+current state to compute mitigation. A private native-governor regression creates
+a real OF BCL thermal binding, invalidates the QMI acknowledged state, resets the
+instance initialization/target, then calls the actual native governor under the
+zone lock. Before the patch it incorrectly initializes the instance and computes
+target1; the other26 lifecycle tests pass. Strict checking rejects that guest.
+
+Move the successful current-state read ahead of get_target_state and skip failed
+reads before changing target/initialized. Valid-state policy stays intact. New
+patch thermal-cooling-read-error-7.3.patch and reviewed native source commit are
+in core-patch-checkpoint.json; the exact replay grows to20 patches/66 files.
+Build_native.py includes the new patch in fresh builds. Full native Image/modules
+rebuild succeeds as Image#26. No new exported interface or thermal struct layout.
+
+The private overlay now projects four saved zones (PMIH BCL levels0/1, socd and
+mdmss-0), preserving ordered trip names/temperature/hysteresis/type, passive delay
+and eight QMI cooling-map references/limits. Other map providers are omitted and
+sensors replaced by separate private recorded inputs; this is not whole-board DT
+validation. audit_qmi_thermal_maps.py compares saved and guest declarations with
+normalized phandles. Native devm_thermal_of_zone_register creates the actual zones
+and native bindings; no mocked bind/governor or substituted successful RPC.
+
+New tests verify eight bindings; native step_wise modem targets8/10/100, then255,
+then release0; shared BCL demand retains2 when only the lower-demand zone cools;
+CDSP follows saved socd cap4 and releases; RPC rejection preserves unknown state
+and requested mitigation until the real driver worker replays successful RPCs.
+The failed-read regression passes with the new Image. Local advertised capabilities
+are recorded fixture values chosen to cover saved limits, not physical modem
+acceptance. QMI32 + BCL SoC26 + PMIC BCL44 =102 cases pass under Image#26 with no
+WARN/panic/skip and normal guest powerdown. Targeted existing thermal suites are
+run because a native shared governor was changed.
+
+A read-only current6.12 sysfs snapshot sees25 same-name cooling devices among27
+saved declarations. modem_vdd/modem_bcl_mtpl_dsc have no same-name entry in that
+snapshot; do not infer permanent firmware absence. Selected map bounds all fit
+observed maxima. CDSP max8 and several modem/BCL maxima255 exceed the smaller
+selected fixture bounds; do not mistake test capability values for an actual
+firmware list. Snapshot/current states are running-driver cached values. No
+physical thermal settings, partitions, vendor files or phone reboot are changed.
+
+Evidence: reports/qmi-thermal-stage95-validation.json; draft including new Image,
+three production modules, private test module/DT and hashes:
+artifacts/qmi-thermal-draft-stage95. This is not a flashable boot image or a promoted
+main bundle. Stage57 and Stage91 physical DT/HAL candidates remain unchanged.
+Reproduce core make Image modules in the pinned chroot, build_qmi_cooling.py
+--tests, then QEMU qmi-cooling --cpus 4 (32), bcl-soc (26), bcl-pmic (44).
+
+Pending: all remaining thermal providers/maps and changed-max rebinding corner
+cases; two absent snapshot declarations; physical firmware mitigation, calibrated
+sensors and ROM/HAL interactions; concurrent PM/hotplug/forced-unbind recovery;
+remaining display/camera/audio/wireless/board drivers, full DT/SID4/boot/vendor_boot/
+dtbo/DLKM/SELinux and daily stability. No functional completion percentage inferred.

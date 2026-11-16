@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage95ではDTの冷却マップからnative thermal制御・QMI送信まで接続し、状態取得失敗時にstep_wiseが無効な値から制御量を作る問題を修正。新Image#26でQMI／冷却マップ32件、既存BCL SoC26件、PMIC BCL44件の計102テストが通過しました。4ゾーン・8個のQMI参照は保存DTのtrip順序・値・制御範囲を維持（他の冷却先と実センサーは試験対象外）。成果物は `artifacts/qmi-thermal-draft-stage95/`、証拠は `reports/qmi-thermal-stage95-validation.json`。実機6.12の読み取り専用スナップショットでは27定義中25個が見え、残り2個は要調査です。実機7.3の起動・制御・常用動作は未確認、Stage57統合版は未更新です。
+
 Stage94ではQMI温度制御の実際のOF／platform probe、QRTR名前サービスでの通信先検出、27冷却デバイスの登録までを隔離環境で接続しました。通信先の再起動、3回の再バインド、複数デバイス、不正DT、途中の初期化失敗と復旧を含む26テストが4コア仮想環境で通過。証拠は `reports/qmi-cooling-stage94-validation.json`、試験成果物は `artifacts/qmi-cooling-probe-stage94/`。本番モジュール／Image#25／Stage57統合版は未変更です。ファームウェアの応答はローカルで再現したもので、実機の制御・thermal HAL・cooling-map連携は未確認です。
 
 Stage93ではモデム／CDSP向けQMI温度制御ドライバを7.3へ移植しました。実際のnative QMI／QRTRローカル通信とthermal登録を使う15テストが通過し、3モジュール計222インポートCRCが一致。保存DTの27冷却デバイス宣言と正規化したcooling-map参照が一致しています。実機ファームウェア・OF probe統合・全競合条件は未確認です。成果物は `artifacts/qmi-cooling-draft-stage93/`、証拠は `reports/qmi-cooling-stage93-validation.json`。同名のビルド候補は544個中122個（22.4%）ですが、異なる段階の候補を合わせた名前の対応率であり、機能・作業の完成率ではありません。Stage57の118モジュールの統合版は未更新、常用版ではありません。

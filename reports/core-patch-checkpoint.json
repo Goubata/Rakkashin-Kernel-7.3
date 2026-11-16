@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "67a3e4f87095defbecb441104770f90cbd3b332e",
+  "source_commit": "a682e5725b266e5e94b7908f0dc2fd4bb2eaa0f6",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -20,6 +20,7 @@
     "patches/smem-state-lifetime-7.3.patch": "d8e38a52deb57c1e887a012b4eb38c1d34b8b9f9a7ceea432eff20db56fcfdb6",
     "patches/geni-wrapper-accessor-7.3.patch": "7f484f8186592d0b290c40ef816d0f736a3c4cb45194fbde81f74960808f84b5",
     "patches/thermal-window-retry-7.3.patch": "449e8574261e3ac8906fae1b91c9cdb55b5c48b8de68eac98ab6067067d2131d",
-    "patches/watchdog-native-api-7.3.patch": "04e5417702ba75259bf569715fdcbe71e276d6192266d70a7e2da0742267ae94"
+    "patches/watchdog-native-api-7.3.patch": "04e5417702ba75259bf569715fdcbe71e276d6192266d70a7e2da0742267ae94",
+    "patches/thermal-cooling-read-error-7.3.patch": "574d86182ff94667441bb98e44ae705c787943194714ce6127f1c017f48118a0"
   }
 }

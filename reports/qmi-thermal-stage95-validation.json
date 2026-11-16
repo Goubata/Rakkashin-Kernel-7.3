@@ -1,0 +1,124 @@
+{
+  "stage": 95,
+  "scope": "Fix native step_wise failed cooling-state reads and connect selected saved DT maps through native thermal control to real local QMI transactions; private recorded sensors/firmware only",
+  "checks": {
+    "qmi_thermal": {
+      "log": "reports/qmi-cooling-stage95-after-qemu.log",
+      "test": "qmi-cooling",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        32,
+        0,
+        0,
+        32
+      ]
+    },
+    "bcl_soc_regression": {
+      "log": "reports/thermal-stage95-bcl-soc-qemu.log",
+      "test": "bcl-soc",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        26,
+        0,
+        0,
+        26
+      ]
+    },
+    "bcl_pmic_regression": {
+      "log": "reports/thermal-stage95-bcl-pmic-qemu.log",
+      "test": "bcl-pmic",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        44,
+        0,
+        0,
+        44
+      ]
+    }
+  },
+  "total_passed_cases": 102,
+  "new_cases": 6,
+  "core_image": "7.3.0-4k #26",
+  "artifact": "artifacts/qmi-thermal-draft-stage95",
+  "core_patch_count": 20,
+  "core_exact_files": 66,
+  "native_source_commit": "a682e5725b266e5e94b7908f0dc2fd4bb2eaa0f6",
+  "physical_verified": false,
+  "phone_partition_written": false,
+  "phone_dt_modified": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "regression_before": "Image#25: 26 previous cases pass; failed_read_preserves_instance fails because failed get_cur_state marks initialized=true and computes target1 from an invalid current state",
+  "fix": "Read current cooling state successfully before computing a step_wise target; preserve target and initialized flag on errors, including ENOTCONN/EAGAIN from remote QMI cooling",
+  "verified": [
+    "Full core Image/modules rebuild succeeds; exact native patch replay20/66",
+    "Image#26 passes regression for unknown-state governor input",
+    "Four selected zones preserve saved ordered trip scalars/types, passive delay, and eight QMI map references with exact limits; non-QMI map providers projected out",
+    "Actual OF sensor-zone registration binds QMI cdevs to eight native thermal instances",
+    "Native step_wise drives modem8/10/100 then255 and releases to0 after cooling, using actual local QMI RPC",
+    "Two BCL zones share one native cdev; higher cooling demand remains until both zones release",
+    "CDSP follows saved socd upper4 and releases after cooling",
+    "Remote rejection invalidates confirmed state; subsequent governor pass preserves demand, actual driver worker replays after replies recover",
+    "Previous26 QMI lifecycle cases and 26 BCL SoC plus44 PMIC BCL cases remain passing under new Image",
+    "Read-only current phone snapshot matches25 of27 declarations; selected eight map limits fit observed maxima, no physical setting writes"
+  ],
+  "artifact_imports": [
+    {
+      "module": "artifacts/qmi-thermal-draft-stage95/avr-qmi-cooling-test.ko",
+      "imports_checked": 74
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage95/qmi_cooling.ko",
+      "imports_checked": 42
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage95/qmi_helpers.ko",
+      "imports_checked": 42
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage95/qrtr.ko",
+      "imports_checked": 138
+    }
+  ],
+  "pending": [
+    "Two DT declarations have no matching current sysfs snapshot: modem_vdd and modem_bcl_mtpl_dsc; determine optional/unavailable/missing behavior, not proof of permanent absence",
+    "Physical modem/CDSP QMI transactions and mitigation under7.3, actual sensor calibration/thermal HAL/ROM integration",
+    "Remaining thermal maps/providers, changed remote max with already-bound maps, concurrency/PM/unbind failure variants",
+    "Remaining display/camera/audio/wireless/board drivers and full DT/schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux/daily stability"
+  ],
+  "evidence_sha256": {
+    "patches/thermal-cooling-read-error-7.3.patch": "574d86182ff94667441bb98e44ae705c787943194714ce6127f1c017f48118a0",
+    "reports/core-patch-checkpoint.json": "2674f54d1a63a0d15929f9122b8bf8c7a571d7d98decaf5ade259b6203700c22",
+    "reports/core-patch-replay.json": "a0e1b1ae1cc7bf829d012b30c5fb317e1f800edc82f2fb5d33af31b91603ddc3",
+    "scripts/build_native.py": "41d05f61ae1e7b082567b21770df7a135e9fadb01f98c446c64f39b1e97786bb",
+    "scripts/audit_qmi_thermal_maps.py": "27bed3db33742f881d998b4c89f350a496bf37743abab1d71f0fc70213d8d0c3",
+    "tests/qmi-cooling/avr-qmi-cooling-test.c": "5d2752e0c036e1244db4b8c98573b06bc257c58286c0089d3252698d0aaa7bae",
+    "tests/qmi-cooling/qemu-qmi.dtso": "e6dc95c055cd14f6840a246cdd97b5ba0c877128c62fa38f172998fb1f9459d4",
+    "tests/qemu/qmi-cooling-tests.cpio.gz": "1f1e7f22d82348ff2b6386f147239d2b0d7bf4e0d60dc72a071bcc9e5de1550a",
+    "reports/thermal-stage95-native-build.log": "02b5b9aa2461cf39c2b32a779449641f61a4a414392703ea8bae4c9592cae2d9",
+    "reports/qmi-cooling-stage95-build.log": "824a019b013cd2dcee43bd5c9617738a04a2afcf4775b6f5d1bf720e6b452540",
+    "reports/qmi-cooling-stage95-before-qemu.log": "3a5c45ecdf602aa43781d8fb1de1a7d560f83845d71916e71c378dafab9ff635",
+    "reports/qmi-cooling-stage95-before-qemu.json": "337415faef291fea74739fd4255bc083dcfbf947e1fe794ad374f4c640f071a6",
+    "reports/qmi-cooling-stage95-after-qemu.log": "13119d337b4b2e2ab45383aab20bb1cf9045d3975ecc9f4c6e27eadd1f2a1dbc",
+    "reports/qmi-cooling-stage95-after-qemu.json": "f9254b1bfde8895d27a296df806e75d79d5658bc52fd7ad3bea408ce3bee5bc2",
+    "reports/qmi-cooling-stage95-check.json": "6527265691dcb3ef74fdfe88e3f2e6dc7c5ab9a88ed5259398f01cbc25c0395f",
+    "reports/qmi-cooling-stage95-maps.json": "f43820d6e775ac9d39323d7dc71ccf759ecf8686635955307b24907e70d3c2b7",
+    "reports/qmi-cooling-stage95-probe-dt.json": "fa74f769e061be89596da8571af74593f5afc3ecc3c2396680e6b43b9b2f8ed6",
+    "reports/qmi-cooling-stage95-dt.json": "b3d53f6d0437c7de81a4ef20ad63b310d1948cb0704093d35ceb01cfae668ee3",
+    "reports/qmi-cooling-stage95-crc.json": "89cdc2d707876919e7865546bb7aa79a06f5527fd3ef201f93169294a67cf3f1",
+    "reports/qmi-cooling-stage95-artifact-crc.json": "edf2364d1c9a7608ef0ebba1d35c07322bbaa224ad93a742383f3ee0ebc478bd",
+    "reports/thermal-stage95-bcl-soc-qemu.log": "e5e82c5e0d482e6482df37b2a0cd71afcc9c60556ce9776223e0db0209a953a5",
+    "reports/thermal-stage95-bcl-soc-qemu.json": "4625f76aefd629d389eff3caac17c4be3a66027e27b0e487a7318b65e9ab1c63",
+    "reports/thermal-stage95-bcl-soc-check.json": "f48cc0fd0d20fddb696a18cf5fcf5caa22a0a6b42ffd41077791decb344ac54c",
+    "reports/thermal-stage95-bcl-pmic-qemu.log": "402dd274f4dfdbbcbc96cf37510d5f49049e2d0b271909b367f1f87c248a522a",
+    "reports/thermal-stage95-bcl-pmic-qemu.json": "6a894868223be1a8df9f80735d1e5784e2fa8c30649568d0a91961fd9d917607",
+    "reports/thermal-stage95-bcl-pmic-check.json": "7a9a2d79f33633ddfe975cee61b135ca8974da3082db2aec1dae7143a4fb60a3",
+    "reports/qmi-cooling-stage95-phone-cooling.tsv": "bc18e34e1a9baa94e420739fea78e00655f7b2411316d4cd1e85e7434bd66082",
+    "reports/qmi-cooling-stage95-phone-capabilities.json": "c3d3615bedd7c3721c25fee64ad63b8eeec8944e2009b92a6f6b162b71bc6245",
+    "reports/thermal-stage95-phone-state.txt": "0e2a5499f8529ddfa8c6b122a33c8787ad1cbb7fe272c22d82413a85f866783b",
+    "artifacts/qmi-thermal-draft-stage95/metadata.json": "b73ab283c05201e1a706fde60171fa281bcd3d5480dd663d8a3eb66d17641f4a"
+  }
+}

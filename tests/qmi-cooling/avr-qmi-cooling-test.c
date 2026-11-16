@@ -6,6 +6,7 @@
 #include <linux/platform_device.h>
 #include <linux/net.h>
 #include <linux/delay.h>
+#include "drivers/thermal/thermal_core.h"
 #include <linux/soc/qcom/qmi.h>
 static int probe_handle_init(struct qmi_handle *,size_t,const struct qmi_ops *,const struct qmi_msg_handler *);
 static int probe_lookup(struct qmi_handle *,unsigned int,unsigned int,unsigned int);
@@ -51,7 +52,9 @@ struct fixture {
  atomic_t calls;
  int response_error;
  bool drop,stale,server_ready,server2_ready,driver_registered;
- struct platform_device *pdev[2];
+ struct platform_device *pdev[2],*sensors[4];
+ struct thermal_zone_device *zones[4];
+ int temps[4];bool map_caps;
  u8 last_state;
 };
 static void reply_list_common(struct fixture *f,struct qmi_handle *q,struct sockaddr_qrtr *peer,struct qmi_txn *txn)
@@ -117,6 +120,7 @@ static int setup(struct kunit *test)
 static void teardown(struct kunit *test)
 {
  struct fixture *f=test->priv;
+ {int i;for(i=0;i<4;i++)if(f->sensors[i])platform_device_unregister(f->sensors[i]);}
  if(f->pdev[1])platform_device_unregister(f->pdev[1]);
  if(f->pdev[0])platform_device_unregister(f->pdev[0]);
  if(f->driver_registered)platform_driver_unregister(&qmi_device_driver);
@@ -295,7 +299,13 @@ static int advertise_saved(struct fixture *f)
    const char *name;ret=of_property_read_string(node,"qcom,qmi-dev-name",&name);if(ret)goto out;
    if(i>=ARRAY_SIZE(f->list.mitigation_device_list)){ret=-E2BIG;goto out;}
    strscpy(f->list.mitigation_device_list[i].mitigation_dev_id.mitigation_dev_id,name);
-   f->list.mitigation_device_list[i++].max_mitigation_level=3;
+   f->list.mitigation_device_list[i].max_mitigation_level=3;
+   if(f->map_caps){
+    if(!strcmp(name,"modem_lte_dsc") || !strcmp(name,"modem_nr_dsc"))f->list.mitigation_device_list[i].max_mitigation_level=255;
+    if(!strcmp(name,"modem_nr_scg_dsc"))f->list.mitigation_device_list[i].max_mitigation_level=100;
+    if(!strcmp(name,"cdsp_sw"))f->list.mitigation_device_list[i].max_mitigation_level=4;
+   }
+   i++;
   }
  }
  f->list.mitigation_device_list_len=i;
@@ -405,6 +415,120 @@ static void first_init_failure(struct kunit *test){partial_probe(test,false,1);}
 static void second_init_failure(struct kunit *test){partial_probe(test,false,2);}
 static void first_lookup_failure(struct kunit *test){partial_probe(test,true,1);}
 static void second_lookup_failure(struct kunit *test){partial_probe(test,true,2);}
+
+static int recorded_temperature(struct thermal_zone_device *tz,int *temp)
+{*temp=READ_ONCE(*(int *)tz->devdata);return 0;}
+static const struct thermal_zone_device_ops recorded_ops={.get_temp=recorded_temperature};
+static int start_zones(struct fixture *f)
+{
+ int i,ret;
+ for(i=0;i<4;i++){
+  char path[48];struct device_node *np;struct platform_device *pdev;
+  snprintf(path,sizeof(path),"/avr-qmi-sensor%d",i);np=of_find_node_by_path(path);if(!np)return -ENOENT;
+  pdev=platform_device_alloc("avr-qmi-temp",PLATFORM_DEVID_AUTO);if(!pdev){of_node_put(np);return -ENOMEM;}
+  device_set_node(&pdev->dev,of_fwnode_handle(np));ret=platform_device_add(pdev);
+  if(ret){platform_device_put(pdev);return ret;}f->sensors[i]=pdev;
+  f->zones[i]=devm_thermal_of_zone_register(&pdev->dev,0,&f->temps[i],&recorded_ops);
+  if(IS_ERR(f->zones[i])){ret=PTR_ERR(f->zones[i]);f->zones[i]=NULL;return ret;}
+ }
+ return 0;
+}
+static struct qmi_cooling_device *find_client(struct fixture *f,const char *name)
+{
+ struct qmi_tmd_device *p=platform_get_drvdata(f->pdev[0]);unsigned int i;
+ for(i=0;i<p->count;i++){
+  struct qmi_cooling_device *c;
+  list_for_each_entry(c,&p->instances[i].tmd_cdev_list,qmi_node)if(!strcmp(c->qmi_name,name))return c;
+ }
+ return NULL;
+}
+static int start_maps(struct fixture *f)
+{
+ int ret;f->map_caps=true;
+ ret=register_private(f);if(!ret)ret=advertise_saved(f);if(!ret)ret=add_private(f,"good",0);
+ if(!ret)ret=wait_private(f->pdev[0],true);if(!ret)ret=start_zones(f);return ret;
+}
+static void failed_read_preserves_instance(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;struct thermal_zone_device *tz;struct thermal_instance *inst=NULL,*p;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"bcl");KUNIT_ASSERT_NOT_NULL(test,c);tz=f->zones[0];
+ KUNIT_ASSERT_STREQ(test,tz->governor->name,"step_wise");
+ mutex_lock(&tz->lock);
+ {int i;for(i=0;i<tz->num_trips;i++)list_for_each_entry(p,&tz->trips[i].thermal_instances,trip_node)if(p->cdev==c->cdev){inst=p;break;}}
+ if(!inst){mutex_unlock(&tz->lock);KUNIT_FAIL(test,"saved BCL map missing");return;}
+ mutex_lock(&c->tmd->state_mutex);c->applied_valid=false;mutex_unlock(&c->tmd->state_mutex);
+ inst->initialized=false;inst->target=THERMAL_NO_TARGET;
+ mutex_lock(&c->cdev->lock);c->cdev->updated=true;mutex_unlock(&c->cdev->lock);
+ tz->temperature=2;tz->last_temperature=1;tz->governor->manage(tz);
+ KUNIT_EXPECT_FALSE(test,inst->initialized);KUNIT_EXPECT_EQ(test,inst->target,THERMAL_NO_TARGET);
+ mutex_unlock(&tz->lock);
+}
+
+static void drive_zone(struct fixture *f,int id,int temp)
+{
+ WRITE_ONCE(f->temps[id],temp);thermal_zone_device_update(f->zones[id],THERMAL_EVENT_UNSPECIFIED);
+ cancel_delayed_work_sync(&f->zones[id]->poll_queue);
+}
+static void expect_state(struct kunit *test,const char *wire,unsigned long expected)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c=find_client(f,wire);unsigned long state=~0UL;
+ KUNIT_ASSERT_NOT_NULL(test,c);KUNIT_ASSERT_EQ(test,qmi_get_cur_state(c->cdev,&state),0);KUNIT_EXPECT_EQ(test,state,expected);
+}
+static void native_saved_maps(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i,j,total=0;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);
+ for(i=0;i<4;i++){
+  struct thermal_zone_device *tz=f->zones[i];int count=0;
+  mutex_lock(&tz->lock);
+  for(j=0;j<tz->num_trips;j++){
+   struct thermal_instance *inst;
+   list_for_each_entry(inst,&tz->trips[j].thermal_instances,trip_node){
+    struct qmi_cooling_device *c=inst->cdev->devdata;count++;
+    if(i<2){KUNIT_EXPECT_STREQ(test,c->qmi_name,"bcl");KUNIT_EXPECT_EQ(test,inst->lower,0UL);KUNIT_EXPECT_EQ(test,inst->upper,(unsigned long)i+1);}
+    if(i==2){KUNIT_EXPECT_STREQ(test,c->qmi_name,"cdsp_sw");KUNIT_EXPECT_EQ(test,inst->upper,4UL);}
+   }
+  }
+  mutex_unlock(&tz->lock);KUNIT_EXPECT_EQ(test,count,i==3 ? 5 : 1);total+=count;
+ }
+ KUNIT_EXPECT_EQ(test,total,8);
+}
+static void native_modem_governor(struct kunit *test)
+{
+ struct fixture *f=test->priv;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);drive_zone(f,3,103000);
+ expect_state(test,"modem_lte_dsc",8);expect_state(test,"modem_nr_dsc",10);expect_state(test,"modem_nr_scg_dsc",100);
+ drive_zone(f,3,106000);expect_state(test,"modem_lte_dsc",255);expect_state(test,"modem_nr_dsc",255);
+ drive_zone(f,3,90000);expect_state(test,"modem_lte_dsc",0);expect_state(test,"modem_nr_dsc",0);expect_state(test,"modem_nr_scg_dsc",0);
+}
+static void native_shared_bcl_governor(struct kunit *test)
+{
+ struct fixture *f=test->priv;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);drive_zone(f,0,2);expect_state(test,"bcl",1);
+ drive_zone(f,1,2);expect_state(test,"bcl",2);
+ drive_zone(f,0,0);expect_state(test,"bcl",2);
+ drive_zone(f,1,0);expect_state(test,"bcl",0);
+}
+static void native_cdsp_governor(struct kunit *test)
+{
+ struct fixture *f=test->priv;int i;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);
+ for(i=0;i<4;i++)drive_zone(f,2,96+i);
+ expect_state(test,"cdsp_sw",4);drive_zone(f,2,80);expect_state(test,"cdsp_sw",0);
+}
+static void native_governor_rpc_recovery(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;unsigned long state;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"bcl");KUNIT_ASSERT_NOT_NULL(test,c);
+ WRITE_ONCE(f->response_error,1);drive_zone(f,0,2);
+ KUNIT_EXPECT_EQ(test,qmi_get_cur_state(c->cdev,&state),-EAGAIN);KUNIT_EXPECT_EQ(test,c->desired_state,1U);
+ cancel_delayed_work_sync(&c->tmd->svc_arrive_work);
+ /* A subsequent governor pass must retain its target while state is unknown. */
+ drive_zone(f,0,3);KUNIT_EXPECT_EQ(test,c->desired_state,1U);
+ cancel_delayed_work_sync(&c->tmd->svc_arrive_work);WRITE_ONCE(f->response_error,0);
+ mod_delayed_work(system_dfl_wq,&c->tmd->svc_arrive_work,0);flush_delayed_work(&c->tmd->svc_arrive_work);
+ expect_state(test,"bcl",1);drive_zone(f,0,0);expect_state(test,"bcl",0);
+}
 static struct kunit_case cases[]={
  KUNIT_CASE(golden_wire),KUNIT_CASE(wire_bounds),KUNIT_CASE(malformed_list),KUNIT_CASE(extended_duplicate),
  KUNIT_CASE(repeated_transactions),KUNIT_CASE(native_discovery),KUNIT_CASE(acknowledged_set),KUNIT_CASE(rejected_retry),KUNIT_CASE(timed_out_retry),
@@ -412,7 +536,9 @@ static struct kunit_case cases[]={
  KUNIT_CASE(no_false_registration),KUNIT_CASE(idempotent_cleanup),
  KUNIT_CASE(native_of_27),KUNIT_CASE(native_server_restart),KUNIT_CASE(native_rebind),
  KUNIT_CASE(native_duplicate_dt),KUNIT_CASE(native_unknown_wire_dt),KUNIT_CASE(native_wrong_cells_dt),KUNIT_CASE(native_two_devices),
- KUNIT_CASE(first_init_failure),KUNIT_CASE(second_init_failure),KUNIT_CASE(first_lookup_failure),KUNIT_CASE(second_lookup_failure),{}
+ KUNIT_CASE(first_init_failure),KUNIT_CASE(second_init_failure),KUNIT_CASE(first_lookup_failure),KUNIT_CASE(second_lookup_failure),KUNIT_CASE(failed_read_preserves_instance),
+ KUNIT_CASE(native_saved_maps),KUNIT_CASE(native_modem_governor),KUNIT_CASE(native_shared_bcl_governor),
+ KUNIT_CASE(native_cdsp_governor),KUNIT_CASE(native_governor_rpc_recovery),{}
 };
 static struct kunit_suite suite={.name="avr-qmi-cooling",.init=setup,.exit=teardown,.test_cases=cases};
 kunit_test_suite(suite);

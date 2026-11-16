@@ -250,6 +250,9 @@ struct thermal_instance {
 	struct list_head cdev_node; /* node in cdev->thermal_instances */
 	unsigned int weight; /* The weight of the cooling device */
 	bool upper_no_limit;
+	/* Configured binding limits survive temporary capability reductions. */
+	unsigned long lower_bound;
+	unsigned long upper_bound;
 };
 
 #define to_thermal_zone(_dev) \

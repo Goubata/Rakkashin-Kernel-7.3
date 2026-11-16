@@ -789,6 +789,8 @@ static int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
 	dev->upper = cool_spec->upper;
 	dev->upper_no_limit = upper_no_limit;
 	dev->lower = cool_spec->lower;
+	dev->lower_bound = cool_spec->lower;
+	dev->upper_bound = cool_spec->upper;
 	dev->target = THERMAL_NO_TARGET;
 	dev->weight = cool_spec->weight;
 
@@ -1186,25 +1188,21 @@ void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
 	thermal_cooling_device_stats_reinit(cdev);
 
 	list_for_each_entry(ti, &cdev->thermal_instances, cdev_node) {
-		if (ti->upper == cdev->max_state)
+		unsigned long upper = ti->upper_no_limit ? cdev->max_state :
+				min(ti->upper_bound, cdev->max_state);
+		unsigned long lower = min(ti->lower_bound, upper);
+
+		if (ti->lower == lower && ti->upper == upper)
 			continue;
 
-		if (ti->upper < cdev->max_state) {
-			if (ti->upper_no_limit)
-				ti->upper = cdev->max_state;
+		ti->lower = lower;
+		ti->upper = upper;
+		if (ti->target != THERMAL_NO_TARGET)
+			ti->target = clamp(ti->target, lower, upper);
 
-			continue;
-		}
-
-		ti->upper = cdev->max_state;
-		if (ti->lower > ti->upper)
-			ti->lower = ti->upper;
-
-		if (ti->target == THERMAL_NO_TARGET)
-			continue;
-
-		if (ti->target > ti->upper)
-			ti->target = ti->upper;
+		/* Re-evaluate even a stable temperature on the next governor pass. */
+		ti->initialized = false;
+		cdev->updated = false;
 	}
 
 	if (cdev->ops->get_cur_state(cdev, &state) || state > cdev->max_state)

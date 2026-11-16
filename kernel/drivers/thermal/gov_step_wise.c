@@ -30,18 +30,9 @@
  *       equals lower limit, deactivate the thermal instance
  */
 static unsigned long get_target_state(struct thermal_instance *instance,
-				enum thermal_trend trend, bool throttle)
+				enum thermal_trend trend, bool throttle,
+				unsigned long cur_state)
 {
-	struct thermal_cooling_device *cdev = instance->cdev;
-	unsigned long cur_state;
-
-	/*
-	 * We keep this instance the way it is by default.
-	 * Otherwise, we use the current state of the
-	 * cdev in use to determine the next_target.
-	 */
-	cdev->ops->get_cur_state(cdev, &cur_state);
-	dev_dbg(&cdev->device, "cur_state=%ld\n", cur_state);
 
 	if (!instance->initialized) {
 		if (throttle)
@@ -93,10 +84,17 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz,
 		trip_id, trip->type, trip_threshold, trend, throttle);
 
 	list_for_each_entry(instance, &td->thermal_instances, trip_node) {
+		unsigned long cur_state;
 		int old_target;
 
+		/* An unavailable remote cooling device has no valid current state.
+		 * Keep both the target and initialization state until a read succeeds.
+		 */
+		if (instance->cdev->ops->get_cur_state(instance->cdev, &cur_state))
+			continue;
+
 		old_target = instance->target;
-		instance->target = get_target_state(instance, trend, throttle);
+		instance->target = get_target_state(instance, trend, throttle, cur_state);
 
 		dev_dbg(&instance->cdev->device, "old_target=%d, target=%ld\n",
 			old_target, instance->target);

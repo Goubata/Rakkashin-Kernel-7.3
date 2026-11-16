@@ -1,0 +1,342 @@
+{
+  "passed": true,
+  "scope": "All 27 saved instance IDs, node/wire names and cooling arity reproduced in private OF probe fixture; physical firmware, cooling maps, IRQs and board not modeled",
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "cooling_declarations": [
+        {
+          "instance": 0,
+          "node_name": "mmw0_dsc",
+          "wire_name": "mmw0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw0_sub1_dsc",
+          "wire_name": "mmw0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw1_dsc",
+          "wire_name": "mmw1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw1_sub1_dsc",
+          "wire_name": "mmw1_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw2_dsc",
+          "wire_name": "mmw2_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw2_sub1_dsc",
+          "wire_name": "mmw2_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw3_dsc",
+          "wire_name": "mmw3_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw3_sub1_dsc",
+          "wire_name": "mmw3_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_bcl",
+          "wire_name": "bcl",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_bcl_mtpl_dsc",
+          "wire_name": "modem_bcl_mtpl_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_lte_dsc",
+          "wire_name": "modem_lte_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_lte_sub1_dsc",
+          "wire_name": "modem_lte_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_dsc",
+          "wire_name": "modem_nr_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_scg_dsc",
+          "wire_name": "modem_nr_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_scg_sub1_dsc",
+          "wire_name": "modem_nr_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_sub1_dsc",
+          "wire_name": "modem_nr_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_vdd",
+          "wire_name": "cpuv_restriction_cold",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_lte_sdr0_dsc",
+          "wire_name": "pa_lte_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_lte_sdr0_sub1_dsc",
+          "wire_name": "pa_lte_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_dsc",
+          "wire_name": "pa_nr_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_scg_dsc",
+          "wire_name": "pa_nr_sdr0_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "wire_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_sub1_dsc",
+          "wire_name": "pa_nr_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp",
+          "wire_name": "cdsp_sw",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_hw",
+          "wire_name": "cdsp_hw",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_sw_hmx",
+          "wire_name": "cdsp_sw_hmx",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_sw_hvx",
+          "wire_name": "cdsp_sw_hvx",
+          "cooling_cells": 2
+        }
+      ]
+    },
+    "guest": {
+      "file": "artifacts/qemu-qmi-cooling/virt-rail.dtb",
+      "sha256": "bc4ef00bb1ea45a1e7129bcaba9318fdbb5dc5c1d95a51049bf60307caf896f7",
+      "cooling_declarations": [
+        {
+          "instance": 0,
+          "node_name": "mmw0_dsc",
+          "wire_name": "mmw0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw0_sub1_dsc",
+          "wire_name": "mmw0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw1_dsc",
+          "wire_name": "mmw1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw1_sub1_dsc",
+          "wire_name": "mmw1_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw2_dsc",
+          "wire_name": "mmw2_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw2_sub1_dsc",
+          "wire_name": "mmw2_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw3_dsc",
+          "wire_name": "mmw3_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "mmw3_sub1_dsc",
+          "wire_name": "mmw3_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_bcl",
+          "wire_name": "bcl",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_bcl_mtpl_dsc",
+          "wire_name": "modem_bcl_mtpl_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_lte_dsc",
+          "wire_name": "modem_lte_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_lte_sub1_dsc",
+          "wire_name": "modem_lte_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_dsc",
+          "wire_name": "modem_nr_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_scg_dsc",
+          "wire_name": "modem_nr_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_scg_sub1_dsc",
+          "wire_name": "modem_nr_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_nr_sub1_dsc",
+          "wire_name": "modem_nr_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "modem_vdd",
+          "wire_name": "cpuv_restriction_cold",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_lte_sdr0_dsc",
+          "wire_name": "pa_lte_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_lte_sdr0_sub1_dsc",
+          "wire_name": "pa_lte_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_dsc",
+          "wire_name": "pa_nr_sdr0_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_scg_dsc",
+          "wire_name": "pa_nr_sdr0_scg_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "wire_name": "pa_nr_sdr0_scg_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 0,
+          "node_name": "pa_nr_sdr0_sub1_dsc",
+          "wire_name": "pa_nr_sdr0_sub1_dsc",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp",
+          "wire_name": "cdsp_sw",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_hw",
+          "wire_name": "cdsp_hw",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_sw_hmx",
+          "wire_name": "cdsp_sw_hmx",
+          "cooling_cells": 2
+        },
+        {
+          "instance": 67,
+          "node_name": "cdsp_sw_hvx",
+          "wire_name": "cdsp_sw_hvx",
+          "cooling_cells": 2
+        }
+      ]
+    }
+  }
+}

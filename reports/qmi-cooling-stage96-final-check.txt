@@ -1,0 +1,13 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/qmi-cooling-tests.cpio.gz 5709904 uncompressed bytes
+{
+  "log": "reports/qmi-cooling-stage96-final-qemu.log",
+  "test": "qmi-cooling",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    36,
+    0,
+    0,
+    36
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "stage": 96,
+  "scope": "Preserve native QMI cooling bindings and configured limits across advertised capability shrink/recovery, with recorded firmware and actual native local transport",
+  "checks": {
+    "qmi_thermal": {
+      "log": "reports/qmi-cooling-stage96-extended-qemu.log",
+      "test": "qmi-cooling",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        38,
+        0,
+        0,
+        38
+      ]
+    },
+    "bcl_soc_regression": {
+      "log": "reports/thermal-stage96-bcl-soc-qemu.log",
+      "test": "bcl-soc",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        26,
+        0,
+        0,
+        26
+      ]
+    },
+    "bcl_pmic_regression": {
+      "log": "reports/thermal-stage96-bcl-pmic-qemu.log",
+      "test": "bcl-pmic",
+      "passed": true,
+      "failures": [],
+      "totals": [
+        44,
+        0,
+        0,
+        44
+      ]
+    }
+  },
+  "new_cases": 6,
+  "total_passed_cases": 108,
+  "artifact": "artifacts/qmi-thermal-draft-stage96",
+  "core_image": "7.3.0-4k #27",
+  "core_patch_count": 21,
+  "core_exact_files": 68,
+  "native_source_commit": "7e2663c534fe7a02c8595a62b8af041bd4bd450f",
+  "phone_partition_written": false,
+  "phone_dt_modified": false,
+  "physical_verified": false,
+  "promoted": false,
+  "software_readiness_target_complete": false,
+  "regressions_before": [
+    "Existing maximum-change path unregistered/re-registered cdev; shrinking LTE maximum255->3 dropped both saved native DT bindings because fixed DT bounds8/255 exceed3. 32 previous cases pass, new binding test fails.",
+    "Switching only driver to native update preserved bindings, but native core permanently overwrote explicit lower/upper bounds with3; recovery to255 failed to restore8/255 or real mitigation.33 cases pass, recovery test fails."
+  ],
+  "implemented": [
+    "Keep cdev identity and call native thermal_cooling_device_update after releasing state/IO locks, including when acknowledgement fails",
+    "Retain configured lower/upper bounds in native thermal_instance, compute effective bounds from original constraints on every capability update",
+    "Clamp active targets to effective limits, preserve THERMAL_NO_TARGET, reset instance initialization and cdev update cache when limits change so next normal governor pass re-evaluates even stable temperature"
+  ],
+  "verified": [
+    "38 native QMI/thermal cases plus26 BCL SoC and44 PMIC BCL regression cases pass with no WARN/panic/skip",
+    "Saved LTE binding count remains2 during255->3 and zero-capability reductions; targets clamp to supported maxima",
+    "255 recovery restores exact configured DT bounds8/255 and native step_wise sends255 even at stable temperature",
+    "Two cycles255->0->255 preserve bindings and recover",
+    "Remote rejection during cap change still updates cached native maximum/bounds, returns EAGAIN for unconfirmed state, and a healthy retry confirms supported mitigation",
+    "Local capability fixture reproduces25 sysfs ceilings saved under6.12; unadvertised two optional IDs do not acquire fabricated capability/cdev",
+    "Explicit later source refresh with real encoded local response can register both newly advertised IDs",
+    "Core patch replay and full native build plus source-pinned external builds complete"
+  ],
+  "limits": [
+    "Initial binding with a maximum already below an explicit DT limit still follows native rejection; this fixes previously valid existing bindings changing capabilities",
+    "Bounds are re-evaluated on next normal governor pass; capability expansion does not promise immediate hardware mitigation before that event",
+    "Two missing snapshot IDs are enabled in saved DT and have zero kernel cooling-map references, but ROM/HAL consumers and actual firmware advertisement remain unconfirmed",
+    "Late optional test explicitly invokes capability refresh; does not establish automatic detection of unsolicited list changes",
+    "Physical firmware/7.3 boot and all remaining board drivers/DT/schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux/ROM daily stability remain pending",
+    "Exhaustive concurrent capability change/setter/peer replacement/PM/unbind and additional thermal governor variants remain pending"
+  ],
+  "artifact_imports": [
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/avr-qmi-cooling-test.ko",
+      "imports_checked": 75
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qmi_cooling.ko",
+      "imports_checked": 43
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qmi_helpers.ko",
+      "imports_checked": 42
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qrtr.ko",
+      "imports_checked": 138
+    }
+  ],
+  "evidence_sha256": {
+    "ports/qcom-qmi-cooling/qmi_cooling.c": "ee9e80afa58888da4f1b21adaaa883d95254092048f60fa2450e285f54db5f66",
+    "patches/qmi-cooling-7.3.patch": "8eb4c1203c6ecaba5c4ac0fe6ffbc1eb4cd8849bd32b1057b0c50035e0df2e55",
+    "reports/qmi-cooling-source-lock.json": "29cba4dfbd17875a64d3b792a3c69df93d9d7bb697cd232a815898326f0f6a18",
+    "patches/thermal-binding-limits-7.3.patch": "9639cabba3600533c7ff8bbabe8acc2c551a7f22fde5fc8e8269c4fb4fb93cbb",
+    "reports/core-patch-checkpoint.json": "0922624cb80cbf7606e74d86ae456887f9ccf0c1bd00abe89e5c6cc6df59f7e1",
+    "reports/core-patch-replay.json": "6180561ae7e8ed3c31208bfdfbebe3d905e53fc6cc6e4657e4d9af252ce437a5",
+    "scripts/build_native.py": "469425077f4247c5a3ca891411c6da57e921b35ccc80a1bacd28c43aeb041cf3",
+    "scripts/audit_qmi_phone_fixture.py": "307b3e3314f43ad63336797e32b060ff4e8eb5262b1afdeb152ecf882a3d4002",
+    "scripts/build_qmi_cooling.py": "265a5d89f9eafe988081cc3a923e20b954e547d51f0641ca15f971dc3d1c4a02",
+    "tests/qmi-cooling/avr-qmi-cooling-test.c": "b1dcbbcabb02c292c6d875a9e208c1afe668f5d6a997250069e35af15a3ed34d",
+    "tests/qmi-cooling/phone-caps.h": "16457619dc10560aaadc7635c97698b92ea6b13348552e45569405e08227fc89",
+    "tests/qemu/qmi-cooling-tests.cpio.gz": "5f07a93f2bf2ee67a048005644697ee7cbdd53c78e9cd0f212c5ef841059c90d",
+    "reports/thermal-stage96-native-build.log": "3ddc885893f9fc235431bb530e328b77c1ac19fdde790ab22ca69ee133902a7f",
+    "reports/qmi-cooling-stage96-build.log": "d01f373805dce04bbffb9fcab6a9e56300a9e4eec8c7b442712542dc039573fc",
+    "reports/thermal-stage96-bcl-soc-build.log": "140c5606eb127c5e7678baf8f5450dfc42207fbe7037737949b0f637bbff061b",
+    "reports/thermal-stage96-bcl-pmic-build.log": "f4e2f7677cffac1b524c42c6e6ccaaeef5c06c9f7e1dfcf4e3e6f7a0358721a0",
+    "reports/qmi-cooling-stage96-before-qemu.log": "33a6b8b4fbf1add8e8794f5d096667b439aa133c6a936289594473eacd17d2d7",
+    "reports/qmi-cooling-stage96-update-qemu.log": "a6a70fc5fde9b58bddaa724f790dd51bd5a49fd8ead433ff0905b99c0b8734cd",
+    "reports/qmi-cooling-stage96-extended-qemu.log": "4000704b3c3b65a46ff44a1dd1f8b304ea60647246421a0c079474fd863b32dd",
+    "reports/qmi-cooling-stage96-extended-qemu.json": "6b6ffe70014c75c478e80e5fef96399087790a077ae7ff030673c30b2d51a489",
+    "reports/qmi-cooling-stage96-check.json": "3904fa78a50e0159c026aa0b0ca12c447e28fe1d0624a5a494392c8266204f12",
+    "reports/qmi-cooling-stage96-artifact-crc.json": "fe126d1f9b97b62d1287b765edf5763341b76e7d39b9aa8101a56a530df64272",
+    "reports/qmi-cooling-stage96-maps.json": "62147d752d7cb7422f8b8893ce1397fe46e87a1e6818954b2884ad11db3e1142",
+    "reports/qmi-cooling-stage96-probe-dt.json": "b01c7d85a819239bae7ff17cd917f7dcd83c4b99854be5d5ec08d7aad13a081c",
+    "reports/qmi-cooling-stage96-dt.json": "b3d53f6d0437c7de81a4ef20ad63b310d1948cb0704093d35ceb01cfae668ee3",
+    "reports/qmi-cooling-stage96-optional-analysis.json": "27e8052375949178ad63d351ac3886692c94e910a15212d760b7592dfc2cbaca",
+    "reports/thermal-stage96-bcl-soc-qemu.log": "e39eeb38e08e7ed42e0cb2650dd5e5df3fa844b38968ccfd178ab837ff14fa3f",
+    "reports/thermal-stage96-bcl-soc-qemu.json": "9295d1bb0a30e3fa7856b2316a69d3039b39a5fb94f74a5f25940d6964b34545",
+    "reports/thermal-stage96-bcl-soc-check.json": "3255a3f1b4404da4805ba4559128b57b73b76e2335893ae6aee88feb43d18dbd",
+    "reports/thermal-stage96-bcl-pmic-qemu.log": "ed852001e060f3b86f426a2f5427a52984729ebe9b909a6b31df03d615f77011",
+    "reports/thermal-stage96-bcl-pmic-qemu.json": "18549fbfa68c4774ae81ee44299b504f7327d3b7095d2b0fb7af686fe96109a9",
+    "reports/thermal-stage96-bcl-pmic-check.json": "f69d2105950aa18d6c49f65613fbc6d304fd0b74a34356a6a7f7ff59f34a164d",
+    "reports/thermal-stage96-phone-state.txt": "0e2a5499f8529ddfa8c6b122a33c8787ad1cbb7fe272c22d82413a85f866783b",
+    "artifacts/qmi-thermal-draft-stage96/metadata.json": "3aad16f17b74332047160a660c43cc05120dc20e4ea05db16e83963c8ef012ac"
+  }
+}

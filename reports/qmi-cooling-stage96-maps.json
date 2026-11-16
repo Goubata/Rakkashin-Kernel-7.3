@@ -1,0 +1,370 @@
+{
+  "passed": true,
+  "scope": "Four selected zones retain saved trip order/scalars/types/passive delay and eight QMI cooling-map references with exact limits; other providers projected out and physical sensors replaced by private recorded values",
+  "inputs": {
+    "saved": {
+      "file": "device-baseline/running.dtb",
+      "sha256": "887d0cb709dd413a83fb75d3e907db319846f22719273e60699ee6d3107820c0",
+      "zones": [
+        {
+          "zone": "pmih010x-bcl-lvl0",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 100,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "b-bcl-lvl0",
+              "temperature": 1,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lbat_lvl0",
+              "trip": "b-bcl-lvl0",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_bcl",
+                  "limits": [
+                    0,
+                    1
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "pmih010x-bcl-lvl1",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 100,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "b-bcl-lvl1",
+              "temperature": 1,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lbat_lvl1",
+              "trip": "b-bcl-lvl1",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_bcl",
+                  "limits": [
+                    0,
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "socd",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 90,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "socd-trip",
+              "temperature": 95,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "socd_map",
+              "trip": "socd-trip",
+              "qmi_targets": [
+                {
+                  "target": "cdsp/cdsp",
+                  "limits": [
+                    0,
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "mdmss-0",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "mdmss0-config0",
+              "temperature": 102000,
+              "hysteresis": 3000,
+              "type": "passive"
+            },
+            {
+              "name": "mdmss0-config1",
+              "temperature": 105000,
+              "hysteresis": 3000,
+              "type": "passive"
+            },
+            {
+              "name": "reset-mon-cfg",
+              "temperature": 125000,
+              "hysteresis": 0,
+              "type": "hot"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lte_cdev0",
+              "trip": "mdmss0-config0",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_lte_dsc",
+                  "limits": [
+                    8,
+                    8
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_scg_dsc",
+                  "limits": [
+                    100,
+                    100
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_dsc",
+                  "limits": [
+                    10,
+                    10
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "lte_cdev2",
+              "trip": "mdmss0-config1",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_lte_dsc",
+                  "limits": [
+                    255,
+                    255
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_dsc",
+                  "limits": [
+                    255,
+                    255
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "guest": {
+      "file": "artifacts/qemu-qmi-cooling/virt-rail.dtb",
+      "sha256": "bc4ef00bb1ea45a1e7129bcaba9318fdbb5dc5c1d95a51049bf60307caf896f7",
+      "zones": [
+        {
+          "zone": "pmih010x-bcl-lvl0",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 100,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "b-bcl-lvl0",
+              "temperature": 1,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lbat_lvl0",
+              "trip": "b-bcl-lvl0",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_bcl",
+                  "limits": [
+                    0,
+                    1
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "pmih010x-bcl-lvl1",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 100,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "b-bcl-lvl1",
+              "temperature": 1,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lbat_lvl1",
+              "trip": "b-bcl-lvl1",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_bcl",
+                  "limits": [
+                    0,
+                    2
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "socd",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "thermal-hal-trip",
+              "temperature": 90,
+              "hysteresis": 0,
+              "type": "passive"
+            },
+            {
+              "name": "socd-trip",
+              "temperature": 95,
+              "hysteresis": 0,
+              "type": "passive"
+            }
+          ],
+          "maps": [
+            {
+              "name": "socd_map",
+              "trip": "socd-trip",
+              "qmi_targets": [
+                {
+                  "target": "cdsp/cdsp",
+                  "limits": [
+                    0,
+                    4
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "mdmss-0",
+          "polling_delay_passive": 100,
+          "ordered_trips": [
+            {
+              "name": "mdmss0-config0",
+              "temperature": 102000,
+              "hysteresis": 3000,
+              "type": "passive"
+            },
+            {
+              "name": "mdmss0-config1",
+              "temperature": 105000,
+              "hysteresis": 3000,
+              "type": "passive"
+            },
+            {
+              "name": "reset-mon-cfg",
+              "temperature": 125000,
+              "hysteresis": 0,
+              "type": "hot"
+            }
+          ],
+          "maps": [
+            {
+              "name": "lte_cdev0",
+              "trip": "mdmss0-config0",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_lte_dsc",
+                  "limits": [
+                    8,
+                    8
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_scg_dsc",
+                  "limits": [
+                    100,
+                    100
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_dsc",
+                  "limits": [
+                    10,
+                    10
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "lte_cdev2",
+              "trip": "mdmss0-config1",
+              "qmi_targets": [
+                {
+                  "target": "modem/modem_lte_dsc",
+                  "limits": [
+                    255,
+                    255
+                  ]
+                },
+                {
+                  "target": "modem/modem_nr_dsc",
+                  "limits": [
+                    255,
+                    255
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recorded_firmware_caps": {
+    "modem_lte_dsc": 255,
+    "modem_nr_dsc": 255,
+    "modem_nr_scg_dsc": 100,
+    "cdsp_sw": 4,
+    "other_clients": 3
+  },
+  "cap_scope": "Local test capability values chosen to represent saved DT limits; not physical firmware advertisement proof"
+}

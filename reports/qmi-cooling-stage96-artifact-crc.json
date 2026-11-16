@@ -1,0 +1,26 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/avr-qmi-cooling-test.ko",
+      "imports_checked": 75,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qmi_cooling.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qmi_helpers.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "artifacts/qmi-thermal-draft-stage96/qrtr.ko",
+      "imports_checked": 138,
+      "mismatches": {}
+    }
+  ]
+}

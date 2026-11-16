@@ -1,0 +1,13 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/bcl-soc-tests.cpio.gz 4284444 uncompressed bytes
+{
+  "log": "reports/thermal-stage96-bcl-soc-qemu.log",
+  "test": "bcl-soc",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    26,
+    0,
+    0,
+    26
+  ]
+}

@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage96ではQMI通信先の制御上限が変わった際に冷却マップが外れる問題と、上限回復時に元のDT制御範囲へ戻らない問題を修正。冷却デバイスを保持し、native thermal側に設定時の範囲を保存して再計算します。Image#27でQMI38件＋BCL SoC26件＋PMIC BCL44件、計108テストが通過。実機6.12で記録した25個の上限を使う試験も追加しましたが、実機7.3／ファームウェアの動作確認ではありません。証拠は `reports/qmi-thermal-stage96-validation.json`、実機未検証のドラフトは `artifacts/qmi-thermal-draft-stage96/`。Stage57統合版・実機DTは未変更です。
+
 Stage95ではDTの冷却マップからnative thermal制御・QMI送信まで接続し、状態取得失敗時にstep_wiseが無効な値から制御量を作る問題を修正。新Image#26でQMI／冷却マップ32件、既存BCL SoC26件、PMIC BCL44件の計102テストが通過しました。4ゾーン・8個のQMI参照は保存DTのtrip順序・値・制御範囲を維持（他の冷却先と実センサーは試験対象外）。成果物は `artifacts/qmi-thermal-draft-stage95/`、証拠は `reports/qmi-thermal-stage95-validation.json`。実機6.12の読み取り専用スナップショットでは27定義中25個が見え、残り2個は要調査です。実機7.3の起動・制御・常用動作は未確認、Stage57統合版は未更新です。
 
 Stage94ではQMI温度制御の実際のOF／platform probe、QRTR名前サービスでの通信先検出、27冷却デバイスの登録までを隔離環境で接続しました。通信先の再起動、3回の再バインド、複数デバイス、不正DT、途中の初期化失敗と復旧を含む26テストが4コア仮想環境で通過。証拠は `reports/qmi-cooling-stage94-validation.json`、試験成果物は `artifacts/qmi-cooling-probe-stage94/`。本番モジュール／Image#25／Stage57統合版は未変更です。ファームウェアの応答はローカルで再現したもので、実機の制御・thermal HAL・cooling-map連携は未確認です。

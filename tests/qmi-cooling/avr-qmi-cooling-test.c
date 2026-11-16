@@ -529,6 +529,134 @@ static void native_governor_rpc_recovery(struct kunit *test)
  mod_delayed_work(system_dfl_wq,&c->tmd->svc_arrive_work,0);flush_delayed_work(&c->tmd->svc_arrive_work);
  expect_state(test,"bcl",1);drive_zone(f,0,0);expect_state(test,"bcl",0);
 }
+
+static int binding_count(struct qmi_cooling_device *c)
+{
+ struct thermal_instance *inst;int count=0;
+ mutex_lock(&c->cdev->lock);list_for_each_entry(inst,&c->cdev->thermal_instances,cdev_node)count++;
+ mutex_unlock(&c->cdev->lock);return count;
+}
+static void set_advertised_cap(struct fixture *f,const char *wire,u8 cap)
+{
+ unsigned int i;
+ for(i=0;i<f->list.mitigation_device_list_len;i++)
+  if(!strcmp(f->list.mitigation_device_list[i].mitigation_dev_id.mitigation_dev_id,wire))
+   f->list.mitigation_device_list[i].max_mitigation_level=cap;
+}
+static void native_cap_shrink_keeps_maps(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"modem_lte_dsc");KUNIT_ASSERT_NOT_NULL(test,c);
+ KUNIT_ASSERT_EQ(test,binding_count(c),2);drive_zone(f,3,106000);expect_state(test,"modem_lte_dsc",255);
+ set_advertised_cap(f,"modem_lte_dsc",3);
+ KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);KUNIT_ASSERT_NOT_NULL(test,c->cdev);
+ KUNIT_EXPECT_EQ(test,c->cdev->max_state,3UL);KUNIT_EXPECT_EQ(test,binding_count(c),2);
+ expect_state(test,"modem_lte_dsc",3);
+}
+
+static void native_cap_recovery_restores_limits(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;struct thermal_instance *inst;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"modem_lte_dsc");KUNIT_ASSERT_NOT_NULL(test,c);
+ drive_zone(f,3,106000);set_advertised_cap(f,"modem_lte_dsc",3);
+ KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);
+ set_advertised_cap(f,"modem_lte_dsc",255);KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);
+ KUNIT_ASSERT_EQ(test,binding_count(c),2);
+ mutex_lock(&c->cdev->lock);
+ list_for_each_entry(inst,&c->cdev->thermal_instances,cdev_node){
+  unsigned long bound=inst->trip->temperature==102000 ? 8 : 255;
+  KUNIT_EXPECT_EQ(test,inst->lower,bound);KUNIT_EXPECT_EQ(test,inst->upper,bound);
+ }
+ mutex_unlock(&c->cdev->lock);
+ drive_zone(f,3,106000);expect_state(test,"modem_lte_dsc",255);
+}
+
+#include "phone-caps.h"
+static void load_phone_caps(struct fixture *f)
+{
+ unsigned int i;
+ memset(&f->list,0,sizeof(f->list));f->list.mitigation_device_list_valid=1;f->list.mitigation_device_list_len=ARRAY_SIZE(phone_caps);
+ for(i=0;i<ARRAY_SIZE(phone_caps);i++){
+  const char *wire=phone_caps[i].node;
+  if(!strcmp(wire,"cdsp"))wire="cdsp_sw";
+  if(!strcmp(wire,"modem_bcl"))wire="bcl";
+  strscpy(f->list.mitigation_device_list[i].mitigation_dev_id.mitigation_dev_id,wire);
+  f->list.mitigation_device_list[i].max_mitigation_level=phone_caps[i].cap;
+ }
+}
+static int start_phone_caps(struct fixture *f)
+{
+ int ret,i;unsigned long limit=jiffies+5*HZ;
+ ret=register_private(f);if(!ret)ret=advertise_saved(f);if(ret)return ret;
+ load_phone_caps(f);ret=add_private(f,"good",0);if(ret)return ret;
+ do{
+  struct qmi_tmd_device *p=platform_get_drvdata(f->pdev[0]);unsigned int ready=0;
+  if(!p)return -ENODEV;
+  for(i=0;i<p->count;i++){
+   struct qmi_cooling_device *c;struct qmi_tmd_instance *t=&p->instances[i];
+   mutex_lock(&t->state_mutex);
+   list_for_each_entry(c,&t->tmd_cdev_list,qmi_node)if(c->cdev && c->applied_valid && c->connection_active)ready++;
+   mutex_unlock(&t->state_mutex);
+  }
+  if(ready==25){for(i=0;i<p->count;i++)cancel_delayed_work_sync(&p->instances[i].svc_arrive_work);return 0;}
+  usleep_range(2000,4000);
+ }while(time_before(jiffies,limit));
+ return -ETIMEDOUT;
+}
+static void native_snapshot_25_supported(struct kunit *test)
+{
+ struct fixture *f=test->priv;unsigned int i;struct qmi_cooling_device *a,*b;
+ KUNIT_ASSERT_EQ(test,start_phone_caps(f),0);
+ for(i=0;i<ARRAY_SIZE(phone_caps);i++){
+  const char *wire=phone_caps[i].node;unsigned long max;
+  if(!strcmp(wire,"cdsp"))wire="cdsp_sw";if(!strcmp(wire,"modem_bcl"))wire="bcl";
+  a=find_client(f,wire);KUNIT_ASSERT_NOT_NULL(test,a);KUNIT_ASSERT_NOT_NULL(test,a->cdev);
+  KUNIT_ASSERT_EQ(test,qmi_get_max_state(a->cdev,&max),0);KUNIT_EXPECT_EQ(test,max,(unsigned long)phone_caps[i].cap);
+ }
+ a=find_client(f,"cpuv_restriction_cold");b=find_client(f,"modem_bcl_mtpl_dsc");
+ KUNIT_ASSERT_NOT_NULL(test,a);KUNIT_ASSERT_NOT_NULL(test,b);
+ KUNIT_EXPECT_PTR_EQ(test,a->cdev,NULL);KUNIT_EXPECT_PTR_EQ(test,b->cdev,NULL);
+ KUNIT_EXPECT_FALSE(test,a->cap_valid);KUNIT_EXPECT_FALSE(test,b->cap_valid);
+}
+static void native_late_optional_advertisement(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *a,*b;unsigned int i;
+ const char *names[]={"cpuv_restriction_cold","modem_bcl_mtpl_dsc"};
+ KUNIT_ASSERT_EQ(test,start_phone_caps(f),0);
+ for(i=0;i<2;i++){
+  unsigned int n=f->list.mitigation_device_list_len++;
+  strscpy(f->list.mitigation_device_list[n].mitigation_dev_id.mitigation_dev_id,names[i]);
+  f->list.mitigation_device_list[n].max_mitigation_level=1;
+ }
+ a=find_client(f,names[0]);b=find_client(f,names[1]);KUNIT_ASSERT_NOT_NULL(test,a);KUNIT_ASSERT_NOT_NULL(test,b);
+ KUNIT_ASSERT_EQ(test,verify_devices_and_register(a->tmd),0);
+ KUNIT_ASSERT_NOT_NULL(test,a->cdev);KUNIT_ASSERT_NOT_NULL(test,b->cdev);
+ KUNIT_EXPECT_EQ(test,qmi_set_cur_state(a->cdev,1),0);KUNIT_EXPECT_EQ(test,qmi_set_cur_state(b->cdev,1),0);
+}
+
+static void native_zero_cap_recovers(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;int i;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"modem_lte_dsc");KUNIT_ASSERT_NOT_NULL(test,c);
+ drive_zone(f,3,106000);
+ for(i=0;i<2;i++){
+  set_advertised_cap(f,"modem_lte_dsc",0);KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);
+  KUNIT_EXPECT_EQ(test,binding_count(c),2);KUNIT_EXPECT_EQ(test,c->cdev->max_state,0UL);expect_state(test,"modem_lte_dsc",0);
+  set_advertised_cap(f,"modem_lte_dsc",255);KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);
+  drive_zone(f,3,106000);expect_state(test,"modem_lte_dsc",255);KUNIT_EXPECT_EQ(test,binding_count(c),2);
+ }
+}
+static void native_cap_rpc_failure_recovers(struct kunit *test)
+{
+ struct fixture *f=test->priv;struct qmi_cooling_device *c;unsigned long state;
+ KUNIT_ASSERT_EQ(test,start_maps(f),0);c=find_client(f,"modem_lte_dsc");KUNIT_ASSERT_NOT_NULL(test,c);
+ drive_zone(f,3,106000);set_advertised_cap(f,"modem_lte_dsc",3);WRITE_ONCE(f->response_error,1);
+ KUNIT_EXPECT_EQ(test,verify_devices_and_register(c->tmd),-EREMOTEIO);
+ KUNIT_EXPECT_EQ(test,c->cdev->max_state,3UL);KUNIT_EXPECT_EQ(test,binding_count(c),2);
+ KUNIT_EXPECT_EQ(test,qmi_get_cur_state(c->cdev,&state),-EAGAIN);
+ WRITE_ONCE(f->response_error,0);KUNIT_ASSERT_EQ(test,verify_devices_and_register(c->tmd),0);
+ expect_state(test,"modem_lte_dsc",3);KUNIT_EXPECT_EQ(test,binding_count(c),2);
+}
 static struct kunit_case cases[]={
  KUNIT_CASE(golden_wire),KUNIT_CASE(wire_bounds),KUNIT_CASE(malformed_list),KUNIT_CASE(extended_duplicate),
  KUNIT_CASE(repeated_transactions),KUNIT_CASE(native_discovery),KUNIT_CASE(acknowledged_set),KUNIT_CASE(rejected_retry),KUNIT_CASE(timed_out_retry),
@@ -538,7 +666,7 @@ static struct kunit_case cases[]={
  KUNIT_CASE(native_duplicate_dt),KUNIT_CASE(native_unknown_wire_dt),KUNIT_CASE(native_wrong_cells_dt),KUNIT_CASE(native_two_devices),
  KUNIT_CASE(first_init_failure),KUNIT_CASE(second_init_failure),KUNIT_CASE(first_lookup_failure),KUNIT_CASE(second_lookup_failure),KUNIT_CASE(failed_read_preserves_instance),
  KUNIT_CASE(native_saved_maps),KUNIT_CASE(native_modem_governor),KUNIT_CASE(native_shared_bcl_governor),
- KUNIT_CASE(native_cdsp_governor),KUNIT_CASE(native_governor_rpc_recovery),{}
+ KUNIT_CASE(native_cdsp_governor),KUNIT_CASE(native_governor_rpc_recovery),KUNIT_CASE(native_cap_shrink_keeps_maps),KUNIT_CASE(native_cap_recovery_restores_limits),KUNIT_CASE(native_snapshot_25_supported),KUNIT_CASE(native_late_optional_advertisement),KUNIT_CASE(native_zero_cap_recovers),KUNIT_CASE(native_cap_rpc_failure_recovers),{}
 };
 static struct kunit_suite suite={.name="avr-qmi-cooling",.init=setup,.exit=teardown,.test_cases=cases};
 kunit_test_suite(suite);

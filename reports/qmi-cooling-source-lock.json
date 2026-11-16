@@ -5,7 +5,7 @@
       "file": "ports/qcom-qmi-cooling/qmi_cooling.c",
       "source": "drivers/thermal/qcom/qmi_cooling.c",
       "original_sha256": "e026d21cfc819e274b9f75c5c3814f4cea389bbfe5da545ee69a7eae740e3140",
-      "sha256": "f551ff6c43a1ce001ae5605da315c81d1a68d80dace91846d3b341bf386d566b"
+      "sha256": "ee9e80afa58888da4f1b21adaaa883d95254092048f60fa2450e285f54db5f66"
     },
     {
       "file": "ports/qcom-qmi-cooling/thermal_mitigation_device_service_v01.c",
@@ -32,7 +32,7 @@
       "sha256": "03c9cb60a635abb5ac1dc4a8b990be0aa23c7c2badc123e882a120de692262c1"
     }
   ],
-  "patch_sha256": "686d3ecc30207a7d89b5ddcff945026bec93b40548e1226579851658750f9b5e",
+  "patch_sha256": "8eb4c1203c6ecaba5c4ac0fe6ffbc1eb4cd8849bd32b1057b0c50035e0df2e55",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "Exact pinned protocol tables; rewritten per-device lifecycle and acknowledged state driver draft",
@@ -41,11 +41,11 @@
     "Keep desired and acknowledged states separate; return negative transport/remote errors; retry unconfirmed identical requests",
     "Explicit peer endpoints and generation checks reject stale acknowledgements",
     "Validate base/extended protocol list bounds, string termination and contradictory duplicates",
-    "Do not hold state or IO mutex during thermal registration/unregistration; drain work and transactions before QMI release",
+    "Preserve native cdev and DT bindings across capability changes using native thermal_cooling_device_update outside state/IO locks; drain work and transactions before QMI release",
     "Managed per-device instances and OF references; idempotent removal and partial probe unwind"
   ],
   "pending": [
-    "Actual OF probe and firmware service discovery integration",
+    "Physical OF probe, firmware service discovery and mitigation acceptance",
     "Exhaustive concurrent thermal setter, server replacement, suspend and teardown stress",
     "Physical modem/CDSP replies and all 27 DT consumers",
     "Whole-board boot/DLKM/SELinux and daily-use acceptance"

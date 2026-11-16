@@ -1,0 +1,18 @@
+{
+  "scope": "Saved DT and earlier read-only running6.12 snapshot only; firmware list not queried on phone",
+  "missing_snapshot_declarations": [
+    {
+      "node": "/soc/qmi-tmd-devices/modem/modem_vdd",
+      "wire_name": "cpuv_restriction_cold",
+      "kernel_dt_cooling_map_references": 0
+    },
+    {
+      "node": "/soc/qmi-tmd-devices/modem/modem_bcl_mtpl_dsc",
+      "wire_name": "modem_bcl_mtpl_dsc",
+      "kernel_dt_cooling_map_references": 0
+    }
+  ],
+  "saved_nodes_have_no_disabled_status": true,
+  "interpretation": "Zero kernel DT cooling-map references does not establish lack of ROM/HAL consumers or permanent firmware absence",
+  "private_tests": "25 recorded sysfs maxima mapped by saved node/wire names; two unadvertised IDs remain unregistered. Explicit later capability refresh with recorded replies can register them; not proof of actual firmware advertisement or unsolicited-list discovery."
+}

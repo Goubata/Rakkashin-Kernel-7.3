@@ -2152,3 +2152,56 @@ cases; two absent snapshot declarations; physical firmware mitigation, calibrate
 sensors and ROM/HAL interactions; concurrent PM/hotplug/forced-unbind recovery;
 remaining display/camera/audio/wireless/board drivers, full DT/SID4/boot/vendor_boot/
 dtbo/DLKM/SELinux and daily stability. No functional completion percentage inferred.
+
+## Stage96: preserve cooling bindings and recover configured limits
+
+Two recorded regressions identify different problems. With the Stage95 driver,
+changing LTE advertised max255 to3 unregisters/re-registers the cdev. Both existing
+saved DT bindings are lost because explicit bounds8/255 exceed3; the new test fails
+while32 previous cases pass. Keep the native cdev and use the real exported
+thermal_cooling_device_update outside state/IO mutexes, even if the apply RPC fails.
+Native update retains bindings and clamps them, but a second test finds that the
+native core permanently overwrites configured bounds with3. After max255 returns,
+bounds8/255 and effective mitigation remain3 (33 pass, recovery test fails).
+
+Store the configured resolved lower/upper bounds in native thermal_instance at
+initial bind. Recompute effective bounds from those originals for each maximum
+change, retaining THERMAL_NO_LIMIT semantics via upper_no_limit. Clamp active
+targets while preserving THERMAL_NO_TARGET; reset initialization/update cache when
+limits change so a subsequent normal governor pass re-evaluates stable temperature.
+The new private fields are appended to the structure. Native Image/modules and
+all three affected external test suites are rebuilt. The core checkpoint replays
+21 patches/68 exact files; build_native.py includes thermal-binding-limits-7.3.patch.
+
+New Image#27 passes38 QMI/thermal cases and26 BCL SoC plus44 PMIC BCL cases,108 total,
+without WARN/panic/skip. Tests retain two native LTE bindings through255->3->255,
+restore exact configured8/255 limits, recover255 at stable temperature, handle
+255->0->255 twice, and preserve bindings/native max during a rejected apply RPC
+until a healthy retry confirms state. Existing32 cases remain covered. The driver
+updates native capability bounds even when no current state can be confirmed;
+get_cur_state continues returning EAGAIN rather than reporting fabricated success.
+
+A fixture pinned to Stage95's read-only6.12 snapshot advertises25 recorded ceilings
+through actual local QMI transport. The two unadvertised IDs get no cdev or valid
+capability. An explicit later capability refresh with recorded responses registers
+both and sends acknowledged level1. This is a source refresh test, not proof of
+unsolicited firmware-list discovery. The25 ceilings are sysfs cached values rather
+than a captured modem capability response; do not claim actual firmware behavior.
+The two saved nodes have no disabled status and no kernel DT cooling-map references,
+but their actual firmware/ROM/HAL consumers and absence reason remain unconfirmed.
+
+Evidence: reports/qmi-thermal-stage96-validation.json; draft with Image#27, three
+production modules, private test module/DT and hashes:
+artifacts/qmi-thermal-draft-stage96. Source replay includes the revised QMI driver
+and unchanged pinned generated wire protocol. audit_qmi_phone_fixture.py pins the
+recorded ceiling fixture; existing selected-map/probe DT audits pass unchanged.
+Phone remains6.12/Enforcing; no partition/vendor writes, phone DT edits or reboot.
+Stage57 and Stage91 physical DT/HAL candidates remain unchanged/unpromoted.
+
+Limits: an initial bind whose advertised maximum is already below an explicit DT
+bound still follows native rejection; this change recovers previously valid existing
+bindings. Expansion re-evaluates on the next normal governor pass, not a guarantee
+of immediate hardware mitigation before that event. Additional governors and
+concurrent capability/setter/peer replacement/PM/forced-unbind variants remain to
+be tested, as do physical firmware and7.3 boot, remaining drivers/maps/ROM/HAL,
+whole DT/schema/SID4/boot/vendor_boot/dtbo/DLKM/SELinux and stable daily operation.

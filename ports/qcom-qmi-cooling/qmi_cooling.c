@@ -258,20 +258,21 @@ unlock_io:
  mutex_unlock(&tmd->io_mutex);if(ret)goto out;
  i=0;
  list_for_each_entry(c,&tmd->tmd_cdev_list,qmi_node){
-  struct thermal_cooling_device *old=NULL,*new;bool create;int cap=caps[i++],error;
+  struct thermal_cooling_device *update=NULL,*new;bool create;int cap=caps[i++],error;
   mutex_lock(&tmd->state_mutex);
   if(tmd->stopping || !tmd->has_server || tmd->generation!=generation){mutex_unlock(&tmd->state_mutex);ret=-ESTALE;break;}
   if(cap<0){c->connection_active=false;c->applied_valid=false;mutex_unlock(&tmd->state_mutex);continue;}
-  if(c->cdev && c->max_level!=cap){old=c->cdev;c->cdev=NULL;c->connection_active=false;c->applied_valid=false;}
+  if(c->cdev && c->max_level!=cap){update=c->cdev;c->applied_valid=false;}
   mutex_unlock(&tmd->state_mutex);
-  /* Native unregister can wait for a setter that needs io_mutex. */
-  if(old)thermal_cooling_device_unregister(old);
+  /* Preserve native DT bindings across capability changes. */
   mutex_lock(&tmd->io_mutex);mutex_lock(&tmd->state_mutex);
   if(tmd->stopping || !tmd->has_server || tmd->generation!=generation){mutex_unlock(&tmd->state_mutex);mutex_unlock(&tmd->io_mutex);ret=-ESTALE;break;}
   c->max_level=cap;c->cap_valid=true;c->connection_active=true;
   if(c->desired_state>cap)c->desired_state=cap;
   mutex_unlock(&tmd->state_mutex);
   error=tmd_apply(c);mutex_unlock(&tmd->io_mutex);
+  /* Native update takes the cdev lock and invokes driver callbacks. */
+  if(update)thermal_cooling_device_update(update);
   if(error){ret=error;continue;}
   mutex_lock(&tmd->state_mutex);create=!tmd->stopping && !c->cdev;mutex_unlock(&tmd->state_mutex);
   if(!create)continue;

@@ -1,0 +1,489 @@
+[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000][    T0] Linux version 7.3.0-4k (root@localhost) (Ubuntu clang version 21.1.8 (6ubuntu1), Ubuntu LLD 21.1.8) #27 SMP PREEMPT Mon Nov 16 13:50:31 JST 2026
+[    0.000000][    T0] KASLR enabled
+[    0.000000][    T0] random: crng init done
+[    0.000000][    T0] Machine model: linux,dummy-virt
+[    0.000000][    T0] earlycon: pl11 MMIO:0x0000000009000000 (options '')
+[    0.000000][    T0] printk: legacy bootconsole [pl11] enabled
+[    0.000000][    T0] efi: UEFI not found.
+[    0.000000][    T0] OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+[    0.000000][    T0] cma: Reserved 16 MiB at 0x000000007ec00000
+[    0.000000][    T0] psci: probing for conduit method from DT.
+[    0.000000][    T0] psci: PSCIv1.1 detected in firmware.
+[    0.000000][    T0] psci: Using standard PSCI v0.2 function IDs
+[    0.000000][    T0] psci: Trusted OS migration not required
+[    0.000000][    T0] psci: SMC Calling Convention v1.0
+[    0.000000][    T0] Zone ranges:
+[    0.000000][    T0]   DMA32    [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0]   Normal   empty
+[    0.000000][    T0] Movable zone start for each node
+[    0.000000][    T0] Early memory node ranges
+[    0.000000][    T0]   node   0: [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] Initmem setup node 0 [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] percpu: Embedded 56 pages/cpu s192144 r8192 d29040 u229376
+[    0.000000][    T0] Detected PIPT I-cache on CPU0
+[    0.000000][    T0] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000][    T0] CPU features: detected: GICv3 CPU interface
+[    0.000000][    T0] CPU features: detected: HCRX_EL2 register
+[    0.000000][    T0] CPU features: detected: Stage-1 Permission Indirection Extension (S1PIE)
+[    0.000000][    T0] CPU features: detected: Spectre-v4
+[    0.000000][    T0] alternatives: applying boot alternatives
+[    0.000000][    T0] Kernel command line: console=ttyAMA0 earlycon=pl011,0x09000000 rdinit=/init panic=1 
+[    0.000000][    T0] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000][    T0] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000][    T0] software IO TLB: SWIOTLB bounce buffer size adjusted to 1MB
+[    0.000000][    T0] software IO TLB: area num 4.
+[    0.000000][    T0] software IO TLB: mapped [mem 0x000000007d980000-0x000000007da80000] (1MB)
+[    0.000000][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 262144
+[    0.000000][    T0] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.000000][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.000000][    T0] stackdepot hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.000000][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000][    T0] Running RCU self tests
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000][    T0] rcu: 	RCU event tracing is enabled.
+[    0.000000][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.000000][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+[    0.000000][    T0] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[    0.000000][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.000000][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000][    T0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000][    T0] GICv3: 256 SPIs implemented
+[    0.000000][    T0] GICv3: 0 Extended SPIs implemented
+[    0.000000][    T0] Root IRQ handler: gic_handle_irq
+[    0.000000][    T0] GICv3: GICv3 features: 16 PPIs
+[    0.000000][    T0] GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.000000][    T0] GICv3: CPU0: found redistributor 0 region 0:0x00000000080a0000
+[    0.000000][    T0] ITS [mem 0x08080000-0x0809ffff]
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Devices @43d20000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Interrupt Collections @43d30000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] GICv3: using LPI property table @0x0000000043d40000
+[    0.000000][    T0] GICv3: CPU0: using allocated LPI pending table @0x0000000043d50000
+[    0.000000][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.000000][    T0] arch_timer: cp15 timer running at 1000.00MHz (virt).
+[    0.000000][    T0] clocksource: arch_sys_counter: mask: 0x1fffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000044][    T0] sched_clock: 61 bits at 1000MHz, resolution 1ns, wraps every 4398046511103ns
+[    0.006000][    T0] kfence: initialized - using 524288 bytes for 63 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.028266][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.031042][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.031238][    T0] ... MAX_LOCK_DEPTH:          48
+[    0.031418][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    0.031594][    T0] ... CLASSHASH_SIZE:          4096
+[    0.031752][    T0] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.031915][    T0] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.032077][    T0] ... CHAINHASH_SIZE:          32768
+[    0.032242][    T0]  memory used by lock dependency info: 6429 kB
+[    0.032431][    T0]  memory used for stack traces: 4224 kB
+[    0.032596][    T0]  per task-struct memory footprint: 1920 bytes
+[    0.034325][    T0] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.00 BogoMIPS (lpj=4000000)
+[    0.035456][    T0] pid_max: default: 32768 minimum: 301
+[    0.051952][    T0] landlock: Up and running.
+[    0.052574][    T0] SELinux:  Initializing.
+[    0.096989][    T0] LSM support for eBPF active
+[    0.110929][    T0] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.111329][    T0] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.127650][    T0] VFS: Finished mounting rootfs on nullfs
+[    0.149935][    T0] Running RCU synchronous self tests
+[    0.150524][    T0] Running RCU synchronous self tests
+[    0.208089][    T1] rcu: Hierarchical SRCU implementation.
+[    0.208379][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    0.217515][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.228040][    T1] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.230968][    T1] EFI services will not be available.
+[    0.242787][    T1] smp: Bringing up secondary CPUs ...
+[    0.275667][    T0] Detected PIPT I-cache on CPU1
+[    0.287128][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    0.292056][    T0] GICv3: CPU1: using allocated LPI pending table @0x0000000043d60000
+[    0.302395][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    0.348927][    T0] Detected PIPT I-cache on CPU2
+[    0.349375][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    0.349715][    T0] GICv3: CPU2: using allocated LPI pending table @0x0000000043d70000
+[    0.350853][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    0.377316][    T0] Detected PIPT I-cache on CPU3
+[    0.377786][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    0.378138][    T0] GICv3: CPU3: using allocated LPI pending table @0x0000000043d80000
+[    0.379477][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    0.385073][    T1] smp: Brought up 1 node, 4 CPUs
+[    0.388524][    T1] SMP: Total of 4 processors activated.
+[    0.389721][    T1] CPU: All CPU(s) started at EL1
+[    0.390383][    T1] CPU features: detected: Branch Target Identification
+[    0.390735][    T1] CPU features: detected: 32-bit EL0 Support
+[    0.391042][    T1] CPU features: detected: 32-bit EL1 Support
+[    0.391346][    T1] CPU features: detected: ARMv8.4 Translation Table Level
+[    0.391686][    T1] CPU features: detected: Instruction cache invalidation not required for I/D coherence
+[    0.392091][    T1] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.392539][    T1] CPU features: detected: Common not Private translations
+[    0.393099][    T1] CPU features: detected: CRC32 instructions
+[    0.393426][    T1] CPU features: detected: Data cache clean to Point of Deep Persistence
+[    0.393783][    T1] CPU features: detected: Data cache clean to Point of Persistence
+[    0.394139][    T1] CPU features: detected: Data independent timing control (DIT)
+[    0.394475][    T1] CPU features: detected: E0PD
+[    0.394733][    T1] CPU features: detected: Enhanced Counter Virtualization
+[    0.395055][    T1] CPU features: detected: Enhanced Counter Virtualization (CNTPOFF)
+[    0.395420][    T1] CPU features: detected: Enhanced Privileged Access Never
+[    0.395746][    T1] CPU features: detected: Enhanced Virtualization Traps
+[    0.396066][    T1] CPU features: detected: Fine Grained Traps
+[    0.396400][    T1] CPU features: detected: Guarded Control Stack (GCS)
+[    0.396802][    T1] CPU features: detected: Generic authentication (IMP DEF algorithm)
+[    0.398180][    T1] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.398548][    T1] CPU features: detected: 52-bit Virtual Addressing for KVM (LPA2)
+[    0.398897][    T1] CPU features: detected: LSE atomic instructions
+[    0.399206][    T1] CPU features: detected: Memory Copy and Memory Set instructions
+[    0.399562][    T1] CPU features: detected: Privileged Access Never
+[    0.399903][    T1] CPU features: detected: PMUv3
+[    0.400163][    T1] CPU features: detected: SCTLR2
+[    0.400425][    T1] CPU features: detected: RAS Extension Support
+[    0.400762][    T1] CPU features: detected: RASv1p1 Extension Support
+[    0.401120][    T1] CPU features: detected: Random Number Generator
+[    0.401829][    T1] CPU features: detected: Speculation barrier (SB)
+[    0.402142][    T1] CPU features: detected: Stage-2 Force Write-Back
+[    0.402450][    T1] CPU features: detected: Trap EL0 IMPLEMENTATION DEFINED functionality
+[    0.402816][    T1] CPU features: detected: TLB range maintenance instructions
+[    0.403146][    T1] CPU features: detected: WFx with timeout
+[    0.403440][    T1] CPU features: detected: XNX
+[    0.403817][    T1] CPU features: detected: Scalable Matrix Extension
+[    0.404127][    T1] CPU features: detected: FA64
+[    0.404384][    T1] CPU features: detected: SME2
+[    0.404641][    T1] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.405042][    T1] CPU features: detected: Scalable Vector Extension
+[    0.438173][    T1] alternatives: applying system-wide alternatives
+[    0.462453][    T1] CPU features: detected: Hardware dirty bit management on CPU0-3
+[    0.463387][    T1] SVE: maximum available vector length 256 bytes per vector
+[    0.463613][    T1] SVE: default vector length 64 bytes per vector
+[    0.463862][    T1] SME: minimum available vector length 16 bytes per vector
+[    0.464065][    T1] SME: maximum available vector length 256 bytes per vector
+[    0.464268][    T1] SME: default vector length 32 bytes per vector
+[    0.504839][    T1] Memory: 942888K/1048576K available (21376K kernel code, 2718K rwdata, 16056K rodata, 5184K init, 11476K bss, 84044K reserved, 16384K cma-reserved)
+[    0.673550][    T1] Running RCU synchronous self tests
+[    0.675602][    T1] Running RCU synchronous self tests
+[    0.680575][    T1] Running RCU Tasks wait API self tests
+[    0.691777][    T1] Running RCU Tasks Trace wait API self tests
+[    0.713378][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    0.717867][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.723886][    T1] 18512 pages in range for non-PLT usage
+[    0.724044][    T1] 510032 pages in range for PLT usage
+[    0.743181][    T9] Callback from call_rcu_tasks_trace() invoked.
+[    0.807022][   T42] Callback from call_rcu_tasks() invoked.
+[    0.835243][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.869400][    T1] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.870875][    T1] audit: initializing netlink subsys (disabled)
+[    0.876669][   T44] audit: type=2000 audit(0.772:1): state=initialized audit_enabled=0 res=1
+[    1.015121][    T1] thermal_sys: Registered thermal governor 'bang_bang'
+[    1.015251][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    1.015976][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    1.016618][    T1] thermal_sys: Registered thermal governor 'power_allocator'
+[    1.018787][    T1] cpuidle: using governor menu
+[    1.022519][    T1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    1.026352][    T1] ASID allocator initialised with 65536 entries
+[    1.038645][    T1] Serial: AMBA PL011 UART driver
+[    1.232658][    T1] 9000000.pl011: ttyAMA0 MMIO:0x0000000009000000 (irq = 13, base_baud = 0) is a PL011 rev1
+[    1.235205][    T1] printk: console [ttyAMA0] enabled
+[    1.235205][    T1] printk: console [ttyAMA0] enabled
+[    1.236243][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.236243][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.432851][    T1] iommu: Default domain type: Translated
+[    1.433042][    T1] iommu: DMA domain TLB invalidation policy: strict mode
+[    1.466014][    T1] SCSI subsystem initialized
+[    1.472682][    T1] usbcore: registered new interface driver usbfs
+[    1.474781][    T1] usbcore: registered new interface driver hub
+[    1.475499][    T1] usbcore: registered new device driver usb
+[    1.481262][    T1] mc: Linux media interface: v0.10
+[    1.483303][    T1] videodev: Linux video capture interface: v2.00
+[    1.487694][    T1] EDAC MC: Ver: 3.0.0
+[    1.499058][    T1] scmi_core: SCMI protocol bus registered
+[    1.509419][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    1.539140][    T1] clocksource: Switched to clocksource arch_sys_counter
+[    1.565873][    T1] VFS: Disk quotas dquot_6.6.0
+[    1.566369][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    1.594007][    T1] NET: Registered PF_INET protocol family
+[    1.596881][    T1] IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.620835][    T1] tcp_listen_portaddr_hash hash table entries: 512 (order: 4, 36864 bytes, linear)
+[    1.621252][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.622282][    T1] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    1.625775][    T1] TCP bind hash table entries: 8192 (order: 9, 1179648 bytes, linear)
+[    1.635026][    T1] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.636412][    T1] UDP hash table entries: 512 (order: 5, 131072 bytes, linear)
+[    1.640805][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.642008][    T1] NET: Registered PF_XDP protocol family
+[    1.642574][    T1] PCI: CLS 0 bytes, default 64
+[    1.659961][   T14] Trying to unpack rootfs image as initramfs...
+[    1.676723][    T1] kvm [1]: HYP mode not available
+[    1.742136][    T1] Initialise system trusted keyrings
+[    1.748314][    T1] workingset: timestamp_bits=46 (anon: 41) max_order=18 bucket_order=0 (anon: 0)
+[    1.751697][    T1] Memory allocation profiling is not supported!
+[    1.783164][    T1] fuse: init (API version 7.46)
+[    1.858327][    T1] Key type asymmetric registered
+[    1.858537][    T1] Asymmetric key parser 'x509' registered
+[    1.861414][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    1.864264][    T1] io scheduler mq-deadline registered
+[    1.864354][    T1] io scheduler kyber registered
+[    1.866390][    T1] io scheduler bfq registered
+[    1.897956][    T1] pl061_gpio 9030000.pl061: PL061 GPIO chip registered
+[    1.911558][    T1] pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+[    1.912952][    T1] pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 0x0000000000
+[    1.913792][    T1] pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 0x0010000000
+[    1.913977][    T1] pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 0x8000000000
+[    1.914557][    T1] pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 32 bits
+[    1.916450][    T1] pci-host-generic 4010000000.pcie: ECAM at [mem 0x4010000000-0x401fffffff] for [bus 00-ff]
+[    1.923796][    T1] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    1.924234][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.924331][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    1.924385][    T1] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    1.924421][    T1] pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+[    1.925957][    T1] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    1.944778][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    1.944856][    T1] pci_bus 0000:00: resource 5 [mem 0x10000000-0x3efeffff]
+[    1.944890][    T1] pci_bus 0000:00: resource 6 [mem 0x8000000000-0xffffffffff]
+[    2.006412][   T14] Freeing initrd memory: 3168K
+[    2.335371][    T1] brd: module loaded
+[    2.632869][    T1] loop: module loaded
+[    2.643644][    T1] encore_fas: version 9, branch main-f408a00, counter 1000000000 Hz
+[    2.666333][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    2.666381][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    2.707207][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    2.737090][    T1] usbcore: registered new interface driver uas
+[    2.738305][    T1] usbcore: registered new interface driver usb-storage
+[    2.749891][    T1] usbcore: registered new interface driver xpad
+[    2.773494][    T1] rtc-pl031 9010000.pl031: registered as rtc0
+[    2.774290][    T1] rtc-pl031 9010000.pl031: setting system clock to 2026-11-16T04:53:14 UTC (1794804794)
+[    2.778566][    T1] usbcore: registered new interface driver uvcvideo
+[    2.785812][    T1] device-mapper: uevent: version 1.0.3
+[    2.790070][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    2.830908][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    2.874459][    T1] usbcore: registered new interface driver usbhid
+[    2.874511][    T1] usbhid: USB HID core driver
+[    2.877160][    T1] ashmem_rust: Using Rust implementation.
+[    2.913835][    T1] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 (0,8000003f) counters available
+[    2.932660][    T1] usbcore: registered new interface driver snd-usb-audio
+[    2.938571][    T1] GACT probability NOT on
+[    2.939244][    T1] Mirror/redirect action on
+[    2.940657][    T1] u32 classifier
+[    2.940688][    T1]     input device check on
+[    2.940708][    T1]     Actions configured
+[    2.955567][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    2.955567][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.956919][    T1] The pptp conntrack helper is scheduled for removal.
+[    2.956919][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.988459][    T1] xt_time: kernel timezone is -0000
+[    2.989717][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.009603][    T1] gre: GRE over IPv4 demultiplexer driver
+[    3.009681][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    3.042309][    T1] IPv4 over IPsec tunneling driver
+[    3.057646][    T1] Initializing XFRM netlink socket
+[    3.058203][    T1] IPsec XFRM device driver
+[    3.061916][    T1] NET: Registered PF_INET6 protocol family
+[    3.098307][    T1] Segment Routing with IPv6
+[    3.099812][    T1] In-situ OAM (IOAM) with IPv6
+[    3.101396][    T1] mip6: Mobile IPv6
+[    3.116356][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    3.139386][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    3.151354][    T1] NET: Registered PF_PACKET protocol family
+[    3.151439][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    3.151728][    T1] NET: Registered PF_KEY protocol family
+[    3.155715][    T1] NET: Registered PF_VSOCK protocol family
+[    3.665564][    T1] sched_proxy_exec: enabled
+[    3.679341][    T1] registered taskstats version 1
+[    3.688905][    T1] workqueue: work func tboost_fn enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
+[    3.689460][    T1] Rakkashin v3.2 features (avr, Android 7.3 port)
+[    3.689509][    T1] Loading compiled-in X.509 certificates
+[    3.726472][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 877395b53bfc9825fc15d9fe6e9400be628ea3ba'
+[    3.726552][    T1] Problem parsing in-kernel X.509 certificate list
+[    4.599098][    T1] page_owner is disabled
+[    4.604499][    T1] Key type .fscrypt registered
+[    4.604557][    T1] Key type fscrypt-provisioning registered
+[    4.619701][    T1] Boeffla WL blocker: driver version 1.1.0-7.3 started
+[    4.639637][    T1] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    4.661502][    T1] clk: Disabling unused clocks
+[    4.661901][    T1] PM: genpd: Disabling unused power domains
+[    4.662128][    T1] ALSA device list:
+[    4.662402][    T1]   No soundcards found.
+[    5.025753][    T1] Freeing unused kernel memory: 5184K
+[    5.029223][    T1] Run /init as init process
+AVR_QEMU_SMOKE_BEGIN
+Linux (none) 7.3.0-4k #27 SMP PREEMPT Mon Nov 16 13:50:31 JST 2026 aarch64 GNU/Linux
+[    5.320693][   T72] kunit: module verification failed: signature and/or required key missing - tainting kernel
+[    5.387844][   T73] qcom_hwspinlock: loading out-of-tree module taints kernel.
+[    5.774191][   T78] KTAP version 1
+[    5.774250][   T78] 1..1
+[    5.778265][   T78]     KTAP version 1
+[    5.778306][   T78]     # Subtest: avr-bcl-pmic
+[    5.778459][   T78]     # module: avr_bcl_pmic_test
+[    5.779198][   T78]     1..28
+[    5.860971][   T78]     ok 1 voltage_gen5_samples
+[    5.922164][   T78]     ok 2 signed_current_gen5
+[    5.985948][   T78]     ok 3 cached_no_reading
+[    6.054303][   T78]     ok 4 legacy_signed_and_voltage
+[    6.081296][   T87] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4786 len:2 err:-5
+[    6.081424][   T87] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4776 len:2 err:-5
+[    6.081488][   T87] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4786 len:2 err:-5
+[    6.081521][   T87] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x4776 len:2 err:-5
+[    6.121178][   T78]     ok 5 read_errors_preserve_output
+[    6.206445][   T78]     ok 6 bpm_snapshot_endianness_and_scale
+[    6.243812][   T91] avr_bcl_pmic_test:bcl_write_register Error reading register:0x47a0 val:0x81 err:-5
+[    6.243955][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244024][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244095][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244136][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244177][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244218][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244260][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244302][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244345][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244388][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244431][   T91] avr_bcl_pmic_test:bcl_read_multi_register Error reading reg base:0x47a2 len:11 err:-5
+[    6.244486][   T91] avr_bcl_pmic_test:bcl_write_register Error reading register:0x47a0 val:0x80 err:-5
+[    6.301510][   T78]     ok 7 bpm_all_bus_failures_are_transactional
+[    6.328206][   T93] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x38
+[    6.328335][   T93] avr_bcl_pmic_test:bcl_set_adc_value threshold:2600 mV ADC:0xe
+[    6.328395][   T93] avr_bcl_pmic_test:bcl_set_adc_value input temp is 2249, lower than MIN
+[    6.328424][   T93] avr_bcl_pmic_test:bcl_set_adc_value input temp is 3601, higher than MAX
+[    6.367927][   T78]     ok 8 voltage_thresholds_and_bounds
+[    6.403520][   T95] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4748 val:0x70 err:-5
+[    6.403577][   T95] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    6.444638][   T78]     ok 9 voltage_threshold_write_error
+[    6.491886][   T97] avr_bcl_pmic_test:convert_ibat_to_ccm_val CCM thresh:2147483647 is invalid, use MAX supported threshold
+[    6.492051][   T97] avr_bcl_pmic_test:convert_ibat_to_ccm_val CCM thresh:2147483647 is invalid, use MAX supported threshold
+[    6.537339][   T78]     ok 10 ccm_clamps_before_narrowing
+[    6.563530][   T99] avr_bcl_pmic_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    6.563681][   T99] avr_bcl_pmic_test:bcl_set_ibat ibat high threshold:11500 mA ADC:0x49
+[    6.563719][   T99] avr_bcl_pmic_test:bcl_write_register Error reading register:0x474b val:0x49 err:-5
+[    6.598405][   T78]     ok 11 current_threshold_native_io
+[    6.675316][   T78]     ok 12 logical_level_metrics_and_trend
+[    6.710850][  T103] avr_bcl_pmic_test:bcl_read_register Error reading register 0x4701 err:-5
+[    6.710968][  T103] avr_bcl_pmic_test:bcl_read_register Error reading register 0x4700 err:-5
+[    6.711042][  T103] avr_bcl_pmic_test:bcl_read_register Error reading register 0x470e err:-5
+[    6.711104][  T103] avr_bcl_pmic_test:bcl_read_register Error reading register 0x470f err:-5
+[    6.768779][   T78]     ok 13 revision_read_errors_propagate
+[    6.847690][   T78]     ok 14 stopped_callbacks_do_not_access_bus
+[    6.961941][   T78]     ok 15 native_irq_wake_remove_ownership
+[    7.067256][   T78]     ok 16 native_irq_wake_error_does_not_arm
+[    7.167494][   T78]     ok 17 freeze_restore_keeps_native_irq_actions
+[    7.283116][   T78]     ok 18 restore_wake_failure_unwinds
+[    7.399513][   T78]     ok 19 debugfs_subtree_ownership
+[    7.433532][  T129] avr_bcl_pmic_test:bpm_reset Error reading register:0x47a1 val:0x01 err:-5
+[    7.471076][   T78]     ok 20 bpm_reset_native_error
+[    7.557251][   T78]     ok 21 frozen_threshold_updates_request_retry
+[    7.589595][  T133] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    7.589757][  T133] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4947 val:0x16 err:-5
+[    7.589791][  T133] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x16
+[    7.589823][  T133] avr_bcl_pmic_test:bcl_config_vph_cb Fail to set vph regs, err: -5
+[    7.589851][  T133] avr_bcl_pmic_test:bcl_config_vph_cb trip_id: 0, vph:2800 mV, ADC: 0x16
+[    7.589910][  T133] avr_bcl_pmic_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x70
+[    7.589987][  T133] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x70
+[    7.590017][  T133] avr_bcl_pmic_test:bcl_set_adc_value threshold:2800 mV ADC:0x16
+[    7.590040][  T133] avr_bcl_pmic_test:bcl_config_vph_cb trip_id: 0, vph:2800 mV, ADC: 0x16
+[    7.590064][  T133] avr_bcl_pmic_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x70
+[    7.640425][   T78]     ok 22 peer_threshold_error_reaches_caller
+[    7.753271][   T78]     ok 23 drop_error_preserves_armed_state
+[    7.906731][   T78]     ok 24 freeze_drop_error_restores_original_actions
+[    7.971848][  T145] platform avr-bcl-pmic-private.1.auto: BCL wake rollback failed for IRQ 32: -5
+[    8.024057][   T78]     ok 25 failed_restore_unwind_retains_reference_for_retry
+[    8.097704][  T150] platform avr-bcl-pmic-private.1.auto: BCL wake release failed for IRQ 32; ownership retained
+[    8.171497][   T78]     ok 26 quiesce_transient_drop_failure_can_retry
+[    8.310137][   T78]     ok 27 failed_rearm_preserves_trigger_statistics
+[    8.396665][  T160] avr_bcl_pmic_test:bcl_write_register Error reading register:0x4746 val:0x80 err:-5
+[    8.468701][   T78]     ok 28 restore_bus_failure_keeps_retry_state
+[    8.469376][   T78] # avr-bcl-pmic: pass:28 fail:0 skip:0 total:28
+[    8.469797][   T78] # Totals: pass:28 fail:0 skip:0 total:28
+[    8.470260][   T78] ok 1 avr-bcl-pmic
+[    8.575368][  T165] KTAP version 1
+[    8.575420][  T165] 1..1
+[    8.579425][  T165]     KTAP version 1
+[    8.579475][  T165]     # Subtest: avr-bcl-pmic-probe
+[    8.579503][  T165]     # module: avr_bcl_pmic_probe_test
+[    8.579560][  T165]     1..16
+[    8.641054][  T166] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    8.645314][  T166] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    8.848517][  T165]     ok 1 native_probe_standard_pair
+[    8.899599][  T172] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:5000 mA ADC:0x0f
+[    8.903703][  T172] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:7000 mA ADC:0x16
+[    9.017001][  T165]     ok 2 native_probe_2s_pair
+[    9.131297][   T61] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.139707][   T61] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.276703][  T165]     ok 3 late_nvmem_supplier_bind_retries
+[    9.328039][  T182] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: failed to read nvmem cell smb1510_present
+[    9.328133][  T182] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.408716][  T165]     ok 4 first_nvmem_read_error_propagates
+[    9.482407][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: failed to read nvmem cell smb1510_present
+[    9.482561][  T184] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.559530][  T165]     ok 5 second_nvmem_read_unwinds_voltage_zone
+[    9.621300][  T187] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x4701 err:-5
+[    9.621410][  T187] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.681828][  T187] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x4700 err:-5
+[    9.681961][  T187] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.716497][  T187] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x470e err:-5
+[    9.716603][  T187] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.751311][  T187] avr_bcl_pmic_probe_test:bcl_read_register Error reading register 0x470f err:-5
+[    9.751403][  T187] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.818464][  T165]     ok 6 revision_failures_leave_no_resources
+[    9.871877][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.876124][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.893583][  T190] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[    9.945341][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[    9.949344][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[    9.965172][  T190] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[   10.014406][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.018504][  T190] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.074081][  T190] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[   10.207904][  T165]     ok 7 zone_failures_unwind_owned_irqs
+[   10.259228][  T198] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.263001][  T198] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.309913][  T198] avr_bcl_pmic_probe_test:bcl_write_register Error reading register:0x4746 val:0x80 err:-5
+[   10.314441][  T198] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[   10.415541][  T165]     ok 8 monitor_enable_error_unwinds_all_zones
+[   10.465729][  T203] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.469819][  T203] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.504773][  T203] avr_bcl_pmic_probe_test:bcl_write_register Error reading register:0x47a0 val:0x80 err:-5
+[   10.513542][  T203] avr-bcl-pmic-probe avr-bcl-pmic-probe.2.auto: probe with driver avr-bcl-pmic-probe failed with error -5
+[   10.607826][  T165]     ok 9 bpm_error_unwinds_registered_notifier
+[   10.659732][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.664512][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   10.886388][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   10.894128][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.020520][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.024692][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.205130][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.209929][  T208] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.326579][  T165]     ok 10 native_release_and_rebind
+[   11.371384][  T222] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.375422][  T222] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.459613][  T223] avr_bcl_pmic_probe_test:bcl_handle_irq Irq:32 triggered for bcl type:bcl-lvl0. status:1, LVL0_cnt 1, LVL1_cnt 0, LVL2_cnt 0, boot_seq 0, ibat=0 vbat=0
+[   11.560367][  T165]     ok 11 native_irq_thread_and_level_rearm
+[   11.702136][  T165]     ok 12 missing_parent_regmap_defers
+[   11.729818][  T229] thermal_sys: Thermal zone name (pmih010x-2s-ibat-lvl0) too long, should be under 20 chars
+[   11.729978][  T229] thermal_sys: Thermal zone name (pmih010x-2s-ibat-lvl1) too long, should be under 20 chars
+[   11.756084][  T165]     ok 13 original_2s_names_exceed_native_limit
+[   11.825083][  T231] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   11.830317][  T231] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   11.873045][  T231] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2800 mV ADC:0x38
+[   11.873249][  T231] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 0, vbat:2800 mV, ADC: 0x38
+[   11.873395][  T231] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2600 mV ADC:0xe
+[   11.873475][  T231] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 1, vbat:2600 mV, ADC: 0xe
+[   11.873531][  T231] avr_bcl_pmic_probe_test:bcl_set_adc_value threshold:2300 mV ADC:0x2
+[   11.873608][  T231] avr_bcl_pmic_probe_test:bcl_write_vbat_tz trip_id: 2, vbat:2300 mV, ADC: 0x2
+[   11.956475][  T165]     ok 14 of_voltage_trip_indices_program_expected_registers
+[   12.005133][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   12.009408][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   12.113081][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   12.117305][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   12.213653][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   12.217913][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   12.354635][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   12.365442][  T236] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   12.513489][  T165]     ok 15 native_supplier_unbind_then_rebind
+[   12.553940][  T250] avr_bcl_pmic_probe_test:bcl_set_ibat ibat high threshold:11000 mA ADC:0x46
+[   12.558285][  T250] avr_bcl_pmic_probe_test:bcl_set_ibat ibat too high threshold:11800 mA ADC:0x4b
+[   12.752360][  T165]     ok 16 supplier_removal_waits_for_native_irq_thread
+[   12.752816][  T165] # avr-bcl-pmic-probe: pass:16 fail:0 skip:0 total:16
+[   12.753113][  T165] # Totals: pass:16 fail:0 skip:0 total:16
+[   12.753377][  T165] ok 1 avr-bcl-pmic-probe
+AVR_BCL_PMIC_TESTS_PASS scope=native-regmap-thermal-irq-debugfs-private-guest-only
+[   13.722149][  T259] reboot: Power down

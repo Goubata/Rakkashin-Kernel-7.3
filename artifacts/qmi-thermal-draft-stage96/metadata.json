@@ -1,0 +1,17 @@
+{
+  "scope": "Unaccepted QMI thermal draft preserving native DT bindings and configured bounds across capability changes; local recorded firmware only",
+  "source_commit": "7e2663c534fe7a02c8595a62b8af041bd4bd450f",
+  "core_image": "7.3.0-4k #27",
+  "modules": [
+    "qrtr.ko",
+    "qmi_helpers.ko",
+    "qmi_cooling.ko"
+  ],
+  "test_module": "avr-qmi-cooling-test.ko",
+  "image_sha256": "2555cbe41505b155ef31f9a01f98e162209fcf132bce2ae936e32e789474143f",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

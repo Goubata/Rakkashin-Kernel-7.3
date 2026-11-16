@@ -1,0 +1,14 @@
+Native patch replay: 20 patches, 66 exact files
+Verified factory QMI cooling source replay: 5 files; unaccepted draft
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qcom-qmi-cooling'
+make[1]: Leaving directory '/work/avr-port/ports/qcom-qmi-cooling'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/qmi-cooling'
+  CC [M]  avr-qmi-cooling-test.o
+  MODPOST Module.symvers
+  LD [M]  avr-qmi-cooling-test.ko
+  BTF [M] avr-qmi-cooling-test.ko
+make[1]: Leaving directory '/work/avr-port/tests/qmi-cooling'
+make: Leaving directory '/work/avr-src'

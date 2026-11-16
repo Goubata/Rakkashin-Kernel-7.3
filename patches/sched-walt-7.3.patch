@@ -1,0 +1,526 @@
+--- a/ports/sched-walt/core_ctl.c
++++ b/ports/sched-walt/core_ctl.c
+@@ -1921,7 +1921,7 @@
+ 		state->cluster = cluster;
+ 		state->cpu = cpu;
+ 		state->disabled = get_cpu_device(cpu) &&
+-				get_cpu_device(cpu)->offline_disabled;
++				dev_offline_disabled(get_cpu_device(cpu));
+ 		list_add_tail(&state->sib, &cluster->lru);
+ 	}
+ 	cluster->active_cpus = get_active_cpu_count(cluster);
+--- a/ports/sched-walt/input-boost.c
++++ b/ports/sched-walt/input-boost.c
+@@ -268,7 +268,7 @@
+ 	struct cpufreq_policy *policy;
+ 	struct freq_qos_request *req;
+ 
+-	input_boost_wq = alloc_workqueue("inputboost_wq", WQ_HIGHPRI, 0);
++	input_boost_wq = alloc_workqueue("inputboost_wq", WQ_HIGHPRI | WQ_PERCPU, 0);	/* 6.12 default was per-CPU */
+ 	if (!input_boost_wq)
+ 		return -EFAULT;
+ 
+--- a/ports/sched-walt/mvp_locking.c
++++ b/ports/sched-walt/mvp_locking.c
+@@ -1,44 +1,49 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Copyright (c) 2023-2025, Qualcomm Innovation Center, Inc. All rights reserved.
++ *
++ * 7.3 port: the mutex wait queue is first_waiter + a headless ring and the core
++ * inserts at a vendor-chosen position. MVP waiters still go in front of the first
++ * non-MVP waiter (6.12 alter_mutex_list_add policy); the core does the insertion.
+  */
+ 
+ #include <trace/hooks/dtask.h>
+ #include "kernel/locking/mutex.h"
+ #include "walt.h"
+ 
+-static void android_vh_alter_mutex_list_add(void *unused, struct mutex *lock,
+-				struct mutex_waiter *waiter, struct list_head *list,
+-				bool *already_on_list)
++static void android_vh_mutex_add_waiter_pos(void *unused, struct mutex *lock,
++				struct mutex_waiter *waiter, struct mutex_waiter **pos)
+ {
+ 	struct walt_task_struct *wts_waiter =
+ 		(struct walt_task_struct *)android_task_vendor_data(current);
+-	struct mutex_waiter *pos = NULL;
+-	struct mutex_waiter *n = NULL;
+-	struct list_head *head = list;
++	struct mutex_waiter *first, *cur;
+ 	struct walt_task_struct *wts;
+ 
+ 	if (unlikely(walt_disabled))
+ 		return;
+ 
+-	if (!lock || !waiter || !list)
++	if (!lock || !waiter || !pos)
+ 		return;
+ 
+ 	if (!is_mvp(wts_waiter))
+ 		return;
+ 
+-	list_for_each_entry_safe(pos, n, head, list) {
++	first = lock->first_waiter;
++	if (!first)
++		return;
++	cur = first;
++	do {
+ 		wts = (struct walt_task_struct *)
+-			android_task_vendor_data((struct task_struct *)(pos->task));
++			android_task_vendor_data((struct task_struct *)(cur->task));
+ 		if (!is_mvp(wts)) {
+-			list_add(&waiter->list, pos->list.prev);
+-			*already_on_list = true;
+-			break;
++			*pos = cur;
++			return;
+ 		}
+-	}
++		cur = list_next_entry(cur, list);
++	} while (cur != first);
+ }
+ 
+ void walt_mvp_lock_ordering_init(void)
+ {
+-	register_trace_android_vh_alter_mutex_list_add(android_vh_alter_mutex_list_add, NULL);
++	register_trace_android_vh_mutex_add_waiter_pos(android_vh_mutex_add_waiter_pos, NULL);
+ }
+--- a/ports/sched-walt/perf_trace_counters.h
++++ b/ports/sched-walt/perf_trace_counters.h
+@@ -231,7 +231,7 @@
+ 
+ #endif
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH ../../kernel/sched/walt
++#define TRACE_INCLUDE_PATH .
+ 
+ #undef TRACE_INCLUDE_FILE
+ #define TRACE_INCLUDE_FILE perf_trace_counters
+--- a/ports/sched-walt/sysctl.c
++++ b/ports/sched-walt/sysctl.c
+@@ -713,7 +713,7 @@
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_PROC_SYSCTL
++#ifdef CONFIG_SYSCTL
+ static void sched_update_updown_migrate_values(bool up)
+ {
+ 	int i = 0;
+@@ -1266,7 +1266,7 @@
+ 	return ret;
+ }
+ 
+-#endif /* CONFIG_PROC_SYSCTL */
++#endif /* CONFIG_SYSCTL */
+ 
+ static int sysctl_sched_sibling_cluster_map[4] = {-1, -1, -1, -1};
+ static int sched_sibling_cluster_handler(const struct ctl_table *table, int write,
+--- a/ports/sched-walt/trace.h
++++ b/ports/sched-walt/trace.h
+@@ -918,7 +918,7 @@
+ 	TP_fast_assign(
+ 		__entry->cpu		= rq->cpu;
+ 		__entry->nr_running	= rq->nr_running;
+-		__entry->nr_cfs_running	= rq->cfs.h_nr_running;
++		__entry->nr_cfs_running	= rq->cfs.h_nr_queued;
+ 	),
+ 
+ 	TP_printk("cpu=%d nr_running=%u nr_cfs_running=%u",
+@@ -988,7 +988,7 @@
+ 	TP_fast_assign(
+ 		__entry->cpu			= cpu;
+ 		__entry->nr_running		= cpu_rq(cpu)->nr_running;
+-		__entry->cfs_nr_running		= cpu_rq(cpu)->cfs.h_nr_running;
++		__entry->cfs_nr_running		= cpu_rq(cpu)->cfs.h_nr_queued;
+ 		__entry->nr_big			= wrq->walt_stats.nr_big_tasks;
+ 		__entry->nr_rtg_high_prio_tasks	= walt_nr_rtg_high_prio(cpu);
+ 		__entry->cpu_util		= cpu_util(cpu);
+@@ -2431,7 +2431,7 @@
+ #endif /* _TRACE_WALT_H */
+ 
+ #undef TRACE_INCLUDE_PATH
+-#define TRACE_INCLUDE_PATH ../../kernel/sched/walt
++#define TRACE_INCLUDE_PATH .
+ #define TRACE_INCLUDE_FILE trace
+ 
+ #include <trace/define_trace.h>
+--- a/ports/sched-walt/walt.c
++++ b/ports/sched-walt/walt.c
+@@ -130,9 +130,24 @@
+ 	return 0;
+ }
+ 
+-static struct syscore_ops walt_syscore_ops = {
+-	.resume		= walt_resume,
+-	.suspend	= walt_suspend
++/* 7.3: syscore callbacks take a data pointer and are registered via struct syscore. */
++static int walt_syscore_suspend(void *data)
++{
++	return walt_suspend();
++}
++
++static void walt_syscore_resume(void *data)
++{
++	walt_resume();
++}
++
++static const struct syscore_ops walt_syscore_ops = {
++	.resume		= walt_syscore_resume,
++	.suspend	= walt_syscore_suspend,
++};
++
++static struct syscore walt_syscore = {
++	.ops = &walt_syscore_ops,
+ };
+ 
+ #if IS_ENABLED(CONFIG_SCHED_MOTO_UNFAIR)
+@@ -585,7 +600,7 @@
+ 
+ 	wrq->ed_task = NULL;
+ 
+-	if (!is_ed_enabled() || !rq->cfs.h_nr_running)
++	if (!is_ed_enabled() || !rq->cfs.h_nr_queued)
+ 		return false;
+ 
+ 	list_for_each_entry(p, &rq->cfs_tasks, se.group_node) {
+@@ -3534,12 +3549,20 @@
+ 	walt_clusters_parsed = true;
+ }
+ 
++/*
++ * 7.3 port bring-up aid (default off): use the cpufreq-derived software cycle
++ * counter that WALT already ships for SoCs without counters, e.g. in QEMU where
++ * the phone's qcom,gclk MMIO counters do not exist.
++ */
++static bool sw_cycle_counter;
++module_param(sw_cycle_counter, bool, 0444);
++
+ static void walt_init_cycle_counter(void)
+ {
+ 	char *walt_cycle_cntr_path = "/soc/walt";
+ 	struct device_node *np = NULL;
+ 
+-	if (soc_feat(SOC_ENABLE_SW_CYCLE_COUNTER_BIT)) {
++	if (soc_feat(SOC_ENABLE_SW_CYCLE_COUNTER_BIT) || sw_cycle_counter) {
+ 		walt_cycle_counter_init();
+ 	} else {
+ 		np = of_find_node_by_path(walt_cycle_cntr_path);
+@@ -3744,7 +3767,7 @@
+ 	transfer_busy_time(rq, wts->grp, p, REM_TASK, wallclock);
+ 	list_del_init(&wts->grp_list);
+ 	rcu_assign_pointer(wts->grp, NULL);
+-	__task_rq_unlock(rq, &rf);
++	__task_rq_unlock(rq, p, &rf);
+ 
+ 	if (!list_empty(&grp->tasks)) {
+ 		empty_group = 0;
+@@ -3781,7 +3804,7 @@
+ 	transfer_busy_time(rq, grp, p, ADD_TASK, wallclock);
+ 	list_add(&wts->grp_list, &grp->tasks);
+ 	rcu_assign_pointer(wts->grp, grp);
+-	__task_rq_unlock(rq, &rf);
++	__task_rq_unlock(rq, p, &rf);
+ 
+ 	_set_preferred_cluster(grp, wallclock);
+ 
+@@ -6041,7 +6064,7 @@
+ 	update_instruction_data(FREQ_QOS_REMOVE_REQUEST);
+ }
+ 
+-static void android_vh_scx_ops_enable_state(void *unused, int state)
++static void __maybe_unused android_vh_scx_ops_enable_state(void *unused, int state)
+ {
+ 	struct walt_rq *wrq = &per_cpu(walt_rq, cpu_of(this_rq()));
+ 
+@@ -6084,7 +6107,7 @@
+ 	register_trace_android_vh_freq_qos_add_request(android_vh_freq_qos_add_request, NULL);
+ 	register_trace_android_vh_freq_qos_update_request(android_vh_freq_qos_update_request, NULL);
+ 	register_trace_android_vh_freq_qos_remove_request(android_vh_freq_qos_remove_request, NULL);
+-	register_trace_android_vh_scx_ops_enable_state(android_vh_scx_ops_enable_state, NULL);
++	/* sched_ext state hook is not present on 7.3 (sched_ext unused on this device). */
+ }
+ 
+ atomic64_t walt_irq_work_lastq_ws;
+@@ -6187,7 +6210,7 @@
+ 	if (atomic_cmpxchg(&already_inited, 0, 1))
+ 		return;
+ 
+-	register_syscore_ops(&walt_syscore_ops);
++	register_syscore(&walt_syscore);
+ 	BUG_ON(alloc_related_thread_groups());
+ 	init_clusters();
+ 	walt_init_tg_pointers();
+@@ -6269,6 +6292,18 @@
+ {
+ 	/* compile time checks for vendor data size */
+ 	WALT_VENDOR_DATA_SIZE_TEST(struct walt_task_group, struct task_group);
++	BUILD_BUG_ON(sizeof(struct walt_task_struct) > CONFIG_GKI_TASK_STRUCT_VENDOR_SIZE_MAX);
++
++	/*
++	 * 7.3 port: per-task state lives behind task_struct and is sized by the
++	 * bootloader's android_arch_task_struct_size=. Without it every write would
++	 * corrupt the neighbouring slab object, so refuse to load instead.
++	 */
++	if (ksize(current) < sizeof(struct task_struct) + sizeof(struct walt_task_struct)) {
++		pr_err("sched_walt: task vendor area too small (%zu < %zu); boot with android_arch_task_struct_size=512\n",
++		       ksize(current) - sizeof(struct task_struct), sizeof(struct walt_task_struct));
++		return -ENOSPC;
++	}
+ 
+ 	register_trace_android_vh_update_topology_flags_workfn(
+ 			android_vh_update_topology_flags_workfn, NULL);
+--- a/ports/sched-walt/walt.h
++++ b/ports/sched-walt/walt.h
+@@ -10,8 +10,10 @@
+ #include <linux/pm_qos.h>
+ #include <linux/sched/cputime.h>
+ #include "kernel/sched/sched.h"
+-#include "fs/proc/internal.h"
+ #include <linux/sched/walt.h>
++/* Exported by drivers/base/arch_topology.c; 7.3 dropped the header declaration. */
++extern bool topology_update_done;
++/* android_pick_task()/cpu_busy_with_softirqs(): restored exports, kernel/sched/sched.h */
+ #include <linux/jump_label.h>
+ 
+ #include <linux/cgroup.h>
+--- a/ports/sched-walt/walt_cfs.c
++++ b/ports/sched-walt/walt_cfs.c
+@@ -12,6 +12,13 @@
+ #include "trace.h"
+ #include "drivers/android/binder_internal.h"
+ #include "drivers/android/binder_trace.h"
++
++/* 6.12 need_reply: set for every synchronous, non-reply transaction before it is
++ * queued; 7.3 keeps the same facts as is_async/is_reply. */
++static inline bool walt_binder_sync_txn(struct binder_transaction *t)
++{
++	return !t->is_async && !t->is_reply;
++}
+ 
+ static void create_freq_to_cost_pd(struct em_perf_domain *pd)
+ {
+@@ -1260,7 +1267,7 @@
+ 		return;
+ 
+ 	get_entry_instr(BINDER_SET_PRIORITY_HOOK);
+-	if (bndrtrans && bndrtrans->need_reply && current_wts->boost == TASK_BOOST_STRICT_MAX) {
++	if (bndrtrans && walt_binder_sync_txn(bndrtrans) && current_wts->boost == TASK_BOOST_STRICT_MAX) {
+ 		bndrtrans->android_vendor_data1  = wts->boost;
+ 		wts->boost = TASK_BOOST_STRICT_MAX;
+ 	}
+@@ -1290,7 +1297,7 @@
+ 
+ #if IS_ENABLED(CONFIG_SCHED_MOTO_UNFAIR)
+ 	// Moto huangzq2: inherit ux type
+-	if (bndrtrans && bndrtrans->need_reply) {
++	if (bndrtrans && walt_binder_sync_txn(bndrtrans)) {
+ 		moto_binder_inherit_ux_type(task);
+ 	}
+ #endif
+@@ -1611,7 +1618,7 @@
+ 	 * see if we can run any other task including MVP tasks.
+ 	 */
+ 	if (((skip_mvp != wrq->skip_mvp) ||
+-		(wrq->mvp_tasks.next != &wts->mvp_list)) && rq->cfs.h_nr_running > 1)
++		(wrq->mvp_tasks.next != &wts->mvp_list)) && rq->cfs.h_nr_queued > 1)
+ 		resched_curr(rq);
+ }
+ 
+--- a/ports/sched-walt/walt_halt.c
++++ b/ports/sched-walt/walt_halt.c
+@@ -119,7 +119,8 @@
+ 		if (rq->nr_running == 1)
+ 			break;
+ 
+-		next = pick_task(rq);
++		/* 7.3: pick without switching, newidle uses the pinned rf (6.12 pick_task(rq)). */
++		next = android_pick_task(rq, rf);
+ 
+ 		if (walt_is_idle_task(next))
+ 			break;
+@@ -187,7 +188,6 @@
+ 	rq->stop = stop;
+ }
+ 
+-void __balance_callbacks(struct rq *rq);
+ 
+ static int drain_rq_cpu_stop(void *data)
+ {
+@@ -210,7 +210,8 @@
+ 	 * the default (0 or balance_push_callback);
+ 	 */
+ 	wrq->enqueue_counter = 0;
+-	__balance_callbacks(rq);
++	/* 7.3 signature: NULL rf because the lock was already unpinned above. */
++	__balance_callbacks(rq, NULL);
+ 	if (wrq->enqueue_counter)
+ 		WALT_BUG(WALT_BUG_WALT, NULL, "cpu: %d task was re-enqueued", cpu_of(rq));
+ 
+--- a/ports/sched-walt/walt_lb.c
++++ b/ports/sched-walt/walt_lb.c
+@@ -27,12 +27,15 @@
+ 			"Dequeuing when task is delayed: src_cpu=%d dst_cpu=%d\n",
+ 			cpu_of(src_rq), cpu_of(dst_rq));
+ 
++	/* 7.3 asserts an updated clock under the rq lock (6.12 only with SCHED_DEBUG). */
++	update_rq_clock(src_rq);
+ 	deactivate_task(src_rq, p, 0);
+ 	set_task_cpu(p, dst_rq->cpu);
+ }
+ 
+ void walt_attach_task(struct task_struct *p, struct rq *rq)
+ {
++	update_rq_clock(rq);
+ 	activate_task(rq, p, 0);
+ 	wakeup_preempt(rq, p, 0);
+ }
+@@ -322,7 +325,7 @@
+ #if IS_ENABLED(CONFIG_SCHED_MOTO_UNFAIR)
+ 	struct task_struct *long_wait_task = NULL;
+ 	u64 max_wait_time = 0;
+-	u64 now = rq_clock(src_rq);
++	u64 now = 0;	/* read under the src rq lock below (7.3 rq_clock assertions) */
+ #endif
+ 
+ 	BUG_ON(src_cpu == dst_cpu);
+@@ -331,6 +334,10 @@
+ 	to_higher = check_for_higher_capacity(dst_cpu, src_cpu);
+ 
+ 	raw_spin_lock_irqsave(&src_rq->__lock, flags);
++#if IS_ENABLED(CONFIG_SCHED_MOTO_UNFAIR)
++	update_rq_clock(src_rq);
++	now = rq_clock(src_rq);
++#endif
+ 
+ 	pull_me = NULL;
+ 	task_visited = 0;
+@@ -442,9 +449,11 @@
+ 				 */
+ 				wts = (struct walt_task_struct *)android_task_vendor_data(p);
+ 				trace_walt_active_load_balance(p, src_cpu, dst_cpu, wts);
+-				success = stop_one_cpu_nowait(src_cpu,
++				/* 7.3: void; the stopper of an active CPU always queues the work. */
++				stop_one_cpu_nowait(src_cpu,
+ 						stop_walt_lb_active_migration,
+ 						src_rq, &src_rq->active_balance_work);
++				success = true;
+ 				if (!success)
+ 					clear_reserved(dst_cpu);
+ 
+@@ -526,7 +535,7 @@
+ static bool similar_cap_skip_cpu(int cpu)
+ {
+ 	struct rq *rq = cpu_rq(cpu);
+-	int cfs_nr_running = rq->cfs.h_nr_running;
++	int cfs_nr_running = rq->cfs.h_nr_queued;
+ 
+ 	if (cpu_halted(cpu) && cfs_nr_running)
+ 		return false;
+@@ -592,12 +601,12 @@
+ 		total_cpus += 1;
+ 		total_util += util;
+ 		total_capacity += capacity_orig_of(i);
+-		total_nr += cpu_rq(i)->cfs.h_nr_running;
+-
+-		if (cpu_rq(i)->cfs.h_nr_running < 2)
+-			continue;
+-
+-		if (cpu_rq(i)->cfs.h_nr_running == 2 &&
++		total_nr += cpu_rq(i)->cfs.h_nr_queued;
++
++		if (cpu_rq(i)->cfs.h_nr_queued < 2)
++			continue;
++
++		if (cpu_rq(i)->cfs.h_nr_queued == 2 &&
+ 			task_util(cpu_rq(i)->curr) < SMALL_TASK_THRESHOLD)
+ 			continue;
+ 
+@@ -661,7 +670,7 @@
+ 		total_cpus += 1;
+ 		total_util += util;
+ 		total_capacity += capacity_orig_of(i);
+-		total_nr += cpu_rq(i)->cfs.h_nr_running;
++		total_nr += cpu_rq(i)->cfs.h_nr_queued;
+ 
+ 		/*
+ 		 * no point in selecting this CPU as busy, as
+@@ -671,7 +680,7 @@
+ 			continue;
+ 
+ 		/* active migration is allowed only to idle cpu */
+-		if (cpu_rq(i)->cfs.h_nr_running < 2 &&
++		if (cpu_rq(i)->cfs.h_nr_queued < 2 &&
+ 			(!wrq->walt_stats.nr_big_tasks || !treat_dst_idle))
+ 			continue;
+ 
+@@ -792,9 +801,10 @@
+ 	raw_spin_unlock_irqrestore(&walt_lb_migration_lock, flags);
+ 
+ 	trace_walt_active_load_balance(p, prev_cpu, new_cpu, wts);
+-	ret = stop_one_cpu_nowait(prev_cpu,
++	stop_one_cpu_nowait(prev_cpu,
+ 			stop_walt_lb_active_migration, rq,
+ 			&rq->active_balance_work);
++	ret = true;	/* 7.3: void, always queued for an active CPU */
+ 	if (!ret)
+ 		clear_reserved(new_cpu);
+ 	else
+@@ -1027,11 +1037,11 @@
+ unlock:
+ 	raw_spin_lock(&this_rq->__lock);
+ rt_pulled:
+-	if (this_rq->cfs.h_nr_running && !*pulled_task)
++	if (this_rq->cfs.h_nr_queued && !*pulled_task)
+ 		*pulled_task = 1;
+ 
+ 	/* Is there a task of a high priority class? */
+-	if (this_rq->nr_running != this_rq->cfs.h_nr_running)
++	if (this_rq->nr_running != this_rq->cfs.h_nr_queued)
+ 		*pulled_task = -1;
+ 
+ 	/* reset the idle time stamp if we pulled any task */
+@@ -1265,9 +1275,10 @@
+ 		 */
+ 		wts = (struct walt_task_struct *)android_task_vendor_data(p);
+ 		oscillate_cpu = src_cpu;
+-		success = stop_one_cpu_nowait(src_cpu,
++		stop_one_cpu_nowait(src_cpu,
+ 				stop_walt_lb_active_migration,
+ 				src_rq, &src_rq->active_balance_work);
++		success = true;	/* 7.3: void, always queued for an active CPU */
+ 
+ 		if (!success) {
+ 			no_oscillate_reason = 102;
+--- a/ports/sched-walt/walt_storage_lb.c
++++ b/ports/sched-walt/walt_storage_lb.c
+@@ -113,9 +113,10 @@
+ 		src_wrq->push_task = target_task;
+ 		mark_reserved(dst_cpu);
+ 		raw_spin_unlock_irqrestore(&src_rq->__lock, flags);
+-		ret = stop_one_cpu_nowait(src_cpu,
++		stop_one_cpu_nowait(src_cpu,
+ 				stop_walt_lb_active_migration,
+ 				src_rq, &src_rq->active_balance_work);
++		ret = 1;	/* 7.3: void, always queued for an active CPU */
+ 		if (!ret) {
+ 			clear_reserved(dst_cpu);
+ 			goto out;
+--- a/ports/sched-walt/Makefile
++++ b/ports/sched-walt/Makefile
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# canoe_perf: SCHED_WALT=m, STATS=n, DEBUG=n, MIDPOINT (phone exposes midpoint_freq), MOTO_UNFAIR=m
++obj-m += sched-walt.o
++sched-walt-y := walt.o boost.o sched_avg.o walt_halt.o core_ctl.o trace.o input-boost.o \
++	sysctl.o cpufreq_walt.o fixup.o walt_lb.o walt_rt.o walt_cfs.o walt_tp.o walt_config.o \
++	voter.o walt_cpufreq_cycle_cntr_driver.o walt_gclk_cycle_counter_driver.o walt_cycles.o \
++	debugfs.o pipeline.o smart_freq.o walt_storage_lb.o mvp_locking.o midpoint.o
++ccflags-y += -I$(src)/include -I$(src) -I$(srctree) -I$(src)/../qcom-socinfo/include \
++	-DCONFIG_SCHED_WALT_MODULE=1 -DCONFIG_SCHED_WALT_MIDPOINT_MODULE=1 \
++	-DCONFIG_SCHED_MOTO_UNFAIR_MODULE=1 -DCONFIG_SCHED_WALT_NR_CPUS=8 \
++	-Wno-missing-prototypes
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-smem/Module.symvers
++CFLAGS_trace.o := -I$(src)
++CFLAGS_walt.o := -I$(src)

@@ -1,0 +1,9 @@
+{
+  "scope": "Image#30: sched_walt core interfaces restored; QEMU only",
+  "core_image": "7.3.0-4k #30",
+  "image_sha256": "3a2035d1f487126fbe4811234bba1eac0247a0135561667b281fe5f47177d19c",
+  "source_commit": "d3ada49940b1fc996b529424ca9bc3431e3d752b",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

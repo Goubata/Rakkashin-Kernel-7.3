@@ -1,0 +1,15 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: Leaving directory '/work/avr-src'
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/tests/sched-walt'
+  CC [M]  avr-walt-fixture.o
+  MODPOST Module.symvers
+WARNING: modpost: avr-walt-fixture.ko: missing MODULE_DESCRIPTION()
+  CC [M]  avr-walt-fixture.mod.o
+  CC [M]  .module-common.o
+  LD [M]  avr-walt-fixture.ko
+  BTF [M] avr-walt-fixture.ko
+make[1]: Leaving directory '/work/avr-port/tests/sched-walt'
+make: Leaving directory '/work/avr-src'

@@ -1,0 +1,10 @@
+/dts-v1/;
+/plugin/;
+/* Asymmetric capacities on QEMU virt cpus (little 0-1, big 2-3) so arch_topology,
+ * sched_asym_cpucapacity and the perf-domain path behave like the phone. */
+/ {
+ fragment@0 { target-path="/cpus/cpu@0"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@1 { target-path="/cpus/cpu@1"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@2 { target-path="/cpus/cpu@2"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+ fragment@3 { target-path="/cpus/cpu@3"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+};

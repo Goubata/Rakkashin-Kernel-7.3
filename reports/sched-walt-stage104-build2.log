@@ -1,0 +1,281 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt.o
+  CC [M]  boost.o
+  CC [M]  sched_avg.o
+  CC [M]  walt_halt.o
+  CC [M]  core_ctl.o
+  CC [M]  trace.o
+  CC [M]  sysctl.o
+  CC [M]  cpufreq_walt.o
+  CC [M]  fixup.o
+sysctl.c:1342:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1342 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from trace.c:84:
+In file included from ./trace.h:2437:
+In file included from /work/avr-src/include/trace/define_trace.h:132:
+In file included from /work/avr-src/include/trace/trace_events.h:489:
+./trace.h:921:37: error: no member named 'h_nr_running' in 'struct cfs_rq'
+  921 |                 __entry->nr_cfs_running = rq->cfs.h_nr_running;
+      |                                           ~~~~~~~ ^
+/work/avr-src/include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+  133 | #define TP_fast_assign(args...) args
+      |                                 ^~~~
+/work/avr-src/include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+   45 |                              PARAMS(assign),                   \
+      |                                     ^~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^~~~
+/work/avr-src/include/trace/trace_events.h:456:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+  456 |                       PARAMS(assign), PARAMS(print))                    \
+      |                              ^~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^~~~
+/work/avr-src/include/trace/trace_events.h:448:4: note: expanded from macro '\
+__DECLARE_EVENT_CLASS'
+  448 |         { assign; }                                                     \
+      |           ^~~~~~
+In file included from trace.c:84:
+In file included from ./trace.h:2437:
+In file included from /work/avr-src/include/trace/define_trace.h:132:
+In file included from /work/avr-src/include/trace/trace_events.h:489:
+./trace.h:991:47: error: no member named 'h_nr_running' in 'struct cfs_rq'
+  972 |                 __field(unsigned int, cpu_util)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  973 |                 __field(unsigned int, capacity_orig)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  974 |         ),
+      |         ~~
+  975 | 
+  976 |         TP_fast_assign(
+      |         ~~~~~~~~~~~~~~~
+  977 |                 __entry->cpu                    = cpu;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  978 |                 __entry->nr_running             = cpu_rq(cpu)->nr_running;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  979 |                 __entry->cfs_nr_running         = cpu_rq(cpu)->cfs.h_nr_running;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+  980 |                 __entry->nr_big                 = wrq->walt_stats.nr_big_tasks;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  981 |                 __entry->nr_rtg_high_prio_tasks = walt_nr_rtg_high_prio(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  982 |                 __entry->cpu_util               = cpu_util(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  983 |                 __entry->capacity_orig          = capacity_orig_of(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  984 |         ),
+      |         ~~
+  985 | 
+  986 |         TP_printk("cpu=%d nr_running=%u cfs_nr_running=%u nr_big=%u nr_rtg_hp=%u cpu_util=%u capacity_orig=%u",
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  987 |                 __entry->cpu, __entry->nr_running, __entry->cfs_nr_running,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+  133 | #define TP_fast_assign(args...) args
+      |                                 ^
+/work/avr-src/include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+   41 |         DECLARE_EVENT_CLASS(name,                              \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   42 |                              PARAMS(proto),                    \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   43 |                              PARAMS(args),                     \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   44 |                              PARAMS(tstruct),                  \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   45 |                              PARAMS(assign),                   \
+      |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   46 |                              PARAMS(print));                   \
+      |                              ~~~~~~~~~~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^
+/work/avr-src/include/trace/trace_events.h:456:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+  454 | #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)  \
+      |                                                                         ~
+  455 | __DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
+      | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  456 |                       PARAMS(assign), PARAMS(print))                    \
+      |                       ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^
+/work/avr-src/include/trace/trace_events.h:448:4: note: expanded from macro '\
+__DECLARE_EVENT_CLASS'
+  448 |         { assign; }                                                     \
+      |           ^~~~~~
+sysctl.c:1349:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1349 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from trace.c:84:
+In file included from ./trace.h:2437:
+In file included from /work/avr-src/include/trace/define_trace.h:133:
+In file included from /work/avr-src/include/trace/perf.h:110:
+./trace.h:921:37: error: no member named 'h_nr_running' in 'struct cfs_rq'
+  921 |                 __entry->nr_cfs_running = rq->cfs.h_nr_running;
+      |                                           ~~~~~~~ ^
+/work/avr-src/include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+  133 | #define TP_fast_assign(args...) args
+      |                                 ^~~~
+/work/avr-src/include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+   45 |                              PARAMS(assign),                   \
+      |                                     ^~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^~~~
+/work/avr-src/include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+   67 |                       PARAMS(assign), PARAMS(print))                    \
+      |                              ^~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^~~~
+/work/avr-src/include/trace/perf.h:51:4: note: expanded from macro '\
+__DECLARE_EVENT_CLASS'
+   51 |         { assign; }                                                     \
+      |           ^~~~~~
+In file included from trace.c:84:
+In file included from ./trace.h:2437:
+In file included from /work/avr-src/include/trace/define_trace.h:133:
+In file included from /work/avr-src/include/trace/perf.h:110:
+./trace.h:991:47: error: no member named 'h_nr_running' in 'struct cfs_rq'
+  972 |                 __field(unsigned int, cpu_util)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  973 |                 __field(unsigned int, capacity_orig)
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  974 |         ),
+      |         ~~
+  975 | 
+  976 |         TP_fast_assign(
+      |         ~~~~~~~~~~~~~~~
+  977 |                 __entry->cpu                    = cpu;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  978 |                 __entry->nr_running             = cpu_rq(cpu)->nr_running;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  979 |                 __entry->cfs_nr_running         = cpu_rq(cpu)->cfs.h_nr_running;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+  980 |                 __entry->nr_big                 = wrq->walt_stats.nr_big_tasks;
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  981 |                 __entry->nr_rtg_high_prio_tasks = walt_nr_rtg_high_prio(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  982 |                 __entry->cpu_util               = cpu_util(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  983 |                 __entry->capacity_orig          = capacity_orig_of(cpu);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  984 |         ),
+      |         ~~
+  985 | 
+  986 |         TP_printk("cpu=%d nr_running=%u cfs_nr_running=%u nr_big=%u nr_rtg_hp=%u cpu_util=%u capacity_orig=%u",
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  987 |                 __entry->cpu, __entry->nr_running, __entry->cfs_nr_running,
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+  133 | #define TP_fast_assign(args...) args
+      |                                 ^
+/work/avr-src/include/trace/trace_events.h:45:16: note: expanded from macro 'TRACE_EVENT'
+   41 |         DECLARE_EVENT_CLASS(name,                              \
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   42 |                              PARAMS(proto),                    \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   43 |                              PARAMS(args),                     \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   44 |                              PARAMS(tstruct),                  \
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   45 |                              PARAMS(assign),                   \
+      |                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   46 |                              PARAMS(print));                   \
+      |                              ~~~~~~~~~~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^
+/work/avr-src/include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+   65 | #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)  \
+      |                                                                         ~
+   66 | __DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
+      | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   67 |                       PARAMS(assign), PARAMS(print))                    \
+      |                       ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+  161 | #define PARAMS(args...) args
+      |                         ^
+/work/avr-src/include/trace/perf.h:51:4: note: expanded from macro '\
+__DECLARE_EVENT_CLASS'
+   51 |         { assign; }                                                     \
+      |           ^~~~~~
+sysctl.c:1356:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1356 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1363:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1363 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1373:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1373 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: trace.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+sysctl.c:1380:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1380 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1387:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1387 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1394:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1394 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1404:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1404 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1411:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1411 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1418:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1418 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1425:19: error: use of undeclared identifier 'sched_cgroup_updown_migrate_handler'
+ 1425 |                 .proc_handler   = sched_cgroup_updown_migrate_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1434:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1434 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1441:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1441 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1451:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1451 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1461:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1461 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1471:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1471 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1478:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1478 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+sysctl.c:1488:19: error: use of undeclared identifier 'sched_load_sync_handler'
+ 1488 |                 .proc_handler   = sched_load_sync_handler,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: sysctl.o] Error 1
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

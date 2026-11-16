@@ -1,0 +1,41 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt_cfs.o
+  CC [M]  walt_cpufreq_cycle_cntr_driver.o
+  CC [M]  walt_gclk_cycle_counter_driver.o
+  CC [M]  walt_cycles.o
+  CC [M]  debugfs.o
+  CC [M]  pipeline.o
+  CC [M]  smart_freq.o
+  CC [M]  walt_storage_lb.o
+  CC [M]  mvp_locking.o
+  CC [M]  midpoint.o
+walt_storage_lb.c:116:7: error: assigning to 'int' from incompatible type 'void'
+  116 |                 ret = stop_one_cpu_nowait(src_cpu,
+      |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  117 |                                 stop_walt_lb_active_migration,
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  118 |                                 src_rq, &src_rq->active_balance_work);
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt_storage_lb.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

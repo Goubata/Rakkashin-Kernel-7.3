@@ -1,0 +1,15 @@
+{
+  "scope": "sched_walt on Image#30 with private cpufreq/EM fixture; QEMU only",
+  "core_image": "changed",
+  "image_sha256": "3a2035d1f487126fbe4811234bba1eac0247a0135561667b281fe5f47177d19c",
+  "modules": [
+    "sched-walt.ko",
+    "avr-walt-fixture.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

@@ -1,0 +1,32 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt_storage_lb.o
+  LD [M]  sched-walt.o
+  MODPOST Module.symvers
+WARNING: modpost: sched-walt.ko: missing MODULE_DESCRIPTION()
+ERROR: modpost: sched-walt.ko: symbol '__scx_enabled' undefined!
+ERROR: modpost: sched-walt.ko: symbol 'ext_sched_class' undefined!
+ERROR: modpost: sched-walt.ko: symbol 'android_pick_task' undefined!
+ERROR: modpost: sched-walt.ko: symbol '__balance_callbacks' undefined!
+ERROR: modpost: sched-walt.ko: symbol 'cpu_busy_with_softirqs' undefined!
+ERROR: modpost: sched-walt.ko: symbol '__tracepoint_android_vh_alter_mutex_list_add' undefined!
+make[3]: *** [/work/avr-src/scripts/Makefile.modpost:193: Module.symvers] Error 1
+make[2]: *** [/work/avr-src/Makefile:2229: modpost] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

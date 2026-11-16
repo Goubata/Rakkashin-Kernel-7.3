@@ -1,0 +1,224 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/sched-walt/boost.c",
+      "source": "kernel/sched/walt/boost.c",
+      "original_sha256": "0de0f09c174455396356a3d568539e25f1606382e70c00da9cfa127106f2a22a",
+      "sha256": "0de0f09c174455396356a3d568539e25f1606382e70c00da9cfa127106f2a22a"
+    },
+    {
+      "file": "ports/sched-walt/core_ctl.c",
+      "source": "kernel/sched/walt/core_ctl.c",
+      "original_sha256": "0b587a2de20b6cd8bfea20fe7a84779408741256c1b109e4c8b401c0acd7b925",
+      "sha256": "cc387604e3df179e8b3843056bbf6764388b423bb48fa0ba07a5a64aa2e05b21"
+    },
+    {
+      "file": "ports/sched-walt/cpufreq_walt.c",
+      "source": "kernel/sched/walt/cpufreq_walt.c",
+      "original_sha256": "63603f2a18510fef3b0b32676f571582b2aa50e1c8040968008de33d6535108f",
+      "sha256": "63603f2a18510fef3b0b32676f571582b2aa50e1c8040968008de33d6535108f"
+    },
+    {
+      "file": "ports/sched-walt/debugfs.c",
+      "source": "kernel/sched/walt/debugfs.c",
+      "original_sha256": "2c158c0ba4c0c06fc247983b31bf6b45b5355f124b11f82924480654e61515d0",
+      "sha256": "2c158c0ba4c0c06fc247983b31bf6b45b5355f124b11f82924480654e61515d0"
+    },
+    {
+      "file": "ports/sched-walt/fixup.c",
+      "source": "kernel/sched/walt/fixup.c",
+      "original_sha256": "d486eb378d12c1992e075d77a4fb81d52759a3309371a4b15c4094fac8237e81",
+      "sha256": "d486eb378d12c1992e075d77a4fb81d52759a3309371a4b15c4094fac8237e81"
+    },
+    {
+      "file": "ports/sched-walt/input-boost.c",
+      "source": "kernel/sched/walt/input-boost.c",
+      "original_sha256": "0148519f211ee17a36bf3691cb8a53a5887f745f69c7c5c7bcf93708c9a29655",
+      "sha256": "cf4d09e773fb94745ea5f24e597bfda871360ba03bee0e47c5428d6d545d64aa"
+    },
+    {
+      "file": "ports/sched-walt/midpoint.c",
+      "source": "kernel/sched/walt/midpoint.c",
+      "original_sha256": "dea364ae4912f558761925b985ae8fd7b1eb4d5be6d5aba1d8602f5e05b67f48",
+      "sha256": "dea364ae4912f558761925b985ae8fd7b1eb4d5be6d5aba1d8602f5e05b67f48"
+    },
+    {
+      "file": "ports/sched-walt/mvp_locking.c",
+      "source": "kernel/sched/walt/mvp_locking.c",
+      "original_sha256": "218123b9f8b0b2090e23e8f4401652ca82e009cc5ba450f08ff61fe95424545e",
+      "sha256": "81726c4906fea4d0e39c327bd777f5635ef3b4ad1f0cd34f483104d896ff3a61"
+    },
+    {
+      "file": "ports/sched-walt/perf_trace_counters.h",
+      "source": "kernel/sched/walt/perf_trace_counters.h",
+      "original_sha256": "4e42c85e9d10940fbd321a4cc9b0dc9b55a1d5102ef8ca48a7a14c0b8e3203bf",
+      "sha256": "bfcf22ae087e7aa7d4d181f4975fee81133109735966b23fff17ca9c247c0628"
+    },
+    {
+      "file": "ports/sched-walt/pipeline.c",
+      "source": "kernel/sched/walt/pipeline.c",
+      "original_sha256": "2e401b2aa6650be36bc9555aede2117381794526b9e734e6161e67625e177754",
+      "sha256": "2e401b2aa6650be36bc9555aede2117381794526b9e734e6161e67625e177754"
+    },
+    {
+      "file": "ports/sched-walt/sched_avg.c",
+      "source": "kernel/sched/walt/sched_avg.c",
+      "original_sha256": "69f2dee660d26f4ea00099260532b0f0bafaa4d7f605d346ddd9dd0a591cda41",
+      "sha256": "69f2dee660d26f4ea00099260532b0f0bafaa4d7f605d346ddd9dd0a591cda41"
+    },
+    {
+      "file": "ports/sched-walt/smart_freq.c",
+      "source": "kernel/sched/walt/smart_freq.c",
+      "original_sha256": "3c31a401f26b289dfe9805ce4155fe58322f56e72ae4a98ae000c3be8ad5f5c3",
+      "sha256": "3c31a401f26b289dfe9805ce4155fe58322f56e72ae4a98ae000c3be8ad5f5c3"
+    },
+    {
+      "file": "ports/sched-walt/sysctl.c",
+      "source": "kernel/sched/walt/sysctl.c",
+      "original_sha256": "dda9c4c45170140cfe7658ad44f3a82818b641a3b7ab56ffdf0a5f89a8f94324",
+      "sha256": "ed01c391d213a283a183168c1df6a784c86c3b6134e2b3980cc9a137647e87d1"
+    },
+    {
+      "file": "ports/sched-walt/sysctl_walt_stats.h",
+      "source": "kernel/sched/walt/sysctl_walt_stats.h",
+      "original_sha256": "8da3f7623be27f837c756c75e30b89a4b6ba732f58aa9405bca46ce9aac575c7",
+      "sha256": "8da3f7623be27f837c756c75e30b89a4b6ba732f58aa9405bca46ce9aac575c7"
+    },
+    {
+      "file": "ports/sched-walt/trace.c",
+      "source": "kernel/sched/walt/trace.c",
+      "original_sha256": "0ab514468a2f70ad04a9d03291554b71ee874688bc942e2c0790906d4dca465d",
+      "sha256": "0ab514468a2f70ad04a9d03291554b71ee874688bc942e2c0790906d4dca465d"
+    },
+    {
+      "file": "ports/sched-walt/trace.h",
+      "source": "kernel/sched/walt/trace.h",
+      "original_sha256": "33653e06550a0aa2d485fd6c87e2d6edef150bbd38b32c2b72f7fbb6316535f2",
+      "sha256": "4acdd8e7eb8367aa3ba0df15577f99f04159cace5bcb538002b722d0386106c6"
+    },
+    {
+      "file": "ports/sched-walt/voter.c",
+      "source": "kernel/sched/walt/voter.c",
+      "original_sha256": "6819ef419192adc8b3b910068f5bb761d40e1c0f58bce929195f037648e3cc9d",
+      "sha256": "6819ef419192adc8b3b910068f5bb761d40e1c0f58bce929195f037648e3cc9d"
+    },
+    {
+      "file": "ports/sched-walt/voter.h",
+      "source": "kernel/sched/walt/voter.h",
+      "original_sha256": "bf0fbdaefae3e642ba6413c304b83563ff088f3a6b9a0f6c696cda8f3a72777c",
+      "sha256": "bf0fbdaefae3e642ba6413c304b83563ff088f3a6b9a0f6c696cda8f3a72777c"
+    },
+    {
+      "file": "ports/sched-walt/walt.c",
+      "source": "kernel/sched/walt/walt.c",
+      "original_sha256": "2e226e718fd7a564daa326060895dc855474c3b0ed4869677ba36d8af4408e3c",
+      "sha256": "100657c46f105b19abd348fb2884f50d801a65300f1f68da9abccf151a4719b4"
+    },
+    {
+      "file": "ports/sched-walt/walt.h",
+      "source": "kernel/sched/walt/walt.h",
+      "original_sha256": "e1e1fbacadace292fba41c723581ba11e6a4886a183c882d9d6b6d217c9b068a",
+      "sha256": "a8773335f334cf875c9c501b291af515a69ffc98173b243b224f08bcb948fd7c"
+    },
+    {
+      "file": "ports/sched-walt/walt_cfs.c",
+      "source": "kernel/sched/walt/walt_cfs.c",
+      "original_sha256": "d31c9a019a05bd710af13241becc704c61c24939b12c9f3c21101f8ae2379e1f",
+      "sha256": "1c42aac5ad33f4fbbc03df6cae85a0714427a20db152731b205fd63efc91508f"
+    },
+    {
+      "file": "ports/sched-walt/walt_config.c",
+      "source": "kernel/sched/walt/walt_config.c",
+      "original_sha256": "28b3aecb328cf3f665dfaab697144e6bac14aef82e90a63231a40907a362ed2f",
+      "sha256": "28b3aecb328cf3f665dfaab697144e6bac14aef82e90a63231a40907a362ed2f"
+    },
+    {
+      "file": "ports/sched-walt/walt_cpufreq_cycle_cntr_driver.c",
+      "source": "kernel/sched/walt/walt_cpufreq_cycle_cntr_driver.c",
+      "original_sha256": "ee6d9effe4d8a6dc3b6be8625b6c74aeed6f7f3bce4eeddad30f1b2e8e614951",
+      "sha256": "ee6d9effe4d8a6dc3b6be8625b6c74aeed6f7f3bce4eeddad30f1b2e8e614951"
+    },
+    {
+      "file": "ports/sched-walt/walt_cycles.c",
+      "source": "kernel/sched/walt/walt_cycles.c",
+      "original_sha256": "cc6547598df30e372d2dcac0dd0439ccc9fcc3b94a86010dc06d6c328c3ba969",
+      "sha256": "cc6547598df30e372d2dcac0dd0439ccc9fcc3b94a86010dc06d6c328c3ba969"
+    },
+    {
+      "file": "ports/sched-walt/walt_debug.h",
+      "source": "kernel/sched/walt/walt_debug.h",
+      "original_sha256": "2237e2cfc516d7159b0642217bc4cb22c66b28cfe7a8a6030a09e25d89045240",
+      "sha256": "2237e2cfc516d7159b0642217bc4cb22c66b28cfe7a8a6030a09e25d89045240"
+    },
+    {
+      "file": "ports/sched-walt/walt_gclk_cycle_counter_driver.c",
+      "source": "kernel/sched/walt/walt_gclk_cycle_counter_driver.c",
+      "original_sha256": "552e149ac53d58e325c0dbb4015f357f0052db235cee82ec218b3575ee6afa7f",
+      "sha256": "552e149ac53d58e325c0dbb4015f357f0052db235cee82ec218b3575ee6afa7f"
+    },
+    {
+      "file": "ports/sched-walt/walt_halt.c",
+      "source": "kernel/sched/walt/walt_halt.c",
+      "original_sha256": "fde9a54564f95e7b86df330cad997ecdf6b13890a08f6b197d7752e1815c7601",
+      "sha256": "1860175003875793ce23a1ae3729ea60db0529f913cec065986e1deb418ada0d"
+    },
+    {
+      "file": "ports/sched-walt/walt_lb.c",
+      "source": "kernel/sched/walt/walt_lb.c",
+      "original_sha256": "b88c98b87c3a3379f7af7b9d1ef75d6ddc8994f70f24ec124c5a5da3ec6f039b",
+      "sha256": "efd55885b0204f5a65aa5bd0f8d179a8b79b253936da4e39054c0dc99cb135aa"
+    },
+    {
+      "file": "ports/sched-walt/walt_rt.c",
+      "source": "kernel/sched/walt/walt_rt.c",
+      "original_sha256": "14c722586f9847478e5b16ce3812f12f10969abe108ca9b885330f963ba7a78e",
+      "sha256": "14c722586f9847478e5b16ce3812f12f10969abe108ca9b885330f963ba7a78e"
+    },
+    {
+      "file": "ports/sched-walt/walt_storage_lb.c",
+      "source": "kernel/sched/walt/walt_storage_lb.c",
+      "original_sha256": "8a6f23b4d49100b5c686aad7f510374a834756a530f1d5203564960583d7dd9d",
+      "sha256": "ba20c0a7d09a0573ce585da55576c8989166c6a3149c97779ff392ff0e5da171"
+    },
+    {
+      "file": "ports/sched-walt/walt_tp.c",
+      "source": "kernel/sched/walt/walt_tp.c",
+      "original_sha256": "585984dc44e0e4795aba6342e0c94d9217cfe7dd0ad492387904c7a482cd3681",
+      "sha256": "585984dc44e0e4795aba6342e0c94d9217cfe7dd0ad492387904c7a482cd3681"
+    },
+    {
+      "file": "ports/sched-walt/include/linux/sched/walt.h",
+      "source": "include/linux/sched/walt.h",
+      "original_sha256": "ef57c14dea3a3655ff2bf1fa0c0938f03fcbb011a9705e2897dc6bc753f1b2d6",
+      "sha256": "ef57c14dea3a3655ff2bf1fa0c0938f03fcbb011a9705e2897dc6bc753f1b2d6"
+    },
+    {
+      "file": "ports/sched-walt/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "240d795871db15623735f7241cb04f4d6fd1c957caf84513bf40c7fed949040b"
+    }
+  ],
+  "patch_sha256": "424d035850a7f4b84ea3f4f6a2f95b132cd69428ebca3d0a019d449472b162f7",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned Motorola/Qualcomm sched_walt (canoe: WALT=m, MIDPOINT, MOTO_UNFAIR; DEBUG/STATS off) ported to android18-7.3",
+  "reviewed_changes": [
+    "7.3 API: register_syscore + data callbacks, __task_rq_unlock(rq,p,rf), dev_offline_disabled(), CONFIG_SYSCTL, stop_one_cpu_nowait() void, WQ_PERCPU explicit",
+    "h_nr_running -> h_nr_queued (6.12 h_nr_running was a KABI alias of h_nr_queued)",
+    "binder need_reply -> !is_async && !is_reply (identical facts); saved boost in restored binder_transaction vendor data",
+    "CPU halt uses restored android_pick_task(rq, rf) and __balance_callbacks(rq, NULL)",
+    "MVP mutex ordering ported to the 7.3 waiter ring: hook only chooses the waiter to precede",
+    "7.3 asserts rq clock under lock: update_rq_clock() before detach/attach and MOTO long-wait timestamp read under the src lock",
+    "Refuse to load if the task vendor area is smaller than walt_task_struct (android_arch_task_struct_size missing); BUILD_BUG_ON size > 512",
+    "sw_cycle_counter module parameter (default off) selects the shipped software cycle counter; used in QEMU where qcom,gclk MMIO is absent",
+    "sched_ext enable-state hook not registered (7.3 lacks it; sched_ext unused on device)"
+  ],
+  "pending": [
+    "qcom,gclk MMIO counters, SCMI cpufreq, perf HAL / thermal_pause / moto_sched consumers on hardware",
+    "waltgov_init partial-failure path (seen only with duplicate sysfs from a misconfigured fixture)",
+    "performance/power parity measurement vs 6.12"
+  ]
+}

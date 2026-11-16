@@ -2380,3 +2380,32 @@ transaction: a SCHED_FIFO 42 client to an INHERIT_RT context manager executes at
 and returns to SCHED_OTHER after BC_REPLY; set/restore hooks fire (1/2). Regression:
 15 suites pass; 132 port modules' CRCs match. Evidence: reports/core-stage103-validation.json.
 Next: port sched_walt itself onto these interfaces.
+
+## Stage104: sched_walt on android18-7.3
+
+Ported the pinned Motorola/Qualcomm sched_walt (canoe: WALT=m, MIDPOINT, MOTO_UNFAIR;
+DEBUG/STATS off) as ports/sched-walt (source-spec.json, patches/sched-walt-7.3.patch).
+Core (android-7.3 d3ada4994, patches/walt-core-exports-7.3.patch): android_pick_task and
+__balance_callbacks, cpu_busy_with_softirqs, __scx_enabled/ext_sched_class exports, vendor
+and OEM data back in struct binder_transaction, and android_vh_mutex_add_waiter_pos — the
+7.3 mutex queue is first_waiter + a headless ring, so the vendor only selects which waiter
+to precede and native __mutex_add_waiter() inserts (the ww_mutex path).
+
+WALT adaptations: syscore/data callbacks, __task_rq_unlock(p), dev_offline_disabled,
+CONFIG_SYSCTL, void stop_one_cpu_nowait, explicit WQ_PERCPU, h_nr_running->h_nr_queued
+(6.12 alias), binder need_reply == !is_async && !is_reply, update_rq_clock before
+detach/attach (7.3 assertions are always on), MOTO timestamp read under the src lock. It
+refuses to load when the task vendor area is smaller than walt_task_struct; a first QEMU
+boot without android_arch_task_struct_size showed exactly that corruption (neighbour task
+refcount underflow). sw_cycle_counter (default off) selects WALT's shipped software counter
+because QEMU lacks the phone's qcom,gclk MMIO counters.
+
+Image#30 QEMU, 2 asymmetric clusters, private cpufreq with the phone tables and an energy
+model, phone cmdline android_arch_task_struct_size=512 sched_walt.midpoint_freq=2500000:
+three consecutive runs pass 6 checks each — 87 /proc/sys/walt entries (phone 87), walt
+governor on both policies, big cluster 384000->3436800 kHz under load and back down idle,
+12 mixed tasks with 3x CPU3 hotplug and 3x schedutil<->walt round trips, no WALT_BUG/WARN.
+Regression: 16 suites pass; 133 port modules' CRCs match.
+Open risk: a fixture without CPUFREQ_HAVE_GOVERNOR_PER_POLICY made waltgov_init fail midway
+and CFS later oopsed; the phone driver sets the flag but that error path needs an audit.
+Not verified: gclk counters, SCMI, perf HAL/thermal_pause/moto_sched, perf/power parity.

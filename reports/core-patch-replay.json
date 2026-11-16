@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "22a4a79de0456f2afdc0986edb18d6066aede2a4",
-  "patch_count": 23,
+  "target_commit": "d3ada49940b1fc996b529424ca9bc3431e3d752b",
+  "patch_count": 24,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -13,8 +13,12 @@
       "sha256": "3ffa70da68092ca89173e8f7a65a279c43400b5cb5feed7f4c544260d591ca70"
     },
     {
+      "file": "drivers/android/binder_internal.h",
+      "sha256": "22f3a8b0b5577013997fd15de5c42f37494ac013603200c393efe2e864a269fa"
+    },
+    {
       "file": "drivers/android/vendor_hooks.c",
-      "sha256": "2cc5a36227e639c6150e8875bb20242d6cb5549a6aa0c52406aba370703d6b77"
+      "sha256": "fb513bb7c9de35d8c82478b0e8cc62c15d034f2aa46e05ab9882a8d7fdfbc75d"
     },
     {
       "file": "drivers/base/power/Makefile",
@@ -205,6 +209,10 @@
       "sha256": "a2003f006e43c6aab529fa6eab8704ef1ea2a960d80a5147618722338ebf8392"
     },
     {
+      "file": "include/trace/hooks/dtask.h",
+      "sha256": "22266e4d93a508ef43bee08f8c142ac2b3a6b9ed2cf9b56b85146b5ba0024836"
+    },
+    {
       "file": "include/trace/hooks/gunyah.h",
       "sha256": "3f17ed05e80c23f2181eefc18afcf6b85370c849444bacd7c25c987f242b9c1e"
     },
@@ -265,6 +273,10 @@
       "sha256": "ffd9b1e94cdb448b1ff6b7252111e5394a1a9022e0dc5c7d9839b352d62e4c69"
     },
     {
+      "file": "kernel/locking/mutex.c",
+      "sha256": "2d7cce7a36baf1e4c7a1d5673ab10f026268018020c65b67227a80d23fa9b870"
+    },
+    {
       "file": "kernel/power/Kconfig",
       "sha256": "92bd5dbff0c091bf62948e2233b677bc1f510e7cd8f4530f19b149fbd05a5c6e"
     },
@@ -278,7 +290,11 @@
     },
     {
       "file": "kernel/sched/core.c",
-      "sha256": "74e980a693fb13c5c14840ee1d9c6f1909cf1ab3effa190ec124a12a635cd046"
+      "sha256": "73e8a5f55d25334d8061d328d551566f45f745fee9bfd5190f9915dcbfc55447"
+    },
+    {
+      "file": "kernel/sched/ext/ext.c",
+      "sha256": "15e2b5f275cdda0fd38800148fc443181040df2800de2597f61f0cd77d7d38fb"
     },
     {
       "file": "kernel/sched/fair.c",
@@ -293,8 +309,12 @@
       "sha256": "80467058803d96433f6337f046527fd413752168504373bd40cd56d7a3411637"
     },
     {
+      "file": "kernel/sched/rt.c",
+      "sha256": "62ee0f31a49a04b3af6683f3a3ed782b14e395ade19140b1ea3367ed152997a0"
+    },
+    {
       "file": "kernel/sched/sched.h",
-      "sha256": "29ac38c4c00dcb9faee53f098306bdfb93ceaf90334ccc7f5d6cae5f1e3485cd"
+      "sha256": "6e86765c8d445ff2445b7d377d500b51fe5e44c415638292864e0b1184c544fc"
     },
     {
       "file": "kernel/sched/vendor_hooks.c",
@@ -310,5 +330,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "6f8631e0377ec125a8452192095f2a4a8558e6ca5d4ebcf80093916ea873112a"
+  "checkpoint_sha256": "adcf697a828b9887e01c7ac972ee42e6a6a3e8256437b8a4a865ee0d150eec40"
 }

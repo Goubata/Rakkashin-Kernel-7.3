@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "22a4a79de0456f2afdc0986edb18d6066aede2a4",
+  "source_commit": "d3ada49940b1fc996b529424ca9bc3431e3d752b",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -24,6 +24,7 @@
     "patches/thermal-cooling-read-error-7.3.patch": "574d86182ff94667441bb98e44ae705c787943194714ce6127f1c017f48118a0",
     "patches/thermal-binding-limits-7.3.patch": "9639cabba3600533c7ff8bbabe8acc2c551a7f22fde5fc8e8269c4fb4fb93cbb",
     "patches/dynamic-task-vendor-data-7.3.patch": "28647e4fc82718232f7d1bb8850674318f39aba596045fc1e812ccb0a0151ba7",
-    "patches/walt-core-hooks-7.3.patch": "f8bb7ba062c16cd5baa5431847f968104a3448a1444875d30c737301aa98522e"
+    "patches/walt-core-hooks-7.3.patch": "f8bb7ba062c16cd5baa5431847f968104a3448a1444875d30c737301aa98522e",
+    "patches/walt-core-exports-7.3.patch": "467fec96837842d6b7f9a7af2bb59708e9f7828e0b93e34b9bbdec3aa530f120"
   }
 }

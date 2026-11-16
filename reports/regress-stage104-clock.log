@@ -1,0 +1,444 @@
+[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000][    T0] Linux version 7.3.0-4k (avr-builder@avr-arm64) (Ubuntu clang version 21.1.8 (6ubuntu1), Ubuntu LLD 21.1.8) #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026
+[    0.000000][    T0] KASLR enabled
+[    0.000000][    T0] random: crng init done
+[    0.000000][    T0] Machine model: linux,dummy-virt
+[    0.000000][    T0] earlycon: pl11 MMIO:0x0000000009000000 (options '')
+[    0.000000][    T0] printk: legacy bootconsole [pl11] enabled
+[    0.000000][    T0] efi: UEFI not found.
+[    0.000000][    T0] OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+[    0.000000][    T0] cma: Reserved 16 MiB at 0x000000007ec00000
+[    0.000000][    T0] psci: probing for conduit method from DT.
+[    0.000000][    T0] psci: PSCIv1.1 detected in firmware.
+[    0.000000][    T0] psci: Using standard PSCI v0.2 function IDs
+[    0.000000][    T0] psci: Trusted OS migration not required
+[    0.000000][    T0] psci: SMC Calling Convention v1.0
+[    0.000000][    T0] Zone ranges:
+[    0.000000][    T0]   DMA32    [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0]   Normal   empty
+[    0.000000][    T0] Movable zone start for each node
+[    0.000000][    T0] Early memory node ranges
+[    0.000000][    T0]   node   0: [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] Initmem setup node 0 [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] percpu: Embedded 56 pages/cpu s192400 r8192 d28784 u229376
+[    0.000000][    T0] Detected PIPT I-cache on CPU0
+[    0.000000][    T0] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000][    T0] CPU features: detected: GICv3 CPU interface
+[    0.000000][    T0] CPU features: detected: HCRX_EL2 register
+[    0.000000][    T0] CPU features: detected: Stage-1 Permission Indirection Extension (S1PIE)
+[    0.000000][    T0] CPU features: detected: Spectre-v4
+[    0.000000][    T0] alternatives: applying boot alternatives
+[    0.000000][    T0] Kernel command line: console=ttyAMA0 earlycon=pl011,0x09000000 rdinit=/init panic=1 
+[    0.000000][    T0] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000][    T0] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000][    T0] software IO TLB: SWIOTLB bounce buffer size adjusted to 1MB
+[    0.000000][    T0] software IO TLB: area num 4.
+[    0.000000][    T0] software IO TLB: mapped [mem 0x000000007d980000-0x000000007da80000] (1MB)
+[    0.000000][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 262144
+[    0.000000][    T0] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.000000][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.000000][    T0] stackdepot hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.000000][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000][    T0] Running RCU self tests
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000][    T0] rcu: 	RCU event tracing is enabled.
+[    0.000000][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.000000][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+[    0.000000][    T0] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[    0.000000][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.000000][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000][    T0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000][    T0] GICv3: 256 SPIs implemented
+[    0.000000][    T0] GICv3: 0 Extended SPIs implemented
+[    0.000000][    T0] Root IRQ handler: gic_handle_irq
+[    0.000000][    T0] GICv3: GICv3 features: 16 PPIs
+[    0.000000][    T0] GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.000000][    T0] GICv3: CPU0: found redistributor 0 region 0:0x00000000080a0000
+[    0.000000][    T0] ITS [mem 0x08080000-0x0809ffff]
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Devices @43d20000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Interrupt Collections @43d30000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] GICv3: using LPI property table @0x0000000043d40000
+[    0.000000][    T0] GICv3: CPU0: using allocated LPI pending table @0x0000000043d50000
+[    0.000000][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.000000][    T0] arch_timer: cp15 timer running at 1000.00MHz (virt).
+[    0.000000][    T0] clocksource: arch_sys_counter: mask: 0x1fffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000044][    T0] sched_clock: 61 bits at 1000MHz, resolution 1ns, wraps every 4398046511103ns
+[    0.006229][    T0] kfence: initialized - using 524288 bytes for 63 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.028706][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.031378][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.031560][    T0] ... MAX_LOCK_DEPTH:          48
+[    0.031734][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    0.031904][    T0] ... CLASSHASH_SIZE:          4096
+[    0.032064][    T0] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.032223][    T0] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.032381][    T0] ... CHAINHASH_SIZE:          32768
+[    0.032541][    T0]  memory used by lock dependency info: 6429 kB
+[    0.032727][    T0]  memory used for stack traces: 4224 kB
+[    0.032892][    T0]  per task-struct memory footprint: 1920 bytes
+[    0.034628][    T0] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.00 BogoMIPS (lpj=4000000)
+[    0.035712][    T0] pid_max: default: 32768 minimum: 301
+[    0.054985][    T0] landlock: Up and running.
+[    0.055577][    T0] SELinux:  Initializing.
+[    0.101298][    T0] LSM support for eBPF active
+[    0.113373][    T0] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.113756][    T0] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.129580][    T0] VFS: Finished mounting rootfs on nullfs
+[    0.151254][    T0] Running RCU synchronous self tests
+[    0.151964][    T0] Running RCU synchronous self tests
+[    0.211451][    T1] rcu: Hierarchical SRCU implementation.
+[    0.211726][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    0.219849][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.231138][    T1] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.233837][    T1] EFI services will not be available.
+[    0.245804][    T1] smp: Bringing up secondary CPUs ...
+[    0.270647][    T0] Detected PIPT I-cache on CPU1
+[    0.273677][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    0.275061][    T0] GICv3: CPU1: using allocated LPI pending table @0x0000000043d60000
+[    0.278671][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    0.298439][    T0] Detected PIPT I-cache on CPU2
+[    0.298803][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    0.299134][    T0] GICv3: CPU2: using allocated LPI pending table @0x0000000043d70000
+[    0.300250][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    0.314331][    T0] Detected PIPT I-cache on CPU3
+[    0.314717][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    0.315065][    T0] GICv3: CPU3: using allocated LPI pending table @0x0000000043d80000
+[    0.316412][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    0.321659][    T1] smp: Brought up 1 node, 4 CPUs
+[    0.323603][    T1] SMP: Total of 4 processors activated.
+[    0.323845][    T1] CPU: All CPU(s) started at EL1
+[    0.324258][    T1] CPU features: detected: Branch Target Identification
+[    0.324619][    T1] CPU features: detected: 32-bit EL0 Support
+[    0.324842][    T1] CPU features: detected: 32-bit EL1 Support
+[    0.325539][    T1] CPU features: detected: ARMv8.4 Translation Table Level
+[    0.325754][    T1] CPU features: detected: Instruction cache invalidation not required for I/D coherence
+[    0.325992][    T1] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.326234][    T1] CPU features: detected: Common not Private translations
+[    0.326420][    T1] CPU features: detected: CRC32 instructions
+[    0.326590][    T1] CPU features: detected: Data cache clean to Point of Deep Persistence
+[    0.326800][    T1] CPU features: detected: Data cache clean to Point of Persistence
+[    0.327001][    T1] CPU features: detected: Data independent timing control (DIT)
+[    0.327198][    T1] CPU features: detected: E0PD
+[    0.327346][    T1] CPU features: detected: Enhanced Counter Virtualization
+[    0.327532][    T1] CPU features: detected: Enhanced Counter Virtualization (CNTPOFF)
+[    0.327743][    T1] CPU features: detected: Enhanced Privileged Access Never
+[    0.327942][    T1] CPU features: detected: Enhanced Virtualization Traps
+[    0.328127][    T1] CPU features: detected: Fine Grained Traps
+[    0.328296][    T1] CPU features: detected: Guarded Control Stack (GCS)
+[    0.328535][    T1] CPU features: detected: Generic authentication (IMP DEF algorithm)
+[    0.328940][    T1] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.329295][    T1] CPU features: detected: 52-bit Virtual Addressing for KVM (LPA2)
+[    0.329525][    T1] CPU features: detected: LSE atomic instructions
+[    0.329703][    T1] CPU features: detected: Memory Copy and Memory Set instructions
+[    0.329905][    T1] CPU features: detected: Privileged Access Never
+[    0.330103][    T1] CPU features: detected: PMUv3
+[    0.330253][    T1] CPU features: detected: SCTLR2
+[    0.330401][    T1] CPU features: detected: RAS Extension Support
+[    0.330588][    T1] CPU features: detected: RASv1p1 Extension Support
+[    0.330766][    T1] CPU features: detected: Random Number Generator
+[    0.330939][    T1] CPU features: detected: Speculation barrier (SB)
+[    0.331113][    T1] CPU features: detected: Stage-2 Force Write-Back
+[    0.331286][    T1] CPU features: detected: Trap EL0 IMPLEMENTATION DEFINED functionality
+[    0.331491][    T1] CPU features: detected: TLB range maintenance instructions
+[    0.331690][    T1] CPU features: detected: WFx with timeout
+[    0.331855][    T1] CPU features: detected: XNX
+[    0.332075][    T1] CPU features: detected: Scalable Matrix Extension
+[    0.332251][    T1] CPU features: detected: FA64
+[    0.332397][    T1] CPU features: detected: SME2
+[    0.332544][    T1] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.332739][    T1] CPU features: detected: Scalable Vector Extension
+[    0.359996][    T1] alternatives: applying system-wide alternatives
+[    0.382532][    T1] CPU features: detected: Hardware dirty bit management on CPU0-3
+[    0.383425][    T1] SVE: maximum available vector length 256 bytes per vector
+[    0.383651][    T1] SVE: default vector length 64 bytes per vector
+[    0.383915][    T1] SME: minimum available vector length 16 bytes per vector
+[    0.384116][    T1] SME: maximum available vector length 256 bytes per vector
+[    0.384315][    T1] SME: default vector length 32 bytes per vector
+[    0.419185][    T1] Memory: 941924K/1048576K available (21376K kernel code, 2734K rwdata, 16084K rodata, 5184K init, 11496K bss, 85008K reserved, 16384K cma-reserved)
+[    0.568678][    T1] Running RCU synchronous self tests
+[    0.570663][    T1] Running RCU synchronous self tests
+[    0.577911][    T1] Running RCU Tasks wait API self tests
+[    0.588440][    T1] Running RCU Tasks Trace wait API self tests
+[    0.602202][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    0.604655][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.611133][    T1] 18480 pages in range for non-PLT usage
+[    0.611940][    T1] 510000 pages in range for PLT usage
+[    0.618534][    T9] Callback from call_rcu_tasks_trace() invoked.
+[    0.694426][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.722223][    T1] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.723735][    T1] audit: initializing netlink subsys (disabled)
+[    0.728390][   T44] audit: type=2000 audit(0.648:1): state=initialized audit_enabled=0 res=1
+[    0.850852][    T1] thermal_sys: Registered thermal governor 'bang_bang'
+[    0.850984][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    0.851252][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    0.851454][    T1] thermal_sys: Registered thermal governor 'power_allocator'
+[    0.853052][    T1] cpuidle: using governor menu
+[    0.856594][    T1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    0.860265][    T1] ASID allocator initialised with 65536 entries
+[    0.871913][    T1] Serial: AMBA PL011 UART driver
+[    1.066337][    T1] 9000000.pl011: ttyAMA0 MMIO:0x0000000009000000 (irq = 13, base_baud = 0) is a PL011 rev1
+[    1.068483][    T1] printk: console [ttyAMA0] enabled
+[    1.068483][    T1] printk: console [ttyAMA0] enabled
+[    1.069728][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.069728][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.129354][   T42] Callback from call_rcu_tasks() invoked.
+[    1.206908][    T1] iommu: Default domain type: Translated
+[    1.207025][    T1] iommu: DMA domain TLB invalidation policy: strict mode
+[    1.230681][    T1] SCSI subsystem initialized
+[    1.236505][    T1] usbcore: registered new interface driver usbfs
+[    1.237634][    T1] usbcore: registered new interface driver hub
+[    1.238298][    T1] usbcore: registered new device driver usb
+[    1.242952][    T1] mc: Linux media interface: v0.10
+[    1.244134][    T1] videodev: Linux video capture interface: v2.00
+[    1.247127][    T1] EDAC MC: Ver: 3.0.0
+[    1.258565][    T1] scmi_core: SCMI protocol bus registered
+[    1.267808][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    1.296943][    T1] clocksource: Switched to clocksource arch_sys_counter
+[    1.354873][    T1] VFS: Disk quotas dquot_6.6.0
+[    1.355461][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    1.389616][    T1] NET: Registered PF_INET protocol family
+[    1.392045][    T1] IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.411101][    T1] tcp_listen_portaddr_hash hash table entries: 512 (order: 4, 36864 bytes, linear)
+[    1.411532][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.412457][    T1] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    1.415566][    T1] TCP bind hash table entries: 8192 (order: 9, 1179648 bytes, linear)
+[    1.423716][    T1] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.425264][    T1] UDP hash table entries: 512 (order: 5, 131072 bytes, linear)
+[    1.429173][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.430316][    T1] NET: Registered PF_XDP protocol family
+[    1.430840][    T1] PCI: CLS 0 bytes, default 64
+[    1.439853][    T1] kvm [1]: HYP mode not available
+[    1.450208][   T14] Trying to unpack rootfs image as initramfs...
+[    1.493168][    T1] Initialise system trusted keyrings
+[    1.498040][    T1] workingset: timestamp_bits=46 (anon: 41) max_order=18 bucket_order=0 (anon: 0)
+[    1.501414][    T1] Memory allocation profiling is not supported!
+[    1.530419][    T1] fuse: init (API version 7.46)
+[    1.597884][    T1] Key type asymmetric registered
+[    1.598098][    T1] Asymmetric key parser 'x509' registered
+[    1.599427][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    1.603273][    T1] io scheduler mq-deadline registered
+[    1.603365][    T1] io scheduler kyber registered
+[    1.609018][    T1] io scheduler bfq registered
+[    1.659117][    T1] pl061_gpio 9030000.pl061: PL061 GPIO chip registered
+[    1.671553][    T1] pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+[    1.673437][    T1] pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 0x0000000000
+[    1.674278][    T1] pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 0x0010000000
+[    1.674467][    T1] pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 0x8000000000
+[    1.675094][    T1] pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 32 bits
+[    1.676062][    T1] pci-host-generic 4010000000.pcie: ECAM at [mem 0x4010000000-0x401fffffff] for [bus 00-ff]
+[    1.682823][    T1] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    1.683166][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.683259][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    1.683311][    T1] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    1.683347][    T1] pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+[    1.686835][    T1] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    1.700274][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    1.700342][    T1] pci_bus 0000:00: resource 5 [mem 0x10000000-0x3efeffff]
+[    1.700375][    T1] pci_bus 0000:00: resource 6 [mem 0x8000000000-0xffffffffff]
+[    1.722770][   T14] Freeing initrd memory: 3048K
+[    2.029286][    T1] brd: module loaded
+[    2.329637][    T1] loop: module loaded
+[    2.339495][    T1] encore_fas: version 9, branch main-f408a00, counter 1000000000 Hz
+[    2.367313][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    2.367357][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    2.408319][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    2.438898][    T1] usbcore: registered new interface driver uas
+[    2.440216][    T1] usbcore: registered new interface driver usb-storage
+[    2.451410][    T1] usbcore: registered new interface driver xpad
+[    2.476501][    T1] rtc-pl031 9010000.pl031: registered as rtc0
+[    2.477360][    T1] rtc-pl031 9010000.pl031: setting system clock to 2026-11-16T08:57:43 UTC (1794819463)
+[    2.481864][    T1] usbcore: registered new interface driver uvcvideo
+[    2.488735][    T1] device-mapper: uevent: version 1.0.3
+[    2.492131][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    2.528169][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    2.573599][    T1] usbcore: registered new interface driver usbhid
+[    2.573642][    T1] usbhid: USB HID core driver
+[    2.575839][    T1] ashmem_rust: Using Rust implementation.
+[    2.605223][    T1] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 (0,8000003f) counters available
+[    2.623937][    T1] usbcore: registered new interface driver snd-usb-audio
+[    2.630428][    T1] GACT probability NOT on
+[    2.630737][    T1] Mirror/redirect action on
+[    2.632075][    T1] u32 classifier
+[    2.632103][    T1]     input device check on
+[    2.632124][    T1]     Actions configured
+[    2.640818][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    2.640818][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.641018][    T1] The pptp conntrack helper is scheduled for removal.
+[    2.641018][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    2.649669][    T1] xt_time: kernel timezone is -0000
+[    2.650079][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    2.662408][    T1] gre: GRE over IPv4 demultiplexer driver
+[    2.662467][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    2.695233][    T1] IPv4 over IPsec tunneling driver
+[    2.708254][    T1] Initializing XFRM netlink socket
+[    2.708935][    T1] IPsec XFRM device driver
+[    2.711708][    T1] NET: Registered PF_INET6 protocol family
+[    2.737496][    T1] Segment Routing with IPv6
+[    2.737912][    T1] In-situ OAM (IOAM) with IPv6
+[    2.739350][    T1] mip6: Mobile IPv6
+[    2.753152][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    2.776173][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    2.788025][    T1] NET: Registered PF_PACKET protocol family
+[    2.788100][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    2.788474][    T1] NET: Registered PF_KEY protocol family
+[    2.791940][    T1] NET: Registered PF_VSOCK protocol family
+[    3.304421][    T1] sched_proxy_exec: enabled
+[    3.318000][    T1] registered taskstats version 1
+[    3.327591][    T1] workqueue: work func tboost_fn enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
+[    3.327972][    T1] Rakkashin v3.2 features (avr, Android 7.3 port)
+[    3.328027][    T1] Loading compiled-in X.509 certificates
+[    3.343093][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 877395b53bfc9825fc15d9fe6e9400be628ea3ba'
+[    3.343167][    T1] Problem parsing in-kernel X.509 certificate list
+[    4.236229][    T1] page_owner is disabled
+[    4.242179][    T1] Key type .fscrypt registered
+[    4.242224][    T1] Key type fscrypt-provisioning registered
+[    4.256070][    T1] Boeffla WL blocker: driver version 1.1.0-7.3 started
+[    4.270919][    T1] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    4.290543][    T1] clk: Disabling unused clocks
+[    4.292141][    T1] PM: genpd: Disabling unused power domains
+[    4.292475][    T1] ALSA device list:
+[    4.294322][    T1]   No soundcards found.
+[    4.629060][    T1] Freeing unused kernel memory: 5184K
+[    4.632134][    T1] Run /init as init process
+AVR_QEMU_SMOKE_BEGIN
+Linux (none) 7.3.0-4k #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026 aarch64 GNU/Linux
+[    4.827049][   T71] kunit: module verification failed: signature and/or required key missing - tainting kernel
+[    4.956827][   T73] clk_divider_test: loading out-of-tree module taints kernel.
+[    4.984972][   T73] KTAP version 1
+[    4.985017][   T73] 1..1
+[    4.988218][   T73]     KTAP version 1
+[    4.988253][   T73]     # Subtest: clk_divider_bestdiv
+[    4.988405][   T73]     # module: clk_divider_test
+[    4.989040][   T73]     1..2
+[    5.013948][   T73]     ok 1 clk_divider_bestdiv_ulong_max_returns_max_rate
+[    5.038694][   T73]     ok 2 clk_divider_bestdiv_mux_ulong_max_returns_max_rate
+[    5.038897][   T73] # clk_divider_bestdiv: pass:2 fail:0 skip:0 total:2
+[    5.039021][   T73] # Totals: pass:2 fail:0 skip:0 total:2
+[    5.039161][   T73] ok 1 clk_divider_bestdiv
+[    5.097776][   T78] KTAP version 1
+[    5.097825][   T78] 1..5
+[    5.099453][   T78]     KTAP version 1
+[    5.099482][   T78]     # Subtest: clk-gate-register-test
+[    5.099509][   T78]     # module: clk_gate_test
+[    5.099564][   T78]     1..6
+[    5.123825][   T78]     ok 1 clk_gate_register_test_dev
+[    5.145764][   T78]     ok 2 clk_gate_register_test_parent_names
+[    5.166925][   T78]     ok 3 clk_gate_register_test_parent_data
+[    5.181699][   T78]     ok 4 clk_gate_register_test_parent_data_legacy
+[    5.195042][   T78]     ok 5 clk_gate_register_test_parent_hw
+[    5.198099][   T89] gate bit exceeds LOWORD field
+[    5.202078][   T78]     ok 6 clk_gate_register_test_hiword_invalid
+[    5.202173][   T78] # clk-gate-register-test: pass:6 fail:0 skip:0 total:6
+[    5.202228][   T78] # Totals: pass:6 fail:0 skip:0 total:6
+[    5.202273][   T78] ok 1 clk-gate-register-test
+[    5.202683][   T78]     KTAP version 1
+[    5.202705][   T78]     # Subtest: clk-gate-test
+[    5.202728][   T78]     # module: clk_gate_test
+[    5.202773][   T78]     1..3
+[    5.225668][   T78]     ok 1 clk_gate_test_parent_rate
+[    5.240284][   T94] clk_unregister: unregistering prepared clock: test_gate
+[    5.244113][   T94] clk_unregister: unregistering prepared clock: test_parent
+[    5.245052][   T78]     ok 2 clk_gate_test_enable
+[    5.263115][   T78]     ok 3 clk_gate_test_disable
+[    5.263283][   T78] # clk-gate-test: pass:3 fail:0 skip:0 total:3
+[    5.263373][   T78] # Totals: pass:3 fail:0 skip:0 total:3
+[    5.263461][   T78] ok 2 clk-gate-test
+[    5.264186][   T78]     KTAP version 1
+[    5.264225][   T78]     # Subtest: clk-gate-invert-test
+[    5.264268][   T78]     # module: clk_gate_test
+[    5.264349][   T78]     1..2
+[    5.277577][   T98] clk_unregister: unregistering prepared clock: test_gate
+[    5.279827][   T98] clk_unregister: unregistering prepared clock: test_parent
+[    5.280443][   T78]     ok 1 clk_gate_test_invert_enable
+[    5.300839][   T78]     ok 2 clk_gate_test_invert_disable
+[    5.300933][   T78] # clk-gate-invert-test: pass:2 fail:0 skip:0 total:2
+[    5.300985][   T78] # Totals: pass:2 fail:0 skip:0 total:2
+[    5.301029][   T78] ok 3 clk-gate-invert-test
+[    5.301433][   T78]     KTAP version 1
+[    5.301455][   T78]     # Subtest: clk-gate-hiword-test
+[    5.301478][   T78]     # module: clk_gate_test
+[    5.301524][   T78]     1..2
+[    5.315174][  T102] clk_unregister: unregistering prepared clock: test_gate
+[    5.317741][  T102] clk_unregister: unregistering prepared clock: test_parent
+[    5.318360][   T78]     ok 1 clk_gate_test_hiword_enable
+[    5.342275][   T78]     ok 2 clk_gate_test_hiword_disable
+[    5.342458][   T78] # clk-gate-hiword-test: pass:2 fail:0 skip:0 total:2
+[    5.342546][   T78] # Totals: pass:2 fail:0 skip:0 total:2
+[    5.342624][   T78] ok 4 clk-gate-hiword-test
+[    5.343478][   T78]     KTAP version 1
+[    5.343517][   T78]     # Subtest: clk-gate-is_enabled-test
+[    5.343559][   T78]     # module: clk_gate_test
+[    5.343639][   T78]     1..4
+[    5.357702][   T78]     ok 1 clk_gate_test_is_enabled
+[    5.371391][   T78]     ok 2 clk_gate_test_is_disabled
+[    5.390934][   T78]     ok 3 clk_gate_test_is_enabled_inverted
+[    5.408064][   T78]     ok 4 clk_gate_test_is_disabled_inverted
+[    5.408184][   T78] # clk-gate-is_enabled-test: pass:4 fail:0 skip:0 total:4
+[    5.408237][   T78] # Totals: pass:4 fail:0 skip:0 total:4
+[    5.408282][   T78] ok 5 clk-gate-is_enabled-test
+[    5.537269][  T113] KTAP version 1
+[    5.537320][  T113] 1..1
+[    5.540387][  T113]     KTAP version 1
+[    5.540415][  T113]     # Subtest: avr_clock_rate_compat
+[    5.540443][  T113]     # module: avr_rate_compat_test
+[    5.540522][  T113]     1..5
+[    5.581930][  T113]     ok 1 exact_division_preserves_parent
+[    5.606782][  T113]     ok 2 read_only_divider_uses_programmed_value
+[    5.631509][  T113]     ok 3 explicit_divider_table_is_respected
+[    5.673963][  T113]     ok 4 parent_rate_adjustment_is_applied
+[    5.696095][  T113]     ok 5 backend_error_is_propagated
+[    5.696228][  T113] # avr_clock_rate_compat: pass:5 fail:0 skip:0 total:5
+[    5.696316][  T113] # Totals: pass:5 fail:0 skip:0 total:5
+[    5.696396][  T113] ok 1 avr_clock_rate_compat
+[    5.771484][  T124] KTAP version 1
+[    5.771540][  T124] 1..1
+[    5.775248][  T124]     KTAP version 1
+[    5.775283][  T124]     # Subtest: avr_clock_boot_hold
+[    5.775312][  T124]     # module: avr_clock_hold_test
+[    5.775370][  T124]     1..3
+[    5.833948][  T124]     ok 1 boot_hold_releases_once
+[    5.868206][  T124]     ok 2 repeated_sync_preserves_consumer
+[    5.908408][  T124]     ok 3 opt_out_does_not_acquire_hold
+[    5.909050][  T124] # avr_clock_boot_hold: pass:3 fail:0 skip:0 total:3
+[    5.909139][  T124] # Totals: pass:3 fail:0 skip:0 total:3
+[    5.909456][  T124] ok 1 avr_clock_boot_hold
+[    5.984044][  T131] KTAP version 1
+[    5.984098][  T131] 1..1
+[    5.986632][  T131]     KTAP version 1
+[    5.986663][  T131]     # Subtest: avr_rcu_proxy
+[    5.986691][  T131]     # module: avr_rcu_proxy_test
+[    5.986751][  T131]     1..2
+[    6.055242][  T131]     ok 1 blocked_proxy_donor_is_quiescent
+[    6.383238][  T131]     ok 2 runnable_task_remains_holdout
+[    6.383498][  T131] # avr_rcu_proxy: pass:2 fail:0 skip:0 total:2
+[    6.383593][  T131] # Totals: pass:2 fail:0 skip:0 total:2
+[    6.383678][  T131] ok 1 avr_rcu_proxy
+[    6.540029][  T141] zram: Added device: zram0
+[    6.584255][    T1] zram0: detected capacity change from 0 to 131072
+Setting up swapspace version 1, size = 67104768 bytes
+UUID=0fb7cec9-c989-4cfb-ab08-0102c25134eb
+[    6.721859][  T145] Adding 65532k swap on /dev/zram0.  Priority:-1 extents:1 across:65532k SS
+[    6.775330][  T146] KTAP version 1
+[    6.775380][  T146] 1..1
+[    6.777480][  T146]     KTAP version 1
+[    6.777510][  T146]     # Subtest: avr_shmem_pool
+[    6.777552][  T146]     # module: avr_shmem_pool_test
+[    6.777612][  T146]     1..6
+[    6.797511][  T146]     ok 1 pool_folio_is_cached_and_accounted
+[    6.811462][  T146]     ok 2 empty_pool_uses_normal_shmem
+[    6.822708][  T146]     ok 3 unrelated_inode_is_untouched
+[    6.830902][  T146]     ok 4 unregister_restores_default_allocator
+[    6.886251][  T146]     ok 5 unregister_waits_for_sleeping_provider
+[    6.913711][  T146]     ok 6 swap_reclaim_preserves_shmem_data
+[    6.914057][  T146] # avr_shmem_pool: pass:6 fail:0 skip:0 total:6
+[    6.914286][  T146] # Totals: pass:6 fail:0 skip:0 total:6
+[    6.914495][  T146] ok 1 avr_shmem_pool
+AVR_QEMU_KUNIT_MODULES_LOADED
+[    6.980476][  T161] reboot: Power down

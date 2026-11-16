@@ -1,0 +1,181 @@
+diff --git a/drivers/android/binder_internal.h b/drivers/android/binder_internal.h
+index e49b6edba..254173c0f 100644
+--- a/drivers/android/binder_internal.h
++++ b/drivers/android/binder_internal.h
+@@ -596,6 +596,9 @@ struct binder_transaction {
+ 	 * during thread teardown
+ 	 */
+ 	spinlock_t lock;
++	/* ANDROID: vendor (sched_walt) and OEM data, as in android16-6.12 */
++	ANDROID_VENDOR_DATA(1);
++	ANDROID_OEM_DATA(1);
+ };
+ 
+ /**
+diff --git a/drivers/android/vendor_hooks.c b/drivers/android/vendor_hooks.c
+index 15e1a8b44..fbc90ae08 100644
+--- a/drivers/android/vendor_hooks.c
++++ b/drivers/android/vendor_hooks.c
+@@ -57,6 +57,7 @@
+  */
+ 
+ /* keep-sorted start */
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_mutex_add_waiter_pos);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_restore_priority);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_set_priority);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_after_vcpu_run);
+diff --git a/include/trace/hooks/dtask.h b/include/trace/hooks/dtask.h
+index 91c97be90..948e4bd93 100644
+--- a/include/trace/hooks/dtask.h
++++ b/include/trace/hooks/dtask.h
+@@ -24,6 +24,13 @@ DECLARE_HOOK(android_vh_alter_mutex_list_add,
+ 		struct list_head *list,
+ 		bool *already_on_list),
+ 	TP_ARGS(lock, waiter, list, already_on_list));
++/*
++ * 7.3 replacement for alter_mutex_list_add: the vendor may only choose the waiter
++ * that @waiter is inserted in front of (*pos stays NULL for FIFO tail).
++ */
++DECLARE_HOOK(android_vh_mutex_add_waiter_pos,
++	TP_PROTO(struct mutex *lock, struct mutex_waiter *waiter, struct mutex_waiter **pos),
++	TP_ARGS(lock, waiter, pos));
+ DECLARE_HOOK(android_vh_mutex_unlock_slowpath,
+ 	TP_PROTO(struct mutex *lock),
+ 	TP_ARGS(lock));
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index b7565ad15..3f76935ab 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -33,6 +33,9 @@
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/lock.h>
++#undef CREATE_TRACE_POINTS
++/* hook instances are created in drivers/android/vendor_hooks.c */
++#include <trace/hooks/dtask.h>
+ 
+ #ifndef CONFIG_PREEMPT_RT
+ #include "mutex.h"
+@@ -676,8 +679,11 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
+ 	lock_contended(&lock->dep_map, ip);
+ 
+ 	if (!use_ww_ctx) {
+-		/* add waiting tasks to the end of the waitqueue (FIFO): */
+-		__mutex_add_waiter(lock, &waiter, NULL);
++		struct mutex_waiter *pos = NULL;
++
++		/* FIFO tail unless a vendor ordering policy picks a waiter to precede. */
++		trace_android_vh_mutex_add_waiter_pos(lock, &waiter, &pos);
++		__mutex_add_waiter(lock, &waiter, pos);
+ 	} else {
+ 		/*
+ 		 * Add in stamp order, waking up waiters that must kill
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index c74189cdb..9ddd8e349 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5783,6 +5783,8 @@ void __balance_callbacks(struct rq *rq, struct rq_flags *rf)
+ 		rq_repin_lock(rq, rf);
+ }
+ 
++EXPORT_SYMBOL_GPL(__balance_callbacks);
++
+ void balance_callbacks(struct rq *rq, struct balance_callback *head)
+ {
+ 	unsigned long flags;
+@@ -6812,6 +6814,32 @@ static inline struct task_struct *pick_task(struct rq *rq, struct rq_flags *rf)
+ }
+ 
+ extern void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
++#endif /* CONFIG_SCHED_CORE */
++
++/*
++ * ANDROID: pick the next task without switching to it (android16-6.12 exported
++ * pick_task(rq) for sched_walt CPU halt). Caller holds the pinned rq lock and @rf.
++ */
++struct task_struct *android_pick_task(struct rq *rq, struct rq_flags *rf)
++{
++	const struct sched_class *class;
++	struct task_struct *p;
++
++restart:
++	rq->dl_server = NULL;
++	for_each_active_class(class) {
++		p = class->pick_task(rq, rf);
++		if (unlikely(p == RETRY_TASK))
++			goto restart;
++		if (p)
++			return p;
++	}
++
++	BUG(); /* The idle class should always have a runnable task. */
++}
++EXPORT_SYMBOL_GPL(android_pick_task);
++
++#ifdef CONFIG_SCHED_CORE
+ 
+ static void queue_core_balance(struct rq *rq);
+ 
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index dcdfd1062..875a486a1 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -77,6 +77,7 @@ static LIST_HEAD(scx_tasks);
+ /* ops enable/disable */
+ DEFINE_MUTEX(scx_enable_mutex);
+ DEFINE_STATIC_KEY_FALSE(__scx_enabled);
++EXPORT_SYMBOL_GPL(__scx_enabled);
+ DEFINE_PERCPU_RWSEM(scx_fork_rwsem);
+ static atomic_t scx_enable_state_var = ATOMIC_INIT(SCX_DISABLED);
+ static DEFINE_RAW_SPINLOCK(scx_bypass_lock);
+@@ -5172,6 +5173,7 @@ DEFINE_SCHED_CLASS(ext) = {
+ 	.uclamp_enabled		= 1,
+ #endif
+ };
++EXPORT_SYMBOL_GPL(ext_sched_class);
+ 
+ s32 scx_init_dsq(struct scx_dispatch_q *dsq, u64 dsq_id, struct scx_sched *sch)
+ {
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 2622c8cdb..218e65c80 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1532,20 +1532,21 @@ static int find_lowest_rq(struct task_struct *sched_ctx, struct task_struct *exe
+  * task is likely to block preemptions soon because it is a
+  * ksoftirq thread that is handling softirqs.
+  */
+-static bool cpu_busy_with_softirqs(int cpu)
++bool cpu_busy_with_softirqs(int cpu)
+ {
+ 	u32 softirqs = per_cpu(active_softirqs, cpu) |
+ 		       __cpu_softirq_pending(cpu);
+ 
+ 	return softirqs & LONG_SOFTIRQ_MASK;
+ }
++EXPORT_SYMBOL_GPL(cpu_busy_with_softirqs);
+ 
+ bool local_rt_runnable(void)
+ {
+ 	return sched_rt_runnable(this_rq());
+ }
+ #else
+-static bool cpu_busy_with_softirqs(int cpu)
++bool cpu_busy_with_softirqs(int cpu)
+ {
+ 	return false;
+ }
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 2fc5e3005..714408464 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2641,6 +2641,10 @@ extern const u32		sched_prio_to_wmult[40];
+ 
+ #define RETRY_TASK		((void *)-1UL)
+ 
++/* ANDROID: vendor scheduler (sched_walt) interfaces restored from android16-6.12 */
++extern struct task_struct *android_pick_task(struct rq *rq, struct rq_flags *rf);
++extern bool cpu_busy_with_softirqs(int cpu);
++
+ struct affinity_context {
+ 	const struct cpumask	*new_mask;
+ 	struct cpumask		*user_mask;

@@ -1,0 +1,78 @@
+{
+ "stage": 104,
+ "scope": "sched_walt (phone CPU governor \"walt\") running on android18-7.3 in QEMU with a private cpufreq/energy-model fixture",
+ "core_patch": "patches/walt-core-exports-7.3.patch",
+ "source_commit": "d3ada49940b1fc996b529424ca9bc3431e3d752b",
+ "core_image": "7.3.0-4k #30",
+ "image_sha256": "3a2035d1f487126fbe4811234bba1eac0247a0135561667b281fe5f47177d19c",
+ "core_changes": [
+  "android_pick_task(rq, rf) export (6.12 exported pick_task(rq)); __balance_callbacks export",
+  "cpu_busy_with_softirqs non-static + export (6.12 parity)",
+  "__scx_enabled and ext_sched_class exports (task_on_scx in WALT)",
+  "struct binder_transaction ANDROID_VENDOR_DATA(1)/OEM_DATA(1) as in 6.12",
+  "android_vh_mutex_add_waiter_pos: 7.3 waiter ring -> vendor chooses insert position, native code inserts"
+ ],
+ "port": {
+  "spec": "ports/sched-walt/source-spec.json",
+  "patch": "patches/sched-walt-7.3.patch",
+  "modules_import_crcs": [
+   340,
+   8
+  ],
+  "crc_passed": true
+ },
+ "checks": {
+  "runtime": {
+   "logs": [
+    "reports/sched-walt-stage104-stress-r1.log",
+    "reports/sched-walt-stage104-stress-r2.log",
+    "reports/sched-walt-stage104-stress-r3.log"
+   ],
+   "runs": 3,
+   "checks_per_run": 6,
+   "passed": true,
+   "details": [
+    "/proc/sys/walt has 87 entries (phone: 87)",
+    "walt governor selected on both policies",
+    "big cluster 384000 -> 3436800 kHz under load and back to 556800-2476800 kHz idle",
+    "12 mixed tasks + 3x CPU3 offline/online + 3x schedutil<->walt round trips",
+    "no WALT_BUG/WARNING/Oops"
+   ]
+  },
+  "regression": [
+   "smoke True  []",
+   "clock True [35, 0, 0, 35] []",
+   "oplus True 1283 []",
+   "rakkashin True 120 []",
+   "ntsync True  []",
+   "fence True [5, 0, 0, 5] []",
+   "walt-hooks True [3, 0, 0, 3] []",
+   "ddr-cooling True [14, 0, 0, 14] []",
+   "devfreq-cooling True [9, 0, 0, 9] []",
+   "cpufreq-cooling True [9, 0, 0, 9] []",
+   "cpu-hotplug True [8, 0, 0, 8] []",
+   "userspace-cdev True [6, 0, 0, 6] []",
+   "qmi-cooling True [38, 0, 0, 38] []",
+   "bcl-soc True [26, 0, 0, 26] []",
+   "bcl-pmic True [44, 0, 0, 44] []",
+   "task-vendor-data True [4, 0, 0, 4] []"
+  ],
+  "module_crc": "133 port modules match"
+ },
+ "bugs_found_and_fixed": [
+  "Booting without android_arch_task_struct_size let WALT write past task_struct and underflow a neighbour task refcount (delayed_put_task_struct WARN); module now refuses to load in that case",
+  "7.3 always-on rq clock assertions: WALT detach/attach lacked update_rq_clock and MOTO code read rq_clock before taking the lock",
+  "alloc_workqueue without WQ_PERCPU warns on 7.3",
+  "walt_init blocked waiting for a cycle counter in QEMU (phone uses qcom,gclk MMIO)"
+ ],
+ "open_risk": [
+  "A misconfigured fixture (no CPUFREQ_HAVE_GOVERNOR_PER_POLICY) made waltgov_init fail mid-way and was followed by CFS h_curr corruption/Oops; the phone driver sets the flag, but the waltgov_init error path must be audited before device use"
+ ],
+ "not_verified": [
+  "qcom,gclk counters, SCMI cpufreq, perf HAL, thermal_pause/moto_sched/core_ctl consumers on hardware",
+  "performance and power parity with 6.12"
+ ],
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

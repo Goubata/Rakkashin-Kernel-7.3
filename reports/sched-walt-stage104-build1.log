@@ -1,0 +1,56 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt.o
+  CC [M]  boost.o
+  CC [M]  sched_avg.o
+  CC [M]  walt_halt.o
+  CC [M]  core_ctl.o
+  CC [M]  trace.o
+  CC [M]  input-boost.o
+core_ctl.c:1924:26: error: no member named 'offline_disabled' in 'struct device'
+ 1924 |                                 get_cpu_device(cpu)->offline_disabled;
+      |                                 ~~~~~~~~~~~~~~~~~~~  ^
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: core_ctl.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from trace.c:84:
+In file included from ./trace.h:2437:
+/work/avr-src/include/trace/define_trace.h:118:10: fatal error: '../../kernel/sched/walt/trace.h' file not found
+  118 | #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/trace/define_trace.h:113:32: note: expanded from macro 'TRACE_INCLUDE'
+  113 | # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/trace/define_trace.h:110:34: note: expanded from macro '__TRACE_INCLUDE'
+  110 | # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
+   10 | #define __stringify(x...)       __stringify_1(x)
+      |                                 ^~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
+    9 | #define __stringify_1(x...)     #x
+      |                                 ^~
+<scratch space>:69:1: note: expanded from here
+   69 | "../../kernel/sched/walt/trace.h"
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: trace.o] Error 1
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

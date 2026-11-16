@@ -1,0 +1,16 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/sched-walt/sched-walt.ko",
+      "imports_checked": 340,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/sched-walt/avr-walt-fixture.ko",
+      "imports_checked": 8,
+      "mismatches": {}
+    }
+  ]
+}

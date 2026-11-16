@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage104では実機のCPUガバナーである **WALT（sched_walt）を7.3で動かしました**。7.3本体に、6.12がベンダー向けに提供していた関数・シンボル（タスク選択、balance callback、softirq判定、sched_ext、binderのベンダー領域）を戻し、7.3で作り直されたmutex待ち行列にはMVP優先の挿入位置だけを選ぶフックを用意しました。WALT側は7.3のAPI変更、常時有効になったランキュー時計の検査、ワークキュー指定などに合わせています。QEMU上（2クラスタ非対称、実機周波数表の仮想cpufreqとエネルギーモデル）で、`/proc/sys/walt` 87項目（実機と同数）、`walt` ガバナーで負荷時に最大周波数・アイドルで低下、多数タスク＋CPUホットプラグ＋ガバナー往復のストレスを3回連続で通過。既存16試験群と133モジュールCRCも合格（Image#30）。実機のサイクルカウンタ（qcom,gclk）や性能・電力の比較は未確認です。証拠は `reports/sched-walt-stage104-validation.json`。
+
 Stage103ではWALTが使うフックのうち7.3で消えていた5個（wakeup時のpreempt判定、次タスク差し替え、アイドル負荷分散CPU選択、binder優先度の設定・復帰）を、7.3のEEVDF構造に合わせて戻しました。また7.3の標準設定はRust版binderのみで、Android独自のRT優先度継承がないため、6.12と同じC版binder＋binderfsに切り替えました。新Image#29で、実際のスケジューリングでの各フック発火と、binderfs上の実トランザクションでFIFO優先度42が継承され返信後に通常へ戻ること・binderフック発火を確認。既存の15試験群と132モジュールのCRCも合格。証拠は `reports/core-stage103-validation.json`。
 
 Stage102ではWALT（Qualcommのスケジューラ拡張、実機のCPUガバナー `walt`）の前提として、6.12にあった「task_structの後ろに付くベンダー領域」（`android_arch_task_struct_size`／`android_task_vendor_data`）を7.3本体へ戻しました。実機の起動パラメーターは `android_arch_task_struct_size=512` です。新Image#28で、512指定時に64回のfork/kthreadで子の領域がゼロ初期化・親と分離されること、指定なし・上限超え（4096）では領域が付かないことを確認。既存の冷却・QMI・BCL・clock・oplus・Rakkashin・fence・ntsync試験も通過し、外部モジュールのCRCは不変。証拠は `reports/core-stage102-validation.json`。

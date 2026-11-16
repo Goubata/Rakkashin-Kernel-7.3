@@ -1,0 +1,410 @@
+[    0.000000][    T0] Booting Linux on physical CPU 0x0000000000 [0x000f0510]
+[    0.000000][    T0] Linux version 7.3.0-4k (avr-builder@avr-arm64) (Ubuntu clang version 21.1.8 (6ubuntu1), Ubuntu LLD 21.1.8) #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026
+[    0.000000][    T0] KASLR enabled
+[    0.000000][    T0] random: crng init done
+[    0.000000][    T0] Machine model: linux,dummy-virt
+[    0.000000][    T0] earlycon: pl11 MMIO:0x0000000009000000 (options '')
+[    0.000000][    T0] printk: legacy bootconsole [pl11] enabled
+[    0.000000][    T0] efi: UEFI not found.
+[    0.000000][    T0] OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+[    0.000000][    T0] cma: Reserved 16 MiB at 0x000000007ec00000
+[    0.000000][    T0] psci: probing for conduit method from DT.
+[    0.000000][    T0] psci: PSCIv1.1 detected in firmware.
+[    0.000000][    T0] psci: Using standard PSCI v0.2 function IDs
+[    0.000000][    T0] psci: Trusted OS migration not required
+[    0.000000][    T0] psci: SMC Calling Convention v1.0
+[    0.000000][    T0] Zone ranges:
+[    0.000000][    T0]   DMA32    [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0]   Normal   empty
+[    0.000000][    T0] Movable zone start for each node
+[    0.000000][    T0] Early memory node ranges
+[    0.000000][    T0]   node   0: [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] Initmem setup node 0 [mem 0x0000000040000000-0x000000007fffffff]
+[    0.000000][    T0] percpu: Embedded 56 pages/cpu s192400 r8192 d28784 u229376
+[    0.000000][    T0] Detected PIPT I-cache on CPU0
+[    0.000000][    T0] CPU features: detected: Address authentication (IMP DEF algorithm)
+[    0.000000][    T0] CPU features: detected: GICv3 CPU interface
+[    0.000000][    T0] CPU features: detected: HCRX_EL2 register
+[    0.000000][    T0] CPU features: detected: Stage-1 Permission Indirection Extension (S1PIE)
+[    0.000000][    T0] CPU features: detected: Spectre-v4
+[    0.000000][    T0] alternatives: applying boot alternatives
+[    0.000000][    T0] Kernel command line: console=ttyAMA0 earlycon=pl011,0x09000000 rdinit=/init panic=1 
+[    0.000000][    T0] printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+[    0.000000][    T0] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes, linear)
+[    0.000000][    T0] software IO TLB: SWIOTLB bounce buffer size adjusted to 1MB
+[    0.000000][    T0] software IO TLB: area num 4.
+[    0.000000][    T0] software IO TLB: mapped [mem 0x000000007d980000-0x000000007da80000] (1MB)
+[    0.000000][    T0] Built 1 zonelists, mobility grouping on.  Total pages: 262144
+[    0.000000][    T0] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+[    0.000000][    T0] stackdepot: allocating hash table via alloc_large_system_hash
+[    0.000000][    T0] stackdepot hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+[    0.000000][    T0] stackdepot: allocating space for 8192 stack pools via memblock
+[    0.000000][    T0] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+[    0.000000][    T0] Running RCU self tests
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] rcu: Preemptible hierarchical RCU implementation.
+[    0.000000][    T0] rcu: 	RCU event tracing is enabled.
+[    0.000000][    T0] rcu: 	RCU lockdep checking is enabled.
+[    0.000000][    T0] rcu: 	RCU restricting CPUs from NR_CPUS=32 to nr_cpu_ids=4.
+[    0.000000][    T0] rcu: 	RCU priority boosting: priority 1 delay 500 ms.
+[    0.000000][    T0] 	Trampoline variant of Tasks RCU enabled.
+[    0.000000][    T0] 	Tracing variant of Tasks RCU enabled.
+[    0.000000][    T0] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+[    0.000000][    T0] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+[    0.000000][    T0] Running RCU synchronous self tests
+[    0.000000][    T0] RCU Tasks: Setting shift to 2 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=4.
+[    0.000000][    T0] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+[    0.000000][    T0] GICv3: 256 SPIs implemented
+[    0.000000][    T0] GICv3: 0 Extended SPIs implemented
+[    0.000000][    T0] Root IRQ handler: gic_handle_irq
+[    0.000000][    T0] GICv3: GICv3 features: 16 PPIs
+[    0.000000][    T0] GICv3: GICD_CTLR.DS=1, SCR_EL3.FIQ=0
+[    0.000000][    T0] GICv3: CPU0: found redistributor 0 region 0:0x00000000080a0000
+[    0.000000][    T0] ITS [mem 0x08080000-0x0809ffff]
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Devices @43d20000 (indirect, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] ITS@0x0000000008080000: allocated 8192 Interrupt Collections @43d30000 (flat, esz 8, psz 64K, shr 1)
+[    0.000000][    T0] GICv3: using LPI property table @0x0000000043d40000
+[    0.000000][    T0] GICv3: CPU0: using allocated LPI pending table @0x0000000043d50000
+[    0.000000][    T0] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000][    T0] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+[    0.000000][    T0] arch_timer: cp15 timer running at 1000.00MHz (virt).
+[    0.000000][    T0] clocksource: arch_sys_counter: mask: 0x1fffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+[    0.000044][    T0] sched_clock: 61 bits at 1000MHz, resolution 1ns, wraps every 4398046511103ns
+[    0.005756][    T0] kfence: initialized - using 524288 bytes for 63 objects at 0x(____ptrval____)-0x(____ptrval____)
+[    0.028032][    T0] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.030683][    T0] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.030869][    T0] ... MAX_LOCK_DEPTH:          48
+[    0.031031][    T0] ... MAX_LOCKDEP_KEYS:        8192
+[    0.031197][    T0] ... CLASSHASH_SIZE:          4096
+[    0.031355][    T0] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.031512][    T0] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.031669][    T0] ... CHAINHASH_SIZE:          32768
+[    0.031825][    T0]  memory used by lock dependency info: 6429 kB
+[    0.032011][    T0]  memory used for stack traces: 4224 kB
+[    0.032172][    T0]  per task-struct memory footprint: 1920 bytes
+[    0.033841][    T0] Calibrating delay loop (skipped), value calculated using timer frequency.. 2000.00 BogoMIPS (lpj=4000000)
+[    0.034877][    T0] pid_max: default: 32768 minimum: 301
+[    0.054094][    T0] landlock: Up and running.
+[    0.054561][    T0] SELinux:  Initializing.
+[    0.102930][    T0] LSM support for eBPF active
+[    0.117007][    T0] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.117409][    T0] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes, linear)
+[    0.133902][    T0] VFS: Finished mounting rootfs on nullfs
+[    0.156136][    T0] Running RCU synchronous self tests
+[    0.156729][    T0] Running RCU synchronous self tests
+[    0.214386][    T1] rcu: Hierarchical SRCU implementation.
+[    0.214888][    T1] rcu: 	Max phase no-delay instances is 1000.
+[    0.223484][    T1] Timer migration: 1 hierarchy levels; 8 children per group; 1 crossnode level
+[    0.233981][    T1] dyndbg: Ignore empty _ddebug table in a CONFIG_DYNAMIC_DEBUG_CORE build
+[    0.236857][    T1] EFI services will not be available.
+[    0.248608][    T1] smp: Bringing up secondary CPUs ...
+[    0.275213][    T0] Detected PIPT I-cache on CPU1
+[    0.284401][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    0.287186][    T0] GICv3: CPU1: using allocated LPI pending table @0x0000000043d60000
+[    0.294317][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    0.345997][    T0] Detected PIPT I-cache on CPU2
+[    0.346443][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    0.346790][    T0] GICv3: CPU2: using allocated LPI pending table @0x0000000043d70000
+[    0.347919][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    0.374916][    T0] Detected PIPT I-cache on CPU3
+[    0.375380][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    0.375723][    T0] GICv3: CPU3: using allocated LPI pending table @0x0000000043d80000
+[    0.377077][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    0.381060][    T1] smp: Brought up 1 node, 4 CPUs
+[    0.385406][    T1] SMP: Total of 4 processors activated.
+[    0.385838][    T1] CPU: All CPU(s) started at EL1
+[    0.386720][    T1] CPU features: detected: Branch Target Identification
+[    0.387080][    T1] CPU features: detected: 32-bit EL0 Support
+[    0.387385][    T1] CPU features: detected: 32-bit EL1 Support
+[    0.387678][    T1] CPU features: detected: ARMv8.4 Translation Table Level
+[    0.388015][    T1] CPU features: detected: Instruction cache invalidation not required for I/D coherence
+[    0.388421][    T1] CPU features: detected: Data cache clean to the PoU not required for I/D coherence
+[    0.388842][    T1] CPU features: detected: Common not Private translations
+[    0.389175][    T1] CPU features: detected: CRC32 instructions
+[    0.389518][    T1] CPU features: detected: Data cache clean to Point of Deep Persistence
+[    0.389946][    T1] CPU features: detected: Data cache clean to Point of Persistence
+[    0.391101][    T1] CPU features: detected: Data independent timing control (DIT)
+[    0.391454][    T1] CPU features: detected: E0PD
+[    0.391714][    T1] CPU features: detected: Enhanced Counter Virtualization
+[    0.392038][    T1] CPU features: detected: Enhanced Counter Virtualization (CNTPOFF)
+[    0.392386][    T1] CPU features: detected: Enhanced Privileged Access Never
+[    0.392711][    T1] CPU features: detected: Enhanced Virtualization Traps
+[    0.393054][    T1] CPU features: detected: Fine Grained Traps
+[    0.393352][    T1] CPU features: detected: Guarded Control Stack (GCS)
+[    0.393828][    T1] CPU features: detected: Generic authentication (IMP DEF algorithm)
+[    0.394380][    T1] CPU features: detected: RCpc load-acquire (LDAPR)
+[    0.395087][    T1] CPU features: detected: 52-bit Virtual Addressing for KVM (LPA2)
+[    0.395471][    T1] CPU features: detected: LSE atomic instructions
+[    0.395779][    T1] CPU features: detected: Memory Copy and Memory Set instructions
+[    0.396125][    T1] CPU features: detected: Privileged Access Never
+[    0.396467][    T1] CPU features: detected: PMUv3
+[    0.396728][    T1] CPU features: detected: SCTLR2
+[    0.396998][    T1] CPU features: detected: RAS Extension Support
+[    0.397321][    T1] CPU features: detected: RASv1p1 Extension Support
+[    0.397631][    T1] CPU features: detected: Random Number Generator
+[    0.398019][    T1] CPU features: detected: Speculation barrier (SB)
+[    0.398372][    T1] CPU features: detected: Stage-2 Force Write-Back
+[    0.398679][    T1] CPU features: detected: Trap EL0 IMPLEMENTATION DEFINED functionality
+[    0.399236][    T1] CPU features: detected: TLB range maintenance instructions
+[    0.399570][    T1] CPU features: detected: WFx with timeout
+[    0.399856][    T1] CPU features: detected: XNX
+[    0.400236][    T1] CPU features: detected: Scalable Matrix Extension
+[    0.400546][    T1] CPU features: detected: FA64
+[    0.400802][    T1] CPU features: detected: SME2
+[    0.401076][    T1] CPU features: detected: Speculative Store Bypassing Safe (SSBS)
+[    0.401418][    T1] CPU features: detected: Scalable Vector Extension
+[    0.440996][    T1] alternatives: applying system-wide alternatives
+[    0.462333][    T1] CPU features: detected: Hardware dirty bit management on CPU0-3
+[    0.463249][    T1] SVE: maximum available vector length 256 bytes per vector
+[    0.463479][    T1] SVE: default vector length 64 bytes per vector
+[    0.463730][    T1] SME: minimum available vector length 16 bytes per vector
+[    0.463937][    T1] SME: maximum available vector length 256 bytes per vector
+[    0.464146][    T1] SME: default vector length 32 bytes per vector
+[    0.506372][    T1] Memory: 944016K/1048576K available (21376K kernel code, 2734K rwdata, 16084K rodata, 5184K init, 11496K bss, 82916K reserved, 16384K cma-reserved)
+[    0.655611][    T1] Running RCU synchronous self tests
+[    0.657394][    T1] Running RCU synchronous self tests
+[    0.665637][    T1] Running RCU Tasks wait API self tests
+[    0.674387][    T1] Running RCU Tasks Trace wait API self tests
+[    0.691345][    T1] posixtimers hash table entries: 2048 (order: 6, 147456 bytes, linear)
+[    0.695975][    T1] futex hash table entries: 1024 (131072 bytes on 1 NUMA nodes, total 128 KiB, linear).
+[    0.710970][    T1] 18480 pages in range for non-PLT usage
+[    0.711168][    T1] 510000 pages in range for PLT usage
+[    0.719937][   T11] Callback from call_rcu_tasks_trace() invoked.
+[    0.796930][   T42] Callback from call_rcu_tasks() invoked.
+[    0.801272][    T1] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+[    0.829699][    T1] DMA: preallocated 128 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+[    0.831236][    T1] audit: initializing netlink subsys (disabled)
+[    0.856438][   T44] audit: type=2000 audit(0.732:1): state=initialized audit_enabled=0 res=1
+[    1.009716][    T1] thermal_sys: Registered thermal governor 'bang_bang'
+[    1.010074][    T1] thermal_sys: Registered thermal governor 'step_wise'
+[    1.010745][    T1] thermal_sys: Registered thermal governor 'user_space'
+[    1.011259][    T1] thermal_sys: Registered thermal governor 'power_allocator'
+[    1.015302][    T1] cpuidle: using governor menu
+[    1.024086][    T1] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
+[    1.028906][    T1] ASID allocator initialised with 65536 entries
+[    1.050138][    T1] Serial: AMBA PL011 UART driver
+[    1.246507][    T1] 9000000.pl011: ttyAMA0 MMIO:0x0000000009000000 (irq = 13, base_baud = 0) is a PL011 rev1
+[    1.249076][    T1] printk: console [ttyAMA0] enabled
+[    1.249076][    T1] printk: console [ttyAMA0] enabled
+[    1.250312][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.250312][    T1] printk: legacy bootconsole [pl11] disabled
+[    1.521414][    T1] iommu: Default domain type: Translated
+[    1.521615][    T1] iommu: DMA domain TLB invalidation policy: strict mode
+[    1.549866][    T1] SCSI subsystem initialized
+[    1.555389][    T1] usbcore: registered new interface driver usbfs
+[    1.556843][    T1] usbcore: registered new interface driver hub
+[    1.557527][    T1] usbcore: registered new device driver usb
+[    1.562346][    T1] mc: Linux media interface: v0.10
+[    1.563322][    T1] videodev: Linux video capture interface: v2.00
+[    1.567167][    T1] EDAC MC: Ver: 3.0.0
+[    1.580858][    T1] scmi_core: SCMI protocol bus registered
+[    1.591822][    T1] Advanced Linux Sound Architecture Driver Initialized.
+[    1.632823][    T1] clocksource: Switched to clocksource arch_sys_counter
+[    1.657554][    T1] VFS: Disk quotas dquot_6.6.0
+[    1.658422][    T1] VFS: Dquot-cache hash table entries: 512 (4096 bytes)
+[    1.684941][    T1] NET: Registered PF_INET protocol family
+[    1.687806][    T1] IP idents hash table entries: 16384 (order: 5, 131072 bytes, linear)
+[    1.708930][    T1] tcp_listen_portaddr_hash hash table entries: 512 (order: 4, 36864 bytes, linear)
+[    1.709391][    T1] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+[    1.710813][    T1] TCP established hash table entries: 8192 (order: 4, 65536 bytes, linear)
+[    1.714572][    T1] TCP bind hash table entries: 8192 (order: 9, 1179648 bytes, linear)
+[    1.722850][    T1] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.724090][    T1] UDP hash table entries: 512 (order: 5, 131072 bytes, linear)
+[    1.728125][    T1] NET: Registered PF_UNIX/PF_LOCAL protocol family
+[    1.729308][    T1] NET: Registered PF_XDP protocol family
+[    1.730141][    T1] PCI: CLS 0 bytes, default 64
+[    1.762506][    T1] kvm [1]: HYP mode not available
+[    1.788734][   T13] Trying to unpack rootfs image as initramfs...
+[    1.820532][    T1] Initialise system trusted keyrings
+[    1.833407][    T1] workingset: timestamp_bits=46 (anon: 41) max_order=18 bucket_order=0 (anon: 0)
+[    1.837085][    T1] Memory allocation profiling is not supported!
+[    1.866638][    T1] fuse: init (API version 7.46)
+[    1.935531][    T1] Key type asymmetric registered
+[    1.935735][    T1] Asymmetric key parser 'x509' registered
+[    1.937138][    T1] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 240)
+[    1.939847][    T1] io scheduler mq-deadline registered
+[    1.939940][    T1] io scheduler kyber registered
+[    1.942270][    T1] io scheduler bfq registered
+[    1.981805][   T13] Freeing initrd memory: 1932K
+[    1.988564][    T1] pl061_gpio 9030000.pl061: PL061 GPIO chip registered
+[    2.000366][    T1] pci-host-generic 4010000000.pcie: host bridge /pcie@10000000 ranges:
+[    2.001530][    T1] pci-host-generic 4010000000.pcie:       IO 0x003eff0000..0x003effffff -> 0x0000000000
+[    2.002670][    T1] pci-host-generic 4010000000.pcie:      MEM 0x0010000000..0x003efeffff -> 0x0010000000
+[    2.002858][    T1] pci-host-generic 4010000000.pcie:      MEM 0x8000000000..0xffffffffff -> 0x8000000000
+[    2.003548][    T1] pci-host-generic 4010000000.pcie: Memory resource size exceeds max for 32 bits
+[    2.004521][    T1] pci-host-generic 4010000000.pcie: ECAM at [mem 0x4010000000-0x401fffffff] for [bus 00-ff]
+[    2.011048][    T1] pci-host-generic 4010000000.pcie: PCI host bridge to bus 0000:00
+[    2.011352][    T1] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    2.011433][    T1] pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
+[    2.011481][    T1] pci_bus 0000:00: root bus resource [mem 0x10000000-0x3efeffff]
+[    2.011516][    T1] pci_bus 0000:00: root bus resource [mem 0x8000000000-0xffffffffff]
+[    2.013052][    T1] pci 0000:00:00.0: [1b36:0008] type 00 class 0x060000 conventional PCI endpoint
+[    2.026526][    T1] pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+[    2.026588][    T1] pci_bus 0000:00: resource 5 [mem 0x10000000-0x3efeffff]
+[    2.026620][    T1] pci_bus 0000:00: resource 6 [mem 0x8000000000-0xffffffffff]
+[    2.468453][    T1] brd: module loaded
+[    2.742910][    T1] loop: module loaded
+[    2.752471][    T1] encore_fas: version 9, branch main-f408a00, counter 1000000000 Hz
+[    2.779183][    T1] wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+[    2.779225][    T1] wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+[    2.817121][    T1] tun: Universal TUN/TAP device driver, 1.6
+[    2.845193][    T1] usbcore: registered new interface driver uas
+[    2.846732][    T1] usbcore: registered new interface driver usb-storage
+[    2.857579][    T1] usbcore: registered new interface driver xpad
+[    2.881164][    T1] rtc-pl031 9010000.pl031: registered as rtc0
+[    2.882056][    T1] rtc-pl031 9010000.pl031: setting system clock to 2026-11-16T08:59:28 UTC (1794819568)
+[    2.886391][    T1] usbcore: registered new interface driver uvcvideo
+[    2.892676][    T1] device-mapper: uevent: version 1.0.3
+[    2.896388][    T1] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    2.931752][    T1] hid: raw HID events driver (C) Jiri Kosina
+[    2.974985][    T1] usbcore: registered new interface driver usbhid
+[    2.975029][    T1] usbhid: USB HID core driver
+[    2.977135][    T1] ashmem_rust: Using Rust implementation.
+[    3.008414][    T1] hw perfevents: enabled with armv8_pmuv3 PMU driver, 7 (0,8000003f) counters available
+[    3.027720][    T1] usbcore: registered new interface driver snd-usb-audio
+[    3.034197][    T1] GACT probability NOT on
+[    3.034511][    T1] Mirror/redirect action on
+[    3.035918][    T1] u32 classifier
+[    3.035946][    T1]     input device check on
+[    3.035967][    T1]     Actions configured
+[    3.043742][    T1] nf_conntrack_irc: The irc conntrack helper is scheduled for removal.
+[    3.043742][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    3.043960][    T1] The pptp conntrack helper is scheduled for removal.
+[    3.043960][    T1] Please contact the netfilter-devel mailing list if you still need this.
+[    3.064280][    T1] xt_time: kernel timezone is -0000
+[    3.065270][    T1] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    3.079503][    T1] gre: GRE over IPv4 demultiplexer driver
+[    3.079589][    T1] ip_gre: GRE over IPv4 tunneling driver
+[    3.124762][    T1] IPv4 over IPsec tunneling driver
+[    3.138151][    T1] Initializing XFRM netlink socket
+[    3.138615][    T1] IPsec XFRM device driver
+[    3.141672][    T1] NET: Registered PF_INET6 protocol family
+[    3.168663][    T1] Segment Routing with IPv6
+[    3.169105][    T1] In-situ OAM (IOAM) with IPv6
+[    3.171250][    T1] mip6: Mobile IPv6
+[    3.184860][    T1] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    3.207195][    T1] ip6_gre: GRE over IPv6 tunneling driver
+[    3.219079][    T1] NET: Registered PF_PACKET protocol family
+[    3.219161][    T1] PFKEY is deprecated and scheduled to be removed in 2027, please contact the netdev mailing list
+[    3.219473][    T1] NET: Registered PF_KEY protocol family
+[    3.223133][    T1] NET: Registered PF_VSOCK protocol family
+[    3.711797][    T1] sched_proxy_exec: enabled
+[    3.724142][    T1] registered taskstats version 1
+[    3.733438][    T1] workqueue: work func tboost_fn enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
+[    3.734039][    T1] Rakkashin v3.2 features (avr, Android 7.3 port)
+[    3.734096][    T1] Loading compiled-in X.509 certificates
+[    3.750328][    T1] Loaded X.509 cert 'Build time autogenerated kernel key: 877395b53bfc9825fc15d9fe6e9400be628ea3ba'
+[    3.750397][    T1] Problem parsing in-kernel X.509 certificate list
+[    4.576446][    T1] page_owner is disabled
+[    4.582123][    T1] Key type .fscrypt registered
+[    4.582169][    T1] Key type fscrypt-provisioning registered
+[    4.597392][    T1] Boeffla WL blocker: driver version 1.1.0-7.3 started
+[    4.612898][    T1] input: gpio-keys as /devices/platform/gpio-keys/input/input0
+[    4.637261][    T1] clk: Disabling unused clocks
+[    4.638545][    T1] PM: genpd: Disabling unused power domains
+[    4.639703][    T1] ALSA device list:
+[    4.640212][    T1]   No soundcards found.
+[    4.976380][    T1] Freeing unused kernel memory: 5184K
+[    4.980198][    T1] Run /init as init process
+AVR_QEMU_SMOKE_BEGIN
+Linux (none) 7.3.0-4k #30 SMP PREEMPT Mon Nov 16 17:46:14 JST 2026 aarch64 GNU/Linux
+[    5.199970][   T72] kunit: module verification failed: signature and/or required key missing - tainting kernel
+[    5.265653][   T73] cpu_hotplug: loading out-of-tree module taints kernel.
+[    5.378554][   T74] KTAP version 1
+[    5.378610][   T74] 1..1
+[    5.383142][   T74]     KTAP version 1
+[    5.383180][   T74]     # Subtest: avr-cpu-hotplug
+[    5.383336][   T74]     # module: avr_cpu_hotplug_test
+[    5.383656][   T74]     1..8
+[    5.397407][   T75] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    5.397776][   T75] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    5.443403][   T74]     ok 1 probe_alias_and_of_node
+[    5.454664][   T78] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    5.454863][   T78] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    5.496466][   T34] psci: CPU2 killed (polled 0 ms)
+[    5.520696][    T0] Detected PIPT I-cache on CPU2
+[    5.521694][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    5.523920][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    5.542753][   T78] psci: CPU2 killed (polled 0 ms)
+[    5.575419][    T0] Detected PIPT I-cache on CPU2
+[    5.575553][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    5.576343][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    5.599932][   T78] psci: CPU2 killed (polled 0 ms)
+[    5.653266][    T0] Detected PIPT I-cache on CPU2
+[    5.653479][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    5.654958][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    5.680848][   T78] psci: CPU2 killed (polled 0 ms)
+[    5.780440][    T0] Detected PIPT I-cache on CPU2
+[    5.780608][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    5.781548][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    5.807633][   T78] psci: CPU2 killed (polled 0 ms)
+[    5.995773][    T0] Detected PIPT I-cache on CPU2
+[    5.996031][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    5.997589][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    6.035413][   T78] psci: CPU2 killed (polled 0 ms)
+[    6.413926][    T0] Detected PIPT I-cache on CPU2
+[    6.414350][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    6.416640][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    6.459127][   T78] psci: CPU2 killed (polled 0 ms)
+[    6.476716][    T0] Detected PIPT I-cache on CPU2
+[    6.476918][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    6.478410][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    6.535310][   T74]     ok 2 mitigate_veto_restore
+[    6.554704][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    6.555055][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    6.598524][   T34] psci: CPU3 killed (polled 0 ms)
+[    6.645275][    T0] Detected PIPT I-cache on CPU3
+[    6.645537][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    6.647702][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    6.674843][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    6.675191][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    6.712820][   T40] psci: CPU3 killed (polled 0 ms)
+[    6.754315][    T0] Detected PIPT I-cache on CPU3
+[    6.754504][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    6.755934][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    6.779332][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    6.779674][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    6.824137][   T34] psci: CPU3 killed (polled 0 ms)
+[    6.860767][    T0] Detected PIPT I-cache on CPU3
+[    6.860999][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    6.862493][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    6.887561][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    6.887944][   T81] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    6.939450][   T74]     ok 3 teardown_restores_cpu
+[    6.968854][   T85] psci: CPU3 killed (polled 0 ms)
+[    6.989556][   T85] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    6.991029][   T85] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    7.008400][    T0] Detected PIPT I-cache on CPU3
+[    7.008583][    T0] GICv3: CPU3: found redistributor 3 region 0:0x0000000008100000
+[    7.010049][    T0] CPU3: Booted secondary processor 0x0000000003 [0x000f0510]
+[    7.070251][   T74]     ok 4 offline_at_probe_registers_later
+[    7.089724][   T87] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    7.090519][   T87] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    7.134350][   T40] psci: CPU1 killed (polled 0 ms)
+[    7.166509][    T0] Detected PIPT I-cache on CPU1
+[    7.166761][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    7.168316][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    7.220548][   T74]     ok 5 rapid_toggle_converges
+[    7.259063][   T90] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    7.259466][   T90] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    7.296718][   T90] psci: CPU1 killed (polled 0 ms)
+[    7.315321][    T0] Detected PIPT I-cache on CPU1
+[    7.315542][    T0] GICv3: CPU1: found redistributor 1 region 0:0x00000000080c0000
+[    7.317047][    T0] CPU1: Booted secondary processor 0x0000000001 [0x000f0510]
+[    7.372498][   T74]     ok 6 user_offline_is_not_onlined
+[    7.394752][   T92] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/bad
+[    7.395114][   T92] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/good/cpu3-hotplug
+[    7.457770][   T10] psci: CPU2 killed (polled 0 ms)
+[    7.481260][    T0] Detected PIPT I-cache on CPU2
+[    7.481452][    T0] GICv3: CPU2: found redistributor 2 region 0:0x00000000080e0000
+[    7.482923][    T0] CPU2: Booted secondary processor 0x0000000002 [0x000f0510]
+[    7.555627][   T74]     ok 7 dt_cooling_map_isolates_cpu
+[    7.583907][   T94] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: Invalid CPU phandle in /avr-hotplug-fixture/none/bad
+[    7.584306][   T94] avr-cpu-hotplug-private avr-cpu-hotplug-private.1.auto: error -ENODEV: no valid CPU hotplug cooling node
+[    7.607020][   T74]     ok 8 no_valid_cpu_rejected
+[    7.607247][   T74] # avr-cpu-hotplug: pass:8 fail:0 skip:0 total:8
+[    7.607378][   T74] # Totals: pass:8 fail:0 skip:0 total:8
+[    7.607522][   T74] ok 1 avr-cpu-hotplug
+AVR_CPU_HOTPLUG_TESTS_PASS scope=native-cpuhp-thermal-of-private-sensor-only
+[    8.269538][   T98] reboot: Power down

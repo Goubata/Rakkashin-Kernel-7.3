@@ -1,0 +1,78 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt.o
+  CC [M]  boost.o
+  CC [M]  sched_avg.o
+  CC [M]  walt_halt.o
+  CC [M]  core_ctl.o
+  CC [M]  trace.o
+  CC [M]  input-boost.o
+  CC [M]  sysctl.o
+  CC [M]  cpufreq_walt.o
+  CC [M]  fixup.o
+  CC [M]  walt_lb.o
+  CC [M]  walt_rt.o
+  CC [M]  walt_cfs.o
+  CC [M]  walt_tp.o
+walt_lb.c:445:13: error: assigning to 'bool' (aka '_Bool') from incompatible type 'void'
+  445 |                                 success = stop_one_cpu_nowait(src_cpu,
+      |                                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  446 |                                                 stop_walt_lb_active_migration,
+      |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  447 |                                                 src_rq, &src_rq->active_balance_work);
+      |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+walt_lb.c:795:6: error: assigning to 'int' from incompatible type 'void'
+  795 |         ret = stop_one_cpu_nowait(prev_cpu,
+      |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  796 |                         stop_walt_lb_active_migration, rq,
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  797 |                         &rq->active_balance_work);
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+walt_lb.c:1268:11: error: assigning to 'bool' (aka '_Bool') from incompatible type 'void'
+ 1268 |                 success = stop_one_cpu_nowait(src_cpu,
+      |                         ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1269 |                                 stop_walt_lb_active_migration,
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1270 |                                 src_rq, &src_rq->active_balance_work);
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt_lb.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+walt_rt.c:309:20: error: call to undeclared function 'cpu_busy_with_softirqs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  309 |         may_not_preempt = cpu_busy_with_softirqs(cpu);
+      |                           ^
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt_rt.o] Error 1
+walt_cfs.c:1263:30: error: no member named 'need_reply' in 'struct binder_transaction'
+ 1263 |         if (bndrtrans && bndrtrans->need_reply && current_wts->boost == TASK_BOOST_STRICT_MAX) {
+      |                          ~~~~~~~~~  ^
+walt_cfs.c:1264:14: error: no member named 'android_vendor_data1' in 'struct binder_transaction'
+ 1264 |                 bndrtrans->android_vendor_data1  = wts->boost;
+      |                 ~~~~~~~~~  ^
+walt_cfs.c:1293:30: error: no member named 'need_reply' in 'struct binder_transaction'
+ 1293 |         if (bndrtrans && bndrtrans->need_reply) {
+      |                          ~~~~~~~~~  ^
+walt_cfs.c:1312:27: error: no member named 'android_vendor_data1' in 'struct binder_transaction'
+ 1312 |                 wts->boost = bndrtrans->android_vendor_data1;
+      |                              ~~~~~~~~~  ^
+4 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt_cfs.o] Error 1
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

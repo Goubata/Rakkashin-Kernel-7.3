@@ -1,0 +1,231 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/sched-walt'
+  CC [M]  walt.o
+  CC [M]  boost.o
+  CC [M]  sched_avg.o
+  CC [M]  walt_halt.o
+In file included from sched_avg.c:16:
+In file included from ./walt.h:13:
+/work/avr-src/fs/proc/internal.h:86:16: error: static assertion failed due to requirement 'PROC_ENTRY_PERMANENT != 0': PROC_ENTRY_PERMANENT != 0
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+/work/avr-src/fs/proc/internal.h:86:37: note: expression evaluates to '0 != 0'
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ~~~~~~~~~~~~~~~~~~~~~^~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+In file included from walt.c:25:
+In file included from ./walt.h:13:
+/work/avr-src/fs/proc/internal.h:86:16: error: static assertion failed due to requirement 'PROC_ENTRY_PERMANENT != 0': PROC_ENTRY_PERMANENT != 0
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+/work/avr-src/fs/proc/internal.h:86:37: note: expression evaluates to '0 != 0'
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ~~~~~~~~~~~~~~~~~~~~~^~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+In file included from walt_halt.c:9:
+In file included from ././walt.h:13:
+/work/avr-src/fs/proc/internal.h:86:16: error: static assertion failed due to requirement 'PROC_ENTRY_PERMANENT != 0': PROC_ENTRY_PERMANENT != 0
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+/work/avr-src/fs/proc/internal.h:86:37: note: expression evaluates to '0 != 0'
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ~~~~~~~~~~~~~~~~~~~~~^~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: sched_avg.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+walt.c:134:13: error: incompatible function pointer types initializing 'void (*)(void *)' with an expression of type 'void (void)' [-Wincompatible-function-pointer-types]
+  134 |         .resume         = walt_resume,
+      |                           ^~~~~~~~~~~
+walt.c:135:13: error: incompatible function pointer types initializing 'int (*)(void *)' with an expression of type 'int (void)' [-Wincompatible-function-pointer-types]
+  135 |         .suspend        = walt_suspend
+      |                           ^~~~~~~~~~~~
+walt.c:588:35: error: no member named 'h_nr_running' in 'struct cfs_rq'
+walt_halt.c:46:1: error: no previous prototype for function 'detach_one_task_core' [-Werror,-Wmissing-prototypes]
+  588 |         if (!   i46s | _deedt_aecnha_bolneed_(t)a s|k|_ c!orrqe-(>sctfrsu.cht_ ntra_srku_nsntirnugc)t
+       *| p                                 ~~~~~~~ ^,
+ struct rq *rq,
+      | ^
+walt.c:635:6: error: no previous prototype for function 'trailblazer_on_prime' [-Werror,-Wmissing-prototypes]
+  635 | bool trailblazer_on_prime(void)
+      |      ^
+walt_halt.c:45:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   45 | void
+      | ^
+      | static 
+walt_halt.c:56:6: error: no previous prototype for function 'attach_tasks_core' [-Werror,-Wmissing-prototypes]
+   56 | void attach_tasks_core(struct list_head *tasks, struct rq *rq)
+      |      ^
+walt_halt.c:56:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   56 | void attach_tasks_core(struct list_head *tasks, struct rq *rq)
+      | ^
+      | static 
+walt.c:635:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  635 | bool trailblazer_on_prime(void)
+      | ^
+      | static 
+walt.c:832:5: error: no previous prototype for function 'other_sync_pct' [-Werror,-Wmissing-prototypes]
+  832 | int other_sync_pct(unsigned long util_other)
+      |     ^
+walt.c:832:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  832 | int other_sync_pct(unsigned long util_other)
+      | ^
+      | static 
+walt.c:856:5: error: no previous prototype for function 'prime_sync_pct' [-Werror,-Wmissing-prototypes]
+  856 | int prime_sync_pct(unsigned long util_prime)
+      |     ^
+walt.c:856:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  856 | int prime_sync_pct(unsigned long util_prime)
+      | ^
+      | static 
+walt_halt.c:122:10: error: call to undeclared function 'pick_task'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  122 |                 next = pick_task(rq);
+      |                        ^
+walt_halt.c:122:10: note: did you mean 'pid_task'?
+/work/avr-src/include/linux/pid.h:95:28: note: 'pid_task' declared here
+   95 | extern struct task_struct *pid_task(struct pid *pid, enum pid_type);
+      |                            ^
+walt_halt.c:122:8: error: incompatible integer to pointer conversion assigning to 'struct task_struct *' from 'int' [-Wint-conversion]
+  122 |                 next = pick_task(rq);
+      |                      ^ ~~~~~~~~~~~~~
+walt_halt.c:190:6: error: conflicting types for '__balance_callbacks'
+  190 | void __balance_callbacks(struct rq *rq);
+      |      ^
+/work/avr-src/kernel/sched/sched.h:4314:13: note: previous declaration is here
+ 4314 | extern void __balance_callbacks(struct rq *rq, struct rq_flags *rf);
+      |             ^
+In file included from boost.c:8:
+In file included from ./walt.h:13:
+/work/avr-src/fs/proc/internal.h:86:16: error: static assertion failed due to requirement 'PROC_ENTRY_PERMANENT != 0': PROC_ENTRY_PERMANENT != 0
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+/work/avr-src/fs/proc/internal.h:86:37: note: expression evaluates to '0 != 0'
+   86 |         static_assert(PROC_ENTRY_PERMANENT != 0);
+      |                       ~~~~~~~~~~~~~~~~~~~~~^~~~
+/work/avr-src/include/linux/build_bug.h:79:50: note: expanded from macro 'static_assert'
+   79 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+      |                                                  ^~~~
+/work/avr-src/include/linux/build_bug.h:80:56: note: expanded from macro '__static_assert'
+   80 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+      |                                                        ^~~~
+walt_halt.c:213:24: error: too few arguments to function call, expected 2, have 1
+  213 |         __balance_callbacks(rq);
+      |         ~~~~~~~~~~~~~~~~~~~   ^
+/work/avr-src/kernel/sched/sched.h:4314:13: note: '__balance_callbacks' declared here
+ 4314 | extern void __balance_callbacks(struct rq *rq, struct rq_flags *rf);
+      |             ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+walt_halt.c:273:6: error: no previous prototype for function 'restrict_cpus_and_freq' [-Werror,-Wmissing-prototypes]
+  273 | void restrict_cpus_and_freq(struct cpumask *cpus)
+      |      ^
+walt_halt.c:273:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  273 | void restrict_cpus_and_freq(struct cpumask *cpus)
+      | ^
+      | static 
+8 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt_halt.o] Error 1
+walt.c:3747:26: error: too few arguments to function call, expected 3, have 2
+ 3747 |         __task_rq_unlock(rq, &rf);
+      |         ~~~~~~~~~~~~~~~~        ^
+/work/avr-src/kernel/sched/sched.h:1986:1: note: '__task_rq_unlock' declared here
+ 1986 | __task_rq_unlock(struct rq *rq, struct task_struct *p, struct rq_flags *rf)
+      | ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+walt.c:3784:26: error: too few arguments to function call, expected 3, have 2
+ 3784 |         __task_rq_unlock(rq, &rf);
+      |         ~~~~~~~~~~~~~~~~        ^
+/work/avr-src/kernel/sched/sched.h:1986:1: note: '__task_rq_unlock' declared here
+ 1986 | __task_rq_unlock(struct rq *rq, struct task_struct *p, struct rq_flags *rf)
+      | ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: boost.o] Error 1
+walt.c:6087:2: error: call to undeclared function 'register_trace_android_vh_scx_ops_enable_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+ 6087 |         register_trace_android_vh_scx_ops_enable_state(android_vh_scx_ops_enable_state, NULL);
+      |         ^
+walt.c:6087:2: note: did you mean 'register_trace_android_vh_sched_move_task'?
+/work/avr-src/include/trace/hooks/sched.h:345:1: note: 'register_trace_android_vh_sched_move_task' declared here
+  345 | DECLARE_HOOK(android_vh_sched_move_task,
+      | ^
+/work/avr-src/include/trace/hooks/vendor_hooks.h:16:22: note: expanded from macro 'DECLARE_HOOK'
+   16 | #define DECLARE_HOOK DECLARE_TRACE_EVENT
+      |                      ^
+/work/avr-src/include/linux/tracepoint.h:548:2: note: expanded from macro 'DECLARE_TRACE_EVENT'
+  548 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^
+/work/avr-src/include/linux/tracepoint.h:310:2: note: expanded from macro '__DECLARE_TRACE'
+  310 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^
+/work/avr-src/include/linux/tracepoint.h:272:2: note: expanded from macro '__DECLARE_TRACE_COMMON'
+  272 |         register_trace_##name(void (*probe)(data_proto), void *data)    \
+      |         ^
+<scratch space>:28:1: note: expanded from here
+   28 | register_trace_android_vh_sched_move_task
+      | ^
+walt.c:6190:2: error: call to undeclared function 'register_syscore_ops'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+ 6190 |         register_syscore_ops(&walt_syscore_ops);
+      |         ^
+walt.c:6190:2: note: did you mean 'register_syscore'?
+/work/avr-src/include/linux/syscore_ops.h:25:13: note: 'register_syscore' declared here
+   25 | extern void register_syscore(struct syscore *syscore);
+      |             ^
+walt.c:6276:6: error: use of undeclared identifier 'topology_update_done'
+ 6276 |         if (topology_update_done)
+      |             ^~~~~~~~~~~~~~~~~~~~
+12 errors generated.
+make[3]: *** [/work/avr-src/scripts/Makefile.build:290: walt.o] Error 1
+make[2]: *** [/work/avr-src/Makefile:2279: .] Error 2
+make[1]: *** [/work/avr-src/Makefile:261: __sub-make] Error 2
+make[1]: Leaving directory '/work/avr-port/ports/sched-walt'
+make: *** [Makefile:261: __sub-make] Error 2
+make: Leaving directory '/work/avr-src'
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 110, in <module>
+    {'register':register,'build':build,'qemu':qemu,'artifact':artifact}[a.cmd](a)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 75, in build
+    for t in [a.port]+([a.test] if a.test else []):chroot_make(t)
+                                                   ~~~~~~~~~~~^^^
+  File "/data/data/com.termux/files/home/avr-kernel-7.3/scripts/stage_tool.py", line 72, in chroot_make
+    subprocess.run(['su','-c',shlex.join(cmd)],check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['su', '-c', 'chroot /data/data/com.termux/files/home/.andronix/distros/ubuntu/rootfs /usr/bin/env -i PATH=/usr/sbin:/usr/bin:/sbin:/bin make -C /work/avr-src O=/work/avr-port/out/native-gki ARCH=arm64 LLVM=1 M=/work/avr-port/ports/sched-walt -j4 modules']' returned non-zero exit status 2.

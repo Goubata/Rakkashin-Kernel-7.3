@@ -1,0 +1,9 @@
+{
+  "scope": "Image#35: scmi-cpufreq boost default (6.12 GKI parity) + cpufreq_boost_set_sw fix; COMMON_CLK_SCMI=m; QEMU only",
+  "core_image": "7.3.0-4k #35",
+  "image_sha256": "50a4c2596d07786bf3eb7e7f272fbe2f647c110a043e359b42b8386688dca9c5",
+  "source_commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

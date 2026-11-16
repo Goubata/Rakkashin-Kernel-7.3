@@ -1,0 +1,24 @@
+{
+  "scope": "Unaccepted draft; QEMU fake SCMI platform verification",
+  "core_image": "changed",
+  "image_sha256": "50a4c2596d07786bf3eb7e7f272fbe2f647c110a043e359b42b8386688dca9c5",
+  "modules": [
+    "qcom_cpucp.ko",
+    "qcom_scmi_vendor.ko",
+    "qcom_scmi_client.ko",
+    "cpucp_fast.ko",
+    "cpucp_log.ko",
+    "cpu_phys_log_map.ko",
+    "qcom-cpufreq-hw.ko",
+    "scmi-clk.ko",
+    "avr-fake-scmi.ko"
+  ],
+  "test_modules": [
+    "avr-scmi-vendor-test.ko"
+  ],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

@@ -2545,3 +2545,34 @@ reboot(RESTART2,"bootloader") -> restart handler sees SDAM 0x48=0x02 (qcom reaso
 0x49=0x04 (moto bootloader flag), dload 0x0, SDI disabled during shutdown. 3/3 runs.
 Regression: 22 suites + scm, secure, pas-driver, ice, iommu; 151 CRCs; core replay 30 patches.
 Not verified: real TCSR/SDAM/PON hardware, EDL entry (vendor code keeps EDL disabled: "#if 0").
+
+## Stage111: CPU DVFS transport (CPUCP mailbox, SCMI vendor protocol, scmi-cpufreq) on android18-7.3
+
+Phone: scaling_driver=scmi; CPUs use clocks=<&pdp_scmi_perf 0|1>; pdp_scmi (perf 0x13, 0x80-byte
+shmem) and cpucp_scmi (clock 0x14, qcom vendor 0x80, 0x200-byte shmem) over qcom,cpucp-v2 mailboxes.
+ports/qcom-cpucp-scmi (qcom-soc 037aa1c): qcom_cpucp, qcom_scmi_vendor, qcom_scmi_client, cpucp_fast,
+cpucp_log, cpu_phys_log_map, qcom-cpufreq-hw. clk-scmi: the vendor file is an older upstream copy
+than GKI 6.12 -> 7.3 in-tree CONFIG_COMMON_CLK_SCMI=m (module name scmi-clk.ko; phone: clk_scmi).
+Port fixes: vendor protocol version from ph->version (xops->version_get removed) with
+supported_version=UINT_MAX (6.12 never negotiated); cpufreq-hw boost via .set_boost, no exported
+scaling_*_freqs attrs, .remove.
+Found with the fake platform and fixed:
+- 7.3 SCMI mailbox max-msg-size default 104 (6.12: 128): qcom_scmi_vendor requests 128-byte
+  replies -> -ERANGE on every set/get_param. Fix in DT (upstream mechanism):
+  ports/device-tree/avr73-fixups.dtso adds arm,max-msg-size=<128> to /soc/qcom,cpucp-scmi only
+  (PDP shmem is 0x80 and must stay at 104).
+- 7.3 scmi-cpufreq no longer enables boost by default (GKI 6.12 set boost_enabled when turbo OPPs
+  exist; phone boots with boost=1, gold max 3801600): restored (patches/scmi-boost-7.3.patch).
+- 7.3 cpufreq_boost_set_sw() could never lower cpuinfo.max_freq after boost (table_cpuinfo keeps
+  a larger previous max), so boost=0 had no effect: recompute from the table (same patch).
+QEMU: tests/qcom-cpucp-scmi/avr-fake-scmi.c registers a mailbox controller and answers base,
+perf v3 (phone tables, 30 us, uW power) and vendor 0x80 in the real shmem protocol. Results 3/3:
+both SCMI instances probe ('Qualcomm:CPUCP', 'Qualcomm:PDP0'; max-msg 128/104), scmi-cpufreq
+policies {0,1} and {2,3} with exactly the phone's scaling_available_frequencies, boost list
+3532800..3801600, latency 30000, EM perf domains created; boost=1 at boot like the phone;
+performance -> 3801600, boost 0 -> 3436800, boost 1 -> 3801600, scaling_max 2000000 -> 1996800,
+policy0 max 1555200 -> LEVEL_SET 1555200; KUnit vendor set/get/start/stop roundtrip via
+get_qcom_scmi_device(); qcom_cpucp, cpucp_log, cpu_phys_log_map, qcom-cpufreq-hw, scmi-clk load.
+Regression on Image#35: 23 suites + scm, secure, pas-driver, ice, iommu; 158 CRCs; replay 31 patches.
+Not verified: CPUCP MMIO mailbox/IRQ, cpucp_fast (needs WALT + CPUCP), perf notifications/
+fastchannels support of the real PDP firmware.

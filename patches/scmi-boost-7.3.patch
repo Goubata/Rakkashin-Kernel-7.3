@@ -1,0 +1,41 @@
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index b97305fc1..69a3f192d 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2823,6 +2823,14 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+ 	if (!policy->freq_table)
+ 		return -ENXIO;
+ 
++	/*
++	 * ANDROID: cpufreq_frequency_table_cpuinfo() keeps a cpuinfo.max_freq
++	 * that is above the table maximum ("driver set its own"). For this
++	 * table-driven helper that is always the previous boost maximum, so
++	 * turning boost off never lowered the limit (found on the AVR SCMI
++	 * policies). Recompute both bounds from the table.
++	 */
++	policy->cpuinfo.max_freq = 0;
+ 	ret = cpufreq_frequency_table_cpuinfo(policy);
+ 	if (ret)
+ 		pr_err("%s: Policy frequency update failed\n", __func__);
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index 4edb4f7a8..c277a639d 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -290,6 +290,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	policy->driver_data = priv;
+ 	policy->freq_table = freq_table;
+ 
++	/* ANDROID: 6.12 GKI parity: boost (turbo OPPs) is on by default */
++	{
++		struct cpufreq_frequency_table *pos;
++
++		cpufreq_for_each_valid_entry(pos, freq_table)
++			if (pos->flags & CPUFREQ_BOOST_FREQ) {
++				scmi_cpufreq_driver.boost_enabled = true;
++				break;
++			}
++	}
++
+ 	/* SCMI allows DVFS request for any domain from any CPU */
+ 	policy->dvfs_possible_from_any_cpu = true;
+ 

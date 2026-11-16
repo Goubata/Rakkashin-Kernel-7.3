@@ -1,0 +1,33 @@
+{
+ "stage": 111,
+ "scope": "CPU DVFS transport: CPUCP mailbox, SCMI vendor protocol/client, cpucp_fast/log, cpufreq-hw, scmi-cpufreq boost",
+ "core_patch": "patches/scmi-boost-7.3.patch",
+ "dt_fixups": "ports/device-tree/avr73-fixups.dtso",
+ "source_commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
+ "core_image": "7.3.0-4k #35",
+ "image_sha256": "50a4c2596d07786bf3eb7e7f272fbe2f647c110a043e359b42b8386688dca9c5",
+ "qemu_runs": [
+  "reports/cpucp-stage111-qemu.log",
+  "reports/cpucp-stage111-r1.log",
+  "reports/cpucp-stage111-r2.log",
+  "reports/cpucp-stage111-r3.log",
+  "reports/regress-stage111-qcom-cpucp-scmi.log"
+ ],
+ "bugs_found": [
+  "7.3 SCMI mailbox max-msg-size 104 breaks vendor 128-byte requests (DT fix)",
+  "7.3 scmi-cpufreq boost default off (gold capped 3.44 GHz)",
+  "7.3 cpufreq_boost_set_sw cannot disable boost"
+ ],
+ "regression": "reports/regress-stage111-summary.txt",
+ "crc": "reports/cpucp-stage111-crc.json",
+ "qemu_substitutes": [
+  "tests/qcom-cpucp-scmi/avr-fake-scmi.ko (mailbox controller + SCMI firmware)"
+ ],
+ "not_verified": [
+  "qcom_cpucp hardware",
+  "cpucp_fast",
+  "real PDP/CPUCP firmware features"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

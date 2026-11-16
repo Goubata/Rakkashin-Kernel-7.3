@@ -1,0 +1,23 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/dts-v1/;
+/plugin/;
+/*
+ * DT changes the android18-7.3 drivers need on top of the saved AVR (6.12) DT.
+ * Every fragment names the 7.3 behaviour that requires it and the stage that
+ * verified it. Applied when the 7.3 boot DT is assembled; not yet on the phone.
+ */
+/ {
+	/*
+	 * Stage111: 7.3 SCMI mailbox transport defaults max-msg-size to 104 bytes
+	 * (6.12: 128) and lets DT raise it. qcom_scmi_vendor requests 128-byte
+	 * replies (SCMI_MAX_TX_RX_SIZE), which 7.3 rejects with -ERANGE unless the
+	 * CPUCP instance allows 128. Its shmem halves are 0x200 bytes (fits
+	 * 128 + 24). The PDP instance (0x80-byte shmem, perf only) keeps 104.
+	 */
+	fragment@0 {
+		target-path = "/soc/qcom,cpucp-scmi";
+		__overlay__ {
+			arm,max-msg-size = <128>;
+		};
+	};
+};

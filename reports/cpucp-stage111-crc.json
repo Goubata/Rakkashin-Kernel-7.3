@@ -1,0 +1,56 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-cpucp-scmi/qcom_cpucp.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/qcom_scmi_vendor.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/qcom_scmi_client.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/cpucp_fast.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/cpucp_log.ko",
+      "imports_checked": 66,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/cpu_phys_log_map.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-cpucp-scmi/qcom-cpufreq-hw.ko",
+      "imports_checked": 101,
+      "mismatches": {}
+    },
+    {
+      "module": "out/native-gki/drivers/clk/scmi-clk.ko",
+      "imports_checked": 14,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-cpucp-scmi/avr-fake-scmi.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-cpucp-scmi/avr-scmi-vendor-test.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    }
+  ]
+}

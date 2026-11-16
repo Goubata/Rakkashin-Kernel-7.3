@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "516244ba312350dbeb1c6fcee1226a0cd64979a1",
+  "source_commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -31,6 +31,7 @@
     "patches/qtee-shmbridge-7.3.patch": "b0221eb5037b75777c36012deeae03b9576465026123f6978ea6fd6dd4957df9",
     "patches/scm-invoke-7.3.patch": "841e91ffeb6ee2ab4cca043c845d747d76882ea655ec93d6da54f836689fe239",
     "patches/tzmem-once-sleepable-7.3.patch": "7c48c909aacfd0ae968662273a5b9330c47cefaca11c1f7e6134e9cef442623c",
-    "patches/scm-dload-7.3.patch": "cf10efb4e4a58db885425b9517e999ce8aa1cc1d5f7c5ff2356b67ba05ebec71"
+    "patches/scm-dload-7.3.patch": "cf10efb4e4a58db885425b9517e999ce8aa1cc1d5f7c5ff2356b67ba05ebec71",
+    "patches/scmi-boost-7.3.patch": "93a8940949d11bdd0378062ba7286b2ac6629eb847103fb1038947dcb1fbb5c5"
   }
 }

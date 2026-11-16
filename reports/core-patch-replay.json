@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "516244ba312350dbeb1c6fcee1226a0cd64979a1",
-  "patch_count": 30,
+  "target_commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
+  "patch_count": 31,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -39,6 +39,14 @@
     {
       "file": "drivers/clk/clk.c",
       "sha256": "334ed4ab8fc2141e9031b038149961a59f6381c975d4425a63cfc6be7c15002a"
+    },
+    {
+      "file": "drivers/cpufreq/cpufreq.c",
+      "sha256": "9882f9d7ec039a29c5230f4f32f91b1698ec61c9bb6b76abc519af639084f32a"
+    },
+    {
+      "file": "drivers/cpufreq/scmi-cpufreq.c",
+      "sha256": "15a7be0cc0ea3b1f1f8c4bdb9ef1aa7339d0241ab192f1dcd0ae4bb26b525c7d"
     },
     {
       "file": "drivers/dma-buf/dma-heap.c",
@@ -382,5 +390,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "e7a6c4556130711f912032ccebe66e3348b059eb0b4286bd57320a2869694aca"
+  "checkpoint_sha256": "cf26690eecadbd68dd6d9a6493799a232601b9fbfdd98853f885e78fbd8dea9a"
 }

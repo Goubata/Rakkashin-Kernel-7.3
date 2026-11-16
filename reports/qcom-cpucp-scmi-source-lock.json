@@ -1,0 +1,100 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-cpucp-scmi/qcom_cpucp.c",
+      "source": "drivers/soc/qcom/qcom_cpucp.c",
+      "original_sha256": "53d57624128aac88e1cc4a3e287d85d0dad28214e02f606b960f2efdebb87b00",
+      "sha256": "53d57624128aac88e1cc4a3e287d85d0dad28214e02f606b960f2efdebb87b00"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/qcom_scmi_vendor.c",
+      "source": "drivers/firmware/arm_scmi/qcom_scmi_vendor.c",
+      "original_sha256": "5c17f5d939c6ffef05ca717bd04dc80b20705c681e30150ac006027df632fb37",
+      "sha256": "a7a92b770191470427509e8a4939d63f63585d7f18aba2236ade82fc32caeffe"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/qcom_scmi_client.c",
+      "source": "drivers/soc/qcom/dcvs/qcom_scmi_client.c",
+      "original_sha256": "3f3f507aeebd23cbafa3fbb5d74d3d3f3582967406fc625ad390d1df0bbd4943",
+      "sha256": "3f3f507aeebd23cbafa3fbb5d74d3d3f3582967406fc625ad390d1df0bbd4943"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/cpucp_fast.c",
+      "source": "drivers/soc/qcom/cpucp_fast.c",
+      "original_sha256": "d8eb8b37d939391ea10f337e4cd653ec0574d6d70a32b438354062ca78d3c525",
+      "sha256": "d8eb8b37d939391ea10f337e4cd653ec0574d6d70a32b438354062ca78d3c525"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/cpucp_log.c",
+      "source": "drivers/soc/qcom/cpucp_log.c",
+      "original_sha256": "e99b15245f16a9c012adef81288c5d9f54e2e2eec43b17bc0ad051b4accb1c33",
+      "sha256": "e99b15245f16a9c012adef81288c5d9f54e2e2eec43b17bc0ad051b4accb1c33"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/cpu_phys_log_map.c",
+      "source": "drivers/soc/qcom/cpu_phys_log_map.c",
+      "original_sha256": "c8b678280992e766e3d894f73ef2069dd55aeacc0d1bc57cd9f7507ff3fb8cc1",
+      "sha256": "c8b678280992e766e3d894f73ef2069dd55aeacc0d1bc57cd9f7507ff3fb8cc1"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/qcom-cpufreq-hw.c",
+      "source": "drivers/cpufreq/qcom-cpufreq-hw.c",
+      "original_sha256": "fdab719e6cee8336f53bee69c9720f83efb73389513935899892f126c814e22e",
+      "sha256": "16e47c3b8a32763882623c28d14f4513876e4e42af1201ba42fc4d1b509a5691"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/trace_cpucp.h",
+      "source": "drivers/soc/qcom/trace_cpucp.h",
+      "original_sha256": "37e3fc6d0c0dac443a5ce56336b1886303239e06aea33e0572bb42aa973bf583",
+      "sha256": "37e3fc6d0c0dac443a5ce56336b1886303239e06aea33e0572bb42aa973bf583"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/include/linux/cpu_phys_log_map.h",
+      "source": "include/linux/cpu_phys_log_map.h",
+      "original_sha256": "3e59a807926dff85099b7b4422028bc080fa9c09774509ecc5defb336c5bb653",
+      "sha256": "3e59a807926dff85099b7b4422028bc080fa9c09774509ecc5defb336c5bb653"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/include/linux/qcom-cpufreq-hw.h",
+      "source": "include/linux/qcom-cpufreq-hw.h",
+      "original_sha256": "d1dac601d5cd6972951e6a5a1ea911b0ba453d64b931a96fafd3bd0b37193dc5",
+      "sha256": "d1dac601d5cd6972951e6a5a1ea911b0ba453d64b931a96fafd3bd0b37193dc5"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/include/linux/qcom_scmi_vendor.h",
+      "source": "include/linux/qcom_scmi_vendor.h",
+      "original_sha256": "d4f38b98f96b8a82f11dafad55e5fdee81568c8c698473388cd41ad13324e08b",
+      "sha256": "d4f38b98f96b8a82f11dafad55e5fdee81568c8c698473388cd41ad13324e08b"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/include/trace/events/dcvsh.h",
+      "source": "include/trace/events/dcvsh.h",
+      "original_sha256": "c072a8e1f3c8c7ccbf7bd189618df7aba422767ad21a73956cc398c6e635b249",
+      "sha256": "c072a8e1f3c8c7ccbf7bd189618df7aba422767ad21a73956cc398c6e635b249"
+    },
+    {
+      "file": "ports/qcom-cpucp-scmi/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "fefc24578b9a50c63f41c8a4039af16ce1822fc7d9b41e1ad5d06c4162adc681"
+    }
+  ],
+  "patch_sha256": "1e207c8aa313134afb492df87ef0075b95ed82ed81f5e0ce2f5f71cbe5f3ae06",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "canoe CPU DVFS transport: qcom_cpucp mailbox, qcom SCMI vendor protocol + client, cpucp_fast, cpucp_log, cpu_phys_log_map, qcom-cpufreq-hw (clk-scmi replaced by the 7.3 in-tree scmi-clk)",
+  "reviewed_changes": [
+    "qcom_scmi_vendor: 7.3 removed xops->version_get; version comes from ph->version; supported_version=UINT_MAX keeps 6.12 behaviour (no NEGOTIATE_PROTOCOL_VERSION to vendor firmware)",
+    "qcom-cpufreq-hw: boost via .set_boost=cpufreq_boost_set_sw (cpufreq_enable_boost_support/policy_has_boost_freq removed in 7.x); no explicit scaling_*_freqs attrs (core adds them, no longer exported); .remove_new -> .remove",
+    "-DCONFIG_QTI_QCOM_SCMI_CLIENT_MODULE so qcom_scmi_vendor.h declares the client API; WALT defines for cpucp_fast",
+    "vendor clk-scmi.c is an older upstream copy than GKI 6.12: dropped in favour of CONFIG_COMMON_CLK_SCMI=m (scmi-clk.ko)",
+    "DT: arm,max-msg-size=<128> on /soc/qcom,cpucp-scmi (ports/device-tree/avr73-fixups.dtso); 7.3 mailbox default 104 makes vendor 128-byte requests fail with -ERANGE",
+    "core: patches/scmi-boost-7.3.patch (boost default on as GKI 6.12; cpufreq_boost_set_sw can lower the limit again)"
+  ],
+  "pending": [
+    "qcom_cpucp MMIO mailbox, cpucp_fast, cpucp_log, qcom-cpufreq-hw on the phone (QEMU: load only)",
+    "whether PDP firmware supports perf notifications/fastchannels (fake: no)"
+  ]
+}

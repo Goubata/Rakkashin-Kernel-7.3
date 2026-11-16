@@ -185,6 +185,19 @@ DECLARE_RESTRICTED_HOOK(android_rvh_update_cpu_capacity,
 	TP_PROTO(int cpu, unsigned long *capacity),
 	TP_ARGS(cpu, capacity), 1);
 
+DECLARE_RESTRICTED_HOOK(android_rvh_check_preempt_wakeup_fair,
+	TP_PROTO(struct rq *rq, struct task_struct *p, bool *preempt, bool *nopreempt,
+			int wake_flags, struct sched_entity *se, struct sched_entity *pse),
+	TP_ARGS(rq, p, preempt, nopreempt, wake_flags, se, pse), 1);
+
+DECLARE_RESTRICTED_HOOK(android_rvh_replace_next_task_fair,
+	TP_PROTO(struct rq *rq, struct task_struct **p, struct task_struct *prev),
+	TP_ARGS(rq, p, prev), 1);
+
+DECLARE_RESTRICTED_HOOK(android_rvh_find_new_ilb,
+	TP_PROTO(struct cpumask *nohz_idle_cpus_mask, int *new_ilb),
+	TP_ARGS(nohz_idle_cpus_mask, new_ilb), 1);
+
 DECLARE_RESTRICTED_HOOK(android_rvh_update_misfit_status,
 	TP_PROTO(struct task_struct *p, struct rq *rq, bool *need_update),
 	TP_ARGS(p, rq, need_update), 1);

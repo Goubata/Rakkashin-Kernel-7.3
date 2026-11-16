@@ -14,6 +14,7 @@
 
 /* keep-sorted start */
 #include <trace/hooks/avc.h>
+#include <trace/hooks/binder.h>
 #include <trace/hooks/bug.h>
 #include <trace/hooks/cgroup.h>
 #include <trace/hooks/cpufreq.h>
@@ -56,6 +57,8 @@
  */
 
 /* keep-sorted start */
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_restore_priority);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_set_priority);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_after_vcpu_run);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_before_vcpu_run);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gh_note_fw_parcel);

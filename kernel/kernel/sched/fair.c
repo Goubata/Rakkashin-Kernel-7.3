@@ -10266,6 +10266,17 @@ static void wakeup_preempt_fair(struct rq *rq, struct task_struct *p, int wake_f
 	if (pse->sched_delayed)
 		goto update;
 
+	{
+		bool vendor_preempt = false, vendor_ignore = false;
+
+		trace_android_rvh_check_preempt_wakeup_fair(rq, p, &vendor_preempt,
+							    &vendor_ignore, wake_flags, se, pse);
+		if (vendor_preempt)
+			goto preempt;
+		if (vendor_ignore)
+			goto update;
+	}
+
 	/*
 	 * If @p has a shorter slice than current and @p is eligible, override
 	 * current's slice protection in order to allow preemption.
@@ -10357,6 +10368,7 @@ again:
 		goto again;
 
 	p = task_of(se);
+	trace_android_rvh_replace_next_task_fair(rq, &p, rq->curr);
 	return p;
 
 idle:
@@ -14411,6 +14423,14 @@ static inline int find_new_ilb(void)
 	int ilb_cpu, fallback = -1;
 
 	lockdep_assert_irqs_disabled();
+
+	{
+		int new_ilb = nr_cpu_ids;
+
+		trace_android_rvh_find_new_ilb(nohz.idle_cpus_mask, &new_ilb);
+		if (new_ilb != nr_cpu_ids)
+			return new_ilb;
+	}
 
 	/*
 	 * Reuse the per-CPU select_rq_mask, which is protected from concurrent

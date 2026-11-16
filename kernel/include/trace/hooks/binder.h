@@ -11,11 +11,16 @@
  * mechanism for vendor modules to hook and extend functionality
  */
 struct binder_transaction;
+struct binder_proc;
 struct task_struct;
 
 DECLARE_HOOK(android_vh_binder_set_priority,
 	TP_PROTO(struct binder_transaction *t, struct task_struct *task),
 	TP_ARGS(t, task));
+DECLARE_HOOK(android_vh_binder_proc_transaction_finish,
+	TP_PROTO(struct binder_proc *proc, struct binder_transaction *t,
+		struct task_struct *binder_th_task, bool pending_async, bool sync),
+	TP_ARGS(proc, t, binder_th_task, pending_async, sync));
 DECLARE_HOOK(android_vh_binder_restore_priority,
 	TP_PROTO(struct binder_transaction *t, struct task_struct *task),
 	TP_ARGS(t, task));

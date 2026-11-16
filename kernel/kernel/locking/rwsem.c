@@ -29,6 +29,7 @@
 #include <linux/atomic.h>
 #include <linux/hung_task.h>
 #include <trace/events/lock.h>
+#include <trace/hooks/dtask.h>
 
 #ifndef CONFIG_PREEMPT_RT
 #include "lock_events.h"
@@ -256,6 +257,17 @@ static inline bool rwsem_read_trylock(struct rw_semaphore *sem, long *cntp)
 	if (!(*cntp & RWSEM_READ_FAILED_MASK)) {
 		rwsem_set_reader_owned(sem);
 		return true;
+	}
+
+	{
+		int ret = 0;
+
+		/* Vendor reader steal; @cntp already carries our READER_BIAS. */
+		trace_android_vh_rwsem_read_trylock_failed(sem, cntp, &ret);
+		if (ret) {
+			rwsem_set_reader_owned(sem);
+			return true;
+		}
 	}
 
 	return false;
@@ -1163,6 +1175,8 @@ queue:
 
 	rwsem_cond_wake_waiter(sem, count, &wake_q);
 	raw_spin_unlock_irq(&sem->wait_lock);
+	/* ANDROID: outside wait_lock (rq -> wait_lock order under proxy exec) */
+	trace_android_vh_rwsem_wake(sem);
 
 	if (!wake_q_empty(&wake_q))
 		wake_up_q(&wake_q);
@@ -1228,6 +1242,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
 	struct rwsem_waiter waiter, *first;
 	DEFINE_WAKE_Q(wake_q);
 	bool blocked_on_set;
+	bool vendor_wait_started = false;
 
 	/* do optimistic spinning and steal lock if possible */
 	if (rwsem_can_spin_on_owner(sem) && rwsem_optimistic_spin(sem)) {
@@ -1248,7 +1263,24 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
 
 	first = sem->first_waiter;
 	if (first) {
-		list_add_tail(&waiter.list, &first->list);
+		struct rwsem_waiter *pos = NULL;
+
+		trace_android_vh_rwsem_add_waiter_pos(sem, &waiter, &pos);
+		if (pos) {
+			list_add_tail(&waiter.list, &pos->list);
+			if (pos == first) {
+				/*
+				 * The handoff belongs to the first waiter: move it with the
+				 * head (android16-6.12 moto rwsem_list_add semantics), so
+				 * rwsem_try_write_lock()'s first->handoff_set check stays true.
+				 */
+				waiter.handoff_set = first->handoff_set;
+				first->handoff_set = false;
+				sem->first_waiter = &waiter;
+			}
+		} else {
+			list_add_tail(&waiter.list, &first->list);
+		}
 		rwsem_cond_wake_waiter(sem, atomic_long_read(&sem->count),
 				       &wake_q);
 		if (!wake_q_empty(&wake_q)) {
@@ -1281,6 +1313,12 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
 		}
 
 		raw_spin_unlock_irq(&sem->wait_lock);
+
+		if (!vendor_wait_started) {
+			/* ANDROID: once, outside wait_lock (see read slowpath) */
+			vendor_wait_started = true;
+			trace_android_vh_rwsem_wake(sem);
+		}
 
 		if (signal_pending_state(state, current))
 			goto out_nolock;
@@ -1351,6 +1389,8 @@ static struct rw_semaphore *rwsem_wake(struct rw_semaphore *sem)
 		rwsem_mark_wake(sem, RWSEM_WAKE_ANY, &wake_q);
 
 	raw_spin_unlock_irqrestore(&sem->wait_lock, flags);
+	/* ANDROID: outside wait_lock (rq -> wait_lock order under proxy exec) */
+	trace_android_vh_rwsem_wake_finish(sem);
 	wake_up_q(&wake_q);
 
 	return sem;
@@ -1429,6 +1469,13 @@ static inline int __down_read_trylock(struct rw_semaphore *sem)
 			ret = 1;
 			break;
 		}
+	}
+
+	if (!ret) {
+		/* Vendor steal adds READER_BIAS itself when @cntp is NULL. */
+		trace_android_vh_rwsem_read_trylock_failed(sem, NULL, &ret);
+		if (ret)
+			rwsem_set_reader_owned(sem);
 	}
 	preempt_enable();
 	return ret;

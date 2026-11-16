@@ -36,6 +36,7 @@
 
 #include <asm/tlb.h>
 
+#include <trace/hooks/sys.h>
 #include "internal.h"
 #include "swap.h"
 
@@ -2236,6 +2237,16 @@ int set_anon_vma_name(unsigned long addr, unsigned long size,
 		kfree(name);
 		if (!anon_name)
 			return -ENOMEM;
+	}
+
+	{
+		bool bypass = false;
+
+		error = 0;
+		trace_android_rvh_pr_set_vma_name_bypass(mm, addr, size, anon_name,
+							 &error, &bypass);
+		if (bypass)
+			return error;
 	}
 
 	error = madvise_set_anon_name(mm, addr, size, anon_name);

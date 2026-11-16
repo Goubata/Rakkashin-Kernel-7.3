@@ -10,6 +10,14 @@
 #include <linux/sched/debug.h>
 #include <linux/errno.h>
 #include <trace/events/lock.h>
+#include <trace/hooks/dtask.h>
+
+void _trace_android_vh_record_pcpu_rwsem_starttime(struct percpu_rw_semaphore *sem,
+						   unsigned long settime)
+{
+	trace_android_vh_record_pcpu_rwsem_starttime(sem, settime);
+}
+EXPORT_SYMBOL_GPL(_trace_android_vh_record_pcpu_rwsem_starttime);
 
 int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
 			const char *name, struct lock_class_key *key)
@@ -172,6 +180,14 @@ bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try,
 	if (__percpu_down_read_trylock(sem))
 		return true;
 
+	{
+		bool ret = false;
+
+		trace_android_vh_percpu_rwsem_down_read(sem, try, &ret);
+		if (ret)
+			return true;
+	}
+
 	if (try)
 		return false;
 
@@ -253,15 +269,25 @@ void __sched percpu_down_write(struct percpu_rw_semaphore *sem)
 	 */
 
 	/* Wait for all active readers to complete. */
-	rcuwait_wait_event(&sem->writer, readers_active_check(sem), TASK_UNINTERRUPTIBLE);
+	{
+		bool complete = false;
+
+		trace_android_rvh_percpu_rwsem_wait_complete(sem, TASK_UNINTERRUPTIBLE, &complete);
+		if (!complete)
+			rcuwait_wait_event(&sem->writer, readers_active_check(sem),
+					   TASK_UNINTERRUPTIBLE);
+	}
 	if (contended)
 		trace_contention_end(sem, 0);
+	trace_android_vh_record_pcpu_rwsem_starttime(sem, jiffies);
 }
 EXPORT_SYMBOL_GPL(percpu_down_write);
 
 void percpu_up_write(struct percpu_rw_semaphore *sem)
 {
 	rwsem_release(&sem->dep_map, _RET_IP_);
+
+	trace_android_vh_percpu_rwsem_up_write(sem);
 
 	if (trace_contended_release_enabled() && wq_has_sleeper(&sem->waiters))
 		trace_call__contended_release(sem);
@@ -289,6 +315,7 @@ void percpu_up_write(struct percpu_rw_semaphore *sem)
 	 * exclusive write lock because its counting.
 	 */
 	rcu_sync_exit(&sem->rss);
+	trace_android_vh_record_pcpu_rwsem_starttime(sem, 0);
 }
 EXPORT_SYMBOL_GPL(percpu_up_write);
 

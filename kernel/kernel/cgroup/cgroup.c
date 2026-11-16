@@ -105,6 +105,7 @@ static bool cgroup_debug __read_mostly;
 static DEFINE_SPINLOCK(cgroup_idr_lock);
 
 DEFINE_PERCPU_RWSEM(cgroup_threadgroup_rwsem);
+EXPORT_SYMBOL_GPL(cgroup_threadgroup_rwsem);	/* ANDROID: as android16-6.12 (moto_sched) */
 
 #define cgroup_assert_mutex_or_rcu_locked()				\
 	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&			\

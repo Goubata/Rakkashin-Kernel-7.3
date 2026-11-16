@@ -614,6 +614,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
 		    struct ww_acquire_ctx *ww_ctx, const bool use_ww_ctx)
 	__cond_acquires(0, lock)
 {
+	bool vendor_wait_started = false;
 	DEFINE_WAKE_Q(wake_q);
 	struct mutex_waiter waiter;
 	struct ww_mutex *ww;
@@ -728,6 +729,16 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
 		}
 
 		raw_spin_unlock_irqrestore_wake(&lock->wait_lock, flags, &wake_q);
+
+		/*
+		 * ANDROID: 6.12 called this under wait_lock; vendors take the owner's rq
+		 * lock in it, and proxy execution nests wait_lock inside rq locks, so it
+		 * runs once here with no lock held, before the first sleep.
+		 */
+		if (!vendor_wait_started) {
+			vendor_wait_started = true;
+			trace_android_vh_mutex_wait_start(lock);
+		}
 
 		schedule_preempt_disabled();
 
@@ -1083,6 +1094,7 @@ static noinline void __sched __mutex_unlock_slowpath(struct mutex *lock, unsigne
 		wake_up_process(next);
 		put_task_struct(next);
 	}
+	trace_android_vh_mutex_unlock_slowpath(lock);
 }
 
 #ifndef CONFIG_DEBUG_LOCK_ALLOC

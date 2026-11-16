@@ -45,6 +45,10 @@ is_static struct percpu_rw_semaphore name = {				\
 
 extern bool __percpu_down_read(struct percpu_rw_semaphore *, bool, bool);
 
+/* dtask.h cannot be included here; out-of-line wrapper as in android16-6.12 */
+void _trace_android_vh_record_pcpu_rwsem_starttime(struct percpu_rw_semaphore *sem,
+						   unsigned long settime);
+
 static inline void percpu_down_read_internal(struct percpu_rw_semaphore *sem,
 					     bool freezable)
 {
@@ -69,6 +73,7 @@ static inline void percpu_down_read_internal(struct percpu_rw_semaphore *sem,
 	 * The preempt_enable() prevents the compiler from
 	 * bleeding the critical section out.
 	 */
+	_trace_android_vh_record_pcpu_rwsem_starttime(sem, jiffies);
 	preempt_enable();
 }
 
@@ -101,8 +106,10 @@ static inline bool percpu_down_read_trylock(struct percpu_rw_semaphore *sem)
 	 * bleeding the critical section out.
 	 */
 
-	if (ret)
+	if (ret) {
+		_trace_android_vh_record_pcpu_rwsem_starttime(sem, jiffies);
 		rwsem_acquire_read(&sem->dep_map, 0, 1, _RET_IP_);
+	}
 
 	return ret;
 }
@@ -122,6 +129,7 @@ static inline void percpu_up_read(struct percpu_rw_semaphore *sem)
 	} else {
 		__percpu_up_read(sem);
 	}
+	_trace_android_vh_record_pcpu_rwsem_starttime(sem, 0);
 	preempt_enable();
 }
 

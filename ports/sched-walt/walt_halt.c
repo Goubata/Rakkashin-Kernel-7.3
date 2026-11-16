@@ -106,10 +106,8 @@ static void migrate_tasks(struct rq *dead_rq, struct rq_flags *rf)
 	 */
 	update_rq_clock(rq);
 
-#ifdef CONFIG_SCHED_DEBUG
-	/* note the clock update in orf */
+	/* note the clock update in orf (7.3 removed CONFIG_SCHED_DEBUG; checks are always on) */
 	orf.clock_update_flags |= RQCF_UPDATED;
-#endif
 
 	for (;;) {
 		/*
@@ -149,6 +147,8 @@ static void migrate_tasks(struct rq *dead_rq, struct rq_flags *rf)
 		raw_spin_lock(&next->pi_lock);
 		raw_spin_rq_lock(rq);
 		rq_repin_lock(rq, rf);
+		/* the lock was dropped: refresh the clock before move_queued_task(NOCLOCK) */
+		update_rq_clock(rq);
 
 		/*
 		 * Since we're inside stop-machine, _nothing_ should have
@@ -173,6 +173,7 @@ static void migrate_tasks(struct rq *dead_rq, struct rq_flags *rf)
 				*rf = orf;
 				raw_spin_rq_lock(rq);
 				rq_repin_lock(rq, rf);
+				update_rq_clock(rq);
 			}
 		} else {
 			detach_one_task_core(next, rq, &percpu_kthreads);

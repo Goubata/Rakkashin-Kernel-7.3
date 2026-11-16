@@ -1,0 +1,21 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qti-thermal-pause/thermal_pause.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/sched-walt/sched-walt.ko",
+      "imports_checked": 340,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/thermal-pause/avr-tp-sensor.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+savedcmd_Module.symvers :=  /work/avr-port/out/native-gki/scripts/mod/modpost -M -m -b -x  -E     -o Module.symvers -n -T modules.order -i /work/avr-port/out/native-gki/Module.symvers -e -i ./../sched-walt/Module.symvers

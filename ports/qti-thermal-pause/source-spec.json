@@ -1,0 +1,21 @@
+{
+ "name": "thermal-pause",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qti-thermal-pause/thermal_pause.c": "drivers/thermal/qcom/thermal_pause.c",
+  "ports/qti-thermal-pause/Makefile": null,
+  "ports/qti-thermal-pause/include/linux/thermal_pause.h": "include/linux/thermal_pause.h"
+ },
+ "scope": "Pinned factory thermal_pause (WALT PAUSE_THERMAL cooling devices); native 7.3 lifetime and lock-order port",
+ "reviewed_changes": [
+  "Keep OF cdev per available child (alias or thermal-pause-<mask>), max level 1, register only when the whole group is online, exported notifier/paused-mask API and resume-ownership rule",
+  "Per-device context on a global list instead of a global list re-initialised by every probe; single-instance cpuhp state shared by refcount",
+  "Teardown cancels registration work, unregisters cdevs without holding the lock set_cur_state takes, cancels pending updates, then resumes synchronously (factory queued a resume work and freed its memory)",
+  "Child OF node references held for the cdev lifetime; 7.3 thermal_of_cooling_device_register(np, id, ...) signature"
+ ],
+ "pending": [
+  "Phone thermal HAL use of pause-cpuN/thermal-pause types and power effect of halting",
+  "Whole-board boot and daily use"
+ ]
+}

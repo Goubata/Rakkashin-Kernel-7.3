@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage106ではCPU一時停止による温度制御 `thermal_pause`（実機の `thermal-pause-*`／`pause-cpuN`）を、本物のWALT halt経路の上で移植しました。最初の版はビルド設定漏れでWALTのAPIが「何もしないスタブ」になり、停止したと報告するだけでした（ftraceでhaltが一度も起きていないことを確認して発見）。工場版の重なり解除の不具合とWALT haltの時計フラグ（7.3でSCHED_DEBUG廃止）も修正し、6回連続で8項目合格・警告ゼロ。証拠は `reports/thermal-pause-stage106-validation.json`。
+
 Stage105ではWALTを7.3で動かした際に約4割で起きていたCFS破損（ランキュー不一致の警告→Oops）の原因を特定・修正しました。7.3は **proxy execution** が有効で、mutex待ちタスクがキューに残ったまま実行コンテキストの貸し手（donor）になります。7.3本体の負荷分散はそれを移動しませんが、6.12向けのWALTは考慮しておらず、アイドル時の引き抜きでdonorを別CPUへ移していました。WALTの移動判定に除外を加え、修正後は持続負荷12/12・混在ガバナー4/4・通常＋ストレス3/3で警告ゼロ。証拠は `reports/sched-walt-stage105-validation.json`。
 
 Stage104では実機のCPUガバナーである **WALT（sched_walt）を7.3で動かしました**。7.3本体に、6.12がベンダー向けに提供していた関数・シンボル（タスク選択、balance callback、softirq判定、sched_ext、binderのベンダー領域）を戻し、7.3で作り直されたmutex待ち行列にはMVP優先の挿入位置だけを選ぶフックを用意しました。WALT側は7.3のAPI変更、常時有効になったランキュー時計の検査、ワークキュー指定などに合わせています。QEMU上（2クラスタ非対称、実機周波数表の仮想cpufreqとエネルギーモデル）で、`/proc/sys/walt` 87項目（実機と同数）、`walt` ガバナーで負荷時に最大周波数・アイドルで低下、多数タスク＋CPUホットプラグ＋ガバナー往復のストレスを3回連続で通過。既存16試験群と133モジュールCRCも合格（Image#30）。実機のサイクルカウンタ（qcom,gclk）や性能・電力の比較は未確認です。証拠は `reports/sched-walt-stage104-validation.json`。

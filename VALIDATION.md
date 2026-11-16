@@ -2429,3 +2429,14 @@ storage LB; the active-push path also skips blocked tasks (stopper already requi
 TASK_RUNNING). blocked_on.lock is read directly because __sched_proxy_exec is unexported.
 After: 12/12 sustained all-walt, 4/4 mixed, 3/3 standard checks+stress, zero WARN/Oops.
 Evidence: reports/sched-walt-stage105-validation.json (before/after per-log counts).
+
+## Stage106: thermal_pause on the sched_walt halt path
+
+ports/qti-thermal-pause (source-spec.json). The first build lacked CONFIG_SCHED_WALT, so
+linux/sched/walt.h compiled walt_pause_cpus() as a stub returning 0: pauses reported success
+while ftrace showed no halt_cpus events and native balancing kept placing tasks on the CPU.
+Fixed defines (CRC now imports walt_pause/resume). Factory overlap bug fixed: WALT keeps one
+vote bit per client, so resume only CPUs no other paused cdev holds. WALT halt set
+RQCF_UPDATED only under CONFIG_SCHED_DEBUG (gone in 7.3, checks always on): now always, and
+the clock is updated after relocking. Lifetime fixes as in cpu_hotplug.
+Six QEMU runs pass 8 checks each with zero warnings; WALT re-verified (2/2, 4/4 sustained).

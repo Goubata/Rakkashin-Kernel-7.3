@@ -1,0 +1,26 @@
+/dts-v1/;
+/plugin/;
+/* WALT environment (asymmetric 2 clusters) plus an AVR-shaped qcom,thermal-pause node.
+ * 0x8003..0x8001 are QEMU cpu@1..3 phandles (verified by the check script). */
+/ {
+ fragment@0 { target-path="/cpus/cpu@0"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@1 { target-path="/cpus/cpu@1"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@2 { target-path="/cpus/cpu@2"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+ fragment@3 { target-path="/cpus/cpu@3"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+ fragment@4 { target-path="/"; __overlay__ {
+  avr_tp_sensor: avr-tp-sensor { #thermal-sensor-cells=<0>; };
+  thermal-zones {
+   avr-pause-zone { polling-delay-passive=<0>; polling-delay=<0>; thermal-sensors=<&avr_tp_sensor>;
+    trips { avr_tp_trip: hot { temperature=<50000>; hysteresis=<5000>; type="passive"; }; };
+    cooling-maps { cpu3-pause { trip=<&avr_tp_trip>; cooling-device=<&avr_cpu3_pause 1 1>; }; };
+   };
+  };
+  avr-cpu-pause {
+   compatible="qcom,thermal-pause";
+   avr_cpu2_pause: cpu2-pause { qcom,cpus=<0x8002>; qcom,cdev-alias="thermal-pause-4"; #cooling-cells=<2>; };
+   avr_cpu3_pause: cpu3-pause { qcom,cpus=<0x8001>; qcom,cdev-alias="thermal-pause-8"; #cooling-cells=<2>; };
+   big-pause { qcom,cpus=<0x8002 0x8001>; #cooling-cells=<2>; };
+   pause-cpu1 { qcom,cpus=<0x8003>; qcom,cdev-alias="pause-cpu1"; };
+  };
+ }; };
+};

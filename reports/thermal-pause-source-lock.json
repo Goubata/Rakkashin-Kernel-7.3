@@ -1,0 +1,38 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qti-thermal-pause/thermal_pause.c",
+      "source": "drivers/thermal/qcom/thermal_pause.c",
+      "original_sha256": "83174fef80fdc176343a8696b9e38e0175b738d3804b0d263fb4baa3af139456",
+      "sha256": "77665aaa46e7d480c5d289552d615a7b5e49019ef54176f1fc13391f32c2cdc7"
+    },
+    {
+      "file": "ports/qti-thermal-pause/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "1a2a9f9a3377add0252981ae040eb4d7aa9924e795275c0821fd314a19702300"
+    },
+    {
+      "file": "ports/qti-thermal-pause/include/linux/thermal_pause.h",
+      "source": "include/linux/thermal_pause.h",
+      "original_sha256": "51b6428392c954dbd047e505554aa345b5c5744e95f4992d4ef83ede920b3405",
+      "sha256": "51b6428392c954dbd047e505554aa345b5c5744e95f4992d4ef83ede920b3405"
+    }
+  ],
+  "patch_sha256": "16865982554f87351fd328fe6daaf24d8eba1181c815cf488074687272e26e1f",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Pinned factory thermal_pause (WALT PAUSE_THERMAL cooling devices); native 7.3 lifetime and lock-order port",
+  "reviewed_changes": [
+    "Keep OF cdev per available child (alias or thermal-pause-<mask>), max level 1, register only when the whole group is online, exported notifier/paused-mask API and resume-ownership rule",
+    "Per-device context on a global list instead of a global list re-initialised by every probe; single-instance cpuhp state shared by refcount",
+    "Teardown cancels registration work, unregisters cdevs without holding the lock set_cur_state takes, cancels pending updates, then resumes synchronously (factory queued a resume work and freed its memory)",
+    "Child OF node references held for the cdev lifetime; 7.3 thermal_of_cooling_device_register(np, id, ...) signature"
+  ],
+  "pending": [
+    "Phone thermal HAL use of pause-cpuN/thermal-pause types and power effect of halting",
+    "Whole-board boot and daily use"
+  ]
+}

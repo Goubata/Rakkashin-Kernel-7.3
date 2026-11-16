@@ -1,0 +1,16 @@
+{
+  "scope": "thermal_pause on real sched_walt halt; QEMU only",
+  "core_image": "changed",
+  "image_sha256": "3a2035d1f487126fbe4811234bba1eac0247a0135561667b281fe5f47177d19c",
+  "modules": [
+    "thermal_pause.ko",
+    "sched-walt.ko",
+    "avr-tp-sensor.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

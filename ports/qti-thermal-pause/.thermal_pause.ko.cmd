@@ -1,0 +1,1 @@
+savedcmd_thermal_pause.ko := ld.lld -r -EL  -maarch64elf -z norelro --fatal-warnings --compress-debug-sections=zstd -z noexecstack --build-id=sha1 --force-group-allocation  -T /work/avr-port/out/native-gki/scripts/module.lds -o thermal_pause.ko thermal_pause.o thermal_pause.mod.o .module-common.o

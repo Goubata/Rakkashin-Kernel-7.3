@@ -1,0 +1,9 @@
+make: Entering directory '/work/avr-src'
+make[1]: Entering directory '/work/avr-port/ports/qti-thermal-pause'
+  CC [M]  thermal_pause.o
+  MODPOST Module.symvers
+WARNING: modpost: thermal_pause.ko: missing MODULE_DESCRIPTION()
+  LD [M]  thermal_pause.ko
+  BTF [M] thermal_pause.ko
+make[1]: Leaving directory '/work/avr-port/ports/qti-thermal-pause'
+make: Leaving directory '/work/avr-src'

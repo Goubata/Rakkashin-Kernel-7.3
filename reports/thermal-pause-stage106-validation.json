@@ -1,0 +1,36 @@
+{
+ "stage": 106,
+ "scope": "Port thermal_pause (phone thermal-pause-*/pause-cpuN cooling devices) on the real sched_walt halt path",
+ "checks": {
+  "runs": 6,
+  "checks_per_run": 8,
+  "warn": 0,
+  "logs": [
+   "reports/thermal-pause-stage106-r1.log",
+   "reports/thermal-pause-stage106-r2.log",
+   "reports/thermal-pause-stage106-r3.log",
+   "reports/thermal-pause-stage106-r4.log",
+   "reports/thermal-pause-stage106-r5.log",
+   "reports/thermal-pause-stage106-r6.log"
+  ],
+  "details": [
+   "4 cdevs (alias, default thermal-pause-<mask>, pause-cpuN without cooling-cells) max_state 1",
+   "pausing cpu3 drains 6 hogs; resume returns it",
+   "group (big cluster) pause, overlapping single pause keeps ownership",
+   "60 rapid toggles converge",
+   "DT cooling map pauses/resumes via step_wise",
+   "unload while paused resumes the CPU"
+  ]
+ },
+ "bugs_found_and_fixed": [
+  "Port built without CONFIG_SCHED_WALT: linux/sched/walt.h turned walt_pause_cpus() into a stub returning 0, so pauses reported success without halting (first passing run was luck); ftrace showed zero halt_cpus events",
+  "Factory: resuming a group released CPUs still paused by another cdev (WALT keeps one vote bit per client); resume only unshared CPUs",
+  "WALT halt: RQCF_UPDATED was set only under CONFIG_SCHED_DEBUG (removed in 7.3, checks always on) -> clock assertions in move_queued_task; set unconditionally and update clock after relock",
+  "Factory lifetime: global list re-init per probe, resume work queued then freed, unregister under callback lock, unreferenced child nodes"
+ ],
+ "walt_reverified": "sched-walt 2/2 standard (6 checks), 4/4 sustained all-walt, zero warnings; CRC 340/39/11 imports match",
+ "core_image": "7.3.0-4k #30 (unchanged)",
+ "phone_partition_written": false,
+ "physical_verified": false,
+ "promoted": false
+}

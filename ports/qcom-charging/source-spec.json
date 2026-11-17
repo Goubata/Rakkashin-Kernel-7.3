@@ -20,7 +20,8 @@
   "ports/qcom-charging/include/linux/soc/qcom/altmode-glink.h": "include/linux/soc/qcom/altmode-glink.h",
   "ports/qcom-charging/include/linux/soc/qcom/battery_charger.h": "include/linux/soc/qcom/battery_charger.h",
   "ports/qcom-charging/include/trace/events/rproc_qcom.h": "include/trace/events/rproc_qcom.h",
-  "ports/qcom-charging/Makefile": null
+  "ports/qcom-charging/Makefile": null,
+  "ports/qcom-charging/avr-canoe-vendor-config.h": null
  },
  "scope": "PMIC glink clients (battery charger, altmode, UCSI, ulog, battery debug, glink ADC, pmic glink debug), glink_pkt, qcom_pd_mapper on android18-7.3",
  "reviewed_changes": [
@@ -28,7 +29,8 @@
   "ucsi: 7.3 sync_control(cmd, cci, data, size, msg_out, size): wraps the 6.12 synchronous write and reads CCI/MESSAGE_IN (no MESSAGE_OUT, as 6.12)",
   "bin_attribute const callbacks/arrays",
   "glink_pkt: vendor GLINK client API from ports/qcom-glink-transport (signals; zero-copy unsupported -> copy path), ida_alloc_max/ida_free, zap_special_vma_range (exported successor of zap_vma_ptes)",
-  "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage"
+  "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "ADSP battery/charging firmware conversation, UCSI/altmode, glink_pkt channels (phone)"

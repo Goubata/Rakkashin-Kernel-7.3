@@ -1,0 +1,321 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/audio-kernel/adsp_loader_dlkm.ko",
+      "imports_checked": 45,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/audio_pkt_dlkm.ko",
+      "imports_checked": 62,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/audio_prm_dlkm.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/audpkt_ion_dlkm.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/aw882xx_dlkm.ko",
+      "imports_checked": 80,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/gpr_dlkm.ko",
+      "imports_checked": 54,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/hdmi_dlkm.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_bt_swr_dlkm.ko",
+      "imports_checked": 50,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_dlkm.ko",
+      "imports_checked": 92,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_rx_macro_dlkm.ko",
+      "imports_checked": 97,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_tx_macro_dlkm.ko",
+      "imports_checked": 77,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_va_macro_dlkm.ko",
+      "imports_checked": 106,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_wsa2_macro_dlkm.ko",
+      "imports_checked": 99,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/lpass_cdc_wsa_macro_dlkm.ko",
+      "imports_checked": 104,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/machine_dlkm.ko",
+      "imports_checked": 115,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/mbhc_dlkm.ko",
+      "imports_checked": 44,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/pinctrl_lpi_dlkm.ko",
+      "imports_checked": 54,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/q6_dlkm.ko",
+      "imports_checked": 7,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/q6_notifier_dlkm.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/q6_pdr_dlkm.ko",
+      "imports_checked": 5,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/qmp_dlkm.ko",
+      "imports_checked": 55,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/sdca_registers_dlkm.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/simple_amp_dlkm.ko",
+      "imports_checked": 81,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/snd_event_dlkm.ko",
+      "imports_checked": 13,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/spf_core_dlkm.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/stub_dlkm.ko",
+      "imports_checked": 5,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/swr_ctrl_dlkm.ko",
+      "imports_checked": 111,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/swr_dlkm.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/swr_dmic_dlkm.ko",
+      "imports_checked": 44,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/swr_haptics_dlkm.ko",
+      "imports_checked": 43,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd9378_dlkm.ko",
+      "imports_checked": 107,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd9378_slave_dlkm.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd937x_dlkm.ko",
+      "imports_checked": 105,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd937x_slave_dlkm.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd938x_dlkm.ko",
+      "imports_checked": 106,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd938x_slave_dlkm.ko",
+      "imports_checked": 34,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd939x_dlkm.ko",
+      "imports_checked": 139,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd939x_slave_dlkm.ko",
+      "imports_checked": 34,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd9xxx_dlkm.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wcd_core_dlkm.ko",
+      "imports_checked": 62,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wsa883x_dlkm.ko",
+      "imports_checked": 98,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wsa884x_dlkm.ko",
+      "imports_checked": 102,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/audio-kernel/wsa885x_i2c_dlkm.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/bt_fm_swr.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/btfm_slim_codec.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/btfmcodec.ko",
+      "imports_checked": 70,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/btpower.ko",
+      "imports_checked": 102,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/radio-i2c-rtc6226-qca.ko",
+      "imports_checked": 84,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/bt-kernel/spi_cnss_proto.ko",
+      "imports_checked": 103,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pas-alor/qcom_q6v5_pas.ko",
+      "imports_checked": 95,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-remoteproc-services/qcom_q6v5.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-rproc-common/qcom_common.ko",
+      "imports_checked": 61,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-slimbus/bam_dma.ko",
+      "imports_checked": 91,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-slimbus/slim-qcom-ngd-ctrl.ko",
+      "imports_checked": 129,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-slimbus/slimbus.ko",
+      "imports_checked": 52,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-wlan-deps/qcom_ramdump.ko",
+      "imports_checked": 36,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-wlan-deps/smem-mailbox.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/cnss_nl.ko",
+      "imports_checked": 7,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/cnss_plat_ipc_qmi_svc.ko",
+      "imports_checked": 37,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/cnss_prealloc.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/cnss_utils.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/icnss2.ko",
+      "imports_checked": 311,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/wlan-platform/wlan_firmware_service.ko",
+      "imports_checked": 4,
+      "mismatches": {}
+    }
+  ]
+}

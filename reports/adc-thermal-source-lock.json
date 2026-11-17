@@ -41,10 +41,10 @@
       "file": "ports/qcom-adc-thermal/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "5455f266141bead2b48e8dc45fd1262b0142ec2826d8afd439e0c5650b6c79fc"
+      "sha256": "89ccf52e827c4a7daee86a65d986f763b723cd2bd2f50fd1ee7d3eb0e3cb3b64"
     }
   ],
-  "patch_sha256": "9ec226323f6ec82896d61c391050295f771aa64d5dd1c1fb2d699f5a9eff264e",
+  "patch_sha256": "ab95abbc02024911e753f492a53280dc31517e1ff7d690fe6f8e9234678db234",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "reviewed_changes": [
     "Private firmware enum, data and DT-binding headers forced before native headers",

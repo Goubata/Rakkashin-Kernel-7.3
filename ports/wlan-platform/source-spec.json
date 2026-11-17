@@ -258,7 +258,8 @@
   "thermal_of_cooling_device_register cdev_id 0 (DT uses 2-cell specs)",
   "avr-canoe-vendor-config.h (gen_drm_vendor_config.py wlan-platform); vendor qcom_rproc API force-included (early SSR notifier)",
   "depends= sets equal the phone modules",
-  "pinned to tag MMI-W3WWL36.65-11-18 (8fb17c9, the phone build; includes the avr BDF selection commits); the earlier checkout differed only in unused cnss2/qmi.c"
+  "pinned to tag MMI-W3WWL36.65-11-18 (8fb17c9, the phone build; includes the avr BDF selection commits); the earlier checkout differed only in unused cnss2/qmi.c",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "WPSS/WLAN on the phone"

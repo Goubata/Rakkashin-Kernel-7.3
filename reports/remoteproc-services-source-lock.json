@@ -35,10 +35,10 @@
       "file": "ports/qcom-remoteproc-services/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "c91c161afe5c133ac3216736d3235adb8d6a3d03b9b9df3a92ac2658466f6a54"
+      "sha256": "f0c2d12699c5539c015192ce60d84fd74fb4315dae9b4fa21d8a8b1810000501"
     }
   ],
-  "patch_sha256": "2e2dc0d9d21aa23de46961a5378b91984e9dcb58decb861c4106e36f597da48b",
+  "patch_sha256": "2ce34e373496b54aa3ac00fe6250573bad4e97036b17b1661cbbe9a05648077b",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "hardware_runtime_accepted": false,

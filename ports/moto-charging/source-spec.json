@@ -46,13 +46,15 @@
   "ports/moto-charging/bm_adsp_ulog/Android.mk": "drivers/power/bm_adsp_ulog/Android.mk",
   "ports/moto-charging/hall/Android.mk": "drivers/misc/hall/Android.mk",
   "ports/moto-charging/bm_adsp_ulog/README": "drivers/power/bm_adsp_ulog/README",
-  "ports/moto-charging/Makefile": null
+  "ports/moto-charging/Makefile": null,
+  "ports/moto-charging/avr-canoe-vendor-config.h": null
  },
  "scope": "Motorola mmi_glink_charger, qti_glink_charger_v2, qpnp_adaptive_charge, bm_adsp_ulog, hall_phone_case on android18-7.3",
  "reviewed_changes": [
   "alarm_start_relative -> alarm_start_timer(.., true)",
   "thermal_of_cooling_device_register gains cdev_id 0 (7.3)",
-  "CONFIG_MMI_PHONE_CASE_SUPPORT=y (mmi_glink_charger depends on hall_phone_case, which the phone loads)"
+  "CONFIG_MMI_PHONE_CASE_SUPPORT=y (mmi_glink_charger depends on hall_phone_case, which the phone loads)",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "charging behaviour on the phone"

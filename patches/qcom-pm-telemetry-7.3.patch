@@ -1,0 +1,9 @@
+--- a/ports/qcom-pm-telemetry/Makefile
++++ b/ports/qcom-pm-telemetry/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# qcom-soc drivers/soc/qcom/cpuss_telemetry.c (canoe_perf CONFIG_QCOM_CPUSS_TELEMETRY=m),
++# imported by qcom_cpuss_sleep_stats_v4 on the phone.
++obj-m += cpuss_telemetry.o
++ccflags-y += -I$(src)/include -I$(src)/../qcom-cpucp-scmi/include -Wno-missing-prototypes -DCONFIG_QCOM_CPUSS_TELEMETRY_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-cpucp-scmi/Module.symvers

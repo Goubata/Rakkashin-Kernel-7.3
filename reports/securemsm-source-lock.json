@@ -24,7 +24,7 @@
       "file": "ports/securemsm/Kbuild",
       "source": "Kbuild",
       "original_sha256": "9ed5ae090a7ed6031c6946d2171f7a4083835aa82d630d7ac2cb6c594bdd2930",
-      "sha256": "78ebefc42758494609a66a136fba1c37525ea9ce42409240e56b4b3edf414375"
+      "sha256": "ea7c7f49dd3742dc5d216ab88f3ef78912c76ef963a62ac932d86a3569149954"
     },
     {
       "file": "ports/securemsm/Kbuild.vendor",
@@ -895,9 +895,15 @@
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "sha256": "e5930d839e715770a48aea7966f4cf4b2682b17b4d13852a72c57ff8503410cc"
+    },
+    {
+      "file": "ports/securemsm/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e49eb0b854899c60486f9090e4830d5c9a476faf8e2151a3cbe078439eeca6d6"
     }
   ],
-  "patch_sha256": "49009f8e3c88d21b20258ce22be1dcf5819517b53e17b2a506d67ee3560b4b78",
+  "patch_sha256": "17fe1f12af63293c61f6ed44dd380e8cf699787b1c069a49d1360653c628d9c6",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3: smcinvoke_dlkm (Stage109), tz_log, qce50, qcedev-mod, qcrypto-msm, hdcp_qseecom, qrng, smmu_proxy (pvm), tmecom-intf (Stage119)",
@@ -908,7 +914,8 @@
     "Stage119: Kbuild gains the canoe modules (vendor Kbuild.vendor objects; compat_qcedev per securemsm_modules.bzl); include paths for socinfo, iommu-util, sps; CONFIG_MSM_QMP (msm_qmp.ko is ported)",
     "from_timer -> timer_container_of (qce50, qcrypto); qcrypto resp_wq gets explicit WQ_PERCPU (7.3 warns on implicit per-cpu)",
     "linux/msm_ion.h: empty stub (tz_log includes it, uses nothing); include/linux/hdcp_qseecom.h and include/linux/mailbox/qmp.h copied unchanged from qcom-soc include",
-    "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)"
+    "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "real QTEE/TZ diag, crypto engine, PRNG, HDCP, TME only verifiable on the phone"

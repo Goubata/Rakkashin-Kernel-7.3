@@ -1,0 +1,120 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-usb-gadget/f_gsi.c",
+      "source": "drivers/usb/gadget/function/f_gsi.c",
+      "original_sha256": "60ac187423322b79611b69793d21480f41e88ff8b77d4b4eb0ac5fe151026ef0",
+      "sha256": "4d879eb194d12c8ee411aa1876a5dc88dfd9ddecd04e81d8f9fc53aa64b17666"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_gsi.h",
+      "source": "drivers/usb/gadget/function/f_gsi.h",
+      "original_sha256": "30aeb47d97efbc1b613b11edb2799227145a60fc6cc9e2a1db85bddf2449a014",
+      "sha256": "30aeb47d97efbc1b613b11edb2799227145a60fc6cc9e2a1db85bddf2449a014"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/ndis.h",
+      "source": "drivers/usb/gadget/function/ndis.h",
+      "original_sha256": "b3a24e6e6aa9885d0327def78fa7fb0660122f2578ed0ae316c9c2d9121cd547",
+      "sha256": "b3a24e6e6aa9885d0327def78fa7fb0660122f2578ed0ae316c9c2d9121cd547"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/rndis.c",
+      "source": "drivers/usb/gadget/function/rndis.c",
+      "original_sha256": "d1ec7e4cad6a1e0c5942bd02e7578ef0d7189b98527d612c40ebc0d544bf7018",
+      "sha256": "d1ec7e4cad6a1e0c5942bd02e7578ef0d7189b98527d612c40ebc0d544bf7018"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/rndis.h",
+      "source": "drivers/usb/gadget/function/rndis.h",
+      "original_sha256": "d60982a6eace8114948df4dd7af03bf076e9a0a54eca9465d7893cb897e426ad",
+      "sha256": "dfd8434304ad5dd1f54fc8dbcd9b41b8626f8044019466d5830b6af2ccb47b16"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/u_rndis.h",
+      "source": "drivers/usb/gadget/function/u_rndis.h",
+      "original_sha256": "a17f55cd7783d4e398f0ef2f2ac26af51c3fb00c1e97a5c7394472d9d2a63221",
+      "sha256": "a17f55cd7783d4e398f0ef2f2ac26af51c3fb00c1e97a5c7394472d9d2a63221"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_cdev.c",
+      "source": "drivers/usb/gadget/function/f_cdev.c",
+      "original_sha256": "90993fbe2d87afeaede6818b6798cb7a6546372fc9989dbf8ef0d2af85ef4d14",
+      "sha256": "402d6fc7208a6f3376f000287108642282b6a07ef3dea690347c26b98c7d6649"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_ccid.c",
+      "source": "drivers/usb/gadget/function/f_ccid.c",
+      "original_sha256": "a626fd838953f32aff34138705b3f454076b3803079b8ddd1bedcb0f3c71cd22",
+      "sha256": "aaf668efe82f90955091e4db55de06c90b17aa02fe949ceb467f976242909d80"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_ccid.h",
+      "source": "drivers/usb/gadget/function/f_ccid.h",
+      "original_sha256": "673060a9c31d874744a046bfaa9d9a69453e06f3193a42fbb317005ff1fdd34e",
+      "sha256": "673060a9c31d874744a046bfaa9d9a69453e06f3193a42fbb317005ff1fdd34e"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_qdss.c",
+      "source": "drivers/usb/gadget/function/f_qdss.c",
+      "original_sha256": "7d5e6d629f4ec06c2205ce7bab6ba4a1485a834d13d1af99083970cbf2036815",
+      "sha256": "7d5e6d629f4ec06c2205ce7bab6ba4a1485a834d13d1af99083970cbf2036815"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/f_qdss.h",
+      "source": "drivers/usb/gadget/function/f_qdss.h",
+      "original_sha256": "2b4b9ce23fd2efc1399c20fef257f8cd4b4f65f8b807efe18cdec20dd0233d02",
+      "sha256": "2b4b9ce23fd2efc1399c20fef257f8cd4b4f65f8b807efe18cdec20dd0233d02"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/u_qdss.c",
+      "source": "drivers/usb/gadget/function/u_qdss.c",
+      "original_sha256": "3042af44e8366d52b4c4b4d060f960f93bbc21edacaed18960670b5e91a50ba7",
+      "sha256": "3042af44e8366d52b4c4b4d060f960f93bbc21edacaed18960670b5e91a50ba7"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/include/linux/usb/ccid_desc.h",
+      "source": "include/linux/usb/ccid_desc.h",
+      "original_sha256": "5473b0eb26830a0298b29fe8b082fe0feefff64d14f4c02d30eefc5351cce25c",
+      "sha256": "5473b0eb26830a0298b29fe8b082fe0feefff64d14f4c02d30eefc5351cce25c"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/include/linux/usb/usb_qdss.h",
+      "source": "include/linux/usb/usb_qdss.h",
+      "original_sha256": "9169a01e7f55afbb2fe1ddcc3a7919a5b08a567be29530cd5ee1aacff29ba4a7",
+      "sha256": "9169a01e7f55afbb2fe1ddcc3a7919a5b08a567be29530cd5ee1aacff29ba4a7"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/include/linux/ipa_usb.h",
+      "source": "include/linux/ipa_usb.h",
+      "original_sha256": "44bfa0cc474a16f7e7dcad17303865433b55bab67a6522a6dce3c338118ae374",
+      "sha256": "44bfa0cc474a16f7e7dcad17303865433b55bab67a6522a6dce3c338118ae374"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/include/uapi/linux/usb/usb_ctrl_qti.h",
+      "source": "include/uapi/linux/usb/usb_ctrl_qti.h",
+      "original_sha256": "5dc6654e20f294e4fff34ea0dc1b3fb24f3d2992e66757fc08a8c655321eb108",
+      "sha256": "5dc6654e20f294e4fff34ea0dc1b3fb24f3d2992e66757fc08a8c655321eb108"
+    },
+    {
+      "file": "ports/qcom-usb-gadget/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "4897436acb8593745e67756625fd3ad617c6401ef1f3f1811d9bafc616f78b48"
+    }
+  ],
+  "patch_sha256": "76a96de332d47752dfe452bcbc8b149ce39542a8d8652601a30b9296c1e48391",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "usb_f_gsi, usb_f_cdev, usb_f_ccid, usb_f_qdss (canoe_perf =m) on android18-7.3",
+  "reviewed_changes": [
+    "ida_simple_get/remove -> ida_alloc(_max)/ida_free; from_timer -> timer_container_of; del_timer_sync -> timer_delete_sync",
+    "rndis.h includes the 7.3 u_ether.h via -I drivers/usb/gadget/function",
+    "depends= equal the phone"
+  ],
+  "pending": [
+    "USB tethering/diag/ADB-like functions on the phone"
+  ]
+}

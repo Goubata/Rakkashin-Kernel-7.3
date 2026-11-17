@@ -1,0 +1,128 @@
+--- a/ports/qcom-usb-gadget/f_gsi.c
++++ b/ports/qcom-usb-gadget/f_gsi.c
+@@ -204,7 +204,7 @@
+ 
+ static void gsi_rw_timer_func(struct timer_list *t)
+ {
+-	struct f_gsi *gsi = from_timer(gsi, t, gsi_rw_timer);
++	struct f_gsi *gsi = timer_container_of(gsi, t, gsi_rw_timer);
+ 
+ 	if (!atomic_read(&gsi->connected)) {
+ 		log_event_dbg("%s: gsi not connected.. bail-out\n", __func__);
+@@ -286,7 +286,7 @@
+ 			  msecs_to_jiffies(gsi->gsi_rw_timer_interval));
+ 		log_event_dbg("%s: timer initialized\n", __func__);
+ 	} else {
+-		del_timer_sync(&gsi->gsi_rw_timer);
++		timer_delete_sync(&gsi->gsi_rw_timer);
+ 		log_event_dbg("%s: timer deleted\n", __func__);
+ 	}
+ 
+@@ -1927,7 +1927,7 @@
+ 	if (!ctrl_dev_create)
+ 		return 0;
+ 
+-	minor = ida_simple_get(&gsi_ida, 0, MAX_CDEV_INSTANCES, GFP_KERNEL);
++	minor = ida_alloc_max(&gsi_ida, MAX_CDEV_INSTANCES - 1, GFP_KERNEL); /* AVR 7.3 */
+ 	if (minor < 0) {
+ 		pr_err("%s: No more minor numbers left! rc:%d\n", __func__,
+ 				minor);
+@@ -1956,7 +1956,7 @@
+ err_create_dev:
+ 	cdev_del(&gsi->c_port.cdev);
+ err_cdev_add:
+-	ida_simple_remove(&gsi_ida, minor);
++	ida_free(&gsi_ida, minor);
+ 	return ret;
+ }
+ 
+@@ -3948,7 +3948,7 @@
+ 		device_destroy(gsi_class, cdev->dev);
+ 		cdev_del(cdev);
+ 		cdev->dev = 0;
+-		ida_simple_remove(&gsi_ida, minor);
++		ida_free(&gsi_ida, minor);
+ 	}
+ 
+ 	kfree(opts->gsi);
+--- a/ports/qcom-usb-gadget/rndis.h
++++ b/ports/qcom-usb-gadget/rndis.h
+@@ -13,7 +13,7 @@
+ #define _LINUX_RNDIS_H
+ 
+ #include <linux/rndis.h>
+-#include "drivers/usb/gadget/function/u_ether.h"
++#include "u_ether.h"
+ #include "ndis.h"
+ 
+ #define RNDIS_MAXIMUM_FRAME_SIZE	1518
+--- a/ports/qcom-usb-gadget/f_cdev.c
++++ b/ports/qcom-usb-gadget/f_cdev.c
+@@ -859,7 +859,7 @@
+ 	if (opts->port) {
+ 		cdev_device_del(&opts->port->fcdev_cdev, &opts->port->dev);
+ 		mutex_lock(&chardev_ida_lock);
+-		ida_simple_remove(&chardev_ida, opts->port->minor);
++		ida_free(&chardev_ida, opts->port->minor);
+ 		mutex_unlock(&chardev_ida_lock);
+ 		usb_cser_debugfs_exit(opts->port);
+ 		put_device(&opts->port->dev);
+@@ -1707,9 +1707,9 @@
+ 		}
+ 	}
+ 
+-	ret = ida_simple_get(&chardev_ida, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&chardev_ida, GFP_KERNEL); /* AVR 7.3: ida_simple_get(..0,0) */
+ 	if (ret >= NUM_INSTANCE) {
+-		ida_simple_remove(&chardev_ida, ret);
++		ida_free(&chardev_ida, ret);
+ 		mutex_unlock(&chardev_ida_lock);
+ 		ret = -ENODEV;
+ 		goto err_get_ida;
+--- a/ports/qcom-usb-gadget/f_ccid.c
++++ b/ports/qcom-usb-gadget/f_ccid.c
+@@ -1003,7 +1003,7 @@
+ 	struct device *dev;
+ 	int ret, minor;
+ 
+-	minor = ida_simple_get(&ccid_ida, 0, MAX_INSTANCES, GFP_KERNEL);
++	minor = ida_alloc_max(&ccid_ida, MAX_INSTANCES - 1, GFP_KERNEL); /* AVR 7.3: ida_simple_get(..0,N) */
+ 	if (minor < 0) {
+ 		pr_err("%s: No more minor numbers left! rc:%d\n", __func__,
+ 				minor);
+@@ -1028,7 +1028,7 @@
+ err_create_dev:
+ 	cdev_del(cdev);
+ err_cdev_add:
+-	ida_simple_remove(&ccid_ida, minor);
++	ida_free(&ccid_ida, minor);
+ 	return ret;
+ }
+ 
+@@ -1038,7 +1038,7 @@
+ 
+ 	device_destroy(ccid_class, cdev->dev);
+ 	cdev_del(cdev);
+-	ida_simple_remove(&ccid_ida, minor);
++	ida_free(&ccid_ida, minor);
+ }
+ 
+ static void ccid_free_func(struct usb_function *f)
+--- a/ports/qcom-usb-gadget/Makefile
++++ b/ports/qcom-usb-gadget/Makefile
+@@ -0,0 +1,15 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# qcom-soc 6.12 USB gadget functions (canoe_perf: USB_F_GSI/CDEV/CCID/QDSS=m) and the
++# Motorola BLAN function moto_f_usbnet (motorola-kernel-modules drivers/moto_f_usbnet).
++obj-m += usb_f_gsi.o usb_f_cdev.o usb_f_ccid.o usb_f_qdss.o moto_f_usbnet.o
++usb_f_gsi-y := f_gsi.o rndis.o
++usb_f_cdev-y := f_cdev.o
++usb_f_ccid-y := f_ccid.o
++usb_f_qdss-y := f_qdss.o u_qdss.o
++moto_f_usbnet-y := f_usbnet.o
++ccflags-y += -I$(src) -I$(src)/include -I$(src)/include/uapi -I$(srctree)/drivers/usb/gadget \
++	-I$(srctree)/drivers/usb/gadget/function -I$(src)/../usb-repeater/include \
++	-I$(src)/../qcom-ipc-logging/include -Wno-missing-prototypes
++ccflags-y += -DCONFIG_USB_F_GSI_MODULE=1 -DCONFIG_USB_F_CDEV_MODULE=1 -DCONFIG_USB_F_CCID_MODULE=1 \
++	-DCONFIG_USB_F_QDSS_MODULE=1 -DCONFIG_IPC_LOGGING_MODULE=1 -DCONFIG_USB_DWC3_MSM_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ipc-logging/Module.symvers $(src)/../qcom-usb/Module.symvers

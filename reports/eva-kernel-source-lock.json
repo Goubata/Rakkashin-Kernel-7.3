@@ -1,0 +1,442 @@
+{
+  "source_commit": "0036a2f103404e277731b38b71c12ae4c427b724",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-eva-kernel",
+  "files": [
+    {
+      "file": "ports/eva-kernel/canoe.bzl",
+      "source": "canoe.bzl",
+      "original_sha256": "e2ae78dea998fdc3934c5b99e21f493fe0016dec88d65350f38a332a1e7c907d",
+      "sha256": "e2ae78dea998fdc3934c5b99e21f493fe0016dec88d65350f38a332a1e7c907d"
+    },
+    {
+      "file": "ports/eva-kernel/config/waipioevaconf.h",
+      "source": "config/waipioevaconf.h",
+      "original_sha256": "5d993dfa565f4b1f44b4e8ecd9d2bc9d215a08544b984671367dd0f044836f13",
+      "sha256": "5d993dfa565f4b1f44b4e8ecd9d2bc9d215a08544b984671367dd0f044836f13"
+    },
+    {
+      "file": "ports/eva-kernel/eva_module_build.bzl",
+      "source": "eva_module_build.bzl",
+      "original_sha256": "4f193b1ed5d5d12bb5ed6ab7aa428650d69c2e81af231e03e806614bc90c572c",
+      "sha256": "4f193b1ed5d5d12bb5ed6ab7aa428650d69c2e81af231e03e806614bc90c572c"
+    },
+    {
+      "file": "ports/eva-kernel/eva_modules.bzl",
+      "source": "eva_modules.bzl",
+      "original_sha256": "b62ed56f9e979624be59c475214cd9ac57a518bc44e057ba4eedd6994eb00811",
+      "sha256": "b62ed56f9e979624be59c475214cd9ac57a518bc44e057ba4eedd6994eb00811"
+    },
+    {
+      "file": "ports/eva-kernel/include/uapi/eva/media/msm_eva_private.h",
+      "source": "include/uapi/eva/media/msm_eva_private.h",
+      "original_sha256": "ad27644a8cd4159c575d6312ef3ddca2084ece70b4d949f4336764fef569069d",
+      "sha256": "ad27644a8cd4159c575d6312ef3ddca2084ece70b4d949f4336764fef569069d"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp.c",
+      "source": "msm/eva/cvp.c",
+      "original_sha256": "2b9f4737e467da3d109a34b8aca80f269335f6356c2944c19fc2cc0431dc50eb",
+      "sha256": "2b9f4737e467da3d109a34b8aca80f269335f6356c2944c19fc2cc0431dc50eb"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_comm_def.h",
+      "source": "msm/eva/cvp_comm_def.h",
+      "original_sha256": "10eb124a05e751fd42ee24407c07ef930fa9790dbe71b43f661ba1fb36ad0f97",
+      "sha256": "10eb124a05e751fd42ee24407c07ef930fa9790dbe71b43f661ba1fb36ad0f97"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_core_hfi.c",
+      "source": "msm/eva/cvp_core_hfi.c",
+      "original_sha256": "2e83964157a7b76c91ba47a2c8456a4feb8c8c79967d2d499d7d04bb333dd2dd",
+      "sha256": "2e83964157a7b76c91ba47a2c8456a4feb8c8c79967d2d499d7d04bb333dd2dd"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_core_hfi.h",
+      "source": "msm/eva/cvp_core_hfi.h",
+      "original_sha256": "8d923ed744689e7187918a5b0dc5024544329ae3de55b138b8f5e7ee51858014",
+      "sha256": "8d923ed744689e7187918a5b0dc5024544329ae3de55b138b8f5e7ee51858014"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_dump.c",
+      "source": "msm/eva/cvp_dump.c",
+      "original_sha256": "704f3bda9fdf6b3a5f41731cd1d5af051fde04bd7574ede6dc84ce5a67aaf70e",
+      "sha256": "704f3bda9fdf6b3a5f41731cd1d5af051fde04bd7574ede6dc84ce5a67aaf70e"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_dump.h",
+      "source": "msm/eva/cvp_dump.h",
+      "original_sha256": "45b02dca8ca4aabc493bb55a4492291b919b664d1c24fc8ac4917e564cc1ed9d",
+      "sha256": "45b02dca8ca4aabc493bb55a4492291b919b664d1c24fc8ac4917e564cc1ed9d"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_fw_load.c",
+      "source": "msm/eva/cvp_fw_load.c",
+      "original_sha256": "19100a7510f8630661b4b1da46bb18d200543f9831611dc75640aad9020dc5d2",
+      "sha256": "19100a7510f8630661b4b1da46bb18d200543f9831611dc75640aad9020dc5d2"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi.c",
+      "source": "msm/eva/cvp_hfi.c",
+      "original_sha256": "e08cb2e53c391a17a73e49e51c2480d5be9410fecce23d323989d6ec05dfa497",
+      "sha256": "e08cb2e53c391a17a73e49e51c2480d5be9410fecce23d323989d6ec05dfa497"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi.h",
+      "source": "msm/eva/cvp_hfi.h",
+      "original_sha256": "4d8adf0a2e6df2779ba8e5995a706b27ac6332cf3bf99fd329bb180cb5e972cd",
+      "sha256": "4d8adf0a2e6df2779ba8e5995a706b27ac6332cf3bf99fd329bb180cb5e972cd"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi_api.h",
+      "source": "msm/eva/cvp_hfi_api.h",
+      "original_sha256": "726456a8b6eca52c8a04d19a10fe1c0b827c62893781924331a49ed6ec0ba050",
+      "sha256": "726456a8b6eca52c8a04d19a10fe1c0b827c62893781924331a49ed6ec0ba050"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi_io.h",
+      "source": "msm/eva/cvp_hfi_io.h",
+      "original_sha256": "fe162ec94a2330dbd5366b906af0fab2549ef575241f31d108c9cbde37e39b41",
+      "sha256": "fe162ec94a2330dbd5366b906af0fab2549ef575241f31d108c9cbde37e39b41"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi_v1.h",
+      "source": "msm/eva/cvp_hfi_v1.h",
+      "original_sha256": "27dbc305ac18b4f73e41dac6050b818b91ef47cf3d7731af7c73db02a8d05905",
+      "sha256": "27dbc305ac18b4f73e41dac6050b818b91ef47cf3d7731af7c73db02a8d05905"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_hfi_v2.h",
+      "source": "msm/eva/cvp_hfi_v2.h",
+      "original_sha256": "7740f2165c50199bf1b147283d6790408e4ac09b05862d7d2357b630f1b8a6d6",
+      "sha256": "7740f2165c50199bf1b147283d6790408e4ac09b05862d7d2357b630f1b8a6d6"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_power.c",
+      "source": "msm/eva/cvp_power.c",
+      "original_sha256": "b34b9a03882624f6d9b4873f213a7b37118c08edf44c00e9a534d454b0fa2907",
+      "sha256": "b34b9a03882624f6d9b4873f213a7b37118c08edf44c00e9a534d454b0fa2907"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_power.h",
+      "source": "msm/eva/cvp_power.h",
+      "original_sha256": "34ec06cbb17bebdbfc0ffd51f1fea768dcd9615b400d63fb95f2df146ff2096c",
+      "sha256": "34ec06cbb17bebdbfc0ffd51f1fea768dcd9615b400d63fb95f2df146ff2096c"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_presil.c",
+      "source": "msm/eva/cvp_presil.c",
+      "original_sha256": "04f2024a9af7c63cd7f9957808dcfe707ffe7fa6c148724c3a126a183a7c659d",
+      "sha256": "04f2024a9af7c63cd7f9957808dcfe707ffe7fa6c148724c3a126a183a7c659d"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_presil.h",
+      "source": "msm/eva/cvp_presil.h",
+      "original_sha256": "f2eee5f1269d84e4dfe1180018ef09ed0113d4e2b114ba4a656f521a42c52c76",
+      "sha256": "f2eee5f1269d84e4dfe1180018ef09ed0113d4e2b114ba4a656f521a42c52c76"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_private.h",
+      "source": "msm/eva/cvp_private.h",
+      "original_sha256": "a8485fdee2adc50dab7a2074d0320c5441beb0a90db068ce51798732043e87e8",
+      "sha256": "a8485fdee2adc50dab7a2074d0320c5441beb0a90db068ce51798732043e87e8"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/cvp_smem.c",
+      "source": "msm/eva/cvp_smem.c",
+      "original_sha256": "c59c742eba297ac98d867fcfcfda2e87f824b84318cccc5252ecbfdd84218a5a",
+      "sha256": "c59c742eba297ac98d867fcfcfda2e87f824b84318cccc5252ecbfdd84218a5a"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/eva_shared_def.h",
+      "source": "msm/eva/eva_shared_def.h",
+      "original_sha256": "d484d628bf3db07cbe376cb695a5ac6266c25378f2f94b9e72cfb4327049e544",
+      "sha256": "d484d628bf3db07cbe376cb695a5ac6266c25378f2f94b9e72cfb4327049e544"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/hfi_packetization.c",
+      "source": "msm/eva/hfi_packetization.c",
+      "original_sha256": "d7763fe9d54e2b15f60a329070041f49449650ee7c2b00a6e4d60794d48ee55e",
+      "sha256": "d7763fe9d54e2b15f60a329070041f49449650ee7c2b00a6e4d60794d48ee55e"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/hfi_packetization.h",
+      "source": "msm/eva/hfi_packetization.h",
+      "original_sha256": "aaaee3bf078824d458d66d6f2a0499694682f8337b6f36b61241c43a1df1a09e",
+      "sha256": "aaaee3bf078824d458d66d6f2a0499694682f8337b6f36b61241c43a1df1a09e"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/hfi_response_handler.c",
+      "source": "msm/eva/hfi_response_handler.c",
+      "original_sha256": "ede2d59c54687c054d57718bb464bd1897f6cef8b351a5ba978da1667bf106d2",
+      "sha256": "ede2d59c54687c054d57718bb464bd1897f6cef8b351a5ba978da1667bf106d2"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp.c",
+      "source": "msm/eva/msm_cvp.c",
+      "original_sha256": "5a198754cb26093d00feaa7fcf16c8c899214024ee56375303447c64d3038b61",
+      "sha256": "5a198754cb26093d00feaa7fcf16c8c899214024ee56375303447c64d3038b61"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp.h",
+      "source": "msm/eva/msm_cvp.h",
+      "original_sha256": "62930d050a7b9e6a976ae21400110e5026dfa8722d18c53b3a7566ae251254fd",
+      "sha256": "62930d050a7b9e6a976ae21400110e5026dfa8722d18c53b3a7566ae251254fd"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_buf.c",
+      "source": "msm/eva/msm_cvp_buf.c",
+      "original_sha256": "6da252acb9a703e278628bbda5c74f99d578e1760c66824308a25acdc1698e56",
+      "sha256": "6da252acb9a703e278628bbda5c74f99d578e1760c66824308a25acdc1698e56"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_buf.h",
+      "source": "msm/eva/msm_cvp_buf.h",
+      "original_sha256": "e54b18a416bffd456c8b070f3dad03c3fb6c56dd5b6c5c1ed8cd71b9938be0ad",
+      "sha256": "e54b18a416bffd456c8b070f3dad03c3fb6c56dd5b6c5c1ed8cd71b9938be0ad"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_clocks.c",
+      "source": "msm/eva/msm_cvp_clocks.c",
+      "original_sha256": "e4f348b0dfa86479d680d0ff3d40cedb7f5fdc8ff5022d9732222c65c370f1f1",
+      "sha256": "e4f348b0dfa86479d680d0ff3d40cedb7f5fdc8ff5022d9732222c65c370f1f1"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_clocks.h",
+      "source": "msm/eva/msm_cvp_clocks.h",
+      "original_sha256": "fb37c8496e7709dab7be0b15afca28ec7129aedbece9ce08f63084c891d265d6",
+      "sha256": "fb37c8496e7709dab7be0b15afca28ec7129aedbece9ce08f63084c891d265d6"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_common.c",
+      "source": "msm/eva/msm_cvp_common.c",
+      "original_sha256": "9af2e5a6a46994c8bfea4ef8f5a0d6748e41d1999c94d61706854bceaa752fa8",
+      "sha256": "9af2e5a6a46994c8bfea4ef8f5a0d6748e41d1999c94d61706854bceaa752fa8"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_common.h",
+      "source": "msm/eva/msm_cvp_common.h",
+      "original_sha256": "32649effdc268f9c1fc9a0773ffc30112abfeafae9d0211cdbd99c1dc6e11c2c",
+      "sha256": "32649effdc268f9c1fc9a0773ffc30112abfeafae9d0211cdbd99c1dc6e11c2c"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_core.c",
+      "source": "msm/eva/msm_cvp_core.c",
+      "original_sha256": "02e40dc3c20df304bcd9e5eb7dff296d578968f0195628c82470531ea4cb6692",
+      "sha256": "02e40dc3c20df304bcd9e5eb7dff296d578968f0195628c82470531ea4cb6692"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_core.h",
+      "source": "msm/eva/msm_cvp_core.h",
+      "original_sha256": "bc4beb827172c30af3c44850bd576abb2725c55f7b7e7fb4c6113e30b015732b",
+      "sha256": "bc4beb827172c30af3c44850bd576abb2725c55f7b7e7fb4c6113e30b015732b"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_debug.c",
+      "source": "msm/eva/msm_cvp_debug.c",
+      "original_sha256": "0ac6cf2f53887bd72159def72f06ebd628be63abaaac139358444c0b27d2a65f",
+      "sha256": "0ac6cf2f53887bd72159def72f06ebd628be63abaaac139358444c0b27d2a65f"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_debug.h",
+      "source": "msm/eva/msm_cvp_debug.h",
+      "original_sha256": "0c597bb98e6950cc2bfdd172925118c459339772513a1987a3557892421e6a42",
+      "sha256": "0c597bb98e6950cc2bfdd172925118c459339772513a1987a3557892421e6a42"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_dsp.c",
+      "source": "msm/eva/msm_cvp_dsp.c",
+      "original_sha256": "0d5a23b44073b5faf5f3df33ae527fd35d220ebaf0398e0f94ee3570bc40075a",
+      "sha256": "0d5a23b44073b5faf5f3df33ae527fd35d220ebaf0398e0f94ee3570bc40075a"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_dsp.h",
+      "source": "msm/eva/msm_cvp_dsp.h",
+      "original_sha256": "473d403aaa21dd3bb1347cfb3b9faeff15f1ac81596cf5d98d73a9f5f138be91",
+      "sha256": "473d403aaa21dd3bb1347cfb3b9faeff15f1ac81596cf5d98d73a9f5f138be91"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_events.h",
+      "source": "msm/eva/msm_cvp_events.h",
+      "original_sha256": "6f29efc09f823697a0ad50f96cad82d9089304d107c7d2c079acf9415224a006",
+      "sha256": "6f29efc09f823697a0ad50f96cad82d9089304d107c7d2c079acf9415224a006"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_internal.h",
+      "source": "msm/eva/msm_cvp_internal.h",
+      "original_sha256": "a5a39de72de932cc392a076a860adec46a3e86bda5ebb0d7f041ea7f59a74c35",
+      "sha256": "a5a39de72de932cc392a076a860adec46a3e86bda5ebb0d7f041ea7f59a74c35"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_ioctl.c",
+      "source": "msm/eva/msm_cvp_ioctl.c",
+      "original_sha256": "5ff8c2233bc75b67af92bc372f53705124668797c2dc8e5a5ff676467ff7688b",
+      "sha256": "5ff8c2233bc75b67af92bc372f53705124668797c2dc8e5a5ff676467ff7688b"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_platform.c",
+      "source": "msm/eva/msm_cvp_platform.c",
+      "original_sha256": "9d34c7c23ddc2cab9ef0087956a2013747b56685c0dfcdac4a82bdece0c06999",
+      "sha256": "9d34c7c23ddc2cab9ef0087956a2013747b56685c0dfcdac4a82bdece0c06999"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_res_parse.c",
+      "source": "msm/eva/msm_cvp_res_parse.c",
+      "original_sha256": "65396fe8d1303a1630b96249d5ec0dd6e4809d771a23519e243deca68b5bc4d9",
+      "sha256": "65396fe8d1303a1630b96249d5ec0dd6e4809d771a23519e243deca68b5bc4d9"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_res_parse.h",
+      "source": "msm/eva/msm_cvp_res_parse.h",
+      "original_sha256": "9001d483a454386a2440e6076bd130fb11ac06d2e1c512cd1dacde7f08a21fc5",
+      "sha256": "9001d483a454386a2440e6076bd130fb11ac06d2e1c512cd1dacde7f08a21fc5"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_resources.h",
+      "source": "msm/eva/msm_cvp_resources.h",
+      "original_sha256": "592adf26774b018b60d9e42561fa70d5afc09f29d27178a74528f707d76f947b",
+      "sha256": "592adf26774b018b60d9e42561fa70d5afc09f29d27178a74528f707d76f947b"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_sw_dbg.c",
+      "source": "msm/eva/msm_cvp_sw_dbg.c",
+      "original_sha256": "e2f8bbcc400520c5d7a05d7c39078493f91c16aa43226430a225935e45e06954",
+      "sha256": "e2f8bbcc400520c5d7a05d7c39078493f91c16aa43226430a225935e45e06954"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_sw_dbg.h",
+      "source": "msm/eva/msm_cvp_sw_dbg.h",
+      "original_sha256": "c4ea61d8c26f9fcd837118805c0e0980309f853a4b012ddc6aa94a461e76065b",
+      "sha256": "c4ea61d8c26f9fcd837118805c0e0980309f853a4b012ddc6aa94a461e76065b"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_synx.c",
+      "source": "msm/eva/msm_cvp_synx.c",
+      "original_sha256": "ebd82e708cc99f7dcb4c8c0f3190a818739f846cccb5da5d6316b1f6d248e051",
+      "sha256": "ebd82e708cc99f7dcb4c8c0f3190a818739f846cccb5da5d6316b1f6d248e051"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/msm_cvp_synx.h",
+      "source": "msm/eva/msm_cvp_synx.h",
+      "original_sha256": "9ca29ad377f1828d57173cd7d52bb868f564c403d7af089ed470ee9f71d8b176",
+      "sha256": "9ca29ad377f1828d57173cd7d52bb868f564c403d7af089ed470ee9f71d8b176"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_hawi_hal.c",
+      "source": "msm/eva/target/cvp_hawi_hal.c",
+      "original_sha256": "17651b38985c1fdb57af2a1d7b9f1c20c54c63777e89acb29e273da8715357c5",
+      "sha256": "17651b38985c1fdb57af2a1d7b9f1c20c54c63777e89acb29e273da8715357c5"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_hawi_hal.h",
+      "source": "msm/eva/target/cvp_hawi_hal.h",
+      "original_sha256": "507f9b809c9e48d3841665e6364de5fd9664af40f27f453e2ccf0d161a817ab9",
+      "sha256": "507f9b809c9e48d3841665e6364de5fd9664af40f27f453e2ccf0d161a817ab9"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_hawi_io.h",
+      "source": "msm/eva/target/cvp_hawi_io.h",
+      "original_sha256": "a3100afcfd185948d3ea18889b16d71189a60668e4ec5d54b3cc801d709eb082",
+      "sha256": "a3100afcfd185948d3ea18889b16d71189a60668e4ec5d54b3cc801d709eb082"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_kaanapali_hal.c",
+      "source": "msm/eva/target/cvp_kaanapali_hal.c",
+      "original_sha256": "6457bb6be74a9c0d790169c26499c3a12d3d21bfa0a06714fa3a1c6947021075",
+      "sha256": "6457bb6be74a9c0d790169c26499c3a12d3d21bfa0a06714fa3a1c6947021075"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_kaanapali_hal.h",
+      "source": "msm/eva/target/cvp_kaanapali_hal.h",
+      "original_sha256": "d4377d18e368417af7f4f109a8ac61910703d924a4cded0e9f10893a3c41c679",
+      "sha256": "d4377d18e368417af7f4f109a8ac61910703d924a4cded0e9f10893a3c41c679"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_kaanapali_io.h",
+      "source": "msm/eva/target/cvp_kaanapali_io.h",
+      "original_sha256": "b18773d791dcc77f9933295e7ba15269fe294c18e67ccd8a889924083e502458",
+      "sha256": "b18773d791dcc77f9933295e7ba15269fe294c18e67ccd8a889924083e502458"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_lanai_io.h",
+      "source": "msm/eva/target/cvp_lanai_io.h",
+      "original_sha256": "5b2945b90ae1880a5e0fb58e603b6373c7a87c2913f9d9d01a497a6b577e5e47",
+      "sha256": "5b2945b90ae1880a5e0fb58e603b6373c7a87c2913f9d9d01a497a6b577e5e47"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_pakala_hal.c",
+      "source": "msm/eva/target/cvp_pakala_hal.c",
+      "original_sha256": "e7a07ea47c04623331892258dd331c742732b299c743f23aa932219c9d174884",
+      "sha256": "e7a07ea47c04623331892258dd331c742732b299c743f23aa932219c9d174884"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_pakala_hal.h",
+      "source": "msm/eva/target/cvp_pakala_hal.h",
+      "original_sha256": "e09ec6496dcc7ae7573f76065c170b5701c6adbff799dd718986c379048c32d9",
+      "sha256": "e09ec6496dcc7ae7573f76065c170b5701c6adbff799dd718986c379048c32d9"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/target/cvp_pakala_io.h",
+      "source": "msm/eva/target/cvp_pakala_io.h",
+      "original_sha256": "278af307a39b35660d6a987598bdab3b9d9e58fa6eac3959c5b0db9ec1ff5f5c",
+      "sha256": "278af307a39b35660d6a987598bdab3b9d9e58fa6eac3959c5b0db9ec1ff5f5c"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm.h",
+      "source": "msm/eva/vm/cvp_vm.h",
+      "original_sha256": "40cf50d12078806a7630a1d572be29f2f83e15753893c36d31543e427d96e48e",
+      "sha256": "40cf50d12078806a7630a1d572be29f2f83e15753893c36d31543e427d96e48e"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm_main.c",
+      "source": "msm/eva/vm/cvp_vm_main.c",
+      "original_sha256": "e543cc58fa1cc6c7fff3385536dcc62772b1424d0ee0fdec6de6e1e57f8e33b9",
+      "sha256": "e543cc58fa1cc6c7fff3385536dcc62772b1424d0ee0fdec6de6e1e57f8e33b9"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm_msgq.c",
+      "source": "msm/eva/vm/cvp_vm_msgq.c",
+      "original_sha256": "0b04c881c09c809762dc91a61abd07521106a339b739c38a6afeb506529f608b",
+      "sha256": "0b04c881c09c809762dc91a61abd07521106a339b739c38a6afeb506529f608b"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm_msgq.h",
+      "source": "msm/eva/vm/cvp_vm_msgq.h",
+      "original_sha256": "2925534cd67d27c1ddee9842e35cf94e3c4b7d72d68b7472e3c770b42be511bd",
+      "sha256": "2925534cd67d27c1ddee9842e35cf94e3c4b7d72d68b7472e3c770b42be511bd"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm_resource.c",
+      "source": "msm/eva/vm/cvp_vm_resource.c",
+      "original_sha256": "606c1d42c609b4164789c6ff4c15c6e56d9424a9bd1d2317fc19bdaf80ac79e6",
+      "sha256": "606c1d42c609b4164789c6ff4c15c6e56d9424a9bd1d2317fc19bdaf80ac79e6"
+    },
+    {
+      "file": "ports/eva-kernel/msm/eva/vm/cvp_vm_resource.h",
+      "source": "msm/eva/vm/cvp_vm_resource.h",
+      "original_sha256": "c68a0e2b61d2df135765c3b06822c8ee3a34f226a8e48b9d4d0b04125413fb55",
+      "sha256": "c68a0e2b61d2df135765c3b06822c8ee3a34f226a8e48b9d4d0b04125413fb55"
+    },
+    {
+      "file": "ports/eva-kernel/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "52f200f7991da02fb98ce482180408f84a599717e4d7a9c07b7f0861c1387019"
+    },
+    {
+      "file": "ports/eva-kernel/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "4ec1075f785f19aaddb8a625ab4b4dee6b1f56c1444443b1765651a293c211a9"
+    }
+  ],
+  "patch_sha256": "920fa259299423a926641a7e9be7de3fcbd1e348a639b5d4a4523228c9faea77",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "msm-eva.ko (canoe.bzl options) on android18-7.3",
+  "reviewed_changes": [
+    "unchanged sources; depends= equal the phone"
+  ],
+  "pending": [
+    "EVA on the phone"
+  ]
+}

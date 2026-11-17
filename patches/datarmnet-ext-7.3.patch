@@ -1,0 +1,170 @@
+--- a/ports/datarmnet/ext/aps/rmnet_aps_main.c
++++ b/ports/datarmnet/ext/aps/rmnet_aps_main.c
+@@ -457,7 +457,7 @@
+ 		rmnet_aps_flow_cnt--;
+ 
+ 	if (!rmnet_aps_flow_cnt)
+-		del_timer(&rmnet_aps_timer);
++		timer_delete(&rmnet_aps_timer);
+ 
+ 	aps_log("aps: flow 0x%x removing (%u)\n", flow->info.label,
+ 		rmnet_aps_flow_cnt);
+@@ -1680,11 +1680,11 @@
+ 	rmnet_aps_flow_removed_ind(0, RMNET_APS_FLOW_REMOVED_RESET);
+ 
+ 	cancel_delayed_work_sync(&rmnet_aps_rate_work);
+-	del_timer_sync(&rmnet_aps_timer);
++	timer_delete_sync(&rmnet_aps_timer);
+ 	cancel_work_sync(&rmnet_aps_flow_expire_work);
+ 
+ 	data_report_clear();
+-	del_timer_sync(&data_report_timer);
++	timer_delete_sync(&data_report_timer);
+ 
+ 	unregister_netdevice_notifier(&rmnet_aps_notifier);
+ 	rmnet_aps_genl_deinit();
+--- a/ports/datarmnet/ext/perf/rmnet_perf_tcp.c
++++ b/ports/datarmnet/ext/perf/rmnet_perf_tcp.c
+@@ -296,7 +296,7 @@
+ 	struct net *net = dev_net(skb_dev);
+ 
+ 	if (tuple->ip_proto == 4)
+-		return inet_lookup_established(net, &tcp_hashinfo,
++		return inet_lookup_established(net, /* AVR 7.3: per-netns hashinfo */
+ 					       tuple->v4_saddr,
+ 					       tuple->sport, tuple->v4_daddr,
+ 					       tuple->dport, skb_dev->ifindex);
+@@ -307,7 +307,7 @@
+ 	 * actually handles doing that for us. The lookup code REALLY does want
+ 	 * dport in host order ;)
+ 	 */
+-	return __inet6_lookup_established(net, &tcp_hashinfo, &tuple->v6_saddr,
++	return __inet6_lookup_established(net, /* AVR 7.3 */ &tuple->v6_saddr,
+ 					  tuple->sport, &tuple->v6_daddr,
+ 					  ntohs(tuple->dport), skb_dev->ifindex,
+ 					  0);
+--- a/ports/datarmnet/ext/perf/rmnet_perf_udp.c
++++ b/ports/datarmnet/ext/perf/rmnet_perf_udp.c
+@@ -246,12 +246,12 @@
+ 		udp_sock = __udp4_lib_lookup(dev_net(skb->dev), tuple->v4_saddr,
+ 					     tuple->sport, tuple->v4_daddr,
+ 					     tuple->dport, inet_iif(skb), 0,
+-					     &udp_table, NULL);
++					     NULL); /* AVR 7.3: per-netns udp table */
+ 	else
+ 		udp_sock = __udp6_lib_lookup(dev_net(skb->dev),
+ 					     &tuple->v6_saddr, tuple->sport,
+ 					     &tuple->v6_daddr, tuple->dport,
+-					     inet6_iif(skb), 0, &udp_table,
++					     inet6_iif(skb), 0, /* AVR 7.3 */
+ 					     NULL);
+ 
+ 	/* Also, neither of these helpers handle bumping the socket refcount!
+--- a/ports/datarmnet/ext/shs/rmnet_shs_freq.c
++++ b/ports/datarmnet/ext/shs/rmnet_shs_freq.c
+@@ -240,7 +240,7 @@
+ 	}
+ 
+ 	if (!shs_boost_wq)
+-		shs_boost_wq = alloc_workqueue("shs_boost_wq", WQ_HIGHPRI, 0);
++		shs_boost_wq = alloc_workqueue("shs_boost_wq", WQ_HIGHPRI | WQ_PERCPU, 0); /* AVR 7.3 */
+ 
+ 	if (!shs_boost_wq) {
+ 		ret = -ENOMEM;
+--- a/ports/datarmnet/ext/shs/rmnet_shs_main.c
++++ b/ports/datarmnet/ext/shs/rmnet_shs_main.c
+@@ -1539,26 +1539,20 @@
+ 		INIT_WORK(&rmnet_shs_cfg.core_flush[i].work,
+ 			  rmnet_shs_flush_core_work);
+ 
+-		hrtimer_init(&rmnet_shs_cfg.core_flush[i].core_timer,
+-			     CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-		rmnet_shs_cfg.core_flush[i].core_timer.function =
+-							rmnet_shs_queue_core;
++		hrtimer_setup(&rmnet_shs_cfg.core_flush[i].core_timer, rmnet_shs_queue_core, /* AVR 7.3 */
++		CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	}
+ 	/* Initialize a fallback/failsafe work for when dl ind fails */
+-	hrtimer_init(&rmnet_shs_cfg.hrtimer_shs,
+-		     CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	rmnet_shs_cfg.hrtimer_shs.function = rmnet_shs_map_flush_queue;
+-	hrtimer_init(&rmnet_shs_cfg.hrtimer_lpm,
+-		     CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	rmnet_shs_cfg.hrtimer_lpm.function = rmnet_shs_lpm_ring;
+-
+-	hrtimer_init(&rmnet_shs_cfg.hrtimer_wake,
+-		     CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	rmnet_shs_cfg.hrtimer_wake.function = rmnet_shs_wake_ring;
+-
+-	hrtimer_init(&rmnet_shs_cfg.hrtimer_disable_pb_boost,
+-		     CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	rmnet_shs_cfg.hrtimer_disable_pb_boost.function = rmnet_shs_pb_unboost_cpus;
++	hrtimer_setup(&rmnet_shs_cfg.hrtimer_shs, rmnet_shs_map_flush_queue, /* AVR 7.3 */
++	CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_setup(&rmnet_shs_cfg.hrtimer_lpm, rmnet_shs_lpm_ring, /* AVR 7.3 */
++	CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++
++	hrtimer_setup(&rmnet_shs_cfg.hrtimer_wake, rmnet_shs_wake_ring, /* AVR 7.3 */
++	CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++
++	hrtimer_setup(&rmnet_shs_cfg.hrtimer_disable_pb_boost, rmnet_shs_pb_unboost_cpus, /* AVR 7.3 */
++	CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 
+ 	INIT_WORK(&shs_rx_work.work, rmnet_flush_buffered);
+ }
+@@ -1594,7 +1588,7 @@
+ 			dev_core_stats_rx_dropped_inc(skb->dev);
+ #if (KERNEL_VERSION(6, 9, 0) <= LINUX_VERSION_CODE)
+ 			rps_input_queue_head_incr(sd);
+-			atomic_inc(&sd->dropped);
++			numa_drop_add(&sd->drop_counters, 1); /* AVR 7.3 */
+ #else
+ 			input_queue_head_incr(sd);
+ 			sd->dropped++;
+--- a/ports/datarmnet/ext/wlan/rmnet_wlan_connection.c
++++ b/ports/datarmnet/ext/wlan/rmnet_wlan_connection.c
+@@ -245,7 +245,7 @@
+ 		fl6.flowi6_flags = FLOWI_FLAG_KNOWN_NH;
+ 
+ 
+-		dst = ipv6_stub->ipv6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
++		dst = ip6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
+ 		if (IS_ERR(dst)) {
+ 			rmnet_wlan_forward_stats_update(RMNET_WLAN_F_S_R0_IPV6_ROUTE_FAIL);
+ 			goto drop;
+@@ -351,7 +351,7 @@
+ 		memcpy(&fl6.saddr, &ip6h->saddr, sizeof(struct in6_addr));
+ 		memcpy(&fl6.daddr, &ip6h->daddr, sizeof(struct in6_addr));
+ 
+-		dst = ipv6_stub->ipv6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
++		dst = ip6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
+ 		if (IS_ERR(dst)) {
+ 			rmnet_wlan_forward_stats_update(RMNET_WWAN_F_S_NON_R0_IPV6_DST_LOOKUP_FAIL);
+ 
+@@ -364,7 +364,7 @@
+ 			fl6.flowi6_oif = ddev->ifindex;
+ 			fl6.flowi6_flags = FLOWI_FLAG_KNOWN_NH;
+ 
+-			dst = ipv6_stub->ipv6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
++			dst = ip6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
+ 			if (IS_ERR(dst)) {
+ 				rmnet_wlan_forward_stats_update(RMNET_WWAN_F_S_NON_R0_IPV6_DDST_LOOKUP_FAIL);
+ 				goto drop;
+@@ -460,7 +460,7 @@
+ 		memcpy(&fl6.saddr, &ip6h->saddr, sizeof(struct in6_addr));
+ 		memcpy(&fl6.daddr, &ip6h->daddr, sizeof(struct in6_addr));
+ 
+-		dst = ipv6_stub->ipv6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
++		dst = ip6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
+ 		if (IS_ERR(dst)) {
+ 			rmnet_wlan_forward_stats_update(RMNET_WLAN_F_S_NON_R0_IPV6_DST_LOOKUP_FAIL);
+ 
+@@ -473,7 +473,7 @@
+ 			fl6.flowi6_oif = ddev->ifindex;
+ 			fl6.flowi6_flags = FLOWI_FLAG_KNOWN_NH;
+ 
+-			dst = ipv6_stub->ipv6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
++			dst = ip6_dst_lookup_flow(&init_net, NULL, &fl6, NULL);
+ 			if (IS_ERR(dst)) {
+ 				rmnet_wlan_forward_stats_update(RMNET_WLAN_F_S_NON_R0_IPV6_DDST_LOOKUP_FAIL);
+ 				goto drop;

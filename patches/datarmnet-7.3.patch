@@ -1,0 +1,142 @@
+--- a/ports/datarmnet/core/qmi_rmnet.c
++++ b/ports/datarmnet/core/qmi_rmnet.c
+@@ -318,7 +318,7 @@
+ 	if (!bearer->watchdog_started)
+ 		return;
+ 
+-	del_timer(&bearer->watchdog);
++	timer_delete(&bearer->watchdog);
+ 	bearer->watchdog_started = false;
+ 
+ 	trace_dfc_watchdog(bearer->qos->mux_id, bearer->bearer_id, 0);
+@@ -332,9 +332,9 @@
+ {
+ 	if (qos->removed_bearer) {
+ 		qos->removed_bearer->watchdog_quit = true;
+-		del_timer_sync(&qos->removed_bearer->watchdog);
++		timer_delete_sync(&qos->removed_bearer->watchdog);
+ 		qos->removed_bearer->ch_switch.timer_quit = true;
+-		del_timer_sync(&qos->removed_bearer->ch_switch.guard_timer);
++		timer_delete_sync(&qos->removed_bearer->ch_switch.guard_timer);
+ 		kfree(qos->removed_bearer);
+ 		qos->removed_bearer = NULL;
+ 	}
+@@ -1151,9 +1151,9 @@
+ 
+ 	list_for_each_entry(bearer, &qosi->bearer_head, list) {
+ 		bearer->watchdog_quit = true;
+-		del_timer_sync(&bearer->watchdog);
++		timer_delete_sync(&bearer->watchdog);
+ 		bearer->ch_switch.timer_quit = true;
+-		del_timer_sync(&bearer->ch_switch.guard_timer);
++		timer_delete_sync(&bearer->ch_switch.guard_timer);
+ 	}
+ 
+ 	list_add(&qosi->list, &qos_cleanup_list);
+@@ -1530,7 +1530,7 @@
+ 		return;
+ 
+ 	rmnet_ps_wq = alloc_workqueue("rmnet_powersave_work",
+-				      WQ_CPU_INTENSIVE, 1);
++				      WQ_CPU_INTENSIVE | WQ_PERCPU, 1); /* AVR 7.3 */
+ 
+ 	if (!rmnet_ps_wq)
+ 		return;
+--- a/ports/datarmnet/core/rmnet_config.c
++++ b/ports/datarmnet/core/rmnet_config.c
+@@ -194,10 +194,14 @@
+ 	}
+ }
+ 
+-static int rmnet_newlink(struct net *src_net, struct net_device *dev,
+-			 struct nlattr *tb[], struct nlattr *data[],
++/* AVR 7.3: rtnl newlink takes rtnl_newlink_params (as upstream 7.3 rmnet) */
++static int rmnet_newlink(struct net_device *dev,
++			 struct rtnl_newlink_params *params,
+ 			 struct netlink_ext_ack *extack)
+ {
++	struct net *src_net = rtnl_newlink_link_net(params);
++	struct nlattr **tb = params->tb;
++	struct nlattr **data = params->data;
+ 	struct net_device *real_dev;
+ 	int mode = RMNET_EPMODE_VND;
+ 	struct rmnet_endpoint *ep;
+--- a/ports/datarmnet/core/rmnet_ll_qmap.c
++++ b/ports/datarmnet/core/rmnet_ll_qmap.c
+@@ -208,7 +208,7 @@
+ 	} else {
+ 		/* Success or permanent failure */
+ 		bearer->ch_switch.timer_quit = true;
+-		del_timer(&bearer->ch_switch.guard_timer);
++		timer_delete(&bearer->ch_switch.guard_timer);
+ 		bearer->ch_switch.state = CH_SWITCH_NONE;
+ 		bearer->ch_switch.retry_left = 0;
+ 		ll_send_nl_ack(bearer);
+--- a/ports/datarmnet/core/rmnet_map_data.c
++++ b/ports/datarmnet/core/rmnet_map_data.c
+@@ -1627,9 +1627,9 @@
+ 
+ 		spin_lock_init(&state->agg_lock);
+ 		INIT_LIST_HEAD(&state->agg_list);
+-		hrtimer_init(&state->hrtimer, CLOCK_MONOTONIC,
+-			     HRTIMER_MODE_REL);
+-		state->hrtimer.function = rmnet_map_flush_tx_packet_queue;
++		/* AVR 7.3: hrtimer_setup */
++		hrtimer_setup(&state->hrtimer, rmnet_map_flush_tx_packet_queue,
++			      CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 		INIT_WORK(&state->agg_wq, rmnet_map_flush_tx_packet_work);
+ 		state->stats = &port->stats.agg;
+ 
+--- a/ports/datarmnet/Makefile
++++ b/ports/datarmnet/Makefile
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# vendor/qcom/opensource/datarmnet (core: rmnet_core, rmnet_ctl) and datarmnet-ext
++# (aps, offload, perf, perf_tether, sch, shs, wlan) for canoe on android18-7.3.
++# Sources from define_modules.bzl / ext/*/define_*.bzl; rmnet_ctl adds rmnet_ctl_client.c
++# (CONFIG_ARCH_CANOE). Kconfig defaults: RMNET_LA_PLATFORM=y on canoe.
++
++obj-m += rmnet_ctl.o rmnet_core.o
++rmnet_ctl-y := core/rmnet_ctl_ipa.o core/rmnet_ctl_client.o
++rmnet_core-y := core/rmnet_config.o core/rmnet_descriptor.o core/rmnet_genl.o core/rmnet_handlers.o core/rmnet_map_command.o core/rmnet_map_data.o core/rmnet_module.o core/rmnet_vnd.o core/dfc_qmap.o core/dfc_qmi.o core/qmi_rmnet.o core/wda_qmi.o core/rmnet_ll.o core/rmnet_ll_ipa.o core/rmnet_qmap.o core/rmnet_ll_qmap.o
++obj-m += rmnet_aps.o
++rmnet_aps-y := ext/aps/rmnet_aps_genl.o ext/aps/rmnet_aps_main.o
++obj-m += rmnet_offload.o
++rmnet_offload-y := ext/offload/rmnet_offload_engine.o ext/offload/rmnet_offload_knob.o ext/offload/rmnet_offload_main.o ext/offload/rmnet_offload_state.o ext/offload/rmnet_offload_stats.o ext/offload/rmnet_offload_tcp.o ext/offload/rmnet_offload_udp.o
++obj-m += rmnet_perf.o
++rmnet_perf-y := ext/perf/rmnet_perf_main.o ext/perf/rmnet_perf_tcp.o ext/perf/rmnet_perf_udp.o
++obj-m += rmnet_perf_tether.o
++rmnet_perf_tether-y := ext/perf_tether/rmnet_perf_tether_main.o
++obj-m += rmnet_sch.o
++rmnet_sch-y := ext/sch/rmnet_sch_main.o
++obj-m += rmnet_shs.o
++rmnet_shs-y := ext/shs/rmnet_shs_common.o ext/shs/rmnet_shs_config.o ext/shs/rmnet_shs_freq.o ext/shs/rmnet_shs_ll.o ext/shs/rmnet_shs_main.o ext/shs/rmnet_shs_modules.o ext/shs/rmnet_shs_wq.o ext/shs/rmnet_shs_wq_genl.o ext/shs/rmnet_shs_wq_mem.o
++obj-m += rmnet_wlan.o
++rmnet_wlan-y := ext/wlan/rmnet_wlan_connection.o ext/wlan/rmnet_wlan_fragment.o ext/wlan/rmnet_wlan_genl.o ext/wlan/rmnet_wlan_main.o ext/wlan/rmnet_wlan_stats.o
++# phone rmnet_core/rmnet_ctl import ipam: built with the dataipa IPA3=m config
++ccflags-y += -DCONFIG_IPA3_MODULE=1 -DCONFIG_SCHED_WALT_MODULE=1 -DCONFIG_SCHED_WALT_NR_CPUS=8 -DCONFIG_RMNET_LA_PLATFORM=1 -DCONFIG_RMNET_CORE_MODULE=1 -DCONFIG_RMNET_CTL_MODULE=1 -DRMNET_TRACE_INCLUDE_PATH=.
++ccflags-y += -I$(src)/core -I$(src)/ext/aps/include -I$(src)/ext/perf/include -I$(src)/ext/shs/include -I$(src)/ext/wlan/include -I$(src)/ext/offload/include -I$(src)/ext/perf_tether/include -I$(src)/ext/sch/include -I$(src)/../dataipa/drivers/platform/msm/include \
++	-I$(src)/../dataipa/drivers/platform/msm/include/linux -I$(src)/../dataipa/drivers/platform/msm/include/uapi \
++	-I$(src)/../dataipa/avr-include -I$(src)/../dataipa/rmnet_mem -I$(src)/../qcom-ipc-logging/include \
++	-I$(src)/../sched-walt/include -I$(src)/../sched-walt
++ccflags-y += -Wno-missing-prototypes -Wno-misleading-indentation -Wno-macro-redefined
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../dataipa/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers \
++	$(src)/../sched-walt/Module.symvers
+--- a/ports/datarmnet/avr-canoe-vendor-config.h
++++ b/ports/datarmnet/avr-canoe-vendor-config.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
++ * module was compiled with through the vendor kernel autoconf but that the 7.3
++ * GKI .config does not carry. Only options referenced by the sources or headers
++ * it includes are listed; all providers are ported modules. Generated by
++ * scripts/gen_drm_vendor_config.py from canoe_perf.bzl. */
++#ifndef AVR_CANOE_VENDOR_CONFIG_H
++#define AVR_CANOE_VENDOR_CONFIG_H
++#define CONFIG_IPC_LOGGING_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
++#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1
++#define CONFIG_SCHED_WALT_MODULE 1
++#endif

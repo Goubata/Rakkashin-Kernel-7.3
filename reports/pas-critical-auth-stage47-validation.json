@@ -1,0 +1,8 @@
+{
+  "log": "reports/pas-critical-auth-stage47-qemu.log",
+  "test": "pas-driver",
+  "expected_critical_failure": "auth",
+  "scope": "expected guest-only kernel panic before cleanup with recorded primitives; no physical firmware operation",
+  "passed": true,
+  "failures": []
+}

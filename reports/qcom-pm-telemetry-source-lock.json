@@ -1,0 +1,34 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-pm-telemetry/cpuss_telemetry.c",
+      "source": "drivers/soc/qcom/cpuss_telemetry.c",
+      "original_sha256": "f9ec2ca50f411afd72f8e9bf5d8f8d6f85509c05d707887518437f32b7de5b3e",
+      "sha256": "f9ec2ca50f411afd72f8e9bf5d8f8d6f85509c05d707887518437f32b7de5b3e"
+    },
+    {
+      "file": "ports/qcom-pm-telemetry/include/soc/qcom/cpuss_telemetry.h",
+      "source": "include/soc/qcom/cpuss_telemetry.h",
+      "original_sha256": "bb75d6d07310fb6bc6d505b3e965b5b48fd370a0c4dc5bf7ac1c617e15a48660",
+      "sha256": "bb75d6d07310fb6bc6d505b3e965b5b48fd370a0c4dc5bf7ac1c617e15a48660"
+    },
+    {
+      "file": "ports/qcom-pm-telemetry/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "94154ff858745cf9deec2b541fccd248563b9232ad19b9d34974b8706bd6804a"
+    }
+  ],
+  "patch_sha256": "be7fefc6dcc1663c0ba6a12ad2f0874b89b9b6fb0089a8731b0f42659edafa51",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "cpuss_telemetry",
+  "reviewed_changes": [
+    "unchanged"
+  ],
+  "pending": [
+    "phone"
+  ]
+}

@@ -264,17 +264,24 @@
       "file": "ports/moto-charging/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "473851e1767371ba3a9e0acf2e1a35df46df2006ed1934a16ac41cfda4c81f59"
+      "sha256": "0d135ebbffdf9f31656973465fbddb8017c7e214edfdc4e14106a44b4faa4719"
+    },
+    {
+      "file": "ports/moto-charging/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "a08a4eb019bf0f40b196c4e847f8e18c5b2d4dd867ff1fb2f9979bfcdbdf071e"
     }
   ],
-  "patch_sha256": "e85fbb851e7133ca1d72918dd6fcd074a7ffe166847f01da16c0a4ef14d773d5",
+  "patch_sha256": "85bb498ad7c482be9d88e2a04fe289d9e208ba71c16d21aa6026ae08bf3535cc",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "Motorola mmi_glink_charger, qti_glink_charger_v2, qpnp_adaptive_charge, bm_adsp_ulog, hall_phone_case on android18-7.3",
   "reviewed_changes": [
     "alarm_start_relative -> alarm_start_timer(.., true)",
     "thermal_of_cooling_device_register gains cdev_id 0 (7.3)",
-    "CONFIG_MMI_PHONE_CASE_SUPPORT=y (mmi_glink_charger depends on hall_phone_case, which the phone loads)"
+    "CONFIG_MMI_PHONE_CASE_SUPPORT=y (mmi_glink_charger depends on hall_phone_case, which the phone loads)",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "charging behaviour on the phone"

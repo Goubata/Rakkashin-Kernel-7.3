@@ -20,14 +20,16 @@
   "ports/qcom-usb/include/linux/soc/qcom/wcd939x-i2c.h": "include/linux/soc/qcom/wcd939x-i2c.h",
   "ports/qcom-usb/include/linux/eom_ioctl.h": "include/uapi/linux/eom_ioctl.h",
   "ports/qcom-usb/include/linux/phy_core.h": "include/linux/phy_core.h",
-  "ports/qcom-usb/Makefile": null
+  "ports/qcom-usb/Makefile": null,
+  "ports/qcom-usb/avr-canoe-vendor-config.h": null
  },
  "scope": "dwc3-msm glue, SS QMP / Synopsys eUSB2 / HS / EMU PHYs, eUSB2 repeater, EUD, USB redrivers on android18-7.3 (M31 eUSB2 PHY + PMIC repeater were ported earlier in ports/usb-repeater)",
  "reviewed_changes": [
   "dwc3-msm: 7.x dwc3 core dropped dep->regs; endpoint registers via dwc->regs + DWC3_DEPCMD*(n) (same absolute offsets); DWC3_LLUCTL(0); FIELD_GET(HCS_MAX_PORTS) (xhci-caps masks)",
   "vendor clk flags from ports/qcom-clock-core (qcom_clk_set_flags)",
   "kretprobe targets and trace-event prototypes unchanged 6.12 -> 7.3 (verified)",
-  "remove_new -> remove"
+  "remove_new -> remove",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "DWC3/PHY hardware, adb gadget, host mode, USB3 SS PHY, EUD (phone)",

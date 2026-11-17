@@ -150,10 +150,16 @@
       "file": "ports/qcom-pm/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "48bb8f730145d392a518e53974a1f9a02edfefb01a20981a4aa7a046e8740aef"
+      "sha256": "d6396cc16fe5f0a3ae0442ba5243f82c117f9f5802d2b35c0b19f92ffbe4867e"
+    },
+    {
+      "file": "ports/qcom-pm/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e54a6dd58bdc629dfaafe1f698d42430a95c054df369d57f6fa4e532bbe25cd8"
     }
   ],
-  "patch_sha256": "1545775d93a1f469aca197775c8ae3f7d8d220a89e750ad6b56dbfdf2d4281b3",
+  "patch_sha256": "ad769aa9a2db40bb52f247642ca6fbde7a628eac5d764fa0cfc4c253f0b72f52",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "canoe power management modules: qcom_lpm cpuidle governor, lpm monitor, qcom_stats, sys_pm_vx, cpuss sleep stats, smp2p_sleepstate, msm_show_resume_irq, boot_stats, msm_show_epoch, sysmon_subsystem_stats",
@@ -161,7 +167,8 @@
     "qcom_lpm: hrtimer_init() removed in 7.x -> hrtimer_setup() with the timer's fixed callback",
     "msm_show_resume_irq: 7.3 struct syscore API",
     "remove_new -> remove",
-    "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)"
+    "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "PSCI idle residency + OSI cluster/APSS domain states (QEMU cannot run them)",

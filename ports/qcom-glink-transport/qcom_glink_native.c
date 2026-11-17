@@ -1270,6 +1270,25 @@ int qcom_glink_rx_done(struct rpmsg_endpoint *ept, void *data)
 }
 EXPORT_SYMBOL_GPL(qcom_glink_rx_done);
 
+/*
+ * AVR: android16-6.12 vendor API (qcom-soc qcom_glink_native.c), imported by
+ * frpc-adsprpc. The vendor sets glink_resume_pkt only from the glink_native_pm_ops
+ * noirq callbacks, which only the qcom_glink_rpm driver uses; canoe has no RPM
+ * GLINK edge, so on the phone this always reports false. Kept with the same
+ * semantics (and no producer) rather than a different wakeup policy.
+ */
+static bool glink_resume_pkt;
+
+bool qcom_glink_is_wakeup(bool reset)
+{
+	if (!glink_resume_pkt)
+		return false;
+	if (reset)
+		glink_resume_pkt = false;
+	return true;
+}
+EXPORT_SYMBOL_GPL(qcom_glink_is_wakeup);
+
 void qcom_glink_native_rx(struct qcom_glink *glink)
 {
 	struct glink_msg msg;

@@ -5,7 +5,7 @@
       "file": "ports/qcom-glink-transport/qcom_glink_native.c",
       "source": "drivers/rpmsg/qcom_glink_native.c",
       "original_sha256": "ca4bf69f7f7d39a18589bf0c6ac365fef68d463b9443bd2457caff6fd4500cc6",
-      "sha256": "32a0fc82eb8f6622ffa75f8618bf3db4dc573131420ef311f858a399ebe88c72"
+      "sha256": "d63254c496898a6772e1d34e07969c586c16c0c0bd113bf5e5c6f7ea82f8bf49"
     },
     {
       "file": "ports/qcom-glink-transport/qcom_glink_smem.c",
@@ -41,16 +41,16 @@
       "file": "ports/qcom-glink-transport/include/linux/rpmsg/qcom_glink_vendor.h",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "0af4d6cce0454819fbde1be023cfefc2fa606732cbea4e218f154ec04f75ae33"
+      "sha256": "abc788329f85dd26fba9395f7075d1ab5b9d4500ae3b2979750bf01755463be3"
     },
     {
       "file": "ports/qcom-glink-transport/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "7a86394d2a27f456f03818b58edec738fbe9f751cdeea09e99e7470295dddae9"
+      "sha256": "e8806829a2935d57b564734792ddbdd5ac277f5765b3219e2447f6ec0b45df64"
     }
   ],
-  "patch_sha256": "0aee06580e39f5f006743bac522c5a858e5af9c481d70cd3bcfe6c1f181fe66d",
+  "patch_sha256": "8b7a784e1deb4d3a6d31c5991477fe83adde52f67abe09133d60c57ea543b73f",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "hardware_runtime_accepted": false,

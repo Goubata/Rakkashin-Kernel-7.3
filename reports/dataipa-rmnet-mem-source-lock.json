@@ -1,0 +1,64 @@
+{
+  "source_commit": "a3cf383a5e94ae804098c97431afde885d650569",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-datarmnet-ext",
+  "files": [
+    {
+      "file": "ports/dataipa/rmnet_mem/define_mem.bzl",
+      "source": "mem/define_mem.bzl",
+      "original_sha256": "e4f356cc5dd2cc74b90de20bfddaae6aa79c0dc76c16b4e2f9e1c666c4bd6ba4",
+      "sha256": "e4f356cc5dd2cc74b90de20bfddaae6aa79c0dc76c16b4e2f9e1c666c4bd6ba4"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/include/uapi/linux/rmnet_mem_uapi.h",
+      "source": "mem/include/uapi/linux/rmnet_mem_uapi.h",
+      "original_sha256": "837819806d415ec8b1b4b08275c98487a0d82ccb2475243bf0089e24833b3f6c",
+      "sha256": "837819806d415ec8b1b4b08275c98487a0d82ccb2475243bf0089e24833b3f6c"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem.h",
+      "source": "mem/rmnet_mem.h",
+      "original_sha256": "e79df5c147bf986992d75107e0b0b754a40067f1f0cc474057515be5cd143f87",
+      "sha256": "e79df5c147bf986992d75107e0b0b754a40067f1f0cc474057515be5cd143f87"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem_main.c",
+      "source": "mem/rmnet_mem_main.c",
+      "original_sha256": "01208288fa7c812ecd364b59d2ec573a65ed409777b2113b53f6cdb50a88ddf0",
+      "sha256": "4c052561ff459cb8f5d20d76e2dd037b98d92713eb94ac7a3b226a86039dff55"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem_nl.c",
+      "source": "mem/rmnet_mem_nl.c",
+      "original_sha256": "efa30dc6a3d8559816e1579a544dc15b664e1654aa7ec30c7fc21a509ffed6e6",
+      "sha256": "efa30dc6a3d8559816e1579a544dc15b664e1654aa7ec30c7fc21a509ffed6e6"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem_nl.h",
+      "source": "mem/rmnet_mem_nl.h",
+      "original_sha256": "6e3863745a9e4f14835b89894729d63ba813c47a4f49f75e25c76081aaa7f6ef",
+      "sha256": "6e3863745a9e4f14835b89894729d63ba813c47a4f49f75e25c76081aaa7f6ef"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem_pool.c",
+      "source": "mem/rmnet_mem_pool.c",
+      "original_sha256": "76700567472d2613da862ded9ff54ec4a942559c6065aaaefe86211f99e2a772",
+      "sha256": "76700567472d2613da862ded9ff54ec4a942559c6065aaaefe86211f99e2a772"
+    },
+    {
+      "file": "ports/dataipa/rmnet_mem/rmnet_mem_priv.h",
+      "source": "mem/rmnet_mem_priv.h",
+      "original_sha256": "6a101735b3b0cee859b09b7704cfb42e7979671b592fb596ee9a633e54a1a3f7",
+      "sha256": "6a101735b3b0cee859b09b7704cfb42e7979671b592fb596ee9a633e54a1a3f7"
+    }
+  ],
+  "patch_sha256": "eedbef46f22822fbe2d53b6213a5abf279a1c8981875fbd6bb6e4e16617a16fa",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "rmnet_mem (ipam dependency)",
+  "reviewed_changes": [
+    "hrtimer_init -> hrtimer_setup"
+  ],
+  "pending": [
+    "phone"
+  ]
+}

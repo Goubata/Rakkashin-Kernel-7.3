@@ -112,5 +112,28 @@
    "stage": 118,
    "config": "SPI_QCOM_GENI (identical; unbound on the phone)"
   }
+ },
+ "parity_differences": {
+  "qcom_glink, qcom_glink_smem, smp2p": {
+   "phone_dep": "qcom_ipc_logging",
+   "reason": "7.3-native sources (Codex) without the vendor IPC log calls; logging only"
+  },
+  "qcom_sysmon": {
+   "phone_dep": "rproc_qcom_common",
+   "reason": "7.3-native sysmon; vendor one uses qcom_device_shutdown_in_progress"
+  },
+  "qcom_q6v5_pas": {
+   "phone_dep": "qcom_ramdump",
+   "extra": "qcom_pas",
+   "reason": "7.3-native PAS with Alor descriptor (Codex); vendor PAS collects ramdumps via qcom_ramdump - pending remoteproc vendor-parity review"
+  },
+  "qrng_dlkm": {
+   "extra": "rng",
+   "reason": "crypto RNG core is a module on 7.3 (CONFIG_CRYPTO_DRBG=m); built in on the phone"
+  },
+  "msm_sysstats": {
+   "phone_dep": "qcom_dma_heaps",
+   "reason": "uses the 7.3 is_dma_buf_file() instead of qcom_is_dma_buf_file() (equivalent identification)"
+  }
  }
 }

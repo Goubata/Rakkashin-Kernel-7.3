@@ -1,0 +1,22 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "source_repo": "vendor-repos/motorola-kernel-modules",
+  "files": [
+    {
+      "file": "ports/qcom-usb-gadget/f_usbnet.c",
+      "source": "drivers/moto_f_usbnet/f_usbnet.c",
+      "original_sha256": "dc4f433073cedd7849dc65b3b4ca22885c7d4ce0a548eb2de30d3dc976c7fa56",
+      "sha256": "dc4f433073cedd7849dc65b3b4ca22885c7d4ce0a548eb2de30d3dc976c7fa56"
+    }
+  ],
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "moto_f_usbnet (Motorola BLAN)",
+  "reviewed_changes": [
+    "unchanged"
+  ],
+  "pending": [
+    "phone"
+  ]
+}

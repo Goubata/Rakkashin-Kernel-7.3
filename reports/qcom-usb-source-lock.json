@@ -108,10 +108,16 @@
       "file": "ports/qcom-usb/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "039fb0b89a5a58a54a5f9136e479b908175a639ab7de406a736b562e0892e0bb"
+      "sha256": "7cff0d56f010b8c84e849ce6a535967fed4e5a3e04da47fe46a177f70c692dd7"
+    },
+    {
+      "file": "ports/qcom-usb/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "c772c49283089f492a61ee38049f06f939e4934ff8e4e4c25062b5d7424d4615"
     }
   ],
-  "patch_sha256": "735d4aac173e2e1b56789279c9218d91cd0e8cda65d80b212c93e6b58ee23feb",
+  "patch_sha256": "af5d97b8fbeaa5f4386f86e5728cc76d97ee192ecbaa0973b0770862080512d9",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "dwc3-msm glue, SS QMP / Synopsys eUSB2 / HS / EMU PHYs, eUSB2 repeater, EUD, USB redrivers on android18-7.3 (M31 eUSB2 PHY + PMIC repeater were ported earlier in ports/usb-repeater)",
@@ -119,7 +125,8 @@
     "dwc3-msm: 7.x dwc3 core dropped dep->regs; endpoint registers via dwc->regs + DWC3_DEPCMD*(n) (same absolute offsets); DWC3_LLUCTL(0); FIELD_GET(HCS_MAX_PORTS) (xhci-caps masks)",
     "vendor clk flags from ports/qcom-clock-core (qcom_clk_set_flags)",
     "kretprobe targets and trace-event prototypes unchanged 6.12 -> 7.3 (verified)",
-    "remove_new -> remove"
+    "remove_new -> remove",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "DWC3/PHY hardware, adb gadget, host mode, USB3 SS PHY, EUD (phone)",

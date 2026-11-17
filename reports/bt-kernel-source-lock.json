@@ -72,7 +72,7 @@
       "file": "ports/bt-kernel/pwr/btpower.c",
       "source": "pwr/btpower.c",
       "original_sha256": "607399baaf0758ae45cb813293697b34a49da34975b66cd67a7087f58dbf0d77",
-      "sha256": "607399baaf0758ae45cb813293697b34a49da34975b66cd67a7087f58dbf0d77"
+      "sha256": "b3e1506e4c62d7fd201cf53c6eea79f4e2e5adfd83cf912fa763c9bd3eb806f8"
     },
     {
       "file": "ports/bt-kernel/rtc6226/radio-rtc6226-common.c",
@@ -213,7 +213,7 @@
       "sha256": "5156cd8a8fbc6f552e291a59fe5dc2412ae243e1ceb2d6cc827e2c0012ea82b6"
     }
   ],
-  "patch_sha256": "4be94e142d8b9716c1b0c4690e73ebbcb0b544898abfed10e267d3ec67e55d1b",
+  "patch_sha256": "89fbb2eb74aef5778e0af5e9ae7fdb148b4eac2391ea01760393432225b33b5d",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "btpower, btfm_slim_codec, btfmcodec, bt_fm_swr, radio-i2c-rtc6226-qca, spi_cnss_proto for canoe on android18-7.3",

@@ -22,5 +22,6 @@ int qcom_glink_register_signals_cb(struct rpmsg_endpoint *ept,
 				   int (*cb)(struct rpmsg_device *, void *, u32, u32));
 bool qcom_glink_rx_done_supported(struct rpmsg_endpoint *ept);
 int qcom_glink_rx_done(struct rpmsg_endpoint *ept, void *data);
+bool qcom_glink_is_wakeup(bool reset);
 
 #endif

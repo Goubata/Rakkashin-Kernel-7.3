@@ -1,0 +1,29 @@
+{
+ "name": "qcom-leds",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-leds/leds-qcom-flash.c": "drivers/leds/flash/leds-qcom-flash.c",
+  "ports/qcom-leds/qcom-spmi-wled.c": "drivers/video/backlight/qcom-spmi-wled.c",
+  "ports/qcom-leds/leds-qcom-lpg.c": "drivers/leds/rgb/leds-qcom-lpg.c",
+  "ports/qcom-leds/leds-qpnp-vibrator-ldo.c": "drivers/leds/leds-qpnp-vibrator-ldo.c",
+  "ports/qcom-leds/qcom-hv-haptics.c": "drivers/input/misc/qcom-hv-haptics.c",
+  "ports/qcom-leds/qcom-hv-haptics-debugfs.h": "drivers/input/misc/qcom-hv-haptics-debugfs.h",
+  "ports/qcom-leds/include/linux/leds-qpnp-flash.h": "include/linux/leds-qpnp-flash.h",
+  "ports/qcom-leds/include/linux/qpnp/qpnp-pbs.h": "include/linux/qpnp/qpnp-pbs.h",
+  "ports/qcom-leds/include/linux/soc/qcom/leds-qcom-flash.h": "include/linux/soc/qcom/leds-qcom-flash.h",
+  "ports/qcom-leds/include/linux/soc/qcom/qcom_hv_haptics.h": "include/linux/soc/qcom/qcom_hv_haptics.h",
+  "ports/qcom-leds/include/trace/events/qcom_haptics.h": "include/trace/events/qcom_haptics.h",
+  "ports/qcom-leds/Makefile": null,
+  "ports/qcom-leds/avr-canoe-vendor-config.h": null
+ },
+ "scope": "leds-qcom-flash, qcom-spmi-wled, leds-qcom-lpg, leds-qpnp-vibrator-ldo, qcom-hv-haptics",
+ "reviewed_changes": [
+  ".remove_new -> .remove; hrtimer_setup; FB_BLANK_UNBLANK -> BACKLIGHT_POWER_ON (0); MODULE_IMPORT_NS(\"IIO_CONSUMER\")",
+  "haptics: uninitialised status name (passed to a trace event) defaults to \"UNKNOWN_STS\"",
+  "depends= equal the phone"
+ ],
+ "pending": [
+  "phone (vibration/flash; no audio)"
+ ]
+}

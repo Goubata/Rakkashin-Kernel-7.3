@@ -1,0 +1,281 @@
+{
+  "source_commit": "03d3aaa3c97a3c9be5d7461ccabec5a45958fb68",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-datarmnet",
+  "files": [
+    {
+      "file": "ports/datarmnet/core/dfc.h",
+      "source": "core/dfc.h",
+      "original_sha256": "0aa158ad5cd75d75f796cd612d68d405a109fd1673e00aa42da8803d4c65ce59",
+      "sha256": "0aa158ad5cd75d75f796cd612d68d405a109fd1673e00aa42da8803d4c65ce59"
+    },
+    {
+      "file": "ports/datarmnet/core/dfc_defs.h",
+      "source": "core/dfc_defs.h",
+      "original_sha256": "5e27763753afd0feea2d7dea54cb48cfb9b0f34f95669e77ec9290922bdd924a",
+      "sha256": "5e27763753afd0feea2d7dea54cb48cfb9b0f34f95669e77ec9290922bdd924a"
+    },
+    {
+      "file": "ports/datarmnet/core/dfc_qmap.c",
+      "source": "core/dfc_qmap.c",
+      "original_sha256": "ed6523f61a77b94edfa25832f487675aeadfe0ee90756f3b2a67124705bde9ed",
+      "sha256": "ed6523f61a77b94edfa25832f487675aeadfe0ee90756f3b2a67124705bde9ed"
+    },
+    {
+      "file": "ports/datarmnet/core/dfc_qmi.c",
+      "source": "core/dfc_qmi.c",
+      "original_sha256": "a362cdd6cac5319e1b8713bb8707a2b93ab967de36146b89bf571184457fb711",
+      "sha256": "a362cdd6cac5319e1b8713bb8707a2b93ab967de36146b89bf571184457fb711"
+    },
+    {
+      "file": "ports/datarmnet/core/qmi_rmnet.c",
+      "source": "core/qmi_rmnet.c",
+      "original_sha256": "6dade097224172750498efd9eb3d777a6fcacb56cc3614e70cd32e6d0846b93a",
+      "sha256": "ec284166ddbfeff80758d85fdccba885fe3c663a11293e4d20b345c23fb93561"
+    },
+    {
+      "file": "ports/datarmnet/core/qmi_rmnet.h",
+      "source": "core/qmi_rmnet.h",
+      "original_sha256": "ff511b763a30bec403a14e2272dec23b0b2f5b85d056de0f8e0b6ec879abc4c8",
+      "sha256": "ff511b763a30bec403a14e2272dec23b0b2f5b85d056de0f8e0b6ec879abc4c8"
+    },
+    {
+      "file": "ports/datarmnet/core/qmi_rmnet_i.h",
+      "source": "core/qmi_rmnet_i.h",
+      "original_sha256": "e56fe840edeefd54b7522c94378c7863e33c836b9226dbc241cb614fb0a4cf52",
+      "sha256": "e56fe840edeefd54b7522c94378c7863e33c836b9226dbc241cb614fb0a4cf52"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_config.c",
+      "source": "core/rmnet_config.c",
+      "original_sha256": "26d2fd3351d2d58c4ebf566a398a19a2e39265b908cea67a50327f395d003dd0",
+      "sha256": "374ab5d05a7aded547fb0d97b5a3630e1285e7ade80ced7c76297bd71ed59d26"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_config.h",
+      "source": "core/rmnet_config.h",
+      "original_sha256": "a8acfe0508efac9f8cf307a2ea6c6efeb99290841369c26ad1ae036fabff9537",
+      "sha256": "a8acfe0508efac9f8cf307a2ea6c6efeb99290841369c26ad1ae036fabff9537"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ctl.h",
+      "source": "core/rmnet_ctl.h",
+      "original_sha256": "dc0480013a6e153fcf6e053ddb7d7e9b3583cbde71c5eeb4cd4ab1d4a2dcf637",
+      "sha256": "dc0480013a6e153fcf6e053ddb7d7e9b3583cbde71c5eeb4cd4ab1d4a2dcf637"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ctl_client.c",
+      "source": "core/rmnet_ctl_client.c",
+      "original_sha256": "b3468d9a29dc0800568c8382e0d06ea4425569a915f5bf12dd3c56827abf0977",
+      "sha256": "b3468d9a29dc0800568c8382e0d06ea4425569a915f5bf12dd3c56827abf0977"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ctl_client.h",
+      "source": "core/rmnet_ctl_client.h",
+      "original_sha256": "1080595141f0ca13d3cd9520efc9fd7da815eefa9cf5b96b61751848dac4832c",
+      "sha256": "1080595141f0ca13d3cd9520efc9fd7da815eefa9cf5b96b61751848dac4832c"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ctl_ipa.c",
+      "source": "core/rmnet_ctl_ipa.c",
+      "original_sha256": "28c0a02cea5a00a07b3bfb7ebf5694a755b7961eadefe1aacced4522c34d747c",
+      "sha256": "28c0a02cea5a00a07b3bfb7ebf5694a755b7961eadefe1aacced4522c34d747c"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ctl_mhi.c",
+      "source": "core/rmnet_ctl_mhi.c",
+      "original_sha256": "5bfbf30bbdd4cab1a790e93be2c3744806e9b16fa9c98a255a395c865a6a5f88",
+      "sha256": "5bfbf30bbdd4cab1a790e93be2c3744806e9b16fa9c98a255a395c865a6a5f88"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_descriptor.c",
+      "source": "core/rmnet_descriptor.c",
+      "original_sha256": "cb5b7f2698e0364ca737a28df4d0297138a143b4c29c59906d2147cfbeca3598",
+      "sha256": "cb5b7f2698e0364ca737a28df4d0297138a143b4c29c59906d2147cfbeca3598"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_descriptor.h",
+      "source": "core/rmnet_descriptor.h",
+      "original_sha256": "ba5eeda715df38720bc45d9d693a28a17acf437b9d27b7f2c8b3a68f88d06bb0",
+      "sha256": "ba5eeda715df38720bc45d9d693a28a17acf437b9d27b7f2c8b3a68f88d06bb0"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_genl.c",
+      "source": "core/rmnet_genl.c",
+      "original_sha256": "645be6c3d9acbc3c6f2ed1474c840f54bc5114b931ab953249fd1a8aa6239c3e",
+      "sha256": "645be6c3d9acbc3c6f2ed1474c840f54bc5114b931ab953249fd1a8aa6239c3e"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_genl.h",
+      "source": "core/rmnet_genl.h",
+      "original_sha256": "2c27059d9ea0fbbd4df97bb1771ea37c5be43895d7cd440e9df3092568164ce4",
+      "sha256": "2c27059d9ea0fbbd4df97bb1771ea37c5be43895d7cd440e9df3092568164ce4"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_handlers.c",
+      "source": "core/rmnet_handlers.c",
+      "original_sha256": "694e278f9cc40236f54efc0e51f73e36913c76cbdf3c360c3990c2ba5a44bcb7",
+      "sha256": "694e278f9cc40236f54efc0e51f73e36913c76cbdf3c360c3990c2ba5a44bcb7"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_handlers.h",
+      "source": "core/rmnet_handlers.h",
+      "original_sha256": "ebab8d72c4add892fd07ebe7c51985c1aebd21855a1626b699c6e9dd03393061",
+      "sha256": "ebab8d72c4add892fd07ebe7c51985c1aebd21855a1626b699c6e9dd03393061"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_hook.h",
+      "source": "core/rmnet_hook.h",
+      "original_sha256": "79be657ee2cf53ce970fa9e7788488d70164d3d5b2728030760a97b6f0924321",
+      "sha256": "79be657ee2cf53ce970fa9e7788488d70164d3d5b2728030760a97b6f0924321"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll.c",
+      "source": "core/rmnet_ll.c",
+      "original_sha256": "e5132c855e222014b38e4432c6d7a0d9e9877f93890774d9005372c5dda3d459",
+      "sha256": "e5132c855e222014b38e4432c6d7a0d9e9877f93890774d9005372c5dda3d459"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll.h",
+      "source": "core/rmnet_ll.h",
+      "original_sha256": "a5f5b7594750639eac809d35a6d81778ba20f7a45470103e40de0acd82983558",
+      "sha256": "a5f5b7594750639eac809d35a6d81778ba20f7a45470103e40de0acd82983558"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll_core.h",
+      "source": "core/rmnet_ll_core.h",
+      "original_sha256": "bd338a945895aebd99d9550d567054d34a0136b03b0b9d2d04845cbc7d05eeae",
+      "sha256": "bd338a945895aebd99d9550d567054d34a0136b03b0b9d2d04845cbc7d05eeae"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll_ipa.c",
+      "source": "core/rmnet_ll_ipa.c",
+      "original_sha256": "58f660e2637cf5a02e268cf1484221454b81890b5a8a0ab1fafe41484b26907c",
+      "sha256": "58f660e2637cf5a02e268cf1484221454b81890b5a8a0ab1fafe41484b26907c"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll_mhi.c",
+      "source": "core/rmnet_ll_mhi.c",
+      "original_sha256": "d17dcc686943816c587c855fb723bb4ffd5f8f47196688c8d71e0fe2ca8cd577",
+      "sha256": "d17dcc686943816c587c855fb723bb4ffd5f8f47196688c8d71e0fe2ca8cd577"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_ll_qmap.c",
+      "source": "core/rmnet_ll_qmap.c",
+      "original_sha256": "a7129ca8b545802c1aaa15ccb9ee7ed01120b8f604d29fd5509056bb6a929f0f",
+      "sha256": "02599a1b5a40b795517e9219910f0bb7ba0b3f98a4eb328486a496a3f3ce53c1"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_map.h",
+      "source": "core/rmnet_map.h",
+      "original_sha256": "d43ef92860cddac70226495da49f34cf8f4e1cd720bfeae1a5fc713234f1cde8",
+      "sha256": "d43ef92860cddac70226495da49f34cf8f4e1cd720bfeae1a5fc713234f1cde8"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_map_command.c",
+      "source": "core/rmnet_map_command.c",
+      "original_sha256": "68c83521b8c7084559fabb06daf9365f5255db43a44b8793ae2777afac5118c1",
+      "sha256": "68c83521b8c7084559fabb06daf9365f5255db43a44b8793ae2777afac5118c1"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_map_data.c",
+      "source": "core/rmnet_map_data.c",
+      "original_sha256": "ec42a6a3c10f6c93d36419b8507efc0e871920194d60e977669e6d0a8c202efc",
+      "sha256": "f43c64509ffea5833eeeecdba149bae346303c377cfbb1e827b81ed87638e68e"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_module.c",
+      "source": "core/rmnet_module.c",
+      "original_sha256": "88193418fd2684a8978e9d3bd21a8a2a0fc380c11b4ec833257c1f8d1194ff35",
+      "sha256": "88193418fd2684a8978e9d3bd21a8a2a0fc380c11b4ec833257c1f8d1194ff35"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_module.h",
+      "source": "core/rmnet_module.h",
+      "original_sha256": "98b6c8d6f4f1904ee0ac21651c8c90df379a164e67a73bae236b1804a8c9581b",
+      "sha256": "98b6c8d6f4f1904ee0ac21651c8c90df379a164e67a73bae236b1804a8c9581b"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_private.h",
+      "source": "core/rmnet_private.h",
+      "original_sha256": "7acf2f8b6ec28588be7e0f830df3adeb53e455ad2a35fb03c2e05cdd3de44430",
+      "sha256": "7acf2f8b6ec28588be7e0f830df3adeb53e455ad2a35fb03c2e05cdd3de44430"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_qmap.c",
+      "source": "core/rmnet_qmap.c",
+      "original_sha256": "4e41031268ae8da7fbadde2ea02138c43717346991a4530a38ff6ece2a9b02f3",
+      "sha256": "4e41031268ae8da7fbadde2ea02138c43717346991a4530a38ff6ece2a9b02f3"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_qmap.h",
+      "source": "core/rmnet_qmap.h",
+      "original_sha256": "668b384c390ff8edb50c170787de74fdf231dd2fd9a133b8a6c27e03d9878210",
+      "sha256": "668b384c390ff8edb50c170787de74fdf231dd2fd9a133b8a6c27e03d9878210"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_qmi.h",
+      "source": "core/rmnet_qmi.h",
+      "original_sha256": "e752eac39da0045e948d8a87f9b7c1eb9cd31bb23686989ddef27c7cd107a580",
+      "sha256": "e752eac39da0045e948d8a87f9b7c1eb9cd31bb23686989ddef27c7cd107a580"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_trace.h",
+      "source": "core/rmnet_trace.h",
+      "original_sha256": "3668130105cf5e5b7b00ad909c53c0875af270c6b78b30e860085a1cdb4888b9",
+      "sha256": "3668130105cf5e5b7b00ad909c53c0875af270c6b78b30e860085a1cdb4888b9"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_vnd.c",
+      "source": "core/rmnet_vnd.c",
+      "original_sha256": "c522968b25f7380e6d79651709625f703e6be77492f89765ea43a738ecbdfe52",
+      "sha256": "c522968b25f7380e6d79651709625f703e6be77492f89765ea43a738ecbdfe52"
+    },
+    {
+      "file": "ports/datarmnet/core/rmnet_vnd.h",
+      "source": "core/rmnet_vnd.h",
+      "original_sha256": "71fe5773a591e93ce9ad3e3e6ba4b4be910f05ca393647907b67f175a9b2de3c",
+      "sha256": "71fe5773a591e93ce9ad3e3e6ba4b4be910f05ca393647907b67f175a9b2de3c"
+    },
+    {
+      "file": "ports/datarmnet/core/wda.h",
+      "source": "core/wda.h",
+      "original_sha256": "ce18dbb0eeac364a81a6067f0a7a93b2bd18f802089a6917934f671e9d957e1b",
+      "sha256": "ce18dbb0eeac364a81a6067f0a7a93b2bd18f802089a6917934f671e9d957e1b"
+    },
+    {
+      "file": "ports/datarmnet/core/wda_qmi.c",
+      "source": "core/wda_qmi.c",
+      "original_sha256": "45159fafbe40005289d73fd9142f466a48568315a8849a17a24d8c4cb15d1a7d",
+      "sha256": "45159fafbe40005289d73fd9142f466a48568315a8849a17a24d8c4cb15d1a7d"
+    },
+    {
+      "file": "ports/datarmnet/define_modules.bzl",
+      "source": "define_modules.bzl",
+      "original_sha256": "4292ef26acf4a8582cad4f4a4b4410d88232ad39426e5573ffcc9e88e3121657",
+      "sha256": "4292ef26acf4a8582cad4f4a4b4410d88232ad39426e5573ffcc9e88e3121657"
+    },
+    {
+      "file": "ports/datarmnet/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "74278db2ccbe03c3fd6d979725ba3dc11de80e790d2c29dfb9a650f95190aa01"
+    },
+    {
+      "file": "ports/datarmnet/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "29ad2115ebe78abdf5ed3007934b3990a816128fcb45dbc5d9252da6c3826a2b"
+    }
+  ],
+  "patch_sha256": "9bf46e2c180738d09d0cc25f1a2c0aeeb40c2c74b4c5c641138a647844d45354",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "rmnet_core, rmnet_ctl on android18-7.3",
+  "reviewed_changes": [
+    "rtnl newlink(dev, rtnl_newlink_params, extack) as upstream 7.3 rmnet; del_timer* -> timer_delete*; hrtimer_setup",
+    "CONFIG_IPA3_MODULE (phone rmnet imports ipam); depends= equal the phone"
+  ],
+  "pending": [
+    "modem data on the phone"
+  ]
+}

@@ -27,14 +27,16 @@
   "ports/qcom-pm/include/soc/qcom/cpuss_telemetry.h": "include/soc/qcom/cpuss_telemetry.h",
   "ports/qcom-pm/include/soc/qcom/qcom_lpm_monitor.h": "include/soc/qcom/qcom_lpm_monitor.h",
   "ports/qcom-pm/include/soc/qcom/qcom_stats.h": "include/soc/qcom/qcom_stats.h",
-  "ports/qcom-pm/Makefile": null
+  "ports/qcom-pm/Makefile": null,
+  "ports/qcom-pm/avr-canoe-vendor-config.h": null
  },
  "scope": "canoe power management modules: qcom_lpm cpuidle governor, lpm monitor, qcom_stats, sys_pm_vx, cpuss sleep stats, smp2p_sleepstate, msm_show_resume_irq, boot_stats, msm_show_epoch, sysmon_subsystem_stats",
  "reviewed_changes": [
   "qcom_lpm: hrtimer_init() removed in 7.x -> hrtimer_setup() with the timer's fixed callback",
   "msm_show_resume_irq: 7.3 struct syscore API",
   "remove_new -> remove",
-  "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)"
+  "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "PSCI idle residency + OSI cluster/APSS domain states (QEMU cannot run them)",

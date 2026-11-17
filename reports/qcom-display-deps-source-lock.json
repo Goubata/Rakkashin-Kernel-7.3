@@ -78,10 +78,10 @@
       "file": "ports/qcom-display-deps/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "359699cbde9e7b6ef1a13d106338da5d446672e6897553792987a6e9b8690a27"
+      "sha256": "14678f53b6e213b1882c34266e89ba5aadfcc9afefe3fe750ae8e93e76243e75"
     }
   ],
-  "patch_sha256": "82f3acff9cf6739ce4e73b0571a251c10c2456df4bce47a4b5a77e27a0340e3b",
+  "patch_sha256": "23af76077df71a0262388cee02b080402d543f1797104a8c001d5748ed3fa467",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "gh_irq_lend, fsa4480_i2c, wcd_usbss_i2c (canoe_perf =m; imported by msm_drm) on android18-7.3",

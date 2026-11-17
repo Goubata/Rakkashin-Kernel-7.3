@@ -151,7 +151,8 @@
   "ports/securemsm/tz_log/tz_log.c": "tz_log/tz_log.c",
   "ports/securemsm/linux/msm_ion.h": null,
   "ports/securemsm/include/linux/hdcp_qseecom.h": null,
-  "ports/securemsm/include/linux/mailbox/qmp.h": null
+  "ports/securemsm/include/linux/mailbox/qmp.h": null,
+  "ports/securemsm/avr-canoe-vendor-config.h": null
  },
  "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3: smcinvoke_dlkm (Stage109), tz_log, qce50, qcedev-mod, qcrypto-msm, hdcp_qseecom, qrng, smmu_proxy (pvm), tmecom-intf (Stage119)",
  "reviewed_changes": [
@@ -161,7 +162,8 @@
   "Stage119: Kbuild gains the canoe modules (vendor Kbuild.vendor objects; compat_qcedev per securemsm_modules.bzl); include paths for socinfo, iommu-util, sps; CONFIG_MSM_QMP (msm_qmp.ko is ported)",
   "from_timer -> timer_container_of (qce50, qcrypto); qcrypto resp_wq gets explicit WQ_PERCPU (7.3 warns on implicit per-cpu)",
   "linux/msm_ion.h: empty stub (tz_log includes it, uses nothing); include/linux/hdcp_qseecom.h and include/linux/mailbox/qmp.h copied unchanged from qcom-soc include",
-  "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)"
+  "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "real QTEE/TZ diag, crypto engine, PRNG, HDCP, TME only verifiable on the phone"

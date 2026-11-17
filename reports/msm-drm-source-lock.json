@@ -2502,7 +2502,7 @@
       "file": "ports/msm-drm/avr-canoe-vendor-config.h",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "ff9ef68170cc53a5c43806920e0d958df248e4c71b1eed04ed045fa0b5d438e1"
+      "sha256": "6065398f104785f197621ebd6148417ba56c559402f82b751eee2d8e85f4ea02"
     },
     {
       "file": "ports/msm-drm/avr-llcc-display.h",
@@ -2517,7 +2517,7 @@
       "sha256": "19797f3799bb30faea956d3e83598a9709e883c23fd9abadcac2e321160c089f"
     }
   ],
-  "patch_sha256": "d784ddad3c89987e86eee4c7f23ba8c29952bd01a38563167d977b2512cb676b",
+  "patch_sha256": "4e15b3ab9e6a2a3d14021677088d587438560e7a33a9d479a749d2745cba3954",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "vendor/qcom/opensource/display-drivers msm_drm for canoe on android18-7.3 (sources/defines from display_modules.bzl + targets/canoe.bzl)",
@@ -2531,7 +2531,8 @@
     "drm_atomic_private_obj_init(dev,obj,funcs): MST bridge gets atomic_create_state; error path uses drm_atomic_private_obj_fini (vendor kfree left a freed state on privobj_list)",
     "fb_create gains format info; drm_get_format_info(dev, fmt, modifier); drm_helper_mode_fill_fb_struct(info); irq_domain_create_linear; thermal cdev_id 0; alarm callbacks void + alarm_start_timer; vmf_insert_mixed(pfn); fbdev restore (force=false, fbdev emulation only)",
     "include order: vendor headers before $(srctree)/include/linux (else <soc/qcom/socinfo.h> hits the 7.3 one); vendor clk/rpmh API headers force-included; vendor qcom,icc.h (PWR_ST tags) force-included",
-    "-Wno-macro-redefined (pr_fmt after force-included printk.h); pp_cfg initialised"
+    "-Wno-macro-redefined (pr_fmt after force-included printk.h); pp_cfg initialised",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "display bring-up, DSI panel, DP altmode, HDCP, hw fences, RSC/CESTA on the phone"

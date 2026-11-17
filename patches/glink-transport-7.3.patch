@@ -103,7 +103,7 @@
  	}
  
  advance_rx:
-@@ -1167,7 +1183,92 @@
+@@ -1167,7 +1183,111 @@
  
  	if (channel->ept.flow_cb)
  		channel->ept.flow_cb(channel->ept.rpdev, channel->ept.priv, enable);
@@ -194,10 +194,29 @@
 +	return -EINVAL;
 +}
 +EXPORT_SYMBOL_GPL(qcom_glink_rx_done);
++
++/*
++ * AVR: android16-6.12 vendor API (qcom-soc qcom_glink_native.c), imported by
++ * frpc-adsprpc. The vendor sets glink_resume_pkt only from the glink_native_pm_ops
++ * noirq callbacks, which only the qcom_glink_rpm driver uses; canoe has no RPM
++ * GLINK edge, so on the phone this always reports false. Kept with the same
++ * semantics (and no producer) rather than a different wakeup policy.
++ */
++static bool glink_resume_pkt;
++
++bool qcom_glink_is_wakeup(bool reset)
++{
++	if (!glink_resume_pkt)
++		return false;
++	if (reset)
++		glink_resume_pkt = false;
++	return true;
++}
++EXPORT_SYMBOL_GPL(qcom_glink_is_wakeup);
  
  void qcom_glink_native_rx(struct qcom_glink *glink)
  {
-@@ -1951,13 +2052,14 @@
+@@ -1951,13 +2071,14 @@
  	int cid;
  	int ret;
  
@@ -216,7 +235,7 @@
  
  	/* Abort any senders waiting for intent requests */
  	spin_lock_irqsave(&glink->idr_lock, flags);
-@@ -1982,5 +2084,6 @@
+@@ -1982,5 +2103,6 @@
  }
  EXPORT_SYMBOL_GPL(qcom_glink_native_remove);
  
@@ -455,7 +474,7 @@
  			       "glink-smem", smem);
 --- a/ports/qcom-glink-transport/include/linux/rpmsg/qcom_glink_vendor.h
 +++ b/ports/qcom-glink-transport/include/linux/rpmsg/qcom_glink_vendor.h
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,27 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * AVR 7.3 port: android16-6.12 qcom-soc GLINK client extensions used by vendor
@@ -480,14 +499,18 @@
 +				   int (*cb)(struct rpmsg_device *, void *, u32, u32));
 +bool qcom_glink_rx_done_supported(struct rpmsg_endpoint *ept);
 +int qcom_glink_rx_done(struct rpmsg_endpoint *ept, void *data);
++bool qcom_glink_is_wakeup(bool reset);
 +
 +#endif
 --- a/ports/qcom-glink-transport/Makefile
 +++ b/ports/qcom-glink-transport/Makefile
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,9 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +obj-m += qcom_glink.o qcom_glink_smem.o rpmsg_ctrl.o
 +qcom_glink-y := qcom_glink_native.o qcom_glink_ssr.o
 +ccflags-y += -I$(src)/include -I$(src) -I$(srctree)/drivers/rpmsg
 +ccflags-y += -DCONFIG_RPMSG_QCOM_GLINK_MODULE=1 -DCONFIG_RPMSG_QCOM_GLINK_SMEM_MODULE=1 -DCONFIG_RPMSG_CTRL_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
 +KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers
++# vendor CONFIG parity (scripts/apply_vendor_config_parity.py)
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ipc-logging/Module.symvers $(src)/../qcom-pas-alor/Module.symvers $(src)/../qcom-rpmh/Module.symvers $(src)/../qcom-remoteproc-services/Module.symvers $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-debug-diag/Module.symvers $(src)/../qcom-perf-misc/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers $(src)/../qcom-sps/Module.symvers $(src)/../qcom-spmi/Module.symvers $(src)/../qcom-display-deps/Module.symvers $(src)/../qcom-rproc-common/Module.symvers $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-iommu-util/Module.symvers $(src)/../secure-buffer/Module.symvers $(src)/../qcom-wlan-deps/Module.symvers $(src)/../qcom-eom/Module.symvers $(src)/../qcom-pm-telemetry/Module.symvers $(src)/../gunyah/Module.symvers $(src)/../gunyah-rm/Module.symvers $(src)/../gunyah-core/Module.symvers $(src)/../qcom-llcc/Module.symvers $(src)/../qcom-clock-core/Module.symvers $(src)/../qcom-dcvs/Module.symvers $(src)/../msm-sysstats/Module.symvers $(src)/../qcom-usb/Module.symvers

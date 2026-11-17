@@ -1,0 +1,1033 @@
+{
+  "source_commit": "04327f0da669b089060c897b074ee53c07e86a1f",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-video-driver",
+  "files": [
+    {
+      "file": "ports/video-driver/driver/platform/alor/inc/msm_vidc_alor.h",
+      "source": "driver/platform/alor/inc/msm_vidc_alor.h",
+      "original_sha256": "c491504713337f2374304310c31c82fd5213a3965b19542ef89e5ec4681016a5",
+      "sha256": "c491504713337f2374304310c31c82fd5213a3965b19542ef89e5ec4681016a5"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/alor/src/alor.c",
+      "source": "driver/platform/alor/src/alor.c",
+      "original_sha256": "6b3daf45fc20db945d5fece75d96fc3b4f6f60d1aa1f95bc32450e051751f9a3",
+      "sha256": "6b3daf45fc20db945d5fece75d96fc3b4f6f60d1aa1f95bc32450e051751f9a3"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/alor/src/msm_vidc_alor.c",
+      "source": "driver/platform/alor/src/msm_vidc_alor.c",
+      "original_sha256": "16f4ea204f801e50ed7d3e924d3790585bdaa46614b0691123167fbb67a72026",
+      "sha256": "16f4ea204f801e50ed7d3e924d3790585bdaa46614b0691123167fbb67a72026"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/canoe/inc/msm_vidc_canoe.h",
+      "source": "driver/platform/canoe/inc/msm_vidc_canoe.h",
+      "original_sha256": "385007cae6ba8721837e3bc6d106caaa6eded0be89edf26ca32554850f7205c0",
+      "sha256": "385007cae6ba8721837e3bc6d106caaa6eded0be89edf26ca32554850f7205c0"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/canoe/src/canoe.c",
+      "source": "driver/platform/canoe/src/canoe.c",
+      "original_sha256": "e5abe9cb2f26f8cb29d53b0a483ee8e64e6d68f0793dfe41f0d62271c78f7939",
+      "sha256": "e5abe9cb2f26f8cb29d53b0a483ee8e64e6d68f0793dfe41f0d62271c78f7939"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/canoe/src/msm_vidc_canoe.c",
+      "source": "driver/platform/canoe/src/msm_vidc_canoe.c",
+      "original_sha256": "434208136451d8de63ef8e48279b96775b48f62cc52c9c262b3042d803a445ee",
+      "sha256": "434208136451d8de63ef8e48279b96775b48f62cc52c9c262b3042d803a445ee"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/chora/inc/msm_vidc_chora.h",
+      "source": "driver/platform/chora/inc/msm_vidc_chora.h",
+      "original_sha256": "ef2c9679e7bbda1f74b9fe03bfabdb2f6f75d0174c1a4bfba2661a18c1261223",
+      "sha256": "ef2c9679e7bbda1f74b9fe03bfabdb2f6f75d0174c1a4bfba2661a18c1261223"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/chora/src/chora.c",
+      "source": "driver/platform/chora/src/chora.c",
+      "original_sha256": "1c20a1c40f1fc56ea188c45586d9335ab1355c9759e96a46ea96b8eccdc779ef",
+      "sha256": "1c20a1c40f1fc56ea188c45586d9335ab1355c9759e96a46ea96b8eccdc779ef"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/chora/src/msm_vidc_chora.c",
+      "source": "driver/platform/chora/src/msm_vidc_chora.c",
+      "original_sha256": "03824669cc83b696d25f920df92eddf75bb4029d60f6d4c38982edf17105df5b",
+      "sha256": "03824669cc83b696d25f920df92eddf75bb4029d60f6d4c38982edf17105df5b"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/common/inc/msm_vidc_platform.h",
+      "source": "driver/platform/common/inc/msm_vidc_platform.h",
+      "original_sha256": "34e48dd521ceae68e20a9cb98d01218bba6e06fc13294cb318f0fb9299c4a9e4",
+      "sha256": "34e48dd521ceae68e20a9cb98d01218bba6e06fc13294cb318f0fb9299c4a9e4"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/common/inc/msm_vidc_platform_ext.h",
+      "source": "driver/platform/common/inc/msm_vidc_platform_ext.h",
+      "original_sha256": "b92bd13f66c74d3191c9f045ac635ca35d0eb72eb9ca1393d6f5cf5d14fb4496",
+      "sha256": "b92bd13f66c74d3191c9f045ac635ca35d0eb72eb9ca1393d6f5cf5d14fb4496"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/common/inc/perf_static_model.h",
+      "source": "driver/platform/common/inc/perf_static_model.h",
+      "original_sha256": "d58d9dbd33d62909af9d89d5c47733712ebca88f552f610b2f33f6613fc3a473",
+      "sha256": "d58d9dbd33d62909af9d89d5c47733712ebca88f552f610b2f33f6613fc3a473"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/common/src/msm_vidc_platform.c",
+      "source": "driver/platform/common/src/msm_vidc_platform.c",
+      "original_sha256": "3b5090b633e9685870e9f1300b0d7dcd9041560565b8d5122d1a35b7e5e3c7f3",
+      "sha256": "b207fa2530fa98b1b31fb6b0c329cf2cd16bbb831e607f5dfd3d73ad8d9a92dd"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/common/src/msm_vidc_platform_ext.c",
+      "source": "driver/platform/common/src/msm_vidc_platform_ext.c",
+      "original_sha256": "05d5a52bdab4fe658e4c89a7a1b8cdbf4a90f0e66c08952187ed6e3112ec73d3",
+      "sha256": "05d5a52bdab4fe658e4c89a7a1b8cdbf4a90f0e66c08952187ed6e3112ec73d3"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/hamoa/inc/msm_vidc_hamoa.h",
+      "source": "driver/platform/hamoa/inc/msm_vidc_hamoa.h",
+      "original_sha256": "8d756d7209e00236a4fd37e156c1c0f90837f7fbb11ef52de0c24c7cf9e6d9ad",
+      "sha256": "8d756d7209e00236a4fd37e156c1c0f90837f7fbb11ef52de0c24c7cf9e6d9ad"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/hamoa/src/hamoa.c",
+      "source": "driver/platform/hamoa/src/hamoa.c",
+      "original_sha256": "aa59d2615f35b43f033eb35cf5a9308da4f8fbba09d2409a64c0c1f87c344fbd",
+      "sha256": "aa59d2615f35b43f033eb35cf5a9308da4f8fbba09d2409a64c0c1f87c344fbd"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/hamoa/src/msm_vidc_hamoa.c",
+      "source": "driver/platform/hamoa/src/msm_vidc_hamoa.c",
+      "original_sha256": "0da9f080298736ac47926ea081ee9a52950b17ede3df53f8c336a8f85bb41760",
+      "sha256": "0da9f080298736ac47926ea081ee9a52950b17ede3df53f8c336a8f85bb41760"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/lemans/inc/msm_vidc_lemans.h",
+      "source": "driver/platform/lemans/inc/msm_vidc_lemans.h",
+      "original_sha256": "92eb4720642df155269cf52029a91adcdde8c835316ddf5ce6e323e0fcc8958b",
+      "sha256": "92eb4720642df155269cf52029a91adcdde8c835316ddf5ce6e323e0fcc8958b"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/lemans/src/lemans.c",
+      "source": "driver/platform/lemans/src/lemans.c",
+      "original_sha256": "3caf9c8441275eb68ef63499228564a4fe577fda34a71667cb5a28c168a9ced8",
+      "sha256": "3caf9c8441275eb68ef63499228564a4fe577fda34a71667cb5a28c168a9ced8"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/lemans/src/msm_vidc_lemans.c",
+      "source": "driver/platform/lemans/src/msm_vidc_lemans.c",
+      "original_sha256": "b6405df8b8a3c2c96113ed2ae65fc4195ba531e7c4c45a0434e5a365424779d1",
+      "sha256": "b6405df8b8a3c2c96113ed2ae65fc4195ba531e7c4c45a0434e5a365424779d1"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/malabar/inc/msm_vidc_malabar.h",
+      "source": "driver/platform/malabar/inc/msm_vidc_malabar.h",
+      "original_sha256": "757452d3d41656eff9acc58c470a71d82fc04b30368861bf1ac03b1c499c9fec",
+      "sha256": "757452d3d41656eff9acc58c470a71d82fc04b30368861bf1ac03b1c499c9fec"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/malabar/src/malabar.c",
+      "source": "driver/platform/malabar/src/malabar.c",
+      "original_sha256": "750579d8af8b86604ab15a85a29e24b34dcb45c296232aaff556790178f9fbd0",
+      "sha256": "750579d8af8b86604ab15a85a29e24b34dcb45c296232aaff556790178f9fbd0"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/malabar/src/msm_vidc_malabar.c",
+      "source": "driver/platform/malabar/src/msm_vidc_malabar.c",
+      "original_sha256": "52f21cc82597651dbaaf3a38cb6781d13abc281d65480c3da48755e1c7d00c20",
+      "sha256": "52f21cc82597651dbaaf3a38cb6781d13abc281d65480c3da48755e1c7d00c20"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/niobe/inc/msm_vidc_niobe.h",
+      "source": "driver/platform/niobe/inc/msm_vidc_niobe.h",
+      "original_sha256": "48f17634839c1719eab20cfee6962048a7fdafce59c636e8e25dd91c29532c71",
+      "sha256": "48f17634839c1719eab20cfee6962048a7fdafce59c636e8e25dd91c29532c71"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/niobe/src/msm_vidc_niobe.c",
+      "source": "driver/platform/niobe/src/msm_vidc_niobe.c",
+      "original_sha256": "80e04593e37eda4d76d6f3373d97ee5e19c7016bcce80395a5110bf2fe90fc34",
+      "sha256": "80e04593e37eda4d76d6f3373d97ee5e19c7016bcce80395a5110bf2fe90fc34"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/niobe/src/niobe.c",
+      "source": "driver/platform/niobe/src/niobe.c",
+      "original_sha256": "4d0effe7a3a250089c7afc095c6d002dad5f3f950e95b59b61593e1ac72ec3be",
+      "sha256": "4d0effe7a3a250089c7afc095c6d002dad5f3f950e95b59b61593e1ac72ec3be"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/nordau/inc/msm_vidc_nordau.h",
+      "source": "driver/platform/nordau/inc/msm_vidc_nordau.h",
+      "original_sha256": "bab65851b8b43e84d0ce0609d08ffbb6124cb54ce6aac594eeb25d2ec06d057c",
+      "sha256": "bab65851b8b43e84d0ce0609d08ffbb6124cb54ce6aac594eeb25d2ec06d057c"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/nordau/src/msm_vidc_nordau.c",
+      "source": "driver/platform/nordau/src/msm_vidc_nordau.c",
+      "original_sha256": "ccacdffc9756ae3bd102cd5e362cd21f4eb88802022770dff66026ed4513d543",
+      "sha256": "ccacdffc9756ae3bd102cd5e362cd21f4eb88802022770dff66026ed4513d543"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/nordau/src/nordau.c",
+      "source": "driver/platform/nordau/src/nordau.c",
+      "original_sha256": "a5a798f73c7468135430a62587f69266e14cbaa9c3e71ef9a182937bd149b0ee",
+      "sha256": "a5a798f73c7468135430a62587f69266e14cbaa9c3e71ef9a182937bd149b0ee"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/pineapple/inc/msm_vidc_pineapple.h",
+      "source": "driver/platform/pineapple/inc/msm_vidc_pineapple.h",
+      "original_sha256": "4743cf34b8b3aa896a8b506975e4fd3e8d7e41183aa5123edb770a5dc62056eb",
+      "sha256": "4743cf34b8b3aa896a8b506975e4fd3e8d7e41183aa5123edb770a5dc62056eb"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/pineapple/src/msm_vidc_pineapple.c",
+      "source": "driver/platform/pineapple/src/msm_vidc_pineapple.c",
+      "original_sha256": "3b559923d5e545b45c8e3ad0e1aa4587b7f2f5b6aae6b4e11bf70fbe9c92558f",
+      "sha256": "3b559923d5e545b45c8e3ad0e1aa4587b7f2f5b6aae6b4e11bf70fbe9c92558f"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/pineapple/src/pineapple.c",
+      "source": "driver/platform/pineapple/src/pineapple.c",
+      "original_sha256": "f0486c6960a409d5033a609d8702bf9c00ae91257f49ba777fec73c6762bacf6",
+      "sha256": "f0486c6960a409d5033a609d8702bf9c00ae91257f49ba777fec73c6762bacf6"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/ravelin/inc/msm_vidc_ravelin.h",
+      "source": "driver/platform/ravelin/inc/msm_vidc_ravelin.h",
+      "original_sha256": "0211056b897d22718004e934191be6ddfb52dd9b67b4c1d0b92671fa8f3c9c63",
+      "sha256": "0211056b897d22718004e934191be6ddfb52dd9b67b4c1d0b92671fa8f3c9c63"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/ravelin/src/msm_vidc_ravelin.c",
+      "source": "driver/platform/ravelin/src/msm_vidc_ravelin.c",
+      "original_sha256": "be358c14c4a97abbf409fed7195bb946b1dee95f3574a039ef6d157d5d449c0f",
+      "sha256": "be358c14c4a97abbf409fed7195bb946b1dee95f3574a039ef6d157d5d449c0f"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/ravelin/src/ravelin.c",
+      "source": "driver/platform/ravelin/src/ravelin.c",
+      "original_sha256": "f82ace70a4f7c3d52f32f86d7a4c2fe475809d725639c325e7f457576c8b0269",
+      "sha256": "f82ace70a4f7c3d52f32f86d7a4c2fe475809d725639c325e7f457576c8b0269"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/seraph/inc/msm_vidc_seraph.h",
+      "source": "driver/platform/seraph/inc/msm_vidc_seraph.h",
+      "original_sha256": "7e33ba1c44c773f3b6f438c56b4d3fa17bca1cd8fd2bbc7eb89a9664aa806a75",
+      "sha256": "7e33ba1c44c773f3b6f438c56b4d3fa17bca1cd8fd2bbc7eb89a9664aa806a75"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/seraph/src/msm_vidc_seraph.c",
+      "source": "driver/platform/seraph/src/msm_vidc_seraph.c",
+      "original_sha256": "02522955823920a53c2cbdb293fafe70b4bcca4b9c4bb7cdf66f7f216c302dd3",
+      "sha256": "02522955823920a53c2cbdb293fafe70b4bcca4b9c4bb7cdf66f7f216c302dd3"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/seraph/src/seraph.c",
+      "source": "driver/platform/seraph/src/seraph.c",
+      "original_sha256": "759c4d8b339af558f014292c95ea4a6197571b6c87a0cc337eb41010292ab547",
+      "sha256": "759c4d8b339af558f014292c95ea4a6197571b6c87a0cc337eb41010292ab547"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/sun/inc/msm_vidc_sun.h",
+      "source": "driver/platform/sun/inc/msm_vidc_sun.h",
+      "original_sha256": "4457a4bf83adb97591ad7b6a753834851daba625a62beb449afa52637ae60228",
+      "sha256": "4457a4bf83adb97591ad7b6a753834851daba625a62beb449afa52637ae60228"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/sun/src/msm_vidc_sun.c",
+      "source": "driver/platform/sun/src/msm_vidc_sun.c",
+      "original_sha256": "e8ce3fc5723f9e1eb5a3f412f13ae111b0cbc33c593ace46f81221d343b2a6e0",
+      "sha256": "e8ce3fc5723f9e1eb5a3f412f13ae111b0cbc33c593ace46f81221d343b2a6e0"
+    },
+    {
+      "file": "ports/video-driver/driver/platform/sun/src/sun.c",
+      "source": "driver/platform/sun/src/sun.c",
+      "original_sha256": "66c690ce7aefaf1f9de032b63a0f4604e7edcbe213c86be659d199c263b909b5",
+      "sha256": "66c690ce7aefaf1f9de032b63a0f4604e7edcbe213c86be659d199c263b909b5"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/inc/hfi_buffer_ar50lt.h",
+      "source": "driver/variant/ar50lt/inc/hfi_buffer_ar50lt.h",
+      "original_sha256": "20dbd05d3ba9c95a04977fade375cf118ad4a1d9ce84101e3d5ba00dab5304dd",
+      "sha256": "20dbd05d3ba9c95a04977fade375cf118ad4a1d9ce84101e3d5ba00dab5304dd"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/inc/msm_vidc_ar50lt.h",
+      "source": "driver/variant/ar50lt/inc/msm_vidc_ar50lt.h",
+      "original_sha256": "3ef52a670f452c06fbd115f799e46f504d0a477e3ec5b01b578c2cd84e08efbc",
+      "sha256": "3ef52a670f452c06fbd115f799e46f504d0a477e3ec5b01b578c2cd84e08efbc"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/inc/msm_vidc_buffer_ar50lt.h",
+      "source": "driver/variant/ar50lt/inc/msm_vidc_buffer_ar50lt.h",
+      "original_sha256": "476c3423afe3a766770de243676f7bb5fb33300341afb182f58deedd0952b3e8",
+      "sha256": "476c3423afe3a766770de243676f7bb5fb33300341afb182f58deedd0952b3e8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/inc/msm_vidc_power_ar50lt.h",
+      "source": "driver/variant/ar50lt/inc/msm_vidc_power_ar50lt.h",
+      "original_sha256": "ed56ae65e6ec5e4ae0eec112cd6a048d66a9705eb523d6af71af0f8593fe9ec1",
+      "sha256": "ed56ae65e6ec5e4ae0eec112cd6a048d66a9705eb523d6af71af0f8593fe9ec1"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/src/msm_vidc_ar50lt.c",
+      "source": "driver/variant/ar50lt/src/msm_vidc_ar50lt.c",
+      "original_sha256": "d895c9611df80177ba21a4c79e9e1b2ef2074f66561dc25bd357b8d2dc45b4c8",
+      "sha256": "d895c9611df80177ba21a4c79e9e1b2ef2074f66561dc25bd357b8d2dc45b4c8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/src/msm_vidc_buffer_ar50lt.c",
+      "source": "driver/variant/ar50lt/src/msm_vidc_buffer_ar50lt.c",
+      "original_sha256": "01d0f885ffdd7281de68fc3a25fc9d38a43e31d979fe255dd9986cd9914c3966",
+      "sha256": "01d0f885ffdd7281de68fc3a25fc9d38a43e31d979fe255dd9986cd9914c3966"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/ar50lt/src/msm_vidc_power_ar50lt.c",
+      "source": "driver/variant/ar50lt/src/msm_vidc_power_ar50lt.c",
+      "original_sha256": "52ca16098d361dde39bec591666be6d17fdaef62f2f27213e3372a80e7e7db58",
+      "sha256": "52ca16098d361dde39bec591666be6d17fdaef62f2f27213e3372a80e7e7db58"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/common/inc/msm_vidc_variant.h",
+      "source": "driver/variant/common/inc/msm_vidc_variant.h",
+      "original_sha256": "0d6d7c5a8bed7328c887e24ec18cd293e74a4228cd35b41dd20abfafb27f8752",
+      "sha256": "0d6d7c5a8bed7328c887e24ec18cd293e74a4228cd35b41dd20abfafb27f8752"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/common/src/msm_vidc_variant.c",
+      "source": "driver/variant/common/src/msm_vidc_variant.c",
+      "original_sha256": "749417d7d5356f01fa2baf5c19d3941b9e526954760445dfdb9a3d886070a757",
+      "sha256": "749417d7d5356f01fa2baf5c19d3941b9e526954760445dfdb9a3d886070a757"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/inc/hfi_buffer_iris2.h",
+      "source": "driver/variant/iris2/inc/hfi_buffer_iris2.h",
+      "original_sha256": "5f26202ea144f747b933a64539a5af2b0c23d16b3f15275642e0d46407243631",
+      "sha256": "5f26202ea144f747b933a64539a5af2b0c23d16b3f15275642e0d46407243631"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/inc/msm_vidc_buffer_iris2.h",
+      "source": "driver/variant/iris2/inc/msm_vidc_buffer_iris2.h",
+      "original_sha256": "a7fb2d055b09ed25c0d882cd20365dbcb1e1216ad7fe4dff2f783463ae8d8ad0",
+      "sha256": "a7fb2d055b09ed25c0d882cd20365dbcb1e1216ad7fe4dff2f783463ae8d8ad0"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/inc/msm_vidc_iris2.h",
+      "source": "driver/variant/iris2/inc/msm_vidc_iris2.h",
+      "original_sha256": "7bf60f4778803fd5d87e17036ed7d39c4fb06377d5a56caec328707ada8d031c",
+      "sha256": "7bf60f4778803fd5d87e17036ed7d39c4fb06377d5a56caec328707ada8d031c"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/inc/msm_vidc_power_iris2.h",
+      "source": "driver/variant/iris2/inc/msm_vidc_power_iris2.h",
+      "original_sha256": "082ace879a7cfdeb6c189cc8b1660894a417822f4064c793df80f2eedcd5e3d6",
+      "sha256": "082ace879a7cfdeb6c189cc8b1660894a417822f4064c793df80f2eedcd5e3d6"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/src/msm_vidc_buffer_iris2.c",
+      "source": "driver/variant/iris2/src/msm_vidc_buffer_iris2.c",
+      "original_sha256": "fd7b8ce22600747596708bafd15ebae118fc3c3c545be9114f3048c35436a375",
+      "sha256": "fd7b8ce22600747596708bafd15ebae118fc3c3c545be9114f3048c35436a375"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/src/msm_vidc_iris2.c",
+      "source": "driver/variant/iris2/src/msm_vidc_iris2.c",
+      "original_sha256": "57b2ae1844ae2fcd61d4d049b4c48750581af0ad4ce6af28a3811c1e331d05b0",
+      "sha256": "57b2ae1844ae2fcd61d4d049b4c48750581af0ad4ce6af28a3811c1e331d05b0"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris2/src/msm_vidc_power_iris2.c",
+      "source": "driver/variant/iris2/src/msm_vidc_power_iris2.c",
+      "original_sha256": "2a7ef5b33861478dff2b459090a59c12e3331839ca82a7dd193cd5087ef1d5f9",
+      "sha256": "2a7ef5b33861478dff2b459090a59c12e3331839ca82a7dd193cd5087ef1d5f9"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/inc/hfi_buffer_iris3.h",
+      "source": "driver/variant/iris3/inc/hfi_buffer_iris3.h",
+      "original_sha256": "74db32f1c71285c91e58c1fa0d0a8412fc9f9fcc2698d136e9f18540deda8c7b",
+      "sha256": "74db32f1c71285c91e58c1fa0d0a8412fc9f9fcc2698d136e9f18540deda8c7b"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/inc/msm_vidc_buffer_iris3.h",
+      "source": "driver/variant/iris3/inc/msm_vidc_buffer_iris3.h",
+      "original_sha256": "f01921376a3d84865344b0e03127d0cd25d270baaabd07cc1f04c38f531abc89",
+      "sha256": "f01921376a3d84865344b0e03127d0cd25d270baaabd07cc1f04c38f531abc89"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/inc/msm_vidc_iris3.h",
+      "source": "driver/variant/iris3/inc/msm_vidc_iris3.h",
+      "original_sha256": "bce2966f7a877d5de013923ed94bb6cb36a7030c26c52f1114904b8eac33b0ce",
+      "sha256": "bce2966f7a877d5de013923ed94bb6cb36a7030c26c52f1114904b8eac33b0ce"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/inc/msm_vidc_power_iris3.h",
+      "source": "driver/variant/iris3/inc/msm_vidc_power_iris3.h",
+      "original_sha256": "78090ae665fc8e89023957ab5839e3ccf66795f240281c68f0f1f22c6a53c4d8",
+      "sha256": "78090ae665fc8e89023957ab5839e3ccf66795f240281c68f0f1f22c6a53c4d8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/src/msm_vidc_buffer_iris3.c",
+      "source": "driver/variant/iris3/src/msm_vidc_buffer_iris3.c",
+      "original_sha256": "7f5efae684df738e683400a1863dd8e9766e49f5250693abcb8a21b6d8d0f1eb",
+      "sha256": "7f5efae684df738e683400a1863dd8e9766e49f5250693abcb8a21b6d8d0f1eb"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/src/msm_vidc_bus_iris3.c",
+      "source": "driver/variant/iris3/src/msm_vidc_bus_iris3.c",
+      "original_sha256": "2c8cd8edaafb18a93bf7d64a08e50d7345460d1a3c3651bec39631ba4a2f9be9",
+      "sha256": "2c8cd8edaafb18a93bf7d64a08e50d7345460d1a3c3651bec39631ba4a2f9be9"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/src/msm_vidc_clock_iris3.c",
+      "source": "driver/variant/iris3/src/msm_vidc_clock_iris3.c",
+      "original_sha256": "ba5a5330ca16572fb3887b246d1184adfb9724fda818bbe2b54e425585ec25c7",
+      "sha256": "ba5a5330ca16572fb3887b246d1184adfb9724fda818bbe2b54e425585ec25c7"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/src/msm_vidc_iris3.c",
+      "source": "driver/variant/iris3/src/msm_vidc_iris3.c",
+      "original_sha256": "1259455af1c6ca9ce290a2edd2e6232cbbbe91e8cec5ae72fec877c77831c186",
+      "sha256": "1259455af1c6ca9ce290a2edd2e6232cbbbe91e8cec5ae72fec877c77831c186"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris3/src/msm_vidc_power_iris3.c",
+      "source": "driver/variant/iris3/src/msm_vidc_power_iris3.c",
+      "original_sha256": "e41b211bda7bf3c94a4bb38a19aef2f655e1613faedc5e1bff6cb3de00d18f0f",
+      "sha256": "e41b211bda7bf3c94a4bb38a19aef2f655e1613faedc5e1bff6cb3de00d18f0f"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/inc/hfi_buffer_iris33.h",
+      "source": "driver/variant/iris33/inc/hfi_buffer_iris33.h",
+      "original_sha256": "14d19cd883234f991f2a5de5c3382ab3d498c9936d4fd509182867e22d849107",
+      "sha256": "14d19cd883234f991f2a5de5c3382ab3d498c9936d4fd509182867e22d849107"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/inc/msm_vidc_buffer_iris33.h",
+      "source": "driver/variant/iris33/inc/msm_vidc_buffer_iris33.h",
+      "original_sha256": "b787773c01f767c33fdc8b9b69bfc8182e0953c54265784147db1ea9c1883ef6",
+      "sha256": "b787773c01f767c33fdc8b9b69bfc8182e0953c54265784147db1ea9c1883ef6"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/inc/msm_vidc_iris33.h",
+      "source": "driver/variant/iris33/inc/msm_vidc_iris33.h",
+      "original_sha256": "08b0b60d28ab4e8cffed872c65e98efa9c025b64a57af8c33c83f6b3ab4ad620",
+      "sha256": "08b0b60d28ab4e8cffed872c65e98efa9c025b64a57af8c33c83f6b3ab4ad620"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/inc/msm_vidc_power_iris33.h",
+      "source": "driver/variant/iris33/inc/msm_vidc_power_iris33.h",
+      "original_sha256": "0c186ae030b51443a563e4463716a5b64ac0ed20416c046c8de84c6eac9e8b23",
+      "sha256": "0c186ae030b51443a563e4463716a5b64ac0ed20416c046c8de84c6eac9e8b23"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/src/msm_vidc_buffer_iris33.c",
+      "source": "driver/variant/iris33/src/msm_vidc_buffer_iris33.c",
+      "original_sha256": "cb48c4951e77fafe08fe5d927f6ece637eeff553ae8b9fcda6de7c5fdabe498e",
+      "sha256": "cb48c4951e77fafe08fe5d927f6ece637eeff553ae8b9fcda6de7c5fdabe498e"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/src/msm_vidc_bus_iris33.c",
+      "source": "driver/variant/iris33/src/msm_vidc_bus_iris33.c",
+      "original_sha256": "b2bdf5c544571f26a5801446f61da7f4072bc4b7996693e31499fd4344bb540c",
+      "sha256": "b2bdf5c544571f26a5801446f61da7f4072bc4b7996693e31499fd4344bb540c"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/src/msm_vidc_clock_iris33.c",
+      "source": "driver/variant/iris33/src/msm_vidc_clock_iris33.c",
+      "original_sha256": "540b95f05f7deae87acd4655532329bab8928c2c4a1916ef2ee64b44ae974e96",
+      "sha256": "540b95f05f7deae87acd4655532329bab8928c2c4a1916ef2ee64b44ae974e96"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/src/msm_vidc_iris33.c",
+      "source": "driver/variant/iris33/src/msm_vidc_iris33.c",
+      "original_sha256": "b8973c7aeab9d4d21939b740e4baf43e4b98b85654b613040a1570d9b65ee9f8",
+      "sha256": "b8973c7aeab9d4d21939b740e4baf43e4b98b85654b613040a1570d9b65ee9f8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris33/src/msm_vidc_power_iris33.c",
+      "source": "driver/variant/iris33/src/msm_vidc_power_iris33.c",
+      "original_sha256": "8eef0d5de8a49e7b7cfa27190d2c56a810606378bea3d211793510ee3e69c8cf",
+      "sha256": "8eef0d5de8a49e7b7cfa27190d2c56a810606378bea3d211793510ee3e69c8cf"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/inc/hfi_buffer_iris35.h",
+      "source": "driver/variant/iris35/inc/hfi_buffer_iris35.h",
+      "original_sha256": "f2cb6e867dc2d4594dd35fe6bf7f778864c04cd28b8f3cbff6a8dd489d3d10a8",
+      "sha256": "f2cb6e867dc2d4594dd35fe6bf7f778864c04cd28b8f3cbff6a8dd489d3d10a8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/inc/msm_vidc_buffer_iris35.h",
+      "source": "driver/variant/iris35/inc/msm_vidc_buffer_iris35.h",
+      "original_sha256": "06957d833521db38147979d6093f3218b6f6f7ef732d64c42e238705a07c8dd7",
+      "sha256": "06957d833521db38147979d6093f3218b6f6f7ef732d64c42e238705a07c8dd7"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/inc/msm_vidc_iris35.h",
+      "source": "driver/variant/iris35/inc/msm_vidc_iris35.h",
+      "original_sha256": "1ebaa9d26a3d985e812e97e5730f7cb8b05183201bb66dadd1d13c687c8880db",
+      "sha256": "1ebaa9d26a3d985e812e97e5730f7cb8b05183201bb66dadd1d13c687c8880db"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/inc/msm_vidc_power_iris35.h",
+      "source": "driver/variant/iris35/inc/msm_vidc_power_iris35.h",
+      "original_sha256": "eff79eaf816313d9f49a6dc67048b23cce55bb13e2e2931ff3665fd854eeccc3",
+      "sha256": "eff79eaf816313d9f49a6dc67048b23cce55bb13e2e2931ff3665fd854eeccc3"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/src/msm_vidc_buffer_iris35.c",
+      "source": "driver/variant/iris35/src/msm_vidc_buffer_iris35.c",
+      "original_sha256": "d33a831dc7a847b8184a8e6c0f619949e0fe874b3653c2666cf8f265372026e5",
+      "sha256": "d33a831dc7a847b8184a8e6c0f619949e0fe874b3653c2666cf8f265372026e5"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/src/msm_vidc_bus_iris35.c",
+      "source": "driver/variant/iris35/src/msm_vidc_bus_iris35.c",
+      "original_sha256": "a58c6b2c8d0f2c45b91016b545ae27d3a9128919687a238bf53c202ffb2057c3",
+      "sha256": "a58c6b2c8d0f2c45b91016b545ae27d3a9128919687a238bf53c202ffb2057c3"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/src/msm_vidc_clock_iris35.c",
+      "source": "driver/variant/iris35/src/msm_vidc_clock_iris35.c",
+      "original_sha256": "0cbc22736583d56c22855c2c0a0e4550bcc3751ead22b0256a97af87b2d19a42",
+      "sha256": "0cbc22736583d56c22855c2c0a0e4550bcc3751ead22b0256a97af87b2d19a42"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/src/msm_vidc_iris35.c",
+      "source": "driver/variant/iris35/src/msm_vidc_iris35.c",
+      "original_sha256": "547bdf9094c117f0d78daa5d0926b13f596a2f0ba760065fb9a628fa78e41dc2",
+      "sha256": "547bdf9094c117f0d78daa5d0926b13f596a2f0ba760065fb9a628fa78e41dc2"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris35/src/msm_vidc_power_iris35.c",
+      "source": "driver/variant/iris35/src/msm_vidc_power_iris35.c",
+      "original_sha256": "23956156d0693686c55a87a23b5d20c8dd732b38adbbb92e9e9b0645aba4e60e",
+      "sha256": "23956156d0693686c55a87a23b5d20c8dd732b38adbbb92e9e9b0645aba4e60e"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/inc/hfi_buffer_iris36.h",
+      "source": "driver/variant/iris36/inc/hfi_buffer_iris36.h",
+      "original_sha256": "b86bb9c7ff52fb48a36f42d62c1ec4ba47be97fa9ae7501ccecf3918f43ec66f",
+      "sha256": "b86bb9c7ff52fb48a36f42d62c1ec4ba47be97fa9ae7501ccecf3918f43ec66f"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/inc/msm_vidc_buffer_iris36.h",
+      "source": "driver/variant/iris36/inc/msm_vidc_buffer_iris36.h",
+      "original_sha256": "9e255c659975a70a4cc48e47de27db64b50ec1166547c064425ac6cf952219d8",
+      "sha256": "9e255c659975a70a4cc48e47de27db64b50ec1166547c064425ac6cf952219d8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/inc/msm_vidc_iris36.h",
+      "source": "driver/variant/iris36/inc/msm_vidc_iris36.h",
+      "original_sha256": "2c20b83ca9c060e6b81e45f6020bb65f1a3f51f23f547ab36f73ff4e6d1aaea8",
+      "sha256": "2c20b83ca9c060e6b81e45f6020bb65f1a3f51f23f547ab36f73ff4e6d1aaea8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/inc/msm_vidc_power_iris36.h",
+      "source": "driver/variant/iris36/inc/msm_vidc_power_iris36.h",
+      "original_sha256": "35b538535db5fdbdf7d236e1c29e166e6b62f89fd90042c017203924338b0fd1",
+      "sha256": "35b538535db5fdbdf7d236e1c29e166e6b62f89fd90042c017203924338b0fd1"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/src/msm_vidc_buffer_iris36.c",
+      "source": "driver/variant/iris36/src/msm_vidc_buffer_iris36.c",
+      "original_sha256": "554f82d57f14f29cffbc502b275a97d8b8d2110686a190829c344b5954877d9d",
+      "sha256": "554f82d57f14f29cffbc502b275a97d8b8d2110686a190829c344b5954877d9d"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/src/msm_vidc_bus_iris36.c",
+      "source": "driver/variant/iris36/src/msm_vidc_bus_iris36.c",
+      "original_sha256": "5fb31c7afbab92665051d0f48a883621de1b7e1e63706d0c33fae686b9e2748f",
+      "sha256": "5fb31c7afbab92665051d0f48a883621de1b7e1e63706d0c33fae686b9e2748f"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/src/msm_vidc_clock_iris36.c",
+      "source": "driver/variant/iris36/src/msm_vidc_clock_iris36.c",
+      "original_sha256": "0b728f3d0b3062c856a46cdc2caf983008ef07ac14f60b3b9fcee31b3c93f192",
+      "sha256": "0b728f3d0b3062c856a46cdc2caf983008ef07ac14f60b3b9fcee31b3c93f192"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/src/msm_vidc_iris36.c",
+      "source": "driver/variant/iris36/src/msm_vidc_iris36.c",
+      "original_sha256": "de309808c6f1a1452934057873cbc15f0e73647c3e4d0d853578e0f64a3e0c53",
+      "sha256": "de309808c6f1a1452934057873cbc15f0e73647c3e4d0d853578e0f64a3e0c53"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris36/src/msm_vidc_power_iris36.c",
+      "source": "driver/variant/iris36/src/msm_vidc_power_iris36.c",
+      "original_sha256": "41f72241f4e6824167315091293983332e204ce477554f628e92ae82c0121366",
+      "sha256": "41f72241f4e6824167315091293983332e204ce477554f628e92ae82c0121366"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/inc/hfi_buffer_iris4.h",
+      "source": "driver/variant/iris4/inc/hfi_buffer_iris4.h",
+      "original_sha256": "9dd7dd60d1fcb2cd0f5708dbb74cfc5fce9363177a4602b7f4e64091614d92c2",
+      "sha256": "9dd7dd60d1fcb2cd0f5708dbb74cfc5fce9363177a4602b7f4e64091614d92c2"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/inc/msm_vidc_buffer_iris4.h",
+      "source": "driver/variant/iris4/inc/msm_vidc_buffer_iris4.h",
+      "original_sha256": "8d97862951fdb31e0a6b245b3c616edea207a095404890f20edfdd86ba66e6c6",
+      "sha256": "8d97862951fdb31e0a6b245b3c616edea207a095404890f20edfdd86ba66e6c6"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/inc/msm_vidc_iris4.h",
+      "source": "driver/variant/iris4/inc/msm_vidc_iris4.h",
+      "original_sha256": "21af9cebbd4edb914e7d8efb0ef5a76b13cbfb1a3731954f40579e06b6ded6c7",
+      "sha256": "21af9cebbd4edb914e7d8efb0ef5a76b13cbfb1a3731954f40579e06b6ded6c7"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/inc/msm_vidc_power_iris4.h",
+      "source": "driver/variant/iris4/inc/msm_vidc_power_iris4.h",
+      "original_sha256": "886f159f10006af891a1bbe03151854011192cd7240a5f6d4c9202a806ea6863",
+      "sha256": "886f159f10006af891a1bbe03151854011192cd7240a5f6d4c9202a806ea6863"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/src/msm_vidc_buffer_iris4.c",
+      "source": "driver/variant/iris4/src/msm_vidc_buffer_iris4.c",
+      "original_sha256": "29827842887e2c9a350677bf6cec666e9b2d7ae0db00ce5457e5dbca1a81642f",
+      "sha256": "29827842887e2c9a350677bf6cec666e9b2d7ae0db00ce5457e5dbca1a81642f"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/src/msm_vidc_bus_iris4.c",
+      "source": "driver/variant/iris4/src/msm_vidc_bus_iris4.c",
+      "original_sha256": "26a00edda364f7d7144ec9dc61eb1ab0f029b9d0387342c0dc105857b2e39ab6",
+      "sha256": "26a00edda364f7d7144ec9dc61eb1ab0f029b9d0387342c0dc105857b2e39ab6"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/src/msm_vidc_clock_iris4.c",
+      "source": "driver/variant/iris4/src/msm_vidc_clock_iris4.c",
+      "original_sha256": "cde82011e6b2f66f15b27982085769d805b5aeca5b46d4ba5e17d6963e13adc8",
+      "sha256": "cde82011e6b2f66f15b27982085769d805b5aeca5b46d4ba5e17d6963e13adc8"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/src/msm_vidc_iris4.c",
+      "source": "driver/variant/iris4/src/msm_vidc_iris4.c",
+      "original_sha256": "120ce463b45d83a4f37ef1dfc2c290afc0689b7b8d18119cfb9413734330b0cd",
+      "sha256": "120ce463b45d83a4f37ef1dfc2c290afc0689b7b8d18119cfb9413734330b0cd"
+    },
+    {
+      "file": "ports/video-driver/driver/variant/iris4/src/msm_vidc_power_iris4.c",
+      "source": "driver/variant/iris4/src/msm_vidc_power_iris4.c",
+      "original_sha256": "f47103198d24bfcb1192dad8512f007f54abdb31312ca8bf7d0b34eb1cda6459",
+      "sha256": "f47103198d24bfcb1192dad8512f007f54abdb31312ca8bf7d0b34eb1cda6459"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/firmware.h",
+      "source": "driver/vidc/inc/firmware.h",
+      "original_sha256": "9aa95e4fba33ee52988ea3180da75a097eeba5dc6809077585bc46384f00cfc2",
+      "sha256": "9aa95e4fba33ee52988ea3180da75a097eeba5dc6809077585bc46384f00cfc2"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/fixedpoint.h",
+      "source": "driver/vidc/inc/fixedpoint.h",
+      "original_sha256": "351d02d8ff5aaedd624f90e5da265e79fbed703e4967ad660e16952da4c88313",
+      "sha256": "351d02d8ff5aaedd624f90e5da265e79fbed703e4967ad660e16952da4c88313"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/hfi_command.h",
+      "source": "driver/vidc/inc/hfi_command.h",
+      "original_sha256": "f3a737f67c828aa84dc5a44fb0ea14cc04136c0592527ec8d6e2421364ed662d",
+      "sha256": "f3a737f67c828aa84dc5a44fb0ea14cc04136c0592527ec8d6e2421364ed662d"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/hfi_packet.h",
+      "source": "driver/vidc/inc/hfi_packet.h",
+      "original_sha256": "f06c22eb52fc2baec4e305c799433e1f21371f02da98ef88619fa6e5742297fe",
+      "sha256": "f06c22eb52fc2baec4e305c799433e1f21371f02da98ef88619fa6e5742297fe"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/hfi_property.h",
+      "source": "driver/vidc/inc/hfi_property.h",
+      "original_sha256": "e5cfd518e60cfcb52ade40bdbeaa5b8dfa6a620deda319ea25882b5897bfd5a0",
+      "sha256": "e5cfd518e60cfcb52ade40bdbeaa5b8dfa6a620deda319ea25882b5897bfd5a0"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_media_info.h",
+      "source": "driver/vidc/inc/msm_media_info.h",
+      "original_sha256": "82a7b985664b7455405da1622da04e311be07d52bae0b74db79270836417aad4",
+      "sha256": "82a7b985664b7455405da1622da04e311be07d52bae0b74db79270836417aad4"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vdec.h",
+      "source": "driver/vidc/inc/msm_vdec.h",
+      "original_sha256": "07a826acf2bfabb2c11150e373c925b23eb5704ca6de51efadd218b21ff7bb78",
+      "sha256": "07a826acf2bfabb2c11150e373c925b23eb5704ca6de51efadd218b21ff7bb78"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_venc.h",
+      "source": "driver/vidc/inc/msm_venc.h",
+      "original_sha256": "74765a7bbbf9c0b1085d1c03d93585d5a4df73d0a54e7014788579fd8315a692",
+      "sha256": "74765a7bbbf9c0b1085d1c03d93585d5a4df73d0a54e7014788579fd8315a692"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc.h",
+      "source": "driver/vidc/inc/msm_vidc.h",
+      "original_sha256": "4629d5c2974cf2b56a0affbae28851c0dc28a0e677b8282bb159ff8a913ef699",
+      "sha256": "4629d5c2974cf2b56a0affbae28851c0dc28a0e677b8282bb159ff8a913ef699"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_buffer.h",
+      "source": "driver/vidc/inc/msm_vidc_buffer.h",
+      "original_sha256": "e1aa65539270c220811c61eaf7f2e31a8ddadb3d5293f2c3ea50371e9538ea9d",
+      "sha256": "e1aa65539270c220811c61eaf7f2e31a8ddadb3d5293f2c3ea50371e9538ea9d"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_control.h",
+      "source": "driver/vidc/inc/msm_vidc_control.h",
+      "original_sha256": "1fb124df48f80a67741519ddde4cce59af5db119af5f3da9e40a43c69f066d2f",
+      "sha256": "1fb124df48f80a67741519ddde4cce59af5db119af5f3da9e40a43c69f066d2f"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_core.h",
+      "source": "driver/vidc/inc/msm_vidc_core.h",
+      "original_sha256": "6c73f88565296a10399fadb261289919d79279930d307f4c66eae1164d1d43f3",
+      "sha256": "6c73f88565296a10399fadb261289919d79279930d307f4c66eae1164d1d43f3"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_debug.h",
+      "source": "driver/vidc/inc/msm_vidc_debug.h",
+      "original_sha256": "6f78737c13ef271786e6e4819d3642bd56efd593afb57d9399cc2f4f7f9f95c3",
+      "sha256": "6f78737c13ef271786e6e4819d3642bd56efd593afb57d9399cc2f4f7f9f95c3"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_driver.h",
+      "source": "driver/vidc/inc/msm_vidc_driver.h",
+      "original_sha256": "ac7f556ea76f43e527141a650a693c88835289f4d93e57421caf25fa04c55261",
+      "sha256": "ac7f556ea76f43e527141a650a693c88835289f4d93e57421caf25fa04c55261"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_events.h",
+      "source": "driver/vidc/inc/msm_vidc_events.h",
+      "original_sha256": "8dedcba12f89f9a57447e07e5d7d1cf8d3afa7872b87d4c5079be742c1e95115",
+      "sha256": "8dedcba12f89f9a57447e07e5d7d1cf8d3afa7872b87d4c5079be742c1e95115"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_fence.h",
+      "source": "driver/vidc/inc/msm_vidc_fence.h",
+      "original_sha256": "dc0e8e48be562f173d769a74101e7eacfee354d7f1a1b0e562a0a12a37806303",
+      "sha256": "dc0e8e48be562f173d769a74101e7eacfee354d7f1a1b0e562a0a12a37806303"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_hw_virt.h",
+      "source": "driver/vidc/inc/msm_vidc_hw_virt.h",
+      "original_sha256": "8c8331f278176b685a66a0c452813a2ea940bb6bcb16cb73ded57277656a196a",
+      "sha256": "8c8331f278176b685a66a0c452813a2ea940bb6bcb16cb73ded57277656a196a"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_inst.h",
+      "source": "driver/vidc/inc/msm_vidc_inst.h",
+      "original_sha256": "89556aac99d973074466d3e52c5f796276df54bcfeb86ff6c917901274086127",
+      "sha256": "89556aac99d973074466d3e52c5f796276df54bcfeb86ff6c917901274086127"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_internal.h",
+      "source": "driver/vidc/inc/msm_vidc_internal.h",
+      "original_sha256": "cd50216752445f47854c5538e68b86a8ed0374437abdf7e3186dd7c447fdca2a",
+      "sha256": "cd50216752445f47854c5538e68b86a8ed0374437abdf7e3186dd7c447fdca2a"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_md.h",
+      "source": "driver/vidc/inc/msm_vidc_md.h",
+      "original_sha256": "8db87f9ec89e762f90605d4553db3ce66223ef0fb60ef08316d69542325e7871",
+      "sha256": "8db87f9ec89e762f90605d4553db3ce66223ef0fb60ef08316d69542325e7871"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_memory.h",
+      "source": "driver/vidc/inc/msm_vidc_memory.h",
+      "original_sha256": "9d34b9afd4993ece827f2ce287cdedb2a157b1452f70407bf7c73abe4292bd36",
+      "sha256": "9d34b9afd4993ece827f2ce287cdedb2a157b1452f70407bf7c73abe4292bd36"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_memory_ext.h",
+      "source": "driver/vidc/inc/msm_vidc_memory_ext.h",
+      "original_sha256": "5d9c91ad3f03e6c1a7d73f55b186e43072d7e0f402dc2449dab194ee7dbfce7a",
+      "sha256": "5d9c91ad3f03e6c1a7d73f55b186e43072d7e0f402dc2449dab194ee7dbfce7a"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_power.h",
+      "source": "driver/vidc/inc/msm_vidc_power.h",
+      "original_sha256": "cf119e76a489e51a2d9d8ebf767e28ccac58469e3d64d40f5910383089b56076",
+      "sha256": "cf119e76a489e51a2d9d8ebf767e28ccac58469e3d64d40f5910383089b56076"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_state.h",
+      "source": "driver/vidc/inc/msm_vidc_state.h",
+      "original_sha256": "6b09fa5dbb9fb9a6ce3a612d1473db573ffc1e519779ad3b089263ef30934d6e",
+      "sha256": "6b09fa5dbb9fb9a6ce3a612d1473db573ffc1e519779ad3b089263ef30934d6e"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_synx.h",
+      "source": "driver/vidc/inc/msm_vidc_synx.h",
+      "original_sha256": "787bb99118f81598719842edb0c94b82f9fffcefcf2d11ae4585eaf4a5d246b2",
+      "sha256": "787bb99118f81598719842edb0c94b82f9fffcefcf2d11ae4585eaf4a5d246b2"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_v4l2.h",
+      "source": "driver/vidc/inc/msm_vidc_v4l2.h",
+      "original_sha256": "e9f73d1f448174bbe975e23b1495f987509c3cfc05782f76339d98e0527bb567",
+      "sha256": "e9f73d1f448174bbe975e23b1495f987509c3cfc05782f76339d98e0527bb567"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/msm_vidc_vb2.h",
+      "source": "driver/vidc/inc/msm_vidc_vb2.h",
+      "original_sha256": "de1c4fc0f2d5cb0cec9e708940a4d8fad1127c223e282f1e92ec70fd82de7f5a",
+      "sha256": "de1c4fc0f2d5cb0cec9e708940a4d8fad1127c223e282f1e92ec70fd82de7f5a"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/resources.h",
+      "source": "driver/vidc/inc/resources.h",
+      "original_sha256": "b14f8e0ed4111942ebdd5ca8f90f771c3977cda99f7db8a19bdb4616fbc9ecee",
+      "sha256": "b14f8e0ed4111942ebdd5ca8f90f771c3977cda99f7db8a19bdb4616fbc9ecee"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/resources_ext.h",
+      "source": "driver/vidc/inc/resources_ext.h",
+      "original_sha256": "0faf598c34e004d848511b5fd640523befdf56c0f372df46c07d40e711cd9608",
+      "sha256": "0faf598c34e004d848511b5fd640523befdf56c0f372df46c07d40e711cd9608"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/venus_hfi.h",
+      "source": "driver/vidc/inc/venus_hfi.h",
+      "original_sha256": "cfc859a2fcedacaad727b8f4eacd7e40f35016fcd8a5de5f93ecc0c59c23e2e2",
+      "sha256": "cfc859a2fcedacaad727b8f4eacd7e40f35016fcd8a5de5f93ecc0c59c23e2e2"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/venus_hfi_queue.h",
+      "source": "driver/vidc/inc/venus_hfi_queue.h",
+      "original_sha256": "b35ac1bef3e37cc4179c0f85fdfba967cbb4c6b9994cce1aba51db7b103fa62d",
+      "sha256": "b35ac1bef3e37cc4179c0f85fdfba967cbb4c6b9994cce1aba51db7b103fa62d"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/inc/venus_hfi_response.h",
+      "source": "driver/vidc/inc/venus_hfi_response.h",
+      "original_sha256": "6cd822546956d8b3e3568f2ca770ea006b09ae0b8f1aa679f73e011bf3df4bd9",
+      "sha256": "6cd822546956d8b3e3568f2ca770ea006b09ae0b8f1aa679f73e011bf3df4bd9"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/firmware.c",
+      "source": "driver/vidc/src/firmware.c",
+      "original_sha256": "706e0bdf57188d182b3d1f32ac397a106bd9e7dafbc8beca3343fcea56d9be6e",
+      "sha256": "706e0bdf57188d182b3d1f32ac397a106bd9e7dafbc8beca3343fcea56d9be6e"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/hfi_packet.c",
+      "source": "driver/vidc/src/hfi_packet.c",
+      "original_sha256": "33a837550d02a0a6562aa3d9aafc2040d39b273cc78455d3c12ccf93b76d7a56",
+      "sha256": "33a837550d02a0a6562aa3d9aafc2040d39b273cc78455d3c12ccf93b76d7a56"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vdec.c",
+      "source": "driver/vidc/src/msm_vdec.c",
+      "original_sha256": "8f406a801e9073a7afc181795d15bae11036d8fca95258a7917c3ba2bbbea54f",
+      "sha256": "8f406a801e9073a7afc181795d15bae11036d8fca95258a7917c3ba2bbbea54f"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_venc.c",
+      "source": "driver/vidc/src/msm_venc.c",
+      "original_sha256": "27fb46f81d6229a8efc5c52318936800d99e1e7f83bbc914bda0c344e7d8aafa",
+      "sha256": "27fb46f81d6229a8efc5c52318936800d99e1e7f83bbc914bda0c344e7d8aafa"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc.c",
+      "source": "driver/vidc/src/msm_vidc.c",
+      "original_sha256": "50399e3f843942ea2940e0e5edefd4508ae6d8eae2e7b0307f2f80fd13c7eb64",
+      "sha256": "50399e3f843942ea2940e0e5edefd4508ae6d8eae2e7b0307f2f80fd13c7eb64"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_buffer.c",
+      "source": "driver/vidc/src/msm_vidc_buffer.c",
+      "original_sha256": "75bd53636a92fd30acddb5000344316e99581f20160ab87810b718eb0f665b6e",
+      "sha256": "75bd53636a92fd30acddb5000344316e99581f20160ab87810b718eb0f665b6e"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_control.c",
+      "source": "driver/vidc/src/msm_vidc_control.c",
+      "original_sha256": "1a1464ad7c8d6c3b4bf7c830bcef758a27df4d001a82f6321c4731b7f99af631",
+      "sha256": "1a1464ad7c8d6c3b4bf7c830bcef758a27df4d001a82f6321c4731b7f99af631"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_debug.c",
+      "source": "driver/vidc/src/msm_vidc_debug.c",
+      "original_sha256": "d2b73197b1bbacd04d3bd05405e6d9869a772f95a59f9169a5a1a91635229d94",
+      "sha256": "d2b73197b1bbacd04d3bd05405e6d9869a772f95a59f9169a5a1a91635229d94"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_driver.c",
+      "source": "driver/vidc/src/msm_vidc_driver.c",
+      "original_sha256": "d327f1dba85b04f9c5aef097be78beaa45b8b7e3e7ff9679f6a5b838330f471b",
+      "sha256": "e5825f1b28cfdab71a723ca85e9c398d7f4ab160f5471c3182963d0812e2f519"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_fence.c",
+      "source": "driver/vidc/src/msm_vidc_fence.c",
+      "original_sha256": "27d40c0d76ea8d5ec5302df80e8d67ff283bfea16354e33efaf8e2602033bca9",
+      "sha256": "27d40c0d76ea8d5ec5302df80e8d67ff283bfea16354e33efaf8e2602033bca9"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_md.c",
+      "source": "driver/vidc/src/msm_vidc_md.c",
+      "original_sha256": "a7aa15cb13c6c822cda0ce77ecead64d62d33c000cfc44949851cdc271e18ede",
+      "sha256": "a7aa15cb13c6c822cda0ce77ecead64d62d33c000cfc44949851cdc271e18ede"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_memory.c",
+      "source": "driver/vidc/src/msm_vidc_memory.c",
+      "original_sha256": "275f7fa8629ddbddacd22c07aa45db1275132bbb39f37bb5a622fa8e038ad56e",
+      "sha256": "275f7fa8629ddbddacd22c07aa45db1275132bbb39f37bb5a622fa8e038ad56e"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_memory_ext.c",
+      "source": "driver/vidc/src/msm_vidc_memory_ext.c",
+      "original_sha256": "b09e57c56bfb36326d185854f1f88057b13c93cff414ef17e8c6f562460025c3",
+      "sha256": "b09e57c56bfb36326d185854f1f88057b13c93cff414ef17e8c6f562460025c3"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_power.c",
+      "source": "driver/vidc/src/msm_vidc_power.c",
+      "original_sha256": "da7c941fb263f16ae9252be57c09e01d1b5fa74e59b8af1a1fe252a90673f5c3",
+      "sha256": "da7c941fb263f16ae9252be57c09e01d1b5fa74e59b8af1a1fe252a90673f5c3"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_probe.c",
+      "source": "driver/vidc/src/msm_vidc_probe.c",
+      "original_sha256": "8dd1a1f999e5b7f7c28aae9dbc9d2e064d9ac4d246c05dea2463dd88b0ef309f",
+      "sha256": "8dd1a1f999e5b7f7c28aae9dbc9d2e064d9ac4d246c05dea2463dd88b0ef309f"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_state.c",
+      "source": "driver/vidc/src/msm_vidc_state.c",
+      "original_sha256": "ff991f895656584365192e7eeb87c8ca252c6a199e95312416ad379cbee2772b",
+      "sha256": "ff991f895656584365192e7eeb87c8ca252c6a199e95312416ad379cbee2772b"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_synx.c",
+      "source": "driver/vidc/src/msm_vidc_synx.c",
+      "original_sha256": "960161c228ca4e7c2805b5489db649e534e28b6bb398be2ff098042932a82be9",
+      "sha256": "960161c228ca4e7c2805b5489db649e534e28b6bb398be2ff098042932a82be9"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_v4l2.c",
+      "source": "driver/vidc/src/msm_vidc_v4l2.c",
+      "original_sha256": "af3977cdf307b02219ada3ddf2dd566d77cd354bfa34b26193dfd58b4bfcf06c",
+      "sha256": "af3977cdf307b02219ada3ddf2dd566d77cd354bfa34b26193dfd58b4bfcf06c"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/msm_vidc_vb2.c",
+      "source": "driver/vidc/src/msm_vidc_vb2.c",
+      "original_sha256": "b0433ed9a74834e804e8c2a3ebe376e573a53d0e9e37c110a03e3afa3ffbd504",
+      "sha256": "b0433ed9a74834e804e8c2a3ebe376e573a53d0e9e37c110a03e3afa3ffbd504"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/resources.c",
+      "source": "driver/vidc/src/resources.c",
+      "original_sha256": "1a4130f938cb797d3c6b740284e0574ab1fd536016d3324c9a264f701cb46a40",
+      "sha256": "1a4130f938cb797d3c6b740284e0574ab1fd536016d3324c9a264f701cb46a40"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/resources_ext.c",
+      "source": "driver/vidc/src/resources_ext.c",
+      "original_sha256": "60014bb375985b1363ec9f905c3f096562fcb21796e078dc617ae2929d561de2",
+      "sha256": "60014bb375985b1363ec9f905c3f096562fcb21796e078dc617ae2929d561de2"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/venus_hfi.c",
+      "source": "driver/vidc/src/venus_hfi.c",
+      "original_sha256": "b9b8f02aa8deef078b7a06297ccc2d3e6d8570fc2bb420be7d458a53401dde9c",
+      "sha256": "b9b8f02aa8deef078b7a06297ccc2d3e6d8570fc2bb420be7d458a53401dde9c"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/venus_hfi_queue.c",
+      "source": "driver/vidc/src/venus_hfi_queue.c",
+      "original_sha256": "7e8aade718d40f4f8fb13f640eea9c759d977993b45850effe33d99326d3a15f",
+      "sha256": "7e8aade718d40f4f8fb13f640eea9c759d977993b45850effe33d99326d3a15f"
+    },
+    {
+      "file": "ports/video-driver/driver/vidc/src/venus_hfi_response.c",
+      "source": "driver/vidc/src/venus_hfi_response.c",
+      "original_sha256": "cd1905ad5cf7d3ddf2b4272d03605db1d6c5c3ded5cbe45db0d765a42ec5ddfc",
+      "sha256": "cd1905ad5cf7d3ddf2b4272d03605db1d6c5c3ded5cbe45db0d765a42ec5ddfc"
+    },
+    {
+      "file": "ports/video-driver/include/uapi/vidc/media/v4l2_vidc_extensions.h",
+      "source": "include/uapi/vidc/media/v4l2_vidc_extensions.h",
+      "original_sha256": "a445b34fd610211efb6a71a0957582403385616642238b2d7a316784e07ba764",
+      "sha256": "a445b34fd610211efb6a71a0957582403385616642238b2d7a316784e07ba764"
+    },
+    {
+      "file": "ports/video-driver/video_driver_build.bzl",
+      "source": "video_driver_build.bzl",
+      "original_sha256": "fcd53d39e79a9c7963b905ddb2abfc47721c4bf3b674af5968ffbbe4fed70ff6",
+      "sha256": "fcd53d39e79a9c7963b905ddb2abfc47721c4bf3b674af5968ffbbe4fed70ff6"
+    },
+    {
+      "file": "ports/video-driver/video_modules.bzl",
+      "source": "video_modules.bzl",
+      "original_sha256": "3d5168056f330a2c12f3d77ef634759e9bf1d60774375438dc5c925186e1c02d",
+      "sha256": "3d5168056f330a2c12f3d77ef634759e9bf1d60774375438dc5c925186e1c02d"
+    },
+    {
+      "file": "ports/video-driver/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "22278aa82122e9475b2d0e2b2be0ec2671acced09736bfb1731668975d5b8453"
+    },
+    {
+      "file": "ports/video-driver/Makefile.generated",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "98f3f0757b5f43f4a87c46df12d44f58d05939f129e5ff4324d8829b2421f509"
+    },
+    {
+      "file": "ports/video-driver/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "8aec82200c59c9a555a6c9abf791c83dc7cdbaf855b36e358a3240bd08aec32a"
+    },
+    {
+      "file": "ports/video-driver/avr-include/dt-bindings/clock/qcom,alor-gcc.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "8d2de75796fde2fdf1a4c8e63b2fa976d67316606ab6610c138e29dd7011a9f3"
+    },
+    {
+      "file": "ports/video-driver/avr-include/dt-bindings/clock/qcom,chora-gcc.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "cc48717a44c5871479f1ab83624b68f042045526fdd7d47c72195eacede245d4"
+    },
+    {
+      "file": "ports/video-driver/avr-include/dt-bindings/clock/qcom,chora-videocc.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "2d25291e669d8408cecdcd16f25c2945be39c70c797b8ec62351053555a02a1e"
+    },
+    {
+      "file": "ports/video-driver/avr-include/dt-bindings/clock/qcom,gcc-canoe.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "44d4f161899e72d6368acebaada65715e663e6bd08e5eb8ed3975b6ceef7fd0e"
+    },
+    {
+      "file": "ports/video-driver/avr-include/dt-bindings/clock/qcom,videocc-canoe.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "c55be654b1e0c9bbd60ad1e6e216d280802a8e9580c07654418eb53ef0d882f4"
+    }
+  ],
+  "patch_sha256": "17d7854aedc8eea152bb2ccf7e9e46a95718f2809fc46181204b27c01698b3ed",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "msm_video.ko (canoe+chora options) on android18-7.3",
+  "reviewed_changes": [
+    "Makefile.generated (scripts/gen_video_makefile.py; missing glob entries skipped like native.glob)",
+    "vidioc_queryctrl removed: the core answered from fh->ctrl_handler first on 6.12 too",
+    "v4l2_fh_add/del take a file in 7.3: scratch file (msm_v4l2_open/close own private_data)",
+    "vendor config first so llcc is not stubbed; depends= equal the phone"
+  ],
+  "pending": [
+    "video on the phone"
+  ]
+}

@@ -17,10 +17,10 @@
       "file": "ports/qcom-pmic-glink/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "b9bc692c320dd075e6c13a2f95fbd530924812c1e826a53495a92e894bf13e27"
+      "sha256": "8998fdbef32f6d6d6398ecceaa5e60fd1a0354852a07ed754185f393d58465a8"
     }
   ],
-  "patch_sha256": "e09f835b0822ca07ba66953d1a2f834cd71167c7d8b8d00103e8626be27add80",
+  "patch_sha256": "d8903c1244b0f620a6aa39386ba428d6ff4805b41dc1d659a26b4f9bf2c08774",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "hardware_runtime_accepted": false,

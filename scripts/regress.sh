@@ -27,4 +27,5 @@ one intree-misc
 one mm-drivers
 one msm-drm
 one audio-conn
+one media-data
 python3 scripts/audit_module_versions.py ports/*/*.ko 2>/dev/null | python3 -c "import json,sys;d=json.load(sys.stdin);print('crc',d['passed'],len(d['modules']),[m['module'] for m in d['modules'] if m['mismatches']][:6])"

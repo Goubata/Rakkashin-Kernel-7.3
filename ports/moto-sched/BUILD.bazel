@@ -1,0 +1,5 @@
+load(":moto_sched.bzl", "define_modules")
+
+exports_files(["Kconfig"])
+
+define_modules()

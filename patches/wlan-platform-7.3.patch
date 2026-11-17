@@ -104,7 +104,7 @@
 +	$(src)/../qcom-smem/Module.symvers $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-debug-diag/Module.symvers $(src)/../qcom-iommu-util/Module.symvers $(src)/../secure-buffer/Module.symvers
 --- a/ports/wlan-platform/avr-canoe-vendor-config.h
 +++ b/ports/wlan-platform/avr-canoe-vendor-config.h
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,28 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
 + * module was compiled with through the vendor kernel autoconf but that the 7.3
@@ -128,6 +128,7 @@
 +#define CONFIG_QCOM_MINIDUMP_MODULE 1
 +#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
 +#define CONFIG_QCOM_RAMDUMP_MODULE 1
++#define CONFIG_QCOM_RPROC_COMMON_MODULE 1
 +#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
 +#define CONFIG_QCOM_SOCINFO_MODULE 1
 +#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1

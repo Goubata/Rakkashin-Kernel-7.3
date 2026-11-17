@@ -1,0 +1,22 @@
+{
+ "name": "dataipa-rmnet-mem",
+ "repo": "vendor-repos/vendor-qcom-opensource-datarmnet-ext",
+ "commit": "a3cf383a5e94ae804098c97431afde885d650569",
+ "files": {
+  "ports/dataipa/rmnet_mem/define_mem.bzl": "mem/define_mem.bzl",
+  "ports/dataipa/rmnet_mem/include/uapi/linux/rmnet_mem_uapi.h": "mem/include/uapi/linux/rmnet_mem_uapi.h",
+  "ports/dataipa/rmnet_mem/rmnet_mem.h": "mem/rmnet_mem.h",
+  "ports/dataipa/rmnet_mem/rmnet_mem_main.c": "mem/rmnet_mem_main.c",
+  "ports/dataipa/rmnet_mem/rmnet_mem_nl.c": "mem/rmnet_mem_nl.c",
+  "ports/dataipa/rmnet_mem/rmnet_mem_nl.h": "mem/rmnet_mem_nl.h",
+  "ports/dataipa/rmnet_mem/rmnet_mem_pool.c": "mem/rmnet_mem_pool.c",
+  "ports/dataipa/rmnet_mem/rmnet_mem_priv.h": "mem/rmnet_mem_priv.h"
+ },
+ "scope": "rmnet_mem (ipam dependency)",
+ "reviewed_changes": [
+  "hrtimer_init -> hrtimer_setup"
+ ],
+ "pending": [
+  "phone"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "name": "qcom-usb-gadget",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-usb-gadget/f_gsi.c": "drivers/usb/gadget/function/f_gsi.c",
+  "ports/qcom-usb-gadget/f_gsi.h": "drivers/usb/gadget/function/f_gsi.h",
+  "ports/qcom-usb-gadget/ndis.h": "drivers/usb/gadget/function/ndis.h",
+  "ports/qcom-usb-gadget/rndis.c": "drivers/usb/gadget/function/rndis.c",
+  "ports/qcom-usb-gadget/rndis.h": "drivers/usb/gadget/function/rndis.h",
+  "ports/qcom-usb-gadget/u_rndis.h": "drivers/usb/gadget/function/u_rndis.h",
+  "ports/qcom-usb-gadget/f_cdev.c": "drivers/usb/gadget/function/f_cdev.c",
+  "ports/qcom-usb-gadget/f_ccid.c": "drivers/usb/gadget/function/f_ccid.c",
+  "ports/qcom-usb-gadget/f_ccid.h": "drivers/usb/gadget/function/f_ccid.h",
+  "ports/qcom-usb-gadget/f_qdss.c": "drivers/usb/gadget/function/f_qdss.c",
+  "ports/qcom-usb-gadget/f_qdss.h": "drivers/usb/gadget/function/f_qdss.h",
+  "ports/qcom-usb-gadget/u_qdss.c": "drivers/usb/gadget/function/u_qdss.c",
+  "ports/qcom-usb-gadget/include/linux/usb/ccid_desc.h": "include/linux/usb/ccid_desc.h",
+  "ports/qcom-usb-gadget/include/linux/usb/usb_qdss.h": "include/linux/usb/usb_qdss.h",
+  "ports/qcom-usb-gadget/include/linux/ipa_usb.h": "include/linux/ipa_usb.h",
+  "ports/qcom-usb-gadget/include/uapi/linux/usb/usb_ctrl_qti.h": "include/uapi/linux/usb/usb_ctrl_qti.h",
+  "ports/qcom-usb-gadget/Makefile": null
+ },
+ "scope": "usb_f_gsi, usb_f_cdev, usb_f_ccid, usb_f_qdss (canoe_perf =m) on android18-7.3",
+ "reviewed_changes": [
+  "ida_simple_get/remove -> ida_alloc(_max)/ida_free; from_timer -> timer_container_of; del_timer_sync -> timer_delete_sync",
+  "rndis.h includes the 7.3 u_ether.h via -I drivers/usb/gadget/function",
+  "depends= equal the phone"
+ ],
+ "pending": [
+  "USB tethering/diag/ADB-like functions on the phone"
+ ]
+}

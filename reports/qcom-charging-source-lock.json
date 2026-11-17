@@ -108,10 +108,16 @@
       "file": "ports/qcom-charging/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "656df4361f7900ff2f9327a642d58dce3ce4c50b2995bb00d8813cf1d6206021"
+      "sha256": "e4c44700ad4fdd80d6c8583f50562591eb940e3696828c5d551392597ec6205c"
+    },
+    {
+      "file": "ports/qcom-charging/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "26bb7eb120fc844bb0f8851256e0bf47309fc46b25713dc05b63191542c089b2"
     }
   ],
-  "patch_sha256": "672e5a410d461427fc9d634c2c03f15e9e25a1c04d3c1eb5d0ea2fa296c11a8c",
+  "patch_sha256": "04c226a83aefdfe11ac93c25635ad52cc6cf1c681b38d2a502109416bc2656b2",
   "physical_verified": false,
   "combined_bundle_promoted": false,
   "scope": "PMIC glink clients (battery charger, altmode, UCSI, ulog, battery debug, glink ADC, pmic glink debug), glink_pkt, qcom_pd_mapper on android18-7.3",
@@ -120,7 +126,8 @@
     "ucsi: 7.3 sync_control(cmd, cci, data, size, msg_out, size): wraps the 6.12 synchronous write and reads CCI/MESSAGE_IN (no MESSAGE_OUT, as 6.12)",
     "bin_attribute const callbacks/arrays",
     "glink_pkt: vendor GLINK client API from ports/qcom-glink-transport (signals; zero-copy unsupported -> copy path), ida_alloc_max/ida_free, zap_special_vma_range (exported successor of zap_vma_ptes)",
-    "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage"
+    "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage",
+    "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
   ],
   "pending": [
     "ADSP battery/charging firmware conversation, UCSI/altmode, glink_pkt channels (phone)"

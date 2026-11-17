@@ -1910,7 +1910,7 @@ static int bt_power_probe(struct platform_device *pdev)
 							"qcom,wcn8850-bt");
 	pr_info("%s: is_multi_tech_soc_dt = %d\n", __func__, pwr_data->is_multi_tech_soc_dt);
 
-	pwr_data->workq = alloc_workqueue("workq", WQ_HIGHPRI, WQ_DFL_ACTIVE);
+	pwr_data->workq = alloc_workqueue("workq", WQ_HIGHPRI | WQ_PERCPU, WQ_DFL_ACTIVE); /* AVR 7.3 */
 	if (!pwr_data->workq) {
 		pr_err("%s: Failed to creat the Work Queue (workq)\n",
 			__func__);

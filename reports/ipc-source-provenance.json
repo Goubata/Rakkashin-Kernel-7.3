@@ -1,7 +1,7 @@
 {
   "passed": true,
   "scope": "staged source provenance only; not a runtime proof",
-  "remoteproc_build_sha256": "02b3b123408e2c359043c837b01b5db1266a03e0d8ed6de383f99ac29c10e33a",
+  "remoteproc_build_sha256": "9a66f1b75c8501d93a036a124dbd35d73470868bd48d8346da50fd867a14942d",
   "remoteproc_error_policy_patch_sha256": "c3d960adfe478d4b0e2f7e92291324752630746f006a64027ab0ef65bcf5dcf5",
   "files": [
     {
@@ -232,6 +232,24 @@
       "original_git_blob": "27e746d131dfa1a368ab8707f7e81797c41ed896",
       "port_changes": [],
       "sha256": "1bfb6039813c0a11729348bbf8988f245e2e3583d5ec26eddf9e1a80d94584de"
+    },
+    {
+      "file": "ports/qcom-rproc-common/qcom_tracepoints.c",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "drivers/remoteproc/qcom_tracepoints.c",
+      "original_git_blob": "546ebe90f14176bd16508238b522912d6c2fd340",
+      "port_changes": [],
+      "sha256": "53444cf16fd16f4af7c39d9a44a775f7186959e8df894df8dbcda6730850ae7f"
+    },
+    {
+      "file": "ports/qcom-rproc-common/include/trace/events/rproc_qcom.h",
+      "source_repository": "qcom-soc",
+      "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+      "origin": "include/trace/events/rproc_qcom.h",
+      "original_git_blob": "20ffa6b8df4a65ce7c3763545d347c64abff390e",
+      "port_changes": [],
+      "sha256": "b26383b04621e733bd9cd61c98e2fab0fd08176e2bb4100ea074231555ee0d11"
     },
     {
       "file": "ports/qcom-rproc-common/qcom_common.c",

@@ -59,5 +59,67 @@ int synx_enable_resources(enum synx_client_id id, enum synx_resource_type resour
 }
 EXPORT_SYMBOL_GPL(synx_enable_resources);
 
+
+int synx_release_n(struct synx_session *session, struct synx_release_n_params *pParams)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_release_n);
+
+int synx_async_wait(struct synx_session *session, struct synx_callback_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_async_wait);
+
+void *synx_get_fence(struct synx_session *session, u32 h_synx)
+{
+	return ERR_PTR(-ENODEV);
+}
+EXPORT_SYMBOL(synx_get_fence);
+
+int synx_get_status(struct synx_session *session, u32 h_synx)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_get_status);
+
+int synx_merge(struct synx_session *session, struct synx_merge_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_merge);
+
+int synx_merge_n(struct synx_session *session, struct synx_merge_n_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL_GPL(synx_merge_n);
+
+int synx_wait(struct synx_session *session, u32 h_synx, u64 timeout_ms)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_wait);
+
+int synx_cancel_async_wait(struct synx_session *session,
+	struct synx_callback_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL(synx_cancel_async_wait);
+
+int synx_get(struct synx_session *session, struct synx_get_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL_GPL(synx_get);
+
+int synx_signal_n(struct synx_session *session, struct synx_signal_n_params *params)
+{
+	return -ENODEV;
+}
+EXPORT_SYMBOL_GPL(synx_signal_n);
+
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("AVR QEMU-only synx stand-in for msm_drm load tests");

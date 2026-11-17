@@ -1,0 +1,14 @@
+{
+ "stage": 122,
+ "qemu_runs": [
+  "reports/media-data-stage122-qemu.log",
+  "reports/media-data-stage122-r2.log",
+  "reports/media-data-stage122-r3.log"
+ ],
+ "parity": {
+  "same": "all but 7 documented",
+  "script": "scripts/compare_phone_deps.py"
+ },
+ "regression": "reports/regress-stage122-summary.txt",
+ "physical_verified": false
+}

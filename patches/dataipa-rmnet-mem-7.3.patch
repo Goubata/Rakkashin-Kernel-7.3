@@ -1,0 +1,22 @@
+--- a/ports/dataipa/rmnet_mem/rmnet_mem_main.c
++++ b/ports/dataipa/rmnet_mem/rmnet_mem_main.c
+@@ -630,7 +630,7 @@
+ 		INIT_LIST_HEAD(&(rmnet_mem_cache[i]));
+ 	}
+ 
+-	mem_wq = alloc_workqueue("mem_wq", WQ_HIGHPRI, 0);
++	mem_wq = alloc_workqueue("mem_wq", WQ_HIGHPRI | WQ_PERCPU, 0); /* AVR 7.3 */
+ 	if (!mem_wq)
+ 		return -ENOMEM;
+ 
+@@ -645,8 +645,8 @@
+ 		mem_wq = NULL;
+ 		return -ENOMEM;
+ 	}
+-	hrtimer_init(&pb_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	pb_timer.function = rmnet_mem_pb_timer_cb;
++	/* AVR 7.3: hrtimer_setup */
++	hrtimer_setup(&pb_timer, rmnet_mem_pb_timer_cb, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 
+ 	return 0;
+ }

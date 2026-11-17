@@ -10,11 +10,11 @@ PROVIDERS = ['qcom-ipc-logging', 'qcom-pas-alor', 'qcom-rpmh', 'qcom-remoteproc-
              'qcom-debug-diag', 'qcom-perf-misc', 'qcom-dma-heaps', 'qcom-sps', 'qcom-spmi', 'qcom-display-deps',
              'qcom-rproc-common', 'qcom-smem', 'qcom-socinfo', 'qcom-iommu-util', 'secure-buffer', 'qcom-wlan-deps',
              'qcom-eom', 'qcom-pm-telemetry', 'gunyah', 'gunyah-rm', 'gunyah-core', 'qcom-llcc', 'qcom-clock-core',
-             'qcom-dcvs', 'msm-sysstats', 'qcom-usb']
+             'qcom-dcvs', 'msm-sysstats', 'qcom-usb', 'qcom-leds', 'mm-drivers', 'qti-fence', 'securemsm', 'qcom-charging']
 TAG = '# vendor CONFIG parity (scripts/apply_vendor_config_parity.py)'
 for port in sys.argv[1:]:
     d = ROOT / 'ports' / port
-    f = d / 'Makefile' if (d / 'Makefile').is_file() else d / 'Kbuild'
+    f = d / 'Kbuild' if (d / 'Kbuild').is_file() else d / 'Makefile'  # kbuild prefers Kbuild
     s = f.read_text()
     have = set(re.findall(r'\.\./([\w-]+)/Module\.symvers', s))
     add = [p for p in PROVIDERS if p != port and p not in have and (ROOT / 'ports' / p).is_dir()]

@@ -1,0 +1,96 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-leds/leds-qcom-flash.c",
+      "source": "drivers/leds/flash/leds-qcom-flash.c",
+      "original_sha256": "fc0b578b858d5143773a6fcbc02c93ce6b8ad0774d57903f1f85628f1a9dd39f",
+      "sha256": "7a71b9f09478f141395550b408aabca90c7eeabd730e0f5dae2fe2b149891309"
+    },
+    {
+      "file": "ports/qcom-leds/qcom-spmi-wled.c",
+      "source": "drivers/video/backlight/qcom-spmi-wled.c",
+      "original_sha256": "cef6e50e53ddce655e2f46c5ec9446de2c52ff5b76ccc64a059a0f5d62e93d28",
+      "sha256": "caa106c13d611180eb091ac204df4f49838d15df91af9c85f1383218e0c67e0c"
+    },
+    {
+      "file": "ports/qcom-leds/leds-qcom-lpg.c",
+      "source": "drivers/leds/rgb/leds-qcom-lpg.c",
+      "original_sha256": "dd2be3d8b5d6db41181f9830f66f9c83a9c648adc7cf895783114a68d7a05e57",
+      "sha256": "dd2be3d8b5d6db41181f9830f66f9c83a9c648adc7cf895783114a68d7a05e57"
+    },
+    {
+      "file": "ports/qcom-leds/leds-qpnp-vibrator-ldo.c",
+      "source": "drivers/leds/leds-qpnp-vibrator-ldo.c",
+      "original_sha256": "e8f5df727f8529f6046463f11108ef22e72dd0ded5b2d7b47c90104abc42486a",
+      "sha256": "21e448f9d4497e160b0dae4dc420eff11dbec8161bc4c8904158f12893ac1c2b"
+    },
+    {
+      "file": "ports/qcom-leds/qcom-hv-haptics.c",
+      "source": "drivers/input/misc/qcom-hv-haptics.c",
+      "original_sha256": "5e8635edd3a025403f487de4d7f4ccce31bca06a7a132bfadc0f7a4a2fcad0c6",
+      "sha256": "9e81c8fad226b4401687c05a5b8a118c1d38c83bd9b443177027f12020d02ee8"
+    },
+    {
+      "file": "ports/qcom-leds/qcom-hv-haptics-debugfs.h",
+      "source": "drivers/input/misc/qcom-hv-haptics-debugfs.h",
+      "original_sha256": "4df7fcf5d92c952851827cab1eb9598f088de3708c35e4ebae14d656e59e8ad0",
+      "sha256": "4df7fcf5d92c952851827cab1eb9598f088de3708c35e4ebae14d656e59e8ad0"
+    },
+    {
+      "file": "ports/qcom-leds/include/linux/leds-qpnp-flash.h",
+      "source": "include/linux/leds-qpnp-flash.h",
+      "original_sha256": "c6ed9d9fb0cc43a35efa70093f6ee3ac297429e244682c615f78b8c08ec96cb3",
+      "sha256": "c6ed9d9fb0cc43a35efa70093f6ee3ac297429e244682c615f78b8c08ec96cb3"
+    },
+    {
+      "file": "ports/qcom-leds/include/linux/qpnp/qpnp-pbs.h",
+      "source": "include/linux/qpnp/qpnp-pbs.h",
+      "original_sha256": "e0d27fe8d7582cb752ca910f12a3edc95af232a569673767b5448c92015589a3",
+      "sha256": "e0d27fe8d7582cb752ca910f12a3edc95af232a569673767b5448c92015589a3"
+    },
+    {
+      "file": "ports/qcom-leds/include/linux/soc/qcom/leds-qcom-flash.h",
+      "source": "include/linux/soc/qcom/leds-qcom-flash.h",
+      "original_sha256": "f1d2fde6394ba542f3af134c2fefd30b84c74fe673bf2840f5969df3ede22764",
+      "sha256": "f1d2fde6394ba542f3af134c2fefd30b84c74fe673bf2840f5969df3ede22764"
+    },
+    {
+      "file": "ports/qcom-leds/include/linux/soc/qcom/qcom_hv_haptics.h",
+      "source": "include/linux/soc/qcom/qcom_hv_haptics.h",
+      "original_sha256": "335c21baf29f3175197b2774b2a0c18bdd9f380af668dbc722a5ed7b689af429",
+      "sha256": "335c21baf29f3175197b2774b2a0c18bdd9f380af668dbc722a5ed7b689af429"
+    },
+    {
+      "file": "ports/qcom-leds/include/trace/events/qcom_haptics.h",
+      "source": "include/trace/events/qcom_haptics.h",
+      "original_sha256": "620f541acb3d1c95c1c9d8960890bebc3f73e07687f17cad52b4f22bcd936a44",
+      "sha256": "620f541acb3d1c95c1c9d8960890bebc3f73e07687f17cad52b4f22bcd936a44"
+    },
+    {
+      "file": "ports/qcom-leds/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "26f1de0ad51d437cd23e14fa37c907d186409954d2ea61411b4ce718e684b608"
+    },
+    {
+      "file": "ports/qcom-leds/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "1b62df8972039de04c6987763b415e97e9f8a98f42d96d173e1b4bd8b7771d0a"
+    }
+  ],
+  "patch_sha256": "a5d0a436166053ce266337ee2dbdd3874d031c86ad9fe6fbcf954dde8d471591",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "leds-qcom-flash, qcom-spmi-wled, leds-qcom-lpg, leds-qpnp-vibrator-ldo, qcom-hv-haptics",
+  "reviewed_changes": [
+    ".remove_new -> .remove; hrtimer_setup; FB_BLANK_UNBLANK -> BACKLIGHT_POWER_ON (0); MODULE_IMPORT_NS(\"IIO_CONSUMER\")",
+    "haptics: uninitialised status name (passed to a trace event) defaults to \"UNKNOWN_STS\"",
+    "depends= equal the phone"
+  ],
+  "pending": [
+    "phone (vibration/flash; no audio)"
+  ]
+}

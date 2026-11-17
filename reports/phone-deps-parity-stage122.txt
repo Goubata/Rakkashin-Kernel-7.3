@@ -1,0 +1,8 @@
+DIFF ports/msm-sysstats/msm_sysstats.ko missing=['qcom_dma_heaps'] extra=[]
+DIFF ports/qcom-glink-transport/qcom_glink.ko missing=['qcom_ipc_logging'] extra=[]
+DIFF ports/qcom-glink-transport/qcom_glink_smem.ko missing=['qcom_ipc_logging'] extra=[]
+DIFF ports/qcom-smp2p/smp2p.ko missing=['qcom_ipc_logging'] extra=[]
+DIFF ports/qcom-remoteproc-services/qcom_sysmon.ko missing=['rproc_qcom_common'] extra=[]
+DIFF ports/qcom-pas-alor/qcom_q6v5_pas.ko missing=['qcom_ramdump'] extra=['qcom_pas']
+DIFF ports/securemsm/qrng_dlkm.ko missing=[] extra=['rng']
+same=191 diff=7

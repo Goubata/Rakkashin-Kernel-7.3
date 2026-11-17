@@ -1,0 +1,15 @@
+{
+ "name": "qcom-usb-gadget-moto",
+ "repo": "vendor-repos/motorola-kernel-modules",
+ "commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+ "files": {
+  "ports/qcom-usb-gadget/f_usbnet.c": "drivers/moto_f_usbnet/f_usbnet.c"
+ },
+ "scope": "moto_f_usbnet (Motorola BLAN)",
+ "reviewed_changes": [
+  "unchanged"
+ ],
+ "pending": [
+  "phone"
+ ]
+}

@@ -1,0 +1,95 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-eom/buffer_manager.c",
+      "source": "drivers/eom/buffer_manager.c",
+      "original_sha256": "e2f031b7ef60da66977d05cc5cee1466cb2db8ceb815cec90cfa96f1c1064542",
+      "sha256": "e2f031b7ef60da66977d05cc5cee1466cb2db8ceb815cec90cfa96f1c1064542"
+    },
+    {
+      "file": "ports/qcom-eom/buffer_manager.h",
+      "source": "drivers/eom/buffer_manager.h",
+      "original_sha256": "6296a80707b57bca670b0d328a8bbc275e49b8204617f938ea55514a16eab345",
+      "sha256": "6296a80707b57bca670b0d328a8bbc275e49b8204617f938ea55514a16eab345"
+    },
+    {
+      "file": "ports/qcom-eom/eom_driver.c",
+      "source": "drivers/eom/eom_driver.c",
+      "original_sha256": "0f6ebac705f29ffc02b38d49bc9f3add9a0c40cc56ccb5d59029a2a0f6f356ac",
+      "sha256": "0f6ebac705f29ffc02b38d49bc9f3add9a0c40cc56ccb5d59029a2a0f6f356ac"
+    },
+    {
+      "file": "ports/qcom-eom/eom_driver.h",
+      "source": "drivers/eom/eom_driver.h",
+      "original_sha256": "99eae2cf273e41388fb815b70cd31af90a2d95b9fa75871d40d3aadc9cd189e1",
+      "sha256": "99eae2cf273e41388fb815b70cd31af90a2d95b9fa75871d40d3aadc9cd189e1"
+    },
+    {
+      "file": "ports/qcom-eom/include/linux/phy_core.h",
+      "source": "include/linux/phy_core.h",
+      "original_sha256": "b34d08c84d48a92617109da7fc96eba40fcfda1eacedccf03dafafe5ab9dd70f",
+      "sha256": "b34d08c84d48a92617109da7fc96eba40fcfda1eacedccf03dafafe5ab9dd70f"
+    },
+    {
+      "file": "ports/qcom-eom/include/uapi/linux/eom_ioctl.h",
+      "source": "include/uapi/linux/eom_ioctl.h",
+      "original_sha256": "626ebd2c5b3765f51cdf7f3b7ce4630c49a40faa81ea837c42e95f685c9cc0b3",
+      "sha256": "626ebd2c5b3765f51cdf7f3b7ce4630c49a40faa81ea837c42e95f685c9cc0b3"
+    },
+    {
+      "file": "ports/qcom-eom/pcie/pci_phy_access.c",
+      "source": "drivers/eom/pcie/pci_phy_access.c",
+      "original_sha256": "f8527330dfccae1dc884ab648654086b8b7f2c8ccf9f3e8bb05adcd08a78a275",
+      "sha256": "f8527330dfccae1dc884ab648654086b8b7f2c8ccf9f3e8bb05adcd08a78a275"
+    },
+    {
+      "file": "ports/qcom-eom/pcie_eom_canoe_phy.c",
+      "source": "drivers/eom/pcie_eom_canoe_phy.c",
+      "original_sha256": "920465fecdfa81a5825a3d259dc8ca4ffa7b3571ca031129590fccb7e04b82f4",
+      "sha256": "920465fecdfa81a5825a3d259dc8ca4ffa7b3571ca031129590fccb7e04b82f4"
+    },
+    {
+      "file": "ports/qcom-eom/pcie_eom_canoe_phy_reg.h",
+      "source": "drivers/eom/pcie_eom_canoe_phy_reg.h",
+      "original_sha256": "cc57c87f1e375576d157ef90d1f7566ad3d68b515b8280f9845da279083cbff5",
+      "sha256": "cc57c87f1e375576d157ef90d1f7566ad3d68b515b8280f9845da279083cbff5"
+    },
+    {
+      "file": "ports/qcom-eom/phy_core.c",
+      "source": "drivers/eom/phy_core.c",
+      "original_sha256": "4006c331ec4b7fa632056c674ba242a6f7013c67aacabf1b381a43479220ea54",
+      "sha256": "4006c331ec4b7fa632056c674ba242a6f7013c67aacabf1b381a43479220ea54"
+    },
+    {
+      "file": "ports/qcom-eom/usb_eom_reg.h",
+      "source": "drivers/eom/usb_eom_reg.h",
+      "original_sha256": "7551dda794191639c20d0f8b1d2ae282979d81c17647d0b54fa9ea2dc35830ac",
+      "sha256": "7551dda794191639c20d0f8b1d2ae282979d81c17647d0b54fa9ea2dc35830ac"
+    },
+    {
+      "file": "ports/qcom-eom/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "7cd2bf6665ea8d509c7bdc9ef95afd6260dfdcc6d6f0f19c415aef8a32b7402e"
+    },
+    {
+      "file": "ports/qcom-eom/eom_driver_core.c",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "12afbce5275d6c9b6e7576ab4fe76e0072de5c2953af7475c3feb381ea9259da"
+    }
+  ],
+  "patch_sha256": "ef33c1a6b92607c566195707e83711767c44323e1608d84186fcbbff60e7cd60",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "eom_driver (+canoe PCIe EOM phy), pci_phy_access",
+  "reviewed_changes": [
+    "eom_driver_core.c wrapper (kbuild name clash)",
+    "unchanged sources"
+  ],
+  "pending": [
+    "phone"
+  ]
+}

@@ -434,7 +434,8 @@
   "drm_atomic_private_obj_init(dev,obj,funcs): MST bridge gets atomic_create_state; error path uses drm_atomic_private_obj_fini (vendor kfree left a freed state on privobj_list)",
   "fb_create gains format info; drm_get_format_info(dev, fmt, modifier); drm_helper_mode_fill_fb_struct(info); irq_domain_create_linear; thermal cdev_id 0; alarm callbacks void + alarm_start_timer; vmf_insert_mixed(pfn); fbdev restore (force=false, fbdev emulation only)",
   "include order: vendor headers before $(srctree)/include/linux (else <soc/qcom/socinfo.h> hits the 7.3 one); vendor clk/rpmh API headers force-included; vendor qcom,icc.h (PWR_ST tags) force-included",
-  "-Wno-macro-redefined (pr_fmt after force-included printk.h); pp_cfg initialised"
+  "-Wno-macro-redefined (pr_fmt after force-included printk.h); pp_cfg initialised",
+  "Stage122 vendor CONFIG parity: avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py, stabilised by scripts/parity_build.sh) force-included and provider Module.symvers added (scripts/apply_vendor_config_parity.py); depends= now equal the phone"
  ],
  "pending": [
   "display bring-up, DSI panel, DP altmode, HDCP, hw fences, RSC/CESTA on the phone"

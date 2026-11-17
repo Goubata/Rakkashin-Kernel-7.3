@@ -1,0 +1,17 @@
+{
+ "name": "qcom-pm-telemetry",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-pm-telemetry/cpuss_telemetry.c": "drivers/soc/qcom/cpuss_telemetry.c",
+  "ports/qcom-pm-telemetry/include/soc/qcom/cpuss_telemetry.h": "include/soc/qcom/cpuss_telemetry.h",
+  "ports/qcom-pm-telemetry/Makefile": null
+ },
+ "scope": "cpuss_telemetry",
+ "reviewed_changes": [
+  "unchanged"
+ ],
+ "pending": [
+  "phone"
+ ]
+}

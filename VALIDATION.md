@@ -2762,3 +2762,24 @@ QEMU audio-conn (3/3): 82 modules load; icnss2 probe on a resource-less qcom,wcn
 moto-sched test: wait_blocked up to 10 s and asserts the waiter blocked (load-induced false failure).
 Regression: 44 pass + reruns (remoteproc-services 2x, moto-sched 5x); CRC 306.
 Not verified: audio, BT, WLAN, SLIMbus on the phone.
+
+## Stage122: vendor CONFIG parity sweep; gadget, IPA, rmnet, camera, video, EVA, FastRPC
+
+Phone parity check (scripts/compare_phone_deps.py, depends= vs /vendor_dlkm copies) found 28 ports with
+fewer dependencies: vendor canoe_perf.bzl options absent from the 7.3 .config made headers compile
+APIs to inline stubs (kgsl lost zap-shader loading: qcom_mdt_load/-ENODEV stub removed the PAS
+auth path; qce50 lost SPS; dwc3-msm lost wcd_usbss; phy-msm-ssusb-qmp lost EOM; IPC logging).
+Generator fixes: relative -I headers and top-level port sources are scanned; scripts/parity_build.sh
+regenerates until the header is stable; vendor config is force-included before llcc/rpmh headers.
+Remaining differences (reports/module-set-decisions.json parity_differences, 7): IPC logging in
+7.3-native glink/glink_smem/smp2p, native sysmon, native PAS (no qcom_ramdump), qrng->rng module,
+msm_sysstats is_dma_buf_file. mmi_glink_charger no longer defines MMI_PHONE_CASE_SUPPORT (phone has no
+hall dependency); gh_irq_lend built without QTVM_WITH_AVF like the phone.
+New ports: qcom-usb-gadget (usb_f_gsi/cdev/ccid/qdss, moto_f_usbnet), dataipa (gsim, ipam, ipanetm,
+rmnet_mem), datarmnet (core, ctl, aps, offload, perf, perf_tether, sch, shs, wlan), qcom-eom,
+qcom-pm-telemetry, qcom-leds, camera-kernel, video-driver, eva-kernel, dsp-kernel (frpc-adsprpc).
+All depends= equal the phone. GLINK: qcom_glink_is_wakeup (vendor semantics; no producer on canoe).
+QEMU media-data (3/3): 30 target modules (88 loaded); WALT fixture for sched-walt; synx stub covers all
+18 synx_compat exports (CRCs equal). Workqueues: explicit WQ_PERCPU where 6.12 default was implied.
+scripts/refresh_test_modules.py re-derives test module lists after dependency changes.
+Regression: all suites pass (5 reruns after list refresh); CRC 318. Not verified on the phone.

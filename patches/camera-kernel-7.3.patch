@@ -1,0 +1,408 @@
+--- a/ports/camera-kernel/cam_generated.h
++++ b/ports/camera-kernel/cam_generated.h
+@@ -0,0 +1,4 @@
++/* AVR: fixed banner (vendor genrule emits build date/user/host) */
++#define CAMERA_COMPILE_TIME "avr-7.3"
++#define CAMERA_COMPILE_BY "avr-builder"
++#define CAMERA_COMPILE_HOST "avr-arm64"
+--- a/ports/camera-kernel/drivers/cam_core/cam_hw_intf.h
++++ b/ports/camera-kernel/drivers/cam_core/cam_hw_intf.h
+@@ -127,7 +127,7 @@
+ {
+ 	unsigned long flags = 0;
+ 
+-	if (!in_irq())
++	if (!in_hardirq())
+ 		spin_lock_irqsave(&hw_info->hw_lock, flags);
+ 
+ 	return flags;
+@@ -136,7 +136,7 @@
+ static inline void cam_hw_util_hw_unlock_irqrestore(struct cam_hw_info *hw_info,
+ 	unsigned long flags)
+ {
+-	if (!in_irq())
++	if (!in_hardirq())
+ 		spin_unlock_irqrestore(&hw_info->hw_lock, flags);
+ }
+ 
+--- a/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/hw_utils/irq_controller/cam_irq_controller.c
++++ b/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/hw_utils/irq_controller/cam_irq_controller.c
+@@ -194,7 +194,7 @@
+ {
+ 	unsigned long flags = 0;
+ 
+-	if (!in_irq())
++	if (!in_hardirq())
+ 		spin_lock_irqsave(&controller->lock, flags);
+ 
+ 	return flags;
+@@ -203,7 +203,7 @@
+ static inline void cam_irq_controller_unlock_irqrestore(
+ 	struct cam_irq_controller *controller, unsigned long flags)
+ {
+-	if (!in_irq())
++	if (!in_hardirq())
+ 		spin_unlock_irqrestore(&controller->lock, flags);
+ }
+ 
+@@ -319,7 +319,7 @@
+ 	/* Don't clear in IRQ context since global clear will be issued after
+ 	 * top half processing
+ 	 */
+-	if (in_irq())
++	if (in_hardirq())
+ 		return;
+ 
+ 	for (i = 0; i < controller->num_registers; i++) {
+--- a/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_csid_hw/cam_tfe_csid_core.c
++++ b/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_csid_hw/cam_tfe_csid_core.c
+@@ -2854,7 +2854,7 @@
+ 		csid_hw->sof_irq_triggered = false;
+ 	}
+ 
+-	if (!in_irq())
++	if (!in_hardirq())
+ 		CAM_INFO(CAM_ISP, "SOF freeze: CSID:%d SOF irq %s",
+ 			csid_hw->hw_intf->hw_idx,
+ 			sof_irq_enable ? "enabled" : "disabled");
+--- a/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_hw/cam_tfe_core.c
++++ b/ports/camera-kernel/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_hw/cam_tfe_core.c
+@@ -213,7 +213,7 @@
+ 	soc_info = (struct cam_hw_soc_info  *)top_priv->common_data.soc_info;
+ 	mem_base = soc_info->reg_map[TFE_CORE_BASE_IDX].mem_base;
+ 
+-	need_lock = !in_irq();
++	need_lock = !in_hardirq();
+ 	if (need_lock)
+ 		spin_lock_irqsave(&core_info->spin_lock, flags);
+ 
+--- a/ports/camera-kernel/drivers/cam_sensor_module/cam_actuator/mot_actuator.c
++++ b/ports/camera-kernel/drivers/cam_sensor_module/cam_actuator/mot_actuator.c
+@@ -415,7 +415,7 @@
+ 	struct workqueue_struct *mot_actuator_wq;
+ 	struct delayed_work delay_work;
+ 	struct mutex actuator_lock;
+-	struct wakeup_source actuator_wakelock;
++	struct wakeup_source *actuator_wakelock; /* AVR 7.3: registered (add/remove are static) */
+ };
+ 
+ enum mot_actuator_state_e {
+@@ -948,7 +948,7 @@
+ 	bool is_exiting = false;
+ 	ktime_t start,end,duration;
+ 	start = ktime_get();
+-	__pm_stay_awake(&mot_actuator_fctrl.actuator_wakelock);
++	__pm_stay_awake(mot_actuator_fctrl.actuator_wakelock);
+ 	cancel_delayed_work(&mot_actuator_fctrl.delay_work);
+ 	if (mutex_is_locked(&mot_actuator_fctrl.actuator_lock)) {
+ 		is_exiting = true;
+@@ -1314,7 +1314,7 @@
+ 	workqueue_status = 0;
+ 	CAM_WARN(CAM_ACTUATOR, "release actuator done");
+ 	mutex_unlock(&actuator_fctrl->actuator_lock);
+-	__pm_relax(&actuator_fctrl->actuator_wakelock);
++	__pm_relax(actuator_fctrl->actuator_wakelock);
+ }
+ 
+ static inline ssize_t msm_actuator_show(struct device *dev,
+@@ -1519,9 +1519,7 @@
+ 
+ 	INIT_DELAYED_WORK(&f_ctrl->delay_work, mot_actuator_delayed_process);
+ 	mutex_init(&f_ctrl->actuator_lock);
+-	memset(&f_ctrl->actuator_wakelock, 0, sizeof(f_ctrl->actuator_wakelock));
+-	f_ctrl->actuator_wakelock.name = "actuator_hold_wl";
+-	wakeup_source_add(&f_ctrl->actuator_wakelock);
++	f_ctrl->actuator_wakelock = wakeup_source_register(NULL, "actuator_hold_wl");
+ 
+ 	{//Debug/tuning interfaces
+ 		int i;
+@@ -1570,8 +1568,8 @@
+ 		mot_actuator_fctrl.mot_actuator_wq = NULL;
+ 	}
+ 	cam_unregister_subdev(&mot_actuator_fctrl.v4l2_dev_str);
+-	__pm_relax(&mot_actuator_fctrl.actuator_wakelock);
+-	wakeup_source_remove(&mot_actuator_fctrl.actuator_wakelock);
++	__pm_relax(mot_actuator_fctrl.actuator_wakelock);
++	wakeup_source_unregister(mot_actuator_fctrl.actuator_wakelock);
+ 
+ 	CAM_WARN(CAM_ACTUATOR,"exit");
+ }
+--- a/ports/camera-kernel/drivers/cam_sensor_module/cam_flash/cam_flash_core.c
++++ b/ports/camera-kernel/drivers/cam_sensor_module/cam_flash/cam_flash_core.c
+@@ -645,14 +645,11 @@
+ 			}
+ 
+ 			if (flash_ctrl->precise_flash.timer_state != TIMER_STATE_INIT) {
+-				hrtimer_init(&flash_ctrl->precise_flash.on_timer,
++				/* AVR 7.3: hrtimer_setup */
++				hrtimer_setup(&flash_ctrl->precise_flash.on_timer, on_timer_function,
+ 					CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-				hrtimer_init(&flash_ctrl->precise_flash.off_timer,
++				hrtimer_setup(&flash_ctrl->precise_flash.off_timer, off_timer_function,
+ 					CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-				flash_ctrl->precise_flash.on_timer.function =
+-					on_timer_function;
+-				flash_ctrl->precise_flash.off_timer.function =
+-					off_timer_function;
+ 			}
+ 			flash_ctrl->precise_flash.off_time_ms =
+ 				flash_data->flash_active_time_ms;
+--- a/ports/camera-kernel/drivers/cam_sensor_module/cam_flash/cam_flash_dev.c
++++ b/ports/camera-kernel/drivers/cam_sensor_module/cam_flash/cam_flash_dev.c
+@@ -255,12 +255,11 @@
+ 
+ 	flash_ctrl->precise_flash.on_time_ms = 0;
+ 	flash_ctrl->precise_flash.off_time_ms = 0;
+-	hrtimer_init(&flash_ctrl->precise_flash.on_timer,
++	/* AVR 7.3: hrtimer_setup */
++	hrtimer_setup(&flash_ctrl->precise_flash.on_timer, on_timer_function,
+ 		CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	hrtimer_init(&flash_ctrl->precise_flash.off_timer,
++	hrtimer_setup(&flash_ctrl->precise_flash.off_timer, off_timer_function,
+ 		CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	flash_ctrl->precise_flash.on_timer.function = on_timer_function;
+-	flash_ctrl->precise_flash.off_timer.function = off_timer_function;
+ 	flash_ctrl->precise_flash.enabled = false;
+ 	flash_ctrl->precise_flash.timer_state = TIMER_STATE_INIT;
+ 
+--- a/ports/camera-kernel/drivers/cam_sync/cam_sync_dma_fence.c
++++ b/ports/camera-kernel/drivers/cam_sync/cam_sync_dma_fence.c
+@@ -57,7 +57,7 @@
+ 	CAM_DBG(CAM_DMA_FENCE,
+ 		"Free memory for dma fence context: %llu seqno: %llu",
+ 		fence->context, fence->seqno);
+-	CAM_MEM_FREE(fence->lock);
++	CAM_MEM_FREE(dma_fence_spinlock(fence)); /* AVR 7.3: external lock */
+ 	CAM_MEM_FREE(fence);
+ }
+ 
+@@ -466,7 +466,7 @@
+ 	int rc;
+ 	bool fence_signaled = false;
+ 
+-	spin_lock_bh(dma_fence->lock);
++	spin_lock_bh(dma_fence_spinlock(dma_fence));
+ 	fence_signaled = dma_fence_is_signaled_locked(dma_fence);
+ 	if (fence_signaled) {
+ 		rc = -EPERM;
+@@ -479,10 +479,12 @@
+ 	if (status)
+ 		dma_fence_set_error(dma_fence, status);
+ 
+-	rc = dma_fence_signal_locked(dma_fence);
++	/* AVR 7.3: returns void; already-signaled was rejected above (6.12 rc 0) */
++	dma_fence_signal_locked(dma_fence);
++	rc = 0;
+ 
+ end:
+-	spin_unlock_bh(dma_fence->lock);
++	spin_unlock_bh(dma_fence_spinlock(dma_fence));
+ 	return rc;
+ }
+ 
+--- a/ports/camera-kernel/drivers/cam_utils/cam_compat.c
++++ b/ports/camera-kernel/drivers/cam_utils/cam_compat.c
+@@ -813,7 +813,16 @@
+ {
+ 	long ret = 0;
+ 
+-	ret = dma_buf_set_name(dmabuf, name);
++	/* AVR 7.3: dma_buf_set_name() is static (user-pointer ioctl helper); same
++	 * as the 6.12 ACK export: kstrndup + replace under name_lock */
++	char *buf = kstrndup(name, DMA_BUF_NAME_LEN, GFP_KERNEL);
++
++	if (!buf)
++		return -ENOMEM;
++	spin_lock(&dmabuf->name_lock);
++	kfree(dmabuf->name);
++	dmabuf->name = buf;
++	spin_unlock(&dmabuf->name_lock);
+ 
+ 	return ret;
+ }
+--- a/ports/camera-kernel/drivers/cam_utils/cam_soc_util.c
++++ b/ports/camera-kernel/drivers/cam_utils/cam_soc_util.c
+@@ -4297,8 +4297,11 @@
+ 	if (mem_block_rw_prop)
+ 		mem_base = ioremap(mem_block_start, mem_block_size);
+ 	else
+-		mem_base = ioremap_prot(mem_block_start, mem_block_size,
+-			(_PAGE_IOREMAP & ~PTE_WRITE) | PTE_RDONLY);
++		/* AVR 7.3: ioremap_prot() now takes user page protections (needs
++		 * PTE_USER, keeps only the memory type); keep the 6.12 read-only
++		 * device mapping via __ioremap_prot (6.12 _PAGE_IOREMAP == PROT_DEVICE_nGnRE) */
++		mem_base = __ioremap_prot(mem_block_start, mem_block_size,
++			__pgprot((PROT_DEVICE_nGnRE & ~PTE_WRITE) | PTE_RDONLY));
+ 
+ 	if (!mem_base) {
+ 		CAM_ERR(CAM_UTIL, "get mem base failed");
+--- a/ports/camera-kernel/Makefile
++++ b/ports/camera-kernel/Makefile
+@@ -0,0 +1,20 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# vendor/qcom/opensource/camera-kernel (tag MMI-W3WWL36.65-11-18) camera.ko for canoe.
++# Sources/defines: Makefile.generated (scripts/gen_camera_makefile.py).
++include $(src)/Makefile.generated
++ccflags-y += $(AVR_CAMERA_DEFINES) $(AVR_CAMERA_INCLUDES)
++ccflags-y += -I$(src)/include/uapi/camera -I$(src)/include/uapi/camera/media -I$(src)/drivers -I$(src)
++ccflags-y += -include $(src)/cam_generated.h -Wno-missing-prototypes -Wno-macro-redefined
++ccflags-y += -I$(src)/../mm-drivers/include -I$(src)/../securemsm/include -I$(src)/../securemsm/include/linux \
++	-I$(src)/../securemsm/smmu-proxy/include/uapi -I$(src)/../securemsm/smmu-proxy \
++	-I$(src)/../qti-fence/synx/msm/synx -I$(src)/../qti-fence/synx/include/uapi/synx/media -I$(src)/../qti-fence/include \
++	-I$(src)/../qcom-socinfo/include -I$(src)/../qcom-iommu-util/include -I$(src)/../qcom-dma-heaps/include \
++	-I$(src)/../qcom-clock-core/include -I$(src)/../qcom-rpmh/include -I$(src)/../qcom-debug-diag/include \
++	-I$(src)/../qcom-minidump/include -I$(src)/../qcom-interconnect/include
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h
++ccflags-y += -include $(src)/../qcom-clock-core/qcom-vendor-clock.h -include $(src)/../qcom-rpmh/rpmh-vendor-api.h \
++	-include $(src)/../msm-drm/avr-llcc-display.h
++ccflags-y += -I$(src)/avr-include -I$(src)/../securemsm -include $(src)/avr-camera-compat.h
++# vendor CONFIG parity (scripts/apply_vendor_config_parity.py)
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-leds/Module.symvers $(src)/../mm-drivers/Module.symvers $(src)/../qti-fence/Module.symvers $(src)/../securemsm/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers $(src)/../qcom-pas-alor/Module.symvers $(src)/../qcom-rpmh/Module.symvers $(src)/../qcom-remoteproc-services/Module.symvers $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-debug-diag/Module.symvers $(src)/../qcom-perf-misc/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers $(src)/../qcom-sps/Module.symvers $(src)/../qcom-spmi/Module.symvers $(src)/../qcom-display-deps/Module.symvers $(src)/../qcom-rproc-common/Module.symvers $(src)/../qcom-smem/Module.symvers $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-iommu-util/Module.symvers $(src)/../secure-buffer/Module.symvers $(src)/../qcom-wlan-deps/Module.symvers $(src)/../qcom-eom/Module.symvers $(src)/../qcom-pm-telemetry/Module.symvers $(src)/../gunyah/Module.symvers $(src)/../gunyah-rm/Module.symvers $(src)/../gunyah-core/Module.symvers $(src)/../qcom-llcc/Module.symvers $(src)/../qcom-clock-core/Module.symvers $(src)/../qcom-dcvs/Module.symvers $(src)/../msm-sysstats/Module.symvers $(src)/../qcom-usb/Module.symvers
+--- a/ports/camera-kernel/Makefile.generated
++++ b/ports/camera-kernel/Makefile.generated
+@@ -0,0 +1,5 @@
++# Generated by scripts/gen_camera_makefile.py (canoe options: CONFIG_INTERCONNECT_QCOM CONFIG_MSM_MMRM CONFIG_SPECTRA_DMABUF_GET_FLAGS CONFIG_SPECTRA_DMA_MAP_ATTRS CONFIG_SPECTRA_DOMAIN_ID_SECURE_CAMERA CONFIG_SPECTRA_GET_IOMMU_FAULT_IDS CONFIG_SPECTRA_ICP CONFIG_SPECTRA_ISP CONFIG_SPECTRA_JPEG CONFIG_SPECTRA_LLCC_STALING CONFIG_SPECTRA_POWER_DOMAIN_SET_HW_MODE CONFIG_SPECTRA_QULTIVATE_API CONFIG_SPECTRA_SECURE_CAMERA_25 CONFIG_SPECTRA_SECURE_MINK_API CONFIG_SPECTRA_SECURE_SCM_API CONFIG_SPECTRA_SENSOR CONFIG_SPECTRA_SOC_QCOM_SOCINFO CONFIG_SPECTRA_USE_RPMH_DRV_API CONFIG_TARGET_SYNX_ENABLE)
++obj-m += camera.o
++camera-y := drivers/cam_req_mgr/cam_req_mgr_core.o drivers/cam_req_mgr/cam_req_mgr_dev.o drivers/cam_req_mgr/cam_req_mgr_util.o drivers/cam_req_mgr/cam_mem_mgr.o drivers/cam_req_mgr/cam_req_mgr_workq.o drivers/cam_req_mgr/cam_req_mgr_timer.o drivers/cam_req_mgr/cam_req_mgr_debug.o drivers/cam_utils/cam_soc_util.o drivers/cam_utils/cam_packet_util.o drivers/cam_utils/cam_debug_util.o drivers/cam_utils/cam_trace.o drivers/cam_utils/cam_common_util.o drivers/cam_utils/cam_compat.o drivers/cam_core/cam_context.o drivers/cam_core/cam_context_utils.o drivers/cam_core/cam_node.o drivers/cam_core/cam_subdev.o drivers/cam_smmu/cam_smmu_api.o drivers/cam_sync/cam_sync.o drivers/cam_sync/cam_sync_util.o drivers/cam_sync/cam_sync_dma_fence.o drivers/cam_cpas/cpas_top/cam_cpastop_hw.o drivers/cam_cpas/camss_top/cam_camsstop_hw.o drivers/cam_cpas/cam_cpas_soc.o drivers/cam_cpas/cam_cpas_intf.o drivers/cam_cpas/cam_cpas_hw.o drivers/cam_cdm/cam_cdm_soc.o drivers/cam_cdm/cam_cdm_util.o drivers/cam_cdm/cam_cdm_intf.o drivers/cam_cdm/cam_cdm_core_common.o drivers/cam_cdm/cam_cdm_virtual_core.o drivers/cam_cdm/cam_cdm_hw_core.o drivers/cam_utils/cam_soc_icc.o drivers/camera_main.o drivers/cam_sync/cam_sync_synx.o drivers/cam_isp/isp_hw_mgr/hw_utils/cam_tasklet_util.o drivers/cam_isp/isp_hw_mgr/hw_utils/cam_isp_packet_parser.o drivers/cam_isp/isp_hw_mgr/hw_utils/irq_controller/cam_irq_controller.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_dev.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_soc.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_common.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_hw_ver1.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_hw_ver2.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_mod.o drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw/cam_ife_csid_lite_mod.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/cam_sfe_soc.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/cam_sfe_dev.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/cam_sfe_core.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_top/cam_sfe_top.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_bus/cam_sfe_bus.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_bus/cam_sfe_bus_rd.o drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_bus/cam_sfe_bus_wr.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/cam_vfe_soc.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/cam_vfe_dev.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/cam_vfe_core.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/cam_vfe_bus.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/cam_vfe_bus_ver2.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/cam_vfe_bus_rd_ver1.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/cam_vfe_bus_ver3.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_camif_lite_ver2.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_top.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_top_common.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_top_ver4.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_top_ver3.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_top_ver2.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_camif_ver2.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_camif_ver3.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_rdi.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_fe_ver1.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/cam_vfe_camif_lite_ver3.o drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe17x/cam_vfe.o drivers/cam_isp/isp_hw_mgr/cam_isp_hw_mgr.o drivers/cam_isp/isp_hw_mgr/cam_ife_hw_mgr.o drivers/cam_isp/cam_isp_dev.o drivers/cam_isp/cam_isp_context.o drivers/cam_icp/icp_hw/icp_hw_mgr/cam_icp_hw_mgr.o drivers/cam_icp/icp_hw/ipe_hw/ipe_dev.o drivers/cam_icp/icp_hw/ipe_hw/ipe_core.o drivers/cam_icp/icp_hw/ipe_hw/ipe_soc.o drivers/cam_icp/icp_hw/icp_proc/icp_v1_hw/cam_icp_v1_dev.o drivers/cam_icp/icp_hw/icp_proc/icp_v1_hw/cam_icp_v1_core.o drivers/cam_icp/icp_hw/icp_proc/icp_v2_hw/cam_icp_v2_dev.o drivers/cam_icp/icp_hw/icp_proc/icp_v2_hw/cam_icp_v2_core.o drivers/cam_icp/icp_hw/icp_proc/icp_common/cam_icp_proc_common.o drivers/cam_icp/icp_hw/icp_proc/icp_common/cam_icp_soc_common.o drivers/cam_icp/icp_hw/icp_proc/cam_icp_proc.o drivers/cam_icp/icp_hw/bps_hw/bps_dev.o drivers/cam_icp/icp_hw/bps_hw/bps_core.o drivers/cam_icp/icp_hw/bps_hw/bps_soc.o drivers/cam_icp/icp_hw/ofe_hw/ofe_dev.o drivers/cam_icp/icp_hw/ofe_hw/ofe_core.o drivers/cam_icp/icp_hw/ofe_hw/ofe_soc.o drivers/cam_icp/cam_icp_subdev.o drivers/cam_icp/cam_icp_context.o drivers/cam_icp/hfi.o drivers/cam_jpeg/jpeg_hw/jpeg_enc_hw/jpeg_enc_dev.o drivers/cam_jpeg/jpeg_hw/jpeg_enc_hw/jpeg_enc_core.o drivers/cam_jpeg/jpeg_hw/jpeg_enc_hw/jpeg_enc_soc.o drivers/cam_jpeg/jpeg_hw/jpeg_dma_hw/jpeg_dma_dev.o drivers/cam_jpeg/jpeg_hw/jpeg_dma_hw/jpeg_dma_core.o drivers/cam_jpeg/jpeg_hw/jpeg_dma_hw/jpeg_dma_soc.o drivers/cam_jpeg/jpeg_hw/cam_jpeg_hw_mgr.o drivers/cam_jpeg/cam_jpeg_dev.o drivers/cam_jpeg/cam_jpeg_context.o drivers/cam_sensor_module/cam_actuator/cam_actuator_dev.o drivers/cam_sensor_module/cam_actuator/cam_actuator_core.o drivers/cam_sensor_module/cam_actuator/cam_actuator_soc.o drivers/cam_sensor_module/cam_cci/cam_cci_dev.o drivers/cam_sensor_module/cam_cci/cam_cci_core.o drivers/cam_sensor_module/cam_cci/cam_cci_soc.o drivers/cam_sensor_module/cam_tpg/cam_tpg_dev.o drivers/cam_sensor_module/cam_tpg/cam_tpg_core.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_common.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_0/tpg_hw_v_1_0.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_2/tpg_hw_v_1_2.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_3/tpg_hw_v_1_3.o drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_4/tpg_hw_v_1_4.o drivers/cam_sensor_module/cam_csiphy/cam_csiphy_soc.o drivers/cam_sensor_module/cam_csiphy/cam_csiphy_dev.o drivers/cam_sensor_module/cam_csiphy/cam_csiphy_core.o drivers/cam_sensor_module/cam_eeprom/cam_eeprom_dev.o drivers/cam_sensor_module/cam_eeprom/cam_eeprom_core.o drivers/cam_sensor_module/cam_eeprom/cam_eeprom_soc.o drivers/cam_sensor_module/cam_ois/cam_ois_dev.o drivers/cam_sensor_module/cam_ois/cam_ois_core.o drivers/cam_sensor_module/cam_ois/cam_ois_soc.o drivers/cam_sensor_module/cam_sensor/cam_sensor_dev.o drivers/cam_sensor_module/cam_sensor/cam_sensor_core.o drivers/cam_sensor_module/cam_sensor/cam_sensor_soc.o drivers/cam_sensor_module/cam_sensor_io/cam_sensor_io.o drivers/cam_sensor_module/cam_sensor_io/cam_sensor_cci_i2c.o drivers/cam_sensor_module/cam_sensor_io/cam_sensor_qup_i2c.o drivers/cam_sensor_module/cam_sensor_io/cam_sensor_qup_i3c.o drivers/cam_sensor_module/cam_sensor_io/cam_sensor_spi.o drivers/cam_sensor_module/cam_sensor_utils/cam_sensor_util.o drivers/cam_sensor_module/cam_res_mgr/cam_res_mgr.o drivers/cam_sensor_module/cam_flash/cam_flash_dev.o drivers/cam_sensor_module/cam_flash/cam_flash_core.o drivers/cam_sensor_module/cam_flash/cam_flash_soc.o drivers/cam_sensor_module/cam_sensor_module_debug.o drivers/cam_sensor_module/cam_actuator/mot_actuator.o drivers/cam_sensor_module/cam_actuator/mot_actuator_policy.o drivers/cam_sensor_module/cam_actuator/mot_ois.o drivers/cam_presil/stub/cam_presil_hw_access_stub.o drivers/cam_utils/cam_io_util.o
++AVR_CAMERA_DEFINES := -DCONFIG_INTERCONNECT_QCOM=1 -DCONFIG_MSM_MMRM=1 -DCONFIG_SPECTRA_DMABUF_GET_FLAGS=1 -DCONFIG_SPECTRA_DMA_MAP_ATTRS=1 -DCONFIG_SPECTRA_DOMAIN_ID_SECURE_CAMERA=1 -DCONFIG_SPECTRA_GET_IOMMU_FAULT_IDS=1 -DCONFIG_SPECTRA_ICP=1 -DCONFIG_SPECTRA_ISP=1 -DCONFIG_SPECTRA_JPEG=1 -DCONFIG_SPECTRA_LLCC_STALING=1 -DCONFIG_SPECTRA_POWER_DOMAIN_SET_HW_MODE=1 -DCONFIG_SPECTRA_QULTIVATE_API=1 -DCONFIG_SPECTRA_SECURE_CAMERA_25=1 -DCONFIG_SPECTRA_SECURE_MINK_API=1 -DCONFIG_SPECTRA_SECURE_SCM_API=1 -DCONFIG_SPECTRA_SENSOR=1 -DCONFIG_SPECTRA_SOC_QCOM_SOCINFO=1 -DCONFIG_SPECTRA_USE_RPMH_DRV_API=1 -DCONFIG_TARGET_SYNX_ENABLE=1
++AVR_CAMERA_INCLUDES := -I$(src)/drivers -I$(src)/drivers/cam_cdm -I$(src)/drivers/cam_core -I$(src)/drivers/cam_cpas -I$(src)/drivers/cam_cpas/cpas_top -I$(src)/drivers/cam_cpas/include -I$(src)/drivers/cam_cre -I$(src)/drivers/cam_cre/cam_cre_hw_mgr -I$(src)/drivers/cam_cre/cam_cre_hw_mgr/cre_hw -I$(src)/drivers/cam_cre/cam_cre_hw_mgr/cre_hw/bus_rd -I$(src)/drivers/cam_cre/cam_cre_hw_mgr/cre_hw/bus_wr -I$(src)/drivers/cam_cre/cam_cre_hw_mgr/cre_hw/include -I$(src)/drivers/cam_cre/cam_cre_hw_mgr/cre_hw/top -I$(src)/drivers/cam_cust -I$(src)/drivers/cam_cust/cam_custom_hw_mgr -I$(src)/drivers/cam_cust/cam_custom_hw_mgr/cam_custom_csid -I$(src)/drivers/cam_cust/cam_custom_hw_mgr/cam_custom_hw1 -I$(src)/drivers/cam_cust/cam_custom_hw_mgr/include -I$(src)/drivers/cam_fd -I$(src)/drivers/cam_fd/fd_hw_mgr -I$(src)/drivers/cam_fd/fd_hw_mgr/fd_hw -I$(src)/drivers/cam_icp -I$(src)/drivers/cam_icp/fw_inc -I$(src)/drivers/cam_icp/icp_hw/bps_hw -I$(src)/drivers/cam_icp/icp_hw/icp_hw_mgr -I$(src)/drivers/cam_icp/icp_hw/icp_hw_mgr/include -I$(src)/drivers/cam_icp/icp_hw/icp_proc -I$(src)/drivers/cam_icp/icp_hw/icp_proc/icp_common -I$(src)/drivers/cam_icp/icp_hw/icp_proc/icp_v1_hw -I$(src)/drivers/cam_icp/icp_hw/icp_proc/icp_v2_hw -I$(src)/drivers/cam_icp/icp_hw/include -I$(src)/drivers/cam_icp/icp_hw/ipe_hw -I$(src)/drivers/cam_icp/icp_hw/ofe_hw -I$(src)/drivers/cam_isp -I$(src)/drivers/cam_isp/isp_hw_mgr -I$(src)/drivers/cam_isp/isp_hw_mgr/hw_utils/include -I$(src)/drivers/cam_isp/isp_hw_mgr/hw_utils/irq_controller -I$(src)/drivers/cam_isp/isp_hw_mgr/include -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/ife_csid_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/include -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/ppi_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_bus -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_bus/include -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/sfe_hw/sfe_top -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_csid_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/tfe_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe17x -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_bus/include -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top -I$(src)/drivers/cam_isp/isp_hw_mgr/isp_hw/vfe_hw/vfe_top/include -I$(src)/drivers/cam_jpeg -I$(src)/drivers/cam_jpeg/jpeg_hw -I$(src)/drivers/cam_jpeg/jpeg_hw/include -I$(src)/drivers/cam_jpeg/jpeg_hw/jpeg_dma_hw -I$(src)/drivers/cam_jpeg/jpeg_hw/jpeg_enc_hw -I$(src)/drivers/cam_lrme -I$(src)/drivers/cam_lrme/lrme_hw_mgr -I$(src)/drivers/cam_lrme/lrme_hw_mgr/lrme_hw -I$(src)/drivers/cam_ope -I$(src)/drivers/cam_ope/ope_hw_mgr -I$(src)/drivers/cam_ope/ope_hw_mgr/ope_hw -I$(src)/drivers/cam_ope/ope_hw_mgr/ope_hw/bus_rd -I$(src)/drivers/cam_ope/ope_hw_mgr/ope_hw/bus_wr -I$(src)/drivers/cam_ope/ope_hw_mgr/ope_hw/top -I$(src)/drivers/cam_presil/inc -I$(src)/drivers/cam_req_mgr -I$(src)/drivers/cam_sensor_module/cam_actuator -I$(src)/drivers/cam_sensor_module/cam_cci -I$(src)/drivers/cam_sensor_module/cam_csiphy -I$(src)/drivers/cam_sensor_module/cam_csiphy/include -I$(src)/drivers/cam_sensor_module/cam_eeprom -I$(src)/drivers/cam_sensor_module/cam_flash -I$(src)/drivers/cam_sensor_module/cam_ois -I$(src)/drivers/cam_sensor_module/cam_res_mgr -I$(src)/drivers/cam_sensor_module/cam_sensor -I$(src)/drivers/cam_sensor_module/cam_sensor_io -I$(src)/drivers/cam_sensor_module/cam_sensor_utils -I$(src)/drivers/cam_sensor_module/cam_tpg -I$(src)/drivers/cam_sensor_module/cam_tpg/tpg_hw -I$(src)/drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_0 -I$(src)/drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_2 -I$(src)/drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_3 -I$(src)/drivers/cam_sensor_module/cam_tpg/tpg_hw/tpg_hw_v_1_4 -I$(src)/drivers/cam_smmu -I$(src)/drivers/cam_sync -I$(src)/drivers/cam_utils -I$(src)/drivers/cam_vmrm -I$(src)/drivers/cam_vmrm/qrtr
+--- a/ports/camera-kernel/avr-camera-compat.h
++++ b/ports/camera-kernel/avr-camera-compat.h
+@@ -0,0 +1,25 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * AVR 7.3 port: android16-6.12 APIs used by the canoe camera-kernel.
++ * - struct gpio (legacy <linux/gpio.h> array descriptor, gone in 7.x): same layout
++ * - I3C: struct i3c_priv_xfer -> struct i3c_xfer (same fields used: rnw, len,
++ *   data.in/out, err); i3c_device_do_priv_xfers() == SDR mode transfers
++ */
++#ifndef AVR_CAMERA_COMPAT_H
++#define AVR_CAMERA_COMPAT_H
++#include <linux/i3c/device.h>
++#include <uapi/linux/dma-buf.h>
++
++struct gpio {
++	unsigned	gpio;
++	unsigned long	flags;
++	const char	*label;
++};
++
++#define i3c_priv_xfer i3c_xfer
++static inline int i3c_device_do_priv_xfers(struct i3c_device *dev, struct i3c_xfer *xfers,
++					   int nxfers)
++{
++	return i3c_device_do_xfers(dev, xfers, nxfers, I3C_SDR);
++}
++#endif
+--- a/ports/camera-kernel/avr-canoe-vendor-config.h
++++ b/ports/camera-kernel/avr-canoe-vendor-config.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
++ * module was compiled with through the vendor kernel autoconf but that the 7.3
++ * GKI .config does not carry. Only options referenced by the sources or headers
++ * it includes are listed; all providers are ported modules. Generated by
++ * scripts/gen_drm_vendor_config.py from canoe_perf.bzl. */
++#ifndef AVR_CANOE_VENDOR_CONFIG_H
++#define AVR_CANOE_VENDOR_CONFIG_H
++#define CONFIG_BACKLIGHT_QCOM_SPMI_WLED_MODULE 1
++#define CONFIG_COMMON_CLK_QCOM_MODULE 1
++#define CONFIG_GH_ARM64_DRV_MODULE 1
++#define CONFIG_GH_DBL_MODULE 1
++#define CONFIG_GH_MSGQ_MODULE 1
++#define CONFIG_GH_RM_DRV_MODULE 1
++#define CONFIG_IOMMU_IO_PGTABLE_FAST 1
++#define CONFIG_LEDS_QCOM_FLASH_MODULE 1
++#define CONFIG_MEM_PROT_MODULE 1
++#define CONFIG_MSM_QMP_MODULE 1
++#define CONFIG_QCOM_CRM_V2_MODULE 1
++#define CONFIG_QCOM_LAZY_MAPPING_MODULE 1
++#define CONFIG_QCOM_LLCC_MODULE 1
++#define CONFIG_QCOM_MDT_LOADER_MODULE 1
++#define CONFIG_QCOM_MEMORY_DUMP_V2_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_DEV_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_GH 1
++#define CONFIG_QCOM_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
++#define CONFIG_QCOM_RPMH_MODULE 1
++#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
++#define CONFIG_QCOM_SI_CORE_MODULE 1
++#define CONFIG_QCOM_SOCINFO_MODULE 1
++#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1
++#define CONFIG_QSEECOM_PROXY_MODULE 1
++#define CONFIG_QTVM_WITH_AVF 1
++#define CONFIG_REGULATOR_DEBUG_CONTROL_MODULE 1
++#define CONFIG_REGULATOR_PROXY_CONSUMER_MODULE 1
++#define CONFIG_SPS_MODULE 1
++#endif
+--- a/ports/camera-kernel/avr-include/linux/leds-qpnp-flash.h
++++ b/ports/camera-kernel/avr-include/linux/leds-qpnp-flash.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2016-2020, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2024, 2025, Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef __LEDS_QPNP_FLASH_H
++#define __LEDS_QPNP_FLASH_H
++
++#include <linux/leds.h>
++
++#define ENABLE_REGULATOR		BIT(0)
++#define DISABLE_REGULATOR		BIT(1)
++#define QUERY_MAX_AVAIL_CURRENT		BIT(2)
++#define QUERY_MAX_CURRENT		BIT(3)
++
++#define FLASH_LED_PREPARE_OPTIONS_MASK	GENMASK(3, 0)
++
++int qpnp_flash_register_led_prepare(struct device *dev, void *data);
++
++#if IS_ENABLED(CONFIG_LEDS_QPNP_FLASH_V2)
++int qpnp_flash_led_prepare(struct led_trigger *trig, int options,
++					int *max_current);
++#else
++static inline int qpnp_flash_led_prepare(struct led_trigger *trig, int options,
++					int *max_current)
++{
++	return -ENODEV;
++}
++#endif
++
++#if IS_ENABLED(CONFIG_BACKLIGHT_QCOM_SPMI_WLED)
++int wled_flash_led_prepare(struct led_trigger *trig, int options,
++					int *max_current);
++#else
++static inline int wled_flash_led_prepare(struct led_trigger *trig, int options,
++					int *max_current)
++{
++	return -EINVAL;
++}
++#endif
++
++#endif
+--- a/ports/camera-kernel/avr-include/linux/soc/qcom/leds-qcom-flash.h
++++ b/ports/camera-kernel/avr-include/linux/soc/qcom/leds-qcom-flash.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2024-2025, Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _LEDS_QCOM_FLASH_H
++#define _LEDS_QCOM_FLASH_H
++
++#if IS_ENABLED(CONFIG_LEDS_QCOM_FLASH)
++int qcom_flash_led_get_max_avail_current(
++		struct led_classdev *led_cdev, int *max_current_ma);
++#else
++static inline int qcom_flash_led_get_max_avail_current(
++		struct led_classdev *led_cdev, int *max_current_ma)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++
++#endif

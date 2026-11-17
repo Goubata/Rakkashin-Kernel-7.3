@@ -17,10 +17,10 @@
       "file": "ports/qcom-smp2p/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "da4789279dcfed9d3d2b222f40f657584181ad1d34f6f5966377c68634b23699"
+      "sha256": "e074f864eab41a8e7dd33d3f2ebc435b44436f19f611f92ac8c6c060b5a92bed"
     }
   ],
-  "patch_sha256": "d75916445e231e7dfd0b8d71eaa2a7d6622793cabad3bd90d78eeb601a4670ad",
+  "patch_sha256": "e4a0503d1388be1affb1276c213e41507a52542ad1d8e763a6dd3ba1fac0a697",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "hardware_runtime_accepted": false,

@@ -1,0 +1,88 @@
+{
+  "source_commit": "c6f219cd0d661f14ac89d9a16e7fe3263089c961",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-dsp-kernel",
+  "files": [
+    {
+      "file": "ports/dsp-kernel/define_modules.bzl",
+      "source": "define_modules.bzl",
+      "original_sha256": "ea9bae6b5bd76b80f1ddb0533ecca81edfa9d8327af9073d31f7072553d5e5db",
+      "sha256": "ea9bae6b5bd76b80f1ddb0533ecca81edfa9d8327af9073d31f7072553d5e5db"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/cdsp-loader.c",
+      "source": "dsp/cdsp-loader.c",
+      "original_sha256": "c8b2923c92bded7e453e3fa6fbe83e37df451c6786c87d4f7d9040cc7310887d",
+      "sha256": "c8b2923c92bded7e453e3fa6fbe83e37df451c6786c87d4f7d9040cc7310887d"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc.c",
+      "source": "dsp/fastrpc.c",
+      "original_sha256": "7d86c8269f41eaf9cbc3ab35ca95f659e2099cd4d75cb6fb72b84855f3193682",
+      "sha256": "7d86c8269f41eaf9cbc3ab35ca95f659e2099cd4d75cb6fb72b84855f3193682"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc_rpmsg.c",
+      "source": "dsp/fastrpc_rpmsg.c",
+      "original_sha256": "ed18545c3ae9578a32303445417fadb1f13306d14bcd23c636d2ca02d5faf86a",
+      "sha256": "ed18545c3ae9578a32303445417fadb1f13306d14bcd23c636d2ca02d5faf86a"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc_shared.h",
+      "source": "dsp/fastrpc_shared.h",
+      "original_sha256": "394ccdc5e36635a278e872ba33e517e2425b473b1ad8b7667c042fe538e0c30c",
+      "sha256": "394ccdc5e36635a278e872ba33e517e2425b473b1ad8b7667c042fe538e0c30c"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc_socket.c",
+      "source": "dsp/fastrpc_socket.c",
+      "original_sha256": "085457fb4a0b844ef475ddf565d625b6526b5a62e27c68cb4293a427dd20996b",
+      "sha256": "085457fb4a0b844ef475ddf565d625b6526b5a62e27c68cb4293a427dd20996b"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc_sysfs.c",
+      "source": "dsp/fastrpc_sysfs.c",
+      "original_sha256": "6817e657b42e51811672f4d1588886719998ea10937993c742198c590cf03c24",
+      "sha256": "6817e657b42e51811672f4d1588886719998ea10937993c742198c590cf03c24"
+    },
+    {
+      "file": "ports/dsp-kernel/dsp/fastrpc_trace.h",
+      "source": "dsp/fastrpc_trace.h",
+      "original_sha256": "1107a1e0079dfdc00da6cdcd5d8a7c11d3ab4b5e64c664b6798771cb8e558c46",
+      "sha256": "1107a1e0079dfdc00da6cdcd5d8a7c11d3ab4b5e64c664b6798771cb8e558c46"
+    },
+    {
+      "file": "ports/dsp-kernel/include/linux/fastrpc.h",
+      "source": "include/linux/fastrpc.h",
+      "original_sha256": "c1685a2fd519954fad9b5e07d541b92e4b54dc18999b1c5777909de8f3ff02b1",
+      "sha256": "c1685a2fd519954fad9b5e07d541b92e4b54dc18999b1c5777909de8f3ff02b1"
+    },
+    {
+      "file": "ports/dsp-kernel/include/uapi/misc/fastrpc.h",
+      "source": "include/uapi/misc/fastrpc.h",
+      "original_sha256": "49b74af4be4a20e2c9b935a16f5ec43301e8c1c996301d28dd973f7e9b54546f",
+      "sha256": "49b74af4be4a20e2c9b935a16f5ec43301e8c1c996301d28dd973f7e9b54546f"
+    },
+    {
+      "file": "ports/dsp-kernel/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "73a9ca0072d1e37c887afbf84e3e021bcc77200cda8116f777c0670a7a07e200"
+    },
+    {
+      "file": "ports/dsp-kernel/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "9218abf61dde5066087d9990ffce844aa212da7b5e04911a9b416df16b2f02d9"
+    }
+  ],
+  "patch_sha256": "4c311838ca29fee06895b2ca915ef55f5b2f71582055a783b7594e9417fef736",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "frpc-adsprpc.ko on android18-7.3",
+  "reviewed_changes": [
+    "unchanged; qcom_glink_is_wakeup provided by ports/qcom-glink-transport (always false on canoe, as vendor)"
+  ],
+  "pending": [
+    "FastRPC to ADSP/CDSP on the phone"
+  ]
+}

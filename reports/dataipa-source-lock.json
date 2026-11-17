@@ -1,0 +1,1178 @@
+{
+  "source_commit": "554dc964bd762d679308288d89c86256a107b2e1",
+  "source_repo": "vendor-repos/kernel-msm-techpack-dataipa",
+  "files": [
+    {
+      "file": "ports/dataipa/config/dataipa.h",
+      "source": "config/dataipa.h",
+      "original_sha256": "f6a02c858c9f4e7ab3b1d18328cb4ba9865060bf93e9e3a7ebeaf69cb04bc577",
+      "sha256": "f6a02c858c9f4e7ab3b1d18328cb4ba9865060bf93e9e3a7ebeaf69cb04bc577"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_GKI.conf",
+      "source": "config/dataipa_GKI.conf",
+      "original_sha256": "47557717718f88306451bb24487d1f9d75089bf4279be3bf8ca6ddb1a1649b99",
+      "sha256": "47557717718f88306451bb24487d1f9d75089bf4279be3bf8ca6ddb1a1649b99"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_GKI_consolidate.conf",
+      "source": "config/dataipa_GKI_consolidate.conf",
+      "original_sha256": "b82723eda579356cba213fbe4a5bc4c7716049d2801af3d6748fa74a2ae590fd",
+      "sha256": "b82723eda579356cba213fbe4a5bc4c7716049d2801af3d6748fa74a2ae590fd"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_GKI_ipav4.conf",
+      "source": "config/dataipa_GKI_ipav4.conf",
+      "original_sha256": "433569ce17833b4d16c58191fe0ed135b7c94ddb7c4c9718a51bfa542176999d",
+      "sha256": "433569ce17833b4d16c58191fe0ed135b7c94ddb7c4c9718a51bfa542176999d"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_QGKI.conf",
+      "source": "config/dataipa_QGKI.conf",
+      "original_sha256": "fab2371550c5a5cdd0ac1d00c1723070fac02d9d8e724a9278f51c3450be14e9",
+      "sha256": "fab2371550c5a5cdd0ac1d00c1723070fac02d9d8e724a9278f51c3450be14e9"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_debug.conf",
+      "source": "config/dataipa_debug.conf",
+      "original_sha256": "906cad0f112acbb248e3f51d2dabd7e0704701c44b915125c24a6e8315f8b01f",
+      "sha256": "906cad0f112acbb248e3f51d2dabd7e0704701c44b915125c24a6e8315f8b01f"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_debug.h",
+      "source": "config/dataipa_debug.h",
+      "original_sha256": "dddf9f64b94fbd92946bbd1537323f08f89bc7340f44757c3538027cf2514009",
+      "sha256": "dddf9f64b94fbd92946bbd1537323f08f89bc7340f44757c3538027cf2514009"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_vendor.h",
+      "source": "config/dataipa_vendor.h",
+      "original_sha256": "d2c9156b059a253c937f060bdb889d630234b9715267d2178da7b18d016b5b93",
+      "sha256": "d2c9156b059a253c937f060bdb889d630234b9715267d2178da7b18d016b5b93"
+    },
+    {
+      "file": "ports/dataipa/config/dataipa_vendor_ipav4.h",
+      "source": "config/dataipa_vendor_ipav4.h",
+      "original_sha256": "b0b1c4dd06a4a65802811f9b005d25d19f280e9d861d3fe238c79a383c964eef",
+      "sha256": "b0b1c4dd06a4a65802811f9b005d25d19f280e9d861d3fe238c79a383c964eef"
+    },
+    {
+      "file": "ports/dataipa/config/sa410mdataipa.h",
+      "source": "config/sa410mdataipa.h",
+      "original_sha256": "f693db316cbfec3ccf475ad767e37e85bc80c5a91681ae890fef56fd94b2dfc7",
+      "sha256": "f693db316cbfec3ccf475ad767e37e85bc80c5a91681ae890fef56fd94b2dfc7"
+    },
+    {
+      "file": "ports/dataipa/config/sa410mdataipa_QGKI.conf",
+      "source": "config/sa410mdataipa_QGKI.conf",
+      "original_sha256": "7ca48148bec9afc12b5dacbb839537b50e4f7f0fdc6f1725608fedb0cc254f71",
+      "sha256": "7ca48148bec9afc12b5dacbb839537b50e4f7f0fdc6f1725608fedb0cc254f71"
+    },
+    {
+      "file": "ports/dataipa/config/sdx12dataipa.h",
+      "source": "config/sdx12dataipa.h",
+      "original_sha256": "1e7bc44a5f2ee09400be7ab07915d738882ceb3f8ab2eb535274c34d37541952",
+      "sha256": "1e7bc44a5f2ee09400be7ab07915d738882ceb3f8ab2eb535274c34d37541952"
+    },
+    {
+      "file": "ports/dataipa/config/sdx12dataipa_QGKI.conf",
+      "source": "config/sdx12dataipa_QGKI.conf",
+      "original_sha256": "ee662d14be8868bf60ce5308f6dc7146ea1e1c277cf89c2d224a146d0b43532b",
+      "sha256": "ee662d14be8868bf60ce5308f6dc7146ea1e1c277cf89c2d224a146d0b43532b"
+    },
+    {
+      "file": "ports/dataipa/define_modules.bzl",
+      "source": "define_modules.bzl",
+      "original_sha256": "d29d397c69975ba80cb18b2656f633006f63604cf651084d4b91c4d351b7aec1",
+      "sha256": "d29d397c69975ba80cb18b2656f633006f63604cf651084d4b91c4d351b7aec1"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi.c",
+      "source": "drivers/platform/msm/gsi/gsi.c",
+      "original_sha256": "3920af314272515fe569c58867da01c6329adaa90e943cc7489b2b1e01b53ef3",
+      "sha256": "3920af314272515fe569c58867da01c6329adaa90e943cc7489b2b1e01b53ef3"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi.h",
+      "source": "drivers/platform/msm/gsi/gsi.h",
+      "original_sha256": "810fb235ae151ef2bcc908e3c9e2e33676cf9801ec8b0bd509b06d36aec3ee99",
+      "sha256": "810fb235ae151ef2bcc908e3c9e2e33676cf9801ec8b0bd509b06d36aec3ee99"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi_dbg.c",
+      "source": "drivers/platform/msm/gsi/gsi_dbg.c",
+      "original_sha256": "6b6263fab8e1459ac6d547abf42eeaf4e98e0ad6299fdafb86350a33fc6ea67c",
+      "sha256": "6b6263fab8e1459ac6d547abf42eeaf4e98e0ad6299fdafb86350a33fc6ea67c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi_emulation.c",
+      "source": "drivers/platform/msm/gsi/gsi_emulation.c",
+      "original_sha256": "54d78464c9dad1fad95baa8171d88c37243866d98fc51b8d1b8318a8153a6303",
+      "sha256": "54d78464c9dad1fad95baa8171d88c37243866d98fc51b8d1b8318a8153a6303"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi_emulation.h",
+      "source": "drivers/platform/msm/gsi/gsi_emulation.h",
+      "original_sha256": "34078cb6b67041c9306f4e547c40a22b3b8fdf12a9ea0f44302720421b3c622e",
+      "sha256": "34078cb6b67041c9306f4e547c40a22b3b8fdf12a9ea0f44302720421b3c622e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi_emulation_stubs.h",
+      "source": "drivers/platform/msm/gsi/gsi_emulation_stubs.h",
+      "original_sha256": "db554a18005c138978d716dff7dcac4cb2c49145142011c0d53123ddb7bcf89f",
+      "sha256": "db554a18005c138978d716dff7dcac4cb2c49145142011c0d53123ddb7bcf89f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsi_trace.h",
+      "source": "drivers/platform/msm/gsi/gsi_trace.h",
+      "original_sha256": "dfad2726bb9f792cb1f14c44aca3eae57617b05d7fab8ca4920f418c242aa6ff",
+      "sha256": "dfad2726bb9f792cb1f14c44aca3eae57617b05d7fab8ca4920f418c242aa6ff"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal.c",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal.c",
+      "original_sha256": "4e42d75a0c00f177e3f65bad275492861821dfe1a5593a36f77102fb0f25a260",
+      "sha256": "4e42d75a0c00f177e3f65bad275492861821dfe1a5593a36f77102fb0f25a260"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal.h",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal.h",
+      "original_sha256": "653e8ed7368194399962362828f01be03f5ffadd2b69ad25782a0061444cc314",
+      "sha256": "653e8ed7368194399962362828f01be03f5ffadd2b69ad25782a0061444cc314"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal_i.h",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal_i.h",
+      "original_sha256": "d69e3e14b67ab6ba256e337aed45077590cea32da593712300032bddfb4d978c",
+      "sha256": "d69e3e14b67ab6ba256e337aed45077590cea32da593712300032bddfb4d978c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal_reg.c",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal_reg.c",
+      "original_sha256": "1a465ff16a6959a52ba70927105877aa84fbb78ebe14848a20f58f1ac0696427",
+      "sha256": "1a465ff16a6959a52ba70927105877aa84fbb78ebe14848a20f58f1ac0696427"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal_reg.h",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal_reg.h",
+      "original_sha256": "6f0abcc8515e3e558c7c27912307be1e618d481a47f7de76d57c29fcf22c671c",
+      "sha256": "6f0abcc8515e3e558c7c27912307be1e618d481a47f7de76d57c29fcf22c671c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/gsi/gsihal/gsihal_reg_i.h",
+      "source": "drivers/platform/msm/gsi/gsihal/gsihal_reg_i.h",
+      "original_sha256": "4701c2402cbf482748266d4f7fe237c65866766deaaa2e4f44e0b9843ed0cdd3",
+      "sha256": "4701c2402cbf482748266d4f7fe237c65866766deaaa2e4f44e0b9843ed0cdd3"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa.h",
+      "source": "drivers/platform/msm/include/linux/ipa.h",
+      "original_sha256": "ce2b87b0b88f07622f56e8dfde5b94b0f845bfe411b0b8d21fab3f6ac59d4f5c",
+      "sha256": "ce2b87b0b88f07622f56e8dfde5b94b0f845bfe411b0b8d21fab3f6ac59d4f5c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_eth.h",
+      "source": "drivers/platform/msm/include/linux/ipa_eth.h",
+      "original_sha256": "9bec970cfda6de9ea947fe5a0f874cb4b59f92023bc3bf674f94300477659e0b",
+      "sha256": "9bec970cfda6de9ea947fe5a0f874cb4b59f92023bc3bf674f94300477659e0b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_mhi.h",
+      "source": "drivers/platform/msm/include/linux/ipa_mhi.h",
+      "original_sha256": "1b6b1ebaae165971c6faad2e1e83cbcf9d0995adc412d5c20f8f517768ce5ac7",
+      "sha256": "1b6b1ebaae165971c6faad2e1e83cbcf9d0995adc412d5c20f8f517768ce5ac7"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_odu_bridge.h",
+      "source": "drivers/platform/msm/include/linux/ipa_odu_bridge.h",
+      "original_sha256": "a8d0cbd755d3dfee7e2a07ebb747efd657455cd53ee1dd618d47f56cf75c2214",
+      "sha256": "a8d0cbd755d3dfee7e2a07ebb747efd657455cd53ee1dd618d47f56cf75c2214"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_qdss.h",
+      "source": "drivers/platform/msm/include/linux/ipa_qdss.h",
+      "original_sha256": "c543de7cd419fea0ffadacdcbc989a50a285d8604e440ae64e2a34d17bf2a498",
+      "sha256": "c543de7cd419fea0ffadacdcbc989a50a285d8604e440ae64e2a34d17bf2a498"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_uc_offload.h",
+      "source": "drivers/platform/msm/include/linux/ipa_uc_offload.h",
+      "original_sha256": "d6445b33afb783a476b1956baa755b5ac992f9e47abba1f61dc1ba9fa06d4c6b",
+      "sha256": "d6445b33afb783a476b1956baa755b5ac992f9e47abba1f61dc1ba9fa06d4c6b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_wdi3.h",
+      "source": "drivers/platform/msm/include/linux/ipa_wdi3.h",
+      "original_sha256": "03bdbc69fa5a4e1bd395075d9a06ec64d60eb7fde6777b7aa1c39e1da167a9b0",
+      "sha256": "03bdbc69fa5a4e1bd395075d9a06ec64d60eb7fde6777b7aa1c39e1da167a9b0"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/ipa_wigig.h",
+      "source": "drivers/platform/msm/include/linux/ipa_wigig.h",
+      "original_sha256": "f2cbc46a68baa875c617c17c73748f60786b2390da0b93a349f5020a79856859",
+      "sha256": "f2cbc46a68baa875c617c17c73748f60786b2390da0b93a349f5020a79856859"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/linux/msm_gsi.h",
+      "source": "drivers/platform/msm/include/linux/msm_gsi.h",
+      "original_sha256": "b9124170f68f1077f316838c9a3284bf77886f145b9c3da0fd5f7735b3378a5f",
+      "sha256": "b9124170f68f1077f316838c9a3284bf77886f145b9c3da0fd5f7735b3378a5f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/uapi/linux/ipa_qmi_service_v01.h",
+      "source": "drivers/platform/msm/include/uapi/linux/ipa_qmi_service_v01.h",
+      "original_sha256": "ea53aa5142a40c57cfeffbfd50f9d72ccb6e725dfecb58e4b210b7162eb6fba5",
+      "sha256": "ea53aa5142a40c57cfeffbfd50f9d72ccb6e725dfecb58e4b210b7162eb6fba5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/uapi/linux/msm_ipa.h",
+      "source": "drivers/platform/msm/include/uapi/linux/msm_ipa.h",
+      "original_sha256": "d7e8998e5f7566ddd6417141ee28084d52f63271c1a2df481d1af8159906010f",
+      "sha256": "d7e8998e5f7566ddd6417141ee28084d52f63271c1a2df481d1af8159906010f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/include/uapi/linux/rmnet_ipa_fd_ioctl.h",
+      "source": "drivers/platform/msm/include/uapi/linux/rmnet_ipa_fd_ioctl.h",
+      "original_sha256": "3ab4b1302d4f075af3aca58c92bc73720d776af06fdc4a83c21fdcf8d124bd92",
+      "sha256": "3ab4b1302d4f075af3aca58c92bc73720d776af06fdc4a83c21fdcf8d124bd92"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ecm_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ecm_ipa.c",
+      "original_sha256": "e4febba84ea5355d50139378f0abc21bb80318a13d6e77242bd2ebe28314e0ec",
+      "sha256": "e4febba84ea5355d50139378f0abc21bb80318a13d6e77242bd2ebe28314e0ec"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ecm_ipa.h",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ecm_ipa.h",
+      "original_sha256": "cb24a3cc3015df40ee5c2424ab68a9fa3c44cc5cdbb3edc843245fd72e2b36cf",
+      "sha256": "cb24a3cc3015df40ee5c2424ab68a9fa3c44cc5cdbb3edc843245fd72e2b36cf"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_eth.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_eth.c",
+      "original_sha256": "33b162d84bd1c53e2144dffa2f9a1ff52ae1a7390ff43f79b38dbb3a3dd40d99",
+      "sha256": "33b162d84bd1c53e2144dffa2f9a1ff52ae1a7390ff43f79b38dbb3a3dd40d99"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_gsb.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_gsb.c",
+      "original_sha256": "5c6d120b4e7d02ffde8279568e7c6746348d2e5d60cd5897460071a3c71852b4",
+      "sha256": "5c6d120b4e7d02ffde8279568e7c6746348d2e5d60cd5897460071a3c71852b4"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_mhi_client.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_mhi_client.c",
+      "original_sha256": "e9ce93ba616c1d2f8227627aaa95d30bdc2a757e8632edbad34ab9fded7f4936",
+      "sha256": "e9ce93ba616c1d2f8227627aaa95d30bdc2a757e8632edbad34ab9fded7f4936"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_uc_offload.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_uc_offload.c",
+      "original_sha256": "49713ae8851799b02b0015d11282c4f4a1bb6f5ba7c8fe0a140063b11842ff23",
+      "sha256": "49713ae8851799b02b0015d11282c4f4a1bb6f5ba7c8fe0a140063b11842ff23"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_usb.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_usb.c",
+      "original_sha256": "3f47932604ccc0fb13fd968e8eb13bb493aef419fb86fba7bf8d5607a1e1cd6d",
+      "sha256": "3f47932604ccc0fb13fd968e8eb13bb493aef419fb86fba7bf8d5607a1e1cd6d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_wdi3.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_wdi3.c",
+      "original_sha256": "a7dc42ad204524038d759b9e1173e354a44daa5b2930dcc3bc18416e3e31d729",
+      "sha256": "a7dc42ad204524038d759b9e1173e354a44daa5b2930dcc3bc18416e3e31d729"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ipa_wigig.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ipa_wigig.c",
+      "original_sha256": "9db9b8eb63ec92f9b7f1abe2758e53a0323bbb1e5c6aef58a4f624d296bf614a",
+      "sha256": "9db9b8eb63ec92f9b7f1abe2758e53a0323bbb1e5c6aef58a4f624d296bf614a"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ncm_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ncm_ipa.c",
+      "original_sha256": "c6ca8f459acecda29007b5a06d5ea2d26bdc5a082ad62dee771aceca5fdb7c7e",
+      "sha256": "c6ca8f459acecda29007b5a06d5ea2d26bdc5a082ad62dee771aceca5fdb7c7e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ncm_ipa.h",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ncm_ipa.h",
+      "original_sha256": "406b67de54d16863f4e2b4f7762bed70364614751f65cf7a30713e0655c2aedd",
+      "sha256": "406b67de54d16863f4e2b4f7762bed70364614751f65cf7a30713e0655c2aedd"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/ncm_ipa_trace.h",
+      "source": "drivers/platform/msm/ipa/ipa_clients/ncm_ipa_trace.h",
+      "original_sha256": "99285b305248a6a379f4ed85544ae93486af48b8b92a9657947b1fe444255d06",
+      "sha256": "99285b305248a6a379f4ed85544ae93486af48b8b92a9657947b1fe444255d06"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/rndis_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_clients/rndis_ipa.c",
+      "original_sha256": "784f115b2621aee27bbcc6e321b590b48c76d76ade60745603337ec479d96451",
+      "sha256": "784f115b2621aee27bbcc6e321b590b48c76d76ade60745603337ec479d96451"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/rndis_ipa.h",
+      "source": "drivers/platform/msm/ipa/ipa_clients/rndis_ipa.h",
+      "original_sha256": "2d597d9fc3976ef2da9eb4f8e5863c9cd70b4210ed3f3e190d9e5a0150c8e34d",
+      "sha256": "2d597d9fc3976ef2da9eb4f8e5863c9cd70b4210ed3f3e190d9e5a0150c8e34d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h",
+      "source": "drivers/platform/msm/ipa/ipa_clients/rndis_ipa_trace.h",
+      "original_sha256": "6865220a143bde6bd1859a1f7c6d336c1a10cd7fde5e9432369f415eeff49275",
+      "sha256": "6865220a143bde6bd1859a1f7c6d336c1a10cd7fde5e9432369f415eeff49275"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_common_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_common_i.h",
+      "original_sha256": "f4474a0092277282724627b740293f5f35f63d5e8ba3a9d5932250eebb561e5a",
+      "sha256": "f4474a0092277282724627b740293f5f35f63d5e8ba3a9d5932250eebb561e5a"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm.c",
+      "source": "drivers/platform/msm/ipa/ipa_rm.c",
+      "original_sha256": "71a39b69e3043596bf9a6d0df22ec49d1055d89c1a88d5038537769a4f5b174b",
+      "sha256": "71a39b69e3043596bf9a6d0df22ec49d1055d89c1a88d5038537769a4f5b174b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_dependency_graph.c",
+      "source": "drivers/platform/msm/ipa/ipa_rm_dependency_graph.c",
+      "original_sha256": "df38e7f02f28074d81cf9dd0275e6ce8601e0ae76f684874fdbc2449b349269d",
+      "sha256": "df38e7f02f28074d81cf9dd0275e6ce8601e0ae76f684874fdbc2449b349269d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_dependency_graph.h",
+      "source": "drivers/platform/msm/ipa/ipa_rm_dependency_graph.h",
+      "original_sha256": "9dd6b06e7e4e19546f7dc0afab5cf6b2d674b084eca9dde370f711ba9a195a1b",
+      "sha256": "9dd6b06e7e4e19546f7dc0afab5cf6b2d674b084eca9dde370f711ba9a195a1b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_rm_i.h",
+      "original_sha256": "216703f20359af8be0515df5a0d1b085f0b19718669f157ec07ad43556aecc7c",
+      "sha256": "216703f20359af8be0515df5a0d1b085f0b19718669f157ec07ad43556aecc7c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_inactivity_timer.c",
+      "source": "drivers/platform/msm/ipa/ipa_rm_inactivity_timer.c",
+      "original_sha256": "ab53b21440bb644801938263239b02f3fea149d405af2560e9bfa388b05d6eb0",
+      "sha256": "ab53b21440bb644801938263239b02f3fea149d405af2560e9bfa388b05d6eb0"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_peers_list.c",
+      "source": "drivers/platform/msm/ipa/ipa_rm_peers_list.c",
+      "original_sha256": "34b764d0f30c83ba40a899976b5bd4d24600f932b0fce3190a751c19e63e1b6d",
+      "sha256": "34b764d0f30c83ba40a899976b5bd4d24600f932b0fce3190a751c19e63e1b6d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_peers_list.h",
+      "source": "drivers/platform/msm/ipa/ipa_rm_peers_list.h",
+      "original_sha256": "55d99b70ced37a3c9dc42507d6689886eba4b022d67d50e2a4733c76e90ec6b6",
+      "sha256": "55d99b70ced37a3c9dc42507d6689886eba4b022d67d50e2a4733c76e90ec6b6"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_resource.c",
+      "source": "drivers/platform/msm/ipa/ipa_rm_resource.c",
+      "original_sha256": "8eda90df284271d712d85290ee0251c26f61e64620cc86748d8a81115efa6683",
+      "sha256": "8eda90df284271d712d85290ee0251c26f61e64620cc86748d8a81115efa6683"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_rm_resource.h",
+      "source": "drivers/platform/msm/ipa/ipa_rm_resource.h",
+      "original_sha256": "9f3a4558cbfc1f8482a25edcf96dd66c090d290cc75466e376091cdecadb4f7b",
+      "sha256": "9f3a4558cbfc1f8482a25edcf96dd66c090d290cc75466e376091cdecadb4f7b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_test_module/ipa_rm_ut.c",
+      "source": "drivers/platform/msm/ipa/ipa_test_module/ipa_rm_ut.c",
+      "original_sha256": "488114c9e81b2a42d708c8cf7dbfc9ab20adab26db4a480ed5960525b2f61ea1",
+      "sha256": "488114c9e81b2a42d708c8cf7dbfc9ab20adab26db4a480ed5960525b2f61ea1"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_test_module/ipa_rm_ut.h",
+      "source": "drivers/platform/msm/ipa/ipa_test_module/ipa_rm_ut.h",
+      "original_sha256": "356b2c3e228919b30d0f8f1e962f1bde1ce8fca4c47566404e8a29a65cf0cafd",
+      "sha256": "356b2c3e228919b30d0f8f1e962f1bde1ce8fca4c47566404e8a29a65cf0cafd"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_test_module/ipa_test_module.h",
+      "source": "drivers/platform/msm/ipa/ipa_test_module/ipa_test_module.h",
+      "original_sha256": "5faedcaaac3918e6d1546bdfbe26c9c061309aea866f0e5a5d7bfb2fa049e66b",
+      "sha256": "5faedcaaac3918e6d1546bdfbe26c9c061309aea866f0e5a5d7bfb2fa049e66b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_test_module/ipa_test_module_impl.c",
+      "source": "drivers/platform/msm/ipa/ipa_test_module/ipa_test_module_impl.c",
+      "original_sha256": "a119ca37be72c322f754843fb9d179d97e5052230a7a9b3f2244a68d8e5efa3f",
+      "sha256": "a119ca37be72c322f754843fb9d179d97e5052230a7a9b3f2244a68d8e5efa3f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_test_module/ipa_test_module_tsp.h",
+      "source": "drivers/platform/msm/ipa/ipa_test_module/ipa_test_module_tsp.h",
+      "original_sha256": "1413e6efd1709e41912fb456b307d4821b189e3abb4277d2f967a73c222afaf0",
+      "sha256": "1413e6efd1709e41912fb456b307d4821b189e3abb4277d2f967a73c222afaf0"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_uc_offload_common_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_uc_offload_common_i.h",
+      "original_sha256": "8f49a03823c62674d61705ea8400a61150fbc7f3780bb7927605dfb644499047",
+      "sha256": "8f49a03823c62674d61705ea8400a61150fbc7f3780bb7927605dfb644499047"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/gsi_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/gsi_hwio.h",
+      "original_sha256": "51a47b1a1e3bd81a851d1188004db11150697224fc52c6233bb77755bf61493a",
+      "sha256": "51a47b1a1e3bd81a851d1188004db11150697224fc52c6233bb77755bf61493a"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/gsi_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/gsi_hwio_def.h",
+      "original_sha256": "2168c4abbeebb68b73fc197c3bd7ddd2203e30ad1873b996096a4e523cd08fee",
+      "sha256": "2168c4abbeebb68b73fc197c3bd7ddd2203e30ad1873b996096a4e523cd08fee"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_access_control.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_access_control.h",
+      "original_sha256": "4c18842243f30e31ebd23bc9c8200f948704107fc7e0b1dff5652c342564f197",
+      "sha256": "4c18842243f30e31ebd23bc9c8200f948704107fc7e0b1dff5652c342564f197"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_gcc_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_gcc_hwio.h",
+      "original_sha256": "2c58038bd8cf1ea90c7e8ea99fb31a6833d8cd183c5fb9d9a7bdef08c9d4ce74",
+      "sha256": "2c58038bd8cf1ea90c7e8ea99fb31a6833d8cd183c5fb9d9a7bdef08c9d4ce74"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_gcc_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_gcc_hwio_def.h",
+      "original_sha256": "b38896cb709c4844ed6a7bb3113082c7271b280549bd882db4444219a889613c",
+      "sha256": "b38896cb709c4844ed6a7bb3113082c7271b280549bd882db4444219a889613c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hw_common_ex.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hw_common_ex.h",
+      "original_sha256": "9c62984a84ce7cc433215435409aa63c7c56ccbcff54dbd0d0b809810e915328",
+      "sha256": "9c62984a84ce7cc433215435409aa63c7c56ccbcff54dbd0d0b809810e915328"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hwio.h",
+      "original_sha256": "187dd62b59733be5351c32c4955cd004c688aad1f554e3dc2729ffe78d90c08d",
+      "sha256": "187dd62b59733be5351c32c4955cd004c688aad1f554e3dc2729ffe78d90c08d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_hwio_def.h",
+      "original_sha256": "1d550d6bceae89308e7a7695cc75da41c1fd9dece92ce47b8166263a55a03742",
+      "sha256": "1d550d6bceae89308e7a7695cc75da41c1fd9dece92ce47b8166263a55a03742"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_pkt_cntxt.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_pkt_cntxt.h",
+      "original_sha256": "ea9448c7bd87c81d24a64ca35feba802a3c8df29267e0447c7e43fa163ce4f15",
+      "sha256": "ea9448c7bd87c81d24a64ca35feba802a3c8df29267e0447c7e43fa163ce4f15"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_reg_dump.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_reg_dump.c",
+      "original_sha256": "b94c308535de62888dc8336b5b514290ae11a1d1472ebfec893156fd0715cb25",
+      "sha256": "b94c308535de62888dc8336b5b514290ae11a1d1472ebfec893156fd0715cb25"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_reg_dump.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa4.5/ipa_reg_dump.h",
+      "original_sha256": "743d29f370110e2142cbdc82e919cd2aee77b452768eb6c8f547f97db09db985",
+      "sha256": "743d29f370110e2142cbdc82e919cd2aee77b452768eb6c8f547f97db09db985"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/gsi_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/gsi_hwio.h",
+      "original_sha256": "e249be594d2ab2efbe76990a4480b19d96ea39f24e44c98872092276930ed3bf",
+      "sha256": "e249be594d2ab2efbe76990a4480b19d96ea39f24e44c98872092276930ed3bf"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/gsi_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/gsi_hwio_def.h",
+      "original_sha256": "2653a48cb1ea02da7c3aa0f37cd56e3d77d95df6b501e9ec505ad6f79c439f79",
+      "sha256": "2653a48cb1ea02da7c3aa0f37cd56e3d77d95df6b501e9ec505ad6f79c439f79"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_access_control.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_access_control.h",
+      "original_sha256": "d8d1f764b24bbf5df9f5106d3f05b3f2557982063aab21383aa695c6b312071d",
+      "sha256": "d8d1f764b24bbf5df9f5106d3f05b3f2557982063aab21383aa695c6b312071d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_gcc_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_gcc_hwio.h",
+      "original_sha256": "64b1dd71a970abdf3c31ab700d4eeab8ab7ef7fdc3b0a871f9c59cb2a17fea34",
+      "sha256": "64b1dd71a970abdf3c31ab700d4eeab8ab7ef7fdc3b0a871f9c59cb2a17fea34"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_gcc_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_gcc_hwio_def.h",
+      "original_sha256": "b8a61623a1f9a9b348e8816e8ce729faf6944e8e193f04d3ac18778a9dd33f93",
+      "sha256": "b8a61623a1f9a9b348e8816e8ce729faf6944e8e193f04d3ac18778a9dd33f93"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hw_common_ex.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hw_common_ex.h",
+      "original_sha256": "514016591c1c6641921cf047389db4e11caa44e5df3386bf81840d0a39424102",
+      "sha256": "514016591c1c6641921cf047389db4e11caa44e5df3386bf81840d0a39424102"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hwio.h",
+      "original_sha256": "de8c3dc244c16389000fa2f90d781888f971216fb3571edab3279236a62f6e5b",
+      "sha256": "de8c3dc244c16389000fa2f90d781888f971216fb3571edab3279236a62f6e5b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_hwio_def.h",
+      "original_sha256": "3d435b03777288186ec276b736aeb00802ac7f46c370d7cc7811a6f03c890909",
+      "sha256": "3d435b03777288186ec276b736aeb00802ac7f46c370d7cc7811a6f03c890909"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_pkt_cntxt.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_pkt_cntxt.h",
+      "original_sha256": "1f438ab89106662227ae29e96cde213677e893c71aeafff7fc62592dd192fe06",
+      "sha256": "1f438ab89106662227ae29e96cde213677e893c71aeafff7fc62592dd192fe06"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_reg_dump.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_reg_dump.c",
+      "original_sha256": "02e7e972496d93ea81e0c70c9244fcd69cffbd5aa6a29ebb11a5ff833bc681f5",
+      "sha256": "02e7e972496d93ea81e0c70c9244fcd69cffbd5aa6a29ebb11a5ff833bc681f5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_reg_dump.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.0/ipa_reg_dump.h",
+      "original_sha256": "2696434cd0212e65226f67ddc1608ec43f0e5e3c8682c03022037ba29a3a20d5",
+      "sha256": "2696434cd0212e65226f67ddc1608ec43f0e5e3c8682c03022037ba29a3a20d5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/gsi_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/gsi_hwio.h",
+      "original_sha256": "57ec36413e6daf38bda59a87e8ebadc78b8f12922a1952979b3b3a8f077a5cf4",
+      "sha256": "57ec36413e6daf38bda59a87e8ebadc78b8f12922a1952979b3b3a8f077a5cf4"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/gsi_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/gsi_hwio_def.h",
+      "original_sha256": "9cf1d58cbae357b1cf664bfc6eb09a39d46cb924ae499164e31b60dabe9b4a85",
+      "sha256": "9cf1d58cbae357b1cf664bfc6eb09a39d46cb924ae499164e31b60dabe9b4a85"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_access_control.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_access_control.h",
+      "original_sha256": "5920ce87148e919e9752f75efac56a9a05ad0edc8117dcc22ac694922ea24341",
+      "sha256": "5920ce87148e919e9752f75efac56a9a05ad0edc8117dcc22ac694922ea24341"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_gcc_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_gcc_hwio.h",
+      "original_sha256": "71d7dd5bd9fda342df03d21f8374ece475242eec7ce90f6b9452bb01d2e44027",
+      "sha256": "71d7dd5bd9fda342df03d21f8374ece475242eec7ce90f6b9452bb01d2e44027"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_gcc_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_gcc_hwio_def.h",
+      "original_sha256": "75c5ef7cc0096596ff2901e115093d472a154b7a32dfcfd16c2a19cc4c8d9090",
+      "sha256": "75c5ef7cc0096596ff2901e115093d472a154b7a32dfcfd16c2a19cc4c8d9090"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hw_common_ex.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hw_common_ex.h",
+      "original_sha256": "baa891cfe569bb3ee8748c795e7c2a0adde4e6eb8653ebe7841e0b48a4492f3b",
+      "sha256": "baa891cfe569bb3ee8748c795e7c2a0adde4e6eb8653ebe7841e0b48a4492f3b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hwio.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hwio.h",
+      "original_sha256": "f7c5b9f2bac705b2175a3ec13ed857bf8fc3667a6f4a93095c39c0ba3bde4032",
+      "sha256": "f7c5b9f2bac705b2175a3ec13ed857bf8fc3667a6f4a93095c39c0ba3bde4032"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hwio_def.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_hwio_def.h",
+      "original_sha256": "4faa23c59f779c1af0b06cc571b4d135019f4424c217475df7f7533a85c43750",
+      "sha256": "4faa23c59f779c1af0b06cc571b4d135019f4424c217475df7f7533a85c43750"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_pkt_cntxt.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_pkt_cntxt.h",
+      "original_sha256": "b80e20bd459befb35a55738fffc24d030f73e4484101d56468af8f1454182648",
+      "sha256": "b80e20bd459befb35a55738fffc24d030f73e4484101d56468af8f1454182648"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_reg_dump.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_reg_dump.c",
+      "original_sha256": "128ae65da671fa71447c7b50096fb2a8d1f338d8cd6780f86974be23e3af3958",
+      "sha256": "128ae65da671fa71447c7b50096fb2a8d1f338d8cd6780f86974be23e3af3958"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_reg_dump.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/dump/ipa5.5/ipa_reg_dump.h",
+      "original_sha256": "80c9a80436d44fb92bbe15c3a2eb73e760f9b604dd217391a4b0b839387f24e2",
+      "sha256": "80c9a80436d44fb92bbe15c3a2eb73e760f9b604dd217391a4b0b839387f24e2"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa.c",
+      "original_sha256": "229ce915c648a3a6a0439d3166990ef3fc33582c7bf44630e87c0356d85f45a2",
+      "sha256": "229ce915c648a3a6a0439d3166990ef3fc33582c7bf44630e87c0356d85f45a2"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_client.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_client.c",
+      "original_sha256": "51db880cd20c72893a7daac670ebc37888bb328658589b5b7b5b149db2d2bc9f",
+      "sha256": "51db880cd20c72893a7daac670ebc37888bb328658589b5b7b5b149db2d2bc9f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_debugfs.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_debugfs.c",
+      "original_sha256": "a2805b3df3edc3c7aca7d53982525374346b052a7d7091ca298c37f5e39ccf61",
+      "sha256": "a2805b3df3edc3c7aca7d53982525374346b052a7d7091ca298c37f5e39ccf61"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_defs.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_defs.h",
+      "original_sha256": "541497419ccf98656892149c1c1d9edf90f2cd629d616b337239c0570da69f99",
+      "sha256": "541497419ccf98656892149c1c1d9edf90f2cd629d616b337239c0570da69f99"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_dma.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_dma.c",
+      "original_sha256": "e9dfe9c4c69485af13c25ba3d9bc758ac96346bee5bdc336883f2662d7b80edb",
+      "sha256": "e9dfe9c4c69485af13c25ba3d9bc758ac96346bee5bdc336883f2662d7b80edb"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_dp.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_dp.c",
+      "original_sha256": "5d68956debcff7b63ba94dcf2b9fd06a9e388489af4c0a36243ed2a24acdbc12",
+      "sha256": "7be1e9b813073eb4bd3d218e107ef20d4b72cc9a78444d1f0afc0300246c4cd3"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_dt_replacement.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_dt_replacement.c",
+      "original_sha256": "b78feeb0d10849a07da6f0f99c4357612b92ce847935a069d3fc35b55cc2f6cc",
+      "sha256": "b78feeb0d10849a07da6f0f99c4357612b92ce847935a069d3fc35b55cc2f6cc"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_elf_dump.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_elf_dump.c",
+      "original_sha256": "7c53ca661035b2b9fa969bbf9644d26e7b1cab07587f90682333921b86d3d470",
+      "sha256": "7c53ca661035b2b9fa969bbf9644d26e7b1cab07587f90682333921b86d3d470"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_elf_dump.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_elf_dump.h",
+      "original_sha256": "a2ba39e301a27f50f54e9801cba8ca684ccce45c9fdca8e521ae88502272c459",
+      "sha256": "a2ba39e301a27f50f54e9801cba8ca684ccce45c9fdca8e521ae88502272c459"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_emulation_stubs.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_emulation_stubs.h",
+      "original_sha256": "ee56b5bc760a88d4c75fd6b6d8637d214e97315a34d5a68e9a4eccc2e5d36be5",
+      "sha256": "ee56b5bc760a88d4c75fd6b6d8637d214e97315a34d5a68e9a4eccc2e5d36be5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_eth_i.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_eth_i.c",
+      "original_sha256": "fd8dd5f235cb7abc7b0df63d2c64b5215dad76818d291b8c137b87a71f37781d",
+      "sha256": "fd8dd5f235cb7abc7b0df63d2c64b5215dad76818d291b8c137b87a71f37781d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_flt.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_flt.c",
+      "original_sha256": "6269f8e011aabf1aed2638c6ddee80309758823787922fd06bf17ca548e28fb0",
+      "sha256": "6269f8e011aabf1aed2638c6ddee80309758823787922fd06bf17ca548e28fb0"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_hdr.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_hdr.c",
+      "original_sha256": "4874a3eb5a59f3fafe0c96b872e226a78973464431ed1acb727022337bee2043",
+      "sha256": "4874a3eb5a59f3fafe0c96b872e226a78973464431ed1acb727022337bee2043"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_hw_stats.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_hw_stats.c",
+      "original_sha256": "1344ccf9ee8d5629e9d2fd8ff7100e07050dba2a04a1741bd2b6d30705183797",
+      "sha256": "1344ccf9ee8d5629e9d2fd8ff7100e07050dba2a04a1741bd2b6d30705183797"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_i.h",
+      "original_sha256": "51f5b0c02ad0105bb2283c60c6bd82949f9e7b1d800ce6c9de750612a2e72338",
+      "sha256": "51f5b0c02ad0105bb2283c60c6bd82949f9e7b1d800ce6c9de750612a2e72338"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_interrupts.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_interrupts.c",
+      "original_sha256": "5d96fd22c88fb98929f6ed44ef53d988e0a6e9e1aea06eda9feb61592cc23eaf",
+      "sha256": "5d96fd22c88fb98929f6ed44ef53d988e0a6e9e1aea06eda9feb61592cc23eaf"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_intf.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_intf.c",
+      "original_sha256": "670d00dccbca6449129ef1fcb5ff990453dc354f109a63553b2be55f8955fdcc",
+      "sha256": "670d00dccbca6449129ef1fcb5ff990453dc354f109a63553b2be55f8955fdcc"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_mhi.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_mhi.c",
+      "original_sha256": "cd8feb0290870598be2c5b6cda495d195793e3269a3a614be2103f100e489ab6",
+      "sha256": "cd8feb0290870598be2c5b6cda495d195793e3269a3a614be2103f100e489ab6"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_mhi_proxy.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_mhi_proxy.c",
+      "original_sha256": "d9df34fd0d141cafdd26fcc2efee3a9197ec81c9c0115781cc60b6d1549112e2",
+      "sha256": "d9df34fd0d141cafdd26fcc2efee3a9197ec81c9c0115781cc60b6d1549112e2"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_mhi_proxy.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_mhi_proxy.h",
+      "original_sha256": "e8c9e7bfd24cdd3d198b6cb5e9efcbfc0894f64bb7ca3c5be64dd099b532194b",
+      "sha256": "e8c9e7bfd24cdd3d198b6cb5e9efcbfc0894f64bb7ca3c5be64dd099b532194b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_mpm.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_mpm.c",
+      "original_sha256": "0718ce33e54f2ede7ad0ea08f9105fc7757dcb373ad40b0e76cf746f3ac82dc3",
+      "sha256": "0718ce33e54f2ede7ad0ea08f9105fc7757dcb373ad40b0e76cf746f3ac82dc3"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_nat.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_nat.c",
+      "original_sha256": "df4b4d5825d80d15dbd09293c145035590e1f0fe9507d251847ce321124cd629",
+      "sha256": "df4b4d5825d80d15dbd09293c145035590e1f0fe9507d251847ce321124cd629"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_net.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_net.c",
+      "original_sha256": "72681e099c00877c055c5cbcbf75d13c7068d20f387760cd6091022e0add7074",
+      "sha256": "72681e099c00877c055c5cbcbf75d13c7068d20f387760cd6091022e0add7074"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_odl.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_odl.c",
+      "original_sha256": "99a5331599f091dfc929958fda7c88118cb8d5babe7ecaea8b2919e635ec7f29",
+      "sha256": "99a5331599f091dfc929958fda7c88118cb8d5babe7ecaea8b2919e635ec7f29"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_odl.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_odl.h",
+      "original_sha256": "8683b7ac7049fd737b42e98c230fd2986a5f18ec9d00808981a6aae072d9981f",
+      "sha256": "8683b7ac7049fd737b42e98c230fd2986a5f18ec9d00808981a6aae072d9981f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_opt_log.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_opt_log.c",
+      "original_sha256": "4490f71be88b2e1185f637365d8d47bc1544ca4f2ddf253221c81d91b54e1b95",
+      "sha256": "4490f71be88b2e1185f637365d8d47bc1544ca4f2ddf253221c81d91b54e1b95"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_opt_log.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_opt_log.h",
+      "original_sha256": "707264e74cc5ff92f870ccb903399488bb6180e76c5fe17838def1a8cfec4a11",
+      "sha256": "707264e74cc5ff92f870ccb903399488bb6180e76c5fe17838def1a8cfec4a11"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_pm.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_pm.c",
+      "original_sha256": "ea74a514ea5d332c03b6197b6d295fb2925fb0258e922d3fda705117fff9395e",
+      "sha256": "ea74a514ea5d332c03b6197b6d295fb2925fb0258e922d3fda705117fff9395e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_pm.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_pm.h",
+      "original_sha256": "4461217ee0f4dcf6192c0855e04e88a8480d9b1046be2bd3146b4673de988d7f",
+      "sha256": "4461217ee0f4dcf6192c0855e04e88a8480d9b1046be2bd3146b4673de988d7f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_qdss.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_qdss.c",
+      "original_sha256": "6876c7df9159ce66f0912c96a32af8b4eac8c16a6385adff408b90423e801f48",
+      "sha256": "6876c7df9159ce66f0912c96a32af8b4eac8c16a6385adff408b90423e801f48"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service.c",
+      "original_sha256": "c644ac06f6a7aedb80901c5344efbf8e41c495ebdcd44b5e77dc413ef8e06f97",
+      "sha256": "f89a10d6080308d60c925d6de2bd5a95b3deb9baa36da9eb2bd3622b0f7d9978"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service.h",
+      "original_sha256": "1bbec077cfd908b39e8593f12be409e2613fb60f1693b668cc6efe00cfabcb3e",
+      "sha256": "1bbec077cfd908b39e8593f12be409e2613fb60f1693b668cc6efe00cfabcb3e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service_v01.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_qmi_service_v01.c",
+      "original_sha256": "2c7ce7d94611bda40ac8f89e51e1f39dd30600b30e7e418e48d104a37388e41b",
+      "sha256": "2c7ce7d94611bda40ac8f89e51e1f39dd30600b30e7e418e48d104a37388e41b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_rt.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_rt.c",
+      "original_sha256": "2e7d475649865a684dfecba57be80d301d037df2c237e022a2e156f90a952cdd",
+      "sha256": "2e7d475649865a684dfecba57be80d301d037df2c237e022a2e156f90a952cdd"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_rtp_genl.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_rtp_genl.c",
+      "original_sha256": "78fb023a597b5f32c9252f5e9d90c12677d352a247a36aa0bab6d5f29afdda50",
+      "sha256": "78fb023a597b5f32c9252f5e9d90c12677d352a247a36aa0bab6d5f29afdda50"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_rtp_genl.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_rtp_genl.h",
+      "original_sha256": "647f9a28a602d3cad5e4133b5ca8f6fc34b886242add1b24cc970507acb4830d",
+      "sha256": "647f9a28a602d3cad5e4133b5ca8f6fc34b886242add1b24cc970507acb4830d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_stats.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_stats.c",
+      "original_sha256": "45e07c1457067d3cce78f5a07b4ca855c4882f0bc68c911ecf5d5d426697c117",
+      "sha256": "45e07c1457067d3cce78f5a07b4ca855c4882f0bc68c911ecf5d5d426697c117"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_stats.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_stats.h",
+      "original_sha256": "de91421b8b7861f2fb49bb304b510ff00f692fb2a0cb90f7381803d92f4947f5",
+      "sha256": "de91421b8b7861f2fb49bb304b510ff00f692fb2a0cb90f7381803d92f4947f5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_trace.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_trace.h",
+      "original_sha256": "85fe639ca9ceb8624beea610f7ccf960b1778d3665694c80d611c26d693f0fb7",
+      "sha256": "85fe639ca9ceb8624beea610f7ccf960b1778d3665694c80d611c26d693f0fb7"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_tsp.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_tsp.c",
+      "original_sha256": "60df7972685c49cc4b9d47182563220ff72634c9ec1c2f22f6a567fc6278485d",
+      "sha256": "60df7972685c49cc4b9d47182563220ff72634c9ec1c2f22f6a567fc6278485d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_tsp.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_tsp.h",
+      "original_sha256": "50aa96764f5731e3c2ed088afdfeb963ade4067860cf22e3691e765cd69603bb",
+      "sha256": "50aa96764f5731e3c2ed088afdfeb963ade4067860cf22e3691e765cd69603bb"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc.c",
+      "original_sha256": "5805dcea0687194b235992f66c955036e68d1c112899b8be3632a67bdfba5bf9",
+      "sha256": "5805dcea0687194b235992f66c955036e68d1c112899b8be3632a67bdfba5bf9"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_holb_monitor.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_holb_monitor.c",
+      "original_sha256": "8a249749285c98ea34a1e55063661e9c1dcd1219024ce5b295eeb5e5a80cbb9f",
+      "sha256": "8a249749285c98ea34a1e55063661e9c1dcd1219024ce5b295eeb5e5a80cbb9f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_holb_monitor.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_holb_monitor.h",
+      "original_sha256": "99b6ce0cdda1c9c5d1cba21d1e6bad2f87b35a5eacb94c2521c4cc754f93f6e1",
+      "sha256": "99b6ce0cdda1c9c5d1cba21d1e6bad2f87b35a5eacb94c2521c4cc754f93f6e1"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_mhi.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_mhi.c",
+      "original_sha256": "18c8208d66ba7246b04efc72dcc3894faeafb85fb8e26b23b9e6065de3072b1c",
+      "sha256": "18c8208d66ba7246b04efc72dcc3894faeafb85fb8e26b23b9e6065de3072b1c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_ntn.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_ntn.c",
+      "original_sha256": "838cfdff75a6666ba10e0318237e302a09544268e8310421cc9e834d26c8ff0f",
+      "sha256": "838cfdff75a6666ba10e0318237e302a09544268e8310421cc9e834d26c8ff0f"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_offload_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_offload_i.h",
+      "original_sha256": "f85842da766e712c7da96f171e53b3000a6a02afa9e97ff512ce04ce8824dba7",
+      "sha256": "f85842da766e712c7da96f171e53b3000a6a02afa9e97ff512ce04ce8824dba7"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_rtp.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_rtp.c",
+      "original_sha256": "ab1e927f01a27cb9b0fd482b5feafa50a78ff29d26e836363916e6bdec115603",
+      "sha256": "ab1e927f01a27cb9b0fd482b5feafa50a78ff29d26e836363916e6bdec115603"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_uc_wdi.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_uc_wdi.c",
+      "original_sha256": "1bd99b4eaeed33ae3efaaa6c6b398e008cdf76259b5facb461354f2dd93cc7ab",
+      "sha256": "1bd99b4eaeed33ae3efaaa6c6b398e008cdf76259b5facb461354f2dd93cc7ab"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_utils.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_utils.c",
+      "original_sha256": "5d45e2fddbde32e0eeb9dfe0fef6eba50a6e56eceecf5452a6a241fba99c47cf",
+      "sha256": "5d45e2fddbde32e0eeb9dfe0fef6eba50a6e56eceecf5452a6a241fba99c47cf"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_wdi3_i.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_wdi3_i.c",
+      "original_sha256": "3373a86e7bfb3cb7ab5d90aa60864f4792774dc907c6e33e79bf4e3e5182fce5",
+      "sha256": "3373a86e7bfb3cb7ab5d90aa60864f4792774dc907c6e33e79bf4e3e5182fce5"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipa_wigig_i.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipa_wigig_i.c",
+      "original_sha256": "563658c45f190feea1936cba9340ce660b098856473b8a56f14eb363398b4439",
+      "sha256": "563658c45f190feea1936cba9340ce660b098856473b8a56f14eb363398b4439"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal.c",
+      "original_sha256": "50331d844296705fba967e76362124e66c86772cab31b3f23172b8036c4c111e",
+      "sha256": "50331d844296705fba967e76362124e66c86772cab31b3f23172b8036c4c111e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal.h",
+      "original_sha256": "4cccd8a5fde47d8977246ac5992062edcab88890911ff67381506f26c14b0a3d",
+      "sha256": "4cccd8a5fde47d8977246ac5992062edcab88890911ff67381506f26c14b0a3d"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt.c",
+      "original_sha256": "d79c9ed185cd66c5cbf1bd7820ce4396f416ddbf5f7149306c462d3e1be19b20",
+      "sha256": "d79c9ed185cd66c5cbf1bd7820ce4396f416ddbf5f7149306c462d3e1be19b20"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt.h",
+      "original_sha256": "78e181ff62dedb4e21d6146ac78419408340df855f2797826be6eed735de503a",
+      "sha256": "78e181ff62dedb4e21d6146ac78419408340df855f2797826be6eed735de503a"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_fltrt_i.h",
+      "original_sha256": "fe2d099457e11b526886a56fcb1e8b396d4743878d896ac180e2ea5fcb87c11c",
+      "sha256": "fe2d099457e11b526886a56fcb1e8b396d4743878d896ac180e2ea5fcb87c11c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats.c",
+      "original_sha256": "39c8ee92222e9f14b5eb400a3d378de5c15390a38f06375ab213e89e2bcf1de9",
+      "sha256": "39c8ee92222e9f14b5eb400a3d378de5c15390a38f06375ab213e89e2bcf1de9"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats.h",
+      "original_sha256": "98d4916c6a48b0dda371721ed0e24d2e8bb89a26015377763efd005684a20bab",
+      "sha256": "98d4916c6a48b0dda371721ed0e24d2e8bb89a26015377763efd005684a20bab"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_hw_stats_i.h",
+      "original_sha256": "8aa11800d07c8abd0f0638a1258eb3da503239c311f1eb618167b0c18eec79e1",
+      "sha256": "8aa11800d07c8abd0f0638a1258eb3da503239c311f1eb618167b0c18eec79e1"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_i.h",
+      "original_sha256": "3d3eca20739bf0987457450a7f7541b7373bb5d1949895c0442fc2b0f74ab092",
+      "sha256": "3d3eca20739bf0987457450a7f7541b7373bb5d1949895c0442fc2b0f74ab092"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat.c",
+      "original_sha256": "fd1133fdf7f2f6154bfed682e2ea4421705ed4bcef65629b390a03397d62b52b",
+      "sha256": "fd1133fdf7f2f6154bfed682e2ea4421705ed4bcef65629b390a03397d62b52b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat.h",
+      "original_sha256": "d5c55252c6c31f2c444bd40633710a47ae91bbd722ea7de762446f9a2b40c906",
+      "sha256": "d5c55252c6c31f2c444bd40633710a47ae91bbd722ea7de762446f9a2b40c906"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_nat_i.h",
+      "original_sha256": "1982f2d90834ef4c2a39164e1b84874db49b8359e8266e38936f9edcbd686bb9",
+      "sha256": "1982f2d90834ef4c2a39164e1b84874db49b8359e8266e38936f9edcbd686bb9"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg.c",
+      "original_sha256": "90ad916acece13720a55256bd5e9cac691b62d92daf59345773a0087f51a4332",
+      "sha256": "90ad916acece13720a55256bd5e9cac691b62d92daf59345773a0087f51a4332"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg.h",
+      "original_sha256": "fb5ff0b5a8b46884ba3feb78a78567dc23bcc3721488f81a4abd3f80b9a40276",
+      "sha256": "fb5ff0b5a8b46884ba3feb78a78567dc23bcc3721488f81a4abd3f80b9a40276"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_reg_i.h",
+      "original_sha256": "30a3ff1de46ca43b54d6c03b58193f9fecdc1227f7a4edfaaeca78790410162e",
+      "sha256": "30a3ff1de46ca43b54d6c03b58193f9fecdc1227f7a4edfaaeca78790410162e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp.c",
+      "original_sha256": "8090a9f0d5bed641ae249927e805b1fee60a35696eff7bc6daf551977a892c10",
+      "sha256": "8090a9f0d5bed641ae249927e805b1fee60a35696eff7bc6daf551977a892c10"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp.h",
+      "original_sha256": "1792756e6c83bf9ba0b9396385f306307809e50fd69710d9e8ca2e13d0bcb385",
+      "sha256": "1792756e6c83bf9ba0b9396385f306307809e50fd69710d9e8ca2e13d0bcb385"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp_i.h",
+      "source": "drivers/platform/msm/ipa/ipa_v3/ipahal/ipahal_tsp_i.h",
+      "original_sha256": "7fadfea7790af9b8540a08ff6dcb3ddad2ad105ca703973b7a1bf27f12ab96b3",
+      "sha256": "7fadfea7790af9b8540a08ff6dcb3ddad2ad105ca703973b7a1bf27f12ab96b3"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/rmnet_ctl_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/rmnet_ctl_ipa.c",
+      "original_sha256": "5921358d6a916639e22897050432d765ee2f322bc174e382f7dc1697c848a586",
+      "sha256": "5921358d6a916639e22897050432d765ee2f322bc174e382f7dc1697c848a586"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/rmnet_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/rmnet_ipa.c",
+      "original_sha256": "bc54e36526abb3bb04b165dd4a4f64305cb2294b2e06c4db93d3bfbae5cc9b1c",
+      "sha256": "bc54e36526abb3bb04b165dd4a4f64305cb2294b2e06c4db93d3bfbae5cc9b1c"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/rmnet_ipa_fd_ioctl.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/rmnet_ipa_fd_ioctl.c",
+      "original_sha256": "57594a97d3a48e1ed859e48af3138821ced227c30e62b05fc6a609d52cbecda8",
+      "sha256": "57594a97d3a48e1ed859e48af3138821ced227c30e62b05fc6a609d52cbecda8"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/rmnet_ll_ipa.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/rmnet_ll_ipa.c",
+      "original_sha256": "757920963f6c4e71e7877686f47796466e697da8d7cf02a65c495cd3418df1a6",
+      "sha256": "757920963f6c4e71e7877686f47796466e697da8d7cf02a65c495cd3418df1a6"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/ipa_v3/teth_bridge.c",
+      "source": "drivers/platform/msm/ipa/ipa_v3/teth_bridge.c",
+      "original_sha256": "47926593fb8ac48b06e28610e27007609f16db5f3d1e04f1a38b73744a485f65",
+      "sha256": "47926593fb8ac48b06e28610e27007609f16db5f3d1e04f1a38b73744a485f65"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_pm_ut.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_pm_ut.c",
+      "original_sha256": "b9f06532e53009540aa88d846a2d206c78ff1faee97f64949178374fc90c6cbc",
+      "sha256": "b9f06532e53009540aa88d846a2d206c78ff1faee97f64949178374fc90c6cbc"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_dma.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_dma.c",
+      "original_sha256": "58767f8332bd510a63da939f814d755449ef7f844b3f3c79cb8d2e1d9716d04b",
+      "sha256": "58767f8332bd510a63da939f814d755449ef7f844b3f3c79cb8d2e1d9716d04b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_example.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_example.c",
+      "original_sha256": "f898c91ffcb1c986a16623608b031c4d65d3ef2afcbc9033b1344d9d08eef939",
+      "sha256": "f898c91ffcb1c986a16623608b031c4d65d3ef2afcbc9033b1344d9d08eef939"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_hw_stats.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_hw_stats.c",
+      "original_sha256": "38d24aafea3a3f042ba959fa4ff03176257e0e6def22f946ed532aaa2b29c635",
+      "sha256": "38d24aafea3a3f042ba959fa4ff03176257e0e6def22f946ed532aaa2b29c635"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_mhi.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_mhi.c",
+      "original_sha256": "0b79aa45b3a86cfbf0c49a831a2dda94fc40a1f3f3972a8abfd0a2fb0bda370b",
+      "sha256": "0b79aa45b3a86cfbf0c49a831a2dda94fc40a1f3f3972a8abfd0a2fb0bda370b"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_ntn.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_ntn.c",
+      "original_sha256": "0f1cf73d0641790fc32893df58aa1cbb17a89fa4178e10d2a5a84282940319ed",
+      "sha256": "0f1cf73d0641790fc32893df58aa1cbb17a89fa4178e10d2a5a84282940319ed"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_test_wdi3.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_test_wdi3.c",
+      "original_sha256": "14a04f1798b9944cb4a349b35102893254919845eee0aa4ba594f349f633ec90",
+      "sha256": "14a04f1798b9944cb4a349b35102893254919845eee0aa4ba594f349f633ec90"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_ut_framework.c",
+      "source": "drivers/platform/msm/ipa/test/ipa_ut_framework.c",
+      "original_sha256": "6ac5417640efa7720e93da3dc3ccd6536a50737d754a2108aa58edfb6f8d0c4e",
+      "sha256": "6ac5417640efa7720e93da3dc3ccd6536a50737d754a2108aa58edfb6f8d0c4e"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_ut_framework.h",
+      "source": "drivers/platform/msm/ipa/test/ipa_ut_framework.h",
+      "original_sha256": "ed25fb6c406554c8a04baea28af4487bab97eedca23722f50c1af64a353277c1",
+      "sha256": "ed25fb6c406554c8a04baea28af4487bab97eedca23722f50c1af64a353277c1"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_ut_i.h",
+      "source": "drivers/platform/msm/ipa/test/ipa_ut_i.h",
+      "original_sha256": "5a9ac3af5fb6fafc9c4717407732400c6c6b063adcc6f0807ff2dae9c21d4bd4",
+      "sha256": "5a9ac3af5fb6fafc9c4717407732400c6c6b063adcc6f0807ff2dae9c21d4bd4"
+    },
+    {
+      "file": "ports/dataipa/drivers/platform/msm/ipa/test/ipa_ut_suite_list.h",
+      "source": "drivers/platform/msm/ipa/test/ipa_ut_suite_list.h",
+      "original_sha256": "4c89f3b0481986d85e62497557761131aa89da54a53d66218e35ffeed7b3a69d",
+      "sha256": "4c89f3b0481986d85e62497557761131aa89da54a53d66218e35ffeed7b3a69d"
+    },
+    {
+      "file": "ports/dataipa/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "5091db0f5d6772c46d2f69ba2c72b6cb1160e9832fbd8626d61f6364ec2f2379"
+    },
+    {
+      "file": "ports/dataipa/Makefile.generated",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "3fef9f5e3a38fe0907a646dc7298e37257100bd73239abd6db9a3b66af7c654c"
+    },
+    {
+      "file": "ports/dataipa/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "cee91ea1f10b73185092cb23814195505ca24e70113b5258beb2052752b15a26"
+    },
+    {
+      "file": "ports/dataipa/avr-include/uapi/linux/msm_rmnet.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "51f90b0a374c278843ef371cac935aedc217d6f706be4bcb031eaf2dc50e3829"
+    }
+  ],
+  "patch_sha256": "a3fa915523f27adc1b21a2c9ceef81728499f92d4084e7c3b90d7836fed41747",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "gsim, ipam, ipanetm (perf defconfig dataipa_GKI.conf) on android18-7.3",
+  "reviewed_changes": [
+    "Makefile.generated by scripts/gen_dataipa_makefile.py from define_modules.bzl",
+    "trace include paths \".\" with the DDK include dirs",
+    "hrtimer_init -> hrtimer_setup; kernel_connect sockaddr_unsized",
+    "msm_rmnet.h uapi copied from qcom-soc include",
+    "depends= equal the phone (rproc rename aside)"
+  ],
+  "pending": [
+    "IPA/modem data on the phone"
+  ]
+}

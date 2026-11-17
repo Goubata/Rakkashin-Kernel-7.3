@@ -15,6 +15,8 @@ ref = set()
 files = set()
 for d in dirs:
     files |= set(d.rglob('*.h')) | set(d.rglob('*.c')) if d.is_dir() else set()
+# sources directly in the port directory as well
+files |= set(D.glob('*.c')) | set(D.glob('*.h'))
 # every header actually included by a previous build (kernel headers too: e.g.
 # llcc-qcom.h / rpmh.h stub out their API unless CONFIG_QCOM_LLCC/RPMH is set)
 SRC = ROOT.parent / 'avr-upstream-audit/android-7.3'

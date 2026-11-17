@@ -1,0 +1,26 @@
+{
+ "name": "dsp-kernel",
+ "repo": "vendor-repos/vendor-qcom-opensource-dsp-kernel",
+ "commit": "c6f219cd0d661f14ac89d9a16e7fe3263089c961",
+ "files": {
+  "ports/dsp-kernel/define_modules.bzl": "define_modules.bzl",
+  "ports/dsp-kernel/dsp/cdsp-loader.c": "dsp/cdsp-loader.c",
+  "ports/dsp-kernel/dsp/fastrpc.c": "dsp/fastrpc.c",
+  "ports/dsp-kernel/dsp/fastrpc_rpmsg.c": "dsp/fastrpc_rpmsg.c",
+  "ports/dsp-kernel/dsp/fastrpc_shared.h": "dsp/fastrpc_shared.h",
+  "ports/dsp-kernel/dsp/fastrpc_socket.c": "dsp/fastrpc_socket.c",
+  "ports/dsp-kernel/dsp/fastrpc_sysfs.c": "dsp/fastrpc_sysfs.c",
+  "ports/dsp-kernel/dsp/fastrpc_trace.h": "dsp/fastrpc_trace.h",
+  "ports/dsp-kernel/include/linux/fastrpc.h": "include/linux/fastrpc.h",
+  "ports/dsp-kernel/include/uapi/misc/fastrpc.h": "include/uapi/misc/fastrpc.h",
+  "ports/dsp-kernel/Makefile": null,
+  "ports/dsp-kernel/avr-canoe-vendor-config.h": null
+ },
+ "scope": "frpc-adsprpc.ko on android18-7.3",
+ "reviewed_changes": [
+  "unchanged; qcom_glink_is_wakeup provided by ports/qcom-glink-transport (always false on canoe, as vendor)"
+ ],
+ "pending": [
+  "FastRPC to ADSP/CDSP on the phone"
+ ]
+}

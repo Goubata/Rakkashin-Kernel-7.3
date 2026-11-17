@@ -1,0 +1,31 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/drm-display-helper/drm_display_helper.ko",
+      "imports_checked": 101,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/msm-drm/msm_drm.ko",
+      "imports_checked": 817,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-display-deps/fsa4480_i2c.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-display-deps/gh_irq_lend.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-display-deps/wcd_usbss_i2c.ko",
+      "imports_checked": 71,
+      "mismatches": {}
+    }
+  ]
+}

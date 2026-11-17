@@ -1,0 +1,227 @@
+{
+  "source_commit": "1aac3eefb3bb686aa317f8f303e36548b094e17c",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-bt-kernel",
+  "files": [
+    {
+      "file": "ports/bt-kernel/bt_modules.bzl",
+      "source": "bt_modules.bzl",
+      "original_sha256": "d6763d71943d5312f0f70b317dba11a9843d512522d4a06d8b073bc8e44aea86",
+      "sha256": "d6763d71943d5312f0f70b317dba11a9843d512522d4a06d8b073bc8e44aea86"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/btfm_codec.c",
+      "source": "btfmcodec/btfm_codec.c",
+      "original_sha256": "281dae22bed60b081872772b246f375d00debc877b0f30d91c9e11725c4af010",
+      "sha256": "281dae22bed60b081872772b246f375d00debc877b0f30d91c9e11725c4af010"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/btfm_codec_btadv_interface.c",
+      "source": "btfmcodec/btfm_codec_btadv_interface.c",
+      "original_sha256": "a493777b7077ea2fe314791d24d506c37fe8b18531574beb5920df9f8f0a1b30",
+      "sha256": "a493777b7077ea2fe314791d24d506c37fe8b18531574beb5920df9f8f0a1b30"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/btfm_codec_hw_interface.c",
+      "source": "btfmcodec/btfm_codec_hw_interface.c",
+      "original_sha256": "0fdb66aa3a97173751a42cc509e0b3d8e65f6aaadc48128db2d5b07576a75ee3",
+      "sha256": "0fdb66aa3a97173751a42cc509e0b3d8e65f6aaadc48128db2d5b07576a75ee3"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/btfm_codec_interface.c",
+      "source": "btfmcodec/btfm_codec_interface.c",
+      "original_sha256": "76704860ec3797a4b3679d9c46dfaab30ba7460980e24990fb9d40e38e9579af",
+      "sha256": "76704860ec3797a4b3679d9c46dfaab30ba7460980e24990fb9d40e38e9579af"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/include/btfm_codec.h",
+      "source": "btfmcodec/include/btfm_codec.h",
+      "original_sha256": "b4948bb92acfd308cd750648d75a0ae10bef003b27568ddbf385772033690eb8",
+      "sha256": "b4948bb92acfd308cd750648d75a0ae10bef003b27568ddbf385772033690eb8"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/include/btfm_codec_btadv_interface.h",
+      "source": "btfmcodec/include/btfm_codec_btadv_interface.h",
+      "original_sha256": "96cc19a560cd45ae93a36153982407874eecfc7a7ccec384cc4ae7b69392b4e3",
+      "sha256": "96cc19a560cd45ae93a36153982407874eecfc7a7ccec384cc4ae7b69392b4e3"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/include/btfm_codec_hw_interface.h",
+      "source": "btfmcodec/include/btfm_codec_hw_interface.h",
+      "original_sha256": "32b32def210b5bed04c735fc135ed70d82933ad0c94f547c61cbd65a5f37840f",
+      "sha256": "32b32def210b5bed04c735fc135ed70d82933ad0c94f547c61cbd65a5f37840f"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/include/btfm_codec_interface.h",
+      "source": "btfmcodec/include/btfm_codec_interface.h",
+      "original_sha256": "3a672429beb05344197a71ca75ce7cb92ae5374ceb4ae23f0f0af020956e3af0",
+      "sha256": "3a672429beb05344197a71ca75ce7cb92ae5374ceb4ae23f0f0af020956e3af0"
+    },
+    {
+      "file": "ports/bt-kernel/btfmcodec/include/btfm_codec_pkt.h",
+      "source": "btfmcodec/include/btfm_codec_pkt.h",
+      "original_sha256": "b2522119b8c3ee6a4cca2b59b2b5b1507b86a28f8c6bccb4c99265c5565813aa",
+      "sha256": "b2522119b8c3ee6a4cca2b59b2b5b1507b86a28f8c6bccb4c99265c5565813aa"
+    },
+    {
+      "file": "ports/bt-kernel/include/btpower.h",
+      "source": "include/btpower.h",
+      "original_sha256": "28bf53ce7edf6863a92d1192df45bdf77316bf156452f9fbf9c0f1c8b1c85df3",
+      "sha256": "28bf53ce7edf6863a92d1192df45bdf77316bf156452f9fbf9c0f1c8b1c85df3"
+    },
+    {
+      "file": "ports/bt-kernel/pwr/btpower.c",
+      "source": "pwr/btpower.c",
+      "original_sha256": "607399baaf0758ae45cb813293697b34a49da34975b66cd67a7087f58dbf0d77",
+      "sha256": "607399baaf0758ae45cb813293697b34a49da34975b66cd67a7087f58dbf0d77"
+    },
+    {
+      "file": "ports/bt-kernel/rtc6226/radio-rtc6226-common.c",
+      "source": "rtc6226/radio-rtc6226-common.c",
+      "original_sha256": "97f13dbeafa6116e538dd92001819c89f591db6f121a4b22baad9ab3db0a2844",
+      "sha256": "97f13dbeafa6116e538dd92001819c89f591db6f121a4b22baad9ab3db0a2844"
+    },
+    {
+      "file": "ports/bt-kernel/rtc6226/radio-rtc6226-i2c.c",
+      "source": "rtc6226/radio-rtc6226-i2c.c",
+      "original_sha256": "8961e11dc84be6405faf3b8da1529d289293941f7d94d355a7acf8b386e5c13f",
+      "sha256": "8961e11dc84be6405faf3b8da1529d289293941f7d94d355a7acf8b386e5c13f"
+    },
+    {
+      "file": "ports/bt-kernel/rtc6226/radio-rtc6226.h",
+      "source": "rtc6226/radio-rtc6226.h",
+      "original_sha256": "5efdd2eb9d3ccf17206d48c1f4698c7b881511534070143492ef7ecc560e4fc4",
+      "sha256": "5efdd2eb9d3ccf17206d48c1f4698c7b881511534070143492ef7ecc560e4fc4"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim.c",
+      "source": "slimbus/btfm_slim.c",
+      "original_sha256": "9c6b4f181dce4f6319383b2488596154611b7d6fe048f53b579088cd4f279e65",
+      "sha256": "9c6b4f181dce4f6319383b2488596154611b7d6fe048f53b579088cd4f279e65"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim.h",
+      "source": "slimbus/btfm_slim.h",
+      "original_sha256": "22a503433d71cc593d1edf3248b0784654ee53139b66fd1d28802399480e5537",
+      "sha256": "22a503433d71cc593d1edf3248b0784654ee53139b66fd1d28802399480e5537"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim_codec.c",
+      "source": "slimbus/btfm_slim_codec.c",
+      "original_sha256": "eb338e73193922121c5534a9c1e979e91d97febde69fc2df4506e02eb384b6a7",
+      "sha256": "eb338e73193922121c5534a9c1e979e91d97febde69fc2df4506e02eb384b6a7"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim_hw_interface.c",
+      "source": "slimbus/btfm_slim_hw_interface.c",
+      "original_sha256": "e2eefe396406376e1f3e372d1c4bf06903809249cfba9579157465cf2971e0b8",
+      "sha256": "e2eefe396406376e1f3e372d1c4bf06903809249cfba9579157465cf2971e0b8"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim_hw_interface.h",
+      "source": "slimbus/btfm_slim_hw_interface.h",
+      "original_sha256": "8d1c87709913396cb491c995521d6ba70776ac5c78d955f9ddc76eefbe8c14a8",
+      "sha256": "8d1c87709913396cb491c995521d6ba70776ac5c78d955f9ddc76eefbe8c14a8"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim_slave.c",
+      "source": "slimbus/btfm_slim_slave.c",
+      "original_sha256": "f959bc85c4013bec316518cac1d13fc7775278230dfa15b9787d6dec2ae78d36",
+      "sha256": "f959bc85c4013bec316518cac1d13fc7775278230dfa15b9787d6dec2ae78d36"
+    },
+    {
+      "file": "ports/bt-kernel/slimbus/btfm_slim_slave.h",
+      "source": "slimbus/btfm_slim_slave.h",
+      "original_sha256": "a9bf92012b5d5b8b08c7d169753927aa1ae28e81f5f9ef31afeff947f627df05",
+      "sha256": "a9bf92012b5d5b8b08c7d169753927aa1ae28e81f5f9ef31afeff947f627df05"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr.c",
+      "source": "soundwire/btfm_swr.c",
+      "original_sha256": "ea25d90902936011a98230266a1d7e0072bdf551b0cfcc20dc5c452c6c204e76",
+      "sha256": "ea25d90902936011a98230266a1d7e0072bdf551b0cfcc20dc5c452c6c204e76"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr.h",
+      "source": "soundwire/btfm_swr.h",
+      "original_sha256": "099d9272fb6cc702a3acb238635ee429c92954990d1ebe0263ef744148b3fa74",
+      "sha256": "099d9272fb6cc702a3acb238635ee429c92954990d1ebe0263ef744148b3fa74"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr_hw_interface.c",
+      "source": "soundwire/btfm_swr_hw_interface.c",
+      "original_sha256": "6424aceb23002b1487b4ee84184263f951db090aaa79aea2a2cf57a6e5234b09",
+      "sha256": "6424aceb23002b1487b4ee84184263f951db090aaa79aea2a2cf57a6e5234b09"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr_hw_interface.h",
+      "source": "soundwire/btfm_swr_hw_interface.h",
+      "original_sha256": "bfa51c8290f6d8aba1f157ddc676bcf0ca98f48f2b373f31481979e65f40467d",
+      "sha256": "bfa51c8290f6d8aba1f157ddc676bcf0ca98f48f2b373f31481979e65f40467d"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr_slave.c",
+      "source": "soundwire/btfm_swr_slave.c",
+      "original_sha256": "4c12265d2ae41f29e9158eecb9de33d60379523ea265e4e53d61c0a8da84904d",
+      "sha256": "4c12265d2ae41f29e9158eecb9de33d60379523ea265e4e53d61c0a8da84904d"
+    },
+    {
+      "file": "ports/bt-kernel/soundwire/btfm_swr_slave.h",
+      "source": "soundwire/btfm_swr_slave.h",
+      "original_sha256": "e7a7e0b6ff96f66fc50ab11c2d1d3de6f57b6e70a46447b98be4d31454e4a3dd",
+      "sha256": "e7a7e0b6ff96f66fc50ab11c2d1d3de6f57b6e70a46447b98be4d31454e4a3dd"
+    },
+    {
+      "file": "ports/bt-kernel/spi/include/spi-cnss-trace.h",
+      "source": "spi/include/spi-cnss-trace.h",
+      "original_sha256": "8a4b64dfdb37bd3e39017bb53b34be03619249341d14d610b77ac2ec1514b87e",
+      "sha256": "8a4b64dfdb37bd3e39017bb53b34be03619249341d14d610b77ac2ec1514b87e"
+    },
+    {
+      "file": "ports/bt-kernel/spi/include/spi_cnss.h",
+      "source": "spi/include/spi_cnss.h",
+      "original_sha256": "539005ff379d56d392e2554d588e40f40da6dc79a14b32546f5aa8d0bea2a251",
+      "sha256": "539005ff379d56d392e2554d588e40f40da6dc79a14b32546f5aa8d0bea2a251"
+    },
+    {
+      "file": "ports/bt-kernel/spi/spi_cnss_proto.c",
+      "source": "spi/spi_cnss_proto.c",
+      "original_sha256": "c96c34378699b8df10d2c0681cd065fb0174aa52a66cb4e8a97ea4e69f8f8763",
+      "sha256": "c96c34378699b8df10d2c0681cd065fb0174aa52a66cb4e8a97ea4e69f8f8763"
+    },
+    {
+      "file": "ports/bt-kernel/spi/spi_cnss_proto.h",
+      "source": "spi/spi_cnss_proto.h",
+      "original_sha256": "c121fc8683a23ae6007d86f190a75770c2d1a7f9f1bb29c20d32dcebd51e0213",
+      "sha256": "c121fc8683a23ae6007d86f190a75770c2d1a7f9f1bb29c20d32dcebd51e0213"
+    },
+    {
+      "file": "ports/bt-kernel/target.bzl",
+      "source": "target.bzl",
+      "original_sha256": "90a9c65fee97763e4880f559f7aed39f25913e142a14d47073a7dec80e9be0f7",
+      "sha256": "90a9c65fee97763e4880f559f7aed39f25913e142a14d47073a7dec80e9be0f7"
+    },
+    {
+      "file": "ports/bt-kernel/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "7a63c9fa33e27017381226b9a4aa3dd2e27b50f7c1bd38523c22338a7b0ead86"
+    },
+    {
+      "file": "ports/bt-kernel/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "5156cd8a8fbc6f552e291a59fe5dc2412ae243e1ceb2d6cc827e2c0012ea82b6"
+    }
+  ],
+  "patch_sha256": "4be94e142d8b9716c1b0c4690e73ebbcb0b544898abfed10e267d3ec67e55d1b",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "btpower, btfm_slim_codec, btfmcodec, bt_fm_swr, radio-i2c-rtc6226-qca, spi_cnss_proto for canoe on android18-7.3",
+  "reviewed_changes": [
+    "unchanged sources; canoe config_options as defines; audio compat and slimbus vendor header force-included",
+    "depends= sets equal the phone modules"
+  ],
+  "pending": [
+    "BT/FM on the phone (no audio output during tests)"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+ "name": "qcom-wlan-deps-ramdump",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-wlan-deps/qcom_ramdump.c": "drivers/soc/qcom/qcom_ramdump.c",
+  "ports/qcom-wlan-deps/include/soc/qcom/qcom_ramdump.h": "include/soc/qcom/qcom_ramdump.h",
+  "ports/qcom-wlan-deps/Makefile": null
+ },
+ "scope": "qcom_ramdump (canoe_perf =m)",
+ "reviewed_changes": [
+  "ida_simple_get/remove -> ida_alloc_max/ida_free"
+ ],
+ "pending": [
+  "ramdump collection on the phone"
+ ]
+}

@@ -2740,3 +2740,25 @@ QEMU msm-drm (3/3): ~50 modules incl. msm_drm load; 9 msm_drm platform drivers r
 WARN/BUG. QEMU-only stand-ins: avr-gunyah-stub, tests/msm-drm/avr-synx-stub.ko (8 synx exports, CRCs
 equal ports/qti-fence), fake-scm. Regression: 38 pass; CRC 276 (incl. not-yet-tested audio/slimbus).
 Not verified: any display function on the phone.
+
+## Stage121: audio, slimbus, Bluetooth, WLAN platform, SSR vendor API
+
+ports/audio-kernel (44 canoe/avr modules, Makefile.generated from audio_modules.bzl + build/canoe.bzl;
+avr-audio-compat.h; DAPM context opaque in 7.3 -> snd_soc_dapm_to_card/_to_component; aw882xx ops
+wrappers, NS string import; cdev_id; gpio_chip.set int; tfa98xx const bin_attribute), ports/qcom-slimbus
+(slimbus, slim-qcom-ngd-ctrl, bam_dma; 7.3 upstream-style driver_override/sockaddr/match fixes;
+slimbus_vendor.h for the one vendor API), ports/bt-kernel (6), ports/wlan-platform (6, tag 8fb17c9),
+ports/qcom-wlan-deps (smem-mailbox from vendor data-kernel, located via the path in the phone module;
+qcom_ramdump). Vendor CONFIG headers per port (gen_drm_vendor_config.py, now also resolving
+relative -I include paths). All depends= sets equal the phone (rproc_qcom_common -> qcom_common).
+qcom_common.ko: vendor exports qcom_ssr_get_subsys, qcom_{register,unregister}_early_ssr_notifier,
+qcom_notify_early_ssr_clients, qcom_notify_ssr_clients, qcom_device_shutdown_in_progress (+sysfs
+store), rproc_recovery_set_fn and the rproc_qcom_event tracepoint (qcom_tracepoints.c), in a wrapper
+TU (qcom_common.c unchanged); qcom_q6v5 notifies early SSR clients from wdog/fatal before crash
+handling and PAS registers its ssr subdev (vendor order). Locks re-recorded (remoteproc services,
+Alor PAS, IPC audit + 2 files).
+QEMU audio-conn (3/3): 82 modules load; icnss2 probe on a resource-less qcom,wcn7750 fixture fails
+-EINVAL without WARN; /sys/kernel/qcom_rproc present. No audio device exists; nothing is played.
+moto-sched test: wait_blocked up to 10 s and asserts the waiter blocked (load-induced false failure).
+Regression: 44 pass + reruns (remoteproc-services 2x, moto-sched 5x); CRC 306.
+Not verified: audio, BT, WLAN, SLIMbus on the phone.

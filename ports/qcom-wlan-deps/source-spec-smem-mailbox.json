@@ -1,0 +1,16 @@
+{
+ "name": "qcom-wlan-deps-smem-mailbox",
+ "repo": "vendor-repos/vendor-qcom-opensource-data-kernel",
+ "commit": "6bab28de42bac39acee5dbc28e111f0e037c56d6",
+ "files": {
+  "ports/qcom-wlan-deps/smem-mailbox.c": "drivers/smem-mailbox/smem-mailbox.c",
+  "ports/qcom-wlan-deps/include/smem-mailbox.h": "drivers/smem-mailbox/include/smem-mailbox.h"
+ },
+ "scope": "smem-mailbox from vendor/qcom/opensource/data-kernel (tag MMI-W3WWL36.65-11-18), located via the source path embedded in the phone module",
+ "reviewed_changes": [
+  "unchanged"
+ ],
+ "pending": [
+  "modem SMEM mailbox on the phone"
+ ]
+}

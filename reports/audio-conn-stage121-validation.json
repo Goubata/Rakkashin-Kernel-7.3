@@ -1,0 +1,15 @@
+{
+ "stage": 121,
+ "qemu_runs": [
+  "reports/audio-conn-stage121-qemu.log",
+  "reports/audio-conn-stage121-r2.log",
+  "reports/audio-conn-stage121-r3.log"
+ ],
+ "results": {
+  "load": "82 modules",
+  "icnss2_probe_error_path": "-EINVAL, no WARN"
+ },
+ "no_sound": true,
+ "regression": "reports/regress-stage121-summary.txt",
+ "physical_verified": false
+}

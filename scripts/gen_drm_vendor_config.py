@@ -19,8 +19,12 @@ for d in dirs:
 # llcc-qcom.h / rpmh.h stub out their API unless CONFIG_QCOM_LLCC/RPMH is set)
 SRC = ROOT.parent / 'avr-upstream-audit/android-7.3'
 for cmd in D.rglob('.*.o.cmd'):
-    for tok in re.findall(r'(/work/avr-(?:src|port)/[^\s:\\]+\.h)', cmd.read_text(errors='ignore')):
+    txt = cmd.read_text(errors='ignore')
+    for tok in re.findall(r'(/work/avr-(?:src|port)/[^\s:\\]+\.h)', txt):
         files.add(Path(tok.replace('/work/avr-src', str(SRC)).replace('/work/avr-port', str(ROOT))))
+    # headers found through relative -I$(src)/../<port>/include paths
+    for tok in re.findall(r'(?<![\w/])((?:\./)*\.\./[^\s:\\]+\.h)', txt):
+        files.add((D / tok).resolve())
 for f in files:
     if f.is_file():
         ref |= {c[:-7] if c.endswith('_MODULE') else c for c in re.findall(r'CONFIG_[A-Z0-9_]+', f.read_text(errors='ignore'))}

@@ -48,6 +48,15 @@ def main():
         rows.append({'file': str(path.relative_to(ROOT)), 'source_repository': repo.name, 'commit': commit,
                      'origin': origin, 'original_git_blob': expected, 'port_changes': changes,
                      'sha256': hashlib.sha256(data).hexdigest()})
+    # Stage120: vendor rproc_qcom_event tracepoint object/header, unchanged from qcom-soc
+    for rel, origin in (('ports/qcom-rproc-common/qcom_tracepoints.c', 'drivers/remoteproc/qcom_tracepoints.c'),
+                        ('ports/qcom-rproc-common/include/trace/events/rproc_qcom.h', 'include/trace/events/rproc_qcom.h')):
+        data = (ROOT / rel).read_bytes()
+        expected = subprocess.check_output(['git', '-C', str(AUDIT / 'qcom-soc'), 'rev-parse', SOC + ':' + origin], text=True).strip()
+        if git_blob(data) != expected:
+            raise ValueError('Unexpected IPC source modification: ' + rel)
+        rows.append({'file': rel, 'source_repository': 'qcom-soc', 'commit': SOC, 'origin': origin,
+                     'original_git_blob': expected, 'port_changes': [], 'sha256': hashlib.sha256(data).hexdigest()})
     for name in ('qcom_common.c', 'qcom_common.h'):
         path = ROOT / 'ports/qcom-rproc-common' / name
         origin = 'drivers/remoteproc/' + name

@@ -17,6 +17,7 @@
 #include <linux/remoteproc.h>
 #include "qcom_common.h"
 #include "qcom_q6v5.h"
+#include <linux/remoteproc/qcom_rproc_vendor.h>
 
 #define Q6V5_LOAD_STATE_MSG_LEN	64
 #define Q6V5_PANIC_DELAY_MS	200
@@ -143,6 +144,9 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
 		dev_err(q6v5->dev, "watchdog without message\n");
 
 	q6v5->running = false;
+	/* AVR: vendor early SSR clients (e.g. icnss2) before crash handling */
+	if (q6v5->ssr_subdev)
+		qcom_notify_early_ssr_clients(q6v5->ssr_subdev);
 	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
 
 	return IRQ_HANDLED;
@@ -165,6 +169,9 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
 		dev_err(q6v5->dev, "fatal error without message\n");
 
 	q6v5->running = false;
+	/* AVR: vendor early SSR clients (e.g. icnss2) before crash handling */
+	if (q6v5->ssr_subdev)
+		qcom_notify_early_ssr_clients(q6v5->ssr_subdev);
 	rproc_report_crash(q6v5->rproc, RPROC_FATAL_ERROR);
 
 	return IRQ_HANDLED;
@@ -262,6 +269,13 @@ EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
  *
  * Return: 200ms
  */
+/* AVR: android16-6.12 vendor API (qcom-soc qcom_q6v5.c) */
+void qcom_q6v5_register_ssr_subdev(struct qcom_q6v5 *q6v5, struct rproc_subdev *ssr_subdev)
+{
+	q6v5->ssr_subdev = ssr_subdev;
+}
+EXPORT_SYMBOL_GPL(qcom_q6v5_register_ssr_subdev);
+
 unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5)
 {
 	qcom_smem_state_update_bits(q6v5->state,

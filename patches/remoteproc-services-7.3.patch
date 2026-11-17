@@ -1,6 +1,14 @@
 --- a/ports/qcom-remoteproc-services/qcom_q6v5.c
 +++ b/ports/qcom-remoteproc-services/qcom_q6v5.c
-@@ -137,7 +137,8 @@
+@@ -17,6 +17,7 @@
+ #include <linux/remoteproc.h>
+ #include "qcom_common.h"
+ #include "qcom_q6v5.h"
++#include <linux/remoteproc/qcom_rproc_vendor.h>
+ 
+ #define Q6V5_LOAD_STATE_MSG_LEN	64
+ #define Q6V5_PANIC_DELAY_MS	200
+@@ -137,11 +138,15 @@
  
  	msg = qcom_smem_get(QCOM_SMEM_HOST_ANY, q6v5->crash_reason, &len);
  	if (!IS_ERR(msg) && len > 0 && msg[0])
@@ -10,7 +18,14 @@
  	else
  		dev_err(q6v5->dev, "watchdog without message\n");
  
-@@ -158,7 +159,8 @@
+ 	q6v5->running = false;
++	/* AVR: vendor early SSR clients (e.g. icnss2) before crash handling */
++	if (q6v5->ssr_subdev)
++		qcom_notify_early_ssr_clients(q6v5->ssr_subdev);
+ 	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
+ 
+ 	return IRQ_HANDLED;
+@@ -158,11 +163,15 @@
  
  	msg = qcom_smem_get(QCOM_SMEM_HOST_ANY, q6v5->crash_reason, &len);
  	if (!IS_ERR(msg) && len > 0 && msg[0])
@@ -20,7 +35,14 @@
  	else
  		dev_err(q6v5->dev, "fatal error without message\n");
  
-@@ -230,7 +232,7 @@
+ 	q6v5->running = false;
++	/* AVR: vendor early SSR clients (e.g. icnss2) before crash handling */
++	if (q6v5->ssr_subdev)
++		qcom_notify_early_ssr_clients(q6v5->ssr_subdev);
+ 	rproc_report_crash(q6v5->rproc, RPROC_FATAL_ERROR);
+ 
+ 	return IRQ_HANDLED;
+@@ -230,7 +239,7 @@
  int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
  {
  	bool was_running = q6v5->running;
@@ -29,7 +51,7 @@
  
  	q6v5->running = false;
  
-@@ -238,14 +240,16 @@
+@@ -238,14 +247,16 @@
  	if (!was_running || qcom_sysmon_shutdown_acked(sysmon))
  		return 0;
  
@@ -50,7 +72,21 @@
  }
  EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
  
-@@ -386,6 +390,12 @@
+@@ -258,6 +269,13 @@
+  *
+  * Return: 200ms
+  */
++/* AVR: android16-6.12 vendor API (qcom-soc qcom_q6v5.c) */
++void qcom_q6v5_register_ssr_subdev(struct qcom_q6v5 *q6v5, struct rproc_subdev *ssr_subdev)
++{
++	q6v5->ssr_subdev = ssr_subdev;
++}
++EXPORT_SYMBOL_GPL(qcom_q6v5_register_ssr_subdev);
++
+ unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5)
+ {
+ 	qcom_smem_state_update_bits(q6v5->state,
+@@ -386,6 +404,12 @@
   */
  void qcom_q6v5_deinit(struct qcom_q6v5 *q6v5)
  {
@@ -63,6 +99,25 @@
  	qmp_put(q6v5->qmp);
  }
  EXPORT_SYMBOL_GPL(qcom_q6v5_deinit);
+--- a/ports/qcom-remoteproc-services/qcom_q6v5.h
++++ b/ports/qcom-remoteproc-services/qcom_q6v5.h
+@@ -44,6 +44,9 @@
+ 
+ 	const char *load_state;
+ 	void (*handover)(struct qcom_q6v5 *q6v5);
++
++	/* AVR: android16-6.12 vendor early SSR notification (qcom-soc qcom_q6v5) */
++	struct rproc_subdev *ssr_subdev;
+ };
+ 
+ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+@@ -56,5 +59,6 @@
+ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon);
+ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
+ unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
++void qcom_q6v5_register_ssr_subdev(struct qcom_q6v5 *q6v5, struct rproc_subdev *ssr_subdev);
+ 
+ #endif
 --- a/ports/qcom-remoteproc-services/qcom_sysmon.c
 +++ b/ports/qcom-remoteproc-services/qcom_sysmon.c
 @@ -12,6 +12,7 @@
@@ -223,9 +278,12 @@
  static const struct rpmsg_device_id sysmon_match[] = {
 --- a/ports/qcom-remoteproc-services/Makefile
 +++ b/ports/qcom-remoteproc-services/Makefile
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,8 @@
 +# SPDX-License-Identifier: GPL-2.0-only
 +obj-m += qcom_q6v5.o qcom_sysmon.o qcom_aoss.o
 +ccflags-y += -I$(src) -I$(srctree)/drivers/remoteproc
 +ccflags-y += -DCONFIG_QCOM_SYSMON_MODULE=1 -DCONFIG_QCOM_AOSS_QMP_MODULE=1 -DCONFIG_QCOM_SMEM_MODULE=1
 +KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-smem/Module.symvers
++# Stage120: vendor early SSR notification from the wdog/fatal handlers
++ccflags-y += -I$(src)/../qcom-rproc-common/include
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-rproc-common/Module.symvers

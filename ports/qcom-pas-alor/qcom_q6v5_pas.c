@@ -1075,6 +1075,8 @@ static int qcom_pas_probe(struct platform_device *pdev)
 	}
 
 	qcom_add_ssr_subdev(rproc, &pas->ssr_subdev, desc->ssr_name);
+	/* AVR: vendor early SSR notification (qcom-soc PAS registers it) */
+	qcom_q6v5_register_ssr_subdev(&pas->q6v5, &pas->ssr_subdev.subdev);
 
 	pas->pas_ctx->use_tzmem = desc->needs_tzmem || rproc->has_iommu;
 	if (pas->dtb_pas_id)

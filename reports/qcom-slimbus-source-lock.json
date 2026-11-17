@@ -1,0 +1,85 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-slimbus/core.c",
+      "source": "drivers/slimbus/core.c",
+      "original_sha256": "041cbfc81421c81ece355354ffb2d3dd5b9f786aee5b316333acf8da2d9db60e",
+      "sha256": "eb15b5d2642b387e1dc92d80b1c07e00f72a0aab452619d4979d4fec6831465f"
+    },
+    {
+      "file": "ports/qcom-slimbus/messaging.c",
+      "source": "drivers/slimbus/messaging.c",
+      "original_sha256": "75d13c5171164485b3538d7671d9f0de422c8a2edbfe9482803f32c76f8c031f",
+      "sha256": "75d13c5171164485b3538d7671d9f0de422c8a2edbfe9482803f32c76f8c031f"
+    },
+    {
+      "file": "ports/qcom-slimbus/sched.c",
+      "source": "drivers/slimbus/sched.c",
+      "original_sha256": "13a2b94cc215de7fcf0bb220a3c511e069bc277466986d6eed1ebfc50e893568",
+      "sha256": "13a2b94cc215de7fcf0bb220a3c511e069bc277466986d6eed1ebfc50e893568"
+    },
+    {
+      "file": "ports/qcom-slimbus/stream.c",
+      "source": "drivers/slimbus/stream.c",
+      "original_sha256": "a78bdaea4763246477ce7d608d33748407787a7023518a7bfa371a36896c5129",
+      "sha256": "a78bdaea4763246477ce7d608d33748407787a7023518a7bfa371a36896c5129"
+    },
+    {
+      "file": "ports/qcom-slimbus/slimbus.h",
+      "source": "drivers/slimbus/slimbus.h",
+      "original_sha256": "c83d90e742dbb83bb4b1a0aea3232d9a43ecba2d16d13c017fa63a63ff6bde23",
+      "sha256": "c83d90e742dbb83bb4b1a0aea3232d9a43ecba2d16d13c017fa63a63ff6bde23"
+    },
+    {
+      "file": "ports/qcom-slimbus/qcom-ngd-ctrl.c",
+      "source": "drivers/slimbus/qcom-ngd-ctrl.c",
+      "original_sha256": "86687cd498c27f32e5944f88a563b3d12eb35da3652fb82027c233c1f92b619f",
+      "sha256": "5bdf1990dbf75fb374518a88685b68e258cf4d33a49549ca78ff8484c079f0c1"
+    },
+    {
+      "file": "ports/qcom-slimbus/trace.h",
+      "source": "drivers/slimbus/trace.h",
+      "original_sha256": "19f81208036832c9131ba528ed9c261387d59b317c985f461a0f76ae2522f04a",
+      "sha256": "19f81208036832c9131ba528ed9c261387d59b317c985f461a0f76ae2522f04a"
+    },
+    {
+      "file": "ports/qcom-slimbus/dma/bam_dma.c",
+      "source": "drivers/dma/qcom/bam_dma.c",
+      "original_sha256": "5521b42718df679a177b4294bdc0eb0bbee79862f0d9bb03d456e4ae91715ffd",
+      "sha256": "b792c5879531362d9d55871ee910c6c5c74b0b881f2d39ac4fbf73de87bb6fdf"
+    },
+    {
+      "file": "ports/qcom-slimbus/dma/bam_dma_trace.h",
+      "source": "drivers/dma/qcom/bam_dma_trace.h",
+      "original_sha256": "004167122077afb731d76772bb7a3e04577b975f2a933271f273343fe87742e2",
+      "sha256": "004167122077afb731d76772bb7a3e04577b975f2a933271f273343fe87742e2"
+    },
+    {
+      "file": "ports/qcom-slimbus/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e82ca4e1ceeb052c8475fc3abac2aa6cb6fa81336e8ff380c8bdfd66573959d1"
+    },
+    {
+      "file": "ports/qcom-slimbus/include/linux/slimbus_vendor.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "77b4ba3b0de945054f155adc23fd8747f26144c610f864a278bf7ac5da403023"
+    }
+  ],
+  "patch_sha256": "6bb3f5bb653974afa1d0d7fd6ca843bd8f0c845e0a420b9ba46a412b4615a6c6",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "vendor slimbus core, slim-qcom-ngd-ctrl, bam_dma (canoe_perf =m) on android18-7.3",
+  "reviewed_changes": [
+    "device_match_t const void * and const slim_eaddr_equal (as 7.3 upstream)",
+    "driver_set_override -> device_set_driver_override (as 7.3 upstream qcom-ngd-ctrl)",
+    "kernel_connect sockaddr_unsized; .remove_new -> .remove",
+    "vendor <linux/slimbus.h> differs from 7.3 only by slim_stream_unprepare_disconnect_port(): slimbus_vendor.h declares it (layouts identical)"
+  ],
+  "pending": [
+    "SLIMbus/NGD with ADSP on the phone"
+  ]
+}

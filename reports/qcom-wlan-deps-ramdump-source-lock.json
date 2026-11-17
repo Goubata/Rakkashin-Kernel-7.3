@@ -1,0 +1,34 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-wlan-deps/qcom_ramdump.c",
+      "source": "drivers/soc/qcom/qcom_ramdump.c",
+      "original_sha256": "cae5b5865136b0de0290bac780e360ef0b2bc66172b3b5c30ad417721ff5272b",
+      "sha256": "7d694f871e4db1520403e3d11657c312b8ae22c1a006a2f289a3022bbb0fc595"
+    },
+    {
+      "file": "ports/qcom-wlan-deps/include/soc/qcom/qcom_ramdump.h",
+      "source": "include/soc/qcom/qcom_ramdump.h",
+      "original_sha256": "10fea7fdca3976306ea987bc79b1cc7fc6255eef3e18ec9329c5112ca3337248",
+      "sha256": "10fea7fdca3976306ea987bc79b1cc7fc6255eef3e18ec9329c5112ca3337248"
+    },
+    {
+      "file": "ports/qcom-wlan-deps/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "79d5800bfb768cbf5a33c989e906e74380a27ae891cf5d808e1de0f25eb2c149"
+    }
+  ],
+  "patch_sha256": "e9216a6f5cfdd2ce724e693128498663338a46c452ca20a01b026c06d5c3c149",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "qcom_ramdump (canoe_perf =m)",
+  "reviewed_changes": [
+    "ida_simple_get/remove -> ida_alloc_max/ida_free"
+  ],
+  "pending": [
+    "ramdump collection on the phone"
+  ]
+}

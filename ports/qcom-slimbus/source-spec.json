@@ -1,0 +1,28 @@
+{
+ "name": "qcom-slimbus",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-slimbus/core.c": "drivers/slimbus/core.c",
+  "ports/qcom-slimbus/messaging.c": "drivers/slimbus/messaging.c",
+  "ports/qcom-slimbus/sched.c": "drivers/slimbus/sched.c",
+  "ports/qcom-slimbus/stream.c": "drivers/slimbus/stream.c",
+  "ports/qcom-slimbus/slimbus.h": "drivers/slimbus/slimbus.h",
+  "ports/qcom-slimbus/qcom-ngd-ctrl.c": "drivers/slimbus/qcom-ngd-ctrl.c",
+  "ports/qcom-slimbus/trace.h": "drivers/slimbus/trace.h",
+  "ports/qcom-slimbus/dma/bam_dma.c": "drivers/dma/qcom/bam_dma.c",
+  "ports/qcom-slimbus/dma/bam_dma_trace.h": "drivers/dma/qcom/bam_dma_trace.h",
+  "ports/qcom-slimbus/Makefile": null,
+  "ports/qcom-slimbus/include/linux/slimbus_vendor.h": null
+ },
+ "scope": "vendor slimbus core, slim-qcom-ngd-ctrl, bam_dma (canoe_perf =m) on android18-7.3",
+ "reviewed_changes": [
+  "device_match_t const void * and const slim_eaddr_equal (as 7.3 upstream)",
+  "driver_set_override -> device_set_driver_override (as 7.3 upstream qcom-ngd-ctrl)",
+  "kernel_connect sockaddr_unsized; .remove_new -> .remove",
+  "vendor <linux/slimbus.h> differs from 7.3 only by slim_stream_unprepare_disconnect_port(): slimbus_vendor.h declares it (layouts identical)"
+ ],
+ "pending": [
+  "SLIMbus/NGD with ADSP on the phone"
+ ]
+}

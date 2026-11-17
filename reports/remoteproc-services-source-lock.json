@@ -5,13 +5,13 @@
       "file": "ports/qcom-remoteproc-services/qcom_q6v5.c",
       "source": "drivers/remoteproc/qcom_q6v5.c",
       "original_sha256": "ac6574fee31b54bf801fbd6d7872e2c2078adfd05a10251c6b0bc62054c1d4bb",
-      "sha256": "1e692e71affcd0b402ad513f6df682d1f3a36543c425e69e6d15305b7ea83d76"
+      "sha256": "549bb3d830412cf059d87cd16d6ca773e097b639b3a18ba221591e10e6ac3fad"
     },
     {
       "file": "ports/qcom-remoteproc-services/qcom_q6v5.h",
       "source": "drivers/remoteproc/qcom_q6v5.h",
       "original_sha256": "3c2ad08b2a50f42d7db95952ccdd6c3f65ea679768900bddc387ea9149cea4c1",
-      "sha256": "3c2ad08b2a50f42d7db95952ccdd6c3f65ea679768900bddc387ea9149cea4c1"
+      "sha256": "8052f14606b5e7dace339a8999dfa201e78e31561865f00a06c036d4e3d3a54e"
     },
     {
       "file": "ports/qcom-remoteproc-services/qcom_sysmon.c",
@@ -35,10 +35,10 @@
       "file": "ports/qcom-remoteproc-services/Makefile",
       "source": null,
       "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "sha256": "3c105e239a294c225b0e294ffefa468d077781047003b26c4570f9f2ab86f9c5"
+      "sha256": "c91c161afe5c133ac3216736d3235adb8d6a3d03b9b9df3a92ac2658466f6a54"
     }
   ],
-  "patch_sha256": "8a60bb6b25025b369fed439307aaf25f2dbe1a287798a6831b16845f989fd4b2",
+  "patch_sha256": "2e2dc0d9d21aa23de46961a5378b91984e9dcb58decb861c4106e36f597da48b",
   "scope": "source and reviewed patch replay only; module link is recorded separately; physical acceptance pending",
   "experimental_packaged": true,
   "hardware_runtime_accepted": false,

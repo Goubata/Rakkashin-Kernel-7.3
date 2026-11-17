@@ -1,0 +1,428 @@
+--- a/ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx.h
++++ b/ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx.h
+@@ -63,7 +63,7 @@
+ 
+ #if KERNEL_VERSION(5, 4, 0) <= LINUX_VERSION_CODE
+ #define AW_KERNEL_VER_OVER_5_4_0
+-MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
++MODULE_IMPORT_NS("VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver"); /* AVR 7.3: string form */
+ #endif
+ 
+ #if KERNEL_VERSION(5, 10, 0) <= LINUX_VERSION_CODE
+--- a/ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx.c
++++ b/ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx.c
+@@ -63,12 +63,30 @@
+  *
+  ******************************************************/
+ #ifdef AW_KERNEL_VER_OVER_4_19_1
++/* AVR 7.3: these are macros/_Generic now; same calls as the 6.12 functions */
++static aw_snd_soc_codec_t *aw_kcontrol_component(struct snd_kcontrol *kcontrol)
++{
++	return snd_soc_kcontrol_component(kcontrol);
++}
++
++static void aw_unregister_component(struct device *dev)
++{
++	snd_soc_unregister_component(dev);
++}
++
++static int aw_register_component(struct device *dev,
++				 const aw_snd_soc_codec_driver_t *codec_drv,
++				 struct snd_soc_dai_driver *dai_drv, int num_dai)
++{
++	return snd_soc_register_component(dev, codec_drv, dai_drv, num_dai);
++}
++
+ static struct aw_componet_codec_ops aw_componet_codec_ops = {
+-	.kcontrol_codec = snd_soc_kcontrol_component,
++	.kcontrol_codec = aw_kcontrol_component,
+ 	.codec_get_drvdata = snd_soc_component_get_drvdata,
+ 	.add_codec_controls = snd_soc_add_component_controls,
+-	.unregister_codec = snd_soc_unregister_component,
+-	.register_codec = snd_soc_register_component,
++	.unregister_codec = aw_unregister_component,
++	.register_codec = aw_register_component,
+ };
+ #else
+ static struct aw_componet_codec_ops aw_componet_codec_ops = {
+--- a/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-rx-macro.c
++++ b/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-rx-macro.c
+@@ -4644,7 +4644,7 @@
+ 		dev_err(rx_dev, "%s: failed to add routes\n", __func__);
+ 		return ret;
+ 	}
+-	ret = snd_soc_dapm_new_widgets(dapm->card);
++	ret = snd_soc_dapm_new_widgets(snd_soc_dapm_to_card(dapm));
+ 	if (ret < 0) {
+ 		dev_err(rx_dev, "%s: failed to add widgets\n", __func__);
+ 		return ret;
+--- a/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-tx-macro.c
++++ b/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-tx-macro.c
+@@ -2208,7 +2208,7 @@
+ 		return ret;
+ 	}
+ 
+-	ret = snd_soc_dapm_new_widgets(dapm->card);
++	ret = snd_soc_dapm_new_widgets(snd_soc_dapm_to_card(dapm));
+ 	if (ret < 0) {
+ 		dev_err(tx_dev, "%s: Failed to add widgets\n", __func__);
+ 		return ret;
+--- a/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-va-macro.c
++++ b/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-va-macro.c
+@@ -2034,7 +2034,7 @@
+ 		return ret;
+ 	}
+ 
+-	ret = snd_soc_dapm_new_widgets(dapm->card);
++	ret = snd_soc_dapm_new_widgets(snd_soc_dapm_to_card(dapm));
+ 	if (ret < 0) {
+ 		dev_err(va_dev, "%s: Failed to add widgets\n", __func__);
+ 		return ret;
+--- a/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.c
++++ b/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.c
+@@ -3715,7 +3715,7 @@
+ 		return ret;
+ 	}
+ 
+-	ret = snd_soc_dapm_new_widgets(dapm->card);
++	ret = snd_soc_dapm_new_widgets(snd_soc_dapm_to_card(dapm));
+ 	if (ret < 0) {
+ 		dev_err(wsa_dev, "%s: Failed to add widgets\n", __func__);
+ 		return ret;
+@@ -4083,7 +4083,7 @@
+ 		}
+ 		wsa_priv->tcdev = devm_thermal_of_cooling_device_register(
+ 						&pdev->dev,
+-						wsa_priv->dev->of_node,
++						0, /* AVR 7.3: cdev_id; node = pdev->dev.of_node as before */
+ 						"wsa", wsa_priv,
+ 						&wsa_cooling_ops);
+ 		if (IS_ERR(wsa_priv->tcdev)) {
+--- a/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.c
++++ b/ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.c
+@@ -3830,7 +3830,7 @@
+ 		return ret;
+ 	}
+ 
+-	ret = snd_soc_dapm_new_widgets(dapm->card);
++	ret = snd_soc_dapm_new_widgets(snd_soc_dapm_to_card(dapm));
+ 	if (ret < 0) {
+ 		dev_err(wsa2_dev, "%s: Failed to add widgets\n", __func__);
+ 		return ret;
+@@ -4193,7 +4193,7 @@
+ 		}
+ 		wsa2_priv->tcdev = devm_thermal_of_cooling_device_register(
+ 						&pdev->dev,
+-						wsa2_priv->dev->of_node,
++						0, /* AVR 7.3: cdev_id; node = pdev->dev.of_node as before */
+ 						"wsa2", wsa2_priv,
+ 						&wsa2_cooling_ops);
+ 		if (IS_ERR(wsa2_priv->tcdev)) {
+--- a/ports/audio-kernel/asoc/codecs/swr-haptics.c
++++ b/ports/audio-kernel/asoc/codecs/swr-haptics.c
+@@ -551,7 +551,7 @@
+ 	snd_soc_component_init_regmap(component, swr_hap->regmap);
+ 
+ 	dapm = snd_soc_component_get_dapm(component);
+-	if (dapm && dapm->component) {
++	if (dapm && snd_soc_dapm_to_component(dapm)) {
+ 		snd_soc_dapm_ignore_suspend(dapm, "HAP_IN");
+ 		snd_soc_dapm_ignore_suspend(dapm, "HAP_OUT");
+ 	}
+--- a/ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa98xx.c
++++ b/ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa98xx.c
+@@ -3873,7 +3873,7 @@
+ }
+ 
+ static ssize_t tfa98xx_reg_write(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+@@ -3923,7 +3923,7 @@
+ }
+ 
+ static ssize_t tfa98xx_cal_read(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 
+@@ -3931,7 +3931,7 @@
+ 	return 0;
+ }
+ static ssize_t tfa98xx_cal_send(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 	char tempbuf_l[5] = {0};
+@@ -3995,14 +3995,14 @@
+ }
+ 
+ static ssize_t tfa98xx_volume_read(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 	//TODO NULL;
+ 	return 0;
+ }
+ static ssize_t tfa98xx_volume_send(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 
+@@ -4032,7 +4032,7 @@
+ 
+ 
+ static ssize_t tfa98xx_rw_write(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+@@ -4068,7 +4068,7 @@
+ }
+ 
+ static ssize_t tfa98xx_rw_read(struct file *filp, struct kobject *kobj,
+-	struct bin_attribute *bin_attr,
++	const struct bin_attribute *bin_attr, /* AVR 7.3: const */
+ 	char *buf, loff_t off, size_t count)
+ {
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+--- a/ports/audio-kernel/soc/pinctrl-lpi.c
++++ b/ports/audio-kernel/soc/pinctrl-lpi.c
+@@ -513,14 +513,15 @@
+ 	return value;
+ }
+ 
+-static void lpi_gpio_set(struct gpio_chip *chip, unsigned int pin, int value)
++/* AVR 7.3: gpio_chip.set returns int */
++static int lpi_gpio_set(struct gpio_chip *chip, unsigned int pin, int value)
+ {
+ 	struct lpi_gpio_state *state = gpiochip_get_data(chip);
+ 	unsigned long config;
+ 
+ 	config = pinconf_to_config_packed(PIN_CONFIG_OUTPUT, value);
+ 
+-	lpi_config_set(state->ctrl, pin, &config, 1);
++	return lpi_config_set(state->ctrl, pin, &config, 1);
+ }
+ 
+ static int lpi_notifier_service_cb(struct notifier_block *this,
+--- a/ports/audio-kernel/Makefile
++++ b/ports/audio-kernel/Makefile
+@@ -0,0 +1,22 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# AVR 7.3 port of vendor/qcom/opensource/audio-kernel (canoe, product avr).
++# Module/source list: Makefile.generated (scripts/gen_audio_makefile.py).
++include $(src)/Makefile.generated
++ccflags-y += $(AVR_AUDIO_DEFINES)
++ccflags-y += -I$(src) -I$(src)/include -I$(src)/include/uapi/audio -I$(src)/asoc/codecs/tfa98xx/inc \
++	-I$(src)/asoc/codecs/aw882xx/inc -I$(src)/config
++ccflags-y += -I$(src)/../qcom-socinfo/include -I$(src)/../qcom-ipc-logging/include -I$(src)/../pinctrl-alor-vendor-core/include -I$(src)/../qcom-spmi/include -I$(src)/../qcom-charging/include -I$(src)/../qcom-display-deps/include -I$(src)/../qcom-minidump/include -I$(src)/../qcom-dma-heaps/include -I$(src)/../qcom-iommu-util/include -I$(src)/../secure-buffer/include -I$(src)/../qcom-glink-transport/include -I$(src)/../mm-drivers/include -I$(src)/../gunyah/include -I$(src)/../gunyah-rm/include 
++ccflags-y += -Wno-missing-prototypes
++ccflags-y += -I$(src)/avr-include -I$(src)/../mm-drivers/msm_ext_display/include
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h -include $(src)/avr-audio-compat.h
++# vendor files define pr_fmt after force-included headers pulled printk.h in
++ccflags-y += -Wno-macro-redefined
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-display-deps/Module.symvers $(src)/../qcom-spmi/Module.symvers \
++	$(src)/../qcom-rproc-common/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers \
++	$(src)/../qcom-charging/Module.symvers $(src)/../mm-drivers/Module.symvers \
++	$(src)/../qcom-socinfo/Module.symvers $(src)/../pinctrl-alor-vendor-core/Module.symvers \
++	$(src)/../qcom-pmic-glink/Module.symvers $(src)/../qcom-smem/Module.symvers \
++	$(src)/../qcom-glink-transport/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers \
++	$(src)/../qcom-iommu-util/Module.symvers $(src)/../secure-buffer/Module.symvers \
++	$(src)/../qcom-remoteproc-services/Module.symvers $(src)/../qcom-minidump/Module.symvers \
++	$(src)/../qcom-usb/Module.symvers $(src)/../sched-walt/Module.symvers
+--- a/ports/audio-kernel/Makefile.generated
++++ b/ports/audio-kernel/Makefile.generated
+@@ -0,0 +1,94 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Generated by scripts/gen_audio_makefile.py from audio_modules.bzl + build/canoe.bzl
++# (mmi_product_name "avr"). Do not edit; edit the generator.
++
++obj-m += q6_dlkm.o
++q6_dlkm-y := dsp/msm-audio-event-notify.o dsp/q6_init.o
++obj-m += spf_core_dlkm.o
++spf_core_dlkm-y := dsp/spf-core.o dsp/digital-cdc-rsc-mgr.o
++obj-m += audpkt_ion_dlkm.o
++audpkt_ion_dlkm-y := dsp/msm_audio_ion.o
++obj-m += q6_notifier_dlkm.o
++q6_notifier_dlkm-y := dsp/audio_notifier.o dsp/audio_ssr.o
++obj-m += adsp_loader_dlkm.o
++adsp_loader_dlkm-y := dsp/adsp-loader.o
++obj-m += audio_prm_dlkm.o
++audio_prm_dlkm-y := dsp/audio_prm.o
++obj-m += q6_pdr_dlkm.o
++q6_pdr_dlkm-y := dsp/audio_pdr.o
++obj-m += gpr_dlkm.o
++gpr_dlkm-y := ipc/gpr-lite.o
++obj-m += audio_pkt_dlkm.o
++audio_pkt_dlkm-y := ipc/audio-pkt.o
++obj-m += pinctrl_lpi_dlkm.o
++pinctrl_lpi_dlkm-y := soc/pinctrl-lpi.o
++obj-m += swr_dlkm.o
++swr_dlkm-y := soc/regmap-swr.o soc/soundwire.o
++obj-m += swr_ctrl_dlkm.o
++swr_ctrl_dlkm-y := soc/swr-mstr-ctrl.o
++obj-m += snd_event_dlkm.o
++snd_event_dlkm-y := soc/snd_event.o
++obj-m += machine_dlkm.o
++machine_dlkm-y := asoc/msm_common.o asoc/audio_machine.o
++obj-m += wcd_core_dlkm.o
++wcd_core_dlkm-y := asoc/codecs/wcd9xxx-core-init.o asoc/codecs/msm-cdc-pinctrl.o asoc/codecs/msm-cdc-supply.o asoc/codecs/wcd-irq.o
++obj-m += mbhc_dlkm.o
++mbhc_dlkm-y := asoc/codecs/wcd-mbhc-v2.o asoc/codecs/wcd-mbhc-adc.o
++obj-m += swr_dmic_dlkm.o
++swr_dmic_dlkm-y := asoc/codecs/swr-dmic.o
++obj-m += wcd9xxx_dlkm.o
++wcd9xxx_dlkm-y := asoc/codecs/wcdcal-hwdep.o asoc/codecs/wcd9xxx-soc-init.o asoc/codecs/audio-ext-clk-up.o asoc/codecs/wcd-clsh.o
++obj-m += swr_haptics_dlkm.o
++swr_haptics_dlkm-y := asoc/codecs/swr-haptics.o
++obj-m += sdca_registers_dlkm.o
++sdca_registers_dlkm-y := asoc/codecs/sdca-registers-api.o
++obj-m += stub_dlkm.o
++stub_dlkm-y := asoc/codecs/msm_stub.o
++obj-m += hdmi_dlkm.o
++hdmi_dlkm-y := asoc/codecs/msm_hdmi_codec_rx.o
++obj-m += lpass_cdc_dlkm.o
++lpass_cdc_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc.o asoc/codecs/lpass-cdc/lpass-cdc-comp.o asoc/codecs/lpass-cdc/lpass-cdc-utils.o asoc/codecs/lpass-cdc/lpass-cdc-regmap.o asoc/codecs/lpass-cdc/lpass-cdc-tables.o asoc/codecs/lpass-cdc/lpass-cdc-clk-rsc.o
++obj-m += lpass_cdc_wsa_macro_dlkm.o
++lpass_cdc_wsa_macro_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.o
++obj-m += lpass_cdc_wsa2_macro_dlkm.o
++lpass_cdc_wsa2_macro_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.o
++obj-m += lpass_cdc_va_macro_dlkm.o
++lpass_cdc_va_macro_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc-va-macro.o
++obj-m += lpass_cdc_rx_macro_dlkm.o
++lpass_cdc_rx_macro_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc-rx-macro.o
++obj-m += lpass_cdc_tx_macro_dlkm.o
++lpass_cdc_tx_macro_dlkm-y := asoc/codecs/lpass-cdc/lpass-cdc-tx-macro.o
++obj-m += wsa883x_dlkm.o
++wsa883x_dlkm-y := asoc/codecs/wsa883x/wsa883x.o asoc/codecs/wsa883x/wsa883x-regmap.o asoc/codecs/wsa883x/wsa883x-tables.o
++obj-m += wsa884x_dlkm.o
++wsa884x_dlkm-y := asoc/codecs/wsa884x/wsa884x.o asoc/codecs/wsa884x/wsa884x-regmap.o asoc/codecs/wsa884x/wsa884x-tables.o
++obj-m += wcd937x_dlkm.o
++wcd937x_dlkm-y := asoc/codecs/wcd937x/wcd937x.o asoc/codecs/wcd937x/wcd937x-regmap.o asoc/codecs/wcd937x/wcd937x-tables.o asoc/codecs/wcd937x/wcd937x-mbhc.o
++obj-m += wcd937x_slave_dlkm.o
++wcd937x_slave_dlkm-y := asoc/codecs/wcd937x/wcd937x_slave.o
++obj-m += wcd938x_dlkm.o
++wcd938x_dlkm-y := asoc/codecs/wcd938x/wcd938x.o asoc/codecs/wcd938x/wcd938x-regmap.o asoc/codecs/wcd938x/wcd938x-tables.o asoc/codecs/wcd938x/wcd938x-mbhc.o
++obj-m += wcd938x_slave_dlkm.o
++wcd938x_slave_dlkm-y := asoc/codecs/wcd938x/wcd938x-slave.o
++obj-m += wcd939x_dlkm.o
++wcd939x_dlkm-y := asoc/codecs/wcd939x/wcd939x.o asoc/codecs/wcd939x/wcd939x-regmap.o asoc/codecs/wcd939x/wcd939x-tables.o asoc/codecs/wcd939x/wcd939x-mbhc.o asoc/codecs/wcd939x/wcd939x-regulator.o
++obj-m += wcd939x_slave_dlkm.o
++wcd939x_slave_dlkm-y := asoc/codecs/wcd939x/wcd939x-slave.o
++obj-m += wcd9378_dlkm.o
++wcd9378_dlkm-y := asoc/codecs/wcd9378/wcd9378.o asoc/codecs/wcd9378/wcd9378-regmap.o asoc/codecs/wcd9378/wcd9378-tables.o asoc/codecs/wcd9378/wcd9378-mbhc.o
++obj-m += wcd9378_slave_dlkm.o
++wcd9378_slave_dlkm-y := asoc/codecs/wcd9378/wcd9378-slave.o
++obj-m += lpass_bt_swr_dlkm.o
++lpass_bt_swr_dlkm-y := asoc/codecs/lpass-bt-swr.o
++obj-m += qmp_dlkm.o
++qmp_dlkm-y := asoc/codecs/qmp1000/qmp-dmic.o asoc/codecs/qmp1000/qmp-aggregator.o
++obj-m += wsa885x_i2c_dlkm.o
++wsa885x_i2c_dlkm-y := asoc/codecs/wsa885x-i2c.o
++obj-m += simple_amp_dlkm.o
++simple_amp_dlkm-y := asoc/codecs/sdca/simple-amp.o asoc/codecs/sdca/simple-amp-regdump.o asoc/codecs/sdca/wsa8855-xu.o
++obj-m += tfa98xx_dlkm.o
++tfa98xx_dlkm-y := asoc/codecs/tfa98xx/src/tfa98xx.o asoc/codecs/tfa98xx/src/tfa_container.o asoc/codecs/tfa98xx/src/tfa_dsp.o asoc/codecs/tfa98xx/src/tfa_init.o
++obj-m += aw882xx_dlkm.o
++aw882xx_dlkm-y := asoc/codecs/aw882xx/src/aw882xx.o asoc/codecs/aw882xx/src/aw882xx_dsp.o asoc/codecs/aw882xx/src/aw882xx_init.o asoc/codecs/aw882xx/src/aw882xx_spin.o asoc/codecs/aw882xx/src/aw882xx_calib.o asoc/codecs/aw882xx/src/aw882xx_device.o asoc/codecs/aw882xx/src/aw882xx_monitor.o asoc/codecs/aw882xx/src/aw882xx_bin_parse.o
++
++AVR_AUDIO_DEFINES := -DCONFIG_AUDIO_BTFM_PROXY=1 -DCONFIG_AUDIO_PKT=1 -DCONFIG_AUDIO_PKT_ION=1 -DCONFIG_AUDIO_PRM=1 -DCONFIG_BOLERO_VER_2P85=1 -DCONFIG_DIGITAL_CDC_RSC_MGR=1 -DCONFIG_LPASS_BT_SWR=1 -DCONFIG_LPASS_CDC_RX_MACRO=1 -DCONFIG_LPASS_CDC_TX_MACRO=1 -DCONFIG_LPASS_CDC_VA_MACRO=1 -DCONFIG_LPASS_CDC_WSA2_MACRO=1 -DCONFIG_LPASS_CDC_WSA_MACRO=1 -DCONFIG_MSM_ADSP_LOADER=1 -DCONFIG_MSM_CDC_PINCTRL=1 -DCONFIG_MSM_EXT_DISPLAY=1 -DCONFIG_MSM_QDSP6_GPR_RPMSG=1 -DCONFIG_MSM_QDSP6_NOTIFIER=1 -DCONFIG_MSM_QDSP6_PDR=1 -DCONFIG_MSM_QDSP6_SSR=1 -DCONFIG_PINCTRL_LPI=1 -DCONFIG_SND_EVENT=1 -DCONFIG_SND_SOC_AW882XX=1 -DCONFIG_SND_SOC_AW882XX_SEN_MI2S=1 -DCONFIG_SND_SOC_CANOE=1 -DCONFIG_SND_SOC_LPASS_CDC=1 -DCONFIG_SND_SOC_MSM_HDMI_CODEC_RX=1 -DCONFIG_SND_SOC_MSM_QDSP6V2_INTF=1 -DCONFIG_SND_SOC_MSM_STUB=1 -DCONFIG_SND_SOC_QMP=1 -DCONFIG_SND_SOC_SDCA_REGISTERS=1 -DCONFIG_SND_SOC_SIMPLE_AMP=1 -DCONFIG_SND_SOC_SWR_DMIC=1 -DCONFIG_SND_SOC_TFA98XX=1 -DCONFIG_SND_SOC_WCD9378=1 -DCONFIG_SND_SOC_WCD9378_SLAVE=1 -DCONFIG_SND_SOC_WCD937X=1 -DCONFIG_SND_SOC_WCD937X_SLAVE=1 -DCONFIG_SND_SOC_WCD938X=1 -DCONFIG_SND_SOC_WCD938X_SLAVE=1 -DCONFIG_SND_SOC_WCD939X=1 -DCONFIG_SND_SOC_WCD939X_SLAVE=1 -DCONFIG_SND_SOC_WCD9XXX_V2=1 -DCONFIG_SND_SOC_WCD_IRQ=1 -DCONFIG_SND_SOC_WCD_MBHC=1 -DCONFIG_SND_SOC_WCD_MBHC_ADC=1 -DCONFIG_SND_SOC_WSA883X=1 -DCONFIG_SND_SOC_WSA884X=1 -DCONFIG_SND_SOC_WSA885X_I2C=1 -DCONFIG_SND_SWR_HAPTICS=1 -DCONFIG_SOUNDWIRE=1 -DCONFIG_SOUNDWIRE_MSTR_CTRL=1 -DCONFIG_SPF_CORE=1 -DCONFIG_SWRM_VER_2P0=1 -DCONFIG_WCD9XXX_CODEC_CORE_V2=1
+--- a/ports/audio-kernel/avr-audio-compat.h
++++ b/ports/audio-kernel/avr-audio-compat.h
+@@ -0,0 +1,39 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * AVR 7.3 port: android16-6.12 ASoC names used by the canoe audio-kernel.
++ * - snd_soc_kcontrol_component(k) was snd_kcontrol_chip(k) (component-registered
++ *   controls keep the component as private_data in 7.3)
++ * - snd_soc_dapm_kcontrol_widget -> snd_soc_dapm_kcontrol_to_widget
++ * - snd_soc_component_get_dapm -> snd_soc_component_to_dapm (dapm is now a pointer)
++ * - SND_SOC_DAIFMT_CBS_CFS -> SND_SOC_DAIFMT_CBC_CFC (same value meaning)
++ * - PIN_CONFIG_OUTPUT -> PIN_CONFIG_LEVEL (output + level, same semantics)
++ */
++#ifndef AVR_AUDIO_COMPAT_H
++#define AVR_AUDIO_COMPAT_H
++#include <sound/soc.h>
++#include <sound/soc-dapm.h>
++#include <linux/pinctrl/pinconf-generic.h>
++
++#define snd_soc_kcontrol_component(kcontrol) \
++	((struct snd_soc_component *)snd_kcontrol_chip(kcontrol))
++#define snd_soc_dapm_kcontrol_widget	snd_soc_dapm_kcontrol_to_widget
++#define snd_soc_component_get_dapm	snd_soc_component_to_dapm
++#define SND_SOC_DAIFMT_CBS_CFS		SND_SOC_DAIFMT_CBC_CFC
++#define PIN_CONFIG_OUTPUT		PIN_CONFIG_LEVEL
++
++/* 6.12 inline: bias level of the component's DAPM context */
++#define snd_soc_component_get_bias_level(component) \
++	snd_soc_dapm_get_bias_level(snd_soc_component_to_dapm(component))
++
++/* irq_domain_add_linear() was removed; same domain from the OF node's fwnode */
++#include <linux/irqdomain.h>
++#include <linux/of.h>
++static inline struct irq_domain *avr_irq_domain_add_linear(struct device_node *np,
++		unsigned int size, const struct irq_domain_ops *ops, void *host_data)
++{
++	/* 6.12: of_node_to_fwnode(NULL) == NULL as well */
++	return irq_domain_create_linear(np ? of_fwnode_handle(np) : NULL, size, ops, host_data);
++}
++#define irq_domain_add_linear avr_irq_domain_add_linear
++
++#endif
+--- a/ports/audio-kernel/avr-canoe-vendor-config.h
++++ b/ports/audio-kernel/avr-canoe-vendor-config.h
+@@ -0,0 +1,38 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
++ * module was compiled with through the vendor kernel autoconf but that the 7.3
++ * GKI .config does not carry. Only options referenced by the sources or headers
++ * it includes are listed; all providers are ported modules. Generated by
++ * scripts/gen_drm_vendor_config.py from canoe_perf.bzl. */
++#ifndef AVR_CANOE_VENDOR_CONFIG_H
++#define AVR_CANOE_VENDOR_CONFIG_H
++#define CONFIG_GH_ARM64_DRV_MODULE 1
++#define CONFIG_GH_DBL_MODULE 1
++#define CONFIG_GH_IRQ_LEND_MODULE 1
++#define CONFIG_GH_MEM_NOTIFIER_MODULE 1
++#define CONFIG_GH_MSGQ_MODULE 1
++#define CONFIG_GH_PANIC_NOTIFIER_MODULE 1
++#define CONFIG_GH_RM_DRV_MODULE 1
++#define CONFIG_GH_RM_HEAP_MANAGER_MODULE 1
++#define CONFIG_GH_VCPU_MGR_MODULE 1
++#define CONFIG_IOMMU_IO_PGTABLE_FAST 1
++#define CONFIG_IPC_LOGGING_MODULE 1
++#define CONFIG_MEM_PROT_MODULE 1
++#define CONFIG_QCOM_FSA4480_I2C_MODULE 1
++#define CONFIG_QCOM_LAZY_MAPPING_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_DEV_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_GH 1
++#define CONFIG_QCOM_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
++#define CONFIG_QCOM_RPROC_COMMON_MODULE 1
++#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
++#define CONFIG_QCOM_SOCINFO_MODULE 1
++#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_WCD_USBSS_I2C_MODULE 1
++#define CONFIG_QTI_ALTMODE_GLINK_MODULE 1
++#define CONFIG_QTI_BATTERY_CHARGER_MODULE 1
++#define CONFIG_QTVM_WITH_AVF 1
++#define CONFIG_REGMAP_QTI_DEBUGFS_MODULE 1
++#define CONFIG_SCHED_WALT_MODULE 1
++#define CONFIG_SPMI_MSM_PMIC_ARB_MODULE 1
++#endif
+--- a/ports/audio-kernel/avr-include/linux/msm_ion.h
++++ b/ports/audio-kernel/avr-include/linux/msm_ion.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: legacy ION header included by audio sources that use none of it. */
++#ifndef AVR_MSM_ION_STUB_H
++#define AVR_MSM_ION_STUB_H
++#endif

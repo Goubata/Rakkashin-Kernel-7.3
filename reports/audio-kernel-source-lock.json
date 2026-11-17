@@ -1,0 +1,2483 @@
+{
+  "source_commit": "012f5b151f4e84d752b4e274fbfd130675903d0a",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-audio-kernel",
+  "files": [
+    {
+      "file": "ports/audio-kernel/asoc/audio_machine.c",
+      "source": "asoc/audio_machine.c",
+      "original_sha256": "23e07ec983cb8c281febd1be6742734007aec8fffadb05c5a7aaa256f4522b23",
+      "sha256": "23e07ec983cb8c281febd1be6742734007aec8fffadb05c5a7aaa256f4522b23"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/bengal-port-config.h",
+      "source": "asoc/bengal-port-config.h",
+      "original_sha256": "da6f699e87f1611bd9a13b84010e5366dca003edb24387538a658baeb35594fb",
+      "sha256": "da6f699e87f1611bd9a13b84010e5366dca003edb24387538a658baeb35594fb"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/bengal.c",
+      "source": "asoc/bengal.c",
+      "original_sha256": "e9aa937b5a61b32a78baaf62d81e8ff73df975ffca6e9b8a0153c35e807f6ef2",
+      "sha256": "e9aa937b5a61b32a78baaf62d81e8ff73df975ffca6e9b8a0153c35e807f6ef2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/canoe-port-config.h",
+      "source": "asoc/canoe-port-config.h",
+      "original_sha256": "c460fa98aab845cd07cbea3bc44834c4a05b16d4ae82f0ae86e27086bab3abd1",
+      "sha256": "c460fa98aab845cd07cbea3bc44834c4a05b16d4ae82f0ae86e27086bab3abd1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-api.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-api.h",
+      "original_sha256": "e8ae6255dc848887211caf6aa38d49ff3fe54072e214e90e9a74aa4370e5fe22",
+      "sha256": "e8ae6255dc848887211caf6aa38d49ff3fe54072e214e90e9a74aa4370e5fe22"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-clsh.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-clsh.c",
+      "original_sha256": "baf9e36dcbf3c8f68588579aeb0faf612cb9e60cf5b000bbd8d48e91926eac56",
+      "sha256": "baf9e36dcbf3c8f68588579aeb0faf612cb9e60cf5b000bbd8d48e91926eac56"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-clsh.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-clsh.h",
+      "original_sha256": "ca6b8901e9eb2de88ea56180947d694cedc36dd959d55e6e8935d14c230fdfc3",
+      "sha256": "ca6b8901e9eb2de88ea56180947d694cedc36dd959d55e6e8935d14c230fdfc3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-core.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-core.c",
+      "original_sha256": "38ff7baba54a05fa188bd6188f68931f729b30340ec73936f743d4e04f50efd3",
+      "sha256": "38ff7baba54a05fa188bd6188f68931f729b30340ec73936f743d4e04f50efd3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-internal.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-internal.h",
+      "original_sha256": "5d1c2a1c50d61fb134aefaf9a958cb26a34acf68a8efe0fb25c2770bd0fe8bcc",
+      "sha256": "5d1c2a1c50d61fb134aefaf9a958cb26a34acf68a8efe0fb25c2770bd0fe8bcc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-irq.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-irq.c",
+      "original_sha256": "cb163f51a77cab154b1aeffb651bb799926978718db3a5a9291bd4c1055db9f1",
+      "sha256": "cb163f51a77cab154b1aeffb651bb799926978718db3a5a9291bd4c1055db9f1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-irq.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-irq.h",
+      "original_sha256": "e189ce264a3e1c58e22f9d94483476c2e4a860c94b9d5502fe3528f0dfa2332e",
+      "sha256": "e189ce264a3e1c58e22f9d94483476c2e4a860c94b9d5502fe3528f0dfa2332e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-mbhc.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-mbhc.c",
+      "original_sha256": "f26d89595147c841b656399518ea6e8013e78e04924aef4ded7a88f8df469693",
+      "sha256": "f26d89595147c841b656399518ea6e8013e78e04924aef4ded7a88f8df469693"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-mbhc.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-mbhc.h",
+      "original_sha256": "aedbf16866853742ecb8cfa956f31cae86c190d913c274048e9eccbffd8aa645",
+      "sha256": "aedbf16866853742ecb8cfa956f31cae86c190d913c274048e9eccbffd8aa645"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-reg-defaults.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-reg-defaults.h",
+      "original_sha256": "a0a88f56d3caa3dec935cadee34e28972ae730723c1f5cd60fcd16b5abbbaf00",
+      "sha256": "a0a88f56d3caa3dec935cadee34e28972ae730723c1f5cd60fcd16b5abbbaf00"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-registers.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-registers.h",
+      "original_sha256": "3e26a43a0654395886d9287b70e36609fe871294a83db5c46051908657aeb835",
+      "sha256": "3e26a43a0654395886d9287b70e36609fe871294a83db5c46051908657aeb835"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-regmap.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-regmap.c",
+      "original_sha256": "72400ba7bea898c4291b62ecce9f4dc8599956e85dbfb16aca7fa09c9fd50774",
+      "sha256": "72400ba7bea898c4291b62ecce9f4dc8599956e85dbfb16aca7fa09c9fd50774"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-routing.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-routing.h",
+      "original_sha256": "81db00d5f2f956a525f73dc54f24934dff7182ac512d16cfc06429ab24214d58",
+      "sha256": "81db00d5f2f956a525f73dc54f24934dff7182ac512d16cfc06429ab24214d58"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-utils.c",
+      "source": "asoc/codecs/aqt1000/aqt1000-utils.c",
+      "original_sha256": "3bb50b3298b6054037aa8fdd94d2c1e3934e2f671decf4731cab6ebe71cd6cc5",
+      "sha256": "3bb50b3298b6054037aa8fdd94d2c1e3934e2f671decf4731cab6ebe71cd6cc5"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000-utils.h",
+      "source": "asoc/codecs/aqt1000/aqt1000-utils.h",
+      "original_sha256": "b71ba4f6b9ffffc99b419c262b18cc04cf595bd500485fa152d8045164653bb1",
+      "sha256": "b71ba4f6b9ffffc99b419c262b18cc04cf595bd500485fa152d8045164653bb1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000.c",
+      "source": "asoc/codecs/aqt1000/aqt1000.c",
+      "original_sha256": "029ecbf2062c404e3c501b760318f52aea76fe7359f1bf92c0fbf82e7a3ac549",
+      "sha256": "029ecbf2062c404e3c501b760318f52aea76fe7359f1bf92c0fbf82e7a3ac549"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/aqt1000.h",
+      "source": "asoc/codecs/aqt1000/aqt1000.h",
+      "original_sha256": "b79b4cca82e2cd3b55b83348f044512fb00dedabaccfeca34b3dea5d4f2a3c6e",
+      "sha256": "b79b4cca82e2cd3b55b83348f044512fb00dedabaccfeca34b3dea5d4f2a3c6e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aqt1000/pdata.h",
+      "source": "asoc/codecs/aqt1000/pdata.h",
+      "original_sha256": "6ea3a28fca392b266bb8b3d5e33e60c7d459382e36ca7dc4349b1b2a6db28627",
+      "sha256": "6ea3a28fca392b266bb8b3d5e33e60c7d459382e36ca7dc4349b1b2a6db28627"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/audio-ext-clk-up.c",
+      "source": "asoc/codecs/audio-ext-clk-up.c",
+      "original_sha256": "b164d02f5a575ce8dd40ff49740278d2e5ea3a536c14d78099af512d1aa36e09",
+      "sha256": "b164d02f5a575ce8dd40ff49740278d2e5ea3a536c14d78099af512d1aa36e09"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/audio-ext-clk-up.h",
+      "source": "asoc/codecs/audio-ext-clk-up.h",
+      "original_sha256": "74da4fa9ae7cc5254cf9c2c026ecb862c2f56b963be6d207ec0ea42f4939f94e",
+      "sha256": "74da4fa9ae7cc5254cf9c2c026ecb862c2f56b963be6d207ec0ea42f4939f94e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/audio-ext-clk.c",
+      "source": "asoc/codecs/audio-ext-clk.c",
+      "original_sha256": "a6ce3fdbf4edacd6c7daaabc7fffeb218e567393eb8ab461f7054598e7de6657",
+      "sha256": "a6ce3fdbf4edacd6c7daaabc7fffeb218e567393eb8ab461f7054598e7de6657"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx.h",
+      "original_sha256": "7af858ab70df536fc38f6d4f63d50e190c40b173bda1dc89af22b3092b314bad",
+      "sha256": "28cf6dc24325b9ea74bb2d1bf34472bc42e6e665ef016d75f7c8509e19f2ba45"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_bin_parse.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_bin_parse.h",
+      "original_sha256": "7634c2d9355848865483c2e8154907e1431c8911d4b0fe0ae3332ba07640c3a4",
+      "sha256": "7634c2d9355848865483c2e8154907e1431c8911d4b0fe0ae3332ba07640c3a4"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_calib.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_calib.h",
+      "original_sha256": "4838036272cc0e2c89aed3e000c39f47cb55f1bfbf40e6802bf8d85685eb1339",
+      "sha256": "4838036272cc0e2c89aed3e000c39f47cb55f1bfbf40e6802bf8d85685eb1339"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_data_type.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_data_type.h",
+      "original_sha256": "cf1ef2c10cc82122c93643d8158f5e75c5685286b9e48244ffdce2200827fd7c",
+      "sha256": "cf1ef2c10cc82122c93643d8158f5e75c5685286b9e48244ffdce2200827fd7c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_device.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_device.h",
+      "original_sha256": "ffe9b9337dd4a6612cf98facb3d554cb9139b91918a14c9dbd1785a6c3afe590",
+      "sha256": "ffe9b9337dd4a6612cf98facb3d554cb9139b91918a14c9dbd1785a6c3afe590"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_dsp.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_dsp.h",
+      "original_sha256": "0c6123ec6f293057cddab33112c913ff3a581f38a1867e3a9e934d9454e22f2f",
+      "sha256": "0c6123ec6f293057cddab33112c913ff3a581f38a1867e3a9e934d9454e22f2f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_init.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_init.h",
+      "original_sha256": "03086e34450cd3e4c0a20d2688143023283bc774902f610510985742383c1816",
+      "sha256": "03086e34450cd3e4c0a20d2688143023283bc774902f610510985742383c1816"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_log.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_log.h",
+      "original_sha256": "401326f0cb59377eb22e509a6813b709716d52a91f82761e3418c255b28a50d3",
+      "sha256": "401326f0cb59377eb22e509a6813b709716d52a91f82761e3418c255b28a50d3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_monitor.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_monitor.h",
+      "original_sha256": "7b1bc28d4aefed245a01a69f3994edf87e526880df1a2fba19b50348056c54fc",
+      "sha256": "7b1bc28d4aefed245a01a69f3994edf87e526880df1a2fba19b50348056c54fc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/inc/aw882xx_spin.h",
+      "source": "asoc/codecs/aw882xx/inc/aw882xx_spin.h",
+      "original_sha256": "01fc2ee8ce384a0200ea8d7dd0e3d029716e5242db6a4fd034b882daa87a131b",
+      "sha256": "01fc2ee8ce384a0200ea8d7dd0e3d029716e5242db6a4fd034b882daa87a131b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx.c",
+      "original_sha256": "fb779274a8b9f6a8e4e0d6921a7149db927cafa3ec5918c69d07d885ae93e7da",
+      "sha256": "4e39f6b3a0c7fe72f00f90428e1e4763da454d7d18bba04699130cf540d048ac"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_bin_parse.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_bin_parse.c",
+      "original_sha256": "d04a2e6c15689b982f994729854a986e8ecf78bcf348a4a6615f3457fbaf4b54",
+      "sha256": "d04a2e6c15689b982f994729854a986e8ecf78bcf348a4a6615f3457fbaf4b54"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_calib.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_calib.c",
+      "original_sha256": "f67e418ce361ba231d96be61d72b8117ff9f7ca082c85fc8d64ed3b2390d73ab",
+      "sha256": "f67e418ce361ba231d96be61d72b8117ff9f7ca082c85fc8d64ed3b2390d73ab"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_device.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_device.c",
+      "original_sha256": "64b86afed1f00be3557007288d3f5c7c969cb5a415149645581a21ebca915f4e",
+      "sha256": "64b86afed1f00be3557007288d3f5c7c969cb5a415149645581a21ebca915f4e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_dsp.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_dsp.c",
+      "original_sha256": "7c9fe36d9a68a8a85240cf43a128d774542efae32fe23fd93a5a1964d9211eff",
+      "sha256": "7c9fe36d9a68a8a85240cf43a128d774542efae32fe23fd93a5a1964d9211eff"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_init.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_init.c",
+      "original_sha256": "482cfa8fe4d003597acd77df910a34e8fd8b22910ef72e0af17f0b2a5df5cce3",
+      "sha256": "482cfa8fe4d003597acd77df910a34e8fd8b22910ef72e0af17f0b2a5df5cce3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_monitor.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_monitor.c",
+      "original_sha256": "de946a64d5bedd3194ab88c3bda102c60f08bc39b6da808ae065e7548e9bf12e",
+      "sha256": "de946a64d5bedd3194ab88c3bda102c60f08bc39b6da808ae065e7548e9bf12e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/aw882xx/src/aw882xx_spin.c",
+      "source": "asoc/codecs/aw882xx/src/aw882xx_spin.c",
+      "original_sha256": "e599d6acde4b44c29f45effb11f9cdf5694a726f8aa606dc11782f4f4aa1e1fa",
+      "sha256": "e599d6acde4b44c29f45effb11f9cdf5694a726f8aa606dc11782f4f4aa1e1fa"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc-registers.h",
+      "source": "asoc/codecs/bolero/bolero-cdc-registers.h",
+      "original_sha256": "3bfa7448592a58afe1284d085f3e43cd2d083cccdfd4487d7f113f21ea1bac08",
+      "sha256": "3bfa7448592a58afe1284d085f3e43cd2d083cccdfd4487d7f113f21ea1bac08"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc-regmap.c",
+      "source": "asoc/codecs/bolero/bolero-cdc-regmap.c",
+      "original_sha256": "5d9ca289e753f6a2cbc1065d655e277d0fb810a6ba4614e7a82a505f495f7dea",
+      "sha256": "5d9ca289e753f6a2cbc1065d655e277d0fb810a6ba4614e7a82a505f495f7dea"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc-tables.c",
+      "source": "asoc/codecs/bolero/bolero-cdc-tables.c",
+      "original_sha256": "33408013b7be9210703eed1c3022772caa395f891ca58018c4427197a4de994f",
+      "sha256": "33408013b7be9210703eed1c3022772caa395f891ca58018c4427197a4de994f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc-utils.c",
+      "source": "asoc/codecs/bolero/bolero-cdc-utils.c",
+      "original_sha256": "53e82fb9bb26ff30646c3f1db36c8a9df8c99449b0609364f4f97e8614b3d6ac",
+      "sha256": "53e82fb9bb26ff30646c3f1db36c8a9df8c99449b0609364f4f97e8614b3d6ac"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc.c",
+      "source": "asoc/codecs/bolero/bolero-cdc.c",
+      "original_sha256": "9125f0dd724a0554255d6b2feefbfab8f0f8a7942584c12ad2a66541d24fbf41",
+      "sha256": "9125f0dd724a0554255d6b2feefbfab8f0f8a7942584c12ad2a66541d24fbf41"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-cdc.h",
+      "source": "asoc/codecs/bolero/bolero-cdc.h",
+      "original_sha256": "87d777f76287b376ada9b4d337a566059098f0317432c00af1cee284160a0f49",
+      "sha256": "87d777f76287b376ada9b4d337a566059098f0317432c00af1cee284160a0f49"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-clk-rsc.c",
+      "source": "asoc/codecs/bolero/bolero-clk-rsc.c",
+      "original_sha256": "6ae1fb69bd4130a4b796e2e5f7cc5ed155eb06030f8ec50752e0f18a5ec0da96",
+      "sha256": "6ae1fb69bd4130a4b796e2e5f7cc5ed155eb06030f8ec50752e0f18a5ec0da96"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/bolero-clk-rsc.h",
+      "source": "asoc/codecs/bolero/bolero-clk-rsc.h",
+      "original_sha256": "65d67c8c3360bfab4065d7e7d6f9e419bb41dc37318b24d1ee9612bc23fe1b6a",
+      "sha256": "65d67c8c3360bfab4065d7e7d6f9e419bb41dc37318b24d1ee9612bc23fe1b6a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/internal.h",
+      "source": "asoc/codecs/bolero/internal.h",
+      "original_sha256": "b8ff59cf6f67a2941d9cb54daafc09d7d54e2dfb5434a03bbeea4eb9cff64936",
+      "sha256": "b8ff59cf6f67a2941d9cb54daafc09d7d54e2dfb5434a03bbeea4eb9cff64936"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/rx-macro.c",
+      "source": "asoc/codecs/bolero/rx-macro.c",
+      "original_sha256": "895d7de988d59f966cefde25e5884edec90ae4f42b2238c81d7b1b4ad45eb12b",
+      "sha256": "895d7de988d59f966cefde25e5884edec90ae4f42b2238c81d7b1b4ad45eb12b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/tx-macro.c",
+      "source": "asoc/codecs/bolero/tx-macro.c",
+      "original_sha256": "b53227a29a0c86635c273547fbe00cfd078547f2a5b0952aa664a6322682e123",
+      "sha256": "b53227a29a0c86635c273547fbe00cfd078547f2a5b0952aa664a6322682e123"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/va-macro.c",
+      "source": "asoc/codecs/bolero/va-macro.c",
+      "original_sha256": "6e07f8b599fb1ea59e3bf69bd8b201314f5181b789ca141d91780b95b68b39de",
+      "sha256": "6e07f8b599fb1ea59e3bf69bd8b201314f5181b789ca141d91780b95b68b39de"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/wsa-macro.c",
+      "source": "asoc/codecs/bolero/wsa-macro.c",
+      "original_sha256": "8defd9b7a5a75c7783abc073430ac2324eb0d2c779e56945ad361d808092bc57",
+      "sha256": "8defd9b7a5a75c7783abc073430ac2324eb0d2c779e56945ad361d808092bc57"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/bolero/wsa-macro.h",
+      "source": "asoc/codecs/bolero/wsa-macro.h",
+      "original_sha256": "e27caf0c4cdb60fc437891c21b0417a51d6fb783f8bc042ef284790c8d5aaafd",
+      "sha256": "e27caf0c4cdb60fc437891c21b0417a51d6fb783f8bc042ef284790c8d5aaafd"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/cpe_cmi.h",
+      "source": "asoc/codecs/cpe_cmi.h",
+      "original_sha256": "f292403e8d9f5b861d19918987c35d6343ae735bb6d3b7a5e21695feaf3eccb7",
+      "sha256": "f292403e8d9f5b861d19918987c35d6343ae735bb6d3b7a5e21695feaf3eccb7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/cpe_err.h",
+      "source": "asoc/codecs/cpe_err.h",
+      "original_sha256": "0df5dc3499e002d8b4f7fccd8b5693cf34336720cdb5b23262e78dcdb5490e73",
+      "sha256": "0df5dc3499e002d8b4f7fccd8b5693cf34336720cdb5b23262e78dcdb5490e73"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/csra66x0/csra66x0.c",
+      "source": "asoc/codecs/csra66x0/csra66x0.c",
+      "original_sha256": "18b26589185ad4bdc3e40ecf64c3742acc9a4fd7148e46fee56de40d86a30af2",
+      "sha256": "18b26589185ad4bdc3e40ecf64c3742acc9a4fd7148e46fee56de40d86a30af2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/csra66x0/csra66x0.h",
+      "source": "asoc/codecs/csra66x0/csra66x0.h",
+      "original_sha256": "aaaee4470d8efa3529063a03824d7cba506a4ca911e8e37eca3d3c6274161556",
+      "sha256": "aaaee4470d8efa3529063a03824d7cba506a4ca911e8e37eca3d3c6274161556"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/ep92/ep92.c",
+      "source": "asoc/codecs/ep92/ep92.c",
+      "original_sha256": "aea82c918de3be74dcea516efbdba25e29a372fafec95ea41c2a7b1a6480a78c",
+      "sha256": "aea82c918de3be74dcea516efbdba25e29a372fafec95ea41c2a7b1a6480a78c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/ep92/ep92.h",
+      "source": "asoc/codecs/ep92/ep92.h",
+      "original_sha256": "95ab5b46b647ff58a87fc38cb069820279599b76095be999b1edf19257645731",
+      "sha256": "95ab5b46b647ff58a87fc38cb069820279599b76095be999b1edf19257645731"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-bt-swr.c",
+      "source": "asoc/codecs/lpass-bt-swr.c",
+      "original_sha256": "2a4c140436d7ddc0cbf3ae630e6182c99f7c28ebf9fea8a5501f5adeee084655",
+      "sha256": "2a4c140436d7ddc0cbf3ae630e6182c99f7c28ebf9fea8a5501f5adeee084655"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/internal.h",
+      "source": "asoc/codecs/lpass-cdc/internal.h",
+      "original_sha256": "d4a3310fe296b4fb3749d29934015abf493a026fb15f182d8aa8c20df88385fb",
+      "sha256": "d4a3310fe296b4fb3749d29934015abf493a026fb15f182d8aa8c20df88385fb"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-clk-rsc.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-clk-rsc.c",
+      "original_sha256": "9d32dc290134142f107227410b2234bb015cf5eadb3a7f0fdb7782322b494984",
+      "sha256": "9d32dc290134142f107227410b2234bb015cf5eadb3a7f0fdb7782322b494984"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-clk-rsc.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-clk-rsc.h",
+      "original_sha256": "2fa8918c8a3aed99585be4b0aa2d73394872c746e8ba94d8239c554e938ad944",
+      "sha256": "2fa8918c8a3aed99585be4b0aa2d73394872c746e8ba94d8239c554e938ad944"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-comp.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-comp.c",
+      "original_sha256": "01ea3223d6b3371cdd64ed889b5c1fb0e2c5d7ce9659d00c9f50811cd9928328",
+      "sha256": "01ea3223d6b3371cdd64ed889b5c1fb0e2c5d7ce9659d00c9f50811cd9928328"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-comp.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-comp.h",
+      "original_sha256": "54f2ec5691f7b0844263c30d935cfbda263c8537d0c834ea41698ed2d426598f",
+      "sha256": "54f2ec5691f7b0844263c30d935cfbda263c8537d0c834ea41698ed2d426598f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-registers.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-registers.h",
+      "original_sha256": "e8826fa9db005fb2033277c5d1b141496575dc96fffe07efae7474c8aa1e14b1",
+      "sha256": "e8826fa9db005fb2033277c5d1b141496575dc96fffe07efae7474c8aa1e14b1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-regmap.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-regmap.c",
+      "original_sha256": "8ebc3b611a9bdf839addd7b383582f7e07330f024cf60d7d21596f9a3b2bda15",
+      "sha256": "8ebc3b611a9bdf839addd7b383582f7e07330f024cf60d7d21596f9a3b2bda15"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-rx-macro.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-rx-macro.c",
+      "original_sha256": "413974696f81f3ba04ae2c510832612dd1fb1b4f21e49e5738e2eb8b4c859621",
+      "sha256": "2a654e2b93aed3c2f15d0a816969700ac68ec23371b44e603c709080310985a6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-tables.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-tables.c",
+      "original_sha256": "308ac62b7351dfb00cf50eb82f2fc5fe36143ffac260bc113e554136048ce758",
+      "sha256": "308ac62b7351dfb00cf50eb82f2fc5fe36143ffac260bc113e554136048ce758"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-tx-macro.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-tx-macro.c",
+      "original_sha256": "0b04fcf2d8cd1abcd222a047086449f4a74d6e7a82defeb67f6e464f03bc0998",
+      "sha256": "aef9b27afa133946325bcd3171a4ba81c7b39e5873ca635afecf47f26a936067"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-utils.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-utils.c",
+      "original_sha256": "e84e0b97607f5339105d617c972ecaf8938881e2ef04c899302a67dd90e2cd4c",
+      "sha256": "e84e0b97607f5339105d617c972ecaf8938881e2ef04c899302a67dd90e2cd4c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-va-macro.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-va-macro.c",
+      "original_sha256": "5f41a01c83b8acd2379258c9fd5bd006277576104e0f42fef65d926ac8b38151",
+      "sha256": "fee50fd49cda0a85efab7164bc70168459d5fc0aa7818495d30f1c21b6d7e67f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.c",
+      "original_sha256": "214f38dd73f2b727a151b41e7f190ef1dc58f3577112f4ffca38c4cf8749b358",
+      "sha256": "088cbb0ab5604e91e1085b0958a8d24398c4b49978d14911e60f9102984020a7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-wsa-macro.h",
+      "original_sha256": "c8c0ad0b384dda6f768a9dc8f1327afedba53330a8e550f0d5ab51095552a299",
+      "sha256": "c8c0ad0b384dda6f768a9dc8f1327afedba53330a8e550f0d5ab51095552a299"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.c",
+      "original_sha256": "c667e84f46d70585044f326eaa451f190876de13c314a22c79a7f64fb8e92511",
+      "sha256": "d4a97e920b6abfa7d2e18601fedc9c604aa43ccbfbeafa8d50a2bc46199fad08"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc-wsa2-macro.h",
+      "original_sha256": "a429276b065028f2cd3829943c017c45c17124a1350e72990beb5ba7c633a441",
+      "sha256": "a429276b065028f2cd3829943c017c45c17124a1350e72990beb5ba7c633a441"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc.c",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc.c",
+      "original_sha256": "5557424256d53fd5e7cfedcb81e91274776afd8e7ff456e5d187e70fc765c8f7",
+      "sha256": "5557424256d53fd5e7cfedcb81e91274776afd8e7ff456e5d187e70fc765c8f7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/lpass-cdc/lpass-cdc.h",
+      "source": "asoc/codecs/lpass-cdc/lpass-cdc.h",
+      "original_sha256": "b4d164792fb03509ef2cd240677037b4809a45a20c382bc3563a33af6d64f115",
+      "sha256": "b4d164792fb03509ef2cd240677037b4809a45a20c382bc3563a33af6d64f115"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/msm-cdc-pinctrl.c",
+      "source": "asoc/codecs/msm-cdc-pinctrl.c",
+      "original_sha256": "5a6f88e8c6803bc625b543b82c01a50b44b501299fa5461632c213c66d5f96a4",
+      "sha256": "5a6f88e8c6803bc625b543b82c01a50b44b501299fa5461632c213c66d5f96a4"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/msm-cdc-supply.c",
+      "source": "asoc/codecs/msm-cdc-supply.c",
+      "original_sha256": "019b07015724b9c2ed4bbe562a970036c5cb7974efde1d1b986cdf58ebbc8b1a",
+      "sha256": "019b07015724b9c2ed4bbe562a970036c5cb7974efde1d1b986cdf58ebbc8b1a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/msm_hdmi_codec_rx.c",
+      "source": "asoc/codecs/msm_hdmi_codec_rx.c",
+      "original_sha256": "c06400c8415f5f2904e1cd10388ab9a66f9df23334e48ca4fb987dd06daea87b",
+      "sha256": "c06400c8415f5f2904e1cd10388ab9a66f9df23334e48ca4fb987dd06daea87b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/msm_stub.c",
+      "source": "asoc/codecs/msm_stub.c",
+      "original_sha256": "709a86fe5f17e0a90bd4aab664370fa966e8cd3e7732dcd0b97a0c77694f5bdc",
+      "sha256": "709a86fe5f17e0a90bd4aab664370fa966e8cd3e7732dcd0b97a0c77694f5bdc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/qmp1000/qmp-aggregator.c",
+      "source": "asoc/codecs/qmp1000/qmp-aggregator.c",
+      "original_sha256": "75b872f3ee5e6136199356d1afad290f33eee3a0a5ca7c2c2d1561f4f5824c78",
+      "sha256": "75b872f3ee5e6136199356d1afad290f33eee3a0a5ca7c2c2d1561f4f5824c78"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/qmp1000/qmp-aggregator.h",
+      "source": "asoc/codecs/qmp1000/qmp-aggregator.h",
+      "original_sha256": "123d52c07d2f6283375ca72791e2e5fb39b773c4540ab02ec7756d0653fe4012",
+      "sha256": "123d52c07d2f6283375ca72791e2e5fb39b773c4540ab02ec7756d0653fe4012"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/qmp1000/qmp-dmic.c",
+      "source": "asoc/codecs/qmp1000/qmp-dmic.c",
+      "original_sha256": "c53932ac1ad57b52b589439c1d0f43f91109358b2f7046d191423675ed03902d",
+      "sha256": "c53932ac1ad57b52b589439c1d0f43f91109358b2f7046d191423675ed03902d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/qmp1000/qmp-dmic.h",
+      "source": "asoc/codecs/qmp1000/qmp-dmic.h",
+      "original_sha256": "8abc62265de036be26209e708e66c82a82fd800fd166b29d90c2de3ff87e23a4",
+      "sha256": "8abc62265de036be26209e708e66c82a82fd800fd166b29d90c2de3ff87e23a4"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/internal.h",
+      "source": "asoc/codecs/rouleur/internal.h",
+      "original_sha256": "cae898f4df64669e7b6992a1f97de34e05034c7665a9702ea745b2e2ce51b8c7",
+      "sha256": "cae898f4df64669e7b6992a1f97de34e05034c7665a9702ea745b2e2ce51b8c7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/pm2250-spmi.h",
+      "source": "asoc/codecs/rouleur/pm2250-spmi.h",
+      "original_sha256": "85c365cf288776f1c9c40a19948feae73c63beb060858b6ec5b0f8b65091a594",
+      "sha256": "85c365cf288776f1c9c40a19948feae73c63beb060858b6ec5b0f8b65091a594"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/pm2250_spmi.c",
+      "source": "asoc/codecs/rouleur/pm2250_spmi.c",
+      "original_sha256": "4a0a76ad6a4ead4801f25bc7d425c18ecfb138c96416ed4fa13a109bf1c62cd3",
+      "sha256": "4a0a76ad6a4ead4801f25bc7d425c18ecfb138c96416ed4fa13a109bf1c62cd3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur-mbhc.c",
+      "source": "asoc/codecs/rouleur/rouleur-mbhc.c",
+      "original_sha256": "56652dc2e200cc7657adb210d03c7509074cd9df731ba48b24bddc9a991aff19",
+      "sha256": "56652dc2e200cc7657adb210d03c7509074cd9df731ba48b24bddc9a991aff19"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur-mbhc.h",
+      "source": "asoc/codecs/rouleur/rouleur-mbhc.h",
+      "original_sha256": "ead94897821f94aa2e31e965cd0889b21257ea0f222fbe805cd36b348c3e0edd",
+      "sha256": "ead94897821f94aa2e31e965cd0889b21257ea0f222fbe805cd36b348c3e0edd"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur-registers.h",
+      "source": "asoc/codecs/rouleur/rouleur-registers.h",
+      "original_sha256": "482f3d1a194890969574381775031363c9f6812a781d2557c020aba8cf820cfc",
+      "sha256": "482f3d1a194890969574381775031363c9f6812a781d2557c020aba8cf820cfc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur-regmap.c",
+      "source": "asoc/codecs/rouleur/rouleur-regmap.c",
+      "original_sha256": "dc35ca05056d61b9b9daed0ab9baf9b915e006deb957b2744ccba62b5edb475d",
+      "sha256": "dc35ca05056d61b9b9daed0ab9baf9b915e006deb957b2744ccba62b5edb475d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur-tables.c",
+      "source": "asoc/codecs/rouleur/rouleur-tables.c",
+      "original_sha256": "eaaef5fe102c02a79ce407bdbe5e20dc89094662f9560c352659895a479f0de5",
+      "sha256": "eaaef5fe102c02a79ce407bdbe5e20dc89094662f9560c352659895a479f0de5"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur.c",
+      "source": "asoc/codecs/rouleur/rouleur.c",
+      "original_sha256": "9c5d26ce0b15ece1fca868d992d25c9b11ae170095abd7b4b9ff0a7499fdfbf2",
+      "sha256": "9c5d26ce0b15ece1fca868d992d25c9b11ae170095abd7b4b9ff0a7499fdfbf2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur.h",
+      "source": "asoc/codecs/rouleur/rouleur.h",
+      "original_sha256": "365f193dd5cc196fde02396d36b31a71f15d97cbd328b65ebe0e590e201de2e5",
+      "sha256": "365f193dd5cc196fde02396d36b31a71f15d97cbd328b65ebe0e590e201de2e5"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/rouleur/rouleur_slave.c",
+      "source": "asoc/codecs/rouleur/rouleur_slave.c",
+      "original_sha256": "8e46fa0b2c2fdb6ab59c48023cb7d92aee6ddc3590a44599e446ab8012a79884",
+      "sha256": "8e46fa0b2c2fdb6ab59c48023cb7d92aee6ddc3590a44599e446ab8012a79884"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/sdca/simple-amp-regdump.c",
+      "source": "asoc/codecs/sdca/simple-amp-regdump.c",
+      "original_sha256": "fdc5e7ea54020f3ae6fac6a344564602e102ee7042a5ffd9d4a1089758c39983",
+      "sha256": "fdc5e7ea54020f3ae6fac6a344564602e102ee7042a5ffd9d4a1089758c39983"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/sdca/simple-amp.c",
+      "source": "asoc/codecs/sdca/simple-amp.c",
+      "original_sha256": "a1b09b78b6ec66282743a80c6d7e5673d4c821e1e22e8d4f8e015640bcede523",
+      "sha256": "a1b09b78b6ec66282743a80c6d7e5673d4c821e1e22e8d4f8e015640bcede523"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/sdca/simple-amp.h",
+      "source": "asoc/codecs/sdca/simple-amp.h",
+      "original_sha256": "acc3b95f24a6949662882e248ca295c008c7067fbff67c77627d04fa54b83cd1",
+      "sha256": "acc3b95f24a6949662882e248ca295c008c7067fbff67c77627d04fa54b83cd1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/sdca/wsa8855-xu.c",
+      "source": "asoc/codecs/sdca/wsa8855-xu.c",
+      "original_sha256": "bc589194ed2c1ac7882bf8e046bbc832153d89e5d7e9fa5b8871b179a007eef2",
+      "sha256": "bc589194ed2c1ac7882bf8e046bbc832153d89e5d7e9fa5b8871b179a007eef2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/sdca-registers-api.c",
+      "source": "asoc/codecs/sdca-registers-api.c",
+      "original_sha256": "fc1dfffe7cb37adac90c75cd9075e53da7994808281acdad93ef63291a1b5f37",
+      "sha256": "fc1dfffe7cb37adac90c75cd9075e53da7994808281acdad93ef63291a1b5f37"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/swr-dmic.c",
+      "source": "asoc/codecs/swr-dmic.c",
+      "original_sha256": "a696d8e70aa8bdb3dc73f96998e6ec35e7146f6b7b0d31ca859f6085dccc9899",
+      "sha256": "a696d8e70aa8bdb3dc73f96998e6ec35e7146f6b7b0d31ca859f6085dccc9899"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/swr-dmic.h",
+      "source": "asoc/codecs/swr-dmic.h",
+      "original_sha256": "31a4c7e480723ad1ce1ccf485492ed55d41e79f0b18f515f3aa9c1ce39511ea2",
+      "sha256": "31a4c7e480723ad1ce1ccf485492ed55d41e79f0b18f515f3aa9c1ce39511ea2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/swr-haptics.c",
+      "source": "asoc/codecs/swr-haptics.c",
+      "original_sha256": "b45d41cb103121989ecd433ab8ea2310eaa9eca1d8423e1edd26e9a1b0deb718",
+      "sha256": "c55daf6a86e6a2cac86fb13546861e74c7a1919144fb8aee9952f8eac1566036"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/config.h",
+      "source": "asoc/codecs/tfa98xx/inc/config.h",
+      "original_sha256": "b9c33ae1cef8f761a83cd8ccab051d73fddfc8dac8633a90ee75d463bccc230b",
+      "sha256": "b9c33ae1cef8f761a83cd8ccab051d73fddfc8dac8633a90ee75d463bccc230b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/dbgprint.h",
+      "source": "asoc/codecs/tfa98xx/inc/dbgprint.h",
+      "original_sha256": "89e3be2879ac5ce0cc3b88f02cae97f0cb4373483c0877a2ff1ef0dbd05a6e36",
+      "sha256": "89e3be2879ac5ce0cc3b88f02cae97f0cb4373483c0877a2ff1ef0dbd05a6e36"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa.h",
+      "original_sha256": "49ef7219dfff2b62fe64fe2bc41f4e07031104c6bc08049421373b1b85392b19",
+      "sha256": "49ef7219dfff2b62fe64fe2bc41f4e07031104c6bc08049421373b1b85392b19"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa1_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa1_tfafieldnames.h",
+      "original_sha256": "c8e3b52dd15c3a29db5e325f81d2b4727d083f3448dae4582b9125567f837e96",
+      "sha256": "c8e3b52dd15c3a29db5e325f81d2b4727d083f3448dae4582b9125567f837e96"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa2_tfafieldnames_N1C.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa2_tfafieldnames_N1C.h",
+      "original_sha256": "b983769797e565ad7fb69845b09804eb6b014f6e22a2ee238d332b35e2b3c58c",
+      "sha256": "b983769797e565ad7fb69845b09804eb6b014f6e22a2ee238d332b35e2b3c58c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9865_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9865_tfafieldnames.h",
+      "original_sha256": "e13513edb532c6f0a75d90b4130f910e302a6c052f20b50640e75a197d800bcc",
+      "sha256": "e13513edb532c6f0a75d90b4130f910e302a6c052f20b50640e75a197d800bcc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9865_tfafieldnames_A2.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9865_tfafieldnames_A2.h",
+      "original_sha256": "450e63a135e257e11e48294c0a4ab55fe439e734aecbd81866a857160bdc9767",
+      "sha256": "450e63a135e257e11e48294c0a4ab55fe439e734aecbd81866a857160bdc9767"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9867_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9867_tfafieldnames.h",
+      "original_sha256": "72e3ef7010ffbe18aa0a126d9e1ce5e55ca553a9078fde3cbc56e89f697f1fe2",
+      "sha256": "72e3ef7010ffbe18aa0a126d9e1ce5e55ca553a9078fde3cbc56e89f697f1fe2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9867_tfafieldnames_B.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9867_tfafieldnames_B.h",
+      "original_sha256": "05d615d548540db3bc893621feaa300c132f626e8367c69df8e3a73c2fe7f1a7",
+      "sha256": "05d615d548540db3bc893621feaa300c132f626e8367c69df8e3a73c2fe7f1a7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa986x_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa986x_tfafieldnames.h",
+      "original_sha256": "7801136900771a95d558e0be4acb125b185c0cd74f074505c177ae4226948931",
+      "sha256": "7801136900771a95d558e0be4acb125b185c0cd74f074505c177ae4226948931"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa986xn2_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa986xn2_tfafieldnames.h",
+      "original_sha256": "e686029a1a07d89655bfb0dca1a0c431d08b37164a4567e35bba27c1c700739f",
+      "sha256": "e686029a1a07d89655bfb0dca1a0c431d08b37164a4567e35bba27c1c700739f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa986xn3_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa986xn3_tfafieldnames.h",
+      "original_sha256": "e5ec1123c10562fb5bc454df307279a12b07620de3da7d18baeb2c085421c309",
+      "sha256": "e5ec1123c10562fb5bc454df307279a12b07620de3da7d18baeb2c085421c309"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9872_device_genregs_POR.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9872_device_genregs_POR.h",
+      "original_sha256": "c5f2f448b17a20510bb40649a70d9361866e0643f50286a4af33de79d0efc485",
+      "sha256": "c5f2f448b17a20510bb40649a70d9361866e0643f50286a4af33de79d0efc485"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9872_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9872_tfafieldnames.h",
+      "original_sha256": "02c7bc8552ac46eb51ecf1085283ed00c788088db6b55cec524495fa6e991899",
+      "sha256": "02c7bc8552ac46eb51ecf1085283ed00c788088db6b55cec524495fa6e991899"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9873_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9873_tfafieldnames.h",
+      "original_sha256": "176fe40f238b268399a81619066483614b1e68ac084bf8a81e9a929ae7b1805a",
+      "sha256": "176fe40f238b268399a81619066483614b1e68ac084bf8a81e9a929ae7b1805a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9873_tfafieldnames_B0.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9873_tfafieldnames_B0.h",
+      "original_sha256": "9bd8313aa3dc16ca15afbaac7f1eb04699984bb2b2760e6f94e6b3338b831817",
+      "sha256": "9bd8313aa3dc16ca15afbaac7f1eb04699984bb2b2760e6f94e6b3338b831817"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9874_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9874_tfafieldnames.h",
+      "original_sha256": "bbf57bbb5846da48a7fce4478b443c5c3f4704d080b2992c4502a00b3fa64078",
+      "sha256": "bbf57bbb5846da48a7fce4478b443c5c3f4704d080b2992c4502a00b3fa64078"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9875_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9875_tfafieldnames.h",
+      "original_sha256": "c2cee617e129246fac85ee5e0fb14a093a88582c883abd2c333985fee0056993",
+      "sha256": "c2cee617e129246fac85ee5e0fb14a093a88582c883abd2c333985fee0056993"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9875_tfafieldnames_A1.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9875_tfafieldnames_A1.h",
+      "original_sha256": "02f91070ede6d9a116ee788d916b06a26a5431ff2deff6f3d823bd3ffe9c9b4b",
+      "sha256": "02f91070ede6d9a116ee788d916b06a26a5431ff2deff6f3d823bd3ffe9c9b4b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9878_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9878_tfafieldnames.h",
+      "original_sha256": "ca8eab4f82c57b8f28441a65e7a92e718aab6452ea3963581325fd50f946a21a",
+      "sha256": "ca8eab4f82c57b8f28441a65e7a92e718aab6452ea3963581325fd50f946a21a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9887_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9887_tfafieldnames.h",
+      "original_sha256": "7a1e32f9872d52faecf57394c179dc55b751a57cfb162469b746c22112014558",
+      "sha256": "7a1e32f9872d52faecf57394c179dc55b751a57cfb162469b746c22112014558"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9890_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9890_tfafieldnames.h",
+      "original_sha256": "78f961b74ecec149c9c6069658328efa6b4ce3312cd8b47da83a3d0421828b1c",
+      "sha256": "78f961b74ecec149c9c6069658328efa6b4ce3312cd8b47da83a3d0421828b1c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9891_genregs.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9891_genregs.h",
+      "original_sha256": "73bd3e81268f102e727e41c3d0a6bae853a6ce17c2321577cc3c85605dab75bc",
+      "sha256": "73bd3e81268f102e727e41c3d0a6bae853a6ce17c2321577cc3c85605dab75bc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9891_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9891_tfafieldnames.h",
+      "original_sha256": "339e77cc5c0207e4c580cf088fe53fe2ce20cc6757e5c7fa5bcab91a91e1589b",
+      "sha256": "339e77cc5c0207e4c580cf088fe53fe2ce20cc6757e5c7fa5bcab91a91e1589b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9894_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9894_tfafieldnames.h",
+      "original_sha256": "8dace5e243279155a7a0bf80260673f0f6897d1246d7a85722371193dc037280",
+      "sha256": "8dace5e243279155a7a0bf80260673f0f6897d1246d7a85722371193dc037280"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9894_tfafieldnames_N2.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9894_tfafieldnames_N2.h",
+      "original_sha256": "72a3bf526a15c7aa87d82a14b4f2c5a2fbe729e7f1c5ea72dc80502c05fad115",
+      "sha256": "72a3bf526a15c7aa87d82a14b4f2c5a2fbe729e7f1c5ea72dc80502c05fad115"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9896_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9896_tfafieldnames.h",
+      "original_sha256": "79070c0d54575515da6d70bc0bc1a3bbc953ddd55cad7f8842a01c320c4998e6",
+      "sha256": "79070c0d54575515da6d70bc0bc1a3bbc953ddd55cad7f8842a01c320c4998e6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa98xx.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa98xx.h",
+      "original_sha256": "19c6611cfc8315e4943e282ab0b4d9ac81f6c8966a948e266e706a27fbe28c93",
+      "sha256": "19c6611cfc8315e4943e282ab0b4d9ac81f6c8966a948e266e706a27fbe28c93"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa98xx_genregs_N1C.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa98xx_genregs_N1C.h",
+      "original_sha256": "22de537cb1e5f34b16761994546877d47c90ce2a0b1332f710399c50fccc756a",
+      "sha256": "22de537cb1e5f34b16761994546877d47c90ce2a0b1332f710399c50fccc756a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa98xx_parameters.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa98xx_parameters.h",
+      "original_sha256": "54d4103accf25f0c4ef18e1088ba5897216aa292802106089d2d531a5e286fca",
+      "sha256": "54d4103accf25f0c4ef18e1088ba5897216aa292802106089d2d531a5e286fca"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa98xx_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa98xx_tfafieldnames.h",
+      "original_sha256": "7894e2b43ad236e7a7fc9fc4d8c5f0fe5abab07fe289e570dcdfaf7930a26549",
+      "sha256": "7894e2b43ad236e7a7fc9fc4d8c5f0fe5abab07fe289e570dcdfaf7930a26549"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9912_device_genregs.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9912_device_genregs.h",
+      "original_sha256": "4c7087560167787abe0a187f12ebddff021706b73a98706511e2a060fe49a8ea",
+      "sha256": "4c7087560167787abe0a187f12ebddff021706b73a98706511e2a060fe49a8ea"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa9912_tfafieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa9912_tfafieldnames.h",
+      "original_sha256": "984a86c25ba0a02efa7a5b6198326545e8538ef5bffb3b5e05f145d6167cf987",
+      "sha256": "984a86c25ba0a02efa7a5b6198326545e8538ef5bffb3b5e05f145d6167cf987"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa_container.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa_container.h",
+      "original_sha256": "756d4ba478941bd37feb4a4865c5a83b92f0e3db1387a6b05fac2820be55c615",
+      "sha256": "756d4ba478941bd37feb4a4865c5a83b92f0e3db1387a6b05fac2820be55c615"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa_device.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa_device.h",
+      "original_sha256": "1e94968e58654194f7afc51c8ab47c20192f515400b6e4271599321f3c5473ef",
+      "sha256": "1e94968e58654194f7afc51c8ab47c20192f515400b6e4271599321f3c5473ef"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa_dsp_fw.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa_dsp_fw.h",
+      "original_sha256": "2ca941047f54783ddef821b0cbbe9478c7f8e28079b4f4f3ff5e2226eb4a8664",
+      "sha256": "2ca941047f54783ddef821b0cbbe9478c7f8e28079b4f4f3ff5e2226eb4a8664"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa_ext.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa_ext.h",
+      "original_sha256": "99924f5ecd2bc5d5e3dfcb69983cfc9a9ef45d6f7f09c3a11d9d32c134bb42c1",
+      "sha256": "99924f5ecd2bc5d5e3dfcb69983cfc9a9ef45d6f7f09c3a11d9d32c134bb42c1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfa_service.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfa_service.h",
+      "original_sha256": "20787019da93ac48c6b80055fe712159b9fe819a616bbad8ddfa730878aef1c6",
+      "sha256": "20787019da93ac48c6b80055fe712159b9fe819a616bbad8ddfa730878aef1c6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/tfd1015_tfdfieldnames.h",
+      "source": "asoc/codecs/tfa98xx/inc/tfd1015_tfdfieldnames.h",
+      "original_sha256": "878a5fdf9291ca7b1b06bb07dc3b3189561f7f51b4e3e43d71f4aafe63120d14",
+      "sha256": "878a5fdf9291ca7b1b06bb07dc3b3189561f7f51b4e3e43d71f4aafe63120d14"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/inc/versions.h",
+      "source": "asoc/codecs/tfa98xx/inc/versions.h",
+      "original_sha256": "2231726f1c49f785986ecbb526bebc9fb6734dfc12a4928c5cfe05b39a5c890a",
+      "sha256": "2231726f1c49f785986ecbb526bebc9fb6734dfc12a4928c5cfe05b39a5c890a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa98xx.c",
+      "source": "asoc/codecs/tfa98xx/src/tfa98xx.c",
+      "original_sha256": "a57387eea2fda749c6640e0f0a1719226763e1cf1822ebf05bbeba945b8d4f07",
+      "sha256": "bfa3ecbc7b80ca8ed22b851a9201e1636eff73aaf120a5310f13008371250f81"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa_container.c",
+      "source": "asoc/codecs/tfa98xx/src/tfa_container.c",
+      "original_sha256": "d61582e58cc360c615ea42af5d95ddce0f1c475cf65e589ec38bc93a7cf2494e",
+      "sha256": "d61582e58cc360c615ea42af5d95ddce0f1c475cf65e589ec38bc93a7cf2494e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa_dsp.c",
+      "source": "asoc/codecs/tfa98xx/src/tfa_dsp.c",
+      "original_sha256": "8af844fc2bd5c2bff428ff8584e2cfd0fdec19f97e3dec5118f2d3a63cf6619f",
+      "sha256": "8af844fc2bd5c2bff428ff8584e2cfd0fdec19f97e3dec5118f2d3a63cf6619f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa_init.c",
+      "source": "asoc/codecs/tfa98xx/src/tfa_init.c",
+      "original_sha256": "6d90cf14e3e830adc4d67007a4d4b9f64853e54564468eef4f92cb87bd5262a3",
+      "sha256": "6d90cf14e3e830adc4d67007a4d4b9f64853e54564468eef4f92cb87bd5262a3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/tfa98xx/src/tfa_internal.h",
+      "source": "asoc/codecs/tfa98xx/src/tfa_internal.h",
+      "original_sha256": "8ae9bbddaa368c0356c80089792fd056633c5a903c061136a46d853aed9ef00e",
+      "sha256": "8ae9bbddaa368c0356c80089792fd056633c5a903c061136a46d853aed9ef00e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-clsh.c",
+      "source": "asoc/codecs/wcd-clsh.c",
+      "original_sha256": "62daa1329705ccb19042b1ca4bfbaadcd8404921eba5554e436725d76c763fde",
+      "sha256": "62daa1329705ccb19042b1ca4bfbaadcd8404921eba5554e436725d76c763fde"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-dsp-mgr.c",
+      "source": "asoc/codecs/wcd-dsp-mgr.c",
+      "original_sha256": "78dac89fa7126a975733e509eb3a3c3e571c074c828c2636370f357d4c140049",
+      "sha256": "78dac89fa7126a975733e509eb3a3c3e571c074c828c2636370f357d4c140049"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-dsp-utils.c",
+      "source": "asoc/codecs/wcd-dsp-utils.c",
+      "original_sha256": "0a9329f863829234f3e553df617b08161b8ec8e52b6bb330f2ed8d3ee8c66dea",
+      "sha256": "0a9329f863829234f3e553df617b08161b8ec8e52b6bb330f2ed8d3ee8c66dea"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-dsp-utils.h",
+      "source": "asoc/codecs/wcd-dsp-utils.h",
+      "original_sha256": "119bd08db3d784631d12b99d243ea876dc610fdf5238d810f7ce40c99ca4cc1f",
+      "sha256": "119bd08db3d784631d12b99d243ea876dc610fdf5238d810f7ce40c99ca4cc1f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-irq.c",
+      "source": "asoc/codecs/wcd-irq.c",
+      "original_sha256": "0a2666bbd70541dbe434a6daa9c341c7b0ead6d2697056a48bc0fe2c942706bf",
+      "sha256": "0a2666bbd70541dbe434a6daa9c341c7b0ead6d2697056a48bc0fe2c942706bf"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-mbhc-adc.c",
+      "source": "asoc/codecs/wcd-mbhc-adc.c",
+      "original_sha256": "cfcedb6dde62a46e44e029d540cfde58821da020196b7e7c44bfa4ff5be8d577",
+      "sha256": "cfcedb6dde62a46e44e029d540cfde58821da020196b7e7c44bfa4ff5be8d577"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-mbhc-adc.h",
+      "source": "asoc/codecs/wcd-mbhc-adc.h",
+      "original_sha256": "247e5fc47114c3340bc4246ea262f0dae741af0a73b743765ad117836d48a835",
+      "sha256": "247e5fc47114c3340bc4246ea262f0dae741af0a73b743765ad117836d48a835"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-mbhc-legacy.c",
+      "source": "asoc/codecs/wcd-mbhc-legacy.c",
+      "original_sha256": "b3cb371946de07e6127361e209e699c6bcec9521b382170d808ea10a9fca8e69",
+      "sha256": "b3cb371946de07e6127361e209e699c6bcec9521b382170d808ea10a9fca8e69"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-mbhc-legacy.h",
+      "source": "asoc/codecs/wcd-mbhc-legacy.h",
+      "original_sha256": "20e3f113cb992daf95d52fe22759bbb0e1a2215397728f02833dc75567641153",
+      "sha256": "20e3f113cb992daf95d52fe22759bbb0e1a2215397728f02833dc75567641153"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-mbhc-v2.c",
+      "source": "asoc/codecs/wcd-mbhc-v2.c",
+      "original_sha256": "2d19068d7f3bdd3ec11f68da0099e06ae59b28017a11f49f0b0d7f6339022260",
+      "sha256": "2d19068d7f3bdd3ec11f68da0099e06ae59b28017a11f49f0b0d7f6339022260"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-spi-registers.h",
+      "source": "asoc/codecs/wcd-spi-registers.h",
+      "original_sha256": "f34191f74e5512ac4df9214a667e028063dce069fa824216bd17f10f29a7b038",
+      "sha256": "f34191f74e5512ac4df9214a667e028063dce069fa824216bd17f10f29a7b038"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd-spi.c",
+      "source": "asoc/codecs/wcd-spi.c",
+      "original_sha256": "794e006cefca88bc02847ffdcfe71b0088ffda6cff1e84b6719e35aedc6f970e",
+      "sha256": "794e006cefca88bc02847ffdcfe71b0088ffda6cff1e84b6719e35aedc6f970e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335-regmap.c",
+      "source": "asoc/codecs/wcd9335-regmap.c",
+      "original_sha256": "b72f0e8f76e6e16cd3bc5d53cf9ad831f1d1417d39a988aa3d1f76b52a483bb0",
+      "sha256": "b72f0e8f76e6e16cd3bc5d53cf9ad831f1d1417d39a988aa3d1f76b52a483bb0"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335-tables.c",
+      "source": "asoc/codecs/wcd9335-tables.c",
+      "original_sha256": "f7cce25a3013c159d9bd71f987ef5490f64c0733a7c008b8b0066e5d2ea7f528",
+      "sha256": "f7cce25a3013c159d9bd71f987ef5490f64c0733a7c008b8b0066e5d2ea7f528"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335.c",
+      "source": "asoc/codecs/wcd9335.c",
+      "original_sha256": "dd83adc44d636209d6fcf4270941047e5180a13a0d84714897c7882d9b073ab9",
+      "sha256": "dd83adc44d636209d6fcf4270941047e5180a13a0d84714897c7882d9b073ab9"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335.h",
+      "source": "asoc/codecs/wcd9335.h",
+      "original_sha256": "fcf141bf07838d2690adc3edfc373a52e1ece5cee8e8d22cd49d6230758b8941",
+      "sha256": "fcf141bf07838d2690adc3edfc373a52e1ece5cee8e8d22cd49d6230758b8941"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335_irq.h",
+      "source": "asoc/codecs/wcd9335_irq.h",
+      "original_sha256": "cb89edf55f3a825e88ccd03d2fc653327ef8b5190ede43fa8247285a7f8aad31",
+      "sha256": "cb89edf55f3a825e88ccd03d2fc653327ef8b5190ede43fa8247285a7f8aad31"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9335_registers.h",
+      "source": "asoc/codecs/wcd9335_registers.h",
+      "original_sha256": "0d5a6ee8cc917fa6ac905f5c932d9cdfbe604db12f9b73db05eed0eef180fb7a",
+      "sha256": "0d5a6ee8cc917fa6ac905f5c932d9cdfbe604db12f9b73db05eed0eef180fb7a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-dsd.c",
+      "source": "asoc/codecs/wcd934x/wcd934x-dsd.c",
+      "original_sha256": "4ee748b723e863d30fd275e5c539a803139460701c25599b50c578c2d6d1c409",
+      "sha256": "4ee748b723e863d30fd275e5c539a803139460701c25599b50c578c2d6d1c409"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-dsd.h",
+      "source": "asoc/codecs/wcd934x/wcd934x-dsd.h",
+      "original_sha256": "60697f3c0a009476bf9ac62230f88a43f277b81a43d5e6f0732d5c10bb343075",
+      "sha256": "60697f3c0a009476bf9ac62230f88a43f277b81a43d5e6f0732d5c10bb343075"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-dsp-cntl.c",
+      "source": "asoc/codecs/wcd934x/wcd934x-dsp-cntl.c",
+      "original_sha256": "1b12d1ed47916491e6426078fb98c7159185c4b42f8d5f071f9d7433f3fc6fa4",
+      "sha256": "1b12d1ed47916491e6426078fb98c7159185c4b42f8d5f071f9d7433f3fc6fa4"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-dsp-cntl.h",
+      "source": "asoc/codecs/wcd934x/wcd934x-dsp-cntl.h",
+      "original_sha256": "d182807a7eb4cefb5be6580c657d1a6d152411d411e25b053601d53ecb04b0cc",
+      "sha256": "d182807a7eb4cefb5be6580c657d1a6d152411d411e25b053601d53ecb04b0cc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-mbhc.c",
+      "source": "asoc/codecs/wcd934x/wcd934x-mbhc.c",
+      "original_sha256": "041d61b1a15bf54b0da84e9d03df2150eebc4785c2659c6e38bd50fb638c869e",
+      "sha256": "041d61b1a15bf54b0da84e9d03df2150eebc4785c2659c6e38bd50fb638c869e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-mbhc.h",
+      "source": "asoc/codecs/wcd934x/wcd934x-mbhc.h",
+      "original_sha256": "e86e695f8892d58f058c43ecbe3f0e5d8981cb8f6c5d8d08a42905355e862aab",
+      "sha256": "e86e695f8892d58f058c43ecbe3f0e5d8981cb8f6c5d8d08a42905355e862aab"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-regmap.c",
+      "source": "asoc/codecs/wcd934x/wcd934x-regmap.c",
+      "original_sha256": "82b6f1dfd96e657a53ff027959b2f76ef3595aa7b3532dc2e9d424219f249959",
+      "sha256": "82b6f1dfd96e657a53ff027959b2f76ef3595aa7b3532dc2e9d424219f249959"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-routing.h",
+      "source": "asoc/codecs/wcd934x/wcd934x-routing.h",
+      "original_sha256": "0b68b3102e3c649a5d7c7bfef5db167cabb45b1ed80e2f896d41bc0b7edd790a",
+      "sha256": "0b68b3102e3c649a5d7c7bfef5db167cabb45b1ed80e2f896d41bc0b7edd790a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x-tables.c",
+      "source": "asoc/codecs/wcd934x/wcd934x-tables.c",
+      "original_sha256": "b4af042e182c5ab54fe97b13801756dc1c50aecb394d73554d7438c12df2432c",
+      "sha256": "b4af042e182c5ab54fe97b13801756dc1c50aecb394d73554d7438c12df2432c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x.c",
+      "source": "asoc/codecs/wcd934x/wcd934x.c",
+      "original_sha256": "93be76218df13d482e16a0eb0e3dc6e893150003c17fe97f64ee80c3ee6376c9",
+      "sha256": "93be76218df13d482e16a0eb0e3dc6e893150003c17fe97f64ee80c3ee6376c9"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x.h",
+      "source": "asoc/codecs/wcd934x/wcd934x.h",
+      "original_sha256": "899c4a929adfe38ca882f4cb4cd00216d1a61abaacfdee3ff12846065846e231",
+      "sha256": "899c4a929adfe38ca882f4cb4cd00216d1a61abaacfdee3ff12846065846e231"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd934x/wcd934x_irq.h",
+      "source": "asoc/codecs/wcd934x/wcd934x_irq.h",
+      "original_sha256": "a661daac238f156952d561533c7ce050212a122041a05fa697a82a06887c0300",
+      "sha256": "a661daac238f156952d561533c7ce050212a122041a05fa697a82a06887c0300"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/internal.h",
+      "source": "asoc/codecs/wcd9378/internal.h",
+      "original_sha256": "230b92f762248f1726617dca80d65e794b27d54dce5472812fbdef5fc083c962",
+      "sha256": "230b92f762248f1726617dca80d65e794b27d54dce5472812fbdef5fc083c962"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-mbhc.c",
+      "source": "asoc/codecs/wcd9378/wcd9378-mbhc.c",
+      "original_sha256": "8663a07f4de2731b87d81e21807910a81ca9bf2e8ec549ebe5b589739be28728",
+      "sha256": "8663a07f4de2731b87d81e21807910a81ca9bf2e8ec549ebe5b589739be28728"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-mbhc.h",
+      "source": "asoc/codecs/wcd9378/wcd9378-mbhc.h",
+      "original_sha256": "561b0637624d97848c138a109ef2dbbd291a0dbb4b2418fde338e2d8a3af11a1",
+      "sha256": "561b0637624d97848c138a109ef2dbbd291a0dbb4b2418fde338e2d8a3af11a1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-reg-masks.h",
+      "source": "asoc/codecs/wcd9378/wcd9378-reg-masks.h",
+      "original_sha256": "a25f64bd466008e11314c4711e747acb41efbd6a436da8d589f7226660ad2ce3",
+      "sha256": "a25f64bd466008e11314c4711e747acb41efbd6a436da8d589f7226660ad2ce3"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-registers.h",
+      "source": "asoc/codecs/wcd9378/wcd9378-registers.h",
+      "original_sha256": "e1a64b500d0a63710753d62321604e00ccd6de3dcbeeb4b2a0a5ed23d99c8d65",
+      "sha256": "e1a64b500d0a63710753d62321604e00ccd6de3dcbeeb4b2a0a5ed23d99c8d65"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-regmap.c",
+      "source": "asoc/codecs/wcd9378/wcd9378-regmap.c",
+      "original_sha256": "7fb2e086956711b1aab677f5f06df633a9662e057044d0925780ec7018d5dde0",
+      "sha256": "7fb2e086956711b1aab677f5f06df633a9662e057044d0925780ec7018d5dde0"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-slave.c",
+      "source": "asoc/codecs/wcd9378/wcd9378-slave.c",
+      "original_sha256": "b0ba230c2000e859b5ace2d30d4a5aec8d2ddd43b780cf10255877ccabfb2fc0",
+      "sha256": "b0ba230c2000e859b5ace2d30d4a5aec8d2ddd43b780cf10255877ccabfb2fc0"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378-tables.c",
+      "source": "asoc/codecs/wcd9378/wcd9378-tables.c",
+      "original_sha256": "66d2c00e73aea6b6e07ff9dc99fd78593109d2c72efc43e1b04e59d0fe7a7ecd",
+      "sha256": "66d2c00e73aea6b6e07ff9dc99fd78593109d2c72efc43e1b04e59d0fe7a7ecd"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378.c",
+      "source": "asoc/codecs/wcd9378/wcd9378.c",
+      "original_sha256": "7c56cc4d3078ff5cc91573042ca6c70f5b77f83d588bd4a6f04535fdfedbed2e",
+      "sha256": "7c56cc4d3078ff5cc91573042ca6c70f5b77f83d588bd4a6f04535fdfedbed2e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9378/wcd9378.h",
+      "source": "asoc/codecs/wcd9378/wcd9378.h",
+      "original_sha256": "3226c7aade32279b18d1914be44feb9fb62dda4c98760e2deb85c76e6be177b6",
+      "sha256": "3226c7aade32279b18d1914be44feb9fb62dda4c98760e2deb85c76e6be177b6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/internal.h",
+      "source": "asoc/codecs/wcd937x/internal.h",
+      "original_sha256": "a3a7389585d2924177fdfce23f10df65384a1ee357d4e0909b255b694a7009f6",
+      "sha256": "a3a7389585d2924177fdfce23f10df65384a1ee357d4e0909b255b694a7009f6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x-mbhc.c",
+      "source": "asoc/codecs/wcd937x/wcd937x-mbhc.c",
+      "original_sha256": "30ffca0d880382bd440dca19a8fc3ccc04edf840f14c57229a7c912dae030180",
+      "sha256": "30ffca0d880382bd440dca19a8fc3ccc04edf840f14c57229a7c912dae030180"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x-mbhc.h",
+      "source": "asoc/codecs/wcd937x/wcd937x-mbhc.h",
+      "original_sha256": "f6d229d110a4942a68787be2950365703d39ea931d6cf24300d05242dca4c20e",
+      "sha256": "f6d229d110a4942a68787be2950365703d39ea931d6cf24300d05242dca4c20e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x-registers.h",
+      "source": "asoc/codecs/wcd937x/wcd937x-registers.h",
+      "original_sha256": "48873fbc26d74c62964e314a0aee77e15785a824412e920b920aeff36f3f0c5c",
+      "sha256": "48873fbc26d74c62964e314a0aee77e15785a824412e920b920aeff36f3f0c5c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x-regmap.c",
+      "source": "asoc/codecs/wcd937x/wcd937x-regmap.c",
+      "original_sha256": "88d00911fd0e821b01f034bff995decc1715e5add99100861bf03eede1f27983",
+      "sha256": "88d00911fd0e821b01f034bff995decc1715e5add99100861bf03eede1f27983"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x-tables.c",
+      "source": "asoc/codecs/wcd937x/wcd937x-tables.c",
+      "original_sha256": "e63fe67db6e814a48cbb95ff1ccf174bda64ab2b1ef20738a9ce8d7c6aaba7ad",
+      "sha256": "e63fe67db6e814a48cbb95ff1ccf174bda64ab2b1ef20738a9ce8d7c6aaba7ad"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x.c",
+      "source": "asoc/codecs/wcd937x/wcd937x.c",
+      "original_sha256": "285d04c69bdf52c524d103a71c0abe8bfb2d2c5f49a04713c0013b383a2c3918",
+      "sha256": "285d04c69bdf52c524d103a71c0abe8bfb2d2c5f49a04713c0013b383a2c3918"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x.h",
+      "source": "asoc/codecs/wcd937x/wcd937x.h",
+      "original_sha256": "2d1fe918274dd835863b871c454ba269a0812ec1c582d3e03706c7106aa9935c",
+      "sha256": "2d1fe918274dd835863b871c454ba269a0812ec1c582d3e03706c7106aa9935c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd937x/wcd937x_slave.c",
+      "source": "asoc/codecs/wcd937x/wcd937x_slave.c",
+      "original_sha256": "2ecc276775bbf7dabfb70ff5ee353a7c00f69dcbffb559680243f1da6e4d5e0e",
+      "sha256": "2ecc276775bbf7dabfb70ff5ee353a7c00f69dcbffb559680243f1da6e4d5e0e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/internal.h",
+      "source": "asoc/codecs/wcd938x/internal.h",
+      "original_sha256": "2932d7360bd9511a562f46bd5cbcdecf11c5ed7f5fb530e1142fd1b8854c62ae",
+      "sha256": "2932d7360bd9511a562f46bd5cbcdecf11c5ed7f5fb530e1142fd1b8854c62ae"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-mbhc.c",
+      "source": "asoc/codecs/wcd938x/wcd938x-mbhc.c",
+      "original_sha256": "c4931e7ed67ec42ddaf96a5f7e2c8284b3f619369e11ef780e1608297b10d2d6",
+      "sha256": "c4931e7ed67ec42ddaf96a5f7e2c8284b3f619369e11ef780e1608297b10d2d6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-mbhc.h",
+      "source": "asoc/codecs/wcd938x/wcd938x-mbhc.h",
+      "original_sha256": "54d9718d1630d81edb4bf36dd3c164566499b1ea80893e02e67786a4003c064c",
+      "sha256": "54d9718d1630d81edb4bf36dd3c164566499b1ea80893e02e67786a4003c064c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-registers.h",
+      "source": "asoc/codecs/wcd938x/wcd938x-registers.h",
+      "original_sha256": "8dc6c8ff72aa3964ad381b141a59ad8f757455d4a2ddb078ce3d6d569d3865b5",
+      "sha256": "8dc6c8ff72aa3964ad381b141a59ad8f757455d4a2ddb078ce3d6d569d3865b5"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-regmap.c",
+      "source": "asoc/codecs/wcd938x/wcd938x-regmap.c",
+      "original_sha256": "3d1dc8153885ae871a32a0381a3b4dbad8522677b05d02f04a3d68a2aef79f62",
+      "sha256": "3d1dc8153885ae871a32a0381a3b4dbad8522677b05d02f04a3d68a2aef79f62"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-slave.c",
+      "source": "asoc/codecs/wcd938x/wcd938x-slave.c",
+      "original_sha256": "6247bab0b887d2ea6d9821cf58415198d2f86f7e6b090d5df843e0227768422b",
+      "sha256": "6247bab0b887d2ea6d9821cf58415198d2f86f7e6b090d5df843e0227768422b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x-tables.c",
+      "source": "asoc/codecs/wcd938x/wcd938x-tables.c",
+      "original_sha256": "63b1569a709df26e376af02a9b79a23bb5106f9418473b5e776475664fe942cb",
+      "sha256": "63b1569a709df26e376af02a9b79a23bb5106f9418473b5e776475664fe942cb"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x.c",
+      "source": "asoc/codecs/wcd938x/wcd938x.c",
+      "original_sha256": "6739240020cb1d0b4940cc699e5f89a2285d855608cd3c5052c83cf3e6cdb95d",
+      "sha256": "6739240020cb1d0b4940cc699e5f89a2285d855608cd3c5052c83cf3e6cdb95d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd938x/wcd938x.h",
+      "source": "asoc/codecs/wcd938x/wcd938x.h",
+      "original_sha256": "f3d9f945c7d6699677da53a8a1d0980863d8fcf4f7f510d7cc088c91e3a549ed",
+      "sha256": "f3d9f945c7d6699677da53a8a1d0980863d8fcf4f7f510d7cc088c91e3a549ed"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/internal.h",
+      "source": "asoc/codecs/wcd939x/internal.h",
+      "original_sha256": "c5844bb416ad90897876c9d20f886c84db1a9b89b631f8b715145899ed515e35",
+      "sha256": "c5844bb416ad90897876c9d20f886c84db1a9b89b631f8b715145899ed515e35"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-mbhc.c",
+      "source": "asoc/codecs/wcd939x/wcd939x-mbhc.c",
+      "original_sha256": "1d4b4abc50b5ed03947ddb9b191cdd66cbe2638a83dc8c07551ca0e67b93bfbd",
+      "sha256": "1d4b4abc50b5ed03947ddb9b191cdd66cbe2638a83dc8c07551ca0e67b93bfbd"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-mbhc.h",
+      "source": "asoc/codecs/wcd939x/wcd939x-mbhc.h",
+      "original_sha256": "92852d5836581010fcac40bbf2f3572559e75816dd09e0c5ad823089d36d216b",
+      "sha256": "92852d5836581010fcac40bbf2f3572559e75816dd09e0c5ad823089d36d216b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-reg-masks.h",
+      "source": "asoc/codecs/wcd939x/wcd939x-reg-masks.h",
+      "original_sha256": "02fa98d5b46e8c677562f5381c014a3ab90860470b6a66375805e1c0c7966484",
+      "sha256": "02fa98d5b46e8c677562f5381c014a3ab90860470b6a66375805e1c0c7966484"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-reg-shifts.h",
+      "source": "asoc/codecs/wcd939x/wcd939x-reg-shifts.h",
+      "original_sha256": "88c8b4d1b7ed3bfe21e34d70077710f123b8a1e2ed508093b12d3949bc5d5602",
+      "sha256": "88c8b4d1b7ed3bfe21e34d70077710f123b8a1e2ed508093b12d3949bc5d5602"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-registers.h",
+      "source": "asoc/codecs/wcd939x/wcd939x-registers.h",
+      "original_sha256": "593e4c2c6a294e3c4e18d0445185208523ac818a546f967d62c934591fbf03ef",
+      "sha256": "593e4c2c6a294e3c4e18d0445185208523ac818a546f967d62c934591fbf03ef"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-regmap.c",
+      "source": "asoc/codecs/wcd939x/wcd939x-regmap.c",
+      "original_sha256": "927943b76c8fb92530e1b05da6a41b0cd21fdc8a3c399a7dbd2e0671166d781f",
+      "sha256": "927943b76c8fb92530e1b05da6a41b0cd21fdc8a3c399a7dbd2e0671166d781f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-regulator.c",
+      "source": "asoc/codecs/wcd939x/wcd939x-regulator.c",
+      "original_sha256": "4d5a1bc01130b777869fa4b425822a8571beb05e5e724cd02894ac2062b3067f",
+      "sha256": "4d5a1bc01130b777869fa4b425822a8571beb05e5e724cd02894ac2062b3067f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-slave.c",
+      "source": "asoc/codecs/wcd939x/wcd939x-slave.c",
+      "original_sha256": "ee718e15b4f7993282a7fe72d0bf7b32717db809452382f6b72a850a4009fccf",
+      "sha256": "ee718e15b4f7993282a7fe72d0bf7b32717db809452382f6b72a850a4009fccf"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x-tables.c",
+      "source": "asoc/codecs/wcd939x/wcd939x-tables.c",
+      "original_sha256": "1a99ef9304001fd37644c96363178226271eaa126c78aab73e437e8b05aad890",
+      "sha256": "1a99ef9304001fd37644c96363178226271eaa126c78aab73e437e8b05aad890"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x.c",
+      "source": "asoc/codecs/wcd939x/wcd939x.c",
+      "original_sha256": "4bcc11735b84e22ed4ed09c63d56be15c5c7b229893b23adb84c04b1c1921d6d",
+      "sha256": "4bcc11735b84e22ed4ed09c63d56be15c5c7b229893b23adb84c04b1c1921d6d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd939x/wcd939x.h",
+      "source": "asoc/codecs/wcd939x/wcd939x.h",
+      "original_sha256": "c7c282e846bf7b21e7e97680c7d59449d17f36be97bb380a36c6708cd07740f1",
+      "sha256": "c7c282e846bf7b21e7e97680c7d59449d17f36be97bb380a36c6708cd07740f1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-common-v2.c",
+      "source": "asoc/codecs/wcd9xxx-common-v2.c",
+      "original_sha256": "bfcf1e24b036822297c65bc9ffac3d2cc76da84de6a3b70dbfc4ca0bd236a220",
+      "sha256": "bfcf1e24b036822297c65bc9ffac3d2cc76da84de6a3b70dbfc4ca0bd236a220"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-core-init.c",
+      "source": "asoc/codecs/wcd9xxx-core-init.c",
+      "original_sha256": "81c8d6c5ecc35e38675b946e8738487098f4baf535e7dd9f247e639f4617eac9",
+      "sha256": "81c8d6c5ecc35e38675b946e8738487098f4baf535e7dd9f247e639f4617eac9"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-core.c",
+      "source": "asoc/codecs/wcd9xxx-core.c",
+      "original_sha256": "2470c268c2a6b569a787c4e2377f0943f2406df27eab97af9d260bbe8d3d5546",
+      "sha256": "2470c268c2a6b569a787c4e2377f0943f2406df27eab97af9d260bbe8d3d5546"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-irq.c",
+      "source": "asoc/codecs/wcd9xxx-irq.c",
+      "original_sha256": "573f8dcb6730a4c13f0c71a46960b99a9a0c4b02dc0dc645cb32c2e120148295",
+      "sha256": "573f8dcb6730a4c13f0c71a46960b99a9a0c4b02dc0dc645cb32c2e120148295"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-resmgr-v2.c",
+      "source": "asoc/codecs/wcd9xxx-resmgr-v2.c",
+      "original_sha256": "596cfc3c4de28156f050f13a5d4146ed674dc476fb1ed864a9d284b86c838206",
+      "sha256": "596cfc3c4de28156f050f13a5d4146ed674dc476fb1ed864a9d284b86c838206"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-rst.c",
+      "source": "asoc/codecs/wcd9xxx-rst.c",
+      "original_sha256": "489aab2ad53053e91ecd21c4fc1e29209c170cb30fd85d62bcd8009535cb1b87",
+      "sha256": "489aab2ad53053e91ecd21c4fc1e29209c170cb30fd85d62bcd8009535cb1b87"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-slimslave.c",
+      "source": "asoc/codecs/wcd9xxx-slimslave.c",
+      "original_sha256": "0bf87d53c66a4f6bb4a846ec1ddfe1007101744d69e5d76d93ef1cb1ba122dce",
+      "sha256": "0bf87d53c66a4f6bb4a846ec1ddfe1007101744d69e5d76d93ef1cb1ba122dce"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-soc-init.c",
+      "source": "asoc/codecs/wcd9xxx-soc-init.c",
+      "original_sha256": "2b487ea808e53677049fde24c25051517f61c297b84cf4d7cfc2efdff2c7a7f0",
+      "sha256": "2b487ea808e53677049fde24c25051517f61c297b84cf4d7cfc2efdff2c7a7f0"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-utils.c",
+      "source": "asoc/codecs/wcd9xxx-utils.c",
+      "original_sha256": "077764d0676debb72e9b9d17fc1504739a6774898ce32bc0b052813b3697890f",
+      "sha256": "077764d0676debb72e9b9d17fc1504739a6774898ce32bc0b052813b3697890f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd9xxx-utils.h",
+      "source": "asoc/codecs/wcd9xxx-utils.h",
+      "original_sha256": "296e2fa41194c8be6c582fb6dd66231fcb1a6199725b0e4a5575ebdd6537cb8f",
+      "sha256": "296e2fa41194c8be6c582fb6dd66231fcb1a6199725b0e4a5575ebdd6537cb8f"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd_cmi_api.h",
+      "source": "asoc/codecs/wcd_cmi_api.h",
+      "original_sha256": "ad144a1ab9dc0699224f5fabf08aae1863ff80ffb5d5fef98b64a5c96b18ff58",
+      "sha256": "ad144a1ab9dc0699224f5fabf08aae1863ff80ffb5d5fef98b64a5c96b18ff58"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd_cpe_core.c",
+      "source": "asoc/codecs/wcd_cpe_core.c",
+      "original_sha256": "617dfadc4571399881cd09fb958ee04889c2f6e0fa3b2add55c39214aaeda0e1",
+      "sha256": "617dfadc4571399881cd09fb958ee04889c2f6e0fa3b2add55c39214aaeda0e1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd_cpe_core.h",
+      "source": "asoc/codecs/wcd_cpe_core.h",
+      "original_sha256": "2f7485ad7660daa4e1572f5e7f2b2156901223d4af13698030f754af4a6d21b0",
+      "sha256": "2f7485ad7660daa4e1572f5e7f2b2156901223d4af13698030f754af4a6d21b0"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd_cpe_services.c",
+      "source": "asoc/codecs/wcd_cpe_services.c",
+      "original_sha256": "6046c131e70a01a15553b257c636778f5e8e8cbd749ef977bb07e5568e831b5a",
+      "sha256": "6046c131e70a01a15553b257c636778f5e8e8cbd749ef977bb07e5568e831b5a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcd_cpe_services.h",
+      "source": "asoc/codecs/wcd_cpe_services.h",
+      "original_sha256": "1b2b213109f825b338ef1bb1429ae0a354f2298f36f69111b40c74406e1f7b3d",
+      "sha256": "1b2b213109f825b338ef1bb1429ae0a354f2298f36f69111b40c74406e1f7b3d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wcdcal-hwdep.c",
+      "source": "asoc/codecs/wcdcal-hwdep.c",
+      "original_sha256": "4a699a09e15656f4b91cc491d9501ad52a3c2c8a0370fe2143507bb5b3ecb60d",
+      "sha256": "4a699a09e15656f4b91cc491d9501ad52a3c2c8a0370fe2143507bb5b3ecb60d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-analog.c",
+      "source": "asoc/codecs/wsa881x-analog.c",
+      "original_sha256": "f8f421e2ca299cdfc182d69e65499186d365489ff136f1b80919dfe30da85171",
+      "sha256": "f8f421e2ca299cdfc182d69e65499186d365489ff136f1b80919dfe30da85171"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-analog.h",
+      "source": "asoc/codecs/wsa881x-analog.h",
+      "original_sha256": "b0bfad50f0b1d1d5c61ba013e2f2e775c03467c2fe71a253ff4bb958d0e3f309",
+      "sha256": "b0bfad50f0b1d1d5c61ba013e2f2e775c03467c2fe71a253ff4bb958d0e3f309"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-registers-analog.h",
+      "source": "asoc/codecs/wsa881x-registers-analog.h",
+      "original_sha256": "cc291a9a7033139e773beccf1df42f247e14d33f4abe069fe2027eab5abb482e",
+      "sha256": "cc291a9a7033139e773beccf1df42f247e14d33f4abe069fe2027eab5abb482e"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-registers.h",
+      "source": "asoc/codecs/wsa881x-registers.h",
+      "original_sha256": "69412fb844e6b104e0b00494a02455baed0ec63f95c1ff22a76c40995c3c9396",
+      "sha256": "69412fb844e6b104e0b00494a02455baed0ec63f95c1ff22a76c40995c3c9396"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-regmap-analog.c",
+      "source": "asoc/codecs/wsa881x-regmap-analog.c",
+      "original_sha256": "a8e76b01e2a4b00b2a0f2f7da3748559274622e64c26accd36d04a9ed49605a7",
+      "sha256": "a8e76b01e2a4b00b2a0f2f7da3748559274622e64c26accd36d04a9ed49605a7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-regmap.c",
+      "source": "asoc/codecs/wsa881x-regmap.c",
+      "original_sha256": "a12bc43b28f7287cc85f06136568ba05edb6a52cb228ee82f4221e039d27eb54",
+      "sha256": "a12bc43b28f7287cc85f06136568ba05edb6a52cb228ee82f4221e039d27eb54"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-tables-analog.c",
+      "source": "asoc/codecs/wsa881x-tables-analog.c",
+      "original_sha256": "9cf5c3841668c5e364fa5f473b8266ccbe5288b38cf7265acd2a6f0eda51fc48",
+      "sha256": "9cf5c3841668c5e364fa5f473b8266ccbe5288b38cf7265acd2a6f0eda51fc48"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-tables.c",
+      "source": "asoc/codecs/wsa881x-tables.c",
+      "original_sha256": "c887c92b40894ded949378030cc29b19fa7c9666ba69594a18c76526222c4ad7",
+      "sha256": "c887c92b40894ded949378030cc29b19fa7c9666ba69594a18c76526222c4ad7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-temp-sensor.c",
+      "source": "asoc/codecs/wsa881x-temp-sensor.c",
+      "original_sha256": "3d38a29ffc3a13067f1509b1362431759df00492138736b6615a307752448b93",
+      "sha256": "3d38a29ffc3a13067f1509b1362431759df00492138736b6615a307752448b93"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x-temp-sensor.h",
+      "source": "asoc/codecs/wsa881x-temp-sensor.h",
+      "original_sha256": "7206caabbae286aebad0066acd87695d59d9771767d1c3a0c965d3fb0c21c44b",
+      "sha256": "7206caabbae286aebad0066acd87695d59d9771767d1c3a0c965d3fb0c21c44b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x.c",
+      "source": "asoc/codecs/wsa881x.c",
+      "original_sha256": "7d57e31325623e16c2693058b423ef49e61352f38fef180c4e17b217d4e0d30b",
+      "sha256": "7d57e31325623e16c2693058b423ef49e61352f38fef180c4e17b217d4e0d30b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa881x.h",
+      "source": "asoc/codecs/wsa881x.h",
+      "original_sha256": "32104f3b210a8b4df885686fef3985faa50ce37d76e291a0e22808f82a4a6251",
+      "sha256": "32104f3b210a8b4df885686fef3985faa50ce37d76e291a0e22808f82a4a6251"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/internal.h",
+      "source": "asoc/codecs/wsa883x/internal.h",
+      "original_sha256": "2c1472bfcef481b9a6f7f6f3386f5c731b92ae41036e67ea246eea92850a5cee",
+      "sha256": "2c1472bfcef481b9a6f7f6f3386f5c731b92ae41036e67ea246eea92850a5cee"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x-registers.h",
+      "source": "asoc/codecs/wsa883x/wsa883x-registers.h",
+      "original_sha256": "65375b32db409d2cbd1f2338853841f9a72a6bb7331c8e9abdf55af25a6a0fef",
+      "sha256": "65375b32db409d2cbd1f2338853841f9a72a6bb7331c8e9abdf55af25a6a0fef"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x-regmap.c",
+      "source": "asoc/codecs/wsa883x/wsa883x-regmap.c",
+      "original_sha256": "967199c0c880cc3b01d71c80c105532540f9b12819de3b7c503b6e0852ab3d04",
+      "sha256": "967199c0c880cc3b01d71c80c105532540f9b12819de3b7c503b6e0852ab3d04"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x-tables.c",
+      "source": "asoc/codecs/wsa883x/wsa883x-tables.c",
+      "original_sha256": "3ebf61cf20f4c2cf71028472dd964686ac07025aea9ac8ee238678289314c173",
+      "sha256": "3ebf61cf20f4c2cf71028472dd964686ac07025aea9ac8ee238678289314c173"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x-temp-sensor.c",
+      "source": "asoc/codecs/wsa883x/wsa883x-temp-sensor.c",
+      "original_sha256": "ad0681c70eecbee811d6224c5ab1d04691c99b432d29dc92964ce096cc0826a2",
+      "sha256": "ad0681c70eecbee811d6224c5ab1d04691c99b432d29dc92964ce096cc0826a2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x-temp-sensor.h",
+      "source": "asoc/codecs/wsa883x/wsa883x-temp-sensor.h",
+      "original_sha256": "b39947b638b77edccd534c5935207a172b14e78e5786b263affe164e19248451",
+      "sha256": "b39947b638b77edccd534c5935207a172b14e78e5786b263affe164e19248451"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x.c",
+      "source": "asoc/codecs/wsa883x/wsa883x.c",
+      "original_sha256": "6e7bbc6e74a7c229bb0ce5330905868b85236770cee93d477e97c9212a11a00a",
+      "sha256": "6e7bbc6e74a7c229bb0ce5330905868b85236770cee93d477e97c9212a11a00a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa883x/wsa883x.h",
+      "source": "asoc/codecs/wsa883x/wsa883x.h",
+      "original_sha256": "0ef39d2323c22bdf1406ed661d95c079855e597820d8b642f9fdfaba8ea4aed2",
+      "sha256": "0ef39d2323c22bdf1406ed661d95c079855e597820d8b642f9fdfaba8ea4aed2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/internal.h",
+      "source": "asoc/codecs/wsa884x/internal.h",
+      "original_sha256": "707fb4d90a9781b36425d53471c1f369ff41d02bb7418acbb17d0e6155fb52a9",
+      "sha256": "707fb4d90a9781b36425d53471c1f369ff41d02bb7418acbb17d0e6155fb52a9"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x-reg-masks.h",
+      "source": "asoc/codecs/wsa884x/wsa884x-reg-masks.h",
+      "original_sha256": "35c22114e4c64d1d3922ff755b45d154cfc86d3927911989d13ad48ad848f3cb",
+      "sha256": "35c22114e4c64d1d3922ff755b45d154cfc86d3927911989d13ad48ad848f3cb"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x-reg-shifts.h",
+      "source": "asoc/codecs/wsa884x/wsa884x-reg-shifts.h",
+      "original_sha256": "2cac39fce9570d508414e1a620365a5752c17bdc40ad2479995e9695e5c3a5bc",
+      "sha256": "2cac39fce9570d508414e1a620365a5752c17bdc40ad2479995e9695e5c3a5bc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x-registers.h",
+      "source": "asoc/codecs/wsa884x/wsa884x-registers.h",
+      "original_sha256": "95b91ca90c9473260176ee70c96ac8bc1a2db33c82447098951dcff17a06f2e1",
+      "sha256": "95b91ca90c9473260176ee70c96ac8bc1a2db33c82447098951dcff17a06f2e1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x-regmap.c",
+      "source": "asoc/codecs/wsa884x/wsa884x-regmap.c",
+      "original_sha256": "dbf318f2928aaa03d3dbd32c986cef76e24904bb42c19c98009610d16efc1873",
+      "sha256": "dbf318f2928aaa03d3dbd32c986cef76e24904bb42c19c98009610d16efc1873"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x-tables.c",
+      "source": "asoc/codecs/wsa884x/wsa884x-tables.c",
+      "original_sha256": "355ffb1e0b8fa0891409a390479e1d2abf5a5d18c7f418c9025353ad53db8a46",
+      "sha256": "355ffb1e0b8fa0891409a390479e1d2abf5a5d18c7f418c9025353ad53db8a46"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x.c",
+      "source": "asoc/codecs/wsa884x/wsa884x.c",
+      "original_sha256": "e00363cda19cd2ece17e0f12d641dcc2c60d97ca0b5a6399e374a170a5dc32cc",
+      "sha256": "e00363cda19cd2ece17e0f12d641dcc2c60d97ca0b5a6399e374a170a5dc32cc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa884x/wsa884x.h",
+      "source": "asoc/codecs/wsa884x/wsa884x.h",
+      "original_sha256": "0bb9822ea88e1c64283a086d3e5348b3fd6f5d43f98220c2b0d2a7dc7366e69c",
+      "sha256": "0bb9822ea88e1c64283a086d3e5348b3fd6f5d43f98220c2b0d2a7dc7366e69c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/codecs/wsa885x-i2c.c",
+      "source": "asoc/codecs/wsa885x-i2c.c",
+      "original_sha256": "ea7f64cfd8e6e78416e3a9d8abf72f50cf65b318b16ed5c72428c33b8c5f8dfc",
+      "sha256": "ea7f64cfd8e6e78416e3a9d8abf72f50cf65b318b16ed5c72428c33b8c5f8dfc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/device_event.h",
+      "source": "asoc/device_event.h",
+      "original_sha256": "a4240d7cd801440ce83cc4e06d068dba2bcaad9eb3ee310218f84d83e786c715",
+      "sha256": "a4240d7cd801440ce83cc4e06d068dba2bcaad9eb3ee310218f84d83e786c715"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/gvm_auto_spf_dummy.c",
+      "source": "asoc/gvm_auto_spf_dummy.c",
+      "original_sha256": "3abb5a3c72bab2913f85c7f463deaf68e74872c877cc1716cd9b0d0cbbcd7917",
+      "sha256": "3abb5a3c72bab2913f85c7f463deaf68e74872c877cc1716cd9b0d0cbbcd7917"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/holi-port-config.h",
+      "source": "asoc/holi-port-config.h",
+      "original_sha256": "46886465270713ecda1a34ec029cda02180147afef0bc2256088f4de492d217a",
+      "sha256": "46886465270713ecda1a34ec029cda02180147afef0bc2256088f4de492d217a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/holi.c",
+      "source": "asoc/holi.c",
+      "original_sha256": "545a3d4a9ea9cec25c322fa1ae24be6eca80817725f8a2a32703aca3ba502d1c",
+      "sha256": "545a3d4a9ea9cec25c322fa1ae24be6eca80817725f8a2a32703aca3ba502d1c"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/kalama-port-config.h",
+      "source": "asoc/kalama-port-config.h",
+      "original_sha256": "77d10a5035df3bf14a69c85bc7a1d836b8f1ed6823470daea7a89cb98a2f28dd",
+      "sha256": "77d10a5035df3bf14a69c85bc7a1d836b8f1ed6823470daea7a89cb98a2f28dd"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/kalama.c",
+      "source": "asoc/kalama.c",
+      "original_sha256": "7226481816c348b509666dcdd3bca41b0852eae14922a50943aeb58afca34400",
+      "sha256": "7226481816c348b509666dcdd3bca41b0852eae14922a50943aeb58afca34400"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/kona-port-config.h",
+      "source": "asoc/kona-port-config.h",
+      "original_sha256": "bd476e8e53af1ef31f4b6c6946a966479b2f0bd462a70044008372c02ac3599d",
+      "sha256": "bd476e8e53af1ef31f4b6c6946a966479b2f0bd462a70044008372c02ac3599d"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/kona.c",
+      "source": "asoc/kona.c",
+      "original_sha256": "be93ce17f033122e9dd7230f2d8182be6c1e2bb2e424a1970193d54a8f0b2706",
+      "sha256": "be93ce17f033122e9dd7230f2d8182be6c1e2bb2e424a1970193d54a8f0b2706"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/lahaina-port-config.h",
+      "source": "asoc/lahaina-port-config.h",
+      "original_sha256": "90a62b9a08feb50f5ec8d01499a905f9baf41da6ecf3734ab8f4295a9f946cf6",
+      "sha256": "90a62b9a08feb50f5ec8d01499a905f9baf41da6ecf3734ab8f4295a9f946cf6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/lahaina.c",
+      "source": "asoc/lahaina.c",
+      "original_sha256": "0ec56257ef59d452bbf464353654c6b43af68a62ac88744eafdd62fc34de4f62",
+      "sha256": "0ec56257ef59d452bbf464353654c6b43af68a62ac88744eafdd62fc34de4f62"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/machine_815x_init.c",
+      "source": "asoc/machine_815x_init.c",
+      "original_sha256": "9958aad09a1632d1f80cb6195ab4dd1667e39914dd2a0018880a9d772af818b2",
+      "sha256": "9958aad09a1632d1f80cb6195ab4dd1667e39914dd2a0018880a9d772af818b2"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/machine_815x_init.h",
+      "source": "asoc/machine_815x_init.h",
+      "original_sha256": "0b5fd43f2a3e4420a97c65b5ab51cc2da78da77d4663626177fda4da3d1a27b6",
+      "sha256": "0b5fd43f2a3e4420a97c65b5ab51cc2da78da77d4663626177fda4da3d1a27b6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm-audio-defs.h",
+      "source": "asoc/msm-audio-defs.h",
+      "original_sha256": "3fa8116d8b8bf4118c8cc9afdc499e2beb019c1d91509c98314139aa5e9deeb7",
+      "sha256": "3fa8116d8b8bf4118c8cc9afdc499e2beb019c1d91509c98314139aa5e9deeb7"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm-compress-q6-v2.h",
+      "source": "asoc/msm-compress-q6-v2.h",
+      "original_sha256": "8ab072a1d4210c4feb023cb660a22a221f85215465e01a9e7b278666b4931702",
+      "sha256": "8ab072a1d4210c4feb023cb660a22a221f85215465e01a9e7b278666b4931702"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm-slim-dma.h",
+      "source": "asoc/msm-slim-dma.h",
+      "original_sha256": "ad1043a24b8fb85b645a8e9741a7f03d021c5d52ea1f155fac5cd4bef790f283",
+      "sha256": "ad1043a24b8fb85b645a8e9741a7f03d021c5d52ea1f155fac5cd4bef790f283"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm_bengal_dailink.h",
+      "source": "asoc/msm_bengal_dailink.h",
+      "original_sha256": "75ec17d5a9b8b937a6d0cbbe2e60940df9b7df7bf44982d7ec2cfb2cfacec2ca",
+      "sha256": "75ec17d5a9b8b937a6d0cbbe2e60940df9b7df7bf44982d7ec2cfb2cfacec2ca"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm_common.c",
+      "source": "asoc/msm_common.c",
+      "original_sha256": "1d2781a183f257c64e3ed11171d693f128dc7fc9539e44f2d2d422e35c48e906",
+      "sha256": "1d2781a183f257c64e3ed11171d693f128dc7fc9539e44f2d2d422e35c48e906"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm_common.h",
+      "source": "asoc/msm_common.h",
+      "original_sha256": "4f728e0ad07bcde8770d3953dfc7d7ca35b3d8a636b4cd331774ebc8c6f25bf8",
+      "sha256": "4f728e0ad07bcde8770d3953dfc7d7ca35b3d8a636b4cd331774ebc8c6f25bf8"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm_dailink.h",
+      "source": "asoc/msm_dailink.h",
+      "original_sha256": "57f06b1c1d0d7ca5d325c6d5754772ee7fe1c9e4c5d1ea07c551c53c1c7f89e4",
+      "sha256": "57f06b1c1d0d7ca5d325c6d5754772ee7fe1c9e4c5d1ea07c551c53c1c7f89e4"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/msm_holi_dailink.h",
+      "source": "asoc/msm_holi_dailink.h",
+      "original_sha256": "2db985d51ca269ee3c2673039a21463865a6a58778fca4805b233725f9d00bc9",
+      "sha256": "2db985d51ca269ee3c2673039a21463865a6a58778fca4805b233725f9d00bc9"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/pineapple-port-config.h",
+      "source": "asoc/pineapple-port-config.h",
+      "original_sha256": "4a58928a8a33ad71ebe9a2a2748d0e87fea544949b0b142683ea573bbcff8857",
+      "sha256": "4a58928a8a33ad71ebe9a2a2748d0e87fea544949b0b142683ea573bbcff8857"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/pineapple.c",
+      "source": "asoc/pineapple.c",
+      "original_sha256": "7bd49aa0984d10582d2e36636305a8e4128e14fba7cfa1752a0e7e47fb262fbf",
+      "sha256": "7bd49aa0984d10582d2e36636305a8e4128e14fba7cfa1752a0e7e47fb262fbf"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/platform_init.c",
+      "source": "asoc/platform_init.c",
+      "original_sha256": "e4775f04108d2382c6409e983a7d53eb562b7764a07a262fc7bb19aeeaef64c1",
+      "sha256": "e4775f04108d2382c6409e983a7d53eb562b7764a07a262fc7bb19aeeaef64c1"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/platform_init.h",
+      "source": "asoc/platform_init.h",
+      "original_sha256": "eac5533aa5db77cdd6e0e5c3e5f771aafd4e6f1b056ba1143f60cb15baf563c6",
+      "sha256": "eac5533aa5db77cdd6e0e5c3e5f771aafd4e6f1b056ba1143f60cb15baf563c6"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/qcs405.c",
+      "source": "asoc/qcs405.c",
+      "original_sha256": "7b9db5e93bdd1ff16f2d31052f67035ee881c165567732208fdb29e183056a07",
+      "sha256": "7b9db5e93bdd1ff16f2d31052f67035ee881c165567732208fdb29e183056a07"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/sdx-port-config.h",
+      "source": "asoc/sdx-port-config.h",
+      "original_sha256": "cd4fec3eb103f735dd4d8ab91cda8c23f908d13ba7bc42892a2fd0d46693b45a",
+      "sha256": "cd4fec3eb103f735dd4d8ab91cda8c23f908d13ba7bc42892a2fd0d46693b45a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/sdx-target.c",
+      "source": "asoc/sdx-target.c",
+      "original_sha256": "ecc52b822ed1610f4be447242c4a0d1b011d45136bb3d66707af1684a5c0eeba",
+      "sha256": "ecc52b822ed1610f4be447242c4a0d1b011d45136bb3d66707af1684a5c0eeba"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/sm8150.c",
+      "source": "asoc/sm8150.c",
+      "original_sha256": "93bbe5a0ee4cd71fb07a27a551d1228cb4a18b521841a1b7ca7cd0dc43e7429a",
+      "sha256": "93bbe5a0ee4cd71fb07a27a551d1228cb4a18b521841a1b7ca7cd0dc43e7429a"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/sun-port-config.h",
+      "source": "asoc/sun-port-config.h",
+      "original_sha256": "3b59d25d239ff40b1be8310f3325e3eee2d427ef10050fb1845a2073c31b16dc",
+      "sha256": "3b59d25d239ff40b1be8310f3325e3eee2d427ef10050fb1845a2073c31b16dc"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/sun.c",
+      "source": "asoc/sun.c",
+      "original_sha256": "798dbbbbfef8c382c7f31b61b1c1a04616c6c659caa34398aee8ecdd2909f74b",
+      "sha256": "798dbbbbfef8c382c7f31b61b1c1a04616c6c659caa34398aee8ecdd2909f74b"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/waipio-port-config.h",
+      "source": "asoc/waipio-port-config.h",
+      "original_sha256": "76817a4207ebc8a856a8955aca9ef82eb34d331ec329c823c50d5f2c82025268",
+      "sha256": "76817a4207ebc8a856a8955aca9ef82eb34d331ec329c823c50d5f2c82025268"
+    },
+    {
+      "file": "ports/audio-kernel/asoc/waipio.c",
+      "source": "asoc/waipio.c",
+      "original_sha256": "ec4857f158bafb85aff1fbfb7b7ac45c4def965a54715b4af8e8e74de4c2af16",
+      "sha256": "ec4857f158bafb85aff1fbfb7b7ac45c4def965a54715b4af8e8e74de4c2af16"
+    },
+    {
+      "file": "ports/audio-kernel/audio_modules.bzl",
+      "source": "audio_modules.bzl",
+      "original_sha256": "98e3d2bd77cc2947f269ec67f1ae039ef71041a5b4e2a255ec574eb72d91cf5d",
+      "sha256": "98e3d2bd77cc2947f269ec67f1ae039ef71041a5b4e2a255ec574eb72d91cf5d"
+    },
+    {
+      "file": "ports/audio-kernel/canoe.bzl",
+      "source": "build/canoe.bzl",
+      "original_sha256": "e120af5daeb396a8b8b3af824c4f5859cd435bad5ebf7783ab5d9efc5515de05",
+      "sha256": "e120af5daeb396a8b8b3af824c4f5859cd435bad5ebf7783ab5d9efc5515de05"
+    },
+    {
+      "file": "ports/audio-kernel/config/bengalautoconf.h",
+      "source": "config/bengalautoconf.h",
+      "original_sha256": "873abf0e2059fc32b2638af18bf81a3aa550f04ad2f1b2ba2d6d4d2c8bc65a46",
+      "sha256": "873abf0e2059fc32b2638af18bf81a3aa550f04ad2f1b2ba2d6d4d2c8bc65a46"
+    },
+    {
+      "file": "ports/audio-kernel/config/gvmautoconf.h",
+      "source": "config/gvmautoconf.h",
+      "original_sha256": "04fc62b7e0b9856bc614e48251f0d596e7a3b0c58628e3d20d8d6324360ad994",
+      "sha256": "04fc62b7e0b9856bc614e48251f0d596e7a3b0c58628e3d20d8d6324360ad994"
+    },
+    {
+      "file": "ports/audio-kernel/config/holiautoconf.h",
+      "source": "config/holiautoconf.h",
+      "original_sha256": "359f500bd85c94512e2908cfe0903b09542ba5c9f02f8793549e23d8cea77556",
+      "sha256": "359f500bd85c94512e2908cfe0903b09542ba5c9f02f8793549e23d8cea77556"
+    },
+    {
+      "file": "ports/audio-kernel/config/kalamaautoconf.h",
+      "source": "config/kalamaautoconf.h",
+      "original_sha256": "1f9eb43aa98f1cddaae52976f22e492150e689626669ecf3b6c9aab51de67ed4",
+      "sha256": "1f9eb43aa98f1cddaae52976f22e492150e689626669ecf3b6c9aab51de67ed4"
+    },
+    {
+      "file": "ports/audio-kernel/config/konaautoconf.h",
+      "source": "config/konaautoconf.h",
+      "original_sha256": "02e7838639ed2944cabf9eb7fd6882f6b3ca069e883224a83b8835cf7d46117b",
+      "sha256": "02e7838639ed2944cabf9eb7fd6882f6b3ca069e883224a83b8835cf7d46117b"
+    },
+    {
+      "file": "ports/audio-kernel/config/lahainaautoconf.h",
+      "source": "config/lahainaautoconf.h",
+      "original_sha256": "c8b9454df251163dc8825800a267f6256f42864b071a9d9e75841e79b25c11a3",
+      "sha256": "c8b9454df251163dc8825800a267f6256f42864b071a9d9e75841e79b25c11a3"
+    },
+    {
+      "file": "ports/audio-kernel/config/litoautoconf.h",
+      "source": "config/litoautoconf.h",
+      "original_sha256": "8ef120343471630de584deb6cfd844344753cf26aa626c9df2dadffc1969fb10",
+      "sha256": "8ef120343471630de584deb6cfd844344753cf26aa626c9df2dadffc1969fb10"
+    },
+    {
+      "file": "ports/audio-kernel/config/pineappleautoconf.h",
+      "source": "config/pineappleautoconf.h",
+      "original_sha256": "12301f548b90cd3c03901594a535df84e54c2b60c62d356c8f4f241025632df3",
+      "sha256": "12301f548b90cd3c03901594a535df84e54c2b60c62d356c8f4f241025632df3"
+    },
+    {
+      "file": "ports/audio-kernel/config/qcs405autoconf.h",
+      "source": "config/qcs405autoconf.h",
+      "original_sha256": "51e82dd13d4b23f4608e4962658b01efe803121de651c0d0baed701132f8e84e",
+      "sha256": "51e82dd13d4b23f4608e4962658b01efe803121de651c0d0baed701132f8e84e"
+    },
+    {
+      "file": "ports/audio-kernel/config/sa6155autoconf.h",
+      "source": "config/sa6155autoconf.h",
+      "original_sha256": "49a013ae2cc38b54270876257304c8ec78d90cd15085e4b008035726e5d9ad7a",
+      "sha256": "49a013ae2cc38b54270876257304c8ec78d90cd15085e4b008035726e5d9ad7a"
+    },
+    {
+      "file": "ports/audio-kernel/config/sa8155autoconf.h",
+      "source": "config/sa8155autoconf.h",
+      "original_sha256": "88c7498cae9e8d7ee2717b3df17af2a57e69f7ba44bacd15d60fcc29caccd6b8",
+      "sha256": "88c7498cae9e8d7ee2717b3df17af2a57e69f7ba44bacd15d60fcc29caccd6b8"
+    },
+    {
+      "file": "ports/audio-kernel/config/sdxlemurautoconf.h",
+      "source": "config/sdxlemurautoconf.h",
+      "original_sha256": "edc1f9cbbaecae7282ab43aaeb7a709fba3d722ab01c5cae6cc5b97513f43fba",
+      "sha256": "edc1f9cbbaecae7282ab43aaeb7a709fba3d722ab01c5cae6cc5b97513f43fba"
+    },
+    {
+      "file": "ports/audio-kernel/config/sdxpoorwillsautoconf.h",
+      "source": "config/sdxpoorwillsautoconf.h",
+      "original_sha256": "9fd790ebc8c3c4b72fd01748c2c16ced8e48157a6cc228cc0953c8a057ffe4d1",
+      "sha256": "9fd790ebc8c3c4b72fd01748c2c16ced8e48157a6cc228cc0953c8a057ffe4d1"
+    },
+    {
+      "file": "ports/audio-kernel/config/sm6150autoconf.h",
+      "source": "config/sm6150autoconf.h",
+      "original_sha256": "7d83513999791c4236c8717bc7272f117246b9a35183ceb2b008cf25ab6b1853",
+      "sha256": "7d83513999791c4236c8717bc7272f117246b9a35183ceb2b008cf25ab6b1853"
+    },
+    {
+      "file": "ports/audio-kernel/config/sm8150autoconf.h",
+      "source": "config/sm8150autoconf.h",
+      "original_sha256": "5a439a098084ba796c5e2d3ffa8107f7365ef892c4e6502451135c2e0e72d0d4",
+      "sha256": "5a439a098084ba796c5e2d3ffa8107f7365ef892c4e6502451135c2e0e72d0d4"
+    },
+    {
+      "file": "ports/audio-kernel/config/waipioautoconf.h",
+      "source": "config/waipioautoconf.h",
+      "original_sha256": "2fa657fdfc6096d94bd957b040101feb09e1dcd6e800bcce0d75cb3a303b25e0",
+      "sha256": "2fa657fdfc6096d94bd957b040101feb09e1dcd6e800bcce0d75cb3a303b25e0"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/adsp-loader.c",
+      "source": "dsp/adsp-loader.c",
+      "original_sha256": "e6aff06e6677745be70c69bba2c5fddb727d8a99fefa706bb0ce22d3de4193ee",
+      "sha256": "e6aff06e6677745be70c69bba2c5fddb727d8a99fefa706bb0ce22d3de4193ee"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_notifier.c",
+      "source": "dsp/audio_notifier.c",
+      "original_sha256": "8741bddd76bdf6fde1a9cf30770b840578cecc7f7c2ce4647007eafadf5f0499",
+      "sha256": "8741bddd76bdf6fde1a9cf30770b840578cecc7f7c2ce4647007eafadf5f0499"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_pdr.c",
+      "source": "dsp/audio_pdr.c",
+      "original_sha256": "8e52cde786bee7176f06170eef15b8b3995e70e9d83584af2eb0e04ce8664f96",
+      "sha256": "8e52cde786bee7176f06170eef15b8b3995e70e9d83584af2eb0e04ce8664f96"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_pdr.h",
+      "source": "dsp/audio_pdr.h",
+      "original_sha256": "dae2333b27ac7c5ec954d71f98ee6daf6072a727fe723b06e808d66110f90eff",
+      "sha256": "dae2333b27ac7c5ec954d71f98ee6daf6072a727fe723b06e808d66110f90eff"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_prm.c",
+      "source": "dsp/audio_prm.c",
+      "original_sha256": "886f939222465025c11bfd66281c29a8255666927f8f6be1f06277cdcfefb0cd",
+      "sha256": "886f939222465025c11bfd66281c29a8255666927f8f6be1f06277cdcfefb0cd"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_ssr.c",
+      "source": "dsp/audio_ssr.c",
+      "original_sha256": "7eb74b5a65e7d753f443d418f75659c7690cbc246d9bcbfa66f9c83e657199e5",
+      "sha256": "7eb74b5a65e7d753f443d418f75659c7690cbc246d9bcbfa66f9c83e657199e5"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/audio_ssr.h",
+      "source": "dsp/audio_ssr.h",
+      "original_sha256": "7297d9945b84c5fc2da27e93c130d8c25d6c4bfa6565587631d71eb4023afb57",
+      "sha256": "7297d9945b84c5fc2da27e93c130d8c25d6c4bfa6565587631d71eb4023afb57"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/digital-cdc-rsc-mgr.c",
+      "source": "dsp/digital-cdc-rsc-mgr.c",
+      "original_sha256": "ae1a9a672564b2b350a7b50a7b26dd2f614ac26e72d293f1ae1e8870bd904271",
+      "sha256": "ae1a9a672564b2b350a7b50a7b26dd2f614ac26e72d293f1ae1e8870bd904271"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/msm-audio-event-notify.c",
+      "source": "dsp/msm-audio-event-notify.c",
+      "original_sha256": "6f4b33fb5c1d62d06d0eb2493b686b56dfd925b36325c0c96b30638995c6b5f4",
+      "sha256": "6f4b33fb5c1d62d06d0eb2493b686b56dfd925b36325c0c96b30638995c6b5f4"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/msm_audio_ion.c",
+      "source": "dsp/msm_audio_ion.c",
+      "original_sha256": "3f090f0bbd58813c879fac496650724b1d7fc7effc9be2bf699326a676e7fe4c",
+      "sha256": "3f090f0bbd58813c879fac496650724b1d7fc7effc9be2bf699326a676e7fe4c"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/msm_audio_ion_vm.c",
+      "source": "dsp/msm_audio_ion_vm.c",
+      "original_sha256": "1c7665d8c0137e17b241a754315cc573fe244748681750931a823d232d17eed2",
+      "sha256": "1c7665d8c0137e17b241a754315cc573fe244748681750931a823d232d17eed2"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/q6_init.c",
+      "source": "dsp/q6_init.c",
+      "original_sha256": "e30f7c4f00ef4dbe600e6c0e2004c72fca693778bc160ddb84baeccfe7b02610",
+      "sha256": "e30f7c4f00ef4dbe600e6c0e2004c72fca693778bc160ddb84baeccfe7b02610"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/q6_init.h",
+      "source": "dsp/q6_init.h",
+      "original_sha256": "a8ee70e0779df1afed8c9a1ec24b960d61f1d8c3d5664134f48d6ecb8cdb7d32",
+      "sha256": "a8ee70e0779df1afed8c9a1ec24b960d61f1d8c3d5664134f48d6ecb8cdb7d32"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/sp_params.c",
+      "source": "dsp/sp_params.c",
+      "original_sha256": "9e9caf588ca6682e67853432f07da1b660158472508e21228a7c0bcca9575f57",
+      "sha256": "9e9caf588ca6682e67853432f07da1b660158472508e21228a7c0bcca9575f57"
+    },
+    {
+      "file": "ports/audio-kernel/dsp/spf-core.c",
+      "source": "dsp/spf-core.c",
+      "original_sha256": "6d2effc89ebad8da5664eebd2d89a0e234e8f9ee92f3707bc795b2b607b265fb",
+      "sha256": "6d2effc89ebad8da5664eebd2d89a0e234e8f9ee92f3707bc795b2b607b265fb"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/bolero-slave-internal.h",
+      "source": "include/asoc/bolero-slave-internal.h",
+      "original_sha256": "a511306cb0caed758ae9c536a2837c0bd7b2d0ce5a337bb2696532e87e28410a",
+      "sha256": "a511306cb0caed758ae9c536a2837c0bd7b2d0ce5a337bb2696532e87e28410a"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/core.h",
+      "source": "include/asoc/core.h",
+      "original_sha256": "30227133302e9a1e104b9e3682e4a3424dae20409a720fec19387724b92f0d96",
+      "sha256": "30227133302e9a1e104b9e3682e4a3424dae20409a720fec19387724b92f0d96"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/cpe_core.h",
+      "source": "include/asoc/cpe_core.h",
+      "original_sha256": "97a7d9857f7354382cf65d1eb2f3931fa2e7053863da3ec82000f5d50f35b335",
+      "sha256": "97a7d9857f7354382cf65d1eb2f3931fa2e7053863da3ec82000f5d50f35b335"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/msm-cdc-pinctrl.h",
+      "source": "include/asoc/msm-cdc-pinctrl.h",
+      "original_sha256": "5ed3b36ec782747347a8ead566af2c2f607f7ce9869dc8fbc0de37f139471bcb",
+      "sha256": "5ed3b36ec782747347a8ead566af2c2f607f7ce9869dc8fbc0de37f139471bcb"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/msm-cdc-supply.h",
+      "source": "include/asoc/msm-cdc-supply.h",
+      "original_sha256": "239b06b82db258c31f734d298e394d526437c6ec15e12368cc416fe601082c0d",
+      "sha256": "239b06b82db258c31f734d298e394d526437c6ec15e12368cc416fe601082c0d"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/pdata.h",
+      "source": "include/asoc/pdata.h",
+      "original_sha256": "b7c41c1a0a525c3d46ef09f23dcf8531c6d9290546b61745a30cf056fe45e3ad",
+      "sha256": "b7c41c1a0a525c3d46ef09f23dcf8531c6d9290546b61745a30cf056fe45e3ad"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/sdca-registers-api.h",
+      "source": "include/asoc/sdca-registers-api.h",
+      "original_sha256": "b428a88f2c9becd471634c87fde0a5e8ebee75a7b2ea13f6d909cc19d7d3e82c",
+      "sha256": "b428a88f2c9becd471634c87fde0a5e8ebee75a7b2ea13f6d909cc19d7d3e82c"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd-clsh.h",
+      "source": "include/asoc/wcd-clsh.h",
+      "original_sha256": "b3d36489d6167f0c62f150c3e9399a309efab7024edd6865276701daab84053f",
+      "sha256": "b3d36489d6167f0c62f150c3e9399a309efab7024edd6865276701daab84053f"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd-irq.h",
+      "source": "include/asoc/wcd-irq.h",
+      "original_sha256": "9c1980bb118dde0eb5a6662b80a4f9a4360fb513a33c510e2bfc2f244d02dba1",
+      "sha256": "9c1980bb118dde0eb5a6662b80a4f9a4360fb513a33c510e2bfc2f244d02dba1"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd-mbhc-v2-api.h",
+      "source": "include/asoc/wcd-mbhc-v2-api.h",
+      "original_sha256": "7400db831d975818115d246bcaa9fb793ee2a43031f7749de6f1be96546dcea6",
+      "sha256": "7400db831d975818115d246bcaa9fb793ee2a43031f7749de6f1be96546dcea6"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd-mbhc-v2.h",
+      "source": "include/asoc/wcd-mbhc-v2.h",
+      "original_sha256": "b8263d4d28474aba0915b2e8348503cc30d38ca01bd47a4958d8733555daab70",
+      "sha256": "b8263d4d28474aba0915b2e8348503cc30d38ca01bd47a4958d8733555daab70"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9320_registers.h",
+      "source": "include/asoc/wcd9320_registers.h",
+      "original_sha256": "bb7afadfc138ea8aec9c36aa1161b32b79f3f16c914e9d0a4b786703c5398534",
+      "sha256": "bb7afadfc138ea8aec9c36aa1161b32b79f3f16c914e9d0a4b786703c5398534"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd934x_registers.h",
+      "source": "include/asoc/wcd934x_registers.h",
+      "original_sha256": "a0da4693e3475d85f0ea9fbc48907a2704a424f29ab34fbca78571e5209b981e",
+      "sha256": "a0da4693e3475d85f0ea9fbc48907a2704a424f29ab34fbca78571e5209b981e"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx-common-v2.h",
+      "source": "include/asoc/wcd9xxx-common-v2.h",
+      "original_sha256": "82f1f59b2fcea260c50f5385f36b7234e592199c0e9b84b4cf6db53bad3fbdca",
+      "sha256": "82f1f59b2fcea260c50f5385f36b7234e592199c0e9b84b4cf6db53bad3fbdca"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx-irq.h",
+      "source": "include/asoc/wcd9xxx-irq.h",
+      "original_sha256": "08510c9985228b79afdb3f9443be226d070296a1b8104b614f64d6b334dfba9a",
+      "sha256": "08510c9985228b79afdb3f9443be226d070296a1b8104b614f64d6b334dfba9a"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx-regmap.h",
+      "source": "include/asoc/wcd9xxx-regmap.h",
+      "original_sha256": "6fdf37ca1865023ac31d5d3879bc77869cce3fce3408e1d0a16805031c8a041a",
+      "sha256": "6fdf37ca1865023ac31d5d3879bc77869cce3fce3408e1d0a16805031c8a041a"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx-resmgr-v2.h",
+      "source": "include/asoc/wcd9xxx-resmgr-v2.h",
+      "original_sha256": "0fdbd7d06b14efcd5da3129f991f4507d8e1b03a7878b229196e92bba34bafa6",
+      "sha256": "0fdbd7d06b14efcd5da3129f991f4507d8e1b03a7878b229196e92bba34bafa6"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx-slimslave.h",
+      "source": "include/asoc/wcd9xxx-slimslave.h",
+      "original_sha256": "79f56a7853eeea650e22c0877c481bc8501e7e087f930e548f0a85bdab539960",
+      "sha256": "79f56a7853eeea650e22c0877c481bc8501e7e087f930e548f0a85bdab539960"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcd9xxx_registers.h",
+      "source": "include/asoc/wcd9xxx_registers.h",
+      "original_sha256": "8d2250411bdde01a8cae7c85ca646feb8d0e36e985c30f1b2565c3bc394376ff",
+      "sha256": "8d2250411bdde01a8cae7c85ca646feb8d0e36e985c30f1b2565c3bc394376ff"
+    },
+    {
+      "file": "ports/audio-kernel/include/asoc/wcdcal-hwdep.h",
+      "source": "include/asoc/wcdcal-hwdep.h",
+      "original_sha256": "58fdab7b34bc04de81294413f5bd96f15844ca55d87b8d343f560649156ce07d",
+      "sha256": "58fdab7b34bc04de81294413f5bd96f15844ca55d87b8d343f560649156ce07d"
+    },
+    {
+      "file": "ports/audio-kernel/include/bindings/audio-codec-port-types.h",
+      "source": "include/bindings/audio-codec-port-types.h",
+      "original_sha256": "0fdf6dd9e9896044da28ded367389d36316b6aff068e25ac6f2b40a08a04d584",
+      "sha256": "0fdf6dd9e9896044da28ded367389d36316b6aff068e25ac6f2b40a08a04d584"
+    },
+    {
+      "file": "ports/audio-kernel/include/bindings/qcom,audio-ext-clk.h",
+      "source": "include/bindings/qcom,audio-ext-clk.h",
+      "original_sha256": "19585318e3c1bef66a40d14f1d38fc40026117e4b14dfb25d52476cd1ed62122",
+      "sha256": "19585318e3c1bef66a40d14f1d38fc40026117e4b14dfb25d52476cd1ed62122"
+    },
+    {
+      "file": "ports/audio-kernel/include/bindings/qcom,bolero-clk-rsc.h",
+      "source": "include/bindings/qcom,bolero-clk-rsc.h",
+      "original_sha256": "764d15aeed369190e4557c124b60f5a2e6eb2471094f4256e780d02dfc83749a",
+      "sha256": "764d15aeed369190e4557c124b60f5a2e6eb2471094f4256e780d02dfc83749a"
+    },
+    {
+      "file": "ports/audio-kernel/include/bindings/qcom,gpr.h",
+      "source": "include/bindings/qcom,gpr.h",
+      "original_sha256": "6071cbde9db5820c0c2611b9789a8823725e0d54a9782d40e45bcb8318df8916",
+      "sha256": "6071cbde9db5820c0c2611b9789a8823725e0d54a9782d40e45bcb8318df8916"
+    },
+    {
+      "file": "ports/audio-kernel/include/bindings/qcom,lpass-cdc-clk-rsc.h",
+      "source": "include/bindings/qcom,lpass-cdc-clk-rsc.h",
+      "original_sha256": "fd840453cf95e725cc130f59a9bc3cc1359cea1247f13d80fd0ab4a36dc28574",
+      "sha256": "fd840453cf95e725cc130f59a9bc3cc1359cea1247f13d80fd0ab4a36dc28574"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/apr_audio-v2.h",
+      "source": "include/dsp/apr_audio-v2.h",
+      "original_sha256": "1b667305e1b3d9ed583af1ecb87169619727f14f217352c10cab447e7fd7d0c0",
+      "sha256": "1b667305e1b3d9ed583af1ecb87169619727f14f217352c10cab447e7fd7d0c0"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/audio_calibration.h",
+      "source": "include/dsp/audio_calibration.h",
+      "original_sha256": "a4ea67e2c8bf3b9b2faaec4f466f248f370e36c3a267f70016f4432544ddcf98",
+      "sha256": "a4ea67e2c8bf3b9b2faaec4f466f248f370e36c3a267f70016f4432544ddcf98"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/audio_notifier.h",
+      "source": "include/dsp/audio_notifier.h",
+      "original_sha256": "7cdb87bb857955aed76905d2e267ea9451f5e88139e830e2b1e9d73b49e8c948",
+      "sha256": "7cdb87bb857955aed76905d2e267ea9451f5e88139e830e2b1e9d73b49e8c948"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/audio_prm.h",
+      "source": "include/dsp/audio_prm.h",
+      "original_sha256": "f7fc313dbcee35b8a8fbe4525b4b0664194b8283f68e2fe6cac41cd8c232d53b",
+      "sha256": "f7fc313dbcee35b8a8fbe4525b4b0664194b8283f68e2fe6cac41cd8c232d53b"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/digital-cdc-rsc-mgr.h",
+      "source": "include/dsp/digital-cdc-rsc-mgr.h",
+      "original_sha256": "bb4ff0f1c176e38db138fccf1d1cda0f7e5c8f0608f3d6637d1deca2e986f311",
+      "sha256": "bb4ff0f1c176e38db138fccf1d1cda0f7e5c8f0608f3d6637d1deca2e986f311"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/msm-audio-event-notify.h",
+      "source": "include/dsp/msm-audio-event-notify.h",
+      "original_sha256": "dc29416d59889f8bad937312c2f6e0ead44ecf5dd96c85ee8cefd89b98c2028a",
+      "sha256": "dc29416d59889f8bad937312c2f6e0ead44ecf5dd96c85ee8cefd89b98c2028a"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/msm_audio_ion.h",
+      "source": "include/dsp/msm_audio_ion.h",
+      "original_sha256": "d4488ce6a916fa0d3fb6c26d1a393530a4d2dee6f6dc80867acf4a4d4d156a9a",
+      "sha256": "d4488ce6a916fa0d3fb6c26d1a393530a4d2dee6f6dc80867acf4a4d4d156a9a"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/sp_params.h",
+      "source": "include/dsp/sp_params.h",
+      "original_sha256": "3bc8174ee20e0269d4710fc386cac2e86c097255b20a908a876776b4e3f15664",
+      "sha256": "3bc8174ee20e0269d4710fc386cac2e86c097255b20a908a876776b4e3f15664"
+    },
+    {
+      "file": "ports/audio-kernel/include/dsp/spf-core.h",
+      "source": "include/dsp/spf-core.h",
+      "original_sha256": "1510a00867426d36e66728b107df1697a18c72ecdf93b36c6de953586c0ebb56",
+      "sha256": "1510a00867426d36e66728b107df1697a18c72ecdf93b36c6de953586c0ebb56"
+    },
+    {
+      "file": "ports/audio-kernel/include/ipc/apr.h",
+      "source": "include/ipc/apr.h",
+      "original_sha256": "5816631512c9abe2d474c67eb1fea4e255da9c391c7cd29673c56b8ce29f3c89",
+      "sha256": "5816631512c9abe2d474c67eb1fea4e255da9c391c7cd29673c56b8ce29f3c89"
+    },
+    {
+      "file": "ports/audio-kernel/include/ipc/aprv2_vm.h",
+      "source": "include/ipc/aprv2_vm.h",
+      "original_sha256": "481a37cad56bff15321ff63b59272971e6ad0695a17fb5adbda1775a2c78a09d",
+      "sha256": "481a37cad56bff15321ff63b59272971e6ad0695a17fb5adbda1775a2c78a09d"
+    },
+    {
+      "file": "ports/audio-kernel/include/ipc/gpr-lite.h",
+      "source": "include/ipc/gpr-lite.h",
+      "original_sha256": "2f7169f33cb936a49df53f1734ed6ed4468bdd143d1a32b535a8c252aad97710",
+      "sha256": "2f7169f33cb936a49df53f1734ed6ed4468bdd143d1a32b535a8c252aad97710"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/audio_mod_devicetable.h",
+      "source": "include/soc/audio_mod_devicetable.h",
+      "original_sha256": "1b5bd7024846b7744a3dc50a9121ffe2c8b13d80105ddda8fef022a6df26823f",
+      "sha256": "1b5bd7024846b7744a3dc50a9121ffe2c8b13d80105ddda8fef022a6df26823f"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/snd_event.h",
+      "source": "include/soc/snd_event.h",
+      "original_sha256": "81cc0b3116c6436874dbc064c573bf70efa7a486b657875776ea73936530fdf4",
+      "sha256": "81cc0b3116c6436874dbc064c573bf70efa7a486b657875776ea73936530fdf4"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/soundwire.h",
+      "source": "include/soc/soundwire.h",
+      "original_sha256": "7ab62ca8660eff14842e911adda2b7e241a987a0fc315b5ac151d2db2ac916cb",
+      "sha256": "7ab62ca8660eff14842e911adda2b7e241a987a0fc315b5ac151d2db2ac916cb"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/swr-common.h",
+      "source": "include/soc/swr-common.h",
+      "original_sha256": "5255dd2315331c183d0f0c2c762fa58ea7e650cf9e5739aebfbe7bad59e4ddc9",
+      "sha256": "5255dd2315331c183d0f0c2c762fa58ea7e650cf9e5739aebfbe7bad59e4ddc9"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/swr-wcd.h",
+      "source": "include/soc/swr-wcd.h",
+      "original_sha256": "df656f95a549d13d4314668e8ac7b93c0abd03e859c8632a2a49827f931ff554",
+      "sha256": "df656f95a549d13d4314668e8ac7b93c0abd03e859c8632a2a49827f931ff554"
+    },
+    {
+      "file": "ports/audio-kernel/include/soc/wcd-spi-ac.h",
+      "source": "include/soc/wcd-spi-ac.h",
+      "original_sha256": "4f2c7dc8943c5462d744f3652b4afbf7bf376556db4e67e35f0d05494f83ec33",
+      "sha256": "4f2c7dc8943c5462d744f3652b4afbf7bf376556db4e67e35f0d05494f83ec33"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/linux/msm_audio.h",
+      "source": "include/uapi/audio/linux/msm_audio.h",
+      "original_sha256": "2a4734576a3697e1540e59c409c1d5dde615fbcbf428a40b12c01a1ad7c97c66",
+      "sha256": "2a4734576a3697e1540e59c409c1d5dde615fbcbf428a40b12c01a1ad7c97c66"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/linux/msm_audio_calibration.h",
+      "source": "include/uapi/audio/linux/msm_audio_calibration.h",
+      "original_sha256": "8647fe42044742319f6e9831d52040920f1392460ccf48a01bbb74503bc0669d",
+      "sha256": "8647fe42044742319f6e9831d52040920f1392460ccf48a01bbb74503bc0669d"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/audio_effects.h",
+      "source": "include/uapi/audio/sound/audio_effects.h",
+      "original_sha256": "19d543ca81e8fd53af9e847ae1f02ef0d532ffbbf96b5d28ec46fc53455e73ef",
+      "sha256": "19d543ca81e8fd53af9e847ae1f02ef0d532ffbbf96b5d28ec46fc53455e73ef"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/audio_slimslave.h",
+      "source": "include/uapi/audio/sound/audio_slimslave.h",
+      "original_sha256": "76d07745b9a11315dd619a70ddd93b34a3dc2353cd907ce912b14280e32b8375",
+      "sha256": "76d07745b9a11315dd619a70ddd93b34a3dc2353cd907ce912b14280e32b8375"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/devdep_params.h",
+      "source": "include/uapi/audio/sound/devdep_params.h",
+      "original_sha256": "b958798735adc0959c0e6f9ce147ae70ea70da484cc910f1fe5331e4d5bbb3c2",
+      "sha256": "b958798735adc0959c0e6f9ce147ae70ea70da484cc910f1fe5331e4d5bbb3c2"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/lsm_params.h",
+      "source": "include/uapi/audio/sound/lsm_params.h",
+      "original_sha256": "4774f00e020f713c405b4eb4f420c531816c94caa0397070ee122ab9eaab050d",
+      "sha256": "4774f00e020f713c405b4eb4f420c531816c94caa0397070ee122ab9eaab050d"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/msmcal-hwdep.h",
+      "source": "include/uapi/audio/sound/msmcal-hwdep.h",
+      "original_sha256": "700f463fc58a200997812c5fcefde61b3b34c434e6b7026be259e1f7c0b8a3b3",
+      "sha256": "700f463fc58a200997812c5fcefde61b3b34c434e6b7026be259e1f7c0b8a3b3"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/voice_params.h",
+      "source": "include/uapi/audio/sound/voice_params.h",
+      "original_sha256": "72ec5c96a23528130929e7486c1579e8c87f62dc8b158ab88d0611fca03e8c03",
+      "sha256": "72ec5c96a23528130929e7486c1579e8c87f62dc8b158ab88d0611fca03e8c03"
+    },
+    {
+      "file": "ports/audio-kernel/include/uapi/audio/sound/wcd-dsp-glink.h",
+      "source": "include/uapi/audio/sound/wcd-dsp-glink.h",
+      "original_sha256": "4498e8028d974f75fc324214a62d20e68e22664d7f8b5f546109cdfbbc8392a6",
+      "sha256": "4498e8028d974f75fc324214a62d20e68e22664d7f8b5f546109cdfbbc8392a6"
+    },
+    {
+      "file": "ports/audio-kernel/ipc/audio-pkt.c",
+      "source": "ipc/audio-pkt.c",
+      "original_sha256": "15479032c3621e9f213cac8c2c565b7022442d19725ccca067c4e2b12d97176a",
+      "sha256": "15479032c3621e9f213cac8c2c565b7022442d19725ccca067c4e2b12d97176a"
+    },
+    {
+      "file": "ports/audio-kernel/ipc/gpr-lite.c",
+      "source": "ipc/gpr-lite.c",
+      "original_sha256": "56a8d2232354b52ea1e6026bd37a27d88df42c8371d4244e1df904d30177286f",
+      "sha256": "56a8d2232354b52ea1e6026bd37a27d88df42c8371d4244e1df904d30177286f"
+    },
+    {
+      "file": "ports/audio-kernel/soc/core.h",
+      "source": "soc/core.h",
+      "original_sha256": "a2ee39ca696d7db7b84220dd26ba390c5a9a66ada956eaff4a9768162125de16",
+      "sha256": "a2ee39ca696d7db7b84220dd26ba390c5a9a66ada956eaff4a9768162125de16"
+    },
+    {
+      "file": "ports/audio-kernel/soc/pinctrl-lpi.c",
+      "source": "soc/pinctrl-lpi.c",
+      "original_sha256": "c51bdbbc9c69bc729ac4f1844027217945e2f1f0d1462b4c87e59566bd67246c",
+      "sha256": "6aae3f3dd32696d8840ef5ee55c64f2557abae45ccbaf98e194c4de4020871b9"
+    },
+    {
+      "file": "ports/audio-kernel/soc/pinctrl-utils.h",
+      "source": "soc/pinctrl-utils.h",
+      "original_sha256": "e9cbae65512c44477a356ac37cd47e72d26b018a6a85fbda2c7f2541eb403a2f",
+      "sha256": "e9cbae65512c44477a356ac37cd47e72d26b018a6a85fbda2c7f2541eb403a2f"
+    },
+    {
+      "file": "ports/audio-kernel/soc/pinctrl-wcd.c",
+      "source": "soc/pinctrl-wcd.c",
+      "original_sha256": "c3c25e3da22f31bbf80d8ffb60de12ed6d55c4c9f68ce4911f5ec06e46ce8324",
+      "sha256": "c3c25e3da22f31bbf80d8ffb60de12ed6d55c4c9f68ce4911f5ec06e46ce8324"
+    },
+    {
+      "file": "ports/audio-kernel/soc/regmap-swr.c",
+      "source": "soc/regmap-swr.c",
+      "original_sha256": "ac2aeddf2b4a08c3467943d4378e1347cf8703068f75e43ede48791f6e7790ac",
+      "sha256": "ac2aeddf2b4a08c3467943d4378e1347cf8703068f75e43ede48791f6e7790ac"
+    },
+    {
+      "file": "ports/audio-kernel/soc/snd_event.c",
+      "source": "soc/snd_event.c",
+      "original_sha256": "f6d67165d1a1d204b0162d63d8b3a23353860e5175e461489beb8c78eef2fa00",
+      "sha256": "f6d67165d1a1d204b0162d63d8b3a23353860e5175e461489beb8c78eef2fa00"
+    },
+    {
+      "file": "ports/audio-kernel/soc/soundwire.c",
+      "source": "soc/soundwire.c",
+      "original_sha256": "9bd9de8a599aaa8284e78a246343b32583d74ae0f9a8f07ad6630b3d07a20d61",
+      "sha256": "9bd9de8a599aaa8284e78a246343b32583d74ae0f9a8f07ad6630b3d07a20d61"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-mstr-ctrl.c",
+      "source": "soc/swr-mstr-ctrl.c",
+      "original_sha256": "39404068facebb7ca548bccc472836113729784319e910b153ecaf9c1c5af059",
+      "sha256": "39404068facebb7ca548bccc472836113729784319e910b153ecaf9c1c5af059"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-mstr-ctrl.h",
+      "source": "soc/swr-mstr-ctrl.h",
+      "original_sha256": "926c1d8ec5c24bc42cc9fbab101a2b9d90e78581a3d3bea84e9b6631246e0ddd",
+      "sha256": "926c1d8ec5c24bc42cc9fbab101a2b9d90e78581a3d3bea84e9b6631246e0ddd"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-mstr-registers.h",
+      "source": "soc/swr-mstr-registers.h",
+      "original_sha256": "691bbe735e3b67583a1bb03c4d3a3c4c79494860b9050d5684fda54cbd5d5bd0",
+      "sha256": "691bbe735e3b67583a1bb03c4d3a3c4c79494860b9050d5684fda54cbd5d5bd0"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-slave-registers.h",
+      "source": "soc/swr-slave-registers.h",
+      "original_sha256": "fe4fbe941c38181123197783cfd98959602676623b0690bdbbe3ee8cd6419170",
+      "sha256": "fe4fbe941c38181123197783cfd98959602676623b0690bdbbe3ee8cd6419170"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-wcd-ctrl.c",
+      "source": "soc/swr-wcd-ctrl.c",
+      "original_sha256": "50ccc8bf18e11bc2e1dfa837d283116cca149e9cd67fa38a9f08fe6729a64538",
+      "sha256": "50ccc8bf18e11bc2e1dfa837d283116cca149e9cd67fa38a9f08fe6729a64538"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swr-wcd-ctrl.h",
+      "source": "soc/swr-wcd-ctrl.h",
+      "original_sha256": "3ecd19e7356bd4706d127e942344fc9ffbe8b4ca6d40c12bc428ddf5a4590a2d",
+      "sha256": "3ecd19e7356bd4706d127e942344fc9ffbe8b4ca6d40c12bc428ddf5a4590a2d"
+    },
+    {
+      "file": "ports/audio-kernel/soc/swrm_registers.h",
+      "source": "soc/swrm_registers.h",
+      "original_sha256": "d6c9ee25a5e56609407d89c0ebe64feaf692954c3f3420541ec220f598972720",
+      "sha256": "d6c9ee25a5e56609407d89c0ebe64feaf692954c3f3420541ec220f598972720"
+    },
+    {
+      "file": "ports/audio-kernel/soc/wcd-spi-ac.c",
+      "source": "soc/wcd-spi-ac.c",
+      "original_sha256": "c3d087c149d5d5c291afb5cecff8d09603e3c67dea2c9fed964e892790647176",
+      "sha256": "c3d087c149d5d5c291afb5cecff8d09603e3c67dea2c9fed964e892790647176"
+    },
+    {
+      "file": "ports/audio-kernel/soc/wcd_spi_ctl_v01.c",
+      "source": "soc/wcd_spi_ctl_v01.c",
+      "original_sha256": "574ffa4520324e7d99f0942a5a7cfd53f63e9759208b3ee549ecde414384ee55",
+      "sha256": "574ffa4520324e7d99f0942a5a7cfd53f63e9759208b3ee549ecde414384ee55"
+    },
+    {
+      "file": "ports/audio-kernel/soc/wcd_spi_ctl_v01.h",
+      "source": "soc/wcd_spi_ctl_v01.h",
+      "original_sha256": "939600524060190a477ecebc9a0b6c3e76f6964a68c34fb5c8b02449b1341c9a",
+      "sha256": "939600524060190a477ecebc9a0b6c3e76f6964a68c34fb5c8b02449b1341c9a"
+    },
+    {
+      "file": "ports/audio-kernel/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "030fa31d1d9e2fadad946e47529098e420eff4fd8c728842ef3c9b307e49bddc"
+    },
+    {
+      "file": "ports/audio-kernel/Makefile.generated",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "f494f00f57ecaf6436ec6108e362e9547ef3819b5ff588e1af57eef6e2e64e8c"
+    },
+    {
+      "file": "ports/audio-kernel/avr-audio-compat.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "74ec3b1d2177b1f154f1d81c12c9da5152776ed41ea1ad9246f9622888962505"
+    },
+    {
+      "file": "ports/audio-kernel/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "713b7e62c384995364d7ce0c1bbfbe39c1ce1d4bda021ff71b724f039e24b53d"
+    },
+    {
+      "file": "ports/audio-kernel/avr-include/linux/msm_ion.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "ef78478c5ce1b85876bdfa5451c29c8214e85ae430c37c67dbe72047096de523"
+    }
+  ],
+  "patch_sha256": "06914797d703358f203105ad2a2e0af11fd3646a9fdfe37c375af4bf9c00912b",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "vendor/qcom/opensource/audio-kernel, canoe product avr (44 modules per build/canoe.bzl; tfa98xx is built by the vendor list but not shipped on the phone) on android18-7.3",
+  "reviewed_changes": [
+    "Makefile.generated from audio_modules.bzl + canoe.bzl avr branch (scripts/gen_audio_makefile.py) mirroring module_mgr.bzl options/srcs/local_defines",
+    "avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py audio-kernel): canoe_perf options absent from the 7.3 .config (WCD_USBSS, FSA4480, SOCINFO, IPC_LOGGING, ...)",
+    "avr-audio-compat.h: snd_soc_kcontrol_component (snd_kcontrol_chip), snd_soc_dapm_kcontrol_widget->_to_widget, snd_soc_component_get_dapm->_to_dapm, snd_soc_component_get_bias_level, SND_SOC_DAIFMT_CBS_CFS->CBC_CFC, PIN_CONFIG_OUTPUT->LEVEL, irq_domain_add_linear (NULL node ok)",
+    "DAPM context is opaque in 7.3: dapm->card/component -> snd_soc_dapm_to_card/_to_component (compiled files only)",
+    "aw882xx: MODULE_IMPORT_NS string form; ops table wraps snd_soc_kcontrol_component/(un)register_component (macros/_Generic in 7.3)",
+    "lpass-cdc wsa/wsa2: devm_thermal_of_cooling_device_register(dev, cdev_id 0, ...) (node is pdev->dev.of_node, as passed before)",
+    "pinctrl-lpi: gpio_chip.set returns int; tfa98xx bin_attribute const; msm_ion.h empty stub; -Wno-macro-redefined (pr_fmt)",
+    "module dependency sets equal the phone modules (except the known rproc_qcom_common -> qcom_common rename)"
+  ],
+  "pending": [
+    "ADSP/SPF/GPR, codecs, SoundWire on the phone - verification must never emit sound"
+  ]
+}

@@ -1,0 +1,124 @@
+--- a/ports/qcom-slimbus/core.c
++++ b/ports/qcom-slimbus/core.c
+@@ -339,7 +339,7 @@
+ }
+ EXPORT_SYMBOL_GPL(slim_report_absent);
+ 
+-static bool slim_eaddr_equal(struct slim_eaddr *a, struct slim_eaddr *b)
++static bool slim_eaddr_equal(const struct slim_eaddr *a, const struct slim_eaddr *b)
+ {
+ 	return (a->manf_id == b->manf_id &&
+ 		a->prod_code == b->prod_code &&
+@@ -347,9 +347,10 @@
+ 		a->instance == b->instance);
+ }
+ 
+-static int slim_match_dev(struct device *dev, void *data)
+-{
+-	struct slim_eaddr *e_addr = data;
++/* AVR 7.3: device_match_t takes const void * (as upstream 7.3 slimbus) */
++static int slim_match_dev(struct device *dev, const void *data)
++{
++	const struct slim_eaddr *e_addr = data;
+ 	struct slim_device *sbdev = to_slim_device(dev);
+ 
+ 	return slim_eaddr_equal(&sbdev->e_addr, e_addr);
+@@ -395,9 +396,9 @@
+ }
+ EXPORT_SYMBOL_GPL(slim_get_device);
+ 
+-static int of_slim_match_dev(struct device *dev, void *data)
+-{
+-	struct device_node *np = data;
++static int of_slim_match_dev(struct device *dev, const void *data)
++{
++	const struct device_node *np = data;
+ 	struct slim_device *sbdev = to_slim_device(dev);
+ 
+ 	return (sbdev->dev.of_node == np);
+--- a/ports/qcom-slimbus/qcom-ngd-ctrl.c
++++ b/ports/qcom-slimbus/qcom-ngd-ctrl.c
+@@ -529,7 +529,7 @@
+ 	}
+ 
+ 	rc = kernel_connect(handle->sock,
+-				(struct sockaddr *)&ctrl->qmi.svc_info,
++				(struct sockaddr_unsized *)&ctrl->qmi.svc_info, /* AVR 7.3 */
+ 				sizeof(ctrl->qmi.svc_info), 0);
+ 	if (rc < 0) {
+ 		SLIM_ERR(ctrl, "Remote Service connect failed: %d\n", rc);
+@@ -1925,10 +1925,9 @@
+ 		ngd->id = id;
+ 		ngd->pdev->dev.parent = parent;
+ 
+-		ret = driver_set_override(&ngd->pdev->dev,
+-					  &ngd->pdev->driver_override,
+-					  QCOM_SLIM_NGD_DRV_NAME,
+-					  strlen(QCOM_SLIM_NGD_DRV_NAME));
++		/* AVR 7.3: driver_override moved into struct device (as upstream 7.3) */
++		ret = device_set_driver_override(&ngd->pdev->dev,
++						 QCOM_SLIM_NGD_DRV_NAME);
+ 		if (ret) {
+ 			platform_device_put(ngd->pdev);
+ 			kfree(ngd);
+@@ -2286,7 +2285,7 @@
+ 
+ static struct platform_driver qcom_slim_ngd_ctrl_driver = {
+ 	.probe = qcom_slim_ngd_ctrl_probe,
+-	.remove_new = qcom_slim_ngd_ctrl_remove,
++	.remove = qcom_slim_ngd_ctrl_remove,
+ 	.driver	= {
+ 		.name = "qcom,slim-ngd-ctrl",
+ 		.of_match_table = qcom_slim_ngd_dt_match,
+@@ -2295,7 +2294,7 @@
+ 
+ static struct platform_driver qcom_slim_ngd_driver = {
+ 	.probe = qcom_slim_ngd_probe,
+-	.remove_new = qcom_slim_ngd_remove,
++	.remove = qcom_slim_ngd_remove,
+ 	.driver	= {
+ 		.name = QCOM_SLIM_NGD_DRV_NAME,
+ 		.pm = &qcom_slim_ngd_dev_pm_ops,
+--- a/ports/qcom-slimbus/dma/bam_dma.c
++++ b/ports/qcom-slimbus/dma/bam_dma.c
+@@ -1622,7 +1622,7 @@
+ 
+ static struct platform_driver bam_dma_driver = {
+ 	.probe = bam_dma_probe,
+-	.remove_new = bam_dma_remove,
++	.remove = bam_dma_remove,
+ 	.driver = {
+ 		.name = "bam-dma-engine",
+ 		.pm = &bam_dma_pm_ops,
+--- a/ports/qcom-slimbus/Makefile
++++ b/ports/qcom-slimbus/Makefile
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# qcom-soc 6.12 vendor sources (canoe_perf: CONFIG_SLIMBUS=m, CONFIG_SLIM_QCOM_NGD_CTRL=m,
++# CONFIG_QCOM_BAM_DMA=m): vendor-modified slimbus core (stream unprepare/disconnect
++# API used by btfm_slim_codec), NGD controller and BAM DMA.
++obj-m += slimbus.o slim-qcom-ngd-ctrl.o bam_dma.o
++slimbus-y := core.o messaging.o sched.o stream.o
++slim-qcom-ngd-ctrl-y := qcom-ngd-ctrl.o
++bam_dma-y := dma/bam_dma.o
++CFLAGS_qcom-ngd-ctrl.o += -I$(src)
++CFLAGS_dma/bam_dma.o += -I$(src)/dma -I$(srctree)
++ccflags-y += -I$(src)/include -I$(src)/../qcom-charging/include -I$(src)/../qcom-ipc-logging/include -I$(src)/../qcom-rproc-common/include \
++	-I$(src)/../qcom-minidump/include -Wno-missing-prototypes \
++	-DCONFIG_SLIMBUS_MODULE=1 -DCONFIG_SLIM_QCOM_NGD_CTRL_MODULE=1 -DCONFIG_QCOM_BAM_DMA_MODULE=1 \
++	-DCONFIG_IPC_LOGGING_MODULE=1 -DCONFIG_QCOM_RPROC_COMMON_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-ipc-logging/Module.symvers $(src)/../qcom-rproc-common/Module.symvers \
++	$(src)/../qcom-remoteproc-services/Module.symvers
++CFLAGS_stream.o += -include $(src)/include/linux/slimbus_vendor.h
+--- a/ports/qcom-slimbus/include/linux/slimbus_vendor.h
++++ b/ports/qcom-slimbus/include/linux/slimbus_vendor.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: the only difference of the vendor <linux/slimbus.h> (qcom-soc 037aa1c)
++ * from 7.3's: this stream API (drivers/slimbus/stream.c), used by btfm_slim_codec. */
++#ifndef AVR_SLIMBUS_VENDOR_H
++#define AVR_SLIMBUS_VENDOR_H
++#include <linux/slimbus.h>
++int slim_stream_unprepare_disconnect_port(struct slim_stream_runtime *stream,
++		bool disconnect_ports, bool is_session_completed);
++#endif

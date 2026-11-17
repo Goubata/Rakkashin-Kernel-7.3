@@ -1,0 +1,1498 @@
+{
+  "source_commit": "8fb17c943a78a4ae8e4ee15041e7894b2e8826be",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-wlan-platform",
+  "files": [
+    {
+      "file": "ports/wlan-platform/cnss2/Kconfig",
+      "source": "cnss2/Kconfig",
+      "original_sha256": "d9b149c751e1cd5467b01f43042b057cc89c24d48da2616578b4b25ce96b99cc",
+      "sha256": "d9b149c751e1cd5467b01f43042b057cc89c24d48da2616578b4b25ce96b99cc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/art_consolidate_defconfig",
+      "source": "cnss2/art_consolidate_defconfig",
+      "original_sha256": "e0ddf4b2c0e1807b4515ef95f79112ed8f1009d2778e53b4777807a71fef024e",
+      "sha256": "e0ddf4b2c0e1807b4515ef95f79112ed8f1009d2778e53b4777807a71fef024e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/art_gki_defconfig",
+      "source": "cnss2/art_gki_defconfig",
+      "original_sha256": "bed3c9d017f8491bb0e799f7a05ce018c2ea920556057d1a7c752d9fe19fe0d7",
+      "sha256": "bed3c9d017f8491bb0e799f7a05ce018c2ea920556057d1a7c752d9fe19fe0d7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/autoghgvm_consolidate_defconfig",
+      "source": "cnss2/autoghgvm_consolidate_defconfig",
+      "original_sha256": "1992812db8a2c83d9b978443173dfdbdd8a7e27dee66bf7e6e418130e9117014",
+      "sha256": "1992812db8a2c83d9b978443173dfdbdd8a7e27dee66bf7e6e418130e9117014"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/autoghgvm_gki_defconfig",
+      "source": "cnss2/autoghgvm_gki_defconfig",
+      "original_sha256": "1992812db8a2c83d9b978443173dfdbdd8a7e27dee66bf7e6e418130e9117014",
+      "sha256": "1992812db8a2c83d9b978443173dfdbdd8a7e27dee66bf7e6e418130e9117014"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/autogvm_consolidate_defconfig",
+      "source": "cnss2/autogvm_consolidate_defconfig",
+      "original_sha256": "01320853daab668cd74c5062be56e2e624550b92ae70e4cd9c7571282fa25e4b",
+      "sha256": "01320853daab668cd74c5062be56e2e624550b92ae70e4cd9c7571282fa25e4b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/autogvm_gki_defconfig",
+      "source": "cnss2/autogvm_gki_defconfig",
+      "original_sha256": "01320853daab668cd74c5062be56e2e624550b92ae70e4cd9c7571282fa25e4b",
+      "sha256": "01320853daab668cd74c5062be56e2e624550b92ae70e4cd9c7571282fa25e4b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/bus.c",
+      "source": "cnss2/bus.c",
+      "original_sha256": "12f5aa6171945016ca19f272cea8ae1af693b717f44bccaff2bed8267940c74c",
+      "sha256": "12f5aa6171945016ca19f272cea8ae1af693b717f44bccaff2bed8267940c74c"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/bus.h",
+      "source": "cnss2/bus.h",
+      "original_sha256": "510044afceb191827aea349d9d663b7daadb44a54c469aa814e0177ed1943890",
+      "sha256": "510044afceb191827aea349d9d663b7daadb44a54c469aa814e0177ed1943890"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/canoe_consolidate_defconfig",
+      "source": "cnss2/canoe_consolidate_defconfig",
+      "original_sha256": "e0ddf4b2c0e1807b4515ef95f79112ed8f1009d2778e53b4777807a71fef024e",
+      "sha256": "e0ddf4b2c0e1807b4515ef95f79112ed8f1009d2778e53b4777807a71fef024e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/canoe_gki_defconfig",
+      "source": "cnss2/canoe_gki_defconfig",
+      "original_sha256": "bed3c9d017f8491bb0e799f7a05ce018c2ea920556057d1a7c752d9fe19fe0d7",
+      "sha256": "bed3c9d017f8491bb0e799f7a05ce018c2ea920556057d1a7c752d9fe19fe0d7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/coexistence_service_v01.c",
+      "source": "cnss2/coexistence_service_v01.c",
+      "original_sha256": "32815da82d27dc6965f8f393500ac1ce5bdd5bbb5e7ad17a1c0ab2d30c3eba9f",
+      "sha256": "32815da82d27dc6965f8f393500ac1ce5bdd5bbb5e7ad17a1c0ab2d30c3eba9f"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/coexistence_service_v01.h",
+      "source": "cnss2/coexistence_service_v01.h",
+      "original_sha256": "02b3b0a830f410ea38ca0bb9aef559df14bf394e553121973e6cf8a72a78cce7",
+      "sha256": "02b3b0a830f410ea38ca0bb9aef559df14bf394e553121973e6cf8a72a78cce7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/debug.c",
+      "source": "cnss2/debug.c",
+      "original_sha256": "3b0ee9e1731c33aed7474a07704a6393131a171cd15ddfa22ffe7ecee0bda99d",
+      "sha256": "3b0ee9e1731c33aed7474a07704a6393131a171cd15ddfa22ffe7ecee0bda99d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/debug.h",
+      "source": "cnss2/debug.h",
+      "original_sha256": "824d49817506526ae8b1454deef72c2708635bd3169cf8d07fd30c6af03d870f",
+      "sha256": "3fab24799ae8083da7715ea827f4dba289cab930816ee4dc0fb2d80a9a7b127d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/genl.c",
+      "source": "cnss2/genl.c",
+      "original_sha256": "062542e031fe8b3966b8a00cdba209318216177f885e91b502406cbbbebcda69",
+      "sha256": "062542e031fe8b3966b8a00cdba209318216177f885e91b502406cbbbebcda69"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/genl.h",
+      "source": "cnss2/genl.h",
+      "original_sha256": "f7222457a694414bdc50099f69f41478ba29be2fa85e667c6c69a0a577e33adc",
+      "sha256": "f7222457a694414bdc50099f69f41478ba29be2fa85e667c6c69a0a577e33adc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/hamoa_consolidate_defconfig",
+      "source": "cnss2/hamoa_consolidate_defconfig",
+      "original_sha256": "ba4fefbb8ff7746314e0e20b276838e2d3bd23e0ec3d390eac1fb0a9f9d713fe",
+      "sha256": "ba4fefbb8ff7746314e0e20b276838e2d3bd23e0ec3d390eac1fb0a9f9d713fe"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/hamoa_gki_defconfig",
+      "source": "cnss2/hamoa_gki_defconfig",
+      "original_sha256": "03449638ff6af5c29091d0ee63545667f53d845fe0060ff7dfff494aada88811",
+      "sha256": "03449638ff6af5c29091d0ee63545667f53d845fe0060ff7dfff494aada88811"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/lahaina_consolidate_defconfig",
+      "source": "cnss2/lahaina_consolidate_defconfig",
+      "original_sha256": "273aa4fef23d4011e3cf564874cf6a9e6747e114a338c0fb11fd5acbc8cf6e8d",
+      "sha256": "273aa4fef23d4011e3cf564874cf6a9e6747e114a338c0fb11fd5acbc8cf6e8d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/lahaina_gki_defconfig",
+      "source": "cnss2/lahaina_gki_defconfig",
+      "original_sha256": "e6df9d7406c8d356b75351ad25f622e8e61c0ccfe208175318c7c5d12acdf523",
+      "sha256": "e6df9d7406c8d356b75351ad25f622e8e61c0ccfe208175318c7c5d12acdf523"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/main.c",
+      "source": "cnss2/main.c",
+      "original_sha256": "25b4b36670a93d4d5c95ed8d276f08bbd11792bb9bf1cc41a06bf17891714349",
+      "sha256": "25b4b36670a93d4d5c95ed8d276f08bbd11792bb9bf1cc41a06bf17891714349"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/main.h",
+      "source": "cnss2/main.h",
+      "original_sha256": "1413f04c2850cb235b66b547a29baf0bd6218c8d481c192b590b0305dab9fae6",
+      "sha256": "1413f04c2850cb235b66b547a29baf0bd6218c8d481c192b590b0305dab9fae6"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/niobe_consolidate_defconfig",
+      "source": "cnss2/niobe_consolidate_defconfig",
+      "original_sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1",
+      "sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/niobe_gki_defconfig",
+      "source": "cnss2/niobe_gki_defconfig",
+      "original_sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7",
+      "sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/parrot_consolidate_defconfig",
+      "source": "cnss2/parrot_consolidate_defconfig",
+      "original_sha256": "273aa4fef23d4011e3cf564874cf6a9e6747e114a338c0fb11fd5acbc8cf6e8d",
+      "sha256": "273aa4fef23d4011e3cf564874cf6a9e6747e114a338c0fb11fd5acbc8cf6e8d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/parrot_gki_defconfig",
+      "source": "cnss2/parrot_gki_defconfig",
+      "original_sha256": "e6df9d7406c8d356b75351ad25f622e8e61c0ccfe208175318c7c5d12acdf523",
+      "sha256": "e6df9d7406c8d356b75351ad25f622e8e61c0ccfe208175318c7c5d12acdf523"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pci.c",
+      "source": "cnss2/pci.c",
+      "original_sha256": "a32bead805415ee2e6e06f01f7869e9cfb81ae2ccfba0c3f584ea11b3521b8df",
+      "sha256": "a32bead805415ee2e6e06f01f7869e9cfb81ae2ccfba0c3f584ea11b3521b8df"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pci.h",
+      "source": "cnss2/pci.h",
+      "original_sha256": "112f8c42e7210ffbf86fa0f01b749409e1bfc217cf7c0039fcdf084ed7509c20",
+      "sha256": "112f8c42e7210ffbf86fa0f01b749409e1bfc217cf7c0039fcdf084ed7509c20"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pci_platform.h",
+      "source": "cnss2/pci_platform.h",
+      "original_sha256": "75cfb356810d591108ec79297df3d1819759e826f139052ee002bcc20ca75ae3",
+      "sha256": "75cfb356810d591108ec79297df3d1819759e826f139052ee002bcc20ca75ae3"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pci_qcom.c",
+      "source": "cnss2/pci_qcom.c",
+      "original_sha256": "275885cc437f53493ad69eccad4cccdd8e59ad8efa2541915a746b326625e8a4",
+      "sha256": "275885cc437f53493ad69eccad4cccdd8e59ad8efa2541915a746b326625e8a4"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pci_qcom_ecam.c",
+      "source": "cnss2/pci_qcom_ecam.c",
+      "original_sha256": "64a75b4bfa91de2f3f63539d7694e67bff7f5f6e1ed01aa121e38ef001440dc8",
+      "sha256": "64a75b4bfa91de2f3f63539d7694e67bff7f5f6e1ed01aa121e38ef001440dc8"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pineapple_consolidate_defconfig",
+      "source": "cnss2/pineapple_consolidate_defconfig",
+      "original_sha256": "ebf0193fbf0fec55f6352e676595ce09844593b7b3881917fa078673b692bcdc",
+      "sha256": "ebf0193fbf0fec55f6352e676595ce09844593b7b3881917fa078673b692bcdc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/pineapple_gki_defconfig",
+      "source": "cnss2/pineapple_gki_defconfig",
+      "original_sha256": "ff5a820bb28524e47c109f7521fbfc1e887e327f52e547968f54e16bb5667bc8",
+      "sha256": "ff5a820bb28524e47c109f7521fbfc1e887e327f52e547968f54e16bb5667bc8"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/power.c",
+      "source": "cnss2/power.c",
+      "original_sha256": "7eac6ed4fb42f6daadfa7ffb832136115b4a54747a5089271a2402d93b999ffb",
+      "sha256": "7eac6ed4fb42f6daadfa7ffb832136115b4a54747a5089271a2402d93b999ffb"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/qmi.c",
+      "source": "cnss2/qmi.c",
+      "original_sha256": "c347e4ba99beae36e5bb0873ab0812f3a1c55968006155f12e069f0810d09b8f",
+      "sha256": "c347e4ba99beae36e5bb0873ab0812f3a1c55968006155f12e069f0810d09b8f"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/qmi.h",
+      "source": "cnss2/qmi.h",
+      "original_sha256": "3c26eefec172f4df45bb714ac2bc72b987e817c9b1823eb6da6923fabc0c68f8",
+      "sha256": "3c26eefec172f4df45bb714ac2bc72b987e817c9b1823eb6da6923fabc0c68f8"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/reg.h",
+      "source": "cnss2/reg.h",
+      "original_sha256": "cb47d49139ab2770b6e747c4bd9e086278a5b7d4d6ebf879b5b30b47f71be5d9",
+      "sha256": "cb47d49139ab2770b6e747c4bd9e086278a5b7d4d6ebf879b5b30b47f71be5d9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sa510m.1g_consolidate_defconfig",
+      "source": "cnss2/sa510m.1g_consolidate_defconfig",
+      "original_sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26",
+      "sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sa510m.1g_gki_defconfig",
+      "source": "cnss2/sa510m.1g_gki_defconfig",
+      "original_sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26",
+      "sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sa510m_consolidate_defconfig",
+      "source": "cnss2/sa510m_consolidate_defconfig",
+      "original_sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26",
+      "sha256": "894ae1dfec50e49bd5a70ef1e9fef6f008a6102dec38ec7b43273759c7a85b26"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sa510m_gki_defconfig",
+      "source": "cnss2/sa510m_gki_defconfig",
+      "original_sha256": "9aa80c48c21ddcb3051c5f86a20c0dff424e51b30eb25d05e08fe99c77c4678a",
+      "sha256": "9aa80c48c21ddcb3051c5f86a20c0dff424e51b30eb25d05e08fe99c77c4678a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/seraph_consolidate_defconfig",
+      "source": "cnss2/seraph_consolidate_defconfig",
+      "original_sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1",
+      "sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/seraph_gki_defconfig",
+      "source": "cnss2/seraph_gki_defconfig",
+      "original_sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7",
+      "sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sun_consolidate_defconfig",
+      "source": "cnss2/sun_consolidate_defconfig",
+      "original_sha256": "ebf0193fbf0fec55f6352e676595ce09844593b7b3881917fa078673b692bcdc",
+      "sha256": "ebf0193fbf0fec55f6352e676595ce09844593b7b3881917fa078673b692bcdc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/sun_gki_defconfig",
+      "source": "cnss2/sun_gki_defconfig",
+      "original_sha256": "ff5a820bb28524e47c109f7521fbfc1e887e327f52e547968f54e16bb5667bc8",
+      "sha256": "ff5a820bb28524e47c109f7521fbfc1e887e327f52e547968f54e16bb5667bc8"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/volcano_consolidate_defconfig",
+      "source": "cnss2/volcano_consolidate_defconfig",
+      "original_sha256": "4918eb02c9015b53713cf7539bc516eca8cf8601c77ad261789cd3231b975c96",
+      "sha256": "4918eb02c9015b53713cf7539bc516eca8cf8601c77ad261789cd3231b975c96"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/volcano_gki_defconfig",
+      "source": "cnss2/volcano_gki_defconfig",
+      "original_sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7",
+      "sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/x1e80100_consolidate_defconfig",
+      "source": "cnss2/x1e80100_consolidate_defconfig",
+      "original_sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1",
+      "sha256": "b0d8c4f10487fca97702ab601edb76f0ee711123cde2ca8cab1f2beb7ec1e6a1"
+    },
+    {
+      "file": "ports/wlan-platform/cnss2/x1e80100_gki_defconfig",
+      "source": "cnss2/x1e80100_gki_defconfig",
+      "original_sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7",
+      "sha256": "5e13f85709fa2b71eecfeeeee4d2641fb674792e954285b2d90133819dcee5e7"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/Kconfig",
+      "source": "cnss_genl/Kconfig",
+      "original_sha256": "16a5746aee40789be1f47ecb94b2cce68ce0272e26e48afe2352b9a915f2bb52",
+      "sha256": "16a5746aee40789be1f47ecb94b2cce68ce0272e26e48afe2352b9a915f2bb52"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/alor-le_consolidate_defconfig",
+      "source": "cnss_genl/alor-le_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/alor-le_gki_defconfig",
+      "source": "cnss_genl/alor-le_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/art_consolidate_defconfig",
+      "source": "cnss_genl/art_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/art_gki_defconfig",
+      "source": "cnss_genl/art_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/autoghgvm_consolidate_defconfig",
+      "source": "cnss_genl/autoghgvm_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/autoghgvm_gki_defconfig",
+      "source": "cnss_genl/autoghgvm_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/autogvm_consolidate_defconfig",
+      "source": "cnss_genl/autogvm_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/autogvm_gki_defconfig",
+      "source": "cnss_genl/autogvm_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/bengal_consolidate_defconfig",
+      "source": "cnss_genl/bengal_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/bengal_gki_defconfig",
+      "source": "cnss_genl/bengal_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/blair_consolidate_defconfig",
+      "source": "cnss_genl/blair_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/blair_gki_defconfig",
+      "source": "cnss_genl/blair_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/canoe_consolidate_defconfig",
+      "source": "cnss_genl/canoe_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/canoe_gki_defconfig",
+      "source": "cnss_genl/canoe_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/chora_consolidate_defconfig",
+      "source": "cnss_genl/chora_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/chora_gki_defconfig",
+      "source": "cnss_genl/chora_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/cnss_nl.c",
+      "source": "cnss_genl/cnss_nl.c",
+      "original_sha256": "4485fa85bc56b6159a7ad57320cf7138600dfc3e309478707a45baa743e08645",
+      "sha256": "4485fa85bc56b6159a7ad57320cf7138600dfc3e309478707a45baa743e08645"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/hamoa_consolidate_defconfig",
+      "source": "cnss_genl/hamoa_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/hamoa_gki_defconfig",
+      "source": "cnss_genl/hamoa_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/lahaina_consolidate_defconfig",
+      "source": "cnss_genl/lahaina_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/lahaina_gki_defconfig",
+      "source": "cnss_genl/lahaina_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/malabar_consolidate_defconfig",
+      "source": "cnss_genl/malabar_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/malabar_gki_defconfig",
+      "source": "cnss_genl/malabar_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/monaco_consolidate_defconfig",
+      "source": "cnss_genl/monaco_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/monaco_gki_defconfig",
+      "source": "cnss_genl/monaco_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/niobe_consolidate_defconfig",
+      "source": "cnss_genl/niobe_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/niobe_gki_defconfig",
+      "source": "cnss_genl/niobe_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/parrot_consolidate_defconfig",
+      "source": "cnss_genl/parrot_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/parrot_gki_defconfig",
+      "source": "cnss_genl/parrot_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/pineapple_consolidate_defconfig",
+      "source": "cnss_genl/pineapple_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/pineapple_gki_defconfig",
+      "source": "cnss_genl/pineapple_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/pitti_consolidate_defconfig",
+      "source": "cnss_genl/pitti_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/pitti_gki_defconfig",
+      "source": "cnss_genl/pitti_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sa510m.1g_consolidate_defconfig",
+      "source": "cnss_genl/sa510m.1g_consolidate_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sa510m.1g_gki_defconfig",
+      "source": "cnss_genl/sa510m.1g_gki_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sa510m_consolidate_defconfig",
+      "source": "cnss_genl/sa510m_consolidate_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sa510m_gki_defconfig",
+      "source": "cnss_genl/sa510m_gki_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/seraph_consolidate_defconfig",
+      "source": "cnss_genl/seraph_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/seraph_gki_defconfig",
+      "source": "cnss_genl/seraph_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sun_consolidate_defconfig",
+      "source": "cnss_genl/sun_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/sun_gki_defconfig",
+      "source": "cnss_genl/sun_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/volcano_consolidate_defconfig",
+      "source": "cnss_genl/volcano_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/volcano_gki_defconfig",
+      "source": "cnss_genl/volcano_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/x1e80100_consolidate_defconfig",
+      "source": "cnss_genl/x1e80100_consolidate_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_genl/x1e80100_gki_defconfig",
+      "source": "cnss_genl/x1e80100_gki_defconfig",
+      "original_sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc",
+      "sha256": "7d4e290832932303cae5b5d02003a866bb4a6815685d05d42ede8eb885138cfc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/Kconfig",
+      "source": "cnss_prealloc/Kconfig",
+      "original_sha256": "9b84b840b26f9141ba1a89e7bbad8dd7b663404c2c3b801f20097d27a371f18e",
+      "sha256": "9b84b840b26f9141ba1a89e7bbad8dd7b663404c2c3b801f20097d27a371f18e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/alor-le_consolidate_defconfig",
+      "source": "cnss_prealloc/alor-le_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/alor-le_gki_defconfig",
+      "source": "cnss_prealloc/alor-le_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/art_consolidate_defconfig",
+      "source": "cnss_prealloc/art_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/art_gki_defconfig",
+      "source": "cnss_prealloc/art_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/autoghgvm_consolidate_defconfig",
+      "source": "cnss_prealloc/autoghgvm_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/autoghgvm_gki_defconfig",
+      "source": "cnss_prealloc/autoghgvm_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/autogvm_consolidate_defconfig",
+      "source": "cnss_prealloc/autogvm_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/autogvm_gki_defconfig",
+      "source": "cnss_prealloc/autogvm_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/bengal_consolidate_defconfig",
+      "source": "cnss_prealloc/bengal_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/bengal_gki_defconfig",
+      "source": "cnss_prealloc/bengal_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/blair_consolidate_defconfig",
+      "source": "cnss_prealloc/blair_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/blair_gki_defconfig",
+      "source": "cnss_prealloc/blair_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/canoe_consolidate_defconfig",
+      "source": "cnss_prealloc/canoe_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/canoe_gki_defconfig",
+      "source": "cnss_prealloc/canoe_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/chora_consolidate_defconfig",
+      "source": "cnss_prealloc/chora_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/chora_gki_defconfig",
+      "source": "cnss_prealloc/chora_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/cnss_prealloc.c",
+      "source": "cnss_prealloc/cnss_prealloc.c",
+      "original_sha256": "f701a04d25b225ee6c0c41db46832bfb6c8c8e5bbad95b507ccc5190af3de123",
+      "sha256": "f701a04d25b225ee6c0c41db46832bfb6c8c8e5bbad95b507ccc5190af3de123"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/hamoa_consolidate_defconfig",
+      "source": "cnss_prealloc/hamoa_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/hamoa_gki_defconfig",
+      "source": "cnss_prealloc/hamoa_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/lahaina_consolidate_defconfig",
+      "source": "cnss_prealloc/lahaina_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/lahaina_gki_defconfig",
+      "source": "cnss_prealloc/lahaina_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/malabar_consolidate_defconfig",
+      "source": "cnss_prealloc/malabar_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/malabar_gki_defconfig",
+      "source": "cnss_prealloc/malabar_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/monaco_consolidate_defconfig",
+      "source": "cnss_prealloc/monaco_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/monaco_gki_defconfig",
+      "source": "cnss_prealloc/monaco_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/niobe_consolidate_defconfig",
+      "source": "cnss_prealloc/niobe_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/niobe_gki_defconfig",
+      "source": "cnss_prealloc/niobe_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/parrot_consolidate_defconfig",
+      "source": "cnss_prealloc/parrot_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/parrot_gki_defconfig",
+      "source": "cnss_prealloc/parrot_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/pineapple_consolidate_defconfig",
+      "source": "cnss_prealloc/pineapple_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/pineapple_gki_defconfig",
+      "source": "cnss_prealloc/pineapple_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/pitti_consolidate_defconfig",
+      "source": "cnss_prealloc/pitti_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/pitti_gki_defconfig",
+      "source": "cnss_prealloc/pitti_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sa510m.1g_consolidate_defconfig",
+      "source": "cnss_prealloc/sa510m.1g_consolidate_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sa510m.1g_gki_defconfig",
+      "source": "cnss_prealloc/sa510m.1g_gki_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sa510m_consolidate_defconfig",
+      "source": "cnss_prealloc/sa510m_consolidate_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sa510m_gki_defconfig",
+      "source": "cnss_prealloc/sa510m_gki_defconfig",
+      "original_sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a",
+      "sha256": "84b3fbf7a8777d25019d6df5a35c2c9e473c48efddde4ffa6e5954ae2e3fac8a"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/seraph_consolidate_defconfig",
+      "source": "cnss_prealloc/seraph_consolidate_defconfig",
+      "original_sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa",
+      "sha256": "d7e46bb7ea9fed3045abb8de9095a3e3965559069c8b16dde1d8ab8a5b3eabfa"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/seraph_gki_defconfig",
+      "source": "cnss_prealloc/seraph_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sun_consolidate_defconfig",
+      "source": "cnss_prealloc/sun_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/sun_gki_defconfig",
+      "source": "cnss_prealloc/sun_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/volcano_consolidate_defconfig",
+      "source": "cnss_prealloc/volcano_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/volcano_gki_defconfig",
+      "source": "cnss_prealloc/volcano_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/x1e80100_consolidate_defconfig",
+      "source": "cnss_prealloc/x1e80100_consolidate_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_prealloc/x1e80100_gki_defconfig",
+      "source": "cnss_prealloc/x1e80100_gki_defconfig",
+      "original_sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e",
+      "sha256": "b6061f819965951183e2340c3e1a019e58574eeed3483b2f5f3e08e14512fe1e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/Kconfig",
+      "source": "cnss_utils/Kconfig",
+      "original_sha256": "0cbfebe879f6624157995d05e7b73bd21b2dc32e02328d51cc6df9c3d5e25188",
+      "sha256": "0cbfebe879f6624157995d05e7b73bd21b2dc32e02328d51cc6df9c3d5e25188"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/alor-le_consolidate_defconfig",
+      "source": "cnss_utils/alor-le_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/alor-le_gki_defconfig",
+      "source": "cnss_utils/alor-le_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/art_consolidate_defconfig",
+      "source": "cnss_utils/art_consolidate_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/art_gki_defconfig",
+      "source": "cnss_utils/art_gki_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/autoghgvm_consolidate_defconfig",
+      "source": "cnss_utils/autoghgvm_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/autoghgvm_gki_defconfig",
+      "source": "cnss_utils/autoghgvm_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/autogvm_consolidate_defconfig",
+      "source": "cnss_utils/autogvm_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/autogvm_gki_defconfig",
+      "source": "cnss_utils/autogvm_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/bengal_consolidate_defconfig",
+      "source": "cnss_utils/bengal_consolidate_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/bengal_gki_defconfig",
+      "source": "cnss_utils/bengal_gki_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/blair_consolidate_defconfig",
+      "source": "cnss_utils/blair_consolidate_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/blair_gki_defconfig",
+      "source": "cnss_utils/blair_gki_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/canoe_consolidate_defconfig",
+      "source": "cnss_utils/canoe_consolidate_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/canoe_gki_defconfig",
+      "source": "cnss_utils/canoe_gki_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/chora_consolidate_defconfig",
+      "source": "cnss_utils/chora_consolidate_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/chora_gki_defconfig",
+      "source": "cnss_utils/chora_gki_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_common.h",
+      "source": "cnss_utils/cnss_common.h",
+      "original_sha256": "bad976775f9bdcd3d0463156e0e85b7468bfb76d9e31e7ae762f09ab367e6e19",
+      "sha256": "bad976775f9bdcd3d0463156e0e85b7468bfb76d9e31e7ae762f09ab367e6e19"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_plat_ipc_qmi.c",
+      "source": "cnss_utils/cnss_plat_ipc_qmi.c",
+      "original_sha256": "29a86c83d0a0afb5f9fd96f43b985ab09c881a602cc14e2b290fb615daaa62ba",
+      "sha256": "75b13c3e5af1e4fdc98c03e0057bd50947939a6793d15913fa4d4d2f578798cb"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_plat_ipc_qmi.h",
+      "source": "cnss_utils/cnss_plat_ipc_qmi.h",
+      "original_sha256": "cd80366f6c0b7fdcc9a71397ec0f9903dea895af0fb88a70fc7a1ce4dea63fbb",
+      "sha256": "cd80366f6c0b7fdcc9a71397ec0f9903dea895af0fb88a70fc7a1ce4dea63fbb"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_plat_ipc_service_v01.c",
+      "source": "cnss_utils/cnss_plat_ipc_service_v01.c",
+      "original_sha256": "de454c0d44a540a6c6f0735b3a2fc87ceb846fd6e247e85d4960242cf1e7db6d",
+      "sha256": "de454c0d44a540a6c6f0735b3a2fc87ceb846fd6e247e85d4960242cf1e7db6d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_plat_ipc_service_v01.h",
+      "source": "cnss_utils/cnss_plat_ipc_service_v01.h",
+      "original_sha256": "de5224cc072a93faff7472915942f38d46e612daf386ab05c2d09f64a228f8c0",
+      "sha256": "de5224cc072a93faff7472915942f38d46e612daf386ab05c2d09f64a228f8c0"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/cnss_utils.c",
+      "source": "cnss_utils/cnss_utils.c",
+      "original_sha256": "56274820974581e92fbed629a7fe28c51b842aab80207a99dc11e4c5eb84c9dc",
+      "sha256": "56274820974581e92fbed629a7fe28c51b842aab80207a99dc11e4c5eb84c9dc"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/device_management_service_v01.c",
+      "source": "cnss_utils/device_management_service_v01.c",
+      "original_sha256": "d34c011d7e361a48eba5268235cffd0c52af954a1cc5a13a705d349fa84f014c",
+      "sha256": "d34c011d7e361a48eba5268235cffd0c52af954a1cc5a13a705d349fa84f014c"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/device_management_service_v01.h",
+      "source": "cnss_utils/device_management_service_v01.h",
+      "original_sha256": "ac37311cdde6a82beba372c5b49300c7eb339e6fce1275e81a7d80c4d99d3c68",
+      "sha256": "ac37311cdde6a82beba372c5b49300c7eb339e6fce1275e81a7d80c4d99d3c68"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/hamoa_consolidate_defconfig",
+      "source": "cnss_utils/hamoa_consolidate_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/hamoa_gki_defconfig",
+      "source": "cnss_utils/hamoa_gki_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/ip_multimedia_subsystem_private_service_v01.c",
+      "source": "cnss_utils/ip_multimedia_subsystem_private_service_v01.c",
+      "original_sha256": "6c811c44179d8a8d85781cc444aaa34280624ff4d9a99aee4472d5d58b03615d",
+      "sha256": "6c811c44179d8a8d85781cc444aaa34280624ff4d9a99aee4472d5d58b03615d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/ip_multimedia_subsystem_private_service_v01.h",
+      "source": "cnss_utils/ip_multimedia_subsystem_private_service_v01.h",
+      "original_sha256": "eba383d49d565b47c3f272abf41c2777bc324b85340e62b6e3c6e168f2534e82",
+      "sha256": "eba383d49d565b47c3f272abf41c2777bc324b85340e62b6e3c6e168f2534e82"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/lahaina_consolidate_defconfig",
+      "source": "cnss_utils/lahaina_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/lahaina_gki_defconfig",
+      "source": "cnss_utils/lahaina_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/malabar_consolidate_defconfig",
+      "source": "cnss_utils/malabar_consolidate_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/malabar_gki_defconfig",
+      "source": "cnss_utils/malabar_gki_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/monaco_consolidate_defconfig",
+      "source": "cnss_utils/monaco_consolidate_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/monaco_gki_defconfig",
+      "source": "cnss_utils/monaco_gki_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/niobe_consolidate_defconfig",
+      "source": "cnss_utils/niobe_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/niobe_gki_defconfig",
+      "source": "cnss_utils/niobe_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/parrot_consolidate_defconfig",
+      "source": "cnss_utils/parrot_consolidate_defconfig",
+      "original_sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b",
+      "sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/parrot_gki_defconfig",
+      "source": "cnss_utils/parrot_gki_defconfig",
+      "original_sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b",
+      "sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/pineapple_consolidate_defconfig",
+      "source": "cnss_utils/pineapple_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/pineapple_gki_defconfig",
+      "source": "cnss_utils/pineapple_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/pitti_consolidate_defconfig",
+      "source": "cnss_utils/pitti_consolidate_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/pitti_gki_defconfig",
+      "source": "cnss_utils/pitti_gki_defconfig",
+      "original_sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280",
+      "sha256": "dd4ac21e74755727c8e074a38d888d6d04f9b992d26e934103c6583c8acbb280"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sa510m.1g_consolidate_defconfig",
+      "source": "cnss_utils/sa510m.1g_consolidate_defconfig",
+      "original_sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d",
+      "sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sa510m.1g_gki_defconfig",
+      "source": "cnss_utils/sa510m.1g_gki_defconfig",
+      "original_sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d",
+      "sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sa510m_consolidate_defconfig",
+      "source": "cnss_utils/sa510m_consolidate_defconfig",
+      "original_sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d",
+      "sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sa510m_gki_defconfig",
+      "source": "cnss_utils/sa510m_gki_defconfig",
+      "original_sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d",
+      "sha256": "3f845e0d0d85e988d0b5e9cac812ddba2331fea44d1ac242647fa144a20cce7d"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/seraph_consolidate_defconfig",
+      "source": "cnss_utils/seraph_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/seraph_gki_defconfig",
+      "source": "cnss_utils/seraph_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sun_consolidate_defconfig",
+      "source": "cnss_utils/sun_consolidate_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/sun_gki_defconfig",
+      "source": "cnss_utils/sun_gki_defconfig",
+      "original_sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510",
+      "sha256": "600512ecd46b1b6d58d3cda95aa8eca8a0bf46431f7f03f651038780aeea7510"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/volcano_consolidate_defconfig",
+      "source": "cnss_utils/volcano_consolidate_defconfig",
+      "original_sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b",
+      "sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/volcano_gki_defconfig",
+      "source": "cnss_utils/volcano_gki_defconfig",
+      "original_sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b",
+      "sha256": "c5a70bd0d41cb2d18bf71ff4007747511fd95d8299eea6febe3fd295c212e53b"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/wlan_firmware_service_v01.c",
+      "source": "cnss_utils/wlan_firmware_service_v01.c",
+      "original_sha256": "dae24f76c0e84b59f35c3c16d4e6d556691ead9556305883917545f7056fe07c",
+      "sha256": "dae24f76c0e84b59f35c3c16d4e6d556691ead9556305883917545f7056fe07c"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/wlan_firmware_service_v01.h",
+      "source": "cnss_utils/wlan_firmware_service_v01.h",
+      "original_sha256": "b0393102014e39375068da7d67b8d5d84d30da3628e19aabaa7b648c00cb270e",
+      "sha256": "b0393102014e39375068da7d67b8d5d84d30da3628e19aabaa7b648c00cb270e"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/x1e80100_consolidate_defconfig",
+      "source": "cnss_utils/x1e80100_consolidate_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/cnss_utils/x1e80100_gki_defconfig",
+      "source": "cnss_utils/x1e80100_gki_defconfig",
+      "original_sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9",
+      "sha256": "2ddbc6dcdebf4afdd3e83da58656e2f8177ed41d8b23171d5b0bda7309eebeb9"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/Kconfig",
+      "source": "icnss2/Kconfig",
+      "original_sha256": "2de8fbfe60dbe74b13b9d446a06045a8e790ef150dea9b788a99bce4be7aee34",
+      "sha256": "2de8fbfe60dbe74b13b9d446a06045a8e790ef150dea9b788a99bce4be7aee34"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/alor-le_consolidate_defconfig",
+      "source": "icnss2/alor-le_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/alor-le_gki_defconfig",
+      "source": "icnss2/alor-le_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/art_consolidate_defconfig",
+      "source": "icnss2/art_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/art_gki_defconfig",
+      "source": "icnss2/art_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/bengal_consolidate_defconfig",
+      "source": "icnss2/bengal_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/bengal_gki_defconfig",
+      "source": "icnss2/bengal_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/blair_consolidate_defconfig",
+      "source": "icnss2/blair_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/blair_gki_defconfig",
+      "source": "icnss2/blair_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/canoe_consolidate_defconfig",
+      "source": "icnss2/canoe_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/canoe_gki_defconfig",
+      "source": "icnss2/canoe_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/chora_consolidate_defconfig",
+      "source": "icnss2/chora_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/chora_gki_defconfig",
+      "source": "icnss2/chora_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/debug.c",
+      "source": "icnss2/debug.c",
+      "original_sha256": "428ec66a049e41c2ebfba3879d660b4e9998f20fe3c5f2073fd754d87e92ac98",
+      "sha256": "428ec66a049e41c2ebfba3879d660b4e9998f20fe3c5f2073fd754d87e92ac98"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/debug.h",
+      "source": "icnss2/debug.h",
+      "original_sha256": "87c7c6c52a96f6445b9c6a1c65d83c5d21fdf0975f01283cd8aa7fc564fae6ca",
+      "sha256": "87c7c6c52a96f6445b9c6a1c65d83c5d21fdf0975f01283cd8aa7fc564fae6ca"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/genl.c",
+      "source": "icnss2/genl.c",
+      "original_sha256": "5d4a7443b35d34c306ece775714de9a8d6c215ba665abc80a857de2dd7d4929b",
+      "sha256": "5d4a7443b35d34c306ece775714de9a8d6c215ba665abc80a857de2dd7d4929b"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/genl.h",
+      "source": "icnss2/genl.h",
+      "original_sha256": "dbc4c39baac95aabaf156ad737328c165479bd7783bde29a4058ebe899dae271",
+      "sha256": "dbc4c39baac95aabaf156ad737328c165479bd7783bde29a4058ebe899dae271"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/lahaina_consolidate_defconfig",
+      "source": "icnss2/lahaina_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/lahaina_gki_defconfig",
+      "source": "icnss2/lahaina_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/main.c",
+      "source": "icnss2/main.c",
+      "original_sha256": "ea2ada911614ed903a11f4ed81c015c2806315e55ef810aa5c8b23e9f2904cab",
+      "sha256": "a4d0e26cc0001bc6a1c9a1921a9a0ac56bd0dc72a1385d47a2833ce6b6ac2634"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/main.h",
+      "source": "icnss2/main.h",
+      "original_sha256": "e19385cfd617d222bd3c1f7fe3b2bc3672f791d2675fccb288d2ef764c9d3a90",
+      "sha256": "e19385cfd617d222bd3c1f7fe3b2bc3672f791d2675fccb288d2ef764c9d3a90"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/malabar_consolidate_defconfig",
+      "source": "icnss2/malabar_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/malabar_gki_defconfig",
+      "source": "icnss2/malabar_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/monaco_consolidate_defconfig",
+      "source": "icnss2/monaco_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/monaco_gki_defconfig",
+      "source": "icnss2/monaco_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/parrot_consolidate_defconfig",
+      "source": "icnss2/parrot_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/parrot_gki_defconfig",
+      "source": "icnss2/parrot_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/pineapple_consolidate_defconfig",
+      "source": "icnss2/pineapple_consolidate_defconfig",
+      "original_sha256": "a3bede9d2c297ab0417eaca12c88c7fb8637443fb5bac6775ce4755eff3070d6",
+      "sha256": "a3bede9d2c297ab0417eaca12c88c7fb8637443fb5bac6775ce4755eff3070d6"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/pineapple_gki_defconfig",
+      "source": "icnss2/pineapple_gki_defconfig",
+      "original_sha256": "7f14bd411f9896e27157a27a9a32abf43650b0f84beb61f6f0ae8a7e75e1fb44",
+      "sha256": "7f14bd411f9896e27157a27a9a32abf43650b0f84beb61f6f0ae8a7e75e1fb44"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/pitti_consolidate_defconfig",
+      "source": "icnss2/pitti_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/pitti_gki_defconfig",
+      "source": "icnss2/pitti_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/power.c",
+      "source": "icnss2/power.c",
+      "original_sha256": "3adb494c8ab93f3b2bd1bb381a825500d23a6df20fb077064c8ca9733be85af8",
+      "sha256": "3adb494c8ab93f3b2bd1bb381a825500d23a6df20fb077064c8ca9733be85af8"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/power.h",
+      "source": "icnss2/power.h",
+      "original_sha256": "202ad72b367871ea188831371a89871bd7b32db013ec3af10e299c3d278be601",
+      "sha256": "202ad72b367871ea188831371a89871bd7b32db013ec3af10e299c3d278be601"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/qmi.c",
+      "source": "icnss2/qmi.c",
+      "original_sha256": "23fcd59e5db1f9b0f5edec608569a50738a824831412e8c43c7220def80a3450",
+      "sha256": "97616b4f02c5be979fb5b238efb7ee4371d38f6bf3db651d371cdffdf870140c"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/qmi.h",
+      "source": "icnss2/qmi.h",
+      "original_sha256": "8c68b32150f232158d83cd84740a39ac7366d82345eb15390308af62084e358d",
+      "sha256": "8c68b32150f232158d83cd84740a39ac7366d82345eb15390308af62084e358d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/sun_consolidate_defconfig",
+      "source": "icnss2/sun_consolidate_defconfig",
+      "original_sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97",
+      "sha256": "3bccc6da6f296f817f7f9a5521aba3a30cd399a38f34b60f8103cca4b3c12e97"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/sun_gki_defconfig",
+      "source": "icnss2/sun_gki_defconfig",
+      "original_sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e",
+      "sha256": "c93bcff9b6599b50c29a24cd1c3937a423cd7a08a65fee4601856bd1cb391b2e"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/volcano_consolidate_defconfig",
+      "source": "icnss2/volcano_consolidate_defconfig",
+      "original_sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d",
+      "sha256": "c8cca2739bf5ee5c53ac0afba68c12f8ab214a2633474ce2a41ef11963eddf1d"
+    },
+    {
+      "file": "ports/wlan-platform/icnss2/volcano_gki_defconfig",
+      "source": "icnss2/volcano_gki_defconfig",
+      "original_sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72",
+      "sha256": "cb3374ed7c1d711102d4b4a0691715b4d293e5a25de0176146571e33b9dd2e72"
+    },
+    {
+      "file": "ports/wlan-platform/inc/cnss2.h",
+      "source": "inc/cnss2.h",
+      "original_sha256": "8558fb7e10d3d914cfdf79d4adb927a249bf67d61571f2ca3fe58cf8e3cc0b4a",
+      "sha256": "8558fb7e10d3d914cfdf79d4adb927a249bf67d61571f2ca3fe58cf8e3cc0b4a"
+    },
+    {
+      "file": "ports/wlan-platform/inc/cnss_nl.h",
+      "source": "inc/cnss_nl.h",
+      "original_sha256": "710f9d3b94a1ee793e8b7c36418768e5bcdcdb59c793092afb2f346fc7b13a51",
+      "sha256": "710f9d3b94a1ee793e8b7c36418768e5bcdcdb59c793092afb2f346fc7b13a51"
+    },
+    {
+      "file": "ports/wlan-platform/inc/cnss_prealloc.h",
+      "source": "inc/cnss_prealloc.h",
+      "original_sha256": "94b12dd58a45e132bae9d9cdf265a77255a23442fbef5d0aff7ca120f7e3ba34",
+      "sha256": "94b12dd58a45e132bae9d9cdf265a77255a23442fbef5d0aff7ca120f7e3ba34"
+    },
+    {
+      "file": "ports/wlan-platform/inc/cnss_utils.h",
+      "source": "inc/cnss_utils.h",
+      "original_sha256": "8406910a82ef550fb6e727a6d451be6916e481c3e2f99f951490255168cc77d7",
+      "sha256": "8406910a82ef550fb6e727a6d451be6916e481c3e2f99f951490255168cc77d7"
+    },
+    {
+      "file": "ports/wlan-platform/inc/icnss2.h",
+      "source": "inc/icnss2.h",
+      "original_sha256": "93256f404b75318cefaa5b0a67e03d8ae78cd2f872f347f808b00951c64ec7fe",
+      "sha256": "93256f404b75318cefaa5b0a67e03d8ae78cd2f872f347f808b00951c64ec7fe"
+    },
+    {
+      "file": "ports/wlan-platform/wlan_platform_modules.bzl",
+      "source": "wlan_platform_modules.bzl",
+      "original_sha256": "a1253e9881c18a1767a1455c002dbde4c15f934eebb75bb440c9cdc2c759131d",
+      "sha256": "a1253e9881c18a1767a1455c002dbde4c15f934eebb75bb440c9cdc2c759131d"
+    },
+    {
+      "file": "ports/wlan-platform/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "cdacc350f532af4c125a647603967679a3f4721260c7f62a68938dd3b6151b56"
+    },
+    {
+      "file": "ports/wlan-platform/avr-canoe-vendor-config.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "4db15cdb9ac0531905890f2ff72c816a5209324a0277431122e3c7dc87e9085c"
+    }
+  ],
+  "patch_sha256": "635c1bf251f95a04213098fae6effc12450eca7cbc22b4013d9fe5cc688c3caa",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "icnss2, cnss_utils, cnss_prealloc, cnss_nl, wlan_firmware_service, cnss_plat_ipc_qmi_svc for canoe on android18-7.3",
+  "reviewed_changes": [
+    "per-module CONFIG_* from <module>/canoe_gki_defconfig as in wlan_platform_modules.bzl",
+    "in_irq() -> in_hardirq()",
+    "kernel_connect sockaddr_unsized (icnss2)",
+    "thermal_of_cooling_device_register cdev_id 0 (DT uses 2-cell specs)",
+    "avr-canoe-vendor-config.h (gen_drm_vendor_config.py wlan-platform); vendor qcom_rproc API force-included (early SSR notifier)",
+    "depends= sets equal the phone modules",
+    "pinned to tag MMI-W3WWL36.65-11-18 (8fb17c9, the phone build; includes the avr BDF selection commits); the earlier checkout differed only in unused cnss2/qmi.c"
+  ],
+  "pending": [
+    "WPSS/WLAN on the phone"
+  ]
+}

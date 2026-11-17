@@ -511,7 +511,16 @@
  	pas->rproc = rproc;
  	pas->minidump_id = desc->minidump_id;
  	pas->pas_id = desc->pas_id;
-@@ -967,6 +1119,17 @@
+@@ -923,6 +1075,8 @@
+ 	}
+ 
+ 	qcom_add_ssr_subdev(rproc, &pas->ssr_subdev, desc->ssr_name);
++	/* AVR: vendor early SSR notification (qcom-soc PAS registers it) */
++	qcom_q6v5_register_ssr_subdev(&pas->q6v5, &pas->ssr_subdev.subdev);
+ 
+ 	pas->pas_ctx->use_tzmem = desc->needs_tzmem || rproc->has_iommu;
+ 	if (pas->dtb_pas_id)
+@@ -967,6 +1121,17 @@
  		of_platform_device_destroy(&pas->bam_dmux->dev, NULL);
  
  	rproc_del(pas->rproc);
@@ -529,7 +538,7 @@
  
  	qcom_q6v5_deinit(&pas->q6v5);
  	qcom_pas_unassign_memory_region(pas);
-@@ -1763,6 +1926,24 @@
+@@ -1763,6 +1928,24 @@
  	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
  };
  
@@ -554,7 +563,7 @@
  static const struct qcom_pas_data kaanapali_soccp_resource = {
  	.crash_reason_smem = 656,
  	.firmware_name = "soccp.mbn",
-@@ -1824,6 +2005,7 @@
+@@ -1824,6 +2007,7 @@
  };
  
  static const struct of_device_id qcom_pas_of_match[] = {

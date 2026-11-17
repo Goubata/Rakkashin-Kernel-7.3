@@ -1,0 +1,10 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture: cnss_utils only loads when an enabled node carries
+ * "qcom,wlan" (the phone's soc:qcom,wlan icnss node does). No compatible, so
+ * nothing binds. icnss2 needs an enabled node it matches (phone: qcom,wcn7750);
+ * the resource-less node exercises its probe error path. */
+/ { fragment@0 { target-path="/"; __overlay__ {
+  avr_wlan_marker { qcom,wlan; status="okay"; };
+  avr_icnss_fixture { compatible="qcom,wcn7750"; status="okay"; };
+}; }; };

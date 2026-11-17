@@ -1,0 +1,134 @@
+--- a/ports/wlan-platform/cnss2/debug.h
++++ b/ports/wlan-platform/cnss2/debug.h
+@@ -47,7 +47,7 @@
+ 		 cnss_debug_ipc_log_print((void *)NULL, _x)
+ #endif
+ 
+-#define proc_name (in_irq() ? "irq" : \
++#define proc_name (in_hardirq() ? "irq" : \
+ 		   (in_softirq() ? "soft_irq" : current->comm))
+ 
+ #define cnss_pr_err(_fmt, ...) \
+--- a/ports/wlan-platform/cnss_utils/cnss_plat_ipc_qmi.c
++++ b/ports/wlan-platform/cnss_utils/cnss_plat_ipc_qmi.c
+@@ -152,7 +152,7 @@
+ 		cnss_plat_ipc_debug_log_print((void *)NULL, _x)
+ #endif
+ 
+-#define proc_name (in_irq() ? "irq" : \
++#define proc_name (in_hardirq() ? "irq" : \
+ 		(in_softirq() ? "soft_irq" : current->comm))
+ #define cnss_plat_ipc_err(_fmt, ...) \
+ 		cnss_plat_ipc_log_print(proc_name, __func__, \
+--- a/ports/wlan-platform/icnss2/main.c
++++ b/ports/wlan-platform/icnss2/main.c
+@@ -4082,7 +4082,7 @@
+ 
+ 	if (of_find_property(dev_node, "#cooling-cells", NULL)) {
+ 		icnss_tcdev->tcdev = thermal_of_cooling_device_register(
+-						dev_node,
++						dev_node, 0, /* AVR 7.3: cdev_id (2-cell specs) */
+ 						cdev_node_name, icnss_tcdev,
+ 						&icnss_cooling_ops);
+ 		if (IS_ERR_OR_NULL(icnss_tcdev->tcdev)) {
+--- a/ports/wlan-platform/icnss2/qmi.c
++++ b/ports/wlan-platform/icnss2/qmi.c
+@@ -1220,7 +1220,7 @@
+ 	sq.sq_node = node;
+ 	sq.sq_port = port;
+ 
+-	ret = kernel_connect(qmi_dms->sock, (struct sockaddr *)&sq,
++	ret = kernel_connect(qmi_dms->sock, (struct sockaddr_unsized *)&sq,
+ 			     sizeof(sq), 0);
+ 	if (ret < 0) {
+ 		icnss_pr_err("Failed to connect to QMI DMS remote service Node: %d Port: %d\n",
+@@ -3552,7 +3552,7 @@
+ 	sq.sq_family = AF_QIPCRTR;
+ 	sq.sq_node = event_data->node;
+ 	sq.sq_port = event_data->port;
+-	ret = kernel_connect(qmi->sock, (struct sockaddr *)&sq, sizeof(sq), 0);
++	ret = kernel_connect(qmi->sock, (struct sockaddr_unsized *)&sq, sizeof(sq), 0);
+ 	if (ret < 0) {
+ 		icnss_pr_err("Fail to connect to remote service port\n");
+ 		goto out;
+@@ -4485,7 +4485,7 @@
+ 	sq.sq_family = AF_QIPCRTR;
+ 	sq.sq_node = service->node;
+ 	sq.sq_port = service->port;
+-	ret = kernel_connect(qmi->sock, (struct sockaddr *)&sq, sizeof(sq), 0);
++	ret = kernel_connect(qmi->sock, (struct sockaddr_unsized *)&sq, sizeof(sq), 0);
+ 	if (ret < 0) {
+ 		icnss_pr_err("Fail to connect to remote service port\n");
+ 		return ret;
+--- a/ports/wlan-platform/Makefile
++++ b/ports/wlan-platform/Makefile
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# vendor/qcom/opensource/wlan/platform for canoe (icnss2 target): the modules the phone loads.
++# Per-module CONFIG_* from <module>/canoe_gki_defconfig (wlan_platform_modules.bzl; the
++# _v01/plat_ipc modules use cnss_utils' defconfig). cnss2 (PCIe) is built for canoe but not loaded.
++
++obj-m += icnss2.o
++icnss2-y := icnss2/main.o icnss2/debug.o icnss2/power.o icnss2/genl.o icnss2/qmi.o
++CFLAGS_icnss2/main.o += -DCONFIG_ICNSS2_MODULE=1 -DCONFIG_ICNSS2_QMI=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS2_SMMU_DB_SUPPORT=1 -DCONFIG_CNSS2_SSR_DRIVER_DUMP=1 -I$(src)/icnss2 -I$(src)/cnss_utils
++CFLAGS_icnss2/debug.o += -DCONFIG_ICNSS2_MODULE=1 -DCONFIG_ICNSS2_QMI=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS2_SMMU_DB_SUPPORT=1 -DCONFIG_CNSS2_SSR_DRIVER_DUMP=1 -I$(src)/icnss2 -I$(src)/cnss_utils
++CFLAGS_icnss2/power.o += -DCONFIG_ICNSS2_MODULE=1 -DCONFIG_ICNSS2_QMI=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS2_SMMU_DB_SUPPORT=1 -DCONFIG_CNSS2_SSR_DRIVER_DUMP=1 -I$(src)/icnss2 -I$(src)/cnss_utils
++CFLAGS_icnss2/genl.o += -DCONFIG_ICNSS2_MODULE=1 -DCONFIG_ICNSS2_QMI=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS2_SMMU_DB_SUPPORT=1 -DCONFIG_CNSS2_SSR_DRIVER_DUMP=1 -I$(src)/icnss2 -I$(src)/cnss_utils
++CFLAGS_icnss2/qmi.o += -DCONFIG_ICNSS2_MODULE=1 -DCONFIG_ICNSS2_QMI=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS2_SMMU_DB_SUPPORT=1 -DCONFIG_CNSS2_SSR_DRIVER_DUMP=1 -I$(src)/icnss2 -I$(src)/cnss_utils
++obj-m += cnss_nl.o
++cnss_nl-y := cnss_genl/cnss_nl.o
++CFLAGS_cnss_genl/cnss_nl.o += -DCONFIG_CNSS_GENL_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1
++obj-m += cnss_prealloc.o
++cnss_prealloc-y := cnss_prealloc/cnss_prealloc.o
++CFLAGS_cnss_prealloc/cnss_prealloc.o += -DCONFIG_WCNSS_MEM_PRE_ALLOC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -I$(src)/cnss_utils
++obj-m += cnss_utils.o
++cnss_utils-y := cnss_utils/cnss_utils.o
++CFLAGS_cnss_utils/cnss_utils.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++obj-m += wlan_firmware_service.o
++wlan_firmware_service-y := cnss_utils/wlan_firmware_service_v01.o cnss_utils/device_management_service_v01.o cnss_utils/ip_multimedia_subsystem_private_service_v01.o
++CFLAGS_cnss_utils/wlan_firmware_service_v01.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++CFLAGS_cnss_utils/device_management_service_v01.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++CFLAGS_cnss_utils/ip_multimedia_subsystem_private_service_v01.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++obj-m += cnss_plat_ipc_qmi_svc.o
++cnss_plat_ipc_qmi_svc-y := cnss_utils/cnss_plat_ipc_qmi.o cnss_utils/cnss_plat_ipc_service_v01.o
++CFLAGS_cnss_utils/cnss_plat_ipc_qmi.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++CFLAGS_cnss_utils/cnss_plat_ipc_service_v01.o += -DCONFIG_CNSS_UTILS_MODULE=1 -DCONFIG_CNSS_QMI_SVC_MODULE=1 -DCONFIG_CNSS_PLAT_IPC_QMI_SVC_MODULE=1 -DCONFIG_CNSS_OUT_OF_TREE=1 -DCONFIG_FEATURE_SMEM_MAILBOX=1
++ccflags-y += -I$(src)/inc -I$(src)/../qcom-wlan-deps/include -I$(src)/../qcom-ipc-logging/include \
++	-I$(src)/../qcom-socinfo/include -I$(src)/../qcom-rproc-common/include -I$(src)/../qcom-remoteproc-services/include \
++	-I$(src)/../qcom-minidump/include -I$(src)/../qcom-debug-diag/include -Wno-missing-prototypes \
++	-I$(src)/../secure-buffer/include -I$(src)/../securemsm/include -I$(src)/../pinctrl-alor-vendor-core/include -I$(src)/../qcom-dcvs/include -I$(src)/../qcom-iommu-util/include
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h -include $(src)/../qcom-rproc-common/include/linux/remoteproc/qcom_rproc_vendor.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-wlan-deps/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers \
++	$(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-rproc-common/Module.symvers\
++	$(src)/../qcom-remoteproc-services/Module.symvers $(src)/../pinctrl-alor-vendor-core/Module.symvers \
++	$(src)/../qcom-smem/Module.symvers $(src)/../qcom-minidump/Module.symvers $(src)/../qcom-debug-diag/Module.symvers $(src)/../qcom-iommu-util/Module.symvers $(src)/../secure-buffer/Module.symvers
+--- a/ports/wlan-platform/avr-canoe-vendor-config.h
++++ b/ports/wlan-platform/avr-canoe-vendor-config.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
++ * module was compiled with through the vendor kernel autoconf but that the 7.3
++ * GKI .config does not carry. Only options referenced by the sources or headers
++ * it includes are listed; all providers are ported modules. Generated by
++ * scripts/gen_drm_vendor_config.py from canoe_perf.bzl. */
++#ifndef AVR_CANOE_VENDOR_CONFIG_H
++#define AVR_CANOE_VENDOR_CONFIG_H
++#define CONFIG_IOMMU_IO_PGTABLE_FAST 1
++#define CONFIG_IPC_LOGGING_MODULE 1
++#define CONFIG_MHI_BUS_MISC 1
++#define CONFIG_MHI_SATELLITE_MODULE 1
++#define CONFIG_MSM_QMP_MODULE 1
++#define CONFIG_PCI_MSM_MODULE 1
++#define CONFIG_PINCTRL_MSM_MODULE 1
++#define CONFIG_QCOM_AOSS_QMP_MODULE 1
++#define CONFIG_QCOM_COMMAND_DB_MODULE 1
++#define CONFIG_QCOM_DCVS_MODULE 1
++#define CONFIG_QCOM_IOMMU_UTIL_MODULE 1
++#define CONFIG_QCOM_MEMORY_DUMP_V2_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
++#define CONFIG_QCOM_RAMDUMP_MODULE 1
++#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
++#define CONFIG_QCOM_SOCINFO_MODULE 1
++#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1
++#endif

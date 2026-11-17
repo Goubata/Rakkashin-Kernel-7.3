@@ -122,12 +122,20 @@ static bool wait_depth(struct task_struct *t, bool want)
 	return false;
 }
 
+static bool wait_blocked_timed_out;
+
+/* Up to 10 s: under host load a worker can take >1 s to reach the lock's wait
+ * list; proceeding early would test the wrong ordering, so report it. */
 static void wait_blocked(struct task_struct *t)
 {
 	int i;
 
-	for (i = 0; i < 200 && READ_ONCE(t->__state) == TASK_RUNNING; i++)
+	for (i = 0; i < 2000 && READ_ONCE(t->__state) == TASK_RUNNING; i++)
 		msleep(5);
+	if (READ_ONCE(t->__state) == TASK_RUNNING) {
+		pr_err("AVR_MOTO_NOT_BLOCKED pid=%d\n", t->pid);
+		wait_blocked_timed_out = true;
+	}
 	msleep(20);
 }
 
@@ -158,6 +166,7 @@ static void mutex_ux_waiter_jumps_queue(struct kunit *test)
 	wait_blocked(plain->t);
 	ux = start(test, 0, true, false, &order);
 	wait_blocked(ux->t);
+	KUNIT_EXPECT_FALSE(test, wait_blocked_timed_out);
 	finish(owner);
 	wait_for_completion(&plain->done);
 	wait_for_completion(&ux->done);
@@ -193,6 +202,7 @@ static void rwsem_ux_writer_jumps_queue(struct kunit *test)
 	wait_blocked(plain->t);
 	ux = start(test, 1, true, false, &order);
 	wait_blocked(ux->t);
+	KUNIT_EXPECT_FALSE(test, wait_blocked_timed_out);
 	finish(owner);
 	wait_for_completion(&plain->done);
 	wait_for_completion(&ux->done);

@@ -1,0 +1,50 @@
+{
+ "name": "bt-kernel",
+ "repo": "vendor-repos/vendor-qcom-opensource-bt-kernel",
+ "commit": "1aac3eefb3bb686aa317f8f303e36548b094e17c",
+ "files": {
+  "ports/bt-kernel/bt_modules.bzl": "bt_modules.bzl",
+  "ports/bt-kernel/btfmcodec/btfm_codec.c": "btfmcodec/btfm_codec.c",
+  "ports/bt-kernel/btfmcodec/btfm_codec_btadv_interface.c": "btfmcodec/btfm_codec_btadv_interface.c",
+  "ports/bt-kernel/btfmcodec/btfm_codec_hw_interface.c": "btfmcodec/btfm_codec_hw_interface.c",
+  "ports/bt-kernel/btfmcodec/btfm_codec_interface.c": "btfmcodec/btfm_codec_interface.c",
+  "ports/bt-kernel/btfmcodec/include/btfm_codec.h": "btfmcodec/include/btfm_codec.h",
+  "ports/bt-kernel/btfmcodec/include/btfm_codec_btadv_interface.h": "btfmcodec/include/btfm_codec_btadv_interface.h",
+  "ports/bt-kernel/btfmcodec/include/btfm_codec_hw_interface.h": "btfmcodec/include/btfm_codec_hw_interface.h",
+  "ports/bt-kernel/btfmcodec/include/btfm_codec_interface.h": "btfmcodec/include/btfm_codec_interface.h",
+  "ports/bt-kernel/btfmcodec/include/btfm_codec_pkt.h": "btfmcodec/include/btfm_codec_pkt.h",
+  "ports/bt-kernel/include/btpower.h": "include/btpower.h",
+  "ports/bt-kernel/pwr/btpower.c": "pwr/btpower.c",
+  "ports/bt-kernel/rtc6226/radio-rtc6226-common.c": "rtc6226/radio-rtc6226-common.c",
+  "ports/bt-kernel/rtc6226/radio-rtc6226-i2c.c": "rtc6226/radio-rtc6226-i2c.c",
+  "ports/bt-kernel/rtc6226/radio-rtc6226.h": "rtc6226/radio-rtc6226.h",
+  "ports/bt-kernel/slimbus/btfm_slim.c": "slimbus/btfm_slim.c",
+  "ports/bt-kernel/slimbus/btfm_slim.h": "slimbus/btfm_slim.h",
+  "ports/bt-kernel/slimbus/btfm_slim_codec.c": "slimbus/btfm_slim_codec.c",
+  "ports/bt-kernel/slimbus/btfm_slim_hw_interface.c": "slimbus/btfm_slim_hw_interface.c",
+  "ports/bt-kernel/slimbus/btfm_slim_hw_interface.h": "slimbus/btfm_slim_hw_interface.h",
+  "ports/bt-kernel/slimbus/btfm_slim_slave.c": "slimbus/btfm_slim_slave.c",
+  "ports/bt-kernel/slimbus/btfm_slim_slave.h": "slimbus/btfm_slim_slave.h",
+  "ports/bt-kernel/soundwire/btfm_swr.c": "soundwire/btfm_swr.c",
+  "ports/bt-kernel/soundwire/btfm_swr.h": "soundwire/btfm_swr.h",
+  "ports/bt-kernel/soundwire/btfm_swr_hw_interface.c": "soundwire/btfm_swr_hw_interface.c",
+  "ports/bt-kernel/soundwire/btfm_swr_hw_interface.h": "soundwire/btfm_swr_hw_interface.h",
+  "ports/bt-kernel/soundwire/btfm_swr_slave.c": "soundwire/btfm_swr_slave.c",
+  "ports/bt-kernel/soundwire/btfm_swr_slave.h": "soundwire/btfm_swr_slave.h",
+  "ports/bt-kernel/spi/include/spi-cnss-trace.h": "spi/include/spi-cnss-trace.h",
+  "ports/bt-kernel/spi/include/spi_cnss.h": "spi/include/spi_cnss.h",
+  "ports/bt-kernel/spi/spi_cnss_proto.c": "spi/spi_cnss_proto.c",
+  "ports/bt-kernel/spi/spi_cnss_proto.h": "spi/spi_cnss_proto.h",
+  "ports/bt-kernel/target.bzl": "target.bzl",
+  "ports/bt-kernel/Makefile": null,
+  "ports/bt-kernel/avr-canoe-vendor-config.h": null
+ },
+ "scope": "btpower, btfm_slim_codec, btfmcodec, bt_fm_swr, radio-i2c-rtc6226-qca, spi_cnss_proto for canoe on android18-7.3",
+ "reviewed_changes": [
+  "unchanged sources; canoe config_options as defines; audio compat and slimbus vendor header force-included",
+  "depends= sets equal the phone modules"
+ ],
+ "pending": [
+  "BT/FM on the phone (no audio output during tests)"
+ ]
+}

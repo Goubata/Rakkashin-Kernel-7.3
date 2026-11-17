@@ -20,6 +20,7 @@
 #include <linux/percpu.h>
 #include <linux/refcount.h>
 #include <linux/slab.h>
+#include <linux/syscore_ops.h>
 #include <linux/iopoll.h>
 #include <trace/hooks/gic_v3.h>
 
@@ -918,7 +919,7 @@ static void __exception_irq_entry gic_handle_irq(struct pt_regs *regs)
 		__gic_handle_irq_from_irqson(regs);
 }
 
-static void __init gic_dist_init(void)
+static void gic_dist_init(void)
 {
 	unsigned int i;
 	u64 affinity;
@@ -1508,6 +1509,50 @@ static void gic_cpu_pm_init(void)
 static inline void gic_cpu_pm_init(void) { }
 #endif /* CONFIG_CPU_PM */
 
+/* ANDROID: 6.12 parity for vendor deep-suspend/hibernation GIC restore */
+void gic_v3_dist_init(void)
+{
+	gic_dist_init();
+}
+EXPORT_SYMBOL_GPL(gic_v3_dist_init);
+
+void gic_v3_cpu_init(void)
+{
+	gic_cpu_init();
+}
+EXPORT_SYMBOL_GPL(gic_v3_cpu_init);
+
+void gic_v3_dist_wait_for_rwp(void)
+{
+	gic_dist_wait_for_rwp();
+}
+EXPORT_SYMBOL_GPL(gic_v3_dist_wait_for_rwp);
+
+#ifdef CONFIG_PM
+static int gic_v3_suspend(void *data)
+{
+	int ret = 0;
+
+	trace_android_vh_gic_v3_suspend(&gic_data, &ret);
+	return ret;
+}
+
+static const struct syscore_ops gic_syscore_ops = {
+	.suspend = gic_v3_suspend,
+};
+
+static struct syscore gic_syscore = {
+	.ops = &gic_syscore_ops,
+};
+
+static void gic_syscore_init(void)
+{
+	register_syscore(&gic_syscore);
+}
+#else
+static inline void gic_syscore_init(void) { }
+#endif
+
 static struct irq_chip gic_chip = {
 	.name			= "GICv3",
 	.irq_mask		= gic_mask_irq,
@@ -2054,6 +2099,7 @@ static int __init gic_init_bases(phys_addr_t dist_phys_base,
 	gic_enable_nmi_support();
 	gic_smp_init();
 	gic_cpu_pm_init();
+	gic_syscore_init();
 
 	if (gic_dist_supports_lpis()) {
 		its_init(handle, &gic_data.rdists, gic_data.domain, dist_prio_irq);

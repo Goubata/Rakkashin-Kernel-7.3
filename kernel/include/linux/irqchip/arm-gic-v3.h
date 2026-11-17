@@ -660,6 +660,11 @@ static inline bool gic_enable_sre(void)
 int its_save_disable(void *data);
 void its_restore_enable(void *data);
 
+
+/* ANDROID: exported for vendor GIC restore after deep suspend/hibernation */
+void gic_v3_dist_init(void);
+void gic_v3_cpu_init(void);
+void gic_v3_dist_wait_for_rwp(void);
 #endif
 
 #endif

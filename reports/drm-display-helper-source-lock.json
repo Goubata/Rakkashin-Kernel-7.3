@@ -1,0 +1,82 @@
+{
+  "source_commit": "7eba801e44bb10c25193b9b6d9670e9617b8f5b7",
+  "source_repo": "android-7.3",
+  "files": [
+    {
+      "file": "ports/drm-display-helper/drm_display_helper_mod.c",
+      "source": "drivers/gpu/drm/display/drm_display_helper_mod.c",
+      "original_sha256": "3b0935abf7d6d92312c54bb4e7f29bf3544666b4d80befec432eb256f275e42c",
+      "sha256": "3b0935abf7d6d92312c54bb4e7f29bf3544666b4d80befec432eb256f275e42c"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dp_dual_mode_helper.c",
+      "source": "drivers/gpu/drm/display/drm_dp_dual_mode_helper.c",
+      "original_sha256": "3c58c370830fbf2e3565deb0d1effed291aed1e52547af406e21f6fdb8a46a1a",
+      "sha256": "3c58c370830fbf2e3565deb0d1effed291aed1e52547af406e21f6fdb8a46a1a"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dp_helper.c",
+      "source": "drivers/gpu/drm/display/drm_dp_helper.c",
+      "original_sha256": "e1aadee5d1bb4d00b8905b8dab7c54fff9341a22bbf33411bfb10549674481a1",
+      "sha256": "e1aadee5d1bb4d00b8905b8dab7c54fff9341a22bbf33411bfb10549674481a1"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dp_helper_internal.h",
+      "source": "drivers/gpu/drm/display/drm_dp_helper_internal.h",
+      "original_sha256": "caf04f4863f2688450bd613b8f0526e4d498f80ef39904ae99e34a654bd28fa3",
+      "sha256": "caf04f4863f2688450bd613b8f0526e4d498f80ef39904ae99e34a654bd28fa3"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dp_mst_topology.c",
+      "source": "drivers/gpu/drm/display/drm_dp_mst_topology.c",
+      "original_sha256": "9d09eca1a83d53fc2a45c8313e10513b88bef0dbd7a805fa359c859e16831139",
+      "sha256": "9d09eca1a83d53fc2a45c8313e10513b88bef0dbd7a805fa359c859e16831139"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dp_mst_topology_internal.h",
+      "source": "drivers/gpu/drm/display/drm_dp_mst_topology_internal.h",
+      "original_sha256": "607246ab06325565f3d063fc8f70f184726560471509d013cdcc29dc32aad331",
+      "sha256": "607246ab06325565f3d063fc8f70f184726560471509d013cdcc29dc32aad331"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_dsc_helper.c",
+      "source": "drivers/gpu/drm/display/drm_dsc_helper.c",
+      "original_sha256": "a4d0df3f61fff2846a94f95928e2267e76f3b2c4c6cd57d2920f7b0dc7367fef",
+      "sha256": "a4d0df3f61fff2846a94f95928e2267e76f3b2c4c6cd57d2920f7b0dc7367fef"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_hdcp_helper.c",
+      "source": "drivers/gpu/drm/display/drm_hdcp_helper.c",
+      "original_sha256": "a25c68a54aeb90d07637b0eff4a255844e1794d4146afb2221e49790cc6aad86",
+      "sha256": "a25c68a54aeb90d07637b0eff4a255844e1794d4146afb2221e49790cc6aad86"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_hdmi_helper.c",
+      "source": "drivers/gpu/drm/display/drm_hdmi_helper.c",
+      "original_sha256": "f1cecba8dce492afb9be1dfce3285276c62af6d080a387e4056c91f7a8e25db5",
+      "sha256": "f1cecba8dce492afb9be1dfce3285276c62af6d080a387e4056c91f7a8e25db5"
+    },
+    {
+      "file": "ports/drm-display-helper/drm_scdc_helper.c",
+      "source": "drivers/gpu/drm/display/drm_scdc_helper.c",
+      "original_sha256": "788982dabccf73591cbc18a0ef7aa8e46c36e64b70589ccfca5071517d608de9",
+      "sha256": "788982dabccf73591cbc18a0ef7aa8e46c36e64b70589ccfca5071517d608de9"
+    },
+    {
+      "file": "ports/drm-display-helper/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "807679e89fb8967686f99ea9340651a4b12c9dcc79937c767ecf736ba2e8050e"
+    }
+  ],
+  "patch_sha256": "ca4433bf0a4015734cbffdc27f2c60e8b965ef7663cf2327b5f7290a0f862d9b",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "drm_display_helper.ko (qcom-soc builds it from the kernel tree; canoe_perf CONFIG_DRM_DISPLAY_HELPER=m) from unchanged android18-7.3 sources: DP/MST/dual-mode, DSC, HDCP, HDMI/SCDC (the helpers in the phone module)",
+  "reviewed_changes": [
+    "unchanged; out-of-tree so the GKI Image stays unchanged"
+  ],
+  "pending": [
+    "DP on the phone"
+  ]
+}

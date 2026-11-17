@@ -1,0 +1,25 @@
+{
+ "name": "drm-display-helper",
+ "repo": "android-7.3",
+ "commit": "7eba801e44bb10c25193b9b6d9670e9617b8f5b7",
+ "files": {
+  "ports/drm-display-helper/drm_display_helper_mod.c": "drivers/gpu/drm/display/drm_display_helper_mod.c",
+  "ports/drm-display-helper/drm_dp_dual_mode_helper.c": "drivers/gpu/drm/display/drm_dp_dual_mode_helper.c",
+  "ports/drm-display-helper/drm_dp_helper.c": "drivers/gpu/drm/display/drm_dp_helper.c",
+  "ports/drm-display-helper/drm_dp_helper_internal.h": "drivers/gpu/drm/display/drm_dp_helper_internal.h",
+  "ports/drm-display-helper/drm_dp_mst_topology.c": "drivers/gpu/drm/display/drm_dp_mst_topology.c",
+  "ports/drm-display-helper/drm_dp_mst_topology_internal.h": "drivers/gpu/drm/display/drm_dp_mst_topology_internal.h",
+  "ports/drm-display-helper/drm_dsc_helper.c": "drivers/gpu/drm/display/drm_dsc_helper.c",
+  "ports/drm-display-helper/drm_hdcp_helper.c": "drivers/gpu/drm/display/drm_hdcp_helper.c",
+  "ports/drm-display-helper/drm_hdmi_helper.c": "drivers/gpu/drm/display/drm_hdmi_helper.c",
+  "ports/drm-display-helper/drm_scdc_helper.c": "drivers/gpu/drm/display/drm_scdc_helper.c",
+  "ports/drm-display-helper/Makefile": null
+ },
+ "scope": "drm_display_helper.ko (qcom-soc builds it from the kernel tree; canoe_perf CONFIG_DRM_DISPLAY_HELPER=m) from unchanged android18-7.3 sources: DP/MST/dual-mode, DSC, HDCP, HDMI/SCDC (the helpers in the phone module)",
+ "reviewed_changes": [
+  "unchanged; out-of-tree so the GKI Image stays unchanged"
+ ],
+ "pending": [
+  "DP on the phone"
+ ]
+}

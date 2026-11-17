@@ -1,0 +1,94 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-display-deps/gh_irq_lend.c",
+      "source": "drivers/virt/gunyah/gh_irq_lend.c",
+      "original_sha256": "de1c5a96ea4f599c29cc1541862379d75c5c7ed310fdf601315fce1b0ddbf736",
+      "sha256": "de1c5a96ea4f599c29cc1541862379d75c5c7ed310fdf601315fce1b0ddbf736"
+    },
+    {
+      "file": "ports/qcom-display-deps/fsa4480-i2c.c",
+      "source": "drivers/soc/qcom/fsa4480-i2c.c",
+      "original_sha256": "c3cff66e600081f8a1275ec4e04ae4d0f4f7cdb6d801aa0ceb8ec2960c9e0ea1",
+      "sha256": "c3cff66e600081f8a1275ec4e04ae4d0f4f7cdb6d801aa0ceb8ec2960c9e0ea1"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-priv.h",
+      "source": "drivers/soc/qcom/wcd-usbss-priv.h",
+      "original_sha256": "fe78aa1b31f330aea2b68f2b2220e3a94fa5094769c3f810e5f36b7e11b610c3",
+      "sha256": "fe78aa1b31f330aea2b68f2b2220e3a94fa5094769c3f810e5f36b7e11b610c3"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-reg-masks.h",
+      "source": "drivers/soc/qcom/wcd-usbss-reg-masks.h",
+      "original_sha256": "c50f82e1dbe5b71838966ef3886367aed32878d58808c0d99783a030aa75fd59",
+      "sha256": "c50f82e1dbe5b71838966ef3886367aed32878d58808c0d99783a030aa75fd59"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-reg-shifts.h",
+      "source": "drivers/soc/qcom/wcd-usbss-reg-shifts.h",
+      "original_sha256": "decf06cf3036945bdd38eac7b0d16b45d21c700c7670b0151d932d83e971b909",
+      "sha256": "decf06cf3036945bdd38eac7b0d16b45d21c700c7670b0151d932d83e971b909"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-registers.h",
+      "source": "drivers/soc/qcom/wcd-usbss-registers.h",
+      "original_sha256": "b43f29b0fd5a445fb28723aadd3c8bcbd356011b0ccb98d8ac6224aa14e3180c",
+      "sha256": "b43f29b0fd5a445fb28723aadd3c8bcbd356011b0ccb98d8ac6224aa14e3180c"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-regmap.c",
+      "source": "drivers/soc/qcom/wcd-usbss-regmap.c",
+      "original_sha256": "ae76bfac4ce17943ebd6584ef2a17efa59c45e6c6877a87a756288fdd40c6d59",
+      "sha256": "ae76bfac4ce17943ebd6584ef2a17efa59c45e6c6877a87a756288fdd40c6d59"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-tables.c",
+      "source": "drivers/soc/qcom/wcd-usbss-tables.c",
+      "original_sha256": "9aa28d4f7f031fa24599649e19e81121fa9c6c77ff656027a65ee3dfde507127",
+      "sha256": "9aa28d4f7f031fa24599649e19e81121fa9c6c77ff656027a65ee3dfde507127"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd-usbss-utils.c",
+      "source": "drivers/soc/qcom/wcd-usbss-utils.c",
+      "original_sha256": "e85516b71376fe51d6237dad003701e1df83c6d9f7c5b12d8072aca184940576",
+      "sha256": "e85516b71376fe51d6237dad003701e1df83c6d9f7c5b12d8072aca184940576"
+    },
+    {
+      "file": "ports/qcom-display-deps/wcd939x-i2c.c",
+      "source": "drivers/soc/qcom/wcd939x-i2c.c",
+      "original_sha256": "29bd20aa668b4adb3281cae8e7a22e891f90b99c8811b54ac225f2232dfdf8de",
+      "sha256": "29bd20aa668b4adb3281cae8e7a22e891f90b99c8811b54ac225f2232dfdf8de"
+    },
+    {
+      "file": "ports/qcom-display-deps/include/linux/soc/qcom/fsa4480-i2c.h",
+      "source": "include/linux/soc/qcom/fsa4480-i2c.h",
+      "original_sha256": "7c01fc5c35169c37a52b51832eae0d40551aa8ddffd2114a234ab01f17ffe796",
+      "sha256": "7c01fc5c35169c37a52b51832eae0d40551aa8ddffd2114a234ab01f17ffe796"
+    },
+    {
+      "file": "ports/qcom-display-deps/include/linux/soc/qcom/wcd939x-i2c.h",
+      "source": "include/linux/soc/qcom/wcd939x-i2c.h",
+      "original_sha256": "7bf8c4b665c6eac7b40072f8b71de96b8895ab6236d0abdbb3ae1dc43f6f7386",
+      "sha256": "7bf8c4b665c6eac7b40072f8b71de96b8895ab6236d0abdbb3ae1dc43f6f7386"
+    },
+    {
+      "file": "ports/qcom-display-deps/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "359699cbde9e7b6ef1a13d106338da5d446672e6897553792987a6e9b8690a27"
+    }
+  ],
+  "patch_sha256": "82f3acff9cf6739ce4e73b0571a251c10c2456df4bce47a4b5a77e27a0340e3b",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "gh_irq_lend, fsa4480_i2c, wcd_usbss_i2c (canoe_perf =m; imported by msm_drm) on android18-7.3",
+  "reviewed_changes": [
+    "unchanged sources; gh_irq_lend built against ports/gunyah-rm private header and avr-rm-deps.h like gh_rm_drv"
+  ],
+  "pending": [
+    "USB-C audio/DP switch and SDE VM irq lending on the phone"
+  ]
+}

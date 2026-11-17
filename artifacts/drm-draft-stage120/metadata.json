@@ -1,0 +1,18 @@
+{
+  "scope": "Unaccepted draft; QEMU display-stack load only",
+  "core_image": "changed",
+  "image_sha256": "ba3cc6fc95542fe52958c019e2f30a3e2fe314dce28601f10e66cb7e10a832b1",
+  "modules": [
+    "drm_display_helper.ko",
+    "msm_drm.ko",
+    "fsa4480_i2c.ko",
+    "gh_irq_lend.ko",
+    "wcd_usbss_i2c.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

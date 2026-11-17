@@ -1,0 +1,19 @@
+{
+ "stage": 120,
+ "qemu_runs": [
+  "reports/msm-drm-stage120-qemu.log",
+  "reports/msm-drm-stage120-r2.log",
+  "reports/msm-drm-stage120-r3.log"
+ ],
+ "results": {
+  "load": "pass",
+  "platform_drivers": 9
+ },
+ "phone_parity": {
+  "depends_equal": true,
+  "functions_common": "3853/3904"
+ },
+ "regression": "reports/regress-stage120-summary.txt",
+ "crc": "reports/regress-stage120-crc-rerun.txt",
+ "physical_verified": false
+}

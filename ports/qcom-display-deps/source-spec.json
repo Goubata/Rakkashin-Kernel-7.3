@@ -1,0 +1,27 @@
+{
+ "name": "qcom-display-deps",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-display-deps/gh_irq_lend.c": "drivers/virt/gunyah/gh_irq_lend.c",
+  "ports/qcom-display-deps/fsa4480-i2c.c": "drivers/soc/qcom/fsa4480-i2c.c",
+  "ports/qcom-display-deps/wcd-usbss-priv.h": "drivers/soc/qcom/wcd-usbss-priv.h",
+  "ports/qcom-display-deps/wcd-usbss-reg-masks.h": "drivers/soc/qcom/wcd-usbss-reg-masks.h",
+  "ports/qcom-display-deps/wcd-usbss-reg-shifts.h": "drivers/soc/qcom/wcd-usbss-reg-shifts.h",
+  "ports/qcom-display-deps/wcd-usbss-registers.h": "drivers/soc/qcom/wcd-usbss-registers.h",
+  "ports/qcom-display-deps/wcd-usbss-regmap.c": "drivers/soc/qcom/wcd-usbss-regmap.c",
+  "ports/qcom-display-deps/wcd-usbss-tables.c": "drivers/soc/qcom/wcd-usbss-tables.c",
+  "ports/qcom-display-deps/wcd-usbss-utils.c": "drivers/soc/qcom/wcd-usbss-utils.c",
+  "ports/qcom-display-deps/wcd939x-i2c.c": "drivers/soc/qcom/wcd939x-i2c.c",
+  "ports/qcom-display-deps/include/linux/soc/qcom/fsa4480-i2c.h": "include/linux/soc/qcom/fsa4480-i2c.h",
+  "ports/qcom-display-deps/include/linux/soc/qcom/wcd939x-i2c.h": "include/linux/soc/qcom/wcd939x-i2c.h",
+  "ports/qcom-display-deps/Makefile": null
+ },
+ "scope": "gh_irq_lend, fsa4480_i2c, wcd_usbss_i2c (canoe_perf =m; imported by msm_drm) on android18-7.3",
+ "reviewed_changes": [
+  "unchanged sources; gh_irq_lend built against ports/gunyah-rm private header and avr-rm-deps.h like gh_rm_drv"
+ ],
+ "pending": [
+  "USB-C audio/DP switch and SDE VM irq lending on the phone"
+ ]
+}

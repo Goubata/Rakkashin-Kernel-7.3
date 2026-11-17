@@ -1,0 +1,13 @@
+--- a/ports/drm-display-helper/Makefile
++++ b/ports/drm-display-helper/Makefile
+@@ -0,0 +1,10 @@
++# SPDX-License-Identifier: MIT
++# drm_display_helper.ko as on the phone: qcom-soc builds it from the kernel's
++# drivers/gpu/drm/display (canoe_perf.bzl CONFIG_DRM_DISPLAY_HELPER=m,
++# DP_HELPER=y) because GKI does not. Built here unchanged from android18-7.3
++# with the helpers the phone module contains: DP (+MST, dual mode), DSC, HDCP,
++# HDMI (+SCDC). 7.3 GKI selects no DRM_DISPLAY_HELPER, so the core Image is unchanged.
++obj-m += drm_display_helper.o
++drm_display_helper-y := drm_display_helper_mod.o drm_dp_dual_mode_helper.o drm_dp_helper.o \
++	drm_dp_mst_topology.o drm_dsc_helper.o drm_hdcp_helper.o drm_hdmi_helper.o drm_scdc_helper.o
++ccflags-y += -I$(srctree)/drivers/gpu/drm/display

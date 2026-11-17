@@ -1,0 +1,15 @@
+--- a/ports/qcom-display-deps/Makefile
++++ b/ports/qcom-display-deps/Makefile
+@@ -0,0 +1,12 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# qcom-soc 6.12 sources (canoe_perf.bzl): CONFIG_GH_IRQ_LEND=m, CONFIG_QCOM_FSA4480_I2C=m,
++# CONFIG_QCOM_WCD_USBSS_I2C=m; imported by msm_drm (DP altmode audio switches, SDE VM irq lending)
++obj-m += gh_irq_lend.o fsa4480_i2c.o wcd_usbss_i2c.o
++fsa4480_i2c-y := fsa4480-i2c.o
++wcd_usbss_i2c-y := wcd-usbss-regmap.o wcd-usbss-tables.o wcd-usbss-utils.o wcd939x-i2c.o
++ccflags-y += -I$(src)/include -I$(src)/../gunyah/include -I$(src)/../gunyah-rm -I$(src)/../gunyah-rm/include -I$(src)/../secure-buffer/include -I$(src)/../qcom-iommu-util/include -I$(src)/../qcom-spmi/include
++ccflags-y += -Wno-missing-prototypes -DCONFIG_GH_RM_DRV_MODULE=1 -DCONFIG_GH_IRQ_LEND_MODULE=1 \
++	-DCONFIG_QCOM_FSA4480_I2C_MODULE=1 -DCONFIG_QCOM_WCD_USBSS_I2C_MODULE=1 -DCONFIG_QTVM_WITH_AVF=1 -DCONFIG_GH_ARM64_DRV_MODULE=1 -DCONFIG_GH_DBL_MODULE=1 -DCONFIG_GH_MSGQ_MODULE=1 -DCONFIG_GUNYAH_MODULE=1 -DCONFIG_GUNYAH_QCOM_TRUSTED_VM_MODULE=1
++CFLAGS_gh_irq_lend.o += -include $(src)/../gunyah-rm/avr-rm-deps.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah-rm/Module.symvers $(src)/../gunyah/Module.symvers \
++	$(src)/../qcom-charging/Module.symvers $(src)/../qcom-spmi/Module.symvers $(src)/../gunyah-core/Module.symvers $(src)/../secure-buffer/Module.symvers

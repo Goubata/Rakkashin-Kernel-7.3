@@ -1,0 +1,1141 @@
+--- a/ports/msm-drm/msm/dp/dp_drm.c
++++ b/ports/msm-drm/msm/dp/dp_drm.c
+@@ -358,13 +358,18 @@
+ 	return ret;
+ }
+ 
++AVR_BRIDGE_ATOMIC(dp_bridge_pre_enable);
++AVR_BRIDGE_ATOMIC(dp_bridge_enable);
++AVR_BRIDGE_ATOMIC(dp_bridge_disable);
++AVR_BRIDGE_ATOMIC(dp_bridge_post_disable);
++AVR_BRIDGE_ATTACH(dp_bridge_attach);
+ static const struct drm_bridge_funcs dp_bridge_ops = {
+-	.attach       = dp_bridge_attach,
++	.attach       = dp_bridge_attach_avr_attach,
+ 	.mode_fixup   = dp_bridge_mode_fixup,
+-	.pre_enable   = dp_bridge_pre_enable,
+-	.enable       = dp_bridge_enable,
+-	.disable      = dp_bridge_disable,
+-	.post_disable = dp_bridge_post_disable,
++	.atomic_pre_enable   = dp_bridge_pre_enable_avr_atomic,
++	.atomic_enable       = dp_bridge_enable_avr_atomic,
++	.atomic_disable      = dp_bridge_disable_avr_atomic,
++	.atomic_post_disable = dp_bridge_post_disable_avr_atomic,
+ 	.mode_set     = dp_bridge_mode_set,
+ };
+ 
+--- a/ports/msm-drm/msm/dp/dp_mst_drm.c
++++ b/ports/msm-drm/msm/dp/dp_mst_drm.c
+@@ -214,7 +214,20 @@
+ 	kfree(priv_state);
+ }
+ 
++/* AVR 7.3: drm_atomic_private_obj_init() allocates the initial state through
++ * atomic_create_state (6.12 took the caller's kzalloc'ed state). */
++static struct drm_private_state *dp_mst_create_bridge_state(struct drm_private_obj *obj)
++{
++	struct dp_mst_bridge_state *state = kzalloc(sizeof(*state), GFP_KERNEL);
++
++	if (!state)
++		return ERR_PTR(-ENOMEM);
++	__drm_atomic_helper_private_obj_create_state(obj, &state->base);
++	return &state->base;
++}
++
+ static const struct drm_private_state_funcs dp_mst_bridge_state_funcs = {
++	.atomic_create_state = dp_mst_create_bridge_state,
+ 	.atomic_duplicate_state = dp_mst_duplicate_bridge_state,
+ 	.atomic_destroy_state = dp_mst_destroy_bridge_state,
+ };
+@@ -1116,13 +1129,18 @@
+ dp_mst_drm_fixed_connector_init(struct dp_display *dp_display,
+ 				struct drm_encoder *encoder);
+ 
++AVR_BRIDGE_ATOMIC(dp_mst_bridge_pre_enable);
++AVR_BRIDGE_ATOMIC(dp_mst_bridge_enable);
++AVR_BRIDGE_ATOMIC(dp_mst_bridge_disable);
++AVR_BRIDGE_ATOMIC(dp_mst_bridge_post_disable);
++AVR_BRIDGE_ATTACH(dp_mst_bridge_attach);
+ static const struct drm_bridge_funcs dp_mst_bridge_ops = {
+-	.attach       = dp_mst_bridge_attach,
++	.attach       = dp_mst_bridge_attach_avr_attach,
+ 	.mode_fixup   = dp_mst_bridge_mode_fixup,
+-	.pre_enable   = dp_mst_bridge_pre_enable,
+-	.enable       = dp_mst_bridge_enable,
+-	.disable      = dp_mst_bridge_disable,
+-	.post_disable = dp_mst_bridge_post_disable,
++	.atomic_pre_enable   = dp_mst_bridge_pre_enable_avr_atomic,
++	.atomic_enable       = dp_mst_bridge_enable_avr_atomic,
++	.atomic_disable      = dp_mst_bridge_disable_avr_atomic,
++	.atomic_post_disable = dp_mst_bridge_post_disable_avr_atomic,
+ 	.mode_set     = dp_mst_bridge_mode_set,
+ };
+ 
+@@ -1130,7 +1148,6 @@
+ {
+ 	int rc = 0;
+ 	struct dp_mst_bridge *bridge = NULL;
+-	struct dp_mst_bridge_state *state;
+ 	struct drm_device *dev;
+ 	struct dp_display *display = data;
+ 	struct msm_drm_private *priv = NULL;
+@@ -1168,15 +1185,10 @@
+ 
+ 	priv->bridges[priv->num_bridges++] = &bridge->base;
+ 
+-	state = kzalloc(sizeof(*state), GFP_KERNEL);
+-	if (state == NULL) {
+-		rc = -ENOMEM;
++	rc = drm_atomic_private_obj_init(dev, &bridge->obj,
++				    &dp_mst_bridge_state_funcs);
++	if (rc)
+ 		goto end;
+-	}
+-
+-	drm_atomic_private_obj_init(dev, &bridge->obj,
+-				    &state->base,
+-				    &dp_mst_bridge_state_funcs);
+ 
+ 	DP_MST_DEBUG("mst drm bridge init. bridge id:%d\n", i);
+ 
+@@ -1192,7 +1204,9 @@
+ 				bridge->encoder);
+ 		if (bridge->fixed_connector == NULL) {
+ 			DP_ERR("failed to create fixed connector\n");
+-			kfree(state);
++			/* AVR: unregister the private object (vendor kfree left a
++			 * freed state on privobj_list) */
++			drm_atomic_private_obj_fini(&bridge->obj);
+ 			rc = -ENOMEM;
+ 			goto end;
+ 		}
+--- a/ports/msm-drm/msm/dp/dp_pll_3nm.c
++++ b/ports/msm-drm/msm/dp/dp_pll_3nm.c
+@@ -761,14 +761,16 @@
+ 	return dp_pll_vco_div_clk_recalc_rate(hw, *parent_rate);
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_link_clk_round);
+ static const struct clk_ops pll_link_clk_ops = {
+ 	.recalc_rate = dp_pll_link_clk_recalc_rate,
+-	.round_rate = dp_pll_link_clk_round,
++	.determine_rate = dp_pll_link_clk_round_avr_determine,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_vco_div_clk_round);
+ static const struct clk_ops pll_vco_div_clk_ops = {
+ 	.recalc_rate = dp_pll_vco_div_clk_recalc_rate,
+-	.round_rate = dp_pll_vco_div_clk_round,
++	.determine_rate = dp_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data phy_pll_clks[DP_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/dp/dp_pll_4nm.c
++++ b/ports/msm-drm/msm/dp/dp_pll_4nm.c
+@@ -791,14 +791,16 @@
+ 	return dp_pll_vco_div_clk_recalc_rate(hw, *parent_rate);
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_link_clk_round);
+ static const struct clk_ops pll_link_clk_ops = {
+ 	.recalc_rate = dp_pll_link_clk_recalc_rate,
+-	.round_rate = dp_pll_link_clk_round,
++	.determine_rate = dp_pll_link_clk_round_avr_determine,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_vco_div_clk_round);
+ static const struct clk_ops pll_vco_div_clk_ops = {
+ 	.recalc_rate = dp_pll_vco_div_clk_recalc_rate,
+-	.round_rate = dp_pll_vco_div_clk_round,
++	.determine_rate = dp_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data phy_pll_clks[DP_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/dp/dp_pll_5nm.c
++++ b/ports/msm-drm/msm/dp/dp_pll_5nm.c
+@@ -773,14 +773,16 @@
+ 	return dp_pll_vco_div_clk_recalc_rate(hw, *parent_rate);
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_link_clk_round);
+ static const struct clk_ops pll_link_clk_ops = {
+ 	.recalc_rate = dp_pll_link_clk_recalc_rate,
+-	.round_rate = dp_pll_link_clk_round,
++	.determine_rate = dp_pll_link_clk_round_avr_determine,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dp_pll_vco_div_clk_round);
+ static const struct clk_ops pll_vco_div_clk_ops = {
+ 	.recalc_rate = dp_pll_vco_div_clk_recalc_rate,
+-	.round_rate = dp_pll_vco_div_clk_round,
++	.determine_rate = dp_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data phy_pll_clks[DP_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/dp/edp_pll_4nm.c
++++ b/ports/msm-drm/msm/dp/edp_pll_4nm.c
+@@ -692,14 +692,16 @@
+ 	return edp_pll_vco_div_clk_recalc_rate(hw, *parent_rate);
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(edp_pll_link_clk_round);
+ static const struct clk_ops edp_pll_link_clk_ops = {
+ 	.recalc_rate = edp_pll_link_clk_recalc_rate,
+-	.round_rate = edp_pll_link_clk_round,
++	.determine_rate = edp_pll_link_clk_round_avr_determine,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(edp_pll_vco_div_clk_round);
+ static const struct clk_ops edp_pll_vco_div_clk_ops = {
+ 	.recalc_rate = edp_pll_vco_div_clk_recalc_rate,
+-	.round_rate = edp_pll_vco_div_clk_round,
++	.determine_rate = edp_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data edp_phy_pll_clks[DP_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/dp/edp_pll_5nm.c
++++ b/ports/msm-drm/msm/dp/edp_pll_5nm.c
+@@ -692,14 +692,16 @@
+ 	return edp_pll_vco_div_clk_recalc_rate(hw, *parent_rate);
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(edp_pll_link_clk_round);
+ static const struct clk_ops edp_pll_link_clk_ops = {
+ 	.recalc_rate = edp_pll_link_clk_recalc_rate,
+-	.round_rate = edp_pll_link_clk_round,
++	.determine_rate = edp_pll_link_clk_round_avr_determine,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(edp_pll_vco_div_clk_round);
+ static const struct clk_ops edp_pll_vco_div_clk_ops = {
+ 	.recalc_rate = edp_pll_vco_div_clk_recalc_rate,
+-	.round_rate = edp_pll_vco_div_clk_round,
++	.determine_rate = edp_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data edp_phy_pll_clks[DP_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/dsi/dsi_ctrl.c
++++ b/ports/msm-drm/msm/dsi/dsi_ctrl.c
+@@ -2091,9 +2091,9 @@
+ 
+ 		msm_gem_put_iova(dsi_ctrl->tx_cmd_buf, aspace);
+ 
+-		mutex_lock(&dsi_ctrl->drm_dev->struct_mutex);
++		mutex_lock(msm_struct_mutex(dsi_ctrl->drm_dev));
+ 		msm_gem_free_object(dsi_ctrl->tx_cmd_buf);
+-		mutex_unlock(&dsi_ctrl->drm_dev->struct_mutex);
++		mutex_unlock(msm_struct_mutex(dsi_ctrl->drm_dev));
+ 		dsi_ctrl->tx_cmd_buf = NULL;
+ 	}
+ 
+--- a/ports/msm-drm/msm/dsi/dsi_display.c
++++ b/ports/msm-drm/msm/dsi/dsi_display.c
+@@ -715,9 +715,9 @@
+ 	msm_gem_address_space_unregister_cb(display->aspace,
+ 			dsi_display_aspace_cb_locked, display);
+ free_gem:
+-	mutex_lock(&display->drm_dev->struct_mutex);
++	mutex_lock(msm_struct_mutex(display->drm_dev));
+ 	msm_gem_free_object(display->tx_cmd_buf);
+-	mutex_unlock(&display->drm_dev->struct_mutex);
++	mutex_unlock(msm_struct_mutex(display->drm_dev));
+ error:
+ 	return rc;
+ }
+--- a/ports/msm-drm/msm/dsi/dsi_display_mot_ext.c
++++ b/ports/msm-drm/msm/dsi/dsi_display_mot_ext.c
+@@ -52,7 +52,8 @@
+ 
+ extern const char *cmd_set_prop_map[DSI_CMD_SET_MAX];
+ 
+-static enum alarmtimer_restart dsi_display_wakeup_timer_func(struct alarm *alarm, ktime_t now)
++/* AVR 7.3: alarm callbacks return void (no restart, as NORESTART on 6.12) */
++static void dsi_display_wakeup_timer_func(struct alarm *alarm, ktime_t now)
+ {
+ 	ktime_t start, add;
+ 	int randomTime = 0;
+@@ -64,11 +65,9 @@
+ 		start = ktime_get_boottime();
+ 		//randomTime = prandom_u32_max(g_wakeup_timer_interval) + g_wakeup_timer_interval;
+ 		add = ktime_set(randomTime, 0);
+-		alarm_start(g_wakeup_timer, ktime_add(start, add));
++		alarm_start_timer(g_wakeup_timer, ktime_add(start, add), false);
+ 		pr_info("%s: randomTimer %d seconds set\n", __func__, randomTime);
+ 	}
+-
+-	return ALARMTIMER_NORESTART;
+ }
+ 
+ int mot_atoi(const char *src)
+@@ -1038,7 +1037,7 @@
+ 	if (val&0x8000) {
+ 		now = ktime_get_boottime();
+ 		add = ktime_set(g_wakeup_timer_interval, 0);
+-		alarm_start(g_wakeup_timer, ktime_add(now, add));
++		alarm_start_timer(g_wakeup_timer, ktime_add(now, add), false);
+ 	}else {
+ 		if (g_wakeup_timer)
+ 			alarm_cancel(g_wakeup_timer);
+--- a/ports/msm-drm/msm/dsi/dsi_drm.c
++++ b/ports/msm-drm/msm/dsi/dsi_drm.c
+@@ -779,13 +779,18 @@
+ 	return 0;
+ }
+ 
++AVR_BRIDGE_ATOMIC(dsi_bridge_pre_enable);
++AVR_BRIDGE_ATOMIC(dsi_bridge_enable);
++AVR_BRIDGE_ATOMIC(dsi_bridge_disable);
++AVR_BRIDGE_ATOMIC(dsi_bridge_post_disable);
++AVR_BRIDGE_ATTACH(dsi_bridge_attach);
+ static const struct drm_bridge_funcs dsi_bridge_ops = {
+-	.attach       = dsi_bridge_attach,
++	.attach       = dsi_bridge_attach_avr_attach,
+ 	.mode_fixup   = dsi_bridge_mode_fixup,
+-	.pre_enable   = dsi_bridge_pre_enable,
+-	.enable       = dsi_bridge_enable,
+-	.disable      = dsi_bridge_disable,
+-	.post_disable = dsi_bridge_post_disable,
++	.atomic_pre_enable   = dsi_bridge_pre_enable_avr_atomic,
++	.atomic_enable       = dsi_bridge_enable_avr_atomic,
++	.atomic_disable      = dsi_bridge_disable_avr_atomic,
++	.atomic_post_disable = dsi_bridge_post_disable_avr_atomic,
+ 	.mode_set     = dsi_bridge_mode_set,
+ };
+ 
+--- a/ports/msm-drm/msm/dsi/dsi_pll_3nm.c
++++ b/ports/msm-drm/msm/dsi/dsi_pll_3nm.c
+@@ -817,18 +817,20 @@
+ 	return pclk_rate;
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_byteclk_round_rate);
+ static const struct clk_ops pll_byteclk_ops = {
+ 	.recalc_rate = dsi_pll_byteclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_byteclk_round_rate,
++	.determine_rate = dsi_pll_byteclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_pclk_round_rate);
+ static const struct clk_ops pll_pclk_ops = {
+ 	.recalc_rate = dsi_pll_pclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_pclk_round_rate,
++	.determine_rate = dsi_pll_pclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+--- a/ports/msm-drm/msm/dsi/dsi_pll_4nm.c
++++ b/ports/msm-drm/msm/dsi/dsi_pll_4nm.c
+@@ -804,18 +804,20 @@
+ 	return pclk_rate;
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_byteclk_round_rate);
+ static const struct clk_ops pll_byteclk_ops = {
+ 	.recalc_rate = dsi_pll_byteclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_byteclk_round_rate,
++	.determine_rate = dsi_pll_byteclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_pclk_round_rate);
+ static const struct clk_ops pll_pclk_ops = {
+ 	.recalc_rate = dsi_pll_pclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_pclk_round_rate,
++	.determine_rate = dsi_pll_pclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+--- a/ports/msm-drm/msm/dsi/dsi_pll_5nm.c
++++ b/ports/msm-drm/msm/dsi/dsi_pll_5nm.c
+@@ -855,18 +855,20 @@
+ 	return pclk_rate;
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_byteclk_round_rate);
+ static const struct clk_ops pll_byteclk_ops = {
+ 	.recalc_rate = dsi_pll_byteclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_byteclk_round_rate,
++	.determine_rate = dsi_pll_byteclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(dsi_pll_pclk_round_rate);
+ static const struct clk_ops pll_pclk_ops = {
+ 	.recalc_rate = dsi_pll_pclk_recalc_rate,
+ 	.set_rate = dsi_pll_set_rate_stub,
+-	.round_rate = dsi_pll_pclk_round_rate,
++	.determine_rate = dsi_pll_pclk_round_rate_avr_determine,
+ 	.prepare = dsi_pll_prepare_stub,
+ 	.unprepare = dsi_pll_unprepare_stub,
+ };
+--- a/ports/msm-drm/msm/dsi/hfi/dsi_display_hfi.c
++++ b/ports/msm-drm/msm/dsi/hfi/dsi_display_hfi.c
+@@ -495,9 +495,9 @@
+ 	msm_gem_address_space_unregister_cb(display->aspace,
+ 			dsi_display_aspace_cb_locked, display);
+ free_gem:
+-	mutex_lock(&display->drm_dev->struct_mutex);
++	mutex_lock(msm_struct_mutex(display->drm_dev));
+ 	msm_gem_free_object(display->tx_cmd_buf);
+-	mutex_unlock(&display->drm_dev->struct_mutex);
++	mutex_unlock(msm_struct_mutex(display->drm_dev));
+ error:
+ 	return rc;
+ }
+--- a/ports/msm-drm/msm/hdmi/hdmi_drm.c
++++ b/ports/msm-drm/msm/hdmi/hdmi_drm.c
+@@ -633,13 +633,18 @@
+ 	return ret;
+ }
+ 
++AVR_BRIDGE_ATOMIC(hdmi_bridge_pre_enable);
++AVR_BRIDGE_ATOMIC(hdmi_bridge_enable);
++AVR_BRIDGE_ATOMIC(hdmi_bridge_disable);
++AVR_BRIDGE_ATOMIC(hdmi_bridge_post_disable);
++AVR_BRIDGE_ATTACH(hdmi_bridge_attach);
+ static const struct drm_bridge_funcs hdmi_bridge_ops = {
+-	.attach       = hdmi_bridge_attach,
++	.attach       = hdmi_bridge_attach_avr_attach,
+ 	.mode_fixup   = hdmi_bridge_mode_fixup,
+-	.pre_enable   = hdmi_bridge_pre_enable,
+-	.enable       = hdmi_bridge_enable,
+-	.disable      = hdmi_bridge_disable,
+-	.post_disable = hdmi_bridge_post_disable,
++	.atomic_pre_enable   = hdmi_bridge_pre_enable_avr_atomic,
++	.atomic_enable       = hdmi_bridge_enable_avr_atomic,
++	.atomic_disable      = hdmi_bridge_disable_avr_atomic,
++	.atomic_post_disable = hdmi_bridge_post_disable_avr_atomic,
+ 	.mode_set     = hdmi_bridge_mode_set,
+ };
+ 
+--- a/ports/msm-drm/msm/hdmi/hdmi_pll_snps.c
++++ b/ports/msm-drm/msm/hdmi/hdmi_pll_snps.c
+@@ -607,9 +607,10 @@
+ 	return 0;
+ }
+ 
++AVR_CLK_DETERMINE_FROM_ROUND(hdmi_pll_vco_div_clk_round);
+ static const struct clk_ops hdmi_phy_pll_clk_ops = {
+ 	.recalc_rate    = hdmi_pll_vco_div_clk_recalc_rate,
+-	.round_rate     = hdmi_pll_vco_div_clk_round,
++	.determine_rate = hdmi_pll_vco_div_clk_round_avr_determine,
+ };
+ 
+ static struct clk_init_data phy_pll_clks[HDMI_PLL_NUM_CLKS] = {
+--- a/ports/msm-drm/msm/msm_cooling_device.c
++++ b/ports/msm-drm/msm/msm_cooling_device.c
+@@ -80,7 +80,7 @@
+ 	else
+ 		disp_cdev->cdev_sf = 1;
+ 
+-	disp_cdev->cdev = thermal_of_cooling_device_register(dev->of_node,
++	disp_cdev->cdev = thermal_of_cooling_device_register(dev->of_node, 0,
+ 				(char *)dev_name(&bd->dev), disp_cdev,
+ 				&sde_cdev_ops);
+ 	if (IS_ERR_OR_NULL(disp_cdev->cdev)) {
+--- a/ports/msm-drm/msm/msm_drv.c
++++ b/ports/msm-drm/msm/msm_drv.c
+@@ -953,6 +953,7 @@
+ 
+ 	ddev->dev_private = priv;
+ 	priv->dev = ddev;
++	mutex_init(&priv->struct_mutex);
+ 
+ 	ret = hfi_msm_drv_init(ddev);
+ 	if (ret)
+@@ -1323,9 +1324,13 @@
+ 	msm_atomic_flush_display_threads(priv);
+ 
+ 	if (priv->fbdev) {
+-		rc = drm_fb_helper_restore_fbdev_mode_unlocked(priv->fbdev);
++		/* AVR 7.3: force argument added (6.12 used false); only built with
++		 * fbdev emulation, which is the only way priv->fbdev gets set */
++#if IS_ENABLED(CONFIG_DRM_FBDEV_EMULATION)
++		rc = drm_fb_helper_restore_fbdev_mode_unlocked(priv->fbdev, false);
+ 		if (rc)
+ 			DRM_ERROR("restore FBDEV mode failed: %d\n", rc);
++#endif
+ #if (KERNEL_VERSION(6, 13, 0) > LINUX_VERSION_CODE)
+ 	} else if (kms && kms->client.dev) {
+ 		rc = drm_client_modeset_commit_locked(&kms->client);
+@@ -1357,10 +1362,10 @@
+ 	if (kms->funcs && kms->funcs->postclose)
+ 		kms->funcs->postclose(kms, file);
+ 
+-	mutex_lock(&dev->struct_mutex);
++	mutex_lock(msm_struct_mutex(dev));
+ 	if (ctx == priv->lastctx)
+ 		priv->lastctx = NULL;
+-	mutex_unlock(&dev->struct_mutex);
++	mutex_unlock(msm_struct_mutex(dev));
+ 
+ 	mutex_lock(&ctx->power_lock);
+ 	if (ctx->enable_refcnt) {
+@@ -1458,7 +1463,7 @@
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = mutex_lock_interruptible(&dev->struct_mutex);
++	ret = mutex_lock_interruptible(msm_struct_mutex(dev));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1477,7 +1482,7 @@
+ 	drm_gem_object_put(obj);
+ 
+ unlock:
+-	mutex_unlock(&dev->struct_mutex);
++	mutex_unlock(msm_struct_mutex(dev));
+ 	return ret;
+ }
+ 
+--- a/ports/msm-drm/msm/msm_drv.h
++++ b/ports/msm-drm/msm/msm_drv.h
+@@ -1295,6 +1295,9 @@
+ 
+ 	struct drm_device *dev;
+ 
++	/* AVR 7.3: drm_device.struct_mutex was removed; same driver-wide scope */
++	struct mutex struct_mutex;
++
+ 	struct msm_kms *kms;
+ 
+ 	struct sde_power_handle phandle;
+@@ -1634,7 +1637,8 @@
+ 		const struct drm_mode_fb_cmd2 *mode_cmd,
+ 		struct drm_gem_object **bos);
+ struct drm_framebuffer *msm_framebuffer_create(struct drm_device *dev,
+-		struct drm_file *file, const struct drm_mode_fb_cmd2 *mode_cmd);
++		struct drm_file *file, const struct drm_format_info *fb_info,
++		const struct drm_mode_fb_cmd2 *mode_cmd);
+ int msm_framebuffer_set_cache_hint(struct drm_framebuffer *fb,
+ 		u32 flags, u32 rd_type, u32 wr_type);
+ int msm_framebuffer_get_cache_hint(struct drm_framebuffer *fb,
+@@ -1982,4 +1986,10 @@
+  * Return: true if the IOMMU is present, false otherwise.
+  */
+ bool mdss_iommu_present(struct drm_device *dev);
++/* AVR 7.3: replacement for the removed drm_device.struct_mutex */
++static inline struct mutex *msm_struct_mutex(struct drm_device *dev)
++{
++	return &((struct msm_drm_private *)dev->dev_private)->struct_mutex;
++}
++
+ #endif /* __MSM_DRV_H__ */
+--- a/ports/msm-drm/msm/msm_fb.c
++++ b/ports/msm-drm/msm/msm_fb.c
+@@ -143,10 +143,11 @@
+ }
+ 
+ struct drm_framebuffer *msm_framebuffer_create(struct drm_device *dev,
+-		struct drm_file *file, const struct drm_mode_fb_cmd2 *mode_cmd)
+-{
+-	const struct drm_format_info *info = drm_get_format_info(dev,
+-								mode_cmd);
++		struct drm_file *file, const struct drm_format_info *fb_info,
++		const struct drm_mode_fb_cmd2 *mode_cmd)
++{
++	/* AVR 7.3: fb_create gained the core-looked-up format info (same lookup) */
++	const struct drm_format_info *info = drm_get_format_info(dev, (mode_cmd)->pixel_format, (mode_cmd)->modifier[0]);
+ 	struct drm_gem_object *bos[4] = {0};
+ 	struct drm_framebuffer *fb;
+ 	int ret, i, n = info->num_planes;
+@@ -177,8 +178,7 @@
+ 		const struct drm_mode_fb_cmd2 *mode_cmd,
+ 		struct drm_gem_object **bos)
+ {
+-	const struct drm_format_info *info = drm_get_format_info(dev,
+-								mode_cmd);
++	const struct drm_format_info *info = drm_get_format_info(dev, (mode_cmd)->pixel_format, (mode_cmd)->modifier[0]);
+ 	struct msm_drm_private *priv = dev->dev_private;
+ 	struct msm_kms *kms = priv->kms;
+ 	struct msm_framebuffer *msm_fb = NULL;
+@@ -267,7 +267,7 @@
+ 	for (i = 0; i < num_planes; i++)
+ 		msm_fb->base.obj[i] = bos[i];
+ 
+-	drm_helper_mode_fill_fb_struct(dev, fb, mode_cmd);
++	drm_helper_mode_fill_fb_struct(dev, fb, info, mode_cmd);
+ 
+ 	ret = drm_framebuffer_init(dev, fb, &msm_framebuffer_funcs);
+ 	if (ret) {
+--- a/ports/msm-drm/msm/msm_gem.c
++++ b/ports/msm-drm/msm/msm_gem.c
+@@ -21,7 +21,6 @@
+ #include <linux/spinlock.h>
+ #include <linux/shmem_fs.h>
+ #include <linux/dma-buf.h>
+-#include <linux/pfn_t.h>
+ #include <linux/version.h>
+ #include <linux/vmalloc.h>
+ #include <linux/module.h>
+@@ -311,7 +310,7 @@
+ 	VERB("Inserting %pK pfn %lx, pa %lx", (void *)vmf->address,
+ 			pfn, pfn << PAGE_SHIFT);
+ 
+-	ret = vmf_insert_mixed(vma, vmf->address, __pfn_to_pfn_t(pfn, PFN_DEV));
++	ret = vmf_insert_mixed(vma, vmf->address, pfn); /* AVR 7.3: pfn_t removed */
+ out_unlock:
+ 	mutex_unlock(&msm_obj->lock);
+ out:
+@@ -809,7 +808,7 @@
+ 
+ 	mutex_lock(&msm_obj->lock);
+ 
+-	WARN_ON(!mutex_is_locked(&obj->dev->struct_mutex));
++	WARN_ON(!mutex_is_locked(msm_struct_mutex(obj->dev)));
+ 
+ 	if (msm_obj->madv != __MSM_MADV_PURGED)
+ 		msm_obj->madv = madv;
+--- a/ports/msm-drm/msm/sde/sde_core_irq.c
++++ b/ports/msm-drm/msm/sde/sde_core_irq.c
+@@ -597,7 +597,7 @@
+ 
+ 	dev = sde_kms->dev->dev;
+ 
+-	domain = irq_domain_add_linear(dev->of_node, 32,
++	domain = irq_domain_create_linear(of_fwnode_handle(dev->of_node), 32,
+ 			&sde_core_irqdomain_ops, sde_kms);
+ 	if (!domain) {
+ 		pr_err("failed to add irq_domain\n");
+--- a/ports/msm-drm/msm/sde/sde_encoder_phys_wb.c
++++ b/ports/msm-drm/msm/sde/sde_encoder_phys_wb.c
+@@ -2656,7 +2656,7 @@
+ 	}
+ 
+ 	/* allocate gem tracking object */
+-	info = drm_get_format_info(dev, &mode_cmd);
++	info = drm_get_format_info(dev, (&mode_cmd)->pixel_format, (&mode_cmd)->modifier[0]);
+ 	nplanes = info->num_planes;
+ 	if (nplanes >= SDE_MAX_PLANES) {
+ 		SDE_ERROR("[enc:%d wb:%d] requested format has too many planes:%d\n",
+--- a/ports/msm-drm/msm/sde/sde_fence.c
++++ b/ports/msm-drm/msm/sde/sde_fence.c
+@@ -460,8 +460,9 @@
+ 		}
+ 
+ 		seqno = data->hw_fence_array_seqno++;
++		/* AVR 7.3: signal_on_any dropped; 0 (= wait for all) is the 7.3 behaviour */
+ 		temp_array = dma_fence_array_create(fence_list_index, fence_list,
+-				data->dma_context, seqno, 0);
++				data->dma_context, seqno);
+ 		if (!temp_array) {
+ 			SDE_ERROR("unable to create fence array, cant register for wait\n");
+ 			_cleanup_fences_refcount(fences, num_fences);
+@@ -880,14 +881,22 @@
+ 		dma_fence_put(fence);
+ }
+ 
++static struct dma_fence_ops sde_fence_ops;
++static void sde_fence_timeline_value_str(struct dma_fence *fence, char *str, int size);
++/* AVR 7.3: replaces dma_fence_ops.timeline_value_str (removed); only sde fences had one */
++static void avr_fence_timeline_str(struct dma_fence *fence, char *str, int size)
++{
++	if (fence->ops == &sde_fence_ops)
++		sde_fence_timeline_value_str(fence, str, size);
++}
++
+ void sde_fence_dump(struct dma_fence *fence)
+ {
+ 	struct dma_fence_array *array = NULL;
+-	char timeline_str[TIMELINE_VAL_LENGTH];
++	char timeline_str[TIMELINE_VAL_LENGTH] = "";
+ 	uint32_t i;
+ 
+-	if (fence->ops->timeline_value_str)
+-		fence->ops->timeline_value_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
++	avr_fence_timeline_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
+ 
+ 	SDE_ERROR(
+ 		"fence drv name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x status:%d flags:0x%lx\n",
+@@ -1045,7 +1054,7 @@
+ 	}
+ }
+ 
+-static void sde_fence_value_str(struct dma_fence *fence, char *str, int size)
++static void __maybe_unused sde_fence_value_str(struct dma_fence *fence, char *str, int size)
+ {
+ 	if (!fence || !str)
+ 		return;
+@@ -1071,8 +1080,7 @@
+ 	.signaled = sde_fence_signaled,
+ 	.wait = dma_fence_default_wait,
+ 	.release = sde_fence_release,
+-	.fence_value_str = sde_fence_value_str,
+-	.timeline_value_str = sde_fence_timeline_value_str,
++	/* AVR 7.3: dma_fence_ops value_str hooks removed; used directly by the dumps */
+ };
+ 
+ /**
+@@ -1367,11 +1375,9 @@
+ 
+ void sde_fence_list_dump(struct dma_fence *fence, struct seq_file **s)
+ {
+-	char timeline_str[TIMELINE_VAL_LENGTH];
+-
+-	if (fence->ops->timeline_value_str)
+-		fence->ops->timeline_value_str(fence,
+-		timeline_str, TIMELINE_VAL_LENGTH);
++	char timeline_str[TIMELINE_VAL_LENGTH] = "";
++
++	avr_fence_timeline_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
+ 
+ 	seq_printf(*s, "fence name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x\n",
+ 		fence->ops->get_driver_name(fence),
+--- a/ports/msm-drm/msm/sde/sde_hw_reg_dma_v1.c
++++ b/ports/msm-drm/msm/sde/sde_hw_reg_dma_v1.c
+@@ -1643,9 +1643,9 @@
+ 	msm_gem_address_space_unregister_cb(aspace,
+ 			sde_reg_dma_aspace_cb_locked, dma_buf);
+ free_gem:
+-	mutex_lock(&reg_dma[dpu_idx]->drm_dev->struct_mutex);
++	mutex_lock(msm_struct_mutex(reg_dma[dpu_idx]->drm_dev));
+ 	msm_gem_free_object(dma_buf->buf);
+-	mutex_unlock(&reg_dma[dpu_idx]->drm_dev->struct_mutex);
++	mutex_unlock(msm_struct_mutex(reg_dma[dpu_idx]->drm_dev));
+ fail:
+ 	kfree(dma_buf);
+ 	return ERR_PTR(rc);
+@@ -1667,9 +1667,9 @@
+ 		msm_gem_put_iova(dma_buf->buf, 0);
+ 		msm_gem_address_space_unregister_cb(dma_buf->aspace,
+ 				sde_reg_dma_aspace_cb_locked, dma_buf);
+-		mutex_lock(&reg_dma[dpu_idx]->drm_dev->struct_mutex);
++		mutex_lock(msm_struct_mutex(reg_dma[dpu_idx]->drm_dev));
+ 		msm_gem_free_object(dma_buf->buf);
+-		mutex_unlock(&reg_dma[dpu_idx]->drm_dev->struct_mutex);
++		mutex_unlock(msm_struct_mutex(reg_dma[dpu_idx]->drm_dev));
+ 	}
+ 
+ 	kfree(dma_buf);
+--- a/ports/msm-drm/msm/sde/sde_rm.c
++++ b/ports/msm-drm/msm/sde/sde_rm.c
+@@ -1299,7 +1299,7 @@
+ 		u32 conn_lm_mask)
+ {
+ 	const struct sde_lm_cfg *lm_cfg = to_sde_hw_mixer(lm->hw)->cap;
+-	const struct sde_pingpong_cfg *pp_cfg;
++	const struct sde_pingpong_cfg *pp_cfg = NULL; /* AVR: the callee overwrites it before use; init for -Wuninitialized */
+ 	bool ret, is_conn_primary, is_conn_secondary;
+ 	u32 lm_primary_pref, lm_secondary_pref, cwb_pref, dcwb_pref;
+ 	u32 cac_lb_pref, cac_primary_pref;
+--- a/ports/msm-drm/Makefile
++++ b/ports/msm-drm/Makefile
+@@ -0,0 +1,195 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# AVR 7.3 port of vendor/qcom/opensource/display-drivers msm_drm for canoe.
++# Sources = display_modules.bzl config_srcs for the canoe target config_options
++# (targets/canoe.bzl); defines = those options (ddk local_defines). Vendor Kbuild kept as Kbuild.vendor.
++obj-m += msm_drm.o
++msm_drm-y := msm/msm_atomic.o \
++	msm/msm_fb.o \
++	msm/msm_drv.o \
++	msm/msm_gem.o \
++	msm/msm_gem_prime.o \
++	msm/msm_gem_vma.o \
++	msm/msm_smmu.o \
++	msm/msm_prop.o \
++	msm/sde/sde_crtc.o \
++	msm/sde/sde_encoder.o \
++	msm/sde/sde_encoder_dce.o \
++	msm/sde/sde_encoder_phys_vid.o \
++	msm/sde/sde_encoder_phys_cmd.o \
++	msm/sde/sde_irq.o \
++	msm/sde/sde_core_irq.o \
++	msm/sde/sde_core_perf.o \
++	msm/sde/sde_rm.o \
++	msm/sde/sde_kms_utils.o \
++	msm/sde/sde_kms.o \
++	msm/sde/sde_plane.o \
++	msm/sde/sde_connector.o \
++	msm/sde/sde_color_processing.o \
++	msm/sde/sde_vbif.o \
++	msm/sde_dbg.o \
++	msm/sde_dbg_evtlog.o \
++	msm/sde_io_util.o \
++	msm/sde_vm_event.o \
++	msm/sde/sde_hw_reg_dma_v1_color_proc.o \
++	msm/sde/sde_hw_color_proc_v4.o \
++	msm/sde/sde_hw_ad4.o \
++	msm/sde/sde_hw_uidle.o \
++	msm/sde_edid_parser.o \
++	msm/sde/sde_hw_catalog.o \
++	msm/sde/sde_hw_cdm.o \
++	msm/sde/sde_hw_dspp.o \
++	msm/sde/sde_hw_intf.o \
++	msm/sde/sde_hw_lm.o \
++	msm/sde/sde_hw_ctl.o \
++	msm/sde/sde_hw_util.o \
++	msm/sde/sde_hw_sspp_v1.o \
++	msm/sde/sde_hw_sspp.o \
++	msm/sde/sde_hw_wb.o \
++	msm/sde/sde_hw_pingpong.o \
++	msm/sde/sde_hw_top.o \
++	msm/sde/sde_hw_interrupts.o \
++	msm/sde/sde_hw_vbif.o \
++	msm/sde/sde_formats.o \
++	msm/sde_power_handle.o \
++	msm/sde/sde_hw_color_processing_v1_7.o \
++	msm/sde/sde_reg_dma.o \
++	msm/sde/sde_hw_reg_dma_v1.o \
++	msm/sde/sde_hw_dsc.o \
++	msm/sde/sde_hw_dsc_1_2.o \
++	msm/sde/sde_hw_vdc.o \
++	msm/sde/sde_hw_ds.o \
++	msm/sde/sde_fence.o \
++	msm/sde/sde_hw_qdss.o \
++	msm/sde_dsc_helper.o \
++	msm/sde_vdc_helper.o \
++	msm/sde/sde_hw_dnsc_blur.o \
++	msm/sde/sde_hw_rc.o \
++	msm/sde/sde_color_proc_property_helper.o \
++	msm/sde/sde_color_processing_aiqe.o \
++	msm/sde/sde_hw_color_proc_aiqe_v1.o \
++	msm/sde/sde_aiqe_common.o \
++	msm/sde/sde_loopback.o \
++	msm/sde/sde_motUtil.o \
++	msm/sde/sde_color_proc_feature_state_helper.o \
++	msm/dsi/dsi_phy.o \
++	msm/dsi/dsi_pwr.o \
++	msm/dsi/dsi_phy_hw_v3_0.o \
++	msm/dsi/dsi_phy_hw_v4_0.o \
++	msm/dsi/dsi_phy_hw_v5_0.o \
++	msm/dsi/dsi_phy_hw_v7_2.o \
++	msm/dsi/dsi_phy_timing_calc.o \
++	msm/dsi/dsi_phy_timing_v3_0.o \
++	msm/dsi/dsi_phy_timing_v4_0.o \
++	msm/dsi/dsi_pll.o \
++	msm/dsi/dsi_pll_5nm.o \
++	msm/dsi/dsi_pll_4nm.o \
++	msm/dsi/dsi_pll_3nm.o \
++	msm/dsi/dsi_ctrl_hw_cmn.o \
++	msm/dsi/dsi_ctrl_hw_2_2.o \
++	msm/dsi/dsi_ctrl.o \
++	msm/dsi/dsi_catalog.o \
++	msm/dsi/dsi_drm.o \
++	msm/dsi/dsi_display.o \
++	msm/dsi/dsi_display_manager.o \
++	msm/dsi/dsi_panel.o \
++	msm/dsi/dsi_clk_manager.o \
++	msm/dsi/dsi_display_test.o \
++	msm/dsi/dsi_display_mot_ext.o \
++	msm/hfi/hfi_adapter.o \
++	msm/hfi/hfi_packer.o \
++	msm/hfi/hfi_unpacker.o \
++	msm/hfi/hfi_utils.o \
++	msm/hfi/hfi_msm_drv.o \
++	msm/hfi/hfi_dbg.o \
++	msm/sde/hfi/hfi_catalog.o \
++	msm/sde/hfi/hfi_connector.o \
++	msm/sde/hfi/hfi_crtc.o \
++	msm/sde/hfi/hfi_encoder.o \
++	msm/sde/hfi/hfi_kms.o \
++	msm/sde/hfi/hfi_plane.o \
++	msm/sde/hfi/hfi_color_proc.o \
++	msm/dsi/hfi/dsi_display_hfi.o \
++	msm/dsi/hfi/dsi_hfi.o \
++	msm/sde/hfi/hfi_wb.o \
++	msm/dp/dp_altmode.o \
++	msm/dp/dp_parser.o \
++	msm/dp/dp_power.o \
++	msm/dp/dp_catalog.o \
++	msm/dp/dp_catalog_v420.o \
++	msm/dp/dp_catalog_v200.o \
++	msm/dp/dp_catalog_v500.o \
++	msm/dp/dp_aux.o \
++	msm/dp/dp_panel.o \
++	msm/dp/dp_panel_tu.o \
++	msm/dp/dp_link.o \
++	msm/dp/dp_ctrl.o \
++	msm/dp/dp_audio.o \
++	msm/dp/dp_debug.o \
++	msm/dp/dp_hpd.o \
++	msm/dp/dp_aux_bridge.o \
++	msm/dp/dp_bridge_hpd.o \
++	msm/dp/dp_mst_sim.o \
++	msm/dp/dp_mst_sim_helper.o \
++	msm/dp/dp_gpio_hpd.o \
++	msm/dp/dp_lphw_hpd.o \
++	msm/dp/dp_display.o \
++	msm/dp/dp_drm.o \
++	msm/dp/dp_pll.o \
++	msm/dp/dp_pll_5nm.o \
++	msm/dp/dp_pll_4nm.o \
++	msm/dp/dp_pll_3nm.o \
++	msm/dp/edp_pll_5nm.o \
++	msm/dp/edp_pll_4nm.o \
++	msm/dp/dp_mst_drm.o \
++	msm/dsi/dsi_parser.o \
++	msm/sde/sde_wb.o \
++	msm/sde/sde_encoder_phys_wb.o \
++	hdcp/msm_hdcp.o \
++	msm/dp/dp_hdcp2p2.o \
++	msm/sde_hdcp_1x.o \
++	msm/sde_hdcp_2x.o \
++	msm/sde/sde_vm_common.o \
++	msm/sde/sde_vm_primary.o \
++	msm/sde/sde_vm_trusted.o \
++	msm/sde/sde_vm_msgq.o \
++	msm/msm_cooling_device.o \
++	msm/sde_rsc.o \
++	msm/sde_rsc_hw.o \
++	msm/sde_rsc_hw_v3.o \
++	msm/sde_cesta.o \
++	msm/sde_cesta_hw.o
++ccflags-y += -DCONFIG_DRM_MSM=1 -DCONFIG_DRM_MSM_SDE=1 -DCONFIG_SYNC_FILE=1 -DCONFIG_DRM_MSM_DSI=1 -DCONFIG_QTI_HFI_CORE=1 -DCONFIG_MDSS_HFI_ADAPTER=1 -DCONFIG_MDSS_HFI=1 -DCONFIG_DRM_MSM_DP=1 -DCONFIG_DRM_MSM_DP_MST=1 -DCONFIG_DSI_PARSER=1 -DCONFIG_DRM_SDE_WB=1 -DCONFIG_DRM_MSM_REGISTER_LOGGING=1 -DCONFIG_QCOM_MDSS_PLL=1 -DCONFIG_HDCP_QSEECOM=1 -DCONFIG_DRM_SDE_VM=1 -DCONFIG_QCOM_WCD939X_I2C=1 -DCONFIG_THERMAL_OF=1 -DCONFIG_QCOM_SPEC_SYNC=1 -DCONFIG_MSM_EXT_DISPLAY=1 -DCONFIG_DRM_SDE_RSC=1 -DCONFIG_DRM_SDE_CESTA=1 -DCONFIG_QTI_HW_FENCE=1 -DCONFIG_DSI_EXTENDED_MODES=1
++ccflags-y += -I$(src) -I$(src)/include -I$(src)/include/linux -I$(src)/include/uapi/display \
++	-I$(src)/msm -I$(src)/msm/dp -I$(src)/msm/dsi -I$(src)/msm/hfi -I$(src)/msm/sde/hfi \
++	-I$(src)/msm/dsi/hfi -I$(src)/msm/sde
++ccflags-y += -DANI_LITTLE_BYTE_ENDIAN -DANI_LITTLE_BIT_ENDIAN -DDOT11F_LITTLE_ENDIAN_HOST \
++	-DANI_COMPILER_TYPE_GCC -DANI_OS_TYPE_ANDROID=6 -DPTT_SOCK_SVC_ENABLE -D__linux__
++ccflags-y += -Wno-missing-prototypes
++# vendor dependency headers (ported modules)
++ccflags-y += -I$(src)/../mm-drivers/msm_ext_display/include -I$(src)/../mm-drivers/sync_fence/include \
++	-I$(src)/../mm-drivers/hfi_core/inc -I$(src)/../qti-fence/hw_fence/include \
++	-I$(src)/../qti-fence/include -I$(src)/../securemsm/include -I$(src)/../securemsm/include/linux \
++	-I$(src)/../securemsm/smmu-proxy/include/uapi -I$(src)/../securemsm/smmu-proxy \
++	-I$(src)/../qcom-display-deps/include
++ccflags-y += -I$(src)/../mm-drivers/include -I$(src)/../qcom-iommu-util/include -I$(src)/../qcom-socinfo/include -I$(src)/../qcom-panel-event/include -I$(src)/../qcom-clock-core/include -I$(src)/../qcom-ipc-logging/include -I$(src)/../qcom-minidump/include -I$(src)/../qcom-debug-diag/include -I$(src)/../qcom-dma-heaps/include -I$(src)/../qcom-usb/include -I$(src)/../qcom-charging/include -I$(src)/../qcom-rpmh/include -I$(src)/../gunyah/include -I$(src)/../gunyah-rm/include -I$(src)/../secure-buffer/include -I$(src)/../qcom-pmic-glink/include 
++ccflags-y += -include $(src)/avr-canoe-vendor-config.h -include $(src)/avr-drm-compat.h
++ccflags-y += -I$(src)/../qti-fence/synx/msm/synx -I$(src)/../qcom-dcvs/include -I$(src)/../usb-repeater/include -I$(src)/../qcom-spmi/include -I$(src)/../pinctrl-alor-vendor-core/include
++ccflags-y += -I$(src)/../qti-fence/synx/include/uapi/synx/media
++# vendor files define pr_fmt after the force-included compat header pulled printk.h in;
++# the later definition is the one used at expansion, as in the vendor build.
++ccflags-y += -Wno-macro-redefined
++# vendor Kbuild also searches $(KERNEL_SRC)/include/linux and .../drm; keep them after
++# the vendor dependency headers so e.g. <soc/qcom/socinfo.h> resolves to the vendor one
++ccflags-y += -I$(src)/msm/hdmi -I$(src)/rotator -include $(src)/../qcom-interconnect/include/dt-bindings/interconnect/qcom,icc.h -I$(src)/../qcom-interconnect/include -I$(srctree)/include/linux -I$(srctree)/include/drm
++# vendor APIs whose declarations live in headers shadowed by 7.3 ones (providers ported)
++ccflags-y += -include $(src)/../qcom-clock-core/qcom-vendor-clock.h -include $(src)/../qcom-rpmh/rpmh-vendor-api.h \
++	-include $(src)/avr-llcc-display.h -DCONFIG_QCOM_SOCINFO_MODULE=1
++KBUILD_EXTRA_SYMBOLS += $(src)/../drm-display-helper/Module.symvers $(src)/../mm-drivers/Module.symvers \
++	$(src)/../securemsm/Module.symvers $(src)/../qti-fence/Module.symvers $(src)/../qcom-socinfo/Module.symvers \
++	$(src)/../qcom-rpmh/Module.symvers $(src)/../qcom-llcc/Module.symvers $(src)/../qcom-iommu-util/Module.symvers \
++	$(src)/../qcom-clock-core/Module.symvers $(src)/../pinctrl-alor-vendor-core/Module.symvers \
++	$(src)/../qcom-display-deps/Module.symvers $(src)/../qcom-charging/Module.symvers \
++	$(src)/../qcom-usb/Module.symvers $(src)/../qcom-panel-event/Module.symvers \
++	$(src)/../qcom-debug-diag/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers \
++	$(src)/../qcom-dma-heaps/Module.symvers $(src)/../gunyah/Module.symvers $(src)/../gunyah-rm/Module.symvers \
++	$(src)/../qcom-minidump/Module.symvers $(src)/../qcom-spmi/Module.symvers
+--- a/ports/msm-drm/avr-drm-compat.h
++++ b/ports/msm-drm/avr-drm-compat.h
+@@ -0,0 +1,143 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * AVR 7.3 port: android16-6.12 DRM API names used by the canoe display driver.
++ * android18-7.3 renamed struct drm_atomic_state -> struct drm_atomic_commit and
++ * its helpers drm_atomic_state_* -> drm_atomic_commit_* (same layout/semantics);
++ * the drm_mode_config_funcs hook names (atomic_state_alloc/clear/free) kept their
++ * names. Vendor files also relied on <drm/drm_print.h> arriving indirectly.
++ */
++#ifndef AVR_DRM_COMPAT_H
++#define AVR_DRM_COMPAT_H
++
++#define drm_atomic_state		drm_atomic_commit
++#define drm_atomic_state_alloc		drm_atomic_commit_alloc
++#define drm_atomic_state_clear		drm_atomic_commit_clear
++#define drm_atomic_state_get		drm_atomic_commit_get
++#define drm_atomic_state_put		drm_atomic_commit_put
++#define drm_atomic_state_init		drm_atomic_commit_init
++#define drm_atomic_state_default_clear	drm_atomic_commit_default_clear
++#define drm_atomic_state_default_release drm_atomic_commit_default_release
++#define __drm_atomic_state_free		__drm_atomic_commit_free
++
++#include <linux/device.h>
++#include <drm/drm_print.h>
++
++
++/* clk_ops.round_rate was removed in 7.x; 6.12 clk core called it as
++ * rate = round_rate(hw, req->rate, &req->best_parent_rate); req->rate = rate. */
++#include <linux/clk-provider.h>
++#define AVR_CLK_DETERMINE_FROM_ROUND(round)					\
++static int round##_avr_determine(struct clk_hw *hw, struct clk_rate_request *req) \
++{									\
++	long rate = round(hw, req->rate, &req->best_parent_rate);		\
++									\
++	if (rate < 0)							\
++		return rate;						\
++	req->rate = rate;						\
++	return 0;							\
++}
++
++/* drm_bridge_funcs lost the non-atomic enable/disable/pre_enable/post_disable
++ * hooks in 7.x; 6.12 drm_atomic_bridge_chain_*() fell back to them when the
++ * atomic variant was absent, so the wrapper keeps that behaviour. attach()
++ * gained the encoder argument (bridge->encoder is still set before the call). */
++#include <drm/drm_bridge.h>
++#define AVR_BRIDGE_ATOMIC(fn)							\
++static void fn##_avr_atomic(struct drm_bridge *bridge,			\
++			    struct drm_atomic_commit *state)		\
++{									\
++	fn(bridge);							\
++}
++#define AVR_BRIDGE_ATTACH(fn)							\
++static int fn##_avr_attach(struct drm_bridge *bridge,			\
++			   struct drm_encoder *encoder,			\
++			   enum drm_bridge_attach_flags flags)		\
++{									\
++	return fn(bridge, flags);					\
++}
++
++/* strncpy() was removed from the 7.x kernel; exact C semantics (no forced
++ * NUL termination, zero padding) as the 6.12 lib/string.c version. */
++#include <linux/types.h>
++static inline char *avr_strncpy(char *dest, const char *src, size_t count)
++{
++	size_t i;
++
++	for (i = 0; i < count && src[i]; i++)
++		dest[i] = src[i];
++	for (; i < count; i++)
++		dest[i] = '\0';
++	return dest;
++}
++#define strncpy avr_strncpy
++
++#include <linux/hex.h>
++
++/* devm_gpio_request() was removed; 6.12 = gpio_request() + devres gpio_free() */
++#include <linux/gpio/legacy.h>
++static inline void avr_devm_gpio_free(void *gpio)
++{
++	gpio_free((unsigned long)gpio);
++}
++static inline int avr_devm_gpio_request(struct device *dev, unsigned int gpio,
++					const char *label)
++{
++	int rc = gpio_request(gpio, label);
++
++	if (rc)
++		return rc;
++	return devm_add_action_or_reset(dev, avr_devm_gpio_free,
++					(void *)(unsigned long)gpio);
++}
++#define devm_gpio_request avr_devm_gpio_request
++
++/* deprecated 6.12 inline returning planes[i].state, the field 7.3 renamed
++ * state_to_destroy (new state before swap, old state after it) */
++#define drm_atomic_get_existing_plane_state(state, plane) \
++	((state)->planes[drm_plane_index(plane)].state_to_destroy)
++#define drm_atomic_get_existing_crtc_state(state, crtc) \
++	((state)->crtcs[drm_crtc_index(crtc)].state_to_destroy)
++
++/* 6.12 drm_wait_one_vblank(): 100 ms timeout, WARN on timeout (7.3 only has
++ * the crtc variant with a 1 s timeout). */
++#include <drm/drm_crtc.h>
++#include <drm/drm_vblank.h>
++static inline void drm_wait_one_vblank(struct drm_device *dev, unsigned int pipe)
++{
++	struct drm_crtc *crtc = drm_crtc_from_index(dev, pipe);
++	long ret;
++	u64 last;
++
++	if (drm_WARN_ON(dev, !crtc))
++		return;
++	ret = drm_crtc_vblank_get(crtc);
++	if (drm_WARN(dev, ret, "vblank not available on crtc %i, ret=%li\n", pipe, ret))
++		return;
++	last = drm_crtc_vblank_count(crtc);
++	ret = wait_event_timeout(*drm_crtc_vblank_waitqueue(crtc),
++				 last != drm_crtc_vblank_count(crtc),
++				 msecs_to_jiffies(100));
++	drm_WARN(dev, ret == 0, "vblank wait timed out on crtc %i\n", pipe);
++	drm_crtc_vblank_put(crtc);
++}
++
++/* drm_panel_init() became static in 7.x (panels are devm_drm_panel_alloc()'ed
++ * and refcounted). dsi_panel embeds its drm_panel, so do the 6.12 init and
++ * hold one permanent reference with no container: drm_panel_add/remove
++ * get/put never reach zero (and kfree(NULL) would be the only release). */
++#include <drm/drm_panel.h>
++static inline void drm_panel_init(struct drm_panel *panel, struct device *dev,
++				  const struct drm_panel_funcs *funcs,
++				  int connector_type)
++{
++	INIT_LIST_HEAD(&panel->list);
++	INIT_LIST_HEAD(&panel->followers);
++	mutex_init(&panel->follower_lock);
++	panel->dev = dev;
++	panel->funcs = funcs;
++	panel->connector_type = connector_type;
++	panel->container = NULL;
++	kref_init(&panel->refcount);
++}
++
++#endif
+--- a/ports/msm-drm/avr-canoe-vendor-config.h
++++ b/ports/msm-drm/avr-canoe-vendor-config.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's
++ * msm_drm was compiled with through the vendor kernel autoconf but that the 7.3
++ * GKI .config does not carry. Only options referenced by msm_drm or the headers
++ * it includes are listed; all providers are ported modules. Generated by
++ * scripts/gen_drm_vendor_config.py from canoe_perf.bzl. */
++#ifndef AVR_CANOE_VENDOR_CONFIG_H
++#define AVR_CANOE_VENDOR_CONFIG_H
++#define CONFIG_COMMON_CLK_QCOM_MODULE 1
++#define CONFIG_EOM_MSM_MODULE 1
++#define CONFIG_GH_ARM64_DRV_MODULE 1
++#define CONFIG_GH_DBL_MODULE 1
++#define CONFIG_GH_IRQ_LEND_MODULE 1
++#define CONFIG_GH_MEM_NOTIFIER_MODULE 1
++#define CONFIG_GH_MSGQ_MODULE 1
++#define CONFIG_GH_PANIC_NOTIFIER_MODULE 1
++#define CONFIG_GH_RM_DRV_MODULE 1
++#define CONFIG_GH_RM_HEAP_MANAGER_MODULE 1
++#define CONFIG_GH_VCPU_MGR_MODULE 1
++#define CONFIG_IOMMU_IO_PGTABLE_FAST 1
++#define CONFIG_IPC_LOGGING_MODULE 1
++#define CONFIG_MEM_PROT_MODULE 1
++#define CONFIG_QCOM_CRM_V2_MODULE 1
++#define CONFIG_QCOM_DCVS_MODULE 1
++#define CONFIG_QCOM_FSA4480_I2C_MODULE 1
++#define CONFIG_QCOM_LAZY_MAPPING_MODULE 1
++#define CONFIG_QCOM_LLCC_MODULE 1
++#define CONFIG_QCOM_MEMORY_DUMP_V2_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_DEV_MODULE 1
++#define CONFIG_QCOM_MEM_BUF_GH 1
++#define CONFIG_QCOM_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_MINIDUMP_PANIC_DUMP 1
++#define CONFIG_QCOM_PANEL_EVENT_NOTIFIER_MODULE 1
++#define CONFIG_QCOM_RPMH_MODULE 1
++#define CONFIG_QCOM_SECURE_BUFFER_MODULE 1
++#define CONFIG_QCOM_SOCINFO_MODULE 1
++#define CONFIG_QCOM_VA_MINIDUMP_MODULE 1
++#define CONFIG_QCOM_WCD_USBSS_I2C_MODULE 1
++#define CONFIG_QTI_ALTMODE_GLINK_MODULE 1
++#define CONFIG_QTI_BATTERY_CHARGER_MODULE 1
++#define CONFIG_QTI_PMIC_GLINK_MODULE 1
++#define CONFIG_QTVM_WITH_AVF 1
++#define CONFIG_REGMAP_QTI_DEBUGFS_MODULE 1
++#define CONFIG_REGULATOR_DEBUG_CONTROL_MODULE 1
++#define CONFIG_REGULATOR_PROXY_CONSUMER_MODULE 1
++#define CONFIG_SPMI_MSM_PMIC_ARB_MODULE 1
++#define CONFIG_USB_DWC3_MSM_MODULE 1
++#define CONFIG_USB_REDRIVER_MODULE 1
++#define CONFIG_USB_REPEATER_MODULE 1
++#endif
+--- a/ports/msm-drm/avr-llcc-display.h
++++ b/ports/msm-drm/avr-llcc-display.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: ports/qcom-llcc keys its slice tables by the vendor (firmware)
++ * use-case ids; 7.3's public llcc-qcom.h has no display ids. Values from the
++ * vendor header (LLCC_DISP 16, LLCC_DISP_WB 53, LLCC_DISP_1 54). */
++#ifndef AVR_LLCC_DISPLAY_H
++#define AVR_LLCC_DISPLAY_H
++#include "../qcom-llcc/llcc-vendor-private.h"
++#define LLCC_DISP	AVR_LLCC_DISP
++#define LLCC_DISP_WB	AVR_LLCC_DISP_WB
++#define LLCC_DISP_1	AVR_LLCC_DISP_1
++#endif

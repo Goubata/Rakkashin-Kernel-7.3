@@ -2717,3 +2717,26 @@ flags=0 behaves as ANY, double bind refused, invalid fd bind error-signals. Nega
 (num_pending fix disabled): ANY/default fail (reports/mm-stage119-negative-control.log).
 scripts/rebuild_all_ports.sh rebuilds every port/test incl. nested fake-scm. Regression: 32 suites +
 11 extra pass; 222 CRCs. Not verified: TZ log, crypto engine, PRNG, HDCP, TME on the phone.
+
+## Stage120: display (msm_drm) and its dependencies
+
+ports/msm-drm: vendor display-drivers (canoe target: display_modules.bzl config_srcs for
+targets/canoe.bzl config_options, 155 sources, same local defines). ports/drm-display-helper:
+drm_display_helper.ko from unchanged 7.3 drivers/gpu/drm/display (qcom-soc builds it too; GKI does
+not select DRM_DISPLAY_HELPER). ports/qcom-display-deps: gh_irq_lend, fsa4480_i2c, wcd_usbss_i2c.
+7.3 adaptations (avr-drm-compat.h + edits, see source-spec): drm_atomic_state->drm_atomic_commit,
+drm_print.h, clk round_rate->determine_rate wrappers, bridge atomic wrappers + attach(encoder),
+strncpy/devm_gpio_request/drm_panel_init/drm_wait_one_vblank (6.12 semantics),
+existing_{plane,crtc}_state = state_to_destroy, struct_mutex -> msm_drm_private mutex, fence
+value_str hooks, dma_fence_array without signal_on_any, private obj atomic_create_state, fb_create
+format info, irq_domain_create_linear, cdev_id, alarm API, pfn_t removal.
+avr-canoe-vendor-config.h (scripts/gen_drm_vendor_config.py): canoe_perf.bzl y/m options referenced by
+the sources or by any header actually included (from .o.cmd) but absent from the 7.3 .config;
+without it llcc slice and rpmh APIs compile to 7.3 inline stubs. Result: msm_drm depends= set equals
+the phone module; 3853/3904 phone functions present (rest inlined into wrappers).
+Vendor bugs fixed: MST bridge init error path left a freed state on privobj_list; fence dumps printed
+an uninitialised timeline buffer.
+QEMU msm-drm (3/3): ~50 modules incl. msm_drm load; 9 msm_drm platform drivers registered; no
+WARN/BUG. QEMU-only stand-ins: avr-gunyah-stub, tests/msm-drm/avr-synx-stub.ko (8 synx exports, CRCs
+equal ports/qti-fence), fake-scm. Regression: 38 pass; CRC 276 (incl. not-yet-tested audio/slimbus).
+Not verified: any display function on the phone.

@@ -24,6 +24,7 @@
 #include <linux/highmem.h>
 #include <linux/sizes.h>
 #include <kunit/visibility.h>
+#include <trace/hooks/binder.h>
 #include "binder_alloc.h"
 #include "binder_trace.h"
 
@@ -524,6 +525,18 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
 	unsigned long next_used_page;
 	unsigned long curr_last_page;
 	size_t buffer_size;
+	bool should_fail = false;
+
+	/* ANDROID: 6.12 parity */
+	trace_android_vh_binder_alloc_new_buf_locked(size, &alloc->free_async_space, is_async,
+			&should_fail);
+	if (should_fail) {
+		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC,
+			     "%d: binder_alloc_buf failed, not allowed to alloc more async space\n",
+			      alloc->pid);
+		buffer = ERR_PTR(-EPERM);
+		goto out;
+	}
 
 	if (is_async && alloc->free_async_space < size) {
 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC,

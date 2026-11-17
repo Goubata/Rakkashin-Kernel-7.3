@@ -55,6 +55,8 @@
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/filemap.h>
+#undef CREATE_TRACE_POINTS
+#include <trace/hooks/mm.h>	/* ANDROID: as in 6.12 */
 
 /*
  * FIXME: remove all knowledge of the buffer layer from the core VM
@@ -3436,6 +3438,9 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
 		ra->size = ra->ra_pages;
 		ra->async_size = ra->ra_pages / 4;
 		ra->order = 0;
+		/* ANDROID: 6.12 parity */
+		trace_android_vh_tune_mmap_readaround(ra->ra_pages, vmf->pgoff,
+				&ra->start, &ra->size, &ra->async_size);
 	}
 
 	fpin = maybe_unlock_mmap_for_io(vmf, fpin);

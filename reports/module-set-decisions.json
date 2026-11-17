@@ -12,6 +12,38 @@
   "debug_symbol": {
    "stage": 113,
    "reason": "debug_symbol_available()/debug_symbol_lookup_name() are provided by the 7.3 kernel (kernel/kallsyms.c, core commit 3684f35f1, verified by the debug-symbol suite) from the running symbol table instead of re-decoding the 6.12 debug_kinfo layout"
+  },
+  "pinctrl-canoe": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
+  },
+  "pinctrl-chora": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
+  },
+  "pinctrl-ravelin": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
+  },
+  "qnoc-canoe": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "qnoc-chora": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "qnoc-ravelin": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "phy-qcom-ufs-qmp-v4-crow": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
+  },
+  "phy-qcom-ufs-qrbtc-sdm845": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
   }
  },
  "renamed": {
@@ -25,5 +57,11 @@
    "7.3_module": "ports/qcom-rproc-common/qcom_common.ko",
    "reason": "same vendor sources (qcom_common.c + tracepoints); module name to be aligned at packaging"
   }
+ },
+ "first_stage_status": {
+  "date": "2026-11-17",
+  "missing_before": 51,
+  "remaining_unported": 0,
+  "note": "every phone first-stage module is ported, renamed (renamed{}), or deliberately omitted (omitted{}) with a reason"
  }
 }

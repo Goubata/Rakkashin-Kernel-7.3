@@ -24,7 +24,7 @@ DEFINE_STATIC_PERCPU_RWSEM(tpc);
 
 struct worker {
 	struct task_struct *t;
-	struct completion started, release, done;
+	struct completion started, acquired, release, done;
 	int kind;		/* 0 mutex, 1 rwsem write, 2 rwsem read, 3 percpu read */
 	bool ux, hold;
 	atomic_t *order;
@@ -53,6 +53,7 @@ static int worker_fn(void *data)
 	case 2: down_read(&trw); break;
 	case 3: percpu_down_read(&tpc); break;
 	}
+	complete_all(&w->acquired);
 	if (w->order)
 		w->my_order = atomic_inc_return(w->order);
 	if (w->hold)
@@ -75,6 +76,7 @@ static struct worker *start(struct kunit *test, int kind, bool ux, bool hold, at
 
 	KUNIT_ASSERT_NOT_NULL(test, w);
 	init_completion(&w->started);
+	init_completion(&w->acquired);
 	init_completion(&w->release);
 	init_completion(&w->done);
 	w->kind = kind;
@@ -85,6 +87,9 @@ static struct worker *start(struct kunit *test, int kind, bool ux, bool hold, at
 	KUNIT_ASSERT_FALSE(test, IS_ERR(w->t));
 	get_task_struct(w->t);
 	wait_for_completion(&w->started);
+	/* a holding owner must own the lock before any waiter is started */
+	if (hold && !wait_for_completion_timeout(&w->acquired, 10 * HZ))
+		KUNIT_FAIL(test, "owner did not acquire the lock");
 	return w;
 }
 

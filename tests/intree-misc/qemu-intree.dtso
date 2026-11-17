@@ -1,0 +1,7 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture: the phone's soc:usb_nop_phy (usb-nop-xceiv, bound by
+ * phy-generic on the AVR). */
+/ { fragment@0 { target-path="/"; __overlay__ {
+  usb_nop_phy { compatible="usb-nop-xceiv"; #phy-cells=<0>; };
+}; }; };

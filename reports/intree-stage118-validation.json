@@ -1,0 +1,19 @@
+{
+ "stage": 118,
+ "image": "#40",
+ "qemu": "reports/intree-stage118-qemu.log",
+ "results": {
+  "load": "6/6",
+  "phy_generic_bind": true
+ },
+ "moto_sched_fix_runs": [
+  "reports/moto-sched-stage118-r1.log",
+  "reports/moto-sched-stage118-r2.log",
+  "reports/moto-sched-stage118-r3.log",
+  "reports/moto-sched-stage118-r4.log",
+  "reports/moto-sched-stage118-r5.log",
+  "reports/moto-sched-stage118-r6.log"
+ ],
+ "regression": "reports/regress-stage118-summary.txt",
+ "physical_verified": false
+}

@@ -44,6 +44,14 @@
   "phy-qcom-ufs-qrbtc-sdm845": {
    "stage": 114,
    "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
+  },
+  "ext4_inode_test": {
+   "stage": 118,
+   "reason": "GKI KUnit test module (ext4 inode tests), not a device driver"
+  },
+  "lib_test": {
+   "stage": 118,
+   "reason": "GKI test module, not a device driver"
   }
  },
  "renamed": {
@@ -56,6 +64,11 @@
    "stage": "37",
    "7.3_module": "ports/qcom-rproc-common/qcom_common.ko",
    "reason": "same vendor sources (qcom_common.c + tracepoints); module name to be aligned at packaging"
+  },
+  "pwrseq_core": {
+   "stage": 118,
+   "7.3_module": "built-in (CONFIG_POWER_SEQUENCING=y)",
+   "reason": "7.3 GKI builds the power-sequencing core in"
   }
  },
  "first_stage_status": {
@@ -72,6 +85,32 @@
   "qcom_glink_spss": {
    "stage": 117,
    "reason": "SPSS (secure processor) edge transport needs vendor qcom_glink_native_start; ported together with qcom_spss"
+  }
+ },
+ "intree": {
+  "tls": {
+   "stage": 118,
+   "config": "TLS"
+  },
+  "hwmon": {
+   "stage": 118,
+   "config": "HWMON (vendor adds devm_hwmon_device_unregister export: add to core if a ported user needs it)"
+  },
+  "phy_generic": {
+   "stage": 118,
+   "config": "NOP_USB_XCEIV (vendor diff: of_property_read_bool vs present only)"
+  },
+  "ledtrig_pattern": {
+   "stage": 118,
+   "config": "LEDS_TRIGGER_PATTERN (identical)"
+  },
+  "i2c_qcom_geni": {
+   "stage": 118,
+   "config": "I2C_QCOM_GENI (identical; unbound on the phone, vendor i2c-msm-geni used)"
+  },
+  "spi_geni_qcom": {
+   "stage": 118,
+   "config": "SPI_QCOM_GENI (identical; unbound on the phone)"
   }
  }
 }

@@ -1,0 +1,9 @@
+{
+  "scope": "Image#40: config-only (TLS, HWMON, NOP_USB_XCEIV, LEDS_TRIGGER_PATTERN, I2C/SPI_QCOM_GENI as modules); QEMU only",
+  "core_image": "7.3.0-4k #40",
+  "image_sha256": "0d53235ef93bab4c251fb3f9288fb4802de3d6ec9e05b2eedb2cd4322a3f8dc0",
+  "source_commit": "f53d32ad59075f133050cad235facb18836fb210",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

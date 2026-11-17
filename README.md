@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage118では、実機が読み込んでいるモジュールのうち、ソースがGKI 6.12と同じか差分が軽微なもの（tls、hwmon、phy-generic、ledtrig-pattern、i2c-qcom-geni、spi-geni-qcom）を、7.3のツリー内ドライバをモジュールとして有効化して用意しました（Image#40、設定のみの変更）。QEMUでは6つすべての読み込みと、usb-nop-xceivへのphy-genericの結合を確認しました。GKIの試験用モジュール2つ（ext4_inode_test、lib_test）は対象外とし、pwrseq_coreは7.3では本体組み込みです。回帰の途中で、試験用qcom_scm（tests/qcom-tee/fake-scm）が入れ子ディレクトリのため再ビルドから漏れ、Image#40とCRCが合わずに5試験が失敗しました。再ビルドして合格を確認しています。また、moto-schedの試験で、所有者がロックを取る前に待機側が始まりうる競合があり、まれに失敗していました（Stage107でも1回発生）。所有者のロック取得を待つように試験を直し、6回連続で合格しています（moto_sched本体は変更なし）。
+
 Stage117では充電まわりを移植しました。Qualcomm側（電池・充電、Type-C altmode/UCSI、充電ログ、電池デバッグ、glink ADC、glink_pkt、pd_mapper）とMotorola側（mmi_glink_charger、qti_glink_charger_v2、適応充電、ADSPログ、カバー検知のhall）の計14モジュールです。7.3での変更点（電源クラスのfwnode化、冷却デバイス登録APIの変化、UCSIのsync_controlの形の変化、alarm APIの変化など）に合わせました。glink_pktはモデムのATコマンドやデータ制御、IMS、オーディオのaprに使われ、ベンダー版glinkのシグナル機能（DTR/CTS/RIなど）を必要とします。そこで、これまでの7.3ベースのglinkトランスポートに、6.12と同じ意味のシグナルAPIを追加しました。この新機能は、受信時の変換・コールバックと送信のバイト列を確かめる試験を加えて、既存11件とあわせて12件すべて合格しています。QEMUでは14モジュールすべての読み込みを3回確認し、glinkに依存する既存試験も合格しました。電池や充電の実際の動作はADSPのファームウェアが必要なため実機で確認します。209モジュールCRC・38試験合格。
 
 Stage116ではUSBの中核を移植しました。dwc3-msm（QualcommのUSBコントローラ制御）、SS QMP・eUSB2・HS・EMUの各PHY、eUSB2リピーター、EUD、USBリドライバーです（実機で使うM31 eUSB2 PHYとPMICリピーターは移植済み）。7.xではdwc3コアのレジスタアクセス方法が変わったため（エンドポイントのレジスタ基点の廃止など）、同じ物理オフセットになるよう書き換えました。dwc3-msmはdwc3コアの14個の関数にkprobeで割り込む作りなので、7.3でもそれらの関数がすべて存在し、引数の並びとトレースイベントの形が6.12と同一であることを確認しました。そのうえで、QEMUで実際にkretprobeを登録・解除できることを3回確認しています。QEMUにはDWC3のハードが無いため、adbなど実際のUSB通信は実機で確認します。195モジュールのCRCも合格。

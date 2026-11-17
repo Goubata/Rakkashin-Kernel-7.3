@@ -2679,3 +2679,17 @@ vendor_signals_roundtrip: remote NATIVE DSR|CTS|RI -> TIOCM_DSR|CTS|RI + callbac
 QEMU: all 14 charging modules load (3/3); glink-transport, pmic-glink, remoteproc-services, rproc-gate,
 pmic-ipc, smp2p pass. Deferred (module-set-decisions.json): glink_probe, qcom_glink_spss (SPSS stage).
 Regression: 30 suites + 8 extra; 209 CRCs. Not verified: battery/charging with ADSP firmware.
+
+## Stage118: GKI-equivalent phone modules (Image#40)
+
+Phone-loaded modules whose AVR (qcom-soc) sources equal GKI 6.12 or differ trivially are built from
+android18-7.3 in-tree drivers as modules (configs/avr-platform.fragment): tls, hwmon (vendor adds only
+devm_hwmon_device_unregister), phy-generic (of_property_read_bool vs present), ledtrig-pattern,
+i2c-qcom-geni and spi-geni-qcom (identical; unbound on the phone, vendor *-msm-geni bind). Omitted:
+ext4_inode_test, lib_test (GKI tests). pwrseq_core is built in on 7.3. QEMU intree-misc: all 6 load,
+phy-generic binds a usb-nop-xceiv fixture node.
+Regression fixes: tests/qcom-tee/fake-scm (nested dir) must be rebuilt with every Image (stale CRCs
+broke qcom-tee/reboot/debug-diag/perf-misc/pm until rebuilt). moto-sched test race: holding owners
+are now confirmed to own the lock before waiters start (rare rwsem_ux_writer_jumps_queue failure,
+seen in stage107 and once here); 6/6 after the fix; moto_sched itself unchanged.
+Regression: 31 suites + 8 extra pass; 209 CRCs.

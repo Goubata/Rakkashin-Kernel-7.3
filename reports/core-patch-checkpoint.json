@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "4701ed0b5f845eeadd8a8a3b7108036715629854",
+  "source_commit": "bc10c75be81a5371800689825a87f78f54a5cf91",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -36,6 +36,7 @@
     "patches/scm-dumptable-7.3.patch": "53621787c2269fd3ce41ee316da2461eb19a3f29ed2545a77469574fea1f800c",
     "patches/gic-v3-suspend-7.3.patch": "e5ad8931ba4292c9b64e624f0fd328015fb55cc0999134681f250710ba0d9fb1",
     "patches/scm-vendor-misc-7.3.patch": "0bfaed4e33aac10cabe42fe7da97d192a3ad7629c956affe9169505d38b16b7f",
-    "patches/android-vendor-hooks-7.3.patch": "9cc660ac021a179c3c169b769301f7e59656c2055fcea908f7c11fba3de98be4"
+    "patches/android-vendor-hooks-7.3.patch": "9cc660ac021a179c3c169b769301f7e59656c2055fcea908f7c11fba3de98be4",
+    "patches/moto-vendor-hooks-7.3.patch": "37f7002f7bcd5a07f9773c4bb52ab22a711185f3604b4491e9df4bee947e2049"
   }
 }

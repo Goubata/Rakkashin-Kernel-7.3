@@ -1,0 +1,61 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-misc/anc_fps_mmi.ko",
+      "imports_checked": 78,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/awinic_sar.ko",
+      "imports_checked": 77,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/cam_aw37004.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/goodix_fod_mmi.ko",
+      "imports_checked": 70,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/mmi_sys_temp.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/moto_binder.ko",
+      "imports_checked": 68,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/moto_mmap_fault.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/stm_st54se_gpio.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/sx937x_sar.ko",
+      "imports_checked": 62,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-misc/utags.ko",
+      "imports_checked": 70,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/wlan/qca_cld3_wcn7750.ko",
+      "imports_checked": 589,
+      "mismatches": {}
+    }
+  ]
+}

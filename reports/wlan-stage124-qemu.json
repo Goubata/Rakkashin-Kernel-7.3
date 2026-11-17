@@ -1,0 +1,12 @@
+{
+  "log": "reports/wlan-stage124-qemu.log",
+  "test": "wlan",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    0,
+    0,
+    0,
+    0
+  ]
+}

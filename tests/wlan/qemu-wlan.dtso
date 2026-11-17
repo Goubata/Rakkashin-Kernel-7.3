@@ -1,0 +1,17 @@
+/dts-v1/;
+/plugin/;
+/* QEMU fixture for the qcacld (qca_cld3_wcn7750) load test: WALT asymmetric
+ * capacities (tests/sched-walt/qemu-walt.dtso) plus the wlan platform nodes of
+ * tests/audio-conn/qemu-conn.dtso (cnss_utils/cnss_prealloc need an enabled
+ * "qcom,wlan" node; icnss2 matches qcom,wcn7750 and takes its resource-less
+ * probe error path, so qcacld registers but no device appears). */
+/ {
+ fragment@0 { target-path="/cpus/cpu@0"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@1 { target-path="/cpus/cpu@1"; __overlay__ { capacity-dmips-mhz=<520>; }; };
+ fragment@2 { target-path="/cpus/cpu@2"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+ fragment@3 { target-path="/cpus/cpu@3"; __overlay__ { capacity-dmips-mhz=<1024>; }; };
+ fragment@4 { target-path="/"; __overlay__ {
+  avr_wlan_marker { qcom,wlan; status="okay"; };
+  avr_icnss_fixture { compatible="qcom,wcn7750"; status="okay"; };
+ }; };
+};

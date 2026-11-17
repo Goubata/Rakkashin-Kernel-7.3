@@ -1,0 +1,12 @@
+{
+  "log": "reports/soc-misc-stage124-qemu.log",
+  "test": "soc-misc",
+  "passed": true,
+  "failures": [],
+  "totals": [
+    0,
+    0,
+    0,
+    0
+  ]
+}

@@ -2763,6 +2763,32 @@ moto-sched test: wait_blocked up to 10 s and asserts the waiter blocked (load-in
 Regression: 44 pass + reruns (remoteproc-services 2x, moto-sched 5x); CRC 306.
 Not verified: audio, BT, WLAN, SLIMbus on the phone.
 
+## Stage124: WLAN host driver (qca_cld3_wcn7750) from the bazel DDK definition; Motorola modules; 6.12 binder/mm hooks (Image#43)
+
+ports/wlan-qcacld: qcacld-3.0 a101450, qca-wifi-host-cmn 6e37299, fw-api ca7f50d (tag MMI-W3WWL36.65-11-18),
+pruned to the 2335 files the build reads. The legacy Kbuild is out of sync with the shipped module
+(no mgmt_rx_srng objects, CONFIG_CONFIG_WLAN_DUMP_IN_PROGRESS typo, MOTO_UTAGS_MAC only in cppflags), so
+scripts/gen_qcacld_kbuild.py reproduces the DDK build: module Kconfig evaluated with the canoe gki/perf
+wcn7750 defconfig (multi-definition symbols merged; kernel symbols from the phone config.gz + canoe_perf.bzl +
+wlan platform defines), _fixed_srcs + _conditional_srcs, chipset/hw/fixed ipaths, default_config.h +
+config_to_feature.h + bzl feature greps (evaluated on 7.3: identical to 6.12), -Wno-enum-compare,
+-D__ANDROID_COMMON_KERNEL__ (ACK KCFLAGS). Result: depends= equal to the phone; every global function of the
+phone module is present (14702/14702; 12 extra are 7.3 static-call trampolines).
+7.3 API: cfg80211_ops adapters (wdev-based station/key ops, radio_idx, tx_control_port cookie by value,
+assoc_ml_reconf request), cfg80211_new_sta/del_sta(wdev), aes_prepareenckey/aes_enckey, in_hardirq,
+<linux/hex.h>, <linux/hrtimer_bases.h>, sockaddr_unsized, WALT grep pointed at ports/sched-walt.
+QEMU wlan (3/3): 44 modules; qcacld resolves every symbol and its init runs to pld_register_driver, which
+fails as expected without a WCN7750 (fixture tests/wlan/qemu-wlan.dtso).
+ports/moto-misc (motorola-kernel-modules a243577): utags, mmi_sys_temp, moto_binder, moto_mmap_fault,
+sx937x_sar, awinic_sar, cam_aw37004, anc_fps_mmi, goodix_fod_mmi, stm_st54se_gpio; depends= equal to the
+phone; feature defines checked against phone imports. utags: unbounded strncpy replaced by strscpy.
+Core patch patches/moto-vendor-hooks-7.3.patch: android_vh_binder_preset/trans/reply/alloc_new_buf_locked,
+android_vh_adjust_alloc_flags, android_vh_throttle_direct_reclaim_bypass, android_vh_tune_mmap_readaround
+at the 6.12 call sites. qcom-coresight generated but parked (Makefile.wip; see WIP.md).
+Not yet ported: NFC nxp-nci / stm_nfc_i2c (phone runs newer QTI/ST drivers than the Motorola repo).
+Regression on Image#43: all suites pass (sched-walt, thermal-pause, qcom-cpucp-scmi reran alone after
+timing out during a parallel WLAN build); CRC 393. Not verified on the phone.
+
 ## Stage123: qcom-soc batch generator; thermal, PMIC, debug, Gunyah, DCVS/MPAM, MHI/PCIe, misc; first-stage parity
 
 scripts/gen_qcom_soc_port.py generates ports from qcom-soc modules.bzl (srcs + canoe_perf conditional_srcs,

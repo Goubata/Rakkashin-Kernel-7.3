@@ -1,0 +1,21 @@
+{
+  "stage": 124,
+  "tests": {
+    "wlan": {
+      "qemu": true,
+      "r2": true,
+      "r3": true
+    },
+    "soc-misc_with_moto-misc": true
+  },
+  "image": "#43 (patches/moto-vendor-hooks-7.3.patch)",
+  "regression": "reports/regress-stage124-summary.txt",
+  "qcacld": {
+    "functions_phone": 14702,
+    "functions_ours": 14714,
+    "phone_only_functions": 0,
+    "depends_equal": true,
+    "note": "built from the bazel DDK definition (scripts/gen_qcacld_kbuild.py); QEMU has no WCN7750, init reaches pld registration"
+  },
+  "phone_verified": false
+}

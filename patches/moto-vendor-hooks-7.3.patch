@@ -1,0 +1,208 @@
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 0cc72f100..b12259320 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -3380,6 +3380,7 @@ static void binder_transaction(struct binder_proc *proc,
+ 		target_proc = target_thread->proc;
+ 		target_proc->tmp_ref++;
+ 		binder_inner_proc_unlock(target_thread->proc);
++		trace_android_vh_binder_reply(target_proc, proc, thread, tr);
+ 	} else {
+ 		if (tr->target.handle) {
+ 			struct binder_ref *ref;
+@@ -3440,6 +3441,7 @@ static void binder_transaction(struct binder_proc *proc,
+ 			return_error_line = __LINE__;
+ 			goto err_invalid_target_handle;
+ 		}
++		trace_android_vh_binder_trans(target_proc, proc, thread, tr);
+ 		if (security_binder_transaction(proc->cred,
+ 						target_proc->cred) < 0) {
+ 			binder_txn_error("%d:%d transaction credentials failed\n",
+@@ -6315,6 +6317,7 @@ static int binder_open(struct inode *nodp, struct file *filp)
+ 	INIT_LIST_HEAD(&proc->waiting_threads);
+ 	filp->private_data = proc;
+ 
++	trace_android_vh_binder_preset(&binder_procs, &binder_procs_lock, proc);
+ 	mutex_lock(&binder_procs_lock);
+ 	hlist_for_each_entry(itr, &binder_procs, proc_node) {
+ 		if (itr->pid == proc->pid) {
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index e4488ad86..e47e24ee3 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -24,6 +24,7 @@
+ #include <linux/highmem.h>
+ #include <linux/sizes.h>
+ #include <kunit/visibility.h>
++#include <trace/hooks/binder.h>
+ #include "binder_alloc.h"
+ #include "binder_trace.h"
+ 
+@@ -524,6 +525,18 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
+ 	unsigned long next_used_page;
+ 	unsigned long curr_last_page;
+ 	size_t buffer_size;
++	bool should_fail = false;
++
++	/* ANDROID: 6.12 parity */
++	trace_android_vh_binder_alloc_new_buf_locked(size, &alloc->free_async_space, is_async,
++			&should_fail);
++	if (should_fail) {
++		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC,
++			     "%d: binder_alloc_buf failed, not allowed to alloc more async space\n",
++			      alloc->pid);
++		buffer = ERR_PTR(-EPERM);
++		goto out;
++	}
+ 
+ 	if (is_async && alloc->free_async_space < size) {
+ 		binder_alloc_debug(BINDER_DEBUG_BUFFER_ALLOC,
+diff --git a/drivers/android/vendor_hooks.c b/drivers/android/vendor_hooks.c
+index a629048d9..cf0f01f32 100644
+--- a/drivers/android/vendor_hooks.c
++++ b/drivers/android/vendor_hooks.c
+@@ -168,3 +168,10 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_enable_thermal_genl_check);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_thermal_pm_notify_suspend);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks_dn);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_preset);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_reply);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_trans);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_binder_alloc_new_buf_locked);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_adjust_alloc_flags);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_throttle_direct_reclaim_bypass);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_tune_mmap_readaround);
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index ff762fcef..01b9121d4 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -924,6 +924,7 @@ static struct page **__iommu_dma_alloc_pages(struct device *dev,
+ 			order_size = 1U << order;
+ 			if (order_mask > order_size)
+ 				alloc_flags |= __GFP_NORETRY;
++			trace_android_vh_adjust_alloc_flags(order, &alloc_flags);
+ 			page = alloc_pages_node(nid, alloc_flags, order);
+ 			if (!page)
+ 				continue;
+diff --git a/include/trace/hooks/binder.h b/include/trace/hooks/binder.h
+index 93f06d918..e978f6982 100644
+--- a/include/trace/hooks/binder.h
++++ b/include/trace/hooks/binder.h
+@@ -25,6 +25,26 @@ DECLARE_HOOK(android_vh_binder_restore_priority,
+ 	TP_PROTO(struct binder_transaction *t, struct task_struct *task),
+ 	TP_ARGS(t, task));
+ 
++/* ANDROID: android16-6.12 parity (moto_binder) */
++struct binder_thread;
++struct binder_transaction_data;
++struct hlist_head;
++struct mutex;
++DECLARE_HOOK(android_vh_binder_preset,
++	TP_PROTO(struct hlist_head *hhead, struct mutex *lock, struct binder_proc *proc),
++	TP_ARGS(hhead, lock, proc));
++DECLARE_HOOK(android_vh_binder_reply,
++	TP_PROTO(struct binder_proc *target_proc, struct binder_proc *proc,
++		struct binder_thread *thread, struct binder_transaction_data *tr),
++	TP_ARGS(target_proc, proc, thread, tr));
++DECLARE_HOOK(android_vh_binder_trans,
++	TP_PROTO(struct binder_proc *target_proc, struct binder_proc *proc,
++		struct binder_thread *thread, struct binder_transaction_data *tr),
++	TP_ARGS(target_proc, proc, thread, tr));
++DECLARE_HOOK(android_vh_binder_alloc_new_buf_locked,
++	TP_PROTO(size_t size, size_t *free_async_space, int is_async, bool *should_fail),
++	TP_ARGS(size, free_async_space, is_async, should_fail));
++
+ #endif /* _TRACE_HOOK_BINDER_H */
+ /* This part must be outside protection */
+ #include <trace/define_trace.h>
+diff --git a/include/trace/hooks/iommu.h b/include/trace/hooks/iommu.h
+index 281000af9..c27b49791 100644
+--- a/include/trace/hooks/iommu.h
++++ b/include/trace/hooks/iommu.h
+@@ -44,6 +44,11 @@ DECLARE_RESTRICTED_HOOK(android_rvh_iommu_limit_align_shift,
+ 		unsigned long *shift),
+ 	TP_ARGS(iovad, size, shift), 1);
+ 
++/* ANDROID: android16-6.12 parity (moto_mmap_fault) */
++DECLARE_HOOK(android_vh_adjust_alloc_flags,
++	TP_PROTO(unsigned int order, gfp_t *alloc_flags),
++	TP_ARGS(order, alloc_flags));
++
+ #endif /* _TRACE_HOOK_IOMMU_H */
+ 
+ /* This part must be outside protection */
+diff --git a/include/trace/hooks/mm.h b/include/trace/hooks/mm.h
+index f69a3adeb..58211e69a 100644
+--- a/include/trace/hooks/mm.h
++++ b/include/trace/hooks/mm.h
+@@ -22,6 +22,12 @@ DECLARE_HOOK(android_vh_page_add_new_anon_rmap,
+ 		unsigned long address),
+ 	TP_ARGS(page, vma, address));
+ 
++/* ANDROID: android16-6.12 parity (moto_mmap_fault) */
++DECLARE_HOOK(android_vh_tune_mmap_readaround,
++	TP_PROTO(unsigned int ra_pages, pgoff_t pgoff,
++		pgoff_t *start, unsigned int *size, unsigned int *async_size),
++	TP_ARGS(ra_pages, pgoff, start, size, async_size));
++
+ #endif /* _TRACE_HOOK_MM_H */
+ /* This part must be outside protection */
+ #include <trace/define_trace.h>
+diff --git a/include/trace/hooks/vmscan.h b/include/trace/hooks/vmscan.h
+index 83116f7d3..dfa88ad3e 100644
+--- a/include/trace/hooks/vmscan.h
++++ b/include/trace/hooks/vmscan.h
+@@ -12,6 +12,11 @@
+ DECLARE_RESTRICTED_HOOK(android_rvh_set_balance_anon_file_reclaim,
+ 			TP_PROTO(bool *balance_anon_file_reclaim),
+ 			TP_ARGS(balance_anon_file_reclaim), 1);
++/* ANDROID: android16-6.12 parity (moto_mmap_fault) */
++DECLARE_HOOK(android_vh_throttle_direct_reclaim_bypass,
++	TP_PROTO(bool *bypass),
++	TP_ARGS(bypass));
++
+ #endif /* _TRACE_HOOK_VMSCAN_H */
+ /* This part must be outside protection */
+ #include <trace/define_trace.h>
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 00fd89cf6..1b86202e2 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -55,6 +55,8 @@
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/filemap.h>
++#undef CREATE_TRACE_POINTS
++#include <trace/hooks/mm.h>	/* ANDROID: as in 6.12 */
+ 
+ /*
+  * FIXME: remove all knowledge of the buffer layer from the core VM
+@@ -3436,6 +3438,9 @@ static struct file *do_sync_mmap_readahead(struct vm_fault *vmf)
+ 		ra->size = ra->ra_pages;
+ 		ra->async_size = ra->ra_pages / 4;
+ 		ra->order = 0;
++		/* ANDROID: 6.12 parity */
++		trace_android_vh_tune_mmap_readaround(ra->ra_pages, vmf->pgoff,
++				&ra->start, &ra->size, &ra->async_size);
+ 	}
+ 
+ 	fpin = maybe_unlock_mmap_for_io(vmf, fpin);
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 2d489dbde..cc1001bf4 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -6746,6 +6746,14 @@ static bool throttle_direct_reclaim(gfp_t gfp_mask, struct zonelist *zonelist,
+ 	if (!pgdat)
+ 		goto out;
+ 
++	{
++		bool bypass = false;	/* ANDROID: 6.12 parity */
++
++		trace_android_vh_throttle_direct_reclaim_bypass(&bypass);
++		if (bypass)
++			goto out;
++	}
++
+ 	/* Account for the throttling */
+ 	count_vm_event(PGSCAN_DIRECT_THROTTLE);
+ 

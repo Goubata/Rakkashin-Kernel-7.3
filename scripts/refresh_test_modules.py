@@ -22,7 +22,7 @@ for flag in sys.argv[1:]:
             if depth == 0: break
     old = s[a:j + 1]
     paths = re.findall(r"ROOT/'([^']+)'", old)
-    stubs = {x for x in paths if x.startswith('tests/') and ('stub' in x or 'fake-scm' in x)}
+    stubs = {x for x in paths if x.startswith('tests/') and ('stub' in x or x.endswith('fake-scm/qcom-scm.ko'))}
     tests = [x for x in paths if x.startswith('tests/') and x not in stubs]
     kunit = [x for x in paths if x.endswith('lib/kunit/kunit.ko')]
     ports = [x for x in paths if not x.startswith('tests/') and x not in kunit]
@@ -37,6 +37,9 @@ for flag in sys.argv[1:]:
             continue
         if 'tests/qcom-tee/fake-scm/qcom-scm.ko' in stubs and x.endswith(('firmware/qcom/qcom-scm.ko', 'fake-scm/qcom-scm.ko')):
             x = 'tests/qcom-tee/fake-scm/qcom-scm.ko'
+        # qcom-reboot: minidump stand-in (msm_minidump_enabled() == true, no SMEM table)
+        if 'tests/qcom-reboot/avr-minidump-stub.ko' in stubs and x == 'ports/qcom-minidump/minidump.ko':
+            x = 'tests/qcom-reboot/avr-minidump-stub.ko'
         if 'tests/msm-drm/avr-synx-stub.ko' in stubs and x.endswith(('ipclite.ko', 'synx-driver.ko')):
             x = 'tests/msm-drm/avr-synx-stub.ko'
         if x not in out:

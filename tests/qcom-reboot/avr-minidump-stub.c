@@ -12,4 +12,17 @@ bool msm_minidump_enabled(void)
 	return true;
 }
 EXPORT_SYMBOL_GPL(msm_minidump_enabled);
+
+/* qcom_ipc_logging registers its log buffers; no SMEM table exists on QEMU */
+int msm_minidump_add_region(const struct md_region *entry)
+{
+	return 0;
+}
+EXPORT_SYMBOL_GPL(msm_minidump_add_region);
+
+int msm_minidump_remove_region(const struct md_region *entry)
+{
+	return 0;
+}
+EXPORT_SYMBOL_GPL(msm_minidump_remove_region);
 MODULE_LICENSE("GPL");

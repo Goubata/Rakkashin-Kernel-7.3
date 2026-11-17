@@ -1,0 +1,336 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/gunyah-misc/gh_ctrl.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/gh_panic_notifier.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/gh_rm_booster.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/gh_tlmm_vm_mem_access.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/gunyah_trace.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/hvc_gunyah.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/gunyah-misc/qrtr-gunyah.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/bwmon.ko",
+      "imports_checked": 75,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/cpu_mpam.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/llcc_heuristics.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/memlat.ko",
+      "imports_checked": 73,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/mpam.ko",
+      "imports_checked": 14,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/mpam_msc.ko",
+      "imports_checked": 8,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/mpam_msc_slc.ko",
+      "imports_checked": 30,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/platform_mpam.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/qcom-cpufreq-hw-debug.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/qcom_cache_allocation.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/qcom_fdcvs.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-dcvs-misc/slc_mpam.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/core_hang_detect.ko",
+      "imports_checked": 25,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/dcc_v2.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/dmesg_dumper.ko",
+      "imports_checked": 68,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/f_fs_ipc_log.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/hung_task_enh.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/mem-offline.ko",
+      "imports_checked": 52,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/microdump_collector.ko",
+      "imports_checked": 14,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/qcom_dynamic_ramoops.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/qcom_edac.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-misc/rdbg.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-fixed-regulator/qti-fixed-regulator.ko",
+      "imports_checked": 29,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/mhi.ko",
+      "imports_checked": 145,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/mhi_dev_satellite.ko",
+      "imports_checked": 54,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/mhi_dev_uci.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/pci-msm-drv.ko",
+      "imports_checked": 212,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/pcie-pdc.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-mhi-pcie/qrtr-mhi.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qcom-amoled-regulator.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qcom-i2c-pmic.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qcom-pmic-ecid.ko",
+      "imports_checked": 22,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qcom_voltage_adj.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qpnp-lcdb-regulator.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/qti_amoled_ecm.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pmic-misc/spmi-pmic-err-debug.ko",
+      "imports_checked": 26,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/adsp_sleepmon.ko",
+      "imports_checked": 76,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/cdsprm.ko",
+      "imports_checked": 69,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/heap_mem_ext_v01.ko",
+      "imports_checked": 2,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/i3c-master-msm-geni.ko",
+      "imports_checked": 143,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/lt9611uxc.ko",
+      "imports_checked": 101,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/msm_geni_serial.ko",
+      "imports_checked": 158,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/msm_memshare.ko",
+      "imports_checked": 57,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/msm_sharedmem.ko",
+      "imports_checked": 18,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/phy-qcom-m31-eusb2.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/phy-qcom-qmp-combo.ko",
+      "imports_checked": 65,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/qsee_ipc_irq_bridge.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/qti_ptd_share.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-soc-misc2/snd-usb-audio-qmi.ko",
+      "imports_checked": 69,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/lmh_stats.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qptf.ko",
+      "imports_checked": 29,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti-ocp-notifier.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_btl.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_dynamic_hw_trip.ko",
+      "imports_checked": 16,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_power_telemetry.ko",
+      "imports_checked": 54,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_qmi_cdev.ko",
+      "imports_checked": 39,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_qmi_sensor_v2.ko",
+      "imports_checked": 42,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/qti_thermal_vendor_hooks.ko",
+      "imports_checked": 8,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-thermal-misc/thermal_config.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    }
+  ]
+}

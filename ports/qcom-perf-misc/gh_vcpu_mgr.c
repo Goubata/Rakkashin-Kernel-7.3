@@ -743,7 +743,12 @@ int gh_vcpu_mgr_init(void)
 	gh_register_hooks();
 	init_done = true;
 
-	is_alor = (strcmp(socinfo_get_id_string(), "ALOR") == 0);
+	{
+		/* AVR: NULL until socinfo has probed (vendor dereferenced it) */
+		const char *soc = socinfo_get_id_string();
+
+		is_alor = soc && !strcmp(soc, "ALOR");
+	}
 
 	return 0;
 

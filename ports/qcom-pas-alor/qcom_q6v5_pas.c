@@ -76,6 +76,7 @@ struct qcom_pas_data {
 struct qcom_pas {
 	struct device *dev;
 	struct rproc *rproc;
+	bool subsys_recovery_disabled;	/* AVR: saved by qcom_rproc_update_recovery_status() */
 
 	struct qcom_q6v5 q6v5;
 
@@ -2095,6 +2096,35 @@ static const struct of_device_id qcom_pas_of_match[] = {
 	{ },
 };
 MODULE_DEVICE_TABLE(of, qcom_pas_of_match);
+
+/*
+ * AVR: vendor android16-6.12 PAS export used by adsp_sleepmon.ko: a kernel
+ * client temporarily forces SSR recovery on (saving the userspace setting)
+ * and later restores it. Same semantics as the vendor qcom_q6v5_pas.c.
+ */
+void qcom_rproc_update_recovery_status(struct rproc *rproc, bool enable, bool locked);
+void qcom_rproc_update_recovery_status(struct rproc *rproc, bool enable, bool locked)
+{
+	struct qcom_pas *pas;
+
+	if (!rproc)
+		return;
+
+	pas = rproc->priv;
+	if (locked)
+		mutex_lock(&rproc->lock);
+	if (enable) {
+		pas->subsys_recovery_disabled = rproc->recovery_disabled;
+		rproc->recovery_disabled = !enable;
+		pr_info("qcom rproc: %s: recovery enabled by kernel client\n", rproc->name);
+	} else {
+		rproc->recovery_disabled = pas->subsys_recovery_disabled;
+		pr_info("qcom rproc: %s: recovery disabled by kernel client\n", rproc->name);
+	}
+	if (locked)
+		mutex_unlock(&rproc->lock);
+}
+EXPORT_SYMBOL_GPL(qcom_rproc_update_recovery_status);
 
 static struct platform_driver qcom_pas_driver = {
 	.probe = qcom_pas_probe,

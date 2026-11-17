@@ -1,0 +1,24 @@
+{
+ "name": "qcom-pmic-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-pmic-misc/drivers/regulator/qcom-amoled-regulator.c": "drivers/regulator/qcom-amoled-regulator.c",
+  "ports/qcom-pmic-misc/drivers/regulator/qpnp-lcdb-regulator.c": "drivers/regulator/qpnp-lcdb-regulator.c",
+  "ports/qcom-pmic-misc/drivers/hwmon/qti_amoled_ecm.c": "drivers/hwmon/qti_amoled_ecm.c",
+  "ports/qcom-pmic-misc/drivers/mfd/qcom-i2c-pmic.c": "drivers/mfd/qcom-i2c-pmic.c",
+  "ports/qcom-pmic-misc/drivers/soc/qcom/qcom-pmic-ecid.c": "drivers/soc/qcom/qcom-pmic-ecid.c",
+  "ports/qcom-pmic-misc/drivers/soc/qcom/spmi-pmic-err-debug.c": "drivers/soc/qcom/spmi-pmic-err-debug.c",
+  "ports/qcom-pmic-misc/drivers/soc/qcom/qcom_voltage_adj.c": "drivers/soc/qcom/qcom_voltage_adj.c",
+  "ports/qcom-pmic-misc/include/soc/qcom/qcom_voltage_adj.h": "include/soc/qcom/qcom_voltage_adj.h",
+  "ports/qcom-pmic-misc/include/linux/qti-regmap-debugfs.h": "include/linux/qti-regmap-debugfs.h",
+  "ports/qcom-pmic-misc/include/linux/soc/qcom/panel_event_notifier.h": "include/linux/soc/qcom/panel_event_notifier.h",
+  "ports/qcom-pmic-misc/include/linux/regulator/debug-regulator.h": "include/linux/regulator/debug-regulator.h",
+  "ports/qcom-pmic-misc/Makefile": null
+ },
+ "scope": "qcom-amoled-regulator qpnp-lcdb-regulator qti-amoled-ecm qcom-i2c-pmic qcom-pmic-ecid spmi-pmic-err-debug qcom-voltage-adj on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

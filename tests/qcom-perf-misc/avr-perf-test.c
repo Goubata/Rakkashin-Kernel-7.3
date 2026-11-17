@@ -18,6 +18,16 @@ static void pmu_counts_advance(struct kunit *test)
 	static const u32 ev[] = { 0x11 };	/* cycles */
 	static const u32 cfg[] = { 0x08, 0x11, 0x17 };
 	unsigned int cpu, i;
+	unsigned long wait_end = jiffies + 5 * HZ;
+
+	/*
+	 * Built like the phone (QTI SCMI vendor protocol), pmu_lib defers its probe
+	 * until the qcom SCMI device exists; the fake CPUCP firmware loads just
+	 * before this test, so wait for the deferred probe instead of racing it.
+	 */
+	while (qcom_pmu_event_supported(0x11, 0) == -EPROBE_DEFER &&
+	       time_before(jiffies, wait_end))
+		msleep(50);
 
 	for_each_online_cpu(cpu) {
 		for (i = 0; i < ARRAY_SIZE(cfg); i++)

@@ -1,0 +1,39 @@
+{
+ "name": "qcom-dcvs-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/dcvs/bwmon.c": "drivers/soc/qcom/dcvs/bwmon.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/dcvs/bwmon.h": "drivers/soc/qcom/dcvs/bwmon.h",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/dcvs/trace-dcvs.h": "drivers/soc/qcom/dcvs/trace-dcvs.h",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/dcvs/memlat.c": "drivers/soc/qcom/dcvs/memlat.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/qcom_fdcvs.c": "drivers/soc/qcom/qcom_fdcvs.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/llcc_heuristics.c": "drivers/soc/qcom/llcc_heuristics.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/qcom_cache_allocation.c": "drivers/soc/qcom/qcom_cache_allocation.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/trace-cache_allocation.h": "drivers/soc/qcom/trace-cache_allocation.h",
+  "ports/qcom-dcvs-misc/drivers/cpufreq/qcom-cpufreq-hw-debug.c": "drivers/cpufreq/qcom-cpufreq-hw-debug.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/cpu_mpam.c": "drivers/soc/qcom/mpam/cpu_mpam.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/mpam.c": "drivers/soc/qcom/mpam/mpam.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/mpam_rpmsg.c": "drivers/soc/qcom/mpam/mpam_rpmsg.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/mpam_dsp.h": "drivers/soc/qcom/mpam/mpam_dsp.h",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/mpam_msc.c": "drivers/soc/qcom/mpam/mpam_msc.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/mpam_msc_slc.c": "drivers/soc/qcom/mpam/mpam_msc_slc.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/platform_mpam.c": "drivers/soc/qcom/mpam/platform_mpam.c",
+  "ports/qcom-dcvs-misc/drivers/soc/qcom/mpam/slc_mpam.c": "drivers/soc/qcom/mpam/slc_mpam.c",
+  "ports/qcom-dcvs-misc/include/soc/qcom/mpam.h": "include/soc/qcom/mpam.h",
+  "ports/qcom-dcvs-misc/include/soc/qcom/mpam_msc.h": "include/soc/qcom/mpam_msc.h",
+  "ports/qcom-dcvs-misc/include/soc/qcom/mpam_slc.h": "include/soc/qcom/mpam_slc.h",
+  "ports/qcom-dcvs-misc/include/linux/qcom_scmi_vendor.h": "include/linux/qcom_scmi_vendor.h",
+  "ports/qcom-dcvs-misc/include/soc/qcom/llcc_heuristics.h": "include/soc/qcom/llcc_heuristics.h",
+  "ports/qcom-dcvs-misc/include/soc/qcom/dcvs.h": "include/soc/qcom/dcvs.h",
+  "ports/qcom-dcvs-misc/include/soc/qcom/pmu_lib.h": "include/soc/qcom/pmu_lib.h",
+  "ports/qcom-dcvs-misc/include/linux/cpu_phys_log_map.h": "include/linux/cpu_phys_log_map.h",
+  "ports/qcom-dcvs-misc/include/linux/scmi_pmu.h": "include/linux/scmi_pmu.h",
+  "ports/qcom-dcvs-misc/Makefile": null
+ },
+ "scope": "bwmon memlat qcom-fdcvs llcc-heuristics qcom-cache-allocation qcom-cpufreq-hw-debug cpu-mpam mpam mpam-msc mpam-msc-slc platform-mpam slc-mpam on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

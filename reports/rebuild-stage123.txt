@@ -1,0 +1,2 @@
+BUILD FAIL ports/moto-misc/
+BUILD FAIL ports/qcom-coresight/

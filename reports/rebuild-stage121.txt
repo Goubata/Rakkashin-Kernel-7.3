@@ -1,0 +1,4 @@
+TBUILD FAIL tests/remoteproc-services/
+rebuild rc=1
+r2 rc=0
+r3 rc=0

@@ -2478,7 +2478,7 @@ qcom,qseecom-ta); a static userspace test allocates 4 KiB/1 MiB/8 MiB through /d
 writes and verifies under DMA_BUF_IOCTL_SYNC, runs 4 threads x 100 allocations, exhausts and recovers
 the carveout, and sees total_pools_kb grow after frees (34824 -> 36872 kB). 3/3 runs, no WARN/BUG.
 QEMU is not a Gunyah guest: gunyah.ko refuses to load (correct) and gh_rm_heap_manager needs
-hypervisor heap resources, so a test-only stub (tests/dma-heaps/avr-gunyah-stub.c, CRC-identical
+hypervisor heap resources, so a test-only stub (tests/dma-heaps/avr-gunyah-stub-main.c + avr-gunyah-stub-vm.c, CRC-identical
 exports, never shipped) stands in for those symbols. Not verified: LCP SCM call, Gunyah heap
 manager, secure heap assignment to TZ (phone only).
 Regression: 15 base suites + task-vendor-data, sched-walt, thermal-pause, moto-sched, dma-heaps
@@ -2762,6 +2762,34 @@ QEMU audio-conn (3/3): 82 modules load; icnss2 probe on a resource-less qcom,wcn
 moto-sched test: wait_blocked up to 10 s and asserts the waiter blocked (load-induced false failure).
 Regression: 44 pass + reruns (remoteproc-services 2x, moto-sched 5x); CRC 306.
 Not verified: audio, BT, WLAN, SLIMbus on the phone.
+
+## Stage123: qcom-soc batch generator; thermal, PMIC, debug, Gunyah, DCVS/MPAM, MHI/PCIe, misc; first-stage parity
+
+scripts/gen_qcom_soc_port.py generates ports from qcom-soc modules.bzl (srcs + canoe_perf conditional_srcs,
+common_sources.bzl patched/copied files from 7.3, copts, *_core.c wrappers, vendor headers missing from 7.3,
+reuse of headers already adapted in other ports, walt/gunyah include mapping). New ports: qcom-thermal-misc (10),
+qcom-pmic-misc (7), qcom-fixed-regulator (fixed.c + fixed.diff), qcom-debug-misc (10), gunyah-misc (7),
+qcom-dcvs-misc (12), qcom-mhi-pcie (6; vendor linux/mhi.h shadows 7.3 via NOSTDINC_FLAGS), qcom-soc-misc2 (13).
+Core patch patches/android-vendor-hooks-7.3.patch (Image#42): android_vh_thermal_pm_notify_suspend,
+android_vh_enable_thermal_genl_check, android_vh_check_uninterruptible_tasks(_dn), exports
+memblock_end_of_DRAM, sched_clock_read_begin/_retry. Vendor-config parity also applied to qcom-clock-core,
+qcom-irq, qcom-rpmh, arm-smmu-vendor, sched-walt, ufs-host, perf-misc, tee, tsens, reboot, firststage-misc,
+minidump (scripts/compare_phone_deps.py now also checks vendor_boot and GKI modules).
+7.3 API work: pci-msm-msi -> MSI parent domain (msi_create_parent_irq_domain + init_dev_msi_info keeping the
+vendor prepare/mask); pci-msm AER via pci_dev->aer_info (struct prefix identical; UNCOR array 32, NULL padded);
+uio mmap -> mmap_prepare + mmap_action_remap; lt9611uxc atomic bridge ops; i3c_xfers; console_suspend;
+iommu_paging_domain_alloc; hrtimer_setup; irq_domain_create_*; f_fs_ipc_log uses the 7.3 ffs_epfile layout.
+scripts/guard_macro_redefs.py turns vendor macro redefinitions into static_assert checks (caught SE_DMA_IF_EN
+0x004 vs 7.3 0x2004; vendor value kept for its debug dump). qcom_rproc_update_recovery_status added to the PAS
+port (vendor semantics) for adsp_sleepmon. qrtr_peek_pkt_size carried inside qrtr-gunyah.
+Vendor bugs fixed: gh_vcpu_mgr strcmp(NULL) before socinfo probe.
+Not ported (inert on AVR, evidence in module-set-decisions.json): qcom_spss, qcom_glink_spss, glink_probe.
+New parity differences: msm_memshare (no qcom_glink: zero-copy never negotiated by native glink),
+gunyah_trace (gunyah_get_info in gunyah.ko instead of vmlinux).
+QEMU soc-misc (3/3): 66 target modules, 112 loaded, no WARN/BUG. QEMU stand-ins extended with CRC-equal
+exports: avr-gunyah-stub (gunyah_vm_get/put, gunyah_hypercall_vcpu_run, gunyah_get_info), avr-minidump-stub
+(add/remove_region). Regression: all 36 suites pass (reruns after test-list fixes: duplicate cpu_phys_log_map removed from qcom-irq, perf test waits for the deferred pmu_lib probe now that pmu_lib uses the QTI SCMI vendor protocol like the phone); CRC 383.
+Not verified on the phone.
 
 ## Stage122: vendor CONFIG parity sweep; gadget, IPA, rmnet, camera, video, EVA, FastRPC
 

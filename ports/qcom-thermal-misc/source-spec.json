@@ -1,0 +1,36 @@
+{
+ "name": "qcom-thermal-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/qmi_cooling.c": "drivers/thermal/qcom/qmi_cooling.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_mitigation_device_service_v01.c": "drivers/thermal/qcom/thermal_mitigation_device_service_v01.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_mitigation_device_service_v01.h": "drivers/thermal/qcom/thermal_mitigation_device_service_v01.h",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/qmi_sensors.h": "drivers/thermal/qcom/qmi_sensors.h",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/qmi_sensors_v2.c": "drivers/thermal/qcom/qmi_sensors_v2.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_sensor_service_v02.c": "drivers/thermal/qcom/thermal_sensor_service_v02.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_sensor_service_v02.h": "drivers/thermal/qcom/thermal_sensor_service_v02.h",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_zone_internal.h": "drivers/thermal/qcom/thermal_zone_internal.h",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/qti_thermal_vendor_hooks.c": "drivers/thermal/qcom/qti_thermal_vendor_hooks.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/thermal_config.c": "drivers/thermal/qcom/thermal_config.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/qti_dynamic_hw_trip.c": "drivers/thermal/qcom/qti_dynamic_hw_trip.c",
+  "ports/qcom-thermal-misc/drivers/regulator/qti-ocp-notifier.c": "drivers/regulator/qti-ocp-notifier.c",
+  "ports/qcom-thermal-misc/drivers/powercap/qcom/qti_power_telemetry.c": "drivers/powercap/qcom/qti_power_telemetry.c",
+  "ports/qcom-thermal-misc/drivers/powercap/qcom/qti_power_telemetry.h": "drivers/powercap/qcom/qti_power_telemetry.h",
+  "ports/qcom-thermal-misc/drivers/powercap/qcom/trace.h": "drivers/powercap/qcom/trace.h",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/lmh_stats.c": "drivers/thermal/qcom/lmh_stats.c",
+  "ports/qcom-thermal-misc/drivers/thermal/qcom/trace_lmh_stats.h": "drivers/thermal/qcom/trace_lmh_stats.h",
+  "ports/qcom-thermal-misc/drivers/powercap/qcom/qptf.c": "drivers/powercap/qcom/qptf.c",
+  "ports/qcom-thermal-misc/drivers/powercap/qcom/qptf_internal.h": "drivers/powercap/qcom/qptf_internal.h",
+  "ports/qcom-thermal-misc/drivers/hwmon/qti_btl.c": "drivers/hwmon/qti_btl.c",
+  "ports/qcom-thermal-misc/include/linux/soc/qcom/qptf.h": "include/linux/soc/qcom/qptf.h",
+  "ports/qcom-thermal-misc/include/linux/ipc_logging.h": "include/linux/ipc_logging.h",
+  "ports/qcom-thermal-misc/include/linux/qcom_scmi_vendor.h": "include/linux/qcom_scmi_vendor.h",
+  "ports/qcom-thermal-misc/Makefile": null
+ },
+ "scope": "qti-qmi-cdev qti-qmi-sensor-v2 qti-thermal-vendor-hooks thermal-config qti-dynamic-hw-trip qti-ocp-notifier qti-power-telemetry lmh-stats qptf qti-btl on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

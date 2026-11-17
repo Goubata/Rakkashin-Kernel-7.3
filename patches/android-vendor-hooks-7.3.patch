@@ -1,0 +1,237 @@
+diff --git a/drivers/android/vendor_hooks.c b/drivers/android/vendor_hooks.c
+index cf3d04a39..a629048d9 100644
+--- a/drivers/android/vendor_hooks.c
++++ b/drivers/android/vendor_hooks.c
+@@ -17,6 +17,8 @@
+ #include <trace/hooks/binder.h>
+ #include <trace/hooks/bug.h>
+ #include <trace/hooks/cgroup.h>
++#include <trace/hooks/hung_task.h>
++#include <trace/hooks/thermal.h>
+ #include <trace/hooks/cpufreq.h>
+ #include <trace/hooks/cpuidle.h>
+ #include <trace/hooks/cpuidle_psci.h>
+@@ -162,3 +164,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_transfer_rsp_status);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_update_sysfs);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_wait_for_uic_cmd);
+ /* keep-sorted end */
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_enable_thermal_genl_check);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_thermal_pm_notify_suspend);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks_dn);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index de7a2dccb..19641db06 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -20,6 +20,7 @@
+ #include <linux/string.h>
+ #include <linux/of.h>
+ #include <linux/suspend.h>
++#include <trace/hooks/thermal.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace.h"
+@@ -1361,8 +1362,14 @@ static void thermal_zone_init_complete(struct thermal_zone_device *tz)
+ 	 * new thermal zone needs to be marked as suspended because
+ 	 * thermal_pm_notify() has run already.
+ 	 */
+-	if (thermal_pm_suspended)
+-		tz->state |= TZ_STATE_FLAG_SUSPENDED;
++	if (thermal_pm_suspended) {
++		int irq_wakeable = 0;
++
++		/* ANDROID: 6.12 parity, wake-capable zones keep running */
++		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
++		if (!irq_wakeable)
++			tz->state |= TZ_STATE_FLAG_SUSPENDED;
++	}
+ 
+ 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ }
+@@ -1740,8 +1747,16 @@ static void __thermal_pm_prepare(void)
+ 
+ 	thermal_pm_suspended = true;
+ 
+-	list_for_each_entry(tz, &thermal_tz_list, node)
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		int irq_wakeable = 0;
++
++		/* ANDROID: 6.12 parity */
++		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
++		if (irq_wakeable)
++			continue;
++
+ 		thermal_zone_pm_prepare(tz);
++	}
+ }
+ 
+ void thermal_pm_prepare(void)
+@@ -1784,8 +1799,16 @@ void thermal_pm_complete(void)
+ 
+ 	thermal_pm_suspended = false;
+ 
+-	list_for_each_entry(tz, &thermal_tz_list, node)
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		int irq_wakeable = 0;
++
++		/* ANDROID: 6.12 parity */
++		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
++		if (irq_wakeable)
++			continue;
++
+ 		thermal_zone_pm_complete(tz);
++	}
+ }
+ 
+ static int __init thermal_init(void)
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 315a76b01..7f1ca8822 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -14,6 +14,7 @@
+ #include <uapi/linux/thermal.h>
+ 
+ #include "thermal_core.h"
++#include <trace/hooks/thermal.h>
+ 
+ static const struct genl_multicast_group thermal_genl_mcgrps[] = {
+ 	[THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
+@@ -317,6 +318,12 @@ static int thermal_genl_send_event(enum thermal_genl_event event,
+ 	struct sk_buff *msg;
+ 	int ret = -EMSGSIZE;
+ 	void *hdr;
++	int enable_thermal_genl = 1;
++
++	/* ANDROID: 6.12 parity */
++	trace_android_vh_enable_thermal_genl_check(event, p->tz_id, &enable_thermal_genl);
++	if (!enable_thermal_genl)
++		return 0;
+ 
+ 	if (!thermal_group_has_listeners(THERMAL_GENL_EVENT_GROUP))
+ 		return 0;
+diff --git a/include/trace/hooks/hung_task.h b/include/trace/hooks/hung_task.h
+new file mode 100644
+index 000000000..2424c4fb3
+--- /dev/null
++++ b/include/trace/hooks/hung_task.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM hung_task
++
++#define TRACE_INCLUDE_PATH trace/hooks
++
++#if !defined(_TRACE_HOOK_HUNG_TASK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_HOOK_HUNG_TASK_H
++
++#include <trace/hooks/vendor_hooks.h>
++
++/* ANDROID: android16-6.12 parity */
++DECLARE_HOOK(android_vh_check_uninterruptible_tasks,
++	TP_PROTO(struct task_struct *t, unsigned long timeout,
++		bool *need_check),
++	TP_ARGS(t, timeout, need_check));
++
++DECLARE_HOOK(android_vh_check_uninterruptible_tasks_dn,
++	TP_PROTO(void *unused),
++	TP_ARGS(unused));
++
++#endif /* _TRACE_HOOK_HUNG_TASK_H */
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/include/trace/hooks/thermal.h b/include/trace/hooks/thermal.h
+new file mode 100644
+index 000000000..c113294cc
+--- /dev/null
++++ b/include/trace/hooks/thermal.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM thermal
++
++#define TRACE_INCLUDE_PATH trace/hooks
++
++#if !defined(_TRACE_HOOK_THERMAL_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_HOOK_THERMAL_H
++
++#include <trace/hooks/vendor_hooks.h>
++
++/* ANDROID: android16-6.12 parity */
++DECLARE_HOOK(android_vh_enable_thermal_genl_check,
++	TP_PROTO(int event, int tz_id, int *enable_thermal_genl),
++	TP_ARGS(event, tz_id, enable_thermal_genl));
++
++struct thermal_zone_device;
++DECLARE_HOOK(android_vh_thermal_pm_notify_suspend,
++	     TP_PROTO(struct thermal_zone_device *tz, int *irq_wakeable),
++	     TP_ARGS(tz, irq_wakeable));
++
++#endif /* _TRACE_HOOK_THERMAL_H */
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index 6fcc94ce4..d7b38cc5d 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -27,6 +27,7 @@
+ #include <linux/sys_info.h>
+ 
+ #include <trace/events/sched.h>
++#include <trace/hooks/hung_task.h>
+ 
+ /*
+  * The number of tasks checked:
+@@ -306,6 +307,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 	unsigned long this_round_count;
+ 	int need_warning = sysctl_hung_task_warnings;
+ 	unsigned long si_mask = hung_task_si_mask;
++	bool need_check;
+ 
+ 	/*
+ 	 * If the system crashed already then all bets are off,
+@@ -325,7 +327,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 			last_break = jiffies;
+ 		}
+ 
+-		if (task_is_hung(t, timeout)) {
++		/* ANDROID: 6.12 parity, vendor may exclude the task from the check */
++		need_check = true;
++		trace_android_vh_check_uninterruptible_tasks(t, timeout, &need_check);
++		if (need_check && task_is_hung(t, timeout)) {
+ 			/*
+ 			 * Increment the global counter so that userspace could
+ 			 * start migrating tasks ASAP. But count the current
+@@ -337,6 +342,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 			hung_task_info(t, timeout, this_round_count);
+ 		}
+ 	}
++	trace_android_vh_check_uninterruptible_tasks_dn(NULL);
+  unlock:
+ 	rcu_read_unlock();
+ 
+diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
+index 13628b1eb..311da7fdc 100644
+--- a/kernel/time/sched_clock.c
++++ b/kernel/time/sched_clock.c
+@@ -80,6 +80,9 @@ notrace int sched_clock_read_retry(unsigned int seq)
+ {
+ 	return read_seqcount_latch_retry(&cd.seq, seq);
+ }
++/* ANDROID: 6.12 parity (gh_ctrl) */
++EXPORT_SYMBOL_GPL(sched_clock_read_begin);
++EXPORT_SYMBOL_GPL(sched_clock_read_retry);
+ 
+ static __always_inline unsigned long long __sched_clock(void)
+ {
+diff --git a/mm/memblock.c b/mm/memblock.c
+index e6fdf95a0..20a8ac82b 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -1974,6 +1974,7 @@ phys_addr_t __init_memblock memblock_end_of_DRAM(void)
+ 
+ 	return (memblock.memory.regions[idx].base + memblock.memory.regions[idx].size);
+ }
++EXPORT_SYMBOL_GPL(memblock_end_of_DRAM); /* ANDROID: 6.12 parity (mem_offline) */
+ 
+ static phys_addr_t __init_memblock __find_max_addr(phys_addr_t limit)
+ {

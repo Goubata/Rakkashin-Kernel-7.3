@@ -1,0 +1,16 @@
+{
+  "stage": 123,
+  "test": "soc-misc",
+  "qemu_runs": {
+    "qemu": true,
+    "r2": true,
+    "r3": true
+  },
+  "target_modules": 66,
+  "loaded_modules": 112,
+  "regression": "reports/regress-stage123b-summary.txt (36 suites + CRC pass)",
+  "crc_modules": 383,
+  "phone_parity": "reports/phone-deps-parity-stage123.txt",
+  "image": "#42 (patches/android-vendor-hooks-7.3.patch)",
+  "phone_verified": false
+}

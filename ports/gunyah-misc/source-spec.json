@@ -1,0 +1,28 @@
+{
+ "name": "gunyah-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/gunyah-misc/drivers/virt/gunyah/gh_ctrl.c": "drivers/virt/gunyah/gh_ctrl.c",
+  "ports/gunyah-misc/drivers/virt/gunyah/hcall_ctrl.h": "drivers/virt/gunyah/hcall_ctrl.h",
+  "ports/gunyah-misc/drivers/virt/gunyah/gh_panic_notifier.c": "drivers/virt/gunyah/gh_panic_notifier.c",
+  "ports/gunyah-misc/drivers/virt/gunyah/gh_rm_booster.c": "drivers/virt/gunyah/gh_rm_booster.c",
+  "ports/gunyah-misc/drivers/virt/gunyah/gh_rm_booster.h": "drivers/virt/gunyah/gh_rm_booster.h",
+  "ports/gunyah-misc/drivers/virt/gunyah/gh_rm_drv_private.h": "drivers/virt/gunyah/gh_rm_drv_private.h",
+  "ports/gunyah-misc/drivers/soc/qcom/gh_tlmm_vm_mem_access.c": "drivers/soc/qcom/gh_tlmm_vm_mem_access.c",
+  "ports/gunyah-misc/drivers/virt/gunyah/gunyah_trace.c": "drivers/virt/gunyah/gunyah_trace.c",
+  "ports/gunyah-misc/drivers/virt/gunyah/gunyah_trace.h": "drivers/virt/gunyah/gunyah_trace.h",
+  "ports/gunyah-misc/drivers/virt/gunyah/hcall_trace.h": "drivers/virt/gunyah/hcall_trace.h",
+  "ports/gunyah-misc/drivers/tty/hvc/hvc_gunyah.c": "drivers/tty/hvc/hvc_gunyah.c",
+  "ports/gunyah-misc/net/qrtr/gunyah.c": "net/qrtr/gunyah.c",
+  "ports/gunyah-misc/net/qrtr/qrtr.h": "net/qrtr/qrtr.h",
+  "ports/gunyah-misc/include/soc/qcom/secure_buffer.h": "include/soc/qcom/secure_buffer.h",
+  "ports/gunyah-misc/include/linux/pinctrl/qcom-pinctrl.h": "include/linux/pinctrl/qcom-pinctrl.h",
+  "ports/gunyah-misc/Makefile": null
+ },
+ "scope": "gh-ctrl gh-panic-notifier gh-rm-booster gh-tlmm-vm-mem-access gunyah-trace hvc-gunyah qrtr-gunyah on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

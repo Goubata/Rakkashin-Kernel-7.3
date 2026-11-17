@@ -32,7 +32,9 @@ for f in files:
         ref |= {c[:-7] if c.endswith('_MODULE') else c for c in re.findall(r'CONFIG_[A-Z0-9_]+', f.read_text(errors='ignore'))}
 v = dict(re.findall(r'"(CONFIG_[A-Z0-9_]+)":\s*"(y|m)"', (ROOT.parent / 'avr-upstream-audit/qcom-soc/configs/canoe_perf.bzl').read_text()))
 ours = set(re.findall(r'^(CONFIG_[A-Z0-9_]+)=[ym]', (ROOT / 'out/native-gki/.config').read_text(), re.M))
-need = sorted(n for n in ref & set(v) if n not in ours and n not in defs)
+# provided natively by the 7.3 core (debug_symbol -> kallsyms, module-set-decisions.json)
+EXCLUDE = {'CONFIG_QCOM_DEBUG_SYMBOL'}
+need = sorted(n for n in ref & set(v) if n not in ours and n not in defs and n not in EXCLUDE)
 lines = ['/* SPDX-License-Identifier: GPL-2.0-only */',
          "/* AVR 7.3: vendor (qcom-soc configs/canoe_perf.bzl) options that the phone's",
          ' * module was compiled with through the vendor kernel autoconf but that the 7.3',

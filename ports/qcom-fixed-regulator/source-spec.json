@@ -1,0 +1,16 @@
+{
+ "name": "qcom-fixed-regulator",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-fixed-regulator/drivers/regulator/qti_fixed_regulator.c": "drivers/regulator/qti_fixed_regulator.c",
+  "ports/qcom-fixed-regulator/include/linux/regulator/debug-regulator.h": "include/linux/regulator/debug-regulator.h",
+  "ports/qcom-fixed-regulator/include/linux/regulator/proxy-consumer.h": "include/linux/regulator/proxy-consumer.h",
+  "ports/qcom-fixed-regulator/Makefile": null
+ },
+ "scope": "qti-fixed-regulator on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

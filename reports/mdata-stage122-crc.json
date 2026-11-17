@@ -1,0 +1,161 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/camera-kernel/camera.ko",
+      "imports_checked": 440,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/dataipa/gsim.ko",
+      "imports_checked": 92,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/dataipa/ipam.ko",
+      "imports_checked": 402,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/dataipa/ipanetm.ko",
+      "imports_checked": 10,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/dataipa/rmnet_mem.ko",
+      "imports_checked": 46,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_aps.ko",
+      "imports_checked": 64,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_core.ko",
+      "imports_checked": 165,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_ctl.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_offload.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_perf.ko",
+      "imports_checked": 74,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_perf_tether.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_sch.ko",
+      "imports_checked": 9,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_shs.ko",
+      "imports_checked": 151,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/datarmnet/rmnet_wlan.ko",
+      "imports_checked": 81,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/dsp-kernel/frpc-adsprpc.ko",
+      "imports_checked": 202,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/eva-kernel/msm-eva.ko",
+      "imports_checked": 281,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/kgsl/msm_kgsl.ko",
+      "imports_checked": 570,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-eom/eom_driver.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-eom/pci_phy_access.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-leds/leds-qcom-flash.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-leds/leds-qcom-lpg.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-leds/leds-qpnp-vibrator-ldo.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-leds/qcom-hv-haptics.ko",
+      "imports_checked": 131,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-leds/qcom-spmi-wled.ko",
+      "imports_checked": 44,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm-telemetry/cpuss_telemetry.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb-gadget/moto_f_usbnet.ko",
+      "imports_checked": 55,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb-gadget/usb_f_ccid.ko",
+      "imports_checked": 56,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb-gadget/usb_f_cdev.ko",
+      "imports_checked": 81,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb-gadget/usb_f_gsi.ko",
+      "imports_checked": 116,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb-gadget/usb_f_qdss.ko",
+      "imports_checked": 58,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/video-driver/msm_video.ko",
+      "imports_checked": 278,
+      "mismatches": {}
+    }
+  ]
+}

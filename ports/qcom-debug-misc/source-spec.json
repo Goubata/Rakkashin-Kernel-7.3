@@ -1,0 +1,37 @@
+{
+ "name": "qcom-debug-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-debug-misc/drivers/soc/qcom/core_hang_detect.c": "drivers/soc/qcom/core_hang_detect.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/dcc_v2.c": "drivers/soc/qcom/dcc_v2.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/dmesg_dumper.c": "drivers/soc/qcom/dmesg_dumper.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/dmesg_dumper_private.h": "drivers/soc/qcom/dmesg_dumper_private.h",
+  "ports/qcom-debug-misc/drivers/soc/qcom/hung_task_enh.c": "drivers/soc/qcom/hung_task_enh.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/mem-offline.c": "drivers/soc/qcom/mem-offline.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/microdump_collector.c": "drivers/soc/qcom/microdump_collector.c",
+  "ports/qcom-debug-misc/drivers/soc/qcom/qcom_dynamic_ramoops.c": "drivers/soc/qcom/qcom_dynamic_ramoops.c",
+  "ports/qcom-debug-misc/drivers/edac/qcom_edac.c": "drivers/edac/qcom_edac.c",
+  "ports/qcom-debug-misc/drivers/char/rdbg.c": "drivers/char/rdbg.c",
+  "ports/qcom-debug-misc/drivers/usb/gadget/function/f_fs_ipc_log.c": "drivers/usb/gadget/function/f_fs_ipc_log.c",
+  "ports/qcom-debug-misc/include/linux/ipc_logging.h": "include/linux/ipc_logging.h",
+  "ports/qcom-debug-misc/include/soc/qcom/qcom_ramdump.h": "include/soc/qcom/qcom_ramdump.h",
+  "ports/qcom-debug-misc/include/soc/qcom/rpm-smd.h": "include/soc/qcom/rpm-smd.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_ctrl.h": "include/linux/gunyah/gh_ctrl.h",
+  "ports/qcom-debug-misc/include/soc/qcom/minidump.h": "include/soc/qcom/minidump.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_dbl.h": "include/linux/gunyah/gh_dbl.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_panic_notifier.h": "include/linux/gunyah/gh_panic_notifier.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_rm_drv.h": "include/linux/gunyah/gh_rm_drv.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_vm.h": "include/linux/gunyah/gh_vm.h",
+  "ports/qcom-debug-misc/include/soc/qcom/secure_buffer.h": "include/soc/qcom/secure_buffer.h",
+  "ports/qcom-debug-misc/include/linux/gunyah/gh_common.h": "include/linux/gunyah/gh_common.h",
+  "ports/qcom-debug-misc/include/soc/qcom/memory_dump.h": "include/soc/qcom/memory_dump.h",
+  "ports/qcom-debug-misc/include/dt-bindings/soc/qcom,dcc_v2.h": "include/dt-bindings/soc/qcom,dcc_v2.h",
+  "ports/qcom-debug-misc/Makefile": null
+ },
+ "scope": "core-hang-detect dcc-v2 dmesg-dumper hung-task-enh mem-offline microdump-collector qcom-dynamic-ramoops qcom-edac rdbg f-fs-ipc-log on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

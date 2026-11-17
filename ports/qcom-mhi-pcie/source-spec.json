@@ -1,0 +1,40 @@
+{
+  "name": "qcom-mhi-pcie",
+  "repo": "qcom-soc",
+  "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "files": {
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/common.h": "drivers/bus/mhi/common.h",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/internal.h": "drivers/bus/mhi/host/internal.h",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/boot.c": "drivers/bus/mhi/host/boot.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/init.c": "drivers/bus/mhi/host/init.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/main.c": "drivers/bus/mhi/host/main.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/misc.h": "drivers/bus/mhi/host/misc.h",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/pm.c": "drivers/bus/mhi/host/pm.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/trace.h": "drivers/bus/mhi/host/trace.h",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/host/misc.c": "drivers/bus/mhi/host/misc.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/devices/mhi_satellite.c": "drivers/bus/mhi/devices/mhi_satellite.c",
+    "ports/qcom-mhi-pcie/drivers/bus/mhi/devices/mhi_uci.c": "drivers/bus/mhi/devices/mhi_uci.c",
+    "ports/qcom-mhi-pcie/drivers/pci/controller/pci-msm-msi.c": "drivers/pci/controller/pci-msm-msi.c",
+    "ports/qcom-mhi-pcie/drivers/pci/controller/pci-msm.c": "drivers/pci/controller/pci-msm.c",
+    "ports/qcom-mhi-pcie/drivers/soc/qcom/pcie-pdc.c": "drivers/soc/qcom/pcie-pdc.c",
+    "ports/qcom-mhi-pcie/net/qrtr/mhi.c": "net/qrtr/mhi.c",
+    "ports/qcom-mhi-pcie/net/qrtr/qrtr.h": "net/qrtr/qrtr.h",
+    "ports/qcom-mhi-pcie/include/soc/qcom/pcie-pdc.h": "include/soc/qcom/pcie-pdc.h",
+    "ports/qcom-mhi-pcie/include/linux/phy_core.h": "include/linux/phy_core.h",
+    "ports/qcom-mhi-pcie/include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h": "include/dt-bindings/regulator/qcom,rpmh-regulator-levels.h",
+    "ports/qcom-mhi-pcie/include/linux/ipc_logging.h": "include/linux/ipc_logging.h",
+    "ports/qcom-mhi-pcie/include/linux/msm_pcie.h": "include/linux/msm_pcie.h",
+    "ports/qcom-mhi-pcie/include/soc/qcom/crm.h": "include/soc/qcom/crm.h",
+    "ports/qcom-mhi-pcie/include/linux/pinctrl/qcom-pinctrl.h": "include/linux/pinctrl/qcom-pinctrl.h",
+    "ports/qcom-mhi-pcie/include/linux/mhi_misc.h": "include/linux/mhi_misc.h",
+    "ports/qcom-mhi-pcie/Makefile": null,
+    "ports/qcom-mhi-pcie/shadow/linux/mhi.h": "include/linux/mhi.h",
+    "ports/qcom-mhi-pcie/shadow/dt-bindings/interconnect/qcom,icc.h": "include/dt-bindings/interconnect/qcom,icc.h"
+  },
+  "scope": "mhi mhi-dev-satellite mhi-dev-uci pci-msm-drv pci-phy-access pcie-pdc qrtr-mhi on android18-7.3",
+  "reviewed_changes": [],
+  "pending": [
+    "phone"
+  ],
+  "notes": " include/linux/mhi.h: vendor header deliberately shadows the 7.3 one (vendor MHI stack; 7.3 builds no native mhi.ko)."
+}

@@ -74,4 +74,22 @@ void gh_rm_heap_shrink(void)
 }
 EXPORT_SYMBOL_GPL(gh_rm_heap_shrink);
 
+/* gh_vcpu_mgr also runs vCPUs; no hypervisor on QEMU virt */
+#include <linux/gunyah.h>
+
+enum gunyah_error
+gunyah_hypercall_vcpu_run(u64 capid, unsigned long *resume_data,
+			  struct gunyah_hypercall_vcpu_run_resp *resp)
+{
+	return GUNYAH_ERROR_UNIMPLEMENTED;
+}
+EXPORT_SYMBOL_GPL(gunyah_hypercall_vcpu_run);
+
+/* gunyah_trace reads hypervisor info; the real gunyah.ko never maps it on QEMU */
+void *gunyah_get_info(u16 owner, u16 id, size_t *size)
+{
+	return ERR_PTR(-ENOENT);
+}
+EXPORT_SYMBOL_GPL(gunyah_get_info);
+
 MODULE_LICENSE("GPL");

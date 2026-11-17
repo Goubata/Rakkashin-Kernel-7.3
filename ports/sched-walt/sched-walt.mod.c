@@ -403,6 +403,7 @@ __used __section("__versions") = {
 	{ 0x80e9f7d9, "tracepoint_probe_unregister" },
 	{ 0xcc39254f, "__cpuhp_remove_state" },
 	{ 0x49dd95d9, "trace_print_flags_seq" },
+	{ 0xc6d171ba, "socinfo_get_id_string" },
 	{ 0x3accfef3, "kstrdup" },
 	{ 0x57962c48, "__tracepoint_rwmmio_read" },
 	{ 0x57962c48, "__tracepoint_rwmmio_post_read" },
@@ -747,6 +748,7 @@ __used __section("__version_ext_crcs") = {
 	0x80e9f7d9,
 	0xcc39254f,
 	0x49dd95d9,
+	0xc6d171ba,
 	0x3accfef3,
 	0x57962c48,
 	0x57962c48,
@@ -1090,6 +1092,7 @@ __used __section("__version_ext_names") =
 	"tracepoint_probe_unregister\0"
 	"__cpuhp_remove_state\0"
 	"trace_print_flags_seq\0"
+	"socinfo_get_id_string\0"
 	"kstrdup\0"
 	"__tracepoint_rwmmio_read\0"
 	"__tracepoint_rwmmio_post_read\0"
@@ -1122,5 +1125,5 @@ __used __section("__version_ext_names") =
 	"module_layout\0"
 ;
 
-MODULE_INFO(depends, "");
+MODULE_INFO(depends, "socinfo");
 

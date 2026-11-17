@@ -1,0 +1,21 @@
+{
+  "scope": "Unaccepted draft; QEMU PMUv3 + fake SCMI + WALT verification",
+  "core_image": "changed",
+  "image_sha256": "a75e669d9d54880a8821ea124c3e0d97ac9316e345e9e54fcea669316f878ebd",
+  "modules": [
+    "arm_smmu_pmu.ko",
+    "qcom_llcc_pmu.ko",
+    "qcom-pmu-lib.ko",
+    "msm_performance.ko",
+    "qcom_cpu_vendor_hooks.ko",
+    "gh_vcpu_mgr.ko"
+  ],
+  "test_modules": [
+    "avr-perf-test.ko"
+  ],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

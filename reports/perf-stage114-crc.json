@@ -1,0 +1,41 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-perf-misc/arm_smmu_pmu.ko",
+      "imports_checked": 38,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-perf-misc/qcom_llcc_pmu.ko",
+      "imports_checked": 33,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-perf-misc/qcom-pmu-lib.ko",
+      "imports_checked": 59,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-perf-misc/msm_performance.ko",
+      "imports_checked": 56,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-perf-misc/qcom_cpu_vendor_hooks.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-perf-misc/gh_vcpu_mgr.ko",
+      "imports_checked": 75,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-perf-misc/avr-perf-test.ko",
+      "imports_checked": 10,
+      "mismatches": {}
+    }
+  ]
+}

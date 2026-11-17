@@ -1,0 +1,113 @@
+--- a/ports/qcom-perf-misc/pmu_lib.c
++++ b/ports/qcom-perf-misc/pmu_lib.c
+@@ -7,6 +7,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <asm/cpufeature.h>
++#include <asm/sysreg.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
+@@ -105,10 +107,18 @@
+  * four supported AMU counters i.e. SYS_AMEVCNTR0_CONST_EL0,
+  * SYS_AMEVCNTR0_CORE_EL0, SYS_AMEVCNTR0_INST_RET_EL0, SYS_AMEVCNTR0_MEM_STALL
+  */
++/*
++ * AVR 7.3 port: only use AMU counters when the CPU implements FEAT_AMU
++ * (ID_AA64PFR0_EL1.AMU). 6.12 assumed AMU from the Kconfig alone; on CPUs
++ * without it (QEMU) reading AMEVCNTR traps as an undefined instruction.
++ * The phone's cores implement AMU, so behaviour there is unchanged.
++ */
++static bool pmu_amu_present __read_mostly;
++
+ static inline bool is_amu_valid(enum amu_counters amu_id)
+ {
+ 	return (amu_id >= SYS_AMU_CONST_CYC && amu_id < SYS_AMU_MAX &&
+-		IS_ENABLED(CONFIG_ARM64_AMU_EXTN));
++		IS_ENABLED(CONFIG_ARM64_AMU_EXTN) && pmu_amu_present);
+ }
+ 
+ /*
+@@ -1173,6 +1183,10 @@
+ 	if (ret == -EPROBE_DEFER)
+ 		return ret;
+ 
++	pmu_amu_present = cpuid_feature_extract_unsigned_field(
++				read_sysreg_s(SYS_ID_AA64PFR0_EL1),
++				ID_AA64PFR0_EL1_AMU_SHIFT) != 0;
++
+ 	if (!pmu_base) {
+ 		idx = of_property_match_string(dev->of_node, "reg-names", "pmu-base");
+ 		if (idx < 0) {
+--- a/ports/qcom-perf-misc/qcom_cpu_vendor_hooks.c
++++ b/ports/qcom-perf-misc/qcom_cpu_vendor_hooks.c
+@@ -143,8 +143,19 @@
+ #endif /* CONFIG_RANDOMIZE_BASE */
+ 
+ #if defined(CONFIG_HIBERNATION)
+-static struct syscore_ops kaslr_offset_restore_syscore_ops = {
+-	.resume = store_kaslr_offset,
++/* AVR 7.3: syscore callbacks take a data pointer and are registered through
++ * struct syscore (register_syscore_ops() was removed). */
++static void kaslr_offset_restore(void *data)
++{
++	store_kaslr_offset();
++}
++
++static const struct syscore_ops kaslr_offset_restore_syscore_ops = {
++	.resume = kaslr_offset_restore,
++};
++
++static struct syscore kaslr_offset_restore_syscore = {
++	.ops = &kaslr_offset_restore_syscore_ops,
+ };
+ #endif /* CONFIG_HIBERNATION */
+ 
+@@ -157,7 +168,7 @@
+ 
+ 	store_kaslr_offset();
+ #ifdef CONFIG_HIBERNATION
+-	register_syscore_ops(&kaslr_offset_restore_syscore_ops);
++	register_syscore(&kaslr_offset_restore_syscore);
+ #endif
+ 
+ 	ret = register_trace_android_vh_ipi_stop(trace_ipi_stop, NULL);
+--- a/ports/qcom-perf-misc/gh_vcpu_mgr.c
++++ b/ports/qcom-perf-misc/gh_vcpu_mgr.c
+@@ -18,6 +18,11 @@
+ #include <linux/gunyah/gh_vm.h>
+ #include <trace/hooks/gunyah.h>
+ #include "gh_vcpu_mgr.h"
++
++/* AVR 7.3: 6.12 qcom_scm.h value, absent from the 7.3 header */
++#ifndef QCOM_SCM_VMID_GH_RM
++#define QCOM_SCM_VMID_GH_RM 0xFF
++#endif
+ 
+ #include <soc/qcom/socinfo.h>
+ 
+--- a/ports/qcom-perf-misc/Makefile
++++ b/ports/qcom-perf-misc/Makefile
+@@ -0,0 +1,21 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# canoe_perf.bzl =m: ARM_SMMU_PMU, QCOM_LLCC_PMU, QCOM_PMU_LIB, MSM_PERFORMANCE,
++# QCOM_CPU_VENDOR_HOOKS, GH_VCPU_MGR.
++obj-m += arm_smmu_pmu.o qcom_llcc_pmu.o qcom-pmu-lib.o msm_performance.o \
++	qcom_cpu_vendor_hooks.o gh_vcpu_mgr.o
++qcom-pmu-lib-y := pmu_lib.o
++ccflags-y += -I$(src)/include -I$(src) -I$(srctree) -I$(src)/../qcom-minidump \
++	-I$(src)/../qcom-minidump/include -I$(src)/../qcom-socinfo/include \
++	-I$(src)/../qcom-watchdog/include -I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include \
++	-I$(src)/../gunyah-core/include -I$(src)/../sched-walt/include \
++	-I$(src)/../qcom-cpucp-scmi/include
++ccflags-y += -DCONFIG_QCOM_PMU_LIB_MODULE=1 -DCONFIG_QCOM_LLCC_PMU_MODULE=1 \
++	-DCONFIG_MSM_PERFORMANCE_MODULE=1 -DCONFIG_SCHED_WALT_MODULE=1 -DCONFIG_SCHED_WALT_NR_CPUS=8 \
++	-DCONFIG_QTI_SCMI_VENDOR_PROTOCOL_MODULE=1 -DCONFIG_QTI_QCOM_SCMI_CLIENT_MODULE=1 \
++	-DCONFIG_GH_VCPU_MGR_MODULE=1 -DCONFIG_GH_RM_DRV_MODULE=1 -DCONFIG_QCOM_MINIDUMP_MODULE=1 \
++	-DCONFIG_QCOM_WDT_CORE_MODULE=1 -DCONFIG_QCOM_CPU_VENDOR_HOOKS_MODULE=1 -DCONFIG_QCOM_DEBUG_SYMBOL_MODULE=1
++ccflags-y += -Wno-missing-prototypes
++KBUILD_EXTRA_SYMBOLS += $(src)/../sched-walt/Module.symvers $(src)/../qcom-cpucp-scmi/Module.symvers \
++	$(src)/../gunyah-rm/Module.symvers $(src)/../gunyah/Module.symvers $(src)/../gunyah-core/Module.symvers \
++	$(src)/../qcom-minidump/Module.symvers $(src)/../qcom-socinfo/Module.symvers \
++	$(src)/../qcom-watchdog/Module.symvers

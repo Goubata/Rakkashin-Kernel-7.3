@@ -1,0 +1,31 @@
+{
+ "name": "qcom-perf-misc",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-perf-misc/arm_smmu_pmu.c": "drivers/perf/arm_smmu_pmu.c",
+  "ports/qcom-perf-misc/qcom_llcc_pmu.c": "drivers/perf/qcom_llcc_pmu.c",
+  "ports/qcom-perf-misc/pmu_lib.c": "drivers/soc/qcom/dcvs/pmu_lib.c",
+  "ports/qcom-perf-misc/msm_performance.c": "drivers/soc/qcom/msm_performance.c",
+  "ports/qcom-perf-misc/qcom_cpu_vendor_hooks.c": "drivers/soc/qcom/qcom_cpu_vendor_hooks.c",
+  "ports/qcom-perf-misc/gh_vcpu_mgr.c": "drivers/virt/gunyah/gh_vcpu_mgr.c",
+  "ports/qcom-perf-misc/gh_vcpu_mgr.h": "drivers/virt/gunyah/gh_vcpu_mgr.h",
+  "ports/qcom-perf-misc/gh_vcpu_mgr_trace.h": "drivers/virt/gunyah/gh_vcpu_mgr_trace.h",
+  "ports/qcom-perf-misc/include/soc/qcom/msm_performance.h": "include/soc/qcom/msm_performance.h",
+  "ports/qcom-perf-misc/include/soc/qcom/pmu_lib.h": "include/soc/qcom/pmu_lib.h",
+  "ports/qcom-perf-misc/include/soc/qcom/qcom_llcc_pmu.h": "include/soc/qcom/qcom_llcc_pmu.h",
+  "ports/qcom-perf-misc/Makefile": null
+ },
+ "scope": "arm_smmu_pmu, qcom_llcc_pmu, qcom-pmu-lib, msm_performance, qcom_cpu_vendor_hooks, gh_vcpu_mgr on android18-7.3",
+ "reviewed_changes": [
+  "qcom_cpu_vendor_hooks: 7.3 syscore API (struct syscore + ops(void *data), register_syscore)",
+  "gh_vcpu_mgr: QCOM_SCM_VMID_GH_RM 0xFF fallback (absent from 7.3 header)",
+  "pmu_lib: AMU counters only when ID_AA64PFR0_EL1.AMU is implemented (6.12 assumed it from Kconfig; unchanged on the phone's AMU cores)",
+  "DEBUG_SYMBOL_LOOKUP via the kernel's debug_symbol_lookup_name (CONFIG_QCOM_DEBUG_SYMBOL)"
+ ],
+ "pending": [
+  "gh_vcpu_mgr needs the Gunyah hypervisor (phone)",
+  "llcc/smmu PMU hardware counters (phone)",
+  "AMU events (phone)"
+ ]
+}

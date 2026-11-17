@@ -19,9 +19,11 @@
   fake_cpucp: fake-cpucp { compatible="avr,fake-scmi-platform"; #mbox-cells=<1>; shmem=<&cpucp_tx>;
    avr,sub-vendor="CPUCP"; avr,protocols=<0x80>; };
   pdp_scmi { compatible="arm,scmi"; #address-cells=<1>; #size-cells=<0>;
+   arm,max-rx-timeout-ms=<1000>;	/* QEMU-only: TCG can stall the fake firmware > 30 ms */
    mboxes=<&fake_pdp 0 &fake_pdp 1>; mbox-names="tx","rx"; shmem=<&pdp_tx &pdp_rx>;
    pdp_perf: protocol@13 { reg=<0x13>; #clock-cells=<1>; }; };
   cpucp_scmi { compatible="arm,scmi"; #address-cells=<1>; #size-cells=<0>;
+   arm,max-rx-timeout-ms=<1000>;	/* QEMU-only: TCG can stall the fake firmware > 30 ms */
    arm,max-msg-size=<128>;	/* ports/device-tree/avr73-fixups.dtso */
    mboxes=<&fake_cpucp 0 &fake_cpucp 2>; mbox-names="tx","rx"; shmem=<&cpucp_tx &cpucp_rx>;
    protocol@80 { reg=<0x80>; #clock-cells=<1>; }; };

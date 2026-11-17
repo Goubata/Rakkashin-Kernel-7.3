@@ -1,0 +1,20 @@
+{
+ "stage": 114,
+ "scope": "pmu_lib, llcc/smmu PMU, msm_performance, cpu vendor hooks, gh_vcpu_mgr",
+ "qemu_runs": [
+  "reports/perf-stage114-r1.log",
+  "reports/perf-stage114-r2.log",
+  "reports/perf-stage114-r3.log",
+  "reports/perf-stage114-r4.log",
+  "reports/perf-stage114-r5.log"
+ ],
+ "results": {
+  "walt_on_scmi": "87 sysctls, walt governor on both policies",
+  "pmu_lib": "events supported, cycles advance",
+  "msm_performance": "max/min limits applied and released"
+ },
+ "regression": "reports/regress-stage114-summary.txt",
+ "crc": "reports/perf-stage114-crc.json",
+ "physical_verified": false,
+ "promoted": false
+}

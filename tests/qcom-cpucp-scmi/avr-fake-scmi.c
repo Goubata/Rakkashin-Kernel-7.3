@@ -232,7 +232,7 @@ static int fake_send(struct mbox_chan *chan, void *data)
 	if (chan != &f->chans[0])
 		return 0;	/* doorbell-only channels (rx, cpucp_fast) */
 	f->pending = chan;
-	schedule_work(&f->work);
+	queue_work(system_highpri_wq, &f->work);
 	return 0;
 }
 

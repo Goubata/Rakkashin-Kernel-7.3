@@ -2608,3 +2608,22 @@ accepts (driver behaviour). kryo EDAC (phone DT has no kryo-cpu-erp node), va_mi
 and iommu debug load. 3/3 runs.
 Regression: 26 suites + scm, secure, pas-driver, ice, iommu, ufs, debug-symbol, diagnostics; 168
 CRCs; core replay 32 patches.
+
+## Stage114: PMU library, msm_performance, CPU vendor hooks, PMUs, gh_vcpu_mgr
+
+ports/qcom-perf-misc (qcom-soc 037aa1c): qcom-pmu-lib, qcom_llcc_pmu, arm_smmu_pmu, msm_performance,
+qcom_cpu_vendor_hooks, gh_vcpu_mgr. Port fixes: 7.3 struct syscore/register_syscore;
+QCOM_SCM_VMID_GH_RM fallback; pmu_lib reads AMU counters only when ID_AA64PFR0_EL1.AMU != 0
+(6.12 relied on the Kconfig; QEMU's CPU has no AMU and AMEVCNTR trapped as undefined).
+QEMU integrated suite qcom-perf-misc (Image#38, 2-cluster, android_arch_task_struct_size=512):
+Stage111 SCMI DVFS fixture + the phone's qcom,pmu (long counters, events 0x08/0x11/0x17 + AMU
+0x1000, no pmu-base), qcom,cpu-vendor-hooks, IMEM kaslr cell and capacity-dmips-mhz 1024/1208
+(arch_topology capacity update is what schedules walt_init). Order as on the phone: scmi-cpufreq
+policies first, sched-walt loaded later. Results 5/5: walt_init completes (87 /proc/sys/walt),
+walt governor set on both SCMI policies; KUnit pmu_lib: events 0x08/0x11/0x17 supported on every
+CPU, cycle counts advance (TCG does not count INST_RETIRED without icount); msm_performance
+cpu_max_freq 2:1996800 -> policy2 scaling_max 1996800, cpu_min_freq 0:1555200 -> policy0
+scaling_min 1555200, both released again; cpu-vendor-hooks and qcom-pmu bound; llcc/smmu PMU load.
+Fixture-only: arm,max-rx-timeout-ms=<1000> on the QEMU SCMI nodes and a highpri worker in the fake
+firmware (one run timed out at the default 30 ms while WALT's stop_machine stalled TCG).
+Regression: 27 suites; 174 CRCs. Not verified: gh_vcpu_mgr (needs Gunyah), PMU hardware on phone.

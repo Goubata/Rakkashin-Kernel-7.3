@@ -1,0 +1,93 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-perf-misc/arm_smmu_pmu.c",
+      "source": "drivers/perf/arm_smmu_pmu.c",
+      "original_sha256": "77d418a04e2dac241918b92dfd1bebd8ba5c6ddd4fd345f0e9c34e9c2365e6c2",
+      "sha256": "77d418a04e2dac241918b92dfd1bebd8ba5c6ddd4fd345f0e9c34e9c2365e6c2"
+    },
+    {
+      "file": "ports/qcom-perf-misc/qcom_llcc_pmu.c",
+      "source": "drivers/perf/qcom_llcc_pmu.c",
+      "original_sha256": "033b5cab15f625d4219e90d8170cea46d53bc0f0d46e20c0bf1674dc3a0e049b",
+      "sha256": "033b5cab15f625d4219e90d8170cea46d53bc0f0d46e20c0bf1674dc3a0e049b"
+    },
+    {
+      "file": "ports/qcom-perf-misc/pmu_lib.c",
+      "source": "drivers/soc/qcom/dcvs/pmu_lib.c",
+      "original_sha256": "bb80222229f298655e5a4453bac89fbfd13b749c228c4342ffd053df498925d1",
+      "sha256": "8f21a23d0dff126a122c088a829e21a0e3d868ebebcd8a953914c80a38d0c52f"
+    },
+    {
+      "file": "ports/qcom-perf-misc/msm_performance.c",
+      "source": "drivers/soc/qcom/msm_performance.c",
+      "original_sha256": "00366b61cc21cc2b7a81fabcbd53b5fe8e0e44c8ea04de91c4fbd9527ce592f5",
+      "sha256": "00366b61cc21cc2b7a81fabcbd53b5fe8e0e44c8ea04de91c4fbd9527ce592f5"
+    },
+    {
+      "file": "ports/qcom-perf-misc/qcom_cpu_vendor_hooks.c",
+      "source": "drivers/soc/qcom/qcom_cpu_vendor_hooks.c",
+      "original_sha256": "04e453f026b33984c20e46c297d319433051ee621d9cf9dd081ce9ad8c224fdc",
+      "sha256": "b5a958765f18044452bc743ce48615596500d80136ee24d003367d65fd545850"
+    },
+    {
+      "file": "ports/qcom-perf-misc/gh_vcpu_mgr.c",
+      "source": "drivers/virt/gunyah/gh_vcpu_mgr.c",
+      "original_sha256": "5b5424d8f604bca3745078eac82fccdef2984f0df858a229f1e8b2baabd0daaa",
+      "sha256": "0608e395656967c04f13b267a0460876e3fea6c3e9cfc892245cad2e8f00d91d"
+    },
+    {
+      "file": "ports/qcom-perf-misc/gh_vcpu_mgr.h",
+      "source": "drivers/virt/gunyah/gh_vcpu_mgr.h",
+      "original_sha256": "4c336a9760d93ddf0501c5cb049498c163d0e9491ed2986c6fb2c72f535df532",
+      "sha256": "4c336a9760d93ddf0501c5cb049498c163d0e9491ed2986c6fb2c72f535df532"
+    },
+    {
+      "file": "ports/qcom-perf-misc/gh_vcpu_mgr_trace.h",
+      "source": "drivers/virt/gunyah/gh_vcpu_mgr_trace.h",
+      "original_sha256": "96e8f8c3494f4eee14cb850427ebbc0cdae22eec5ba46a1d32003e4d00dabedc",
+      "sha256": "96e8f8c3494f4eee14cb850427ebbc0cdae22eec5ba46a1d32003e4d00dabedc"
+    },
+    {
+      "file": "ports/qcom-perf-misc/include/soc/qcom/msm_performance.h",
+      "source": "include/soc/qcom/msm_performance.h",
+      "original_sha256": "242b3aa73d5df0c107670ce01d500ef93ebf152e73648b09433a4a887cb40ea2",
+      "sha256": "242b3aa73d5df0c107670ce01d500ef93ebf152e73648b09433a4a887cb40ea2"
+    },
+    {
+      "file": "ports/qcom-perf-misc/include/soc/qcom/pmu_lib.h",
+      "source": "include/soc/qcom/pmu_lib.h",
+      "original_sha256": "a8ec64a550415dcd6e74a99e3ff6615cbf21d76b26a8ea5a8990fd76c1ca24c3",
+      "sha256": "a8ec64a550415dcd6e74a99e3ff6615cbf21d76b26a8ea5a8990fd76c1ca24c3"
+    },
+    {
+      "file": "ports/qcom-perf-misc/include/soc/qcom/qcom_llcc_pmu.h",
+      "source": "include/soc/qcom/qcom_llcc_pmu.h",
+      "original_sha256": "07eb7c8bb26f1ec250b5dde94f444f326d1fb8b126e34112956c2740ade0b769",
+      "sha256": "07eb7c8bb26f1ec250b5dde94f444f326d1fb8b126e34112956c2740ade0b769"
+    },
+    {
+      "file": "ports/qcom-perf-misc/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "76a60054e7116eec1061a515217143444db9e833f6a051970c76873fe6de8c08"
+    }
+  ],
+  "patch_sha256": "836be7fdf8e0289fdbf448c6c4a6a7fd303d01eb2856e0809237497ac72824e8",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "arm_smmu_pmu, qcom_llcc_pmu, qcom-pmu-lib, msm_performance, qcom_cpu_vendor_hooks, gh_vcpu_mgr on android18-7.3",
+  "reviewed_changes": [
+    "qcom_cpu_vendor_hooks: 7.3 syscore API (struct syscore + ops(void *data), register_syscore)",
+    "gh_vcpu_mgr: QCOM_SCM_VMID_GH_RM 0xFF fallback (absent from 7.3 header)",
+    "pmu_lib: AMU counters only when ID_AA64PFR0_EL1.AMU is implemented (6.12 assumed it from Kconfig; unchanged on the phone's AMU cores)",
+    "DEBUG_SYMBOL_LOOKUP via the kernel's debug_symbol_lookup_name (CONFIG_QCOM_DEBUG_SYMBOL)"
+  ],
+  "pending": [
+    "gh_vcpu_mgr needs the Gunyah hypervisor (phone)",
+    "llcc/smmu PMU hardware counters (phone)",
+    "AMU events (phone)"
+  ]
+}

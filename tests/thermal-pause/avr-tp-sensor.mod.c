@@ -20,7 +20,7 @@ static const struct modversion_info ____versions[]
 __used __section("__versions") = {
 	{ 0xb98e8186, "of_find_node_opts_by_path" },
 	{ 0x62d3813f, "platform_device_alloc" },
-	{ 0x5e100014, "device_set_node" },
+	{ 0x6ef8d1b2, "device_set_node" },
 	{ 0x82068328, "platform_device_add" },
 	{ 0x4ae224f7, "platform_device_put" },
 	{ 0xbb03692e, "devm_thermal_of_zone_register" },
@@ -35,7 +35,7 @@ static const u32 ____version_ext_crcs[]
 __used __section("__version_ext_crcs") = {
 	0xb98e8186,
 	0x62d3813f,
-	0x5e100014,
+	0x6ef8d1b2,
 	0x82068328,
 	0x4ae224f7,
 	0xbb03692e,

@@ -2627,3 +2627,21 @@ scaling_min 1555200, both released again; cpu-vendor-hooks and qcom-pmu bound; l
 Fixture-only: arm,max-rx-timeout-ms=<1000> on the QEMU SCMI nodes and a highpri worker in the fake
 firmware (one run timed out at the default 30 ms while WALT's stop_machine stalled TCG).
 Regression: 27 suites; 174 CRCs. Not verified: gh_vcpu_mgr (needs Gunyah), PMU hardware on phone.
+
+## Stage115: CPU idle governor, sleep statistics and GICv3 suspend hook
+
+ports/qcom-pm (qcom-soc 037aa1c): qcom_lpm (cpuidle governor qcom-cpu-lpm, as on the phone with
+psci_idle), qcom_lpm_monitor, qcom_stats, sys_pm_vx, qcom_cpuss_sleep_stats(_v4), smp2p_sleepstate,
+msm_show_resume_irq, boot_stats, msm_show_epoch, sysmon_subsystem_stats. Port fixes: hrtimer_setup()
+(hrtimer_init removed), struct syscore, .remove.
+Core (patches/gic-v3-suspend-7.3.patch, Image#39): 6.12 ACK android_vh_gic_v3_suspend called from a
+GICv3 syscore suspend, gic_dist_init no longer __init, exported gic_v3_dist_init/cpu_init/
+dist_wait_for_rwp. msm_show_resume_irq uses them to save and re-init the GIC around
+PM_SUSPEND_MEM (mem_sleep=deep, offered by the phone next to the default s2idle) and hibernation.
+QEMU (3/3): qcom-cpu-lpm becomes the current cpuidle governor on load; with all PM modules loaded
+(boot_stats on an IMEM cell + MPM2 counter at the phone's 32768 Hz) s2idle suspend enters and
+resumes on the pl031 RTC alarm (suspend_stats success 1, fail 0), no WARN/BUG.
+Not verified in QEMU: PSCI idle states (with cpu-idle-states QEMU TCG stops booting), OSI cluster
+and APSS domain states, mem_sleep=deep (QEMU offers only s2idle) and so the GIC restore path.
+Regression: 28 suites + scm, secure, pas-driver, ice, iommu, ufs, debug-symbol, diagnostics; 185 CRCs;
+core replay.

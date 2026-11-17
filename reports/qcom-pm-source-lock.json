@@ -1,0 +1,171 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-pm/qcom-cluster-lpm.c",
+      "source": "drivers/cpuidle/governors/qcom-cluster-lpm.c",
+      "original_sha256": "f08cd1a21ad63b2247fff8a4040450f2e7eb46fc62386ba4c93c9a10ecbcb257",
+      "sha256": "05ec2a144310b5d49ebdcf5a1255fe993e14a1e782615d6f2c6a51046ffec351"
+    },
+    {
+      "file": "ports/qcom-pm/qcom-lpm-sysfs.c",
+      "source": "drivers/cpuidle/governors/qcom-lpm-sysfs.c",
+      "original_sha256": "9ea6aa21c3bf0bca3ac60b2090966555f359afd237c3e182d137c6c1d2073576",
+      "sha256": "9ea6aa21c3bf0bca3ac60b2090966555f359afd237c3e182d137c6c1d2073576"
+    },
+    {
+      "file": "ports/qcom-pm/qcom-lpm.c",
+      "source": "drivers/cpuidle/governors/qcom-lpm.c",
+      "original_sha256": "eabc5529b9b77d8034a58a9c3573fb6108714bbd08dcb0dc03a30b4921dd5f64",
+      "sha256": "bbb20a131dc9321f41687406b21690a572964619f30274449293353d198a18c6"
+    },
+    {
+      "file": "ports/qcom-pm/qcom-lpm.h",
+      "source": "drivers/cpuidle/governors/qcom-lpm.h",
+      "original_sha256": "e58165e6fe871ef522ac21ce7b55a2511a7cb95978e3243106e3d8c16cf4bca0",
+      "sha256": "e58165e6fe871ef522ac21ce7b55a2511a7cb95978e3243106e3d8c16cf4bca0"
+    },
+    {
+      "file": "ports/qcom-pm/qcom-simple-lpm.h",
+      "source": "drivers/cpuidle/governors/qcom-simple-lpm.h",
+      "original_sha256": "014dc862cef973337176471d63561cc13626811c0ab92e5ab6ef9e037c56861b",
+      "sha256": "014dc862cef973337176471d63561cc13626811c0ab92e5ab6ef9e037c56861b"
+    },
+    {
+      "file": "ports/qcom-pm/trace-cluster-lpm.h",
+      "source": "drivers/cpuidle/governors/trace-cluster-lpm.h",
+      "original_sha256": "b9330318bd27632976babcc5eea740568976369882b2f0be9b24f5666b069d10",
+      "sha256": "b9330318bd27632976babcc5eea740568976369882b2f0be9b24f5666b069d10"
+    },
+    {
+      "file": "ports/qcom-pm/trace-qcom-lpm.h",
+      "source": "drivers/cpuidle/governors/trace-qcom-lpm.h",
+      "original_sha256": "8bb09f1e48595570ec24f14461c56520e3ec8e86e3eea1e1948ef213b93d93bc",
+      "sha256": "8bb09f1e48595570ec24f14461c56520e3ec8e86e3eea1e1948ef213b93d93bc"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_lpm_monitor_main.c",
+      "source": "drivers/soc/qcom/qcom_lpm_monitor.c",
+      "original_sha256": "c22eee0d2ea8b6a21bce88ee403fe89caf5491ac853a9d43ab1a96b056cf9856",
+      "sha256": "c22eee0d2ea8b6a21bce88ee403fe89caf5491ac853a9d43ab1a96b056cf9856"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_lpm_monitor_service_v01.c",
+      "source": "drivers/soc/qcom/qcom_lpm_monitor_service_v01.c",
+      "original_sha256": "45d94d8626dd507e44c073e09fc1d0fd73ee7d324ece3dfebfd281fe7880c259",
+      "sha256": "45d94d8626dd507e44c073e09fc1d0fd73ee7d324ece3dfebfd281fe7880c259"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_lpm_monitor_service_v01.h",
+      "source": "drivers/soc/qcom/qcom_lpm_monitor_service_v01.h",
+      "original_sha256": "173f48dcbf734f616e113db455f235b8cf2e58135ebcb1a80fdc4260554002e3",
+      "sha256": "173f48dcbf734f616e113db455f235b8cf2e58135ebcb1a80fdc4260554002e3"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_stats.c",
+      "source": "drivers/soc/qcom/qcom_stats.c",
+      "original_sha256": "50a90f4d0d8d1549898472d8ac050383dac653df8d3be4afbc059e8201d85e0e",
+      "sha256": "73573b1f9220024cf112f0668b1169674ca7e181a946b053ca77da6f3f606274"
+    },
+    {
+      "file": "ports/qcom-pm/sys_pm_vx.c",
+      "source": "drivers/soc/qcom/sys_pm_vx.c",
+      "original_sha256": "7bc9450099c9fa3d1f935719c918a8d473d2e8b7b817c92d848ceb985cae1e60",
+      "sha256": "7bc9450099c9fa3d1f935719c918a8d473d2e8b7b817c92d848ceb985cae1e60"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_cpuss_sleep_stats.c",
+      "source": "drivers/soc/qcom/qcom_cpuss_sleep_stats.c",
+      "original_sha256": "3cf9e1084be5c4f4700ed579f78b275d8b866e5d46be44fc3fe72757210981a7",
+      "sha256": "3cf9e1084be5c4f4700ed579f78b275d8b866e5d46be44fc3fe72757210981a7"
+    },
+    {
+      "file": "ports/qcom-pm/qcom_cpuss_sleep_stats_v4.c",
+      "source": "drivers/soc/qcom/qcom_cpuss_sleep_stats_v4.c",
+      "original_sha256": "6300c5d9763146e366008bd1d4040dccd2896b747d776695364849e8f6a7796c",
+      "sha256": "6300c5d9763146e366008bd1d4040dccd2896b747d776695364849e8f6a7796c"
+    },
+    {
+      "file": "ports/qcom-pm/smp2p_sleepstate.c",
+      "source": "drivers/soc/qcom/smp2p_sleepstate.c",
+      "original_sha256": "2196debf0cd48c29b2c2d77eb68ee4aa78301c307d57e9ab2f4dfc426bc0c0da",
+      "sha256": "2196debf0cd48c29b2c2d77eb68ee4aa78301c307d57e9ab2f4dfc426bc0c0da"
+    },
+    {
+      "file": "ports/qcom-pm/msm_show_resume_irq.c",
+      "source": "drivers/irqchip/msm_show_resume_irq.c",
+      "original_sha256": "e448422dea53b0c358dea08d67b9ec28270d504112f69602f4c30032536bd806",
+      "sha256": "97dc7e1f10ca2aa53ec7c95db88ebfcc270e899842157395c2050302fae13f57"
+    },
+    {
+      "file": "ports/qcom-pm/boot_stats.c",
+      "source": "drivers/soc/qcom/boot_stats.c",
+      "original_sha256": "6e50ff2308fdfb58f71ea22ef1a2ac5c4512134f15132a2690b45d81d421d134",
+      "sha256": "6e50ff2308fdfb58f71ea22ef1a2ac5c4512134f15132a2690b45d81d421d134"
+    },
+    {
+      "file": "ports/qcom-pm/msm_show_epoch.c",
+      "source": "drivers/soc/qcom/msm_show_epoch.c",
+      "original_sha256": "83a4391fce423d0314e941163cf0e6ae744ee62c2e3765fc1fc4f668eda692ee",
+      "sha256": "83a4391fce423d0314e941163cf0e6ae744ee62c2e3765fc1fc4f668eda692ee"
+    },
+    {
+      "file": "ports/qcom-pm/sysmon_subsystem_stats.c",
+      "source": "drivers/soc/qcom/sysmon_subsystem_stats.c",
+      "original_sha256": "51e4727c1d3493bd282603eb21a2f211f532beed8a85818f5346b3b8f596211f",
+      "sha256": "51e4727c1d3493bd282603eb21a2f211f532beed8a85818f5346b3b8f596211f"
+    },
+    {
+      "file": "ports/qcom-pm/include/uapi/misc/sysmon_subsystem_stats_ioctl.h",
+      "source": "include/uapi/misc/sysmon_subsystem_stats_ioctl.h",
+      "original_sha256": "ef0339f107c771db6d7e1cb5a7ef5291f998e1d1994de65f9db0caa1ede5d648",
+      "sha256": "ef0339f107c771db6d7e1cb5a7ef5291f998e1d1994de65f9db0caa1ede5d648"
+    },
+    {
+      "file": "ports/qcom-pm/include/linux/soc/qcom/sysmon_subsystem_stats.h",
+      "source": "include/linux/soc/qcom/sysmon_subsystem_stats.h",
+      "original_sha256": "2a4f69cb89c5b3df37d77c61969d31b3da0d2855b523e9190dd3b1123467085f",
+      "sha256": "2a4f69cb89c5b3df37d77c61969d31b3da0d2855b523e9190dd3b1123467085f"
+    },
+    {
+      "file": "ports/qcom-pm/include/soc/qcom/cpuss_telemetry.h",
+      "source": "include/soc/qcom/cpuss_telemetry.h",
+      "original_sha256": "bb75d6d07310fb6bc6d505b3e965b5b48fd370a0c4dc5bf7ac1c617e15a48660",
+      "sha256": "bb75d6d07310fb6bc6d505b3e965b5b48fd370a0c4dc5bf7ac1c617e15a48660"
+    },
+    {
+      "file": "ports/qcom-pm/include/soc/qcom/qcom_lpm_monitor.h",
+      "source": "include/soc/qcom/qcom_lpm_monitor.h",
+      "original_sha256": "d0978736837b86fb465861105bbe39040ff47fd8c1985e8732754c0625ef5aa1",
+      "sha256": "d0978736837b86fb465861105bbe39040ff47fd8c1985e8732754c0625ef5aa1"
+    },
+    {
+      "file": "ports/qcom-pm/include/soc/qcom/qcom_stats.h",
+      "source": "include/soc/qcom/qcom_stats.h",
+      "original_sha256": "c0201821354e51f57e31428df1763b26e4d3147d757874e7d254e22c4a29620f",
+      "sha256": "c0201821354e51f57e31428df1763b26e4d3147d757874e7d254e22c4a29620f"
+    },
+    {
+      "file": "ports/qcom-pm/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "48bb8f730145d392a518e53974a1f9a02edfefb01a20981a4aa7a046e8740aef"
+    }
+  ],
+  "patch_sha256": "1545775d93a1f469aca197775c8ae3f7d8d220a89e750ad6b56dbfdf2d4281b3",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "canoe power management modules: qcom_lpm cpuidle governor, lpm monitor, qcom_stats, sys_pm_vx, cpuss sleep stats, smp2p_sleepstate, msm_show_resume_irq, boot_stats, msm_show_epoch, sysmon_subsystem_stats",
+  "reviewed_changes": [
+    "qcom_lpm: hrtimer_init() removed in 7.x -> hrtimer_setup() with the timer's fixed callback",
+    "msm_show_resume_irq: 7.3 struct syscore API",
+    "remove_new -> remove",
+    "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)"
+  ],
+  "pending": [
+    "PSCI idle residency + OSI cluster/APSS domain states (QEMU cannot run them)",
+    "deep suspend GIC save/restore (QEMU offers only s2idle)",
+    "AOSS/RPMh stats sources"
+  ]
+}

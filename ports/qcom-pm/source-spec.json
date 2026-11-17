@@ -1,0 +1,44 @@
+{
+ "name": "qcom-pm",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-pm/qcom-cluster-lpm.c": "drivers/cpuidle/governors/qcom-cluster-lpm.c",
+  "ports/qcom-pm/qcom-lpm-sysfs.c": "drivers/cpuidle/governors/qcom-lpm-sysfs.c",
+  "ports/qcom-pm/qcom-lpm.c": "drivers/cpuidle/governors/qcom-lpm.c",
+  "ports/qcom-pm/qcom-lpm.h": "drivers/cpuidle/governors/qcom-lpm.h",
+  "ports/qcom-pm/qcom-simple-lpm.h": "drivers/cpuidle/governors/qcom-simple-lpm.h",
+  "ports/qcom-pm/trace-cluster-lpm.h": "drivers/cpuidle/governors/trace-cluster-lpm.h",
+  "ports/qcom-pm/trace-qcom-lpm.h": "drivers/cpuidle/governors/trace-qcom-lpm.h",
+  "ports/qcom-pm/qcom_lpm_monitor_main.c": "drivers/soc/qcom/qcom_lpm_monitor.c",
+  "ports/qcom-pm/qcom_lpm_monitor_service_v01.c": "drivers/soc/qcom/qcom_lpm_monitor_service_v01.c",
+  "ports/qcom-pm/qcom_lpm_monitor_service_v01.h": "drivers/soc/qcom/qcom_lpm_monitor_service_v01.h",
+  "ports/qcom-pm/qcom_stats.c": "drivers/soc/qcom/qcom_stats.c",
+  "ports/qcom-pm/sys_pm_vx.c": "drivers/soc/qcom/sys_pm_vx.c",
+  "ports/qcom-pm/qcom_cpuss_sleep_stats.c": "drivers/soc/qcom/qcom_cpuss_sleep_stats.c",
+  "ports/qcom-pm/qcom_cpuss_sleep_stats_v4.c": "drivers/soc/qcom/qcom_cpuss_sleep_stats_v4.c",
+  "ports/qcom-pm/smp2p_sleepstate.c": "drivers/soc/qcom/smp2p_sleepstate.c",
+  "ports/qcom-pm/msm_show_resume_irq.c": "drivers/irqchip/msm_show_resume_irq.c",
+  "ports/qcom-pm/boot_stats.c": "drivers/soc/qcom/boot_stats.c",
+  "ports/qcom-pm/msm_show_epoch.c": "drivers/soc/qcom/msm_show_epoch.c",
+  "ports/qcom-pm/sysmon_subsystem_stats.c": "drivers/soc/qcom/sysmon_subsystem_stats.c",
+  "ports/qcom-pm/include/uapi/misc/sysmon_subsystem_stats_ioctl.h": "include/uapi/misc/sysmon_subsystem_stats_ioctl.h",
+  "ports/qcom-pm/include/linux/soc/qcom/sysmon_subsystem_stats.h": "include/linux/soc/qcom/sysmon_subsystem_stats.h",
+  "ports/qcom-pm/include/soc/qcom/cpuss_telemetry.h": "include/soc/qcom/cpuss_telemetry.h",
+  "ports/qcom-pm/include/soc/qcom/qcom_lpm_monitor.h": "include/soc/qcom/qcom_lpm_monitor.h",
+  "ports/qcom-pm/include/soc/qcom/qcom_stats.h": "include/soc/qcom/qcom_stats.h",
+  "ports/qcom-pm/Makefile": null
+ },
+ "scope": "canoe power management modules: qcom_lpm cpuidle governor, lpm monitor, qcom_stats, sys_pm_vx, cpuss sleep stats, smp2p_sleepstate, msm_show_resume_irq, boot_stats, msm_show_epoch, sysmon_subsystem_stats",
+ "reviewed_changes": [
+  "qcom_lpm: hrtimer_init() removed in 7.x -> hrtimer_setup() with the timer's fixed callback",
+  "msm_show_resume_irq: 7.3 struct syscore API",
+  "remove_new -> remove",
+  "core: patches/gic-v3-suspend-7.3.patch (android_vh_gic_v3_suspend from a GICv3 syscore suspend, gic_v3_dist_init/cpu_init/dist_wait_for_rwp exports; needed for mem_sleep=deep/hibernation GIC restore)"
+ ],
+ "pending": [
+  "PSCI idle residency + OSI cluster/APSS domain states (QEMU cannot run them)",
+  "deep suspend GIC save/restore (QEMU offers only s2idle)",
+  "AOSS/RPMh stats sources"
+ ]
+}

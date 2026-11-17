@@ -1,0 +1,16 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture: qcom,show-resume-irqs on the GICv3 distributor, IMEM
+ * boot_stats cell and the MPM2 sleep counter (phone: 32768 Hz) on no-map RAM.
+ * The phone's PSCI idle states are not modelled: with cpu-idle-states QEMU
+ * (TCG PSCI CPU_SUSPEND) stops booting, so CPU idle residency is a phone check. */
+/ {
+ fragment@0 { target-path="/"; __overlay__ {
+  reserved-memory { #address-cells=<2>; #size-cells=<2>; ranges;
+   avr_imem: imem@5ff30000 { reg=<0x0 0x5ff30000 0x0 0x2000>; no-map; }; };
+  boot_stats@5ff306b0 { compatible="qcom,msm-imem-boot_stats"; reg=<0x0 0x5ff306b0 0x0 0x20>; };
+  mpm2-sleep-counter@5ff31000 { compatible="qcom,mpm2-sleep-counter"; reg=<0x0 0x5ff31000 0x0 0x1000>;
+   clock-frequency=<0x8000>; };
+  show-resume-irqs@8000000 { compatible="qcom,show-resume-irqs"; reg=<0x0 0x08000000 0x0 0x10000>; };
+ }; };
+};

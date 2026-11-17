@@ -1,0 +1,27 @@
+{
+ "stage": 115,
+ "scope": "qcom_lpm governor, sleep stats, show_resume_irq, boot_stats, GICv3 suspend hook",
+ "core_patch": "patches/gic-v3-suspend-7.3.patch",
+ "core_image": "7.3.0-4k #39",
+ "image_sha256": "4d74ab5309cb27229b5f5f49c18b7b1570de50d26e849ed24ed0ed74266e1efa",
+ "source_commit": "f53d32ad59075f133050cad235facb18836fb210",
+ "qemu_runs": [
+  "reports/pm-stage115-qemu.log",
+  "reports/pm-stage115-r2.log",
+  "reports/pm-stage115-r3.log",
+  "reports/regress-stage115-qcom-pm.log"
+ ],
+ "results": {
+  "governor": "qcom-cpu-lpm current",
+  "s2idle": "enter + RTC wake, success=1 fail=0"
+ },
+ "not_verified": [
+  "PSCI idle residency",
+  "OSI domain states",
+  "deep suspend + GIC restore"
+ ],
+ "regression": "reports/regress-stage115-summary.txt",
+ "crc": "reports/pm-stage115-crc.json",
+ "physical_verified": false,
+ "promoted": false
+}

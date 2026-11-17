@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage115では省電力まわりを移植しました。qcom_lpm（実機が使っているCPUアイドル管理のガバナー`qcom-cpu-lpm`）、lpm_monitor、qcom_stats、sys_pm_vx、スリープ統計、smp2p_sleepstate、msm_show_resume_irq（復帰要因の割り込み表示）、boot_stats、msm_show_epoch、sysmon_subsystem_statsです。7.3では、6.12にあったGICの退避・復元の仕組み（deepサスペンドやハイバネーションで割り込み設定を保持する）が消えていたため、7.3本体に戻しました。実機の既定はs2idleですが、deepも選べます。QEMUでは、qcom-cpu-lpmが自動でガバナーに選ばれ、全モジュールを読み込んだ状態でs2idleサスペンドからRTCアラームで正常に復帰することを3回確認しました。PSCIのアイドル状態の実行（QEMUでは起動が止まる）とdeepサスペンド（QEMUに無い）は実機で確認します。Image#39で既存28試験群と追加8試験、185モジュールCRCが合格。証拠は `reports/pm-stage115-validation.json`。
+
 Stage114では性能まわりの初段モジュールを移植しました。pmu_lib（CPU性能カウンタ）、qcom_llcc_pmu、arm_smmu_pmu、msm_performance（CPU周波数の上下限をユーザー空間から指定）、qcom_cpu_vendor_hooks、gh_vcpu_mgrです。7.3で変わったsyscore APIへの対応のほか、pmu_libには「CPUがAMUを実装しているときだけAMUカウンタを読む」判定を加えました（AMUを持つ実機では動作は同じ。持たないCPUでは未定義命令で落ちていた）。QEMUでは、Stage111のSCMI構成に実機の`qcom,pmu`設定とCPU容量値を加えた統合試験を作りました。実機と同じ順序（SCMI cpufreqが先、WALTが後）でWALTが初期化を完了し（sysctl 87項目）、両ポリシーでwaltガバナーが動作することを確認しました。さらに、pmu_libのカウンタが全CPUで増えること、msm_performanceで上限1.9968GHz・下限1.5552GHzを設定・解除できることも確認しました（5回とも合格）。途中で出たSCMIのタイムアウトは、TCG上の偽ファームの応答遅れが原因でした。そのため、試験用DTに限り待ち時間を延ばしています。既存27試験群・174モジュールCRCも合格。証拠は `reports/perf-stage114-validation.json`。
 
 Stage113ではデバッグ・診断系の初段モジュールを移植しました。memory_dump_v2（クラッシュ時のメモリダンプ表）、qcom_va_minidump、logbuf 2種、kryo_arm64_edac（CPUキャッシュのエラー検出）、qcom_iommu_debugです。7.3本体には、ダンプ表をTZに登録するSCM呼び出しを戻しました。debug_symbolは、以前のステージで7.3のkallsymsから直接提供する設計にしているため、モジュールとしては作りません（判断記録に追記）。QEMUでは、実機と同じ構成（専用の予約領域、CPUコンテキストなどの静的ダンプ項目）でmemory_dump_v2が動き、偽TZが受け取ったダンプ表を読んで、トップ表v2.0に1件、apps表に静的ダンプ5件が入っていることを3回とも確認しました。ほかは読み込みまで確認しています。Image#38で既存26試験群とSCM・UFS・debug-symbol・diagnosticsなど8試験、168モジュールCRCが合格。証拠は `reports/diag-stage113-validation.json`。

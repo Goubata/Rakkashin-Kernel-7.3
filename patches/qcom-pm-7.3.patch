@@ -1,0 +1,126 @@
+--- a/ports/qcom-pm/qcom-cluster-lpm.c
++++ b/ports/qcom-pm/qcom-cluster-lpm.c
+@@ -74,7 +74,6 @@
+ {
+ 	struct hrtimer *timer = &cluster_gov->histtimer;
+ 
+-	timer->function = clusttimer_fn;
+ 	hrtimer_start(timer, time_ns, HRTIMER_MODE_REL_PINNED);
+ }
+ 
+@@ -616,7 +615,8 @@
+ 	cluster_gov->restrict_idx = -1;
+ 	cluster_gov->timer_cpu = -1;
+ 	pm_runtime_enable(&pdev->dev);
+-	hrtimer_init(&cluster_gov->histtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	/* AVR 7.3: hrtimer_init() removed; the callback is fixed at setup */
++	hrtimer_setup(&cluster_gov->histtimer, clusttimer_fn, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	cluster_gov->genpd = pd_to_genpd(cluster_gov->dev->pm_domain);
+ 	cluster_gov->genpd_nb.notifier_call = cluster_power_cb;
+ 	cluster_gov->genpd_nb.priority = INT_MAX;
+--- a/ports/qcom-pm/qcom-lpm.c
++++ b/ports/qcom-pm/qcom-lpm.c
+@@ -131,7 +131,6 @@
+ 	struct lpm_cpu *cpu_gov = this_cpu_ptr(&lpm_cpu_data);
+ 	struct hrtimer *cpu_histtimer = &cpu_gov->histtimer;
+ 
+-	cpu_histtimer->function = histtimer_fn;
+ 	hrtimer_start(cpu_histtimer, time_ns, HRTIMER_MODE_REL_PINNED);
+ }
+ 
+@@ -181,7 +180,6 @@
+ 	struct lpm_cpu *cpu_gov = this_cpu_ptr(&lpm_cpu_data);
+ 	struct hrtimer *cpu_biastimer = &cpu_gov->biastimer;
+ 
+-	cpu_biastimer->function = biastimer_fn;
+ 	hrtimer_start(cpu_biastimer, time_ns, HRTIMER_MODE_REL_PINNED);
+ }
+ 
+@@ -912,8 +910,9 @@
+ 	int ret;
+ 
+ 	spin_lock_init(&cpu_gov->lock);
+-	hrtimer_init(cpu_histtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+-	hrtimer_init(cpu_biastimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	/* AVR 7.3: hrtimer_init() removed; the callback is fixed at setup */
++	hrtimer_setup(cpu_histtimer, histtimer_fn, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_setup(cpu_biastimer, biastimer_fn, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	if (!traces_registered) {
+ 		ret = register_trace_ipi_raise(ipi_raise, NULL);
+ 		if (ret)
+--- a/ports/qcom-pm/qcom_stats.c
++++ b/ports/qcom-pm/qcom_stats.c
+@@ -1427,7 +1427,7 @@
+ 
+ static struct platform_driver qcom_stats = {
+ 	.probe = qcom_stats_probe,
+-	.remove_new = qcom_stats_remove,
++	.remove = qcom_stats_remove,
+ 	.driver = {
+ 		.name = "qcom_stats",
+ 		.of_match_table = qcom_stats_table,
+--- a/ports/qcom-pm/msm_show_resume_irq.c
++++ b/ports/qcom-pm/msm_show_resume_irq.c
+@@ -179,8 +179,18 @@
+ 	atomic_dec(&cpus_in_s2idle);
+ }
+ 
+-static struct syscore_ops gic_syscore_ops = {
+-	.resume = msm_show_resume_irqs,
++/* AVR 7.3: syscore callbacks take a data pointer, registered via struct syscore */
++static void msm_show_resume_irqs_syscore(void *data)
++{
++	msm_show_resume_irqs();
++}
++
++static const struct syscore_ops gic_syscore_ops = {
++	.resume = msm_show_resume_irqs_syscore,
++};
++
++static struct syscore gic_syscore = {
++	.ops = &gic_syscore_ops,
+ };
+ 
+ static int msm_show_resume_probe(struct platform_device *pdev)
+@@ -193,7 +203,7 @@
+ 
+ 	register_trace_prio_android_vh_cpuidle_psci_enter(gic_s2idle_enter, NULL, INT_MAX);
+ 	register_trace_prio_android_vh_cpuidle_psci_exit(gic_s2idle_exit, NULL, INT_MAX);
+-	register_syscore_ops(&gic_syscore_ops);
++	register_syscore(&gic_syscore);
+ 	register_pm_notifier(&gic_notif_block);
+ 	register_trace_android_vh_gic_v3_suspend(gic_suspend_ds, NULL);
+ 	return 0;
+@@ -203,7 +213,7 @@
+ {
+ 	unregister_trace_android_vh_cpuidle_psci_enter(gic_s2idle_enter, NULL);
+ 	unregister_trace_android_vh_cpuidle_psci_exit(gic_s2idle_exit, NULL);
+-	unregister_syscore_ops(&gic_syscore_ops);
++	unregister_syscore(&gic_syscore);
+ 	unregister_trace_android_vh_gic_v3_suspend(gic_suspend_ds, NULL);
+ 	unregister_pm_notifier(&gic_notif_block);
+ 	iounmap(base);
+--- a/ports/qcom-pm/Makefile
++++ b/ports/qcom-pm/Makefile
+@@ -0,0 +1,21 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# canoe power management (canoe_perf.bzl =m): qcom_lpm cpuidle governor
++# (CPU_IDLE_GOV_QCOM_LPM), qcom_lpm_monitor, qcom_stats, sys_pm_vx,
++# qcom_cpuss_sleep_stats(_v4), smp2p_sleepstate, msm_show_resume_irq,
++# boot_stats, msm_show_epoch, sysmon_subsystem_stats.
++obj-m += qcom_lpm.o qcom_lpm_monitor.o qcom_stats.o sys_pm_vx.o qcom_cpuss_sleep_stats.o \
++	qcom_cpuss_sleep_stats_v4.o smp2p_sleepstate.o msm_show_resume_irq.o boot_stats.o \
++	msm_show_epoch.o sysmon_subsystem_stats.o
++qcom_lpm-y := qcom-cluster-lpm.o qcom-lpm-sysfs.o qcom-lpm.o
++qcom_lpm_monitor-y := qcom_lpm_monitor_service_v01.o qcom_lpm_monitor_main.o
++ccflags-y += -I$(src)/include -I$(src)/include/uapi -I$(src) -I$(srctree) -I$(src)/../qcom-smem/include \
++	-I$(src)/../sched-walt/include -I$(src)/../qcom-remoteproc-services/include
++ccflags-y += -DCONFIG_CPU_IDLE_GOV_QCOM_LPM_MODULE=1 -DCONFIG_SCHED_WALT_MODULE=1 \
++	-DCONFIG_SCHED_WALT_NR_CPUS=8 -DCONFIG_QCOM_STATS_MODULE=1 -DCONFIG_QCOM_LPM_MONITOR_MODULE=1 \
++	-DCONFIG_QCOM_SYSMON_SUBSYSTEM_STATS_MODULE=1 \
++	-DCONFIG_SHOW_SUSPEND_EPOCH_MODULE=1 -DCONFIG_QCOM_SHOW_RESUME_IRQ_MODULE=1 -DCONFIG_MSM_BOOT_STATS_MODULE=1 \
++	-DCONFIG_QCOM_SMP2P_SLEEPSTATE_MODULE=1 -DCONFIG_QTI_SYS_PM_VX_MODULE=1 -DCONFIG_QCOM_CPUSS_SLEEP_STATS_MODULE=1 \
++	-DCONFIG_QCOM_CPUSS_SLEEP_STATS_V4_MODULE=1
++ccflags-y += -Wno-missing-prototypes
++KBUILD_EXTRA_SYMBOLS += $(src)/../sched-walt/Module.symvers $(src)/../qcom-smem/Module.symvers \
++	$(src)/../qcom-remoteproc-services/Module.symvers $(src)/../qcom-smp2p/Module.symvers

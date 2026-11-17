@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "b23bc4661203275d768890c0eea13a23c9cf5c6b",
-  "patch_count": 32,
+  "target_commit": "f53d32ad59075f133050cad235facb18836fb210",
+  "patch_count": 33,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -18,7 +18,7 @@
     },
     {
       "file": "drivers/android/vendor_hooks.c",
-      "sha256": "f39de5c5f35d0bc8dba8048fa669c4cc6efe005e4c6e6db1cc1b3c7b2967012f"
+      "sha256": "cd3f3d966bf7eeb7d29d842a0b6739ae67a6bb66ce698161d589f3817fc925e1"
     },
     {
       "file": "drivers/base/power/Makefile",
@@ -91,6 +91,10 @@
     {
       "file": "drivers/firmware/qcom/qcom_tzmem.c",
       "sha256": "d19df82c69af85217ecdb925aba718ef0718f87e09a2ca1aec25504326974c1d"
+    },
+    {
+      "file": "drivers/irqchip/irq-gic-v3.c",
+      "sha256": "81ce53ac9e671aae95b8f61f70bec8471bcbf2ce3d3b78ce0398acbb357e5556"
     },
     {
       "file": "drivers/misc/Kconfig",
@@ -209,6 +213,10 @@
       "sha256": "ff1098b81313b7f610226488a93f35a83f6a315603f0221b70233bd88853271c"
     },
     {
+      "file": "include/linux/irqchip/arm-gic-v3.h",
+      "sha256": "d81501f2d2108c65566f4551c82129803cff5a3dd8c280ca91602742a214fb4e"
+    },
+    {
       "file": "include/linux/kallsyms.h",
       "sha256": "9eafc31ec09aa84fdb55defe05d16f63b89d9b30ef807f68d425c4a981880ce9"
     },
@@ -251,6 +259,10 @@
     {
       "file": "include/trace/hooks/dtask.h",
       "sha256": "4056cd24cbad7ea013e617e253189a37068380fc2db3300760a1abe64f2d09da"
+    },
+    {
+      "file": "include/trace/hooks/gic_v3.h",
+      "sha256": "9a169c361133809f73b6beedc13e29ab1adc040eb6d03c278199cbde36f6ab12"
     },
     {
       "file": "include/trace/hooks/gunyah.h",
@@ -390,5 +402,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "24ac73b6f5a09823be711fd6084d69da720fe47658ebc86d8b42dc0cf0449ff1"
+  "checkpoint_sha256": "243087afe90e8d3cff90c320f9801b0caaaa74b65964b26a381b4ba35362d188"
 }

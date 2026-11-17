@@ -1,0 +1,61 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-pm/boot_stats.ko",
+      "imports_checked": 11,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/msm_show_epoch.ko",
+      "imports_checked": 5,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/msm_show_resume_irq.ko",
+      "imports_checked": 34,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/qcom_cpuss_sleep_stats.ko",
+      "imports_checked": 35,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/qcom_cpuss_sleep_stats_v4.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/qcom_lpm.ko",
+      "imports_checked": 85,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/qcom_lpm_monitor.ko",
+      "imports_checked": 34,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/qcom_stats.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/smp2p_sleepstate.ko",
+      "imports_checked": 20,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/sys_pm_vx.ko",
+      "imports_checked": 40,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-pm/sysmon_subsystem_stats.ko",
+      "imports_checked": 37,
+      "mismatches": {}
+    }
+  ]
+}

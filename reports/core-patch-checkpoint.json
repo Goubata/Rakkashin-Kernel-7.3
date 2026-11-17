@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "b23bc4661203275d768890c0eea13a23c9cf5c6b",
+  "source_commit": "f53d32ad59075f133050cad235facb18836fb210",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -33,6 +33,7 @@
     "patches/tzmem-once-sleepable-7.3.patch": "7c48c909aacfd0ae968662273a5b9330c47cefaca11c1f7e6134e9cef442623c",
     "patches/scm-dload-7.3.patch": "cf10efb4e4a58db885425b9517e999ce8aa1cc1d5f7c5ff2356b67ba05ebec71",
     "patches/scmi-boost-7.3.patch": "93a8940949d11bdd0378062ba7286b2ac6629eb847103fb1038947dcb1fbb5c5",
-    "patches/scm-dumptable-7.3.patch": "53621787c2269fd3ce41ee316da2461eb19a3f29ed2545a77469574fea1f800c"
+    "patches/scm-dumptable-7.3.patch": "53621787c2269fd3ce41ee316da2461eb19a3f29ed2545a77469574fea1f800c",
+    "patches/gic-v3-suspend-7.3.patch": "e5ad8931ba4292c9b64e624f0fd328015fb55cc0999134681f250710ba0d9fb1"
   }
 }

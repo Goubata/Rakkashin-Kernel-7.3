@@ -1,0 +1,9 @@
+{
+  "scope": "Image#39: GICv3 suspend vendor hook + dist/cpu init exports; QEMU only",
+  "core_image": "7.3.0-4k #39",
+  "image_sha256": "4d74ab5309cb27229b5f5f49c18b7b1570de50d26e849ed24ed0ed74266e1efa",
+  "source_commit": "f53d32ad59075f133050cad235facb18836fb210",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

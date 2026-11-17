@@ -1,8 +1,8 @@
 {
   "scope": "exact native source patch replay only; not clean build or hardware validation",
   "base_commit": "4dd306a07b2f456fd70ddaa28f4f65640374f202",
-  "target_commit": "8c7d3ff036cacba94e78d794df2f0aabdea3deca",
-  "patch_count": 31,
+  "target_commit": "b23bc4661203275d768890c0eea13a23c9cf5c6b",
+  "patch_count": 32,
   "source_files": [
     {
       "file": "arch/arm64/mm/pageattr.c",
@@ -78,11 +78,11 @@
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.c",
-      "sha256": "2546838e5ebb806da96bc0e6ba6aadc88ffe89f21c7e146016828e70129e400a"
+      "sha256": "60b6a4c077330207167966021a7c7d09d6ccd4a064ae57f270c1923399e81219"
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm.h",
-      "sha256": "47c73b64972f0a90744197ee2c252ca6f55bc8ec5693fd351e022f3a70b931d7"
+      "sha256": "be5094e44762dd572033c1f382f2974810c6f347e4df3f080e62f8cd8009b903"
     },
     {
       "file": "drivers/firmware/qcom/qcom_scm_retry.h",
@@ -202,7 +202,7 @@
     },
     {
       "file": "include/linux/firmware/qcom/qcom_scm.h",
-      "sha256": "bc7ae371fc7e0299a8716f15e106136fffa6e809f251a2c386a8420dc2350949"
+      "sha256": "dafff06356fafe6e79038d3dc1b1d7d7733ca3478a9297cfe091baa3d2b140ef"
     },
     {
       "file": "include/linux/firmware/qcom/qcom_tzmem.h",
@@ -390,5 +390,5 @@
     }
   ],
   "passed": true,
-  "checkpoint_sha256": "cf26690eecadbd68dd6d9a6493799a232601b9fbfdd98853f885e78fbd8dea9a"
+  "checkpoint_sha256": "24ac73b6f5a09823be711fd6084d69da720fe47658ebc86d8b42dc0cf0449ff1"
 }

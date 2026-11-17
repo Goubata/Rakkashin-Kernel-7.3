@@ -20,6 +20,10 @@ struct avr_fake_tz_stats {
 	/* SCM IO (TCSR dload register), SDI and OEM power calls */
 	u64 last_io_addr;
 	unsigned int last_io_val, io_writes, sdi_disables, oem_reboots;
+	/* crash dump table registration (SIP UTIL 0x03/0x13) */
+	u64 dump_addr, dump_size;
+	unsigned int dump_assigns;
+	u32 dump_top_ver, dump_top_n, dump_apps_ver, dump_apps_n;
 };
 void avr_fake_tz_get_stats(struct avr_fake_tz_stats *s);
 #endif

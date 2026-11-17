@@ -8,6 +8,10 @@
   "cqhci": {
    "stage": 112,
    "reason": "only user is sdhci-msm (omitted)"
+  },
+  "debug_symbol": {
+   "stage": 113,
+   "reason": "debug_symbol_available()/debug_symbol_lookup_name() are provided by the 7.3 kernel (kernel/kallsyms.c, core commit 3684f35f1, verified by the debug-symbol suite) from the running symbol table instead of re-decoding the 6.12 debug_kinfo layout"
   }
  },
  "renamed": {

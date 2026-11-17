@@ -1,0 +1,36 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-debug-diag/memory_dump_v2.ko",
+      "imports_checked": 49,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-diag/qcom_va_minidump.ko",
+      "imports_checked": 51,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-diag/qcom_logbuf_boot_log.ko",
+      "imports_checked": 17,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-diag/qcom_logbuf_vendor_hooks.ko",
+      "imports_checked": 10,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-diag/kryo_arm64_edac.ko",
+      "imports_checked": 36,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-debug-diag/qcom_iommu_debug.ko",
+      "imports_checked": 91,
+      "mismatches": {}
+    }
+  ]
+}

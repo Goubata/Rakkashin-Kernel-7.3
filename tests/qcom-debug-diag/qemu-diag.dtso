@@ -1,0 +1,26 @@
+/dts-v1/;
+/plugin/;
+/* Private QEMU fixture mirroring the phone's crash-dump wiring: reserved
+ * dump_mem_region (dynamic, smaller than the phone's 0x5e00000), mem_dump with
+ * static per-CPU context entries and an rpmh-sized entry, and the IMEM
+ * mem_dump_table cell where the table address is published for the boot
+ * loader's ramdump. SCM backend: tests/qcom-tee/avr_fake_tz.c. */
+/ {
+ fragment@0 { target-path="/"; __overlay__ {
+  reserved-memory { #address-cells=<2>; #size-cells=<2>; ranges;
+   avr_imem: imem@5ff10000 { reg=<0x0 0x5ff10000 0x0 0x1000>; no-map; };
+   dump_mem: dump_mem_region { alloc-ranges=<0x0 0x40000000 0x0 0x40000000>; size=<0x0 0x800000>; };
+  };
+  firmware { qcom_scm { compatible="qcom,scm-v1.1","qcom,scm"; }; };
+  imem_dump_table@5ff10010 { compatible="qcom,msm-imem-mem_dump_table"; reg=<0x0 0x5ff10010 0x0 0x8>; };
+  mem_dump { compatible="qcom,mem-dump"; memory-region=<&dump_mem>;
+   static_dump { qcom,static-mem-dump;
+    c0_context { qcom,dump-size=<0x800>; qcom,dump-id=<0x00>; };
+    c100_context { qcom,dump-size=<0x800>; qcom,dump-id=<0x01>; };
+    c200_context { qcom,dump-size=<0x800>; qcom,dump-id=<0x02>; };
+    c300_context { qcom,dump-size=<0x800>; qcom,dump-id=<0x03>; };
+    rpmh { qcom,dump-size=<0x100000>; qcom,dump-id=<0xec>; };
+   };
+  };
+ }; };
+};

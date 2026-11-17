@@ -429,6 +429,26 @@ static void fake_call(unsigned long a0, unsigned long a1, unsigned long a2,
 		st.last_io_val = a3;
 	} else if (owner == OWNER_SIP && fn == FN(QCOM_SCM_SVC_BOOT, QCOM_SCM_BOOT_SDI_CONFIG)) {
 		st.sdi_disables += (a2 == 1 && a3 == 0);
+	} else if (owner == OWNER_SIP && fn == FN(0x03, 0x13)) {
+		st.dump_assigns += a2 == 1;
+		st.dump_addr = a3;
+		st.dump_size = a4;
+		if (a2 == 1 && a3 && pfn_valid(PHYS_PFN(a3))) {
+			/* read the table like the boot loader's ramdump would:
+			 * {u32 version, u32 num_entries, {u32 id; char name[32];
+			 *  u32 type; u64 addr} entries[]} */
+			u32 *top = phys_to_virt(a3);
+			u64 apps = *(u64 *)((u8 *)top + 8 + 40);
+
+			st.dump_top_ver = top[0];
+			st.dump_top_n = top[1];
+			if (top[1] && pfn_valid(PHYS_PFN(apps))) {
+				u32 *t = phys_to_virt(apps);
+
+				st.dump_apps_ver = t[0];
+				st.dump_apps_n = t[1];
+			}
+		}
 	} else if (owner == ARM_SMCCC_OWNER_OEM && fn == FN(0x09, 0x22)) {
 		st.oem_reboots++;
 	} else {
@@ -462,8 +482,10 @@ static int avr_state_get(char *buf, const struct kernel_param *kp)
 	struct avr_fake_tz_stats s;
 
 	avr_fake_tz_get_stats(&s);
-	return sysfs_emit(buf, "io=0x%llx:0x%x writes=%u sdi=%u oem=%u\n", s.last_io_addr,
-			  s.last_io_val, s.io_writes, s.sdi_disables, s.oem_reboots);
+	return sysfs_emit(buf, "io=0x%llx:0x%x writes=%u sdi=%u oem=%u dump=%u:0x%llx:0x%llx table=%x/%u apps=%x/%u\n",
+			  s.last_io_addr, s.last_io_val, s.io_writes, s.sdi_disables,
+			  s.oem_reboots, s.dump_assigns, s.dump_addr, s.dump_size,
+			  s.dump_top_ver, s.dump_top_n, s.dump_apps_ver, s.dump_apps_n);
 }
 static const struct kernel_param_ops avr_state_ops = { .get = avr_state_get };
 module_param_cb(avr_state, &avr_state_ops, NULL, 0444);

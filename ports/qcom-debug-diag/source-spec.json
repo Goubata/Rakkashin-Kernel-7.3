@@ -1,0 +1,28 @@
+{
+ "name": "qcom-debug-diag",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-debug-diag/memory_dump_v2.c": "drivers/soc/qcom/memory_dump_v2.c",
+  "ports/qcom-debug-diag/qcom_va_minidump.c": "drivers/soc/qcom/qcom_va_minidump.c",
+  "ports/qcom-debug-diag/qcom_logbuf_boot_log.c": "drivers/soc/qcom/qcom_logbuf_boot_log.c",
+  "ports/qcom-debug-diag/qcom_logbuf_vendor_hooks.c": "drivers/soc/qcom/qcom_logbuf_vendor_hooks.c",
+  "ports/qcom-debug-diag/kryo_arm64_edac.c": "drivers/edac/kryo_arm64_edac.c",
+  "ports/qcom-debug-diag/qcom-iommu-debug.c": "drivers/iommu/qcom-iommu-debug.c",
+  "ports/qcom-debug-diag/qcom-iommu-debug-user.c": "drivers/iommu/qcom-iommu-debug-user.c",
+  "ports/qcom-debug-diag/qcom-iommu-debug.h": "drivers/iommu/qcom-iommu-debug.h",
+  "ports/qcom-debug-diag/include/soc/qcom/memory_dump.h": "include/soc/qcom/memory_dump.h",
+  "ports/qcom-debug-diag/Makefile": null
+ },
+ "scope": "memory_dump_v2, qcom_va_minidump, qcom_logbuf_boot_log, qcom_logbuf_vendor_hooks, kryo_arm64_edac (PANIC_ON_UE), qcom_iommu_debug on android18-7.3; debug_symbol is provided by the 7.3 kernel (kallsyms)",
+ "reviewed_changes": [
+  "qcom_va_minidump: nth_page() removed in 7.x -> page + i (contiguous vmemmap on arm64)",
+  "core: qcom_scm_assign_dump_table_region (patches/scm-dumptable-7.3.patch; canoe uses the plain SCM variant, no CONFIG_QCOM_SCM_SMCI)",
+  "debug_symbol module not built: kernel/kallsyms.c exports debug_symbol_available/lookup_name (module would double-export)"
+ ],
+ "pending": [
+  "kryo EDAC: phone DT has no arm,arm64-kryo-cpu-erp node (loads, does not bind)",
+  "va_minidump/logbuf need the real SMEM minidump table (phone)",
+  "iommu debug needs the SMMU (phone)"
+ ]
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "Image#38: + qcom_scm_assign_dump_table_region (qcom-scm.ko); QEMU only",
+  "core_image": "7.3.0-4k #38",
+  "image_sha256": "a75e669d9d54880a8821ea124c3e0d97ac9316e345e9e54fcea669316f878ebd",
+  "source_commit": "b23bc4661203275d768890c0eea13a23c9cf5c6b",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

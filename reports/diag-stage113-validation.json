@@ -1,0 +1,26 @@
+{
+ "stage": 113,
+ "scope": "memory_dump_v2, qcom_va_minidump, logbuf x2, kryo_arm64_edac, qcom_iommu_debug; debug_symbol native",
+ "core_patch": "patches/scm-dumptable-7.3.patch",
+ "source_commit": "b23bc4661203275d768890c0eea13a23c9cf5c6b",
+ "core_image": "7.3.0-4k #38",
+ "image_sha256": "a75e669d9d54880a8821ea124c3e0d97ac9316e345e9e54fcea669316f878ebd",
+ "qemu_runs": [
+  "reports/diag-stage113-r1.log",
+  "reports/diag-stage113-r2.log",
+  "reports/diag-stage113-r3.log",
+  "reports/regress-stage113-qcom-debug-diag.log"
+ ],
+ "results": {
+  "dump_table": "TZ got 0x10b000 bytes: top v2.0/1 entry, apps v2.0/5 entries"
+ },
+ "regression": "reports/regress-stage113-summary.txt",
+ "crc": "reports/diag-stage113-crc.json",
+ "not_verified": [
+  "real TZ dump table/ramdump",
+  "minidump-backed logbuf/va_minidump",
+  "SMMU iommu debug"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

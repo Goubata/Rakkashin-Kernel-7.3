@@ -1,0 +1,80 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-debug-diag/memory_dump_v2.c",
+      "source": "drivers/soc/qcom/memory_dump_v2.c",
+      "original_sha256": "b6be642d2bfe35ca57080db6832aa3f124f6541b2a69563244c205f0747575a8",
+      "sha256": "b6be642d2bfe35ca57080db6832aa3f124f6541b2a69563244c205f0747575a8"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom_va_minidump.c",
+      "source": "drivers/soc/qcom/qcom_va_minidump.c",
+      "original_sha256": "9d42e12661087256a2c89c851dc2561c3042bc0f317fa4275a848bfada4f277d",
+      "sha256": "79bb59a214924d7489eb3764d5432fb862498683454b981a72da50b1fd0628f2"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom_logbuf_boot_log.c",
+      "source": "drivers/soc/qcom/qcom_logbuf_boot_log.c",
+      "original_sha256": "7d7a18be3dcefbed67c4910d0a8170f5970719e2ba218963bdc64580f5547d93",
+      "sha256": "7d7a18be3dcefbed67c4910d0a8170f5970719e2ba218963bdc64580f5547d93"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom_logbuf_vendor_hooks.c",
+      "source": "drivers/soc/qcom/qcom_logbuf_vendor_hooks.c",
+      "original_sha256": "83a57c89cd5459bf2696f290aea08b3cb9c2de8949cc5bfda3cce9821f29a003",
+      "sha256": "83a57c89cd5459bf2696f290aea08b3cb9c2de8949cc5bfda3cce9821f29a003"
+    },
+    {
+      "file": "ports/qcom-debug-diag/kryo_arm64_edac.c",
+      "source": "drivers/edac/kryo_arm64_edac.c",
+      "original_sha256": "4db3d124a9fa784da39dd1d46640a21c1e7b417c376aad6b4cb520e741cbb8aa",
+      "sha256": "4db3d124a9fa784da39dd1d46640a21c1e7b417c376aad6b4cb520e741cbb8aa"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom-iommu-debug.c",
+      "source": "drivers/iommu/qcom-iommu-debug.c",
+      "original_sha256": "2e854786af3b1ac6bca02a83f54808cd4bdace0095f0f9d27823aa328bf07ff8",
+      "sha256": "2e854786af3b1ac6bca02a83f54808cd4bdace0095f0f9d27823aa328bf07ff8"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom-iommu-debug-user.c",
+      "source": "drivers/iommu/qcom-iommu-debug-user.c",
+      "original_sha256": "3527e750f712a09968f98cf28f2f254e79451c2be7083e311511f3cdd39823f5",
+      "sha256": "3527e750f712a09968f98cf28f2f254e79451c2be7083e311511f3cdd39823f5"
+    },
+    {
+      "file": "ports/qcom-debug-diag/qcom-iommu-debug.h",
+      "source": "drivers/iommu/qcom-iommu-debug.h",
+      "original_sha256": "ed5177559119f964b25baafe03e42ade3b24ce5ce679da702f5f847084292786",
+      "sha256": "ed5177559119f964b25baafe03e42ade3b24ce5ce679da702f5f847084292786"
+    },
+    {
+      "file": "ports/qcom-debug-diag/include/soc/qcom/memory_dump.h",
+      "source": "include/soc/qcom/memory_dump.h",
+      "original_sha256": "9e0940720dd17e9da3344a373b0611e798ac6c53b7a460cf605acf5ba791071e",
+      "sha256": "9e0940720dd17e9da3344a373b0611e798ac6c53b7a460cf605acf5ba791071e"
+    },
+    {
+      "file": "ports/qcom-debug-diag/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "bdeb1107db49eaeecd1bd479dc62fd1d7d2c2109ae86e9c598963b9bd6161682"
+    }
+  ],
+  "patch_sha256": "2cfbb1b53bb53ce83869769686a6d1ffeeb6d39af386e263e16d926fd52600da",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "memory_dump_v2, qcom_va_minidump, qcom_logbuf_boot_log, qcom_logbuf_vendor_hooks, kryo_arm64_edac (PANIC_ON_UE), qcom_iommu_debug on android18-7.3; debug_symbol is provided by the 7.3 kernel (kallsyms)",
+  "reviewed_changes": [
+    "qcom_va_minidump: nth_page() removed in 7.x -> page + i (contiguous vmemmap on arm64)",
+    "core: qcom_scm_assign_dump_table_region (patches/scm-dumptable-7.3.patch; canoe uses the plain SCM variant, no CONFIG_QCOM_SCM_SMCI)",
+    "debug_symbol module not built: kernel/kallsyms.c exports debug_symbol_available/lookup_name (module would double-export)"
+  ],
+  "pending": [
+    "kryo EDAC: phone DT has no arm,arm64-kryo-cpu-erp node (loads, does not bind)",
+    "va_minidump/logbuf need the real SMEM minidump table (phone)",
+    "iommu debug needs the SMMU (phone)"
+  ]
+}

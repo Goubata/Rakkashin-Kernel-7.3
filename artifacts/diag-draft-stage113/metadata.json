@@ -1,0 +1,19 @@
+{
+  "scope": "Unaccepted draft; QEMU memory-dump TZ registration via fake TZ, others load",
+  "core_image": "changed",
+  "image_sha256": "a75e669d9d54880a8821ea124c3e0d97ac9316e345e9e54fcea669316f878ebd",
+  "modules": [
+    "memory_dump_v2.ko",
+    "qcom_va_minidump.ko",
+    "qcom_logbuf_boot_log.ko",
+    "qcom_logbuf_vendor_hooks.ko",
+    "kryo_arm64_edac.ko",
+    "qcom_iommu_debug.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

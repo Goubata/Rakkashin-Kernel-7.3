@@ -2591,3 +2591,20 @@ sdhci-msm/cqhci are deliberately omitted (reports/module-set-decisions.json): th
 SDHC is status=disabled, and the 7.3 in-tree sdhci-msm imports the upstream qcom_ice ABI, which
 conflicts with the vendor ICE module used by UFS inline encryption.
 Regression: 25 suites incl. firststage-misc; 162 CRCs.
+
+## Stage113: crash-dump table and diagnostic modules on android18-7.3
+
+ports/qcom-debug-diag (qcom-soc 037aa1c): memory_dump_v2, qcom_va_minidump, qcom_logbuf_boot_log,
+qcom_logbuf_vendor_hooks, kryo_arm64_edac (PANIC_ON_UE=y), qcom_iommu_debug. debug_symbol is not
+built: 7.3 kernel/kallsyms.c already exports debug_symbol_available()/debug_symbol_lookup_name()
+(core 3684f35f1; module would double-export) - recorded in reports/module-set-decisions.json.
+Core (patches/scm-dumptable-7.3.patch): qcom_scm_assign_dump_table_region() = SIP UTIL 0x03 /
+DUMP_TABLE_ASSIGN 0x13 (canoe has no CONFIG_QCOM_SCM_SMCI, so 6.12 used this plain call).
+Port fix: nth_page() removed in 7.x -> page + i (va_minidump vmap).
+QEMU (Image#38, fake TZ): phone-shaped mem_dump with a mapped, non-reusable dump_mem_region and
+static entries (4 CPU contexts + rpmh-sized): the table handed to TZ (0x10b000 bytes) holds a
+v2.0 top table with 1 entry whose APPS table is v2.0 with 5 entries; IMEM is left alone when TZ
+accepts (driver behaviour). kryo EDAC (phone DT has no kryo-cpu-erp node), va_minidump, logbuf x2
+and iommu debug load. 3/3 runs.
+Regression: 26 suites + scm, secure, pas-driver, ice, iommu, ufs, debug-symbol, diagnostics; 168
+CRCs; core replay 32 patches.

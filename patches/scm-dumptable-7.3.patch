@@ -1,0 +1,57 @@
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 4e91129a7..2dfa5d655 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -608,6 +608,26 @@ int qcom_scm_get_download_mode(unsigned int *mode)
+ }
+ EXPORT_SYMBOL_GPL(qcom_scm_get_download_mode);
+ 
++/* ANDROID: 6.12 qcom_scm-scm.c: hand the memory_dump_v2 table to TZ */
++int qcom_scm_assign_dump_table_region(bool is_assign, phys_addr_t addr, size_t size)
++{
++	struct qcom_scm_desc desc = {
++		.svc = QCOM_SCM_SVC_UTIL,
++		.cmd = QCOM_SCM_UTIL_DUMP_TABLE_ASSIGN,
++		.arginfo = QCOM_SCM_ARGS(3),
++		.owner = ARM_SMCCC_OWNER_SIP,
++		.args[0] = is_assign,
++		.args[1] = addr,
++		.args[2] = size,
++	};
++
++	if (!__scm)
++		return -ENODEV;
++
++	return qcom_scm_call(__scm->dev, &desc, NULL);
++}
++EXPORT_SYMBOL_GPL(qcom_scm_assign_dump_table_region);
++
+ static enum qcom_scm_custom_reset_type qcom_scm_custom_reset_type = QCOM_SCM_RST_NONE;
+ 
+ static int qcom_scm_oem_reboot(struct device *dev)
+diff --git a/drivers/firmware/qcom/qcom_scm.h b/drivers/firmware/qcom/qcom_scm.h
+index dc4b76914..3fa68ae4e 100644
+--- a/drivers/firmware/qcom/qcom_scm.h
++++ b/drivers/firmware/qcom/qcom_scm.h
+@@ -109,6 +109,9 @@ int qcom_scm_shm_bridge_enable(struct device *scm_dev);
+ #define QCOM_SCM_BOOT_SET_DLOAD_MODE	0x10
+ /* ANDROID: OEM power service (6.12 warm/custom reboot) */
+ #define QCOM_SCM_SVC_OEM_POWER			0x09
++/* ANDROID: crash dump table registration (6.12 qcom_scm-scm.c) */
++#define QCOM_SCM_SVC_UTIL			0x03
++#define QCOM_SCM_UTIL_DUMP_TABLE_ASSIGN		0x13
+ #define QCOM_SCM_OEM_POWER_REBOOT		0x22
+ #define QCOM_SCM_OEM_POWER_CUSTOM_REBOOT	0x23
+ #define QCOM_SCM_BOOT_SET_ADDR_MC	0x11
+diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+index 2a28777a9..cae8b38fa 100644
+--- a/include/linux/firmware/qcom/qcom_scm.h
++++ b/include/linux/firmware/qcom/qcom_scm.h
+@@ -287,6 +287,7 @@ enum qcom_scm_custom_reset_type {
+ };
+ 
+ int qcom_scm_disable_sdi(void);
++int qcom_scm_assign_dump_table_region(bool is_assign, phys_addr_t addr, size_t size);
+ void qcom_scm_set_download_mode(enum qcom_download_mode mode);
+ int qcom_scm_get_download_mode(unsigned int *mode);
+ 

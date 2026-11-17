@@ -287,6 +287,20 @@ enum qcom_scm_custom_reset_type {
 };
 
 int qcom_scm_disable_sdi(void);
+/* ANDROID: android16-6.12 vendor calls (tz_log, tpdm, ipam, msm_drm, camera) */
+int qcom_scm_get_tz_feat_id_version(u64 feat_id, u64 *version);
+int qcom_scm_get_tz_log_feat_id(u64 *version);
+int qcom_scm_query_encrypted_log_feature(u64 *enabled);
+int qcom_scm_query_log_status(u64 *status);
+int qcom_scm_query_tz_time(u64 *ticks, u32 *frequency);
+int qcom_scm_register_qsee_log_buf(phys_addr_t buf, size_t len);
+int qcom_scm_request_encrypted_log(phys_addr_t buf, size_t len, uint32_t log_id,
+				   bool is_full_encrypted_tz_logs_supported,
+				   bool is_full_encrypted_tz_logs_enabled);
+int qcom_scm_get_sec_dump_state(u32 *dump_state);
+int qcom_scm_mem_protect_region_id(phys_addr_t paddr, size_t size);
+int qcom_scm_mem_protect_sd_ctrl(u32 devid, phys_addr_t mem_addr, u64 mem_size, u32 vmid);
+int qcom_scm_smmu_notify_secure_lut(u64 dev_id, bool secure);
 int qcom_scm_assign_dump_table_region(bool is_assign, phys_addr_t addr, size_t size);
 void qcom_scm_set_download_mode(enum qcom_download_mode mode);
 int qcom_scm_get_download_mode(unsigned int *mode);

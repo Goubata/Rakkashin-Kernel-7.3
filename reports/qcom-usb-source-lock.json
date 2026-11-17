@@ -1,0 +1,128 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-usb/debug_ipc.c",
+      "source": "drivers/usb/dwc3/debug_ipc.c",
+      "original_sha256": "921d0b1be4094ab90a0726bc16ed64151083746474f314cc41da858076f6a12d",
+      "sha256": "921d0b1be4094ab90a0726bc16ed64151083746474f314cc41da858076f6a12d"
+    },
+    {
+      "file": "ports/qcom-usb/dwc3-msm-core.c",
+      "source": "drivers/usb/dwc3/dwc3-msm-core.c",
+      "original_sha256": "a7cb4b69be794004d0a8a61cf3a433acc6e8dbad323817e8ef4a6e10a41e2abd",
+      "sha256": "80531b1c394c6eed5f9802888b64112f54195bcad4364eaacfb9ee4673ed2095"
+    },
+    {
+      "file": "ports/qcom-usb/dwc3-msm-ops.c",
+      "source": "drivers/usb/dwc3/dwc3-msm-ops.c",
+      "original_sha256": "46125c6ea270fc36b798451689ac02d7a677ea1cb41d929d26682a42f5d17351",
+      "sha256": "46125c6ea270fc36b798451689ac02d7a677ea1cb41d929d26682a42f5d17351"
+    },
+    {
+      "file": "ports/qcom-usb/debug-ipc.h",
+      "source": "drivers/usb/dwc3/debug-ipc.h",
+      "original_sha256": "a99b2b6e292ae5cddf77b0fd0b082b297c726003909b48cc24a92281bb92f526",
+      "sha256": "a99b2b6e292ae5cddf77b0fd0b082b297c726003909b48cc24a92281bb92f526"
+    },
+    {
+      "file": "ports/qcom-usb/phy-msm-ssusb-qmp.c",
+      "source": "drivers/usb/phy/phy-msm-ssusb-qmp.c",
+      "original_sha256": "bb60318b70135f92cc447caef8b00ce77cc4170fa5c22d82553b1fcc8ad2b9b6",
+      "sha256": "bb60318b70135f92cc447caef8b00ce77cc4170fa5c22d82553b1fcc8ad2b9b6"
+    },
+    {
+      "file": "ports/qcom-usb/phy-msm-snps-eusb2.c",
+      "source": "drivers/usb/phy/phy-msm-snps-eusb2.c",
+      "original_sha256": "6df4fcfbd4bf227a4bfadc07a6404b64493628a9b9ef722c0dc367410f5cfa32",
+      "sha256": "6df4fcfbd4bf227a4bfadc07a6404b64493628a9b9ef722c0dc367410f5cfa32"
+    },
+    {
+      "file": "ports/qcom-usb/phy-msm-snps-hs.c",
+      "source": "drivers/usb/phy/phy-msm-snps-hs.c",
+      "original_sha256": "2b374be8b0a56cd9f4d5fd5588a5335e1dc4e9d8e23bec9a4e660026c7b67608",
+      "sha256": "2b374be8b0a56cd9f4d5fd5588a5335e1dc4e9d8e23bec9a4e660026c7b67608"
+    },
+    {
+      "file": "ports/qcom-usb/phy-qcom-emu.c",
+      "source": "drivers/usb/phy/phy-qcom-emu.c",
+      "original_sha256": "048138662c9b40b3a6b5936a84a4b2662cc839ea3f51e1e7103451690e571c5a",
+      "sha256": "048138662c9b40b3a6b5936a84a4b2662cc839ea3f51e1e7103451690e571c5a"
+    },
+    {
+      "file": "ports/qcom-usb/phy-qcom-eusb2-repeater.c",
+      "source": "drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c",
+      "original_sha256": "3232a6da5db97cc3a8fec219795d7f66bfa555e16dac2049021d603bbf238cba",
+      "sha256": "cddf2b831f334e8f9c3019bb071564b45b63333557fc9b1f3b9a590da135f5d5"
+    },
+    {
+      "file": "ports/qcom-usb/eud.c",
+      "source": "drivers/soc/qcom/eud.c",
+      "original_sha256": "7937ee204f2d9c24a2f1126e88e49a654075ecc6e252fd525736a24bf725d91a",
+      "sha256": "7937ee204f2d9c24a2f1126e88e49a654075ecc6e252fd525736a24bf725d91a"
+    },
+    {
+      "file": "ports/qcom-usb/redriver.c",
+      "source": "drivers/usb/redriver/redriver.c",
+      "original_sha256": "17de19829bd11345964972ce257e0d3ed2f6e9bc249899230706398b96a16c23",
+      "sha256": "17de19829bd11345964972ce257e0d3ed2f6e9bc249899230706398b96a16c23"
+    },
+    {
+      "file": "ports/qcom-usb/nb7vpq904m.c",
+      "source": "drivers/usb/redriver/nb7vpq904m.c",
+      "original_sha256": "a56c93253707d67de9df89d23f26deb745876621a1ef4ce66f37d9d0961e71fd",
+      "sha256": "a56c93253707d67de9df89d23f26deb745876621a1ef4ce66f37d9d0961e71fd"
+    },
+    {
+      "file": "ports/qcom-usb/ps5169.c",
+      "source": "drivers/usb/redriver/ps5169.c",
+      "original_sha256": "bd3fcde96f8e1c765c7de4fd4384d0edaa15dc50eca94e5e55fcd8b90f714389",
+      "sha256": "bd3fcde96f8e1c765c7de4fd4384d0edaa15dc50eca94e5e55fcd8b90f714389"
+    },
+    {
+      "file": "ports/qcom-usb/include/linux/usb/redriver.h",
+      "source": "include/linux/usb/redriver.h",
+      "original_sha256": "0620485e8b3b190bd878621c143b3943112fb967d87fe0ccf25f73c475570292",
+      "sha256": "0620485e8b3b190bd878621c143b3943112fb967d87fe0ccf25f73c475570292"
+    },
+    {
+      "file": "ports/qcom-usb/include/linux/soc/qcom/wcd939x-i2c.h",
+      "source": "include/linux/soc/qcom/wcd939x-i2c.h",
+      "original_sha256": "7bf8c4b665c6eac7b40072f8b71de96b8895ab6236d0abdbb3ae1dc43f6f7386",
+      "sha256": "7bf8c4b665c6eac7b40072f8b71de96b8895ab6236d0abdbb3ae1dc43f6f7386"
+    },
+    {
+      "file": "ports/qcom-usb/include/linux/eom_ioctl.h",
+      "source": "include/uapi/linux/eom_ioctl.h",
+      "original_sha256": "626ebd2c5b3765f51cdf7f3b7ce4630c49a40faa81ea837c42e95f685c9cc0b3",
+      "sha256": "626ebd2c5b3765f51cdf7f3b7ce4630c49a40faa81ea837c42e95f685c9cc0b3"
+    },
+    {
+      "file": "ports/qcom-usb/include/linux/phy_core.h",
+      "source": "include/linux/phy_core.h",
+      "original_sha256": "b34d08c84d48a92617109da7fc96eba40fcfda1eacedccf03dafafe5ab9dd70f",
+      "sha256": "b34d08c84d48a92617109da7fc96eba40fcfda1eacedccf03dafafe5ab9dd70f"
+    },
+    {
+      "file": "ports/qcom-usb/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "039fb0b89a5a58a54a5f9136e479b908175a639ab7de406a736b562e0892e0bb"
+    }
+  ],
+  "patch_sha256": "735d4aac173e2e1b56789279c9218d91cd0e8cda65d80b212c93e6b58ee23feb",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "dwc3-msm glue, SS QMP / Synopsys eUSB2 / HS / EMU PHYs, eUSB2 repeater, EUD, USB redrivers on android18-7.3 (M31 eUSB2 PHY + PMIC repeater were ported earlier in ports/usb-repeater)",
+  "reviewed_changes": [
+    "dwc3-msm: 7.x dwc3 core dropped dep->regs; endpoint registers via dwc->regs + DWC3_DEPCMD*(n) (same absolute offsets); DWC3_LLUCTL(0); FIELD_GET(HCS_MAX_PORTS) (xhci-caps masks)",
+    "vendor clk flags from ports/qcom-clock-core (qcom_clk_set_flags)",
+    "kretprobe targets and trace-event prototypes unchanged 6.12 -> 7.3 (verified)",
+    "remove_new -> remove"
+  ],
+  "pending": [
+    "DWC3/PHY hardware, adb gadget, host mode, USB3 SS PHY, EUD (phone)",
+    "gadget functions usb_f_gsi/cdev/ccid/qdss and moto_f_usbnet (later stage)"
+  ]
+}

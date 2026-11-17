@@ -1,0 +1,19 @@
+{
+ "stage": 116,
+ "scope": "dwc3-msm, USB PHYs, EUD, redrivers",
+ "qemu_runs": [
+  "reports/usb-stage116-qemu.log",
+  "reports/usb-stage116-r2.log",
+  "reports/usb-stage116-r3.log"
+ ],
+ "results": {
+  "kretprobes": "14/14 registered",
+  "load": "all"
+ },
+ "not_verified": [
+  "USB hardware, adb, host mode"
+ ],
+ "crc": "reports/usb-stage116-crc.json",
+ "physical_verified": false,
+ "promoted": false
+}

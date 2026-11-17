@@ -21,4 +21,5 @@ one firststage-misc
 one qcom-debug-diag
 one qcom-perf-misc
 one qcom-pm
+one qcom-usb
 python3 scripts/audit_module_versions.py ports/*/*.ko 2>/dev/null | python3 -c "import json,sys;d=json.load(sys.stdin);print('crc',d['passed'],len(d['modules']),[m['module'] for m in d['modules'] if m['mismatches']][:6])"

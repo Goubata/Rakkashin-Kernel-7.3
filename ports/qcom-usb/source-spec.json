@@ -1,0 +1,36 @@
+{
+ "name": "qcom-usb",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-usb/debug_ipc.c": "drivers/usb/dwc3/debug_ipc.c",
+  "ports/qcom-usb/dwc3-msm-core.c": "drivers/usb/dwc3/dwc3-msm-core.c",
+  "ports/qcom-usb/dwc3-msm-ops.c": "drivers/usb/dwc3/dwc3-msm-ops.c",
+  "ports/qcom-usb/debug-ipc.h": "drivers/usb/dwc3/debug-ipc.h",
+  "ports/qcom-usb/phy-msm-ssusb-qmp.c": "drivers/usb/phy/phy-msm-ssusb-qmp.c",
+  "ports/qcom-usb/phy-msm-snps-eusb2.c": "drivers/usb/phy/phy-msm-snps-eusb2.c",
+  "ports/qcom-usb/phy-msm-snps-hs.c": "drivers/usb/phy/phy-msm-snps-hs.c",
+  "ports/qcom-usb/phy-qcom-emu.c": "drivers/usb/phy/phy-qcom-emu.c",
+  "ports/qcom-usb/phy-qcom-eusb2-repeater.c": "drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c",
+  "ports/qcom-usb/eud.c": "drivers/soc/qcom/eud.c",
+  "ports/qcom-usb/redriver.c": "drivers/usb/redriver/redriver.c",
+  "ports/qcom-usb/nb7vpq904m.c": "drivers/usb/redriver/nb7vpq904m.c",
+  "ports/qcom-usb/ps5169.c": "drivers/usb/redriver/ps5169.c",
+  "ports/qcom-usb/include/linux/usb/redriver.h": "include/linux/usb/redriver.h",
+  "ports/qcom-usb/include/linux/soc/qcom/wcd939x-i2c.h": "include/linux/soc/qcom/wcd939x-i2c.h",
+  "ports/qcom-usb/include/linux/eom_ioctl.h": "include/uapi/linux/eom_ioctl.h",
+  "ports/qcom-usb/include/linux/phy_core.h": "include/linux/phy_core.h",
+  "ports/qcom-usb/Makefile": null
+ },
+ "scope": "dwc3-msm glue, SS QMP / Synopsys eUSB2 / HS / EMU PHYs, eUSB2 repeater, EUD, USB redrivers on android18-7.3 (M31 eUSB2 PHY + PMIC repeater were ported earlier in ports/usb-repeater)",
+ "reviewed_changes": [
+  "dwc3-msm: 7.x dwc3 core dropped dep->regs; endpoint registers via dwc->regs + DWC3_DEPCMD*(n) (same absolute offsets); DWC3_LLUCTL(0); FIELD_GET(HCS_MAX_PORTS) (xhci-caps masks)",
+  "vendor clk flags from ports/qcom-clock-core (qcom_clk_set_flags)",
+  "kretprobe targets and trace-event prototypes unchanged 6.12 -> 7.3 (verified)",
+  "remove_new -> remove"
+ ],
+ "pending": [
+  "DWC3/PHY hardware, adb gadget, host mode, USB3 SS PHY, EUD (phone)",
+  "gadget functions usb_f_gsi/cdev/ccid/qdss and moto_f_usbnet (later stage)"
+ ]
+}

@@ -2645,3 +2645,17 @@ Not verified in QEMU: PSCI idle states (with cpu-idle-states QEMU TCG stops boot
 and APSS domain states, mem_sleep=deep (QEMU offers only s2idle) and so the GIC restore path.
 Regression: 28 suites + scm, secure, pas-driver, ice, iommu, ufs, debug-symbol, diagnostics; 185 CRCs;
 core replay.
+
+## Stage116: dwc3-msm, USB PHYs, EUD, redrivers
+
+Phone bindings (running ROM): msm-dwc3 a600000.ssusb (+ core dwc3), msm_m31_eusb2_phy 88e3000.hsphy and
+eusb2-repeater (both ported earlier in ports/usb-repeater), msm-usb-ssphy-qmp 88e8000.ssphy,
+usb_phy_generic usb_nop_phy, msm-eud; redrivers/fsa4480/wcd_usbss have no I2C devices.
+ports/qcom-usb (qcom-soc 037aa1c): dwc3-msm (debug_ipc + core + ops), phy-msm-ssusb-qmp,
+phy-msm-snps-eusb2, phy-msm-snps-hs, phy-qcom-emu, phy-qcom-eusb2-repeater, eud, redriver,
+nb7vpq904m, ps5169. 7.3 dwc3 core changes handled: no dep->regs (DEPCMD*/DEPCMDPAR*(n) on dwc->regs,
+same absolute offsets as 6.12's dep->regs + DWC3_DEPCMD), DWC3_LLUCTL(n), HCS_MAX_PORTS is a mask.
+dwc3-msm-ops hooks the core with kretprobes on 14 symbols: all present in 7.3 vmlinux with
+6.12-identical signatures and identical dwc3 trace-event prototypes; KUnit avr_dwc3_msm_probes
+registers/unregisters a kretprobe on each (3/3). All modules load in QEMU.
+Not verified: any USB hardware path (gadget/adb, host, SS PHY, EUD) - phone only. CRC: 195 modules.

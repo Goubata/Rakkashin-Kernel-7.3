@@ -1,0 +1,61 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/qcom-usb/dwc3-msm.ko",
+      "imports_checked": 208,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/eud.ko",
+      "imports_checked": 65,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/nb7vpq904m.ko",
+      "imports_checked": 47,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/phy-msm-snps-eusb2.ko",
+      "imports_checked": 74,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/phy-msm-snps-hs.ko",
+      "imports_checked": 69,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/phy-msm-ssusb-qmp.ko",
+      "imports_checked": 72,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/phy-qcom-emu.ko",
+      "imports_checked": 24,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/phy-qcom-eusb2-repeater.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/ps5169.ko",
+      "imports_checked": 44,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-usb/redriver.ko",
+      "imports_checked": 8,
+      "mismatches": {}
+    },
+    {
+      "module": "tests/qcom-usb/avr-usb-test.ko",
+      "imports_checked": 6,
+      "mismatches": {}
+    }
+  ]
+}

@@ -1,0 +1,2707 @@
+{
+ "summary": {
+  "vendor_boot": {
+   "ko": 293,
+   "omitted": 11,
+   "missing": 18,
+   "not_ported_inert": 4
+  },
+  "vendor_boot_first_stage": {
+   "ko": 125,
+   "omitted": 11
+  },
+  "vendor_dlkm": {
+   "ko": 296,
+   "missing": 18,
+   "not_ported_inert": 9
+  },
+  "system_dlkm": {
+   "ko": 98,
+   "omitted": 2,
+   "not_ported_inert": 4
+  }
+ },
+ "plan": {
+  "vendor_boot": {
+   "gh_arm_drv": {
+    "ko": "ports/gunyah/gh_arm_drv.ko"
+   },
+   "qti_regmap_debugfs": {
+    "ko": "ports/qcom-spmi/qti-regmap-debugfs.ko"
+   },
+   "cambistmclkcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/cambistmclkcc-canoe.ko"
+   },
+   "camcc_alor": {
+    "ko": "ports/qcom-clock-controllers/camcc-alor.ko"
+   },
+   "camcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/camcc-canoe.ko"
+   },
+   "clk_dummy": {
+    "ko": "ports/qcom-clock-controllers/clk-dummy.ko"
+   },
+   "clk_qcom": {
+    "ko": "ports/qcom-clock-core/clk-qcom.ko"
+   },
+   "clk_rpmh": {
+    "ko": "ports/qcom-clock-controllers/clk-rpmh.ko"
+   },
+   "debugcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/debugcc-canoe.ko"
+   },
+   "dispcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/dispcc-canoe.ko"
+   },
+   "dispcc_chora": {
+    "ko": "ports/qcom-clock-controllers/dispcc-chora.ko"
+   },
+   "evacc_canoe": {
+    "ko": "ports/qcom-clock-controllers/evacc-canoe.ko"
+   },
+   "gcc_alor": {
+    "ko": "ports/gcc-alor-vendor-core/gcc-alor.ko"
+   },
+   "gcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/gcc-canoe.ko"
+   },
+   "gcc_chora": {
+    "ko": "ports/qcom-clock-controllers/gcc-chora.ko"
+   },
+   "gdsc_regulator": {
+    "ko": "ports/qcom-clock-core/gdsc-regulator.ko"
+   },
+   "gpucc_canoe": {
+    "ko": "ports/qcom-clock-controllers/gpucc-canoe.ko"
+   },
+   "tcsrcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/tcsrcc-canoe.ko"
+   },
+   "tcsrcc_chora": {
+    "ko": "ports/qcom-clock-controllers/tcsrcc-chora.ko"
+   },
+   "videocc_canoe": {
+    "ko": "ports/qcom-clock-controllers/videocc-canoe.ko"
+   },
+   "videocc_chora": {
+    "ko": "ports/qcom-clock-controllers/videocc-chora.ko"
+   },
+   "clk_scmi": {
+    "ko": "scmi-clk.ko",
+    "renamed": true
+   },
+   "qcom_cpufreq_hw": {
+    "ko": "ports/qcom-cpucp-scmi/qcom-cpufreq-hw.ko"
+   },
+   "msm_gpi": {
+    "ko": "ports/geni-bus/msm_gpi.ko"
+   },
+   "qcom_dma_heaps": {
+    "ko": "ports/qcom-dma-heaps/qcom_dma_heaps.ko"
+   },
+   "deferred_free_helper": {
+    "ko": "ports/qcom-dma-heaps/deferred-free-helper.ko"
+   },
+   "kryo_arm64_edac": {
+    "ko": "ports/qcom-debug-diag/kryo_arm64_edac.ko"
+   },
+   "qcom_scmi_vendor": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_scmi_vendor.ko"
+   },
+   "si_core_module": {
+    "ko": "ports/qcom-tee/si_core_module.ko"
+   },
+   "qcom_scm": {
+    "ko": "out/native-gki/drivers/firmware/qcom/qcom-scm.ko"
+   },
+   "qcom_hwspinlock": {
+    "ko": "ports/qcom-hwspinlock/qcom_hwspinlock.ko"
+   },
+   "i2c_msm_geni": {
+    "ko": "ports/geni-bus/i2c-msm-geni.ko"
+   },
+   "icc_clk": {
+    "ko": "ports/qcom-firststage-misc/icc-clk.ko"
+   },
+   "icc_bcm_voter": {
+    "ko": "ports/qcom-interconnect/icc-bcm-voter.ko"
+   },
+   "icc_debug": {
+    "ko": "ports/qcom-interconnect/icc-debug.ko"
+   },
+   "icc_rpmh": {
+    "ko": "ports/qcom-interconnect/icc-rpmh.ko"
+   },
+   "qnoc_canoe": {
+    "decision": "omitted"
+   },
+   "qnoc_chora": {
+    "decision": "omitted"
+   },
+   "qnoc_ravelin": {
+    "decision": "omitted"
+   },
+   "qnoc_qos": {
+    "ko": "ports/qcom-interconnect/qnoc-qos.ko"
+   },
+   "qnoc_alor": {
+    "ko": "ports/qcom-interconnect/qnoc-alor.ko"
+   },
+   "arm_smmu": {
+    "ko": "ports/arm-smmu-vendor/arm_smmu.ko"
+   },
+   "iommu_logger": {
+    "ko": "ports/iommu-logger/iommu_logger.ko"
+   },
+   "msm_dma_iommu_mapping": {
+    "ko": "ports/qcom-dma-heaps/msm_dma_iommu_mapping.ko"
+   },
+   "qcom_iommu_debug": {
+    "ko": "ports/qcom-debug-diag/qcom_iommu_debug.ko"
+   },
+   "qcom_iommu_util": {
+    "ko": "ports/qcom-iommu-util/qcom_iommu_util.ko"
+   },
+   "qcom_pdc": {
+    "ko": "ports/qcom-irq/qcom-pdc.ko"
+   },
+   "msm_qmp": {
+    "ko": "ports/qcom-firststage-misc/msm_qmp.ko"
+   },
+   "qcom_ipcc": {
+    "ko": "ports/qcom-ipcc/qcom-ipcc.ko"
+   },
+   "qcom_spmi_pmic": {
+    "ko": "ports/qcom-spmi/qcom-spmi-pmic.ko"
+   },
+   "qseecom_proxy": {
+    "ko": "ports/qcom-tee/qseecom_proxy.ko"
+   },
+   "cqhci": {
+    "decision": "omitted"
+   },
+   "sdhci_msm": {
+    "decision": "omitted"
+   },
+   "nvmem_qcom_spmi_sdam": {
+    "ko": "ports/qcom-sdam/nvmem_qcom-spmi-sdam.ko"
+   },
+   "qcom_llcc_pmu": {
+    "ko": "ports/qcom-perf-misc/qcom_llcc_pmu.ko"
+   },
+   "arm_smmu_pmu": {
+    "ko": "ports/qcom-perf-misc/arm_smmu_pmu.ko"
+   },
+   "phy_qcom_ufs": {
+    "ko": "ports/ufs-phy-canoe/phy-qcom-ufs.ko"
+   },
+   "phy_qcom_ufs_qmp_v4_canoe": {
+    "ko": "ports/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
+   },
+   "phy_qcom_ufs_qrbtc_sdm845": {
+    "decision": "omitted"
+   },
+   "phy_qcom_ufs_qmp_v4_crow": {
+    "decision": "omitted"
+   },
+   "pinctrl_canoe": {
+    "decision": "omitted"
+   },
+   "pinctrl_msm": {
+    "ko": "ports/pinctrl-alor-vendor-core/pinctrl-msm.ko"
+   },
+   "pinctrl_ravelin": {
+    "decision": "omitted"
+   },
+   "pinctrl_alor": {
+    "ko": "ports/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+   },
+   "pinctrl_chora": {
+    "decision": "omitted"
+   },
+   "qcom_dload_mode": {
+    "ko": "ports/qcom-reboot/qcom-dload-mode.ko"
+   },
+   "qcom_reboot_reason": {
+    "ko": "ports/qcom-reboot/qcom-reboot-reason.ko"
+   },
+   "debug_regulator": {
+    "ko": "ports/qcom-regulators/debug-regulator.ko"
+   },
+   "proxy_consumer": {
+    "ko": "ports/qcom-clock-core/proxy-consumer.ko"
+   },
+   "rpmh_regulator": {
+    "ko": "ports/qcom-regulators/rpmh-regulator.ko"
+   },
+   "stub_regulator": {
+    "ko": "ports/qcom-regulators/stub-regulator.ko"
+   },
+   "rtc_pm8xxx": {
+    "ko": "ports/qcom-rtc/rtc-pm8xxx.ko"
+   },
+   "sg": {
+    "ko": "ports/qcom-firststage-misc/sg.ko"
+   },
+   "dcvs_fp": {
+    "ko": "ports/qcom-dcvs/dcvs_fp.ko"
+   },
+   "qcom_dcvs": {
+    "ko": "ports/qcom-dcvs/qcom-dcvs.ko"
+   },
+   "qcom_pmu_lib": {
+    "ko": "ports/qcom-perf-misc/qcom-pmu-lib.ko"
+   },
+   "qcom_scmi_client": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_scmi_client.ko"
+   },
+   "mem_buf_dev": {
+    "ko": "ports/qcom-dma-heaps/mem_buf_dev.ko"
+   },
+   "mem_buf": {
+    "ko": "ports/qcom-dma-heaps/mem_buf.ko"
+   },
+   "mem_buf_msgq": {
+    "ko": "ports/qcom-dma-heaps/mem_buf_msgq.ko"
+   },
+   "mem_prot": {
+    "ko": "ports/qcom-dma-heaps/mem-prot.ko"
+   },
+   "cmd_db": {
+    "ko": "ports/qcom-rpmh/cmd-db.ko"
+   },
+   "cpu_phys_log_map": {
+    "ko": "ports/qcom-cpucp-scmi/cpu_phys_log_map.ko"
+   },
+   "crm_v2": {
+    "ko": "ports/qcom-clock-core/crm-v2.ko"
+   },
+   "debug_symbol": {
+    "decision": "omitted"
+   },
+   "gic_intr_routing": {
+    "ko": "ports/qcom-irq/gic_intr_routing.ko"
+   },
+   "llcc_qcom": {
+    "ko": "ports/qcom-llcc/llcc-qcom.ko"
+   },
+   "mdt_loader": {
+    "ko": "ports/qcom-pas-alor/mdt_loader.ko"
+   },
+   "memory_dump_v2": {
+    "ko": "ports/qcom-debug-diag/memory_dump_v2.ko"
+   },
+   "minidump": {
+    "ko": "ports/qcom-minidump/minidump.ko"
+   },
+   "qcom_sdei": {
+    "ko": "ports/qcom-watchdog/qcom_sdei.ko"
+   },
+   "pmic_pon_log": {
+    "ko": "ports/qcom-reboot/pmic-pon-log.ko"
+   },
+   "qcom_aoss": {
+    "ko": "ports/qcom-remoteproc-services/qcom_aoss.ko"
+   },
+   "qcom_cpucp": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_cpucp.ko"
+   },
+   "cpucp_fast": {
+    "ko": "ports/qcom-cpucp-scmi/cpucp_fast.ko"
+   },
+   "qcom_cpu_vendor_hooks": {
+    "ko": "ports/qcom-perf-misc/qcom_cpu_vendor_hooks.ko"
+   },
+   "qcom_ice": {
+    "ko": "out/native-gki/drivers/soc/qcom/qcom_ice.ko"
+   },
+   "qcom_logbuf_boot_log": {
+    "ko": "ports/qcom-debug-diag/qcom_logbuf_boot_log.ko"
+   },
+   "qcom_logbuf_vendor_hooks": {
+    "ko": "ports/qcom-debug-diag/qcom_logbuf_vendor_hooks.ko"
+   },
+   "qcom_rpmh": {
+    "ko": "ports/qcom-rpmh/qcom_rpmh.ko"
+   },
+   "qcom_soc_wdt": {
+    "ko": "ports/qcom-watchdog/qcom_soc_wdt.ko"
+   },
+   "qcom_wdt_core": {
+    "ko": "ports/qcom-watchdog/qcom_wdt_core.ko"
+   },
+   "secure_buffer": {
+    "ko": "ports/secure-buffer/secure_buffer.ko"
+   },
+   "smem": {
+    "ko": "ports/qcom-smem/smem.ko"
+   },
+   "socinfo": {
+    "ko": "ports/qcom-socinfo/socinfo.ko"
+   },
+   "spmi_pmic_arb": {
+    "ko": "ports/qcom-spmi/spmi-pmic-arb.ko"
+   },
+   "bcl_soc": {
+    "ko": "ports/qcom-bcl-soc/bcl_soc.ko"
+   },
+   "qcom_tsens": {
+    "ko": "ports/qcom-tsens/qcom_tsens.ko"
+   },
+   "ufshcd_crypto_qti": {
+    "ko": "ports/ufs-host/ufshcd-crypto-qti.ko"
+   },
+   "ufs_qcom": {
+    "ko": "ports/ufs-host/ufs-qcom.ko"
+   },
+   "gh_dbl": {
+    "ko": "ports/gunyah/gh_dbl.ko"
+   },
+   "gh_mem_notifier": {
+    "ko": "ports/qcom-dma-heaps/gh_mem_notifier.ko"
+   },
+   "gh_rm_heap_manager": {
+    "ko": "ports/qcom-dma-heaps/gh_rm_heap_manager.ko"
+   },
+   "gh_msgq": {
+    "ko": "ports/gunyah/gh_msgq.ko"
+   },
+   "gh_rm_drv": {
+    "ko": "ports/gunyah-rm/gh_rm_drv.ko"
+   },
+   "gh_vcpu_mgr": {
+    "ko": "ports/qcom-perf-misc/gh_vcpu_mgr.ko"
+   },
+   "sched_walt": {
+    "ko": "ports/sched-walt/sched-walt.ko"
+   },
+   "qcom_ipc_logging": {
+    "ko": "ports/qcom-ipc-logging/qcom_ipc_logging.ko"
+   },
+   "qrtr": {
+    "ko": "out/native-gki/net/qrtr/qrtr.ko"
+   },
+   "zram": {
+    "ko": "out/native-gki/drivers/block/zram/zram.ko"
+   },
+   "mhi_dev_satellite": {
+    "ko": "ports/qcom-mhi-pcie/mhi_dev_satellite.ko"
+   },
+   "mhi_dev_uci": {
+    "ko": "ports/qcom-mhi-pcie/mhi_dev_uci.ko"
+   },
+   "mhi": {
+    "ko": "ports/qcom-mhi-pcie/mhi.ko"
+   },
+   "rdbg": {
+    "ko": "ports/qcom-debug-misc/rdbg.ko"
+   },
+   "camcc_chora": {
+    "ko": "ports/qcom-clock-controllers/camcc-chora.ko"
+   },
+   "debugcc_alor": {
+    "ko": "ports/qcom-clock-controllers/debugcc-alor.ko"
+   },
+   "debugcc_chora": {
+    "ko": "ports/qcom-clock-controllers/debugcc-chora.ko"
+   },
+   "gpucc_chora": {
+    "ko": "ports/qcom-clock-controllers/gpucc-chora.ko"
+   },
+   "qcom_cpufreq_hw_debug": {
+    "ko": "ports/qcom-dcvs-misc/qcom-cpufreq-hw-debug.ko"
+   },
+   "qcom_lpm": {
+    "ko": "ports/qcom-pm/qcom_lpm.ko"
+   },
+   "qcom_rng": {
+    "ko": "ports/qcom-rng/qcom-rng.ko"
+   },
+   "governor_gpubw_mon": {
+    "ko": "ports/governor-gpubw/governor_gpubw_mon.ko"
+   },
+   "governor_msm_adreno_tz": {
+    "ko": "ports/governor-adreno-tz/governor_msm_adreno_tz.ko"
+   },
+   "governor_msm_adreno_ro": {
+    "ko": "ports/governor-adreno-ro/governor_msm_adreno_ro.ko"
+   },
+   "bam_dma": {
+    "ko": "ports/qcom-slimbus/bam_dma.ko"
+   },
+   "qcom_edac": {
+    "ko": "ports/qcom-debug-misc/qcom_edac.ko"
+   },
+   "lt9611uxc": {
+    "ko": "ports/qcom-soc-misc2/lt9611uxc.ko"
+   },
+   "drm_display_helper": {
+    "ko": "ports/drm-display-helper/drm_display_helper.ko"
+   },
+   "hwmon": {
+    "ko": "out/native-gki/drivers/hwmon/hwmon.ko"
+   },
+   "qti_amoled_ecm": {
+    "ko": "ports/qcom-pmic-misc/qti_amoled_ecm.ko"
+   },
+   "qti_btl": {
+    "ko": "ports/qcom-thermal-misc/qti_btl.ko"
+   },
+   "coresight_csr": {
+    "missing": true
+   },
+   "coresight_cti": {
+    "missing": true
+   },
+   "coresight_dummy": {
+    "missing": true
+   },
+   "coresight_funnel": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight-funnel.ko"
+   },
+   "coresight_replicator": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight-replicator.ko"
+   },
+   "coresight": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight.ko"
+   },
+   "coresight_qmi": {
+    "missing": true
+   },
+   "coresight_remote_etm": {
+    "missing": true
+   },
+   "coresight_tmc_sec": {
+    "missing": true
+   },
+   "coresight_stm": {
+    "missing": true
+   },
+   "coresight_tgu": {
+    "missing": true
+   },
+   "coresight_tmc": {
+    "missing": true
+   },
+   "coresight_tpda": {
+    "missing": true
+   },
+   "coresight_tpdm": {
+    "missing": true
+   },
+   "coresight_trace_noc": {
+    "missing": true
+   },
+   "coresight_uetm": {
+    "missing": true
+   },
+   "stm_console": {
+    "missing": true
+   },
+   "stm_core": {
+    "missing": true
+   },
+   "stm_ftrace": {
+    "missing": true
+   },
+   "stm_heartbeat": {
+    "missing": true
+   },
+   "stm_p_ost": {
+    "missing": true
+   },
+   "i2c_qcom_geni": {
+    "ko": "out/native-gki/drivers/i2c/busses/i2c-qcom-geni.ko"
+   },
+   "i3c_master_msm_geni": {
+    "ko": "ports/qcom-soc-misc2/i3c-master-msm-geni.ko"
+   },
+   "qcom_spmi_adc5_gen3": {
+    "ko": "ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
+   },
+   "qcom_vadc_common": {
+    "ko": "ports/qcom-adc-thermal/qcom-vadc-common.ko"
+   },
+   "qti_glink_adc": {
+    "ko": "ports/qcom-charging/qti-glink-adc.ko"
+   },
+   "pm8941_pwrkey": {
+    "ko": "ports/qcom-power-key/pm8941-pwrkey.ko"
+   },
+   "qcom_hv_haptics": {
+    "ko": "ports/qcom-leds/qcom-hv-haptics.ko"
+   },
+   "msm_show_resume_irq": {
+    "ko": "ports/qcom-pm/msm_show_resume_irq.ko"
+   },
+   "leds_qcom_flash": {
+    "ko": "ports/qcom-leds/leds-qcom-flash.ko"
+   },
+   "leds_qcom_lpg": {
+    "ko": "ports/qcom-leds/leds-qcom-lpg.ko"
+   },
+   "ledtrig_pattern": {
+    "ko": "out/native-gki/drivers/leds/trigger/ledtrig-pattern.ko"
+   },
+   "leds_qpnp_vibrator_ldo": {
+    "ko": "ports/qcom-leds/leds-qpnp-vibrator-ldo.ko"
+   },
+   "qcom_i2c_pmic": {
+    "ko": "ports/qcom-pmic-misc/qcom-i2c-pmic.ko"
+   },
+   "nvmem_qfprom": {
+    "ko": "out/native-gki/drivers/nvmem/nvmem_qfprom.ko"
+   },
+   "pci_msm_drv": {
+    "ko": "ports/qcom-mhi-pcie/pci-msm-drv.ko"
+   },
+   "eom_driver": {
+    "ko": "ports/qcom-eom/eom_driver.ko"
+   },
+   "pci_phy_access": {
+    "ko": "ports/qcom-eom/pci_phy_access.ko"
+   },
+   "phy_qcom_eusb2_repeater": {
+    "ko": "ports/qcom-usb/phy-qcom-eusb2-repeater.ko"
+   },
+   "phy_qcom_m31_eusb2": {
+    "ko": "ports/qcom-soc-misc2/phy-qcom-m31-eusb2.ko"
+   },
+   "phy_qcom_qmp_combo": {
+    "ko": "ports/qcom-soc-misc2/phy-qcom-qmp-combo.ko"
+   },
+   "pinctrl_spmi_gpio": {
+    "ko": "ports/pmic-pinctrl/pinctrl-spmi-gpio.ko"
+   },
+   "pinctrl_spmi_mpp": {
+    "ko": "ports/pmic-pinctrl/pinctrl-spmi-mpp.ko"
+   },
+   "qcom_pon": {
+    "ko": "ports/qcom-power-key/qcom-pon.ko"
+   },
+   "reboot_mode": {
+    "ko": "ports/qcom-power-key/reboot-mode.ko"
+   },
+   "qti_battery_charger": {
+    "ko": "ports/qcom-charging/qti_battery_charger.ko"
+   },
+   "qptf": {
+    "ko": "ports/qcom-thermal-misc/qptf.ko"
+   },
+   "qti_power_telemetry": {
+    "ko": "ports/qcom-thermal-misc/qti_power_telemetry.ko"
+   },
+   "qti_ptd_share": {
+    "ko": "ports/qcom-soc-misc2/qti_ptd_share.ko"
+   },
+   "qcom_amoled_regulator": {
+    "ko": "ports/qcom-pmic-misc/qcom-amoled-regulator.ko"
+   },
+   "qti_fixed_regulator": {
+    "ko": "ports/qcom-fixed-regulator/qti-fixed-regulator.ko"
+   },
+   "qti_ocp_notifier": {
+    "ko": "ports/qcom-thermal-misc/qti-ocp-notifier.ko"
+   },
+   "qpnp_lcdb_regulator": {
+    "ko": "ports/qcom-pmic-misc/qpnp-lcdb-regulator.ko"
+   },
+   "qcom_pil_info": {
+    "ko": "ports/qcom-pas-alor/qcom_pil_info.ko"
+   },
+   "qcom_q6v5": {
+    "ko": "ports/qcom-remoteproc-services/qcom_q6v5.ko"
+   },
+   "qcom_q6v5_pas": {
+    "ko": "ports/qcom-pas-alor/qcom_q6v5_pas.ko"
+   },
+   "qcom_spss": {
+    "decision": "not_ported_inert"
+   },
+   "qcom_sysmon": {
+    "ko": "ports/qcom-remoteproc-services/qcom_sysmon.ko"
+   },
+   "rproc_qcom_common": {
+    "ko": "ports/qcom-rproc-common/qcom_common.ko",
+    "renamed": true
+   },
+   "glink_pkt": {
+    "ko": "ports/qcom-charging/glink_pkt.ko"
+   },
+   "qcom_glink": {
+    "ko": "ports/qcom-glink-transport/qcom_glink.ko"
+   },
+   "qcom_glink_smem": {
+    "ko": "ports/qcom-glink-transport/qcom_glink_smem.ko"
+   },
+   "qcom_glink_spss": {
+    "decision": "not_ported_inert"
+   },
+   "qcom_smd": {
+    "ko": "ports/qcom-firststage-misc/qcom_smd.ko"
+   },
+   "slimbus": {
+    "ko": "ports/qcom-slimbus/slimbus.ko"
+   },
+   "slim_qcom_ngd_ctrl": {
+    "ko": "ports/qcom-slimbus/slim-qcom-ngd-ctrl.ko"
+   },
+   "bwmon": {
+    "ko": "ports/qcom-dcvs-misc/bwmon.ko"
+   },
+   "memlat": {
+    "ko": "ports/qcom-dcvs-misc/memlat.ko"
+   },
+   "heap_mem_ext_v01": {
+    "ko": "ports/qcom-soc-misc2/heap_mem_ext_v01.ko"
+   },
+   "msm_memshare": {
+    "ko": "ports/qcom-soc-misc2/msm_memshare.ko"
+   },
+   "sps_drv": {
+    "ko": "ports/qcom-sps/sps_drv.ko"
+   },
+   "mpam": {
+    "ko": "ports/qcom-dcvs-misc/mpam.ko"
+   },
+   "cpu_mpam": {
+    "ko": "ports/qcom-dcvs-misc/cpu_mpam.ko"
+   },
+   "platform_mpam": {
+    "ko": "ports/qcom-dcvs-misc/platform_mpam.ko"
+   },
+   "mpam_msc": {
+    "ko": "ports/qcom-dcvs-misc/mpam_msc.ko"
+   },
+   "mpam_msc_slc": {
+    "ko": "ports/qcom-dcvs-misc/mpam_msc_slc.ko"
+   },
+   "slc_mpam": {
+    "ko": "ports/qcom-dcvs-misc/slc_mpam.ko"
+   },
+   "adsp_sleepmon": {
+    "ko": "ports/qcom-soc-misc2/adsp_sleepmon.ko"
+   },
+   "altmode_glink": {
+    "ko": "ports/qcom-charging/altmode-glink.ko"
+   },
+   "boot_stats": {
+    "ko": "ports/qcom-pm/boot_stats.ko"
+   },
+   "cdsprm": {
+    "ko": "ports/qcom-soc-misc2/cdsprm.ko"
+   },
+   "charger_ulog_glink": {
+    "ko": "ports/qcom-charging/charger-ulog-glink.ko"
+   },
+   "cpucp_log": {
+    "ko": "ports/qcom-cpucp-scmi/cpucp_log.ko"
+   },
+   "cpuss_telemetry": {
+    "ko": "ports/qcom-pm-telemetry/cpuss_telemetry.ko"
+   },
+   "dcc_v2": {
+    "ko": "ports/qcom-debug-misc/dcc_v2.ko"
+   },
+   "dmesg_dumper": {
+    "ko": "ports/qcom-debug-misc/dmesg_dumper.ko"
+   },
+   "eud": {
+    "ko": "ports/qcom-usb/eud.ko"
+   },
+   "qcom_fdcvs": {
+    "ko": "ports/qcom-dcvs-misc/qcom_fdcvs.ko"
+   },
+   "gh_tlmm_vm_mem_access": {
+    "ko": "ports/gunyah-misc/gh_tlmm_vm_mem_access.ko"
+   },
+   "glink_probe": {
+    "decision": "not_ported_inert"
+   },
+   "hung_task_enh": {
+    "ko": "ports/qcom-debug-misc/hung_task_enh.ko"
+   },
+   "llcc_heuristics": {
+    "ko": "ports/qcom-dcvs-misc/llcc_heuristics.ko"
+   },
+   "mem_offline": {
+    "ko": "ports/qcom-debug-misc/mem-offline.ko"
+   },
+   "mem_hooks": {
+    "ko": "ports/qcom-mem-hooks/mem-hooks.ko"
+   },
+   "microdump_collector": {
+    "ko": "ports/qcom-debug-misc/microdump_collector.ko"
+   },
+   "msm_show_epoch": {
+    "ko": "ports/qcom-pm/msm_show_epoch.ko"
+   },
+   "msm_performance": {
+    "ko": "ports/qcom-perf-misc/msm_performance.ko"
+   },
+   "panel_event_notifier": {
+    "ko": "ports/qcom-panel-event/panel_event_notifier.ko"
+   },
+   "pcie_pdc": {
+    "ko": "ports/qcom-mhi-pcie/pcie-pdc.ko"
+   },
+   "qcom_pd_mapper": {
+    "ko": "ports/qcom-charging/qcom_pd_mapper.ko"
+   },
+   "qcom_pdr_msg": {
+    "ko": "out/native-gki/drivers/soc/qcom/qcom_pdr_msg.ko"
+   },
+   "pdr_interface": {
+    "ko": "out/native-gki/drivers/soc/qcom/pdr_interface.ko"
+   },
+   "pmic_glink_debug": {
+    "ko": "ports/qcom-charging/pmic-glink-debug.ko"
+   },
+   "qcom_cache_allocation": {
+    "ko": "ports/qcom-dcvs-misc/qcom_cache_allocation.ko"
+   },
+   "qcom_cpuss_sleep_stats_v4": {
+    "ko": "ports/qcom-pm/qcom_cpuss_sleep_stats_v4.ko"
+   },
+   "qcom_cpuss_sleep_stats": {
+    "ko": "ports/qcom-pm/qcom_cpuss_sleep_stats.ko"
+   },
+   "qcom_dynamic_ramoops": {
+    "ko": "ports/qcom-debug-misc/qcom_dynamic_ramoops.ko"
+   },
+   "qcom_lpm_monitor": {
+    "ko": "ports/qcom-pm/qcom_lpm_monitor.ko"
+   },
+   "qcom_ramdump": {
+    "ko": "ports/qcom-wlan-deps/qcom_ramdump.ko"
+   },
+   "qcom_stats": {
+    "ko": "ports/qcom-pm/qcom_stats.ko"
+   },
+   "qcom_va_minidump": {
+    "ko": "ports/qcom-debug-diag/qcom_va_minidump.ko"
+   },
+   "qcom_voltage_adj": {
+    "ko": "ports/qcom-pmic-misc/qcom_voltage_adj.ko"
+   },
+   "qmi_helpers": {
+    "ko": "out/native-gki/drivers/soc/qcom/qmi_helpers.ko"
+   },
+   "qsee_ipc_irq_bridge": {
+    "ko": "ports/qcom-soc-misc2/qsee_ipc_irq_bridge.ko"
+   },
+   "qti_battery_debug": {
+    "ko": "ports/qcom-charging/qti_battery_debug.ko"
+   },
+   "qti_pmic_glink": {
+    "ko": "ports/qcom-pmic-glink/qti_pmic_glink.ko"
+   },
+   "slc_perfmon": {
+    "decision": "not_ported_inert"
+   },
+   "smp2p": {
+    "ko": "ports/qcom-smp2p/smp2p.ko"
+   },
+   "smp2p_sleepstate": {
+    "ko": "ports/qcom-pm/smp2p_sleepstate.ko"
+   },
+   "sysmon_subsystem_stats": {
+    "ko": "ports/qcom-pm/sysmon_subsystem_stats.ko"
+   },
+   "sys_pm_vx": {
+    "ko": "ports/qcom-pm/sys_pm_vx.ko"
+   },
+   "wcd_usbss_i2c": {
+    "ko": "ports/qcom-display-deps/wcd_usbss_i2c.ko"
+   },
+   "fsa4480_i2c": {
+    "ko": "ports/qcom-display-deps/fsa4480_i2c.ko"
+   },
+   "qcom_pmic_ecid": {
+    "ko": "ports/qcom-pmic-misc/qcom-pmic-ecid.ko"
+   },
+   "spmi_pmic_err_debug": {
+    "ko": "ports/qcom-pmic-misc/spmi-pmic-err-debug.ko"
+   },
+   "core_hang_detect": {
+    "ko": "ports/qcom-debug-misc/core_hang_detect.ko"
+   },
+   "spi_msm_geni": {
+    "ko": "ports/geni-bus/spi-msm-geni.ko"
+   },
+   "spi_geni_qcom": {
+    "ko": "out/native-gki/drivers/spi/spi-geni-qcom.ko"
+   },
+   "spmi_pmic_arb_debug": {
+    "ko": "ports/qcom-spmi/spmi-pmic-arb-debug.ko"
+   },
+   "bcl_pmic5": {
+    "ko": "ports/qcom-bcl-pmic/bcl_pmic5.ko"
+   },
+   "cpu_hotplug": {
+    "ko": "ports/qti-cpu-hotplug/cpu_hotplug.ko"
+   },
+   "ddr_cdev": {
+    "ko": "ports/qcom-ddr-cooling/ddr_cdev.ko"
+   },
+   "qcom_spmi_temp_alarm": {
+    "ko": "ports/qcom-adc-thermal/qcom-spmi-temp-alarm.ko"
+   },
+   "qti_cpufreq_cdev": {
+    "ko": "ports/qti-cpufreq-cdev/qti_cpufreq_cdev.ko"
+   },
+   "qti_devfreq_cdev": {
+    "ko": "ports/qti-devfreq-cdev/qti_devfreq_cdev.ko"
+   },
+   "qti_qmi_cdev": {
+    "ko": "ports/qcom-thermal-misc/qti_qmi_cdev.ko"
+   },
+   "qti_qmi_sensor_v2": {
+    "ko": "ports/qcom-thermal-misc/qti_qmi_sensor_v2.ko"
+   },
+   "qti_userspace_cdev": {
+    "ko": "ports/qti-userspace-cdev/qti_userspace_cdev.ko"
+   },
+   "thermal_config": {
+    "ko": "ports/qcom-thermal-misc/thermal_config.ko"
+   },
+   "thermal_pause": {
+    "ko": "ports/qti-thermal-pause/thermal_pause.ko"
+   },
+   "qti_thermal_vendor_hooks": {
+    "ko": "ports/qcom-thermal-misc/qti_thermal_vendor_hooks.ko"
+   },
+   "qti_dynamic_hw_trip": {
+    "ko": "ports/qcom-thermal-misc/qti_dynamic_hw_trip.ko"
+   },
+   "lmh_stats": {
+    "ko": "ports/qcom-thermal-misc/lmh_stats.ko"
+   },
+   "hvc_gunyah": {
+    "ko": "ports/gunyah-misc/hvc_gunyah.ko"
+   },
+   "msm_geni_serial": {
+    "ko": "ports/qcom-soc-misc2/msm_geni_serial.ko"
+   },
+   "msm_sharedmem": {
+    "ko": "ports/qcom-soc-misc2/msm_sharedmem.ko"
+   },
+   "dwc3_msm": {
+    "ko": "ports/qcom-usb/dwc3-msm.ko"
+   },
+   "f_fs_ipc_log": {
+    "ko": "ports/qcom-debug-misc/f_fs_ipc_log.ko"
+   },
+   "usb_f_ccid": {
+    "ko": "ports/qcom-usb-gadget/usb_f_ccid.ko"
+   },
+   "usb_f_cdev": {
+    "ko": "ports/qcom-usb-gadget/usb_f_cdev.ko"
+   },
+   "usb_f_gsi": {
+    "ko": "ports/qcom-usb-gadget/usb_f_gsi.ko"
+   },
+   "usb_f_qdss": {
+    "ko": "ports/qcom-usb-gadget/usb_f_qdss.ko"
+   },
+   "phy_generic": {
+    "ko": "out/native-gki/drivers/usb/phy/phy-generic.ko"
+   },
+   "phy_msm_m31_eusb2": {
+    "ko": "ports/usb-repeater/phy-msm-m31-eusb2.ko"
+   },
+   "phy_msm_ssusb_qmp": {
+    "ko": "ports/qcom-usb/phy-msm-ssusb-qmp.ko"
+   },
+   "phy_qcom_emu": {
+    "ko": "ports/qcom-usb/phy-qcom-emu.ko"
+   },
+   "phy_msm_snps_hs": {
+    "ko": "ports/qcom-usb/phy-msm-snps-hs.ko"
+   },
+   "phy_msm_snps_eusb2": {
+    "ko": "ports/qcom-usb/phy-msm-snps-eusb2.ko"
+   },
+   "nb7vpq904m": {
+    "ko": "ports/qcom-usb/nb7vpq904m.ko"
+   },
+   "redriver": {
+    "ko": "ports/qcom-usb/redriver.ko"
+   },
+   "ps5169": {
+    "ko": "ports/qcom-usb/ps5169.ko"
+   },
+   "repeater": {
+    "ko": "ports/usb-repeater/repeater.ko"
+   },
+   "repeater_qti_pmic_eusb2": {
+    "ko": "ports/usb-repeater/repeater-qti-pmic-eusb2.ko"
+   },
+   "ucsi_qti_glink": {
+    "ko": "ports/qcom-charging/ucsi_qti_glink.ko"
+   },
+   "qcom_spmi_wled": {
+    "ko": "ports/qcom-leds/qcom-spmi-wled.ko"
+   },
+   "gh_ctrl": {
+    "ko": "ports/gunyah-misc/gh_ctrl.ko"
+   },
+   "gh_irq_lend": {
+    "ko": "ports/qcom-display-deps/gh_irq_lend.ko"
+   },
+   "gh_panic_notifier": {
+    "ko": "ports/gunyah-misc/gh_panic_notifier.ko"
+   },
+   "gh_rm_booster": {
+    "ko": "ports/gunyah-misc/gh_rm_booster.ko"
+   },
+   "gunyah_trace": {
+    "ko": "ports/gunyah-misc/gunyah_trace.ko"
+   },
+   "msm_sysstats": {
+    "ko": "ports/msm-sysstats/msm_sysstats.ko"
+   },
+   "zsmalloc": {
+    "ko": "out/native-gki/mm/zsmalloc.ko"
+   },
+   "qrtr_gunyah": {
+    "ko": "ports/gunyah-misc/qrtr-gunyah.ko"
+   },
+   "qrtr_mhi": {
+    "ko": "ports/qcom-mhi-pcie/qrtr-mhi.ko"
+   },
+   "qrtr_smd": {
+    "ko": "out/native-gki/net/qrtr/qrtr-smd.ko"
+   },
+   "snd_usb_audio_qmi": {
+    "ko": "ports/qcom-soc-misc2/snd-usb-audio-qmi.ko"
+   },
+   "smcinvoke_dlkm": {
+    "ko": "ports/securemsm/smcinvoke_dlkm.ko"
+   },
+   "synx_driver": {
+    "ko": "ports/qti-fence/synx-driver.ko"
+   },
+   "ipclite": {
+    "ko": "ports/qti-fence/ipclite.ko"
+   },
+   "msm_drm": {
+    "ko": "ports/msm-drm/msm_drm.ko"
+   },
+   "msm_ext_display": {
+    "ko": "ports/mm-drivers/msm_ext_display.ko"
+   },
+   "sync_fence": {
+    "ko": "ports/mm-drivers/sync_fence.ko"
+   },
+   "msm_hw_fence": {
+    "ko": "ports/qti-fence/msm_hw_fence.ko"
+   },
+   "msm_hfi_core": {
+    "ko": "ports/mm-drivers/msm_hfi_core.ko"
+   },
+   "msm_mmrm": {
+    "ko": "ports/mm-drivers/msm-mmrm.ko"
+   }
+  },
+  "vendor_boot_first_stage": {
+   "gh_arm_drv": {
+    "ko": "ports/gunyah/gh_arm_drv.ko"
+   },
+   "qti_regmap_debugfs": {
+    "ko": "ports/qcom-spmi/qti-regmap-debugfs.ko"
+   },
+   "cambistmclkcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/cambistmclkcc-canoe.ko"
+   },
+   "camcc_alor": {
+    "ko": "ports/qcom-clock-controllers/camcc-alor.ko"
+   },
+   "camcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/camcc-canoe.ko"
+   },
+   "clk_dummy": {
+    "ko": "ports/qcom-clock-controllers/clk-dummy.ko"
+   },
+   "clk_qcom": {
+    "ko": "ports/qcom-clock-core/clk-qcom.ko"
+   },
+   "clk_rpmh": {
+    "ko": "ports/qcom-clock-controllers/clk-rpmh.ko"
+   },
+   "debugcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/debugcc-canoe.ko"
+   },
+   "dispcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/dispcc-canoe.ko"
+   },
+   "dispcc_chora": {
+    "ko": "ports/qcom-clock-controllers/dispcc-chora.ko"
+   },
+   "evacc_canoe": {
+    "ko": "ports/qcom-clock-controllers/evacc-canoe.ko"
+   },
+   "gcc_alor": {
+    "ko": "ports/gcc-alor-vendor-core/gcc-alor.ko"
+   },
+   "gcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/gcc-canoe.ko"
+   },
+   "gcc_chora": {
+    "ko": "ports/qcom-clock-controllers/gcc-chora.ko"
+   },
+   "gdsc_regulator": {
+    "ko": "ports/qcom-clock-core/gdsc-regulator.ko"
+   },
+   "gpucc_canoe": {
+    "ko": "ports/qcom-clock-controllers/gpucc-canoe.ko"
+   },
+   "tcsrcc_canoe": {
+    "ko": "ports/qcom-clock-controllers/tcsrcc-canoe.ko"
+   },
+   "tcsrcc_chora": {
+    "ko": "ports/qcom-clock-controllers/tcsrcc-chora.ko"
+   },
+   "videocc_canoe": {
+    "ko": "ports/qcom-clock-controllers/videocc-canoe.ko"
+   },
+   "videocc_chora": {
+    "ko": "ports/qcom-clock-controllers/videocc-chora.ko"
+   },
+   "clk_scmi": {
+    "ko": "scmi-clk.ko",
+    "renamed": true
+   },
+   "qcom_cpufreq_hw": {
+    "ko": "ports/qcom-cpucp-scmi/qcom-cpufreq-hw.ko"
+   },
+   "msm_gpi": {
+    "ko": "ports/geni-bus/msm_gpi.ko"
+   },
+   "qcom_dma_heaps": {
+    "ko": "ports/qcom-dma-heaps/qcom_dma_heaps.ko"
+   },
+   "deferred_free_helper": {
+    "ko": "ports/qcom-dma-heaps/deferred-free-helper.ko"
+   },
+   "kryo_arm64_edac": {
+    "ko": "ports/qcom-debug-diag/kryo_arm64_edac.ko"
+   },
+   "qcom_scmi_vendor": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_scmi_vendor.ko"
+   },
+   "si_core_module": {
+    "ko": "ports/qcom-tee/si_core_module.ko"
+   },
+   "qcom_scm": {
+    "ko": "out/native-gki/drivers/firmware/qcom/qcom-scm.ko"
+   },
+   "qcom_hwspinlock": {
+    "ko": "ports/qcom-hwspinlock/qcom_hwspinlock.ko"
+   },
+   "i2c_msm_geni": {
+    "ko": "ports/geni-bus/i2c-msm-geni.ko"
+   },
+   "icc_clk": {
+    "ko": "ports/qcom-firststage-misc/icc-clk.ko"
+   },
+   "icc_bcm_voter": {
+    "ko": "ports/qcom-interconnect/icc-bcm-voter.ko"
+   },
+   "icc_debug": {
+    "ko": "ports/qcom-interconnect/icc-debug.ko"
+   },
+   "icc_rpmh": {
+    "ko": "ports/qcom-interconnect/icc-rpmh.ko"
+   },
+   "qnoc_canoe": {
+    "decision": "omitted"
+   },
+   "qnoc_chora": {
+    "decision": "omitted"
+   },
+   "qnoc_ravelin": {
+    "decision": "omitted"
+   },
+   "qnoc_qos": {
+    "ko": "ports/qcom-interconnect/qnoc-qos.ko"
+   },
+   "qnoc_alor": {
+    "ko": "ports/qcom-interconnect/qnoc-alor.ko"
+   },
+   "arm_smmu": {
+    "ko": "ports/arm-smmu-vendor/arm_smmu.ko"
+   },
+   "iommu_logger": {
+    "ko": "ports/iommu-logger/iommu_logger.ko"
+   },
+   "msm_dma_iommu_mapping": {
+    "ko": "ports/qcom-dma-heaps/msm_dma_iommu_mapping.ko"
+   },
+   "qcom_iommu_debug": {
+    "ko": "ports/qcom-debug-diag/qcom_iommu_debug.ko"
+   },
+   "qcom_iommu_util": {
+    "ko": "ports/qcom-iommu-util/qcom_iommu_util.ko"
+   },
+   "qcom_pdc": {
+    "ko": "ports/qcom-irq/qcom-pdc.ko"
+   },
+   "msm_qmp": {
+    "ko": "ports/qcom-firststage-misc/msm_qmp.ko"
+   },
+   "qcom_ipcc": {
+    "ko": "ports/qcom-ipcc/qcom-ipcc.ko"
+   },
+   "qcom_spmi_pmic": {
+    "ko": "ports/qcom-spmi/qcom-spmi-pmic.ko"
+   },
+   "qseecom_proxy": {
+    "ko": "ports/qcom-tee/qseecom_proxy.ko"
+   },
+   "cqhci": {
+    "decision": "omitted"
+   },
+   "sdhci_msm": {
+    "decision": "omitted"
+   },
+   "nvmem_qcom_spmi_sdam": {
+    "ko": "ports/qcom-sdam/nvmem_qcom-spmi-sdam.ko"
+   },
+   "qcom_llcc_pmu": {
+    "ko": "ports/qcom-perf-misc/qcom_llcc_pmu.ko"
+   },
+   "arm_smmu_pmu": {
+    "ko": "ports/qcom-perf-misc/arm_smmu_pmu.ko"
+   },
+   "phy_qcom_ufs": {
+    "ko": "ports/ufs-phy-canoe/phy-qcom-ufs.ko"
+   },
+   "phy_qcom_ufs_qmp_v4_canoe": {
+    "ko": "ports/ufs-phy-canoe/phy-qcom-ufs-qmp-v4-canoe.ko"
+   },
+   "phy_qcom_ufs_qrbtc_sdm845": {
+    "decision": "omitted"
+   },
+   "phy_qcom_ufs_qmp_v4_crow": {
+    "decision": "omitted"
+   },
+   "pinctrl_canoe": {
+    "decision": "omitted"
+   },
+   "pinctrl_msm": {
+    "ko": "ports/pinctrl-alor-vendor-core/pinctrl-msm.ko"
+   },
+   "pinctrl_ravelin": {
+    "decision": "omitted"
+   },
+   "pinctrl_alor": {
+    "ko": "ports/pinctrl-alor-vendor-core/pinctrl-alor.ko"
+   },
+   "pinctrl_chora": {
+    "decision": "omitted"
+   },
+   "qcom_dload_mode": {
+    "ko": "ports/qcom-reboot/qcom-dload-mode.ko"
+   },
+   "qcom_reboot_reason": {
+    "ko": "ports/qcom-reboot/qcom-reboot-reason.ko"
+   },
+   "debug_regulator": {
+    "ko": "ports/qcom-regulators/debug-regulator.ko"
+   },
+   "proxy_consumer": {
+    "ko": "ports/qcom-clock-core/proxy-consumer.ko"
+   },
+   "rpmh_regulator": {
+    "ko": "ports/qcom-regulators/rpmh-regulator.ko"
+   },
+   "stub_regulator": {
+    "ko": "ports/qcom-regulators/stub-regulator.ko"
+   },
+   "rtc_pm8xxx": {
+    "ko": "ports/qcom-rtc/rtc-pm8xxx.ko"
+   },
+   "sg": {
+    "ko": "ports/qcom-firststage-misc/sg.ko"
+   },
+   "dcvs_fp": {
+    "ko": "ports/qcom-dcvs/dcvs_fp.ko"
+   },
+   "qcom_dcvs": {
+    "ko": "ports/qcom-dcvs/qcom-dcvs.ko"
+   },
+   "qcom_pmu_lib": {
+    "ko": "ports/qcom-perf-misc/qcom-pmu-lib.ko"
+   },
+   "qcom_scmi_client": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_scmi_client.ko"
+   },
+   "mem_buf_dev": {
+    "ko": "ports/qcom-dma-heaps/mem_buf_dev.ko"
+   },
+   "mem_buf": {
+    "ko": "ports/qcom-dma-heaps/mem_buf.ko"
+   },
+   "mem_buf_msgq": {
+    "ko": "ports/qcom-dma-heaps/mem_buf_msgq.ko"
+   },
+   "mem_prot": {
+    "ko": "ports/qcom-dma-heaps/mem-prot.ko"
+   },
+   "cmd_db": {
+    "ko": "ports/qcom-rpmh/cmd-db.ko"
+   },
+   "cpu_phys_log_map": {
+    "ko": "ports/qcom-cpucp-scmi/cpu_phys_log_map.ko"
+   },
+   "crm_v2": {
+    "ko": "ports/qcom-clock-core/crm-v2.ko"
+   },
+   "debug_symbol": {
+    "decision": "omitted"
+   },
+   "gic_intr_routing": {
+    "ko": "ports/qcom-irq/gic_intr_routing.ko"
+   },
+   "llcc_qcom": {
+    "ko": "ports/qcom-llcc/llcc-qcom.ko"
+   },
+   "mdt_loader": {
+    "ko": "ports/qcom-pas-alor/mdt_loader.ko"
+   },
+   "memory_dump_v2": {
+    "ko": "ports/qcom-debug-diag/memory_dump_v2.ko"
+   },
+   "minidump": {
+    "ko": "ports/qcom-minidump/minidump.ko"
+   },
+   "qcom_sdei": {
+    "ko": "ports/qcom-watchdog/qcom_sdei.ko"
+   },
+   "pmic_pon_log": {
+    "ko": "ports/qcom-reboot/pmic-pon-log.ko"
+   },
+   "qcom_aoss": {
+    "ko": "ports/qcom-remoteproc-services/qcom_aoss.ko"
+   },
+   "qcom_cpucp": {
+    "ko": "ports/qcom-cpucp-scmi/qcom_cpucp.ko"
+   },
+   "cpucp_fast": {
+    "ko": "ports/qcom-cpucp-scmi/cpucp_fast.ko"
+   },
+   "qcom_cpu_vendor_hooks": {
+    "ko": "ports/qcom-perf-misc/qcom_cpu_vendor_hooks.ko"
+   },
+   "qcom_ice": {
+    "ko": "out/native-gki/drivers/soc/qcom/qcom_ice.ko"
+   },
+   "qcom_logbuf_boot_log": {
+    "ko": "ports/qcom-debug-diag/qcom_logbuf_boot_log.ko"
+   },
+   "qcom_logbuf_vendor_hooks": {
+    "ko": "ports/qcom-debug-diag/qcom_logbuf_vendor_hooks.ko"
+   },
+   "qcom_rpmh": {
+    "ko": "ports/qcom-rpmh/qcom_rpmh.ko"
+   },
+   "qcom_soc_wdt": {
+    "ko": "ports/qcom-watchdog/qcom_soc_wdt.ko"
+   },
+   "qcom_wdt_core": {
+    "ko": "ports/qcom-watchdog/qcom_wdt_core.ko"
+   },
+   "secure_buffer": {
+    "ko": "ports/secure-buffer/secure_buffer.ko"
+   },
+   "smem": {
+    "ko": "ports/qcom-smem/smem.ko"
+   },
+   "socinfo": {
+    "ko": "ports/qcom-socinfo/socinfo.ko"
+   },
+   "spmi_pmic_arb": {
+    "ko": "ports/qcom-spmi/spmi-pmic-arb.ko"
+   },
+   "bcl_soc": {
+    "ko": "ports/qcom-bcl-soc/bcl_soc.ko"
+   },
+   "qcom_tsens": {
+    "ko": "ports/qcom-tsens/qcom_tsens.ko"
+   },
+   "ufshcd_crypto_qti": {
+    "ko": "ports/ufs-host/ufshcd-crypto-qti.ko"
+   },
+   "ufs_qcom": {
+    "ko": "ports/ufs-host/ufs-qcom.ko"
+   },
+   "gh_dbl": {
+    "ko": "ports/gunyah/gh_dbl.ko"
+   },
+   "gh_mem_notifier": {
+    "ko": "ports/qcom-dma-heaps/gh_mem_notifier.ko"
+   },
+   "gh_rm_heap_manager": {
+    "ko": "ports/qcom-dma-heaps/gh_rm_heap_manager.ko"
+   },
+   "gh_msgq": {
+    "ko": "ports/gunyah/gh_msgq.ko"
+   },
+   "gh_rm_drv": {
+    "ko": "ports/gunyah-rm/gh_rm_drv.ko"
+   },
+   "gh_vcpu_mgr": {
+    "ko": "ports/qcom-perf-misc/gh_vcpu_mgr.ko"
+   },
+   "sched_walt": {
+    "ko": "ports/sched-walt/sched-walt.ko"
+   },
+   "qcom_ipc_logging": {
+    "ko": "ports/qcom-ipc-logging/qcom_ipc_logging.ko"
+   },
+   "qrtr": {
+    "ko": "out/native-gki/net/qrtr/qrtr.ko"
+   },
+   "smcinvoke_dlkm": {
+    "ko": "ports/securemsm/smcinvoke_dlkm.ko"
+   },
+   "governor_gpubw_mon": {
+    "ko": "ports/governor-gpubw/governor_gpubw_mon.ko"
+   },
+   "governor_msm_adreno_tz": {
+    "ko": "ports/governor-adreno-tz/governor_msm_adreno_tz.ko"
+   },
+   "governor_msm_adreno_ro": {
+    "ko": "ports/governor-adreno-ro/governor_msm_adreno_ro.ko"
+   },
+   "coresight": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight.ko"
+   },
+   "nvmem_qfprom": {
+    "ko": "out/native-gki/drivers/nvmem/nvmem_qfprom.ko"
+   },
+   "rproc_qcom_common": {
+    "ko": "ports/qcom-rproc-common/qcom_common.ko",
+    "renamed": true
+   },
+   "qcom_glink": {
+    "ko": "ports/qcom-glink-transport/qcom_glink.ko"
+   },
+   "qcom_glink_smem": {
+    "ko": "ports/qcom-glink-transport/qcom_glink_smem.ko"
+   },
+   "qcom_smd": {
+    "ko": "ports/qcom-firststage-misc/qcom_smd.ko"
+   },
+   "msm_performance": {
+    "ko": "ports/qcom-perf-misc/msm_performance.ko"
+   },
+   "qcom_va_minidump": {
+    "ko": "ports/qcom-debug-diag/qcom_va_minidump.ko"
+   },
+   "msm_sysstats": {
+    "ko": "ports/msm-sysstats/msm_sysstats.ko"
+   },
+   "synx_driver": {
+    "ko": "ports/qti-fence/synx-driver.ko"
+   },
+   "ipclite": {
+    "ko": "ports/qti-fence/ipclite.ko"
+   },
+   "msm_hw_fence": {
+    "ko": "ports/qti-fence/msm_hw_fence.ko"
+   },
+   "msm_kgsl": {
+    "ko": "ports/kgsl/msm_kgsl.ko"
+   }
+  },
+  "vendor_dlkm": {
+   "zram": {
+    "ko": "out/native-gki/drivers/block/zram/zram.ko"
+   },
+   "mhi_dev_satellite": {
+    "ko": "ports/qcom-mhi-pcie/mhi_dev_satellite.ko"
+   },
+   "mhi_dev_uci": {
+    "ko": "ports/qcom-mhi-pcie/mhi_dev_uci.ko"
+   },
+   "mhi": {
+    "ko": "ports/qcom-mhi-pcie/mhi.ko"
+   },
+   "rdbg": {
+    "ko": "ports/qcom-debug-misc/rdbg.ko"
+   },
+   "camcc_chora": {
+    "ko": "ports/qcom-clock-controllers/camcc-chora.ko"
+   },
+   "debugcc_alor": {
+    "ko": "ports/qcom-clock-controllers/debugcc-alor.ko"
+   },
+   "debugcc_chora": {
+    "ko": "ports/qcom-clock-controllers/debugcc-chora.ko"
+   },
+   "gpucc_chora": {
+    "ko": "ports/qcom-clock-controllers/gpucc-chora.ko"
+   },
+   "qcom_cpufreq_hw_debug": {
+    "ko": "ports/qcom-dcvs-misc/qcom-cpufreq-hw-debug.ko"
+   },
+   "qcom_lpm": {
+    "ko": "ports/qcom-pm/qcom_lpm.ko"
+   },
+   "qcom_rng": {
+    "ko": "ports/qcom-rng/qcom-rng.ko"
+   },
+   "governor_gpubw_mon": {
+    "ko": "ports/governor-gpubw/governor_gpubw_mon.ko"
+   },
+   "governor_msm_adreno_tz": {
+    "ko": "ports/governor-adreno-tz/governor_msm_adreno_tz.ko"
+   },
+   "governor_msm_adreno_ro": {
+    "ko": "ports/governor-adreno-ro/governor_msm_adreno_ro.ko"
+   },
+   "bam_dma": {
+    "ko": "ports/qcom-slimbus/bam_dma.ko"
+   },
+   "qcom_edac": {
+    "ko": "ports/qcom-debug-misc/qcom_edac.ko"
+   },
+   "lt9611uxc": {
+    "ko": "ports/qcom-soc-misc2/lt9611uxc.ko"
+   },
+   "drm_display_helper": {
+    "ko": "ports/drm-display-helper/drm_display_helper.ko"
+   },
+   "hwmon": {
+    "ko": "out/native-gki/drivers/hwmon/hwmon.ko"
+   },
+   "qti_amoled_ecm": {
+    "ko": "ports/qcom-pmic-misc/qti_amoled_ecm.ko"
+   },
+   "qti_btl": {
+    "ko": "ports/qcom-thermal-misc/qti_btl.ko"
+   },
+   "coresight_csr": {
+    "missing": true
+   },
+   "coresight_cti": {
+    "missing": true
+   },
+   "coresight_dummy": {
+    "missing": true
+   },
+   "coresight_funnel": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight-funnel.ko"
+   },
+   "coresight_replicator": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight-replicator.ko"
+   },
+   "coresight": {
+    "ko": "out/native-gki/drivers/hwtracing/coresight/coresight.ko"
+   },
+   "coresight_qmi": {
+    "missing": true
+   },
+   "coresight_remote_etm": {
+    "missing": true
+   },
+   "coresight_tmc_sec": {
+    "missing": true
+   },
+   "coresight_stm": {
+    "missing": true
+   },
+   "coresight_tgu": {
+    "missing": true
+   },
+   "coresight_tmc": {
+    "missing": true
+   },
+   "coresight_tpda": {
+    "missing": true
+   },
+   "coresight_tpdm": {
+    "missing": true
+   },
+   "coresight_trace_noc": {
+    "missing": true
+   },
+   "coresight_uetm": {
+    "missing": true
+   },
+   "stm_console": {
+    "missing": true
+   },
+   "stm_core": {
+    "missing": true
+   },
+   "stm_ftrace": {
+    "missing": true
+   },
+   "stm_heartbeat": {
+    "missing": true
+   },
+   "stm_p_ost": {
+    "missing": true
+   },
+   "i2c_qcom_geni": {
+    "ko": "out/native-gki/drivers/i2c/busses/i2c-qcom-geni.ko"
+   },
+   "i3c_master_msm_geni": {
+    "ko": "ports/qcom-soc-misc2/i3c-master-msm-geni.ko"
+   },
+   "qcom_spmi_adc5_gen3": {
+    "ko": "ports/qcom-adc-thermal/qcom-spmi-adc5-gen3.ko"
+   },
+   "qcom_vadc_common": {
+    "ko": "ports/qcom-adc-thermal/qcom-vadc-common.ko"
+   },
+   "qti_glink_adc": {
+    "ko": "ports/qcom-charging/qti-glink-adc.ko"
+   },
+   "pm8941_pwrkey": {
+    "ko": "ports/qcom-power-key/pm8941-pwrkey.ko"
+   },
+   "qcom_hv_haptics": {
+    "ko": "ports/qcom-leds/qcom-hv-haptics.ko"
+   },
+   "msm_show_resume_irq": {
+    "ko": "ports/qcom-pm/msm_show_resume_irq.ko"
+   },
+   "leds_qcom_flash": {
+    "ko": "ports/qcom-leds/leds-qcom-flash.ko"
+   },
+   "leds_qcom_lpg": {
+    "ko": "ports/qcom-leds/leds-qcom-lpg.ko"
+   },
+   "ledtrig_pattern": {
+    "ko": "out/native-gki/drivers/leds/trigger/ledtrig-pattern.ko"
+   },
+   "leds_qpnp_vibrator_ldo": {
+    "ko": "ports/qcom-leds/leds-qpnp-vibrator-ldo.ko"
+   },
+   "qcom_i2c_pmic": {
+    "ko": "ports/qcom-pmic-misc/qcom-i2c-pmic.ko"
+   },
+   "nvmem_qfprom": {
+    "ko": "out/native-gki/drivers/nvmem/nvmem_qfprom.ko"
+   },
+   "pci_msm_drv": {
+    "ko": "ports/qcom-mhi-pcie/pci-msm-drv.ko"
+   },
+   "eom_driver": {
+    "ko": "ports/qcom-eom/eom_driver.ko"
+   },
+   "pci_phy_access": {
+    "ko": "ports/qcom-eom/pci_phy_access.ko"
+   },
+   "phy_qcom_eusb2_repeater": {
+    "ko": "ports/qcom-usb/phy-qcom-eusb2-repeater.ko"
+   },
+   "phy_qcom_m31_eusb2": {
+    "ko": "ports/qcom-soc-misc2/phy-qcom-m31-eusb2.ko"
+   },
+   "phy_qcom_qmp_combo": {
+    "ko": "ports/qcom-soc-misc2/phy-qcom-qmp-combo.ko"
+   },
+   "pinctrl_spmi_gpio": {
+    "ko": "ports/pmic-pinctrl/pinctrl-spmi-gpio.ko"
+   },
+   "pinctrl_spmi_mpp": {
+    "ko": "ports/pmic-pinctrl/pinctrl-spmi-mpp.ko"
+   },
+   "qcom_pon": {
+    "ko": "ports/qcom-power-key/qcom-pon.ko"
+   },
+   "reboot_mode": {
+    "ko": "ports/qcom-power-key/reboot-mode.ko"
+   },
+   "qti_battery_charger": {
+    "ko": "ports/qcom-charging/qti_battery_charger.ko"
+   },
+   "qptf": {
+    "ko": "ports/qcom-thermal-misc/qptf.ko"
+   },
+   "qti_power_telemetry": {
+    "ko": "ports/qcom-thermal-misc/qti_power_telemetry.ko"
+   },
+   "qti_ptd_share": {
+    "ko": "ports/qcom-soc-misc2/qti_ptd_share.ko"
+   },
+   "qcom_amoled_regulator": {
+    "ko": "ports/qcom-pmic-misc/qcom-amoled-regulator.ko"
+   },
+   "qti_fixed_regulator": {
+    "ko": "ports/qcom-fixed-regulator/qti-fixed-regulator.ko"
+   },
+   "qti_ocp_notifier": {
+    "ko": "ports/qcom-thermal-misc/qti-ocp-notifier.ko"
+   },
+   "qpnp_lcdb_regulator": {
+    "ko": "ports/qcom-pmic-misc/qpnp-lcdb-regulator.ko"
+   },
+   "qcom_pil_info": {
+    "ko": "ports/qcom-pas-alor/qcom_pil_info.ko"
+   },
+   "qcom_q6v5": {
+    "ko": "ports/qcom-remoteproc-services/qcom_q6v5.ko"
+   },
+   "qcom_q6v5_pas": {
+    "ko": "ports/qcom-pas-alor/qcom_q6v5_pas.ko"
+   },
+   "qcom_spss": {
+    "decision": "not_ported_inert"
+   },
+   "qcom_sysmon": {
+    "ko": "ports/qcom-remoteproc-services/qcom_sysmon.ko"
+   },
+   "rproc_qcom_common": {
+    "ko": "ports/qcom-rproc-common/qcom_common.ko",
+    "renamed": true
+   },
+   "glink_pkt": {
+    "ko": "ports/qcom-charging/glink_pkt.ko"
+   },
+   "qcom_glink": {
+    "ko": "ports/qcom-glink-transport/qcom_glink.ko"
+   },
+   "qcom_glink_smem": {
+    "ko": "ports/qcom-glink-transport/qcom_glink_smem.ko"
+   },
+   "qcom_glink_spss": {
+    "decision": "not_ported_inert"
+   },
+   "qcom_smd": {
+    "ko": "ports/qcom-firststage-misc/qcom_smd.ko"
+   },
+   "slimbus": {
+    "ko": "ports/qcom-slimbus/slimbus.ko"
+   },
+   "slim_qcom_ngd_ctrl": {
+    "ko": "ports/qcom-slimbus/slim-qcom-ngd-ctrl.ko"
+   },
+   "bwmon": {
+    "ko": "ports/qcom-dcvs-misc/bwmon.ko"
+   },
+   "memlat": {
+    "ko": "ports/qcom-dcvs-misc/memlat.ko"
+   },
+   "heap_mem_ext_v01": {
+    "ko": "ports/qcom-soc-misc2/heap_mem_ext_v01.ko"
+   },
+   "msm_memshare": {
+    "ko": "ports/qcom-soc-misc2/msm_memshare.ko"
+   },
+   "sps_drv": {
+    "ko": "ports/qcom-sps/sps_drv.ko"
+   },
+   "mpam": {
+    "ko": "ports/qcom-dcvs-misc/mpam.ko"
+   },
+   "cpu_mpam": {
+    "ko": "ports/qcom-dcvs-misc/cpu_mpam.ko"
+   },
+   "platform_mpam": {
+    "ko": "ports/qcom-dcvs-misc/platform_mpam.ko"
+   },
+   "mpam_msc": {
+    "ko": "ports/qcom-dcvs-misc/mpam_msc.ko"
+   },
+   "mpam_msc_slc": {
+    "ko": "ports/qcom-dcvs-misc/mpam_msc_slc.ko"
+   },
+   "slc_mpam": {
+    "ko": "ports/qcom-dcvs-misc/slc_mpam.ko"
+   },
+   "adsp_sleepmon": {
+    "ko": "ports/qcom-soc-misc2/adsp_sleepmon.ko"
+   },
+   "altmode_glink": {
+    "ko": "ports/qcom-charging/altmode-glink.ko"
+   },
+   "boot_stats": {
+    "ko": "ports/qcom-pm/boot_stats.ko"
+   },
+   "cdsprm": {
+    "ko": "ports/qcom-soc-misc2/cdsprm.ko"
+   },
+   "charger_ulog_glink": {
+    "ko": "ports/qcom-charging/charger-ulog-glink.ko"
+   },
+   "cpucp_log": {
+    "ko": "ports/qcom-cpucp-scmi/cpucp_log.ko"
+   },
+   "cpuss_telemetry": {
+    "ko": "ports/qcom-pm-telemetry/cpuss_telemetry.ko"
+   },
+   "dcc_v2": {
+    "ko": "ports/qcom-debug-misc/dcc_v2.ko"
+   },
+   "dmesg_dumper": {
+    "ko": "ports/qcom-debug-misc/dmesg_dumper.ko"
+   },
+   "eud": {
+    "ko": "ports/qcom-usb/eud.ko"
+   },
+   "qcom_fdcvs": {
+    "ko": "ports/qcom-dcvs-misc/qcom_fdcvs.ko"
+   },
+   "gh_tlmm_vm_mem_access": {
+    "ko": "ports/gunyah-misc/gh_tlmm_vm_mem_access.ko"
+   },
+   "glink_probe": {
+    "decision": "not_ported_inert"
+   },
+   "hung_task_enh": {
+    "ko": "ports/qcom-debug-misc/hung_task_enh.ko"
+   },
+   "llcc_heuristics": {
+    "ko": "ports/qcom-dcvs-misc/llcc_heuristics.ko"
+   },
+   "mem_offline": {
+    "ko": "ports/qcom-debug-misc/mem-offline.ko"
+   },
+   "mem_hooks": {
+    "ko": "ports/qcom-mem-hooks/mem-hooks.ko"
+   },
+   "microdump_collector": {
+    "ko": "ports/qcom-debug-misc/microdump_collector.ko"
+   },
+   "msm_show_epoch": {
+    "ko": "ports/qcom-pm/msm_show_epoch.ko"
+   },
+   "msm_performance": {
+    "ko": "ports/qcom-perf-misc/msm_performance.ko"
+   },
+   "panel_event_notifier": {
+    "ko": "ports/qcom-panel-event/panel_event_notifier.ko"
+   },
+   "pcie_pdc": {
+    "ko": "ports/qcom-mhi-pcie/pcie-pdc.ko"
+   },
+   "qcom_pd_mapper": {
+    "ko": "ports/qcom-charging/qcom_pd_mapper.ko"
+   },
+   "qcom_pdr_msg": {
+    "ko": "out/native-gki/drivers/soc/qcom/qcom_pdr_msg.ko"
+   },
+   "pdr_interface": {
+    "ko": "out/native-gki/drivers/soc/qcom/pdr_interface.ko"
+   },
+   "pmic_glink_debug": {
+    "ko": "ports/qcom-charging/pmic-glink-debug.ko"
+   },
+   "qcom_cache_allocation": {
+    "ko": "ports/qcom-dcvs-misc/qcom_cache_allocation.ko"
+   },
+   "qcom_cpuss_sleep_stats_v4": {
+    "ko": "ports/qcom-pm/qcom_cpuss_sleep_stats_v4.ko"
+   },
+   "qcom_cpuss_sleep_stats": {
+    "ko": "ports/qcom-pm/qcom_cpuss_sleep_stats.ko"
+   },
+   "qcom_dynamic_ramoops": {
+    "ko": "ports/qcom-debug-misc/qcom_dynamic_ramoops.ko"
+   },
+   "qcom_lpm_monitor": {
+    "ko": "ports/qcom-pm/qcom_lpm_monitor.ko"
+   },
+   "qcom_ramdump": {
+    "ko": "ports/qcom-wlan-deps/qcom_ramdump.ko"
+   },
+   "qcom_stats": {
+    "ko": "ports/qcom-pm/qcom_stats.ko"
+   },
+   "qcom_va_minidump": {
+    "ko": "ports/qcom-debug-diag/qcom_va_minidump.ko"
+   },
+   "qcom_voltage_adj": {
+    "ko": "ports/qcom-pmic-misc/qcom_voltage_adj.ko"
+   },
+   "qmi_helpers": {
+    "ko": "out/native-gki/drivers/soc/qcom/qmi_helpers.ko"
+   },
+   "qsee_ipc_irq_bridge": {
+    "ko": "ports/qcom-soc-misc2/qsee_ipc_irq_bridge.ko"
+   },
+   "qti_battery_debug": {
+    "ko": "ports/qcom-charging/qti_battery_debug.ko"
+   },
+   "qti_pmic_glink": {
+    "ko": "ports/qcom-pmic-glink/qti_pmic_glink.ko"
+   },
+   "slc_perfmon": {
+    "decision": "not_ported_inert"
+   },
+   "smp2p": {
+    "ko": "ports/qcom-smp2p/smp2p.ko"
+   },
+   "smp2p_sleepstate": {
+    "ko": "ports/qcom-pm/smp2p_sleepstate.ko"
+   },
+   "sysmon_subsystem_stats": {
+    "ko": "ports/qcom-pm/sysmon_subsystem_stats.ko"
+   },
+   "sys_pm_vx": {
+    "ko": "ports/qcom-pm/sys_pm_vx.ko"
+   },
+   "wcd_usbss_i2c": {
+    "ko": "ports/qcom-display-deps/wcd_usbss_i2c.ko"
+   },
+   "fsa4480_i2c": {
+    "ko": "ports/qcom-display-deps/fsa4480_i2c.ko"
+   },
+   "qcom_pmic_ecid": {
+    "ko": "ports/qcom-pmic-misc/qcom-pmic-ecid.ko"
+   },
+   "spmi_pmic_err_debug": {
+    "ko": "ports/qcom-pmic-misc/spmi-pmic-err-debug.ko"
+   },
+   "core_hang_detect": {
+    "ko": "ports/qcom-debug-misc/core_hang_detect.ko"
+   },
+   "spi_msm_geni": {
+    "ko": "ports/geni-bus/spi-msm-geni.ko"
+   },
+   "spi_geni_qcom": {
+    "ko": "out/native-gki/drivers/spi/spi-geni-qcom.ko"
+   },
+   "spmi_pmic_arb_debug": {
+    "ko": "ports/qcom-spmi/spmi-pmic-arb-debug.ko"
+   },
+   "bcl_pmic5": {
+    "ko": "ports/qcom-bcl-pmic/bcl_pmic5.ko"
+   },
+   "cpu_hotplug": {
+    "ko": "ports/qti-cpu-hotplug/cpu_hotplug.ko"
+   },
+   "ddr_cdev": {
+    "ko": "ports/qcom-ddr-cooling/ddr_cdev.ko"
+   },
+   "qcom_spmi_temp_alarm": {
+    "ko": "ports/qcom-adc-thermal/qcom-spmi-temp-alarm.ko"
+   },
+   "qti_cpufreq_cdev": {
+    "ko": "ports/qti-cpufreq-cdev/qti_cpufreq_cdev.ko"
+   },
+   "qti_devfreq_cdev": {
+    "ko": "ports/qti-devfreq-cdev/qti_devfreq_cdev.ko"
+   },
+   "qti_qmi_cdev": {
+    "ko": "ports/qcom-thermal-misc/qti_qmi_cdev.ko"
+   },
+   "qti_qmi_sensor_v2": {
+    "ko": "ports/qcom-thermal-misc/qti_qmi_sensor_v2.ko"
+   },
+   "qti_userspace_cdev": {
+    "ko": "ports/qti-userspace-cdev/qti_userspace_cdev.ko"
+   },
+   "thermal_config": {
+    "ko": "ports/qcom-thermal-misc/thermal_config.ko"
+   },
+   "thermal_pause": {
+    "ko": "ports/qti-thermal-pause/thermal_pause.ko"
+   },
+   "qti_thermal_vendor_hooks": {
+    "ko": "ports/qcom-thermal-misc/qti_thermal_vendor_hooks.ko"
+   },
+   "qti_dynamic_hw_trip": {
+    "ko": "ports/qcom-thermal-misc/qti_dynamic_hw_trip.ko"
+   },
+   "lmh_stats": {
+    "ko": "ports/qcom-thermal-misc/lmh_stats.ko"
+   },
+   "hvc_gunyah": {
+    "ko": "ports/gunyah-misc/hvc_gunyah.ko"
+   },
+   "msm_geni_serial": {
+    "ko": "ports/qcom-soc-misc2/msm_geni_serial.ko"
+   },
+   "msm_sharedmem": {
+    "ko": "ports/qcom-soc-misc2/msm_sharedmem.ko"
+   },
+   "dwc3_msm": {
+    "ko": "ports/qcom-usb/dwc3-msm.ko"
+   },
+   "f_fs_ipc_log": {
+    "ko": "ports/qcom-debug-misc/f_fs_ipc_log.ko"
+   },
+   "usb_f_ccid": {
+    "ko": "ports/qcom-usb-gadget/usb_f_ccid.ko"
+   },
+   "usb_f_cdev": {
+    "ko": "ports/qcom-usb-gadget/usb_f_cdev.ko"
+   },
+   "usb_f_gsi": {
+    "ko": "ports/qcom-usb-gadget/usb_f_gsi.ko"
+   },
+   "usb_f_qdss": {
+    "ko": "ports/qcom-usb-gadget/usb_f_qdss.ko"
+   },
+   "phy_generic": {
+    "ko": "out/native-gki/drivers/usb/phy/phy-generic.ko"
+   },
+   "phy_msm_m31_eusb2": {
+    "ko": "ports/usb-repeater/phy-msm-m31-eusb2.ko"
+   },
+   "phy_msm_ssusb_qmp": {
+    "ko": "ports/qcom-usb/phy-msm-ssusb-qmp.ko"
+   },
+   "phy_qcom_emu": {
+    "ko": "ports/qcom-usb/phy-qcom-emu.ko"
+   },
+   "phy_msm_snps_hs": {
+    "ko": "ports/qcom-usb/phy-msm-snps-hs.ko"
+   },
+   "phy_msm_snps_eusb2": {
+    "ko": "ports/qcom-usb/phy-msm-snps-eusb2.ko"
+   },
+   "nb7vpq904m": {
+    "ko": "ports/qcom-usb/nb7vpq904m.ko"
+   },
+   "redriver": {
+    "ko": "ports/qcom-usb/redriver.ko"
+   },
+   "ps5169": {
+    "ko": "ports/qcom-usb/ps5169.ko"
+   },
+   "repeater": {
+    "ko": "ports/usb-repeater/repeater.ko"
+   },
+   "repeater_qti_pmic_eusb2": {
+    "ko": "ports/usb-repeater/repeater-qti-pmic-eusb2.ko"
+   },
+   "ucsi_qti_glink": {
+    "ko": "ports/qcom-charging/ucsi_qti_glink.ko"
+   },
+   "qcom_spmi_wled": {
+    "ko": "ports/qcom-leds/qcom-spmi-wled.ko"
+   },
+   "gh_ctrl": {
+    "ko": "ports/gunyah-misc/gh_ctrl.ko"
+   },
+   "gh_irq_lend": {
+    "ko": "ports/qcom-display-deps/gh_irq_lend.ko"
+   },
+   "gh_panic_notifier": {
+    "ko": "ports/gunyah-misc/gh_panic_notifier.ko"
+   },
+   "gh_rm_booster": {
+    "ko": "ports/gunyah-misc/gh_rm_booster.ko"
+   },
+   "gunyah_trace": {
+    "ko": "ports/gunyah-misc/gunyah_trace.ko"
+   },
+   "msm_sysstats": {
+    "ko": "ports/msm-sysstats/msm_sysstats.ko"
+   },
+   "zsmalloc": {
+    "ko": "out/native-gki/mm/zsmalloc.ko"
+   },
+   "mac80211": {
+    "ko": "out/native-gki/net/mac80211/mac80211.ko"
+   },
+   "qrtr_gunyah": {
+    "ko": "ports/gunyah-misc/qrtr-gunyah.ko"
+   },
+   "qrtr_mhi": {
+    "ko": "ports/qcom-mhi-pcie/qrtr-mhi.ko"
+   },
+   "qrtr_smd": {
+    "ko": "out/native-gki/net/qrtr/qrtr-smd.ko"
+   },
+   "cfg80211": {
+    "ko": "out/native-gki/net/wireless/cfg80211.ko"
+   },
+   "snd_usb_audio_qmi": {
+    "ko": "ports/qcom-soc-misc2/snd-usb-audio-qmi.ko"
+   },
+   "qca_cld3_wcn7750": {
+    "ko": "ports/wlan-qcacld/qcacld-3.0/qca_cld3_wcn7750.ko"
+   },
+   "cnss2": {
+    "decision": "not_ported_inert"
+   },
+   "icnss2": {
+    "ko": "ports/wlan-platform/icnss2.ko"
+   },
+   "cnss_plat_ipc_qmi_svc": {
+    "ko": "ports/wlan-platform/cnss_plat_ipc_qmi_svc.ko"
+   },
+   "wlan_firmware_service": {
+    "ko": "ports/wlan-platform/wlan_firmware_service.ko"
+   },
+   "cnss_nl": {
+    "ko": "ports/wlan-platform/cnss_nl.ko"
+   },
+   "cnss_prealloc": {
+    "ko": "ports/wlan-platform/cnss_prealloc.ko"
+   },
+   "cnss_utils": {
+    "ko": "ports/wlan-platform/cnss_utils.ko"
+   },
+   "q6_notifier_dlkm": {
+    "ko": "ports/audio-kernel/q6_notifier_dlkm.ko"
+   },
+   "spf_core_dlkm": {
+    "ko": "ports/audio-kernel/spf_core_dlkm.ko"
+   },
+   "audpkt_ion_dlkm": {
+    "ko": "ports/audio-kernel/audpkt_ion_dlkm.ko"
+   },
+   "gpr_dlkm": {
+    "ko": "ports/audio-kernel/gpr_dlkm.ko"
+   },
+   "audio_pkt_dlkm": {
+    "ko": "ports/audio-kernel/audio_pkt_dlkm.ko"
+   },
+   "q6_dlkm": {
+    "ko": "ports/audio-kernel/q6_dlkm.ko"
+   },
+   "adsp_loader_dlkm": {
+    "ko": "ports/audio-kernel/adsp_loader_dlkm.ko"
+   },
+   "audio_prm_dlkm": {
+    "ko": "ports/audio-kernel/audio_prm_dlkm.ko"
+   },
+   "q6_pdr_dlkm": {
+    "ko": "ports/audio-kernel/q6_pdr_dlkm.ko"
+   },
+   "pinctrl_lpi_dlkm": {
+    "ko": "ports/audio-kernel/pinctrl_lpi_dlkm.ko"
+   },
+   "swr_dlkm": {
+    "ko": "ports/audio-kernel/swr_dlkm.ko"
+   },
+   "swr_ctrl_dlkm": {
+    "ko": "ports/audio-kernel/swr_ctrl_dlkm.ko"
+   },
+   "snd_event_dlkm": {
+    "ko": "ports/audio-kernel/snd_event_dlkm.ko"
+   },
+   "wcd_core_dlkm": {
+    "ko": "ports/audio-kernel/wcd_core_dlkm.ko"
+   },
+   "mbhc_dlkm": {
+    "ko": "ports/audio-kernel/mbhc_dlkm.ko"
+   },
+   "sdca_registers_dlkm": {
+    "ko": "ports/audio-kernel/sdca_registers_dlkm.ko"
+   },
+   "wcd9xxx_dlkm": {
+    "ko": "ports/audio-kernel/wcd9xxx_dlkm.ko"
+   },
+   "stub_dlkm": {
+    "ko": "ports/audio-kernel/stub_dlkm.ko"
+   },
+   "machine_dlkm": {
+    "ko": "ports/audio-kernel/machine_dlkm.ko"
+   },
+   "swr_dmic_dlkm": {
+    "ko": "ports/audio-kernel/swr_dmic_dlkm.ko"
+   },
+   "swr_haptics_dlkm": {
+    "ko": "ports/audio-kernel/swr_haptics_dlkm.ko"
+   },
+   "lpass_cdc_wsa2_macro_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_wsa2_macro_dlkm.ko"
+   },
+   "lpass_cdc_wsa_macro_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_wsa_macro_dlkm.ko"
+   },
+   "lpass_cdc_va_macro_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_va_macro_dlkm.ko"
+   },
+   "lpass_cdc_rx_macro_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_rx_macro_dlkm.ko"
+   },
+   "lpass_cdc_tx_macro_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_tx_macro_dlkm.ko"
+   },
+   "lpass_cdc_dlkm": {
+    "ko": "ports/audio-kernel/lpass_cdc_dlkm.ko"
+   },
+   "wsa884x_dlkm": {
+    "ko": "ports/audio-kernel/wsa884x_dlkm.ko"
+   },
+   "wsa883x_dlkm": {
+    "ko": "ports/audio-kernel/wsa883x_dlkm.ko"
+   },
+   "wcd9378_dlkm": {
+    "ko": "ports/audio-kernel/wcd9378_dlkm.ko"
+   },
+   "wcd9378_slave_dlkm": {
+    "ko": "ports/audio-kernel/wcd9378_slave_dlkm.ko"
+   },
+   "wcd939x_dlkm": {
+    "ko": "ports/audio-kernel/wcd939x_dlkm.ko"
+   },
+   "wcd939x_slave_dlkm": {
+    "ko": "ports/audio-kernel/wcd939x_slave_dlkm.ko"
+   },
+   "wcd937x_dlkm": {
+    "ko": "ports/audio-kernel/wcd937x_dlkm.ko"
+   },
+   "wcd937x_slave_dlkm": {
+    "ko": "ports/audio-kernel/wcd937x_slave_dlkm.ko"
+   },
+   "lpass_bt_swr_dlkm": {
+    "ko": "ports/audio-kernel/lpass_bt_swr_dlkm.ko"
+   },
+   "qmp_dlkm": {
+    "ko": "ports/audio-kernel/qmp_dlkm.ko"
+   },
+   "aw882xx_dlkm": {
+    "ko": "ports/audio-kernel/aw882xx_dlkm.ko"
+   },
+   "simple_amp_dlkm": {
+    "ko": "ports/audio-kernel/simple_amp_dlkm.ko"
+   },
+   "wsa885x_i2c_dlkm": {
+    "ko": "ports/audio-kernel/wsa885x_i2c_dlkm.ko"
+   },
+   "hdmi_dlkm": {
+    "ko": "ports/audio-kernel/hdmi_dlkm.ko"
+   },
+   "wcd938x_dlkm": {
+    "ko": "ports/audio-kernel/wcd938x_dlkm.ko"
+   },
+   "wcd938x_slave_dlkm": {
+    "ko": "ports/audio-kernel/wcd938x_slave_dlkm.ko"
+   },
+   "smem_mailbox": {
+    "ko": "ports/qcom-wlan-deps/smem-mailbox.ko"
+   },
+   "gsim": {
+    "ko": "ports/dataipa/gsim.ko"
+   },
+   "ipam": {
+    "ko": "ports/dataipa/ipam.ko"
+   },
+   "ipanetm": {
+    "ko": "ports/dataipa/ipanetm.ko"
+   },
+   "rmnet_core": {
+    "ko": "ports/datarmnet/rmnet_core.ko"
+   },
+   "rmnet_ctl": {
+    "ko": "ports/datarmnet/rmnet_ctl.ko"
+   },
+   "rmnet_offload": {
+    "ko": "ports/datarmnet/rmnet_offload.ko"
+   },
+   "rmnet_perf_tether": {
+    "ko": "ports/datarmnet/rmnet_perf_tether.ko"
+   },
+   "rmnet_perf": {
+    "ko": "ports/datarmnet/rmnet_perf.ko"
+   },
+   "rmnet_wlan": {
+    "ko": "ports/datarmnet/rmnet_wlan.ko"
+   },
+   "rmnet_mem": {
+    "ko": "ports/dataipa/rmnet_mem.ko"
+   },
+   "rmnet_shs": {
+    "ko": "ports/datarmnet/rmnet_shs.ko"
+   },
+   "rmnet_aps": {
+    "ko": "ports/datarmnet/rmnet_aps.ko"
+   },
+   "rmnet_sch": {
+    "ko": "ports/datarmnet/rmnet_sch.ko"
+   },
+   "stm_st54se_gpio": {
+    "ko": "ports/moto-misc/stm_st54se_gpio.ko"
+   },
+   "qcedev_mod_dlkm": {
+    "ko": "ports/securemsm/qcedev-mod_dlkm.ko"
+   },
+   "qcrypto_msm_dlkm": {
+    "ko": "ports/securemsm/qcrypto-msm_dlkm.ko"
+   },
+   "qce50_dlkm": {
+    "ko": "ports/securemsm/qce50_dlkm.ko"
+   },
+   "qrng_dlkm": {
+    "ko": "ports/securemsm/qrng_dlkm.ko"
+   },
+   "hdcp_qseecom_dlkm": {
+    "ko": "ports/securemsm/hdcp_qseecom_dlkm.ko"
+   },
+   "smmu_proxy_dlkm": {
+    "ko": "ports/securemsm/smmu_proxy_dlkm.ko"
+   },
+   "smcinvoke_dlkm": {
+    "ko": "ports/securemsm/smcinvoke_dlkm.ko"
+   },
+   "tmecom_intf_dlkm": {
+    "ko": "ports/securemsm/tmecom-intf_dlkm.ko"
+   },
+   "tz_log_dlkm": {
+    "ko": "ports/securemsm/tz_log_dlkm.ko"
+   },
+   "synx_driver": {
+    "ko": "ports/qti-fence/synx-driver.ko"
+   },
+   "ipclite": {
+    "ko": "ports/qti-fence/ipclite.ko"
+   },
+   "ipclite_test": {
+    "decision": "not_ported_inert"
+   },
+   "btpower": {
+    "ko": "ports/bt-kernel/btpower.ko"
+   },
+   "radio_i2c_rtc6226_qca": {
+    "ko": "ports/bt-kernel/radio-i2c-rtc6226-qca.ko"
+   },
+   "btfmcodec": {
+    "ko": "ports/bt-kernel/btfmcodec.ko"
+   },
+   "btfm_slim_codec": {
+    "ko": "ports/bt-kernel/btfm_slim_codec.ko"
+   },
+   "bt_fm_swr": {
+    "ko": "ports/bt-kernel/bt_fm_swr.ko"
+   },
+   "spi_cnss_proto": {
+    "ko": "ports/bt-kernel/spi_cnss_proto.ko"
+   },
+   "camera": {
+    "ko": "ports/camera-kernel/camera.ko"
+   },
+   "msm_drm": {
+    "ko": "ports/msm-drm/msm_drm.ko"
+   },
+   "frpc_adsprpc": {
+    "ko": "ports/dsp-kernel/frpc-adsprpc.ko"
+   },
+   "msm_eva": {
+    "ko": "ports/eva-kernel/msm-eva.ko"
+   },
+   "qbt_handler": {
+    "decision": "not_ported_inert"
+   },
+   "msm_ext_display": {
+    "ko": "ports/mm-drivers/msm_ext_display.ko"
+   },
+   "sync_fence": {
+    "ko": "ports/mm-drivers/sync_fence.ko"
+   },
+   "msm_hw_fence": {
+    "ko": "ports/qti-fence/msm_hw_fence.ko"
+   },
+   "msm_hfi_core": {
+    "ko": "ports/mm-drivers/msm_hfi_core.ko"
+   },
+   "msm_mmrm": {
+    "ko": "ports/mm-drivers/msm-mmrm.ko"
+   },
+   "stm_nfc_i2c": {
+    "ko": "ports/nfc-st/stm_nfc_i2c.ko"
+   },
+   "nxp_nci": {
+    "ko": "ports/nfc-nxp/nxp-nci.ko"
+   },
+   "msm_video": {
+    "ko": "ports/video-driver/msm_video.ko"
+   },
+   "utags": {
+    "ko": "ports/moto-misc/utags.ko"
+   },
+   "mmi_annotate": {
+    "ko": "ports/moto-info/mmi_annotate.ko"
+   },
+   "mmi_info": {
+    "ko": "ports/moto-info/mmi_info.ko"
+   },
+   "moto_sched": {
+    "ko": "ports/moto-sched/moto_sched.ko"
+   },
+   "moto_reboot_reason": {
+    "ko": "ports/qcom-reboot/moto_reboot_reason.ko"
+   },
+   "moto_f_usbnet": {
+    "ko": "ports/qcom-usb-gadget/moto_f_usbnet.ko"
+   },
+   "watchdogtest": {
+    "decision": "not_ported_inert"
+   },
+   "bm_adsp_ulog": {
+    "ko": "ports/moto-charging/bm_adsp_ulog.ko"
+   },
+   "mmi_relay": {
+    "ko": "ports/moto-touch-deps/mmi_relay.ko"
+   },
+   "touchscreen_mmi": {
+    "ko": "ports/goodix-touch/touchscreen_mmi.ko"
+   },
+   "goodix_brl_thp": {
+    "ko": "ports/goodix-touch/goodix_brl_thp.ko"
+   },
+   "anc_fps_mmi": {
+    "ko": "ports/moto-misc/anc_fps_mmi.ko"
+   },
+   "goodix_fod_mmi": {
+    "ko": "ports/moto-misc/goodix_fod_mmi.ko"
+   },
+   "qti_glink_charger_v2": {
+    "ko": "ports/moto-charging/qti_glink_charger_v2.ko"
+   },
+   "mmi_glink_charger": {
+    "ko": "ports/moto-charging/mmi_glink_charger.ko"
+   },
+   "qpnp_adaptive_charge": {
+    "ko": "ports/moto-charging/qpnp_adaptive_charge.ko"
+   },
+   "sensors_class": {
+    "ko": "ports/moto-touch-deps/sensors_class.ko"
+   },
+   "awinic_sar": {
+    "ko": "ports/moto-misc/awinic_sar.ko"
+   },
+   "sx937x_sar": {
+    "ko": "ports/moto-misc/sx937x_sar.ko"
+   },
+   "hall_phone_case": {
+    "ko": "ports/moto-charging/hall_phone_case.ko"
+   },
+   "mmi_sys_temp": {
+    "ko": "ports/moto-misc/mmi_sys_temp.ko"
+   },
+   "moto_swap5": {
+    "decision": "not_ported_inert"
+   },
+   "moto_binder": {
+    "ko": "ports/moto-misc/moto_binder.ko"
+   },
+   "moto_mmap_fault": {
+    "ko": "ports/moto-misc/moto_mmap_fault.ko"
+   },
+   "cam_aw37004": {
+    "ko": "ports/moto-misc/cam_aw37004.ko"
+   },
+   "msm_kgsl": {
+    "ko": "ports/kgsl/msm_kgsl.ko"
+   }
+  },
+  "system_dlkm": {
+   "6lowpan": {
+    "ko": "out/native-gki/net/6lowpan/6lowpan.ko"
+   },
+   "8021q": {
+    "ko": "out/native-gki/net/8021q/8021q.ko"
+   },
+   "9pnet": {
+    "ko": "out/native-gki/net/9p/9pnet.ko"
+   },
+   "9pnet_fd": {
+    "ko": "out/native-gki/net/9p/9pnet_fd.ko"
+   },
+   "aqc111": {
+    "ko": "out/native-gki/drivers/net/usb/aqc111.ko"
+   },
+   "asix": {
+    "ko": "out/native-gki/drivers/net/usb/asix.ko"
+   },
+   "ax88179_178a": {
+    "ko": "out/native-gki/drivers/net/usb/ax88179_178a.ko"
+   },
+   "bluetooth": {
+    "ko": "out/native-gki/net/bluetooth/bluetooth.ko"
+   },
+   "bsd_comp": {
+    "ko": "out/native-gki/drivers/net/ppp/bsd_comp.ko"
+   },
+   "btbcm": {
+    "ko": "out/native-gki/drivers/bluetooth/btbcm.ko"
+   },
+   "btqca": {
+    "ko": "out/native-gki/drivers/bluetooth/btqca.ko"
+   },
+   "btsdio": {
+    "ko": "out/native-gki/drivers/bluetooth/btsdio.ko"
+   },
+   "can_bcm": {
+    "ko": "out/native-gki/net/can/can-bcm.ko"
+   },
+   "can_dev": {
+    "ko": "out/native-gki/drivers/net/can/dev/can-dev.ko"
+   },
+   "can_gw": {
+    "ko": "out/native-gki/net/can/can-gw.ko"
+   },
+   "can_raw": {
+    "ko": "out/native-gki/net/can/can-raw.ko"
+   },
+   "can": {
+    "ko": "out/native-gki/net/can/can.ko"
+   },
+   "cctrng": {
+    "ko": "out/native-gki/drivers/char/hw_random/cctrng.ko"
+   },
+   "cdc_acm": {
+    "ko": "out/native-gki/drivers/usb/class/cdc-acm.ko"
+   },
+   "cdc_eem": {
+    "ko": "out/native-gki/drivers/net/usb/cdc_eem.ko"
+   },
+   "cdc_ether": {
+    "ko": "out/native-gki/drivers/net/usb/cdc_ether.ko"
+   },
+   "cdc_ncm": {
+    "ko": "out/native-gki/drivers/net/usb/cdc_ncm.ko"
+   },
+   "clk_gate_test": {
+    "ko": "out/native-gki/drivers/clk/clk-gate_test.ko"
+   },
+   "clk_test": {
+    "ko": "out/native-gki/drivers/clk/clk-test.ko"
+   },
+   "clk_kunit_helpers": {
+    "ko": "out/native-gki/drivers/clk/clk_kunit_helpers.ko"
+   },
+   "dev_addr_lists_test": {
+    "ko": "out/native-gki/net/core/dev_addr_lists_test.ko"
+   },
+   "ext4_inode_test": {
+    "decision": "omitted"
+   },
+   "exynos_hvm": {
+    "decision": "not_ported_inert"
+   },
+   "fat_test": {
+    "ko": "out/native-gki/fs/fat/fat_test.ko"
+   },
+   "ftdi_sio": {
+    "ko": "out/native-gki/drivers/usb/serial/ftdi_sio.ko"
+   },
+   "gnss": {
+    "ko": "out/native-gki/drivers/gnss/gnss.ko"
+   },
+   "gzvm": {
+    "decision": "not_ported_inert"
+   },
+   "hci_uart": {
+    "ko": "out/native-gki/drivers/bluetooth/hci_uart.ko"
+   },
+   "hid_uclogic_test": {
+    "ko": "out/native-gki/drivers/hid/hid-uclogic-test.ko"
+   },
+   "hidp": {
+    "ko": "out/native-gki/net/bluetooth/hidp/hidp.ko"
+   },
+   "ieee802154": {
+    "ko": "out/native-gki/net/ieee802154/ieee802154.ko"
+   },
+   "ieee802154_6lowpan": {
+    "ko": "out/native-gki/net/ieee802154/6lowpan/ieee802154_6lowpan.ko"
+   },
+   "ieee802154_socket": {
+    "ko": "out/native-gki/net/ieee802154/ieee802154_socket.ko"
+   },
+   "iio_test_format": {
+    "ko": "out/native-gki/drivers/iio/test/iio-test-format.ko"
+   },
+   "input_test": {
+    "decision": "not_ported_inert"
+   },
+   "kheaders": {
+    "ko": "out/native-gki/kernel/kheaders.ko"
+   },
+   "kunit_example_test": {
+    "ko": "out/native-gki/lib/kunit/kunit-example-test.ko"
+   },
+   "kunit_test": {
+    "ko": "out/native-gki/lib/kunit/kunit-test.ko"
+   },
+   "kunit": {
+    "ko": "out/native-gki/lib/kunit/kunit.ko"
+   },
+   "l2tp_core": {
+    "ko": "out/native-gki/net/l2tp/l2tp_core.ko"
+   },
+   "l2tp_ppp": {
+    "ko": "out/native-gki/net/l2tp/l2tp_ppp.ko"
+   },
+   "lib_test": {
+    "decision": "omitted"
+   },
+   "libarc4": {
+    "ko": "out/native-gki/lib/crypto/libarc4.ko"
+   },
+   "mac802154": {
+    "ko": "out/native-gki/net/mac802154/mac802154.ko"
+   },
+   "macsec": {
+    "ko": "out/native-gki/drivers/net/macsec.ko"
+   },
+   "mii": {
+    "ko": "out/native-gki/drivers/net/mii.ko"
+   },
+   "netfs": {
+    "ko": "out/native-gki/fs/netfs/netfs.ko"
+   },
+   "nfc": {
+    "ko": "out/native-gki/net/nfc/nfc.ko"
+   },
+   "nhc_dest": {
+    "ko": "out/native-gki/net/6lowpan/nhc_dest.ko"
+   },
+   "nhc_fragment": {
+    "ko": "out/native-gki/net/6lowpan/nhc_fragment.ko"
+   },
+   "nhc_hop": {
+    "ko": "out/native-gki/net/6lowpan/nhc_hop.ko"
+   },
+   "nhc_ipv6": {
+    "ko": "out/native-gki/net/6lowpan/nhc_ipv6.ko"
+   },
+   "nhc_mobility": {
+    "ko": "out/native-gki/net/6lowpan/nhc_mobility.ko"
+   },
+   "nhc_routing": {
+    "ko": "out/native-gki/net/6lowpan/nhc_routing.ko"
+   },
+   "nhc_udp": {
+    "ko": "out/native-gki/net/6lowpan/nhc_udp.ko"
+   },
+   "of_kunit_helpers": {
+    "ko": "out/native-gki/drivers/of/of_kunit_helpers.ko"
+   },
+   "open_dice": {
+    "ko": "out/native-gki/drivers/misc/open-dice.ko"
+   },
+   "platform_test": {
+    "ko": "out/native-gki/lib/kunit/platform-test.ko"
+   },
+   "ppp_deflate": {
+    "ko": "out/native-gki/drivers/net/ppp/ppp_deflate.ko"
+   },
+   "ppp_generic": {
+    "ko": "out/native-gki/drivers/net/ppp/ppp_generic.ko"
+   },
+   "ppp_mppe": {
+    "ko": "out/native-gki/drivers/net/ppp/ppp_mppe.ko"
+   },
+   "pppox": {
+    "ko": "out/native-gki/drivers/net/ppp/pppox.ko"
+   },
+   "pps_core": {
+    "ko": "out/native-gki/drivers/pps/pps_core.ko"
+   },
+   "pptp": {
+    "ko": "out/native-gki/drivers/net/ppp/pptp.ko"
+   },
+   "ptp": {
+    "ko": "out/native-gki/drivers/ptp/ptp.ko"
+   },
+   "ptp_kvm": {
+    "ko": "out/native-gki/drivers/ptp/ptp_kvm.ko"
+   },
+   "pwrseq_core": {
+    "ko": "built-in (CONFIG_POWER_SEQUENCING=y)",
+    "renamed": true
+   },
+   "r8152": {
+    "ko": "out/native-gki/drivers/net/usb/r8152.ko"
+   },
+   "r8153_ecm": {
+    "ko": "out/native-gki/drivers/net/usb/r8153_ecm.ko"
+   },
+   "regmap_kunit": {
+    "ko": "out/native-gki/drivers/base/regmap/regmap-kunit.ko"
+   },
+   "regmap_ram": {
+    "ko": "out/native-gki/drivers/base/regmap/regmap-ram.ko"
+   },
+   "regmap_raw_ram": {
+    "ko": "out/native-gki/drivers/base/regmap/regmap-raw-ram.ko"
+   },
+   "rfcomm": {
+    "ko": "out/native-gki/net/bluetooth/rfcomm/rfcomm.ko"
+   },
+   "rfkill": {
+    "ko": "out/native-gki/net/rfkill/rfkill.ko"
+   },
+   "rtl8150": {
+    "ko": "out/native-gki/drivers/net/usb/rtl8150.ko"
+   },
+   "rust_binder": {
+    "decision": "not_ported_inert"
+   },
+   "slcan": {
+    "ko": "out/native-gki/drivers/net/can/slcan/slcan.ko"
+   },
+   "slhc": {
+    "ko": "out/native-gki/drivers/net/slip/slhc.ko"
+   },
+   "soc_topology_test": {
+    "ko": "out/native-gki/sound/soc/soc-topology-test.ko"
+   },
+   "soc_utils_test": {
+    "ko": "out/native-gki/sound/soc/soc-utils-test.ko"
+   },
+   "time_test": {
+    "ko": "out/native-gki/kernel/time/time_test.ko"
+   },
+   "tipc": {
+    "ko": "out/native-gki/net/tipc/tipc.ko"
+   },
+   "tipc_diag": {
+    "ko": "out/native-gki/net/tipc/tipc_diag.ko"
+   },
+   "tls": {
+    "ko": "out/native-gki/net/tls/tls.ko"
+   },
+   "usbmon": {
+    "ko": "out/native-gki/drivers/usb/mon/usbmon.ko"
+   },
+   "usbnet": {
+    "ko": "out/native-gki/drivers/net/usb/usbnet.ko"
+   },
+   "usbserial": {
+    "ko": "out/native-gki/drivers/usb/serial/usbserial.ko"
+   },
+   "vcan": {
+    "ko": "out/native-gki/drivers/net/can/vcan.ko"
+   },
+   "vcpu_stall_detector": {
+    "ko": "out/native-gki/drivers/misc/vcpu_stall_detector.ko"
+   },
+   "virtio_balloon": {
+    "ko": "out/native-gki/drivers/virtio/virtio_balloon.ko"
+   },
+   "virtio_blk": {
+    "ko": "out/native-gki/drivers/block/virtio_blk.ko"
+   },
+   "virtio_console": {
+    "ko": "out/native-gki/drivers/char/virtio_console.ko"
+   },
+   "virtio_pci": {
+    "ko": "out/native-gki/drivers/virtio/virtio_pci.ko"
+   },
+   "virtio_pci_legacy_dev": {
+    "ko": "out/native-gki/drivers/virtio/virtio_pci_legacy_dev.ko"
+   },
+   "virtio_pci_modern_dev": {
+    "ko": "out/native-gki/drivers/virtio/virtio_pci_modern_dev.ko"
+   },
+   "vmw_vsock_virtio_transport": {
+    "ko": "out/native-gki/net/vmw_vsock/vmw_vsock_virtio_transport.ko"
+   },
+   "wwan": {
+    "ko": "out/native-gki/drivers/net/wwan/wwan.ko"
+   },
+   "zram": {
+    "ko": "out/native-gki/drivers/block/zram/zram.ko"
+   },
+   "zsmalloc": {
+    "ko": "out/native-gki/mm/zsmalloc.ko"
+   }
+  }
+ }
+}

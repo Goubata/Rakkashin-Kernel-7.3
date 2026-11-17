@@ -1,0 +1,21 @@
+# Production (phone) build: drop the lock debugging that android18-7.3 gki_defconfig
+# enables for mainline development (the phone's 6.12 GKI has none of it), keep the
+# phone's swap/zram setup. KASAN stays as on the phone (HW tags, MTE, off unless
+# enabled on the cmdline). Every module must be rebuilt against this config: lockdep
+# changes spinlock/mutex layouts.
+# CONFIG_PROVE_LOCKING is not set
+# CONFIG_DEBUG_LOCK_ALLOC is not set
+# CONFIG_LOCKDEP is not set
+# CONFIG_DEBUG_SPINLOCK is not set
+# CONFIG_DEBUG_MUTEXES is not set
+# CONFIG_DEBUG_RWSEMS is not set
+# CONFIG_PROVE_RCU is not set
+# CONFIG_DEBUG_ATOMIC_SLEEP is not set
+# zram built in, as in the running Rakkashin 6.12.113 Image (kallsyms: zram_add/zs_create_pool
+# without a module tag): vendor init runs "modprobe -r zram" at early-init and then loads
+# moto_swap5, so a modular zram would be removed and swap lost.
+CONFIG_SWAP=y
+CONFIG_ZSMALLOC=y
+CONFIG_ZRAM=y
+CONFIG_ZRAM_BACKEND_LZ4=y
+CONFIG_ZRAM_WRITEBACK=y

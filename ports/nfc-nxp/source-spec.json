@@ -1,0 +1,24 @@
+{
+ "name": "nfc-nxp",
+ "repo": "vendor-repos/vendor-nxp-opensource-driver",
+ "commit": "1097486a366f4b9e7c25d6993a9767a36a0c095c",
+ "files": {
+  "ports/nfc-nxp/include/uapi/linux/nfc/nfcinfo.h": "include/uapi/linux/nfc/nfcinfo.h",
+  "ports/nfc-nxp/include/uapi/linux/nfc/sn_uapi.h": "include/uapi/linux/nfc/sn_uapi.h",
+  "ports/nfc-nxp/nfc/common.c": "nfc/common.c",
+  "ports/nfc-nxp/nfc/common.h": "nfc/common.h",
+  "ports/nfc-nxp/nfc/common_nxp.c": "nfc/common_nxp.c",
+  "ports/nfc-nxp/nfc/common_nxp.h": "nfc/common_nxp.h",
+  "ports/nfc-nxp/nfc/common_qcom.c": "nfc/common_qcom.c",
+  "ports/nfc-nxp/nfc/ese_cold_reset.c": "nfc/ese_cold_reset.c",
+  "ports/nfc-nxp/nfc/ese_cold_reset.h": "nfc/ese_cold_reset.h",
+  "ports/nfc-nxp/nfc/i2c_drv.c": "nfc/i2c_drv.c",
+  "ports/nfc-nxp/nfc/i2c_drv.h": "nfc/i2c_drv.h",
+  "ports/nfc-nxp/Makefile": ""
+ },
+ "scope": "QTI NFC driver (canoe target: CONFIG_NFC_BOB1, NFC_SECURE_PERIPHERAL_ENABLED) built out-of-tree for android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone NFC verification"
+ ]
+}

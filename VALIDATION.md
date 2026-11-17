@@ -2837,3 +2837,31 @@ QEMU media-data (3/3): 30 target modules (88 loaded); WALT fixture for sched-wal
 18 synx_compat exports (CRCs equal). Workqueues: explicit WQ_PERCPU where 6.12 default was implied.
 scripts/refresh_test_modules.py re-derives test module lists after dependency changes.
 Regression: all suites pass (5 reruns after list refresh); CRC 318. Not verified on the phone.
+
+## Stage125: NFC, mem_hooks, SEA/SCMI core parity (Image#44), production build and RAM-boot kit tooling
+
+NFC: QTI NFC drivers found on CodeLinaro (vendor/nxp/opensource/driver nfc-driver.lnx.16.0.r1-rel 1097486a,
+vendor/st/opensource/driver nfc-st-driver.lnx.16.0.r1-rel be17fa61); all phone .ko format strings match.
+ports/nfc-nxp (nxp-nci, DT qcom,sn-nci, the one bound on AVR) and ports/nfc-st (stm_nfc_i2c) use the canoe
+copts (CONFIG_NFC_BOB1, NFC_SECURE_PERIPHERAL_ENABLED) + vendor config parity; depends= equal the phone.
+mem_hooks (phone: first stage, permanent): core patch sea-fixup restores the 6.12 android_vh_try_fixup_sea
+call in arm64 do_sea() + export; the CMA best-fit rvh part is compiled only for CONFIG_CMA_BEST_FIT (unset
+on the phone, no cma-best-fit DT property: a no-op there). Core patch scmi-msg-size: without
+arm,max-msg-size, use 6.12's 128-byte payload when the first shmem area holds it (CPUCP 0x200 -> 128,
+PDP 0x80 -> 104); replaces the avr73-fixups.dtso fragment so the stock DTB works. QEMU SCMI fixture no
+longer sets the property (log: 128/104 bytes). Inert/blocklisted phone modules recorded in
+module-set-decisions.json (qbt_handler, slc_perfmon, ipclite_test, watchdogtest, cnss2, moto_swap5,
+exynos_hvm, gzvm, input_test, rust_binder). Remaining unported: coresight/stm (18, debug tracing).
+Production: configs/avr-production.fragment (no lockdep/lock debugging, KASAN HW tags as the phone,
+zram/zsmalloc built in like the running Rakkashin 6.12.113 Image: vendor init does modprobe -r zram);
+scripts/build_production.py builds out/prod-gki and every port from a source copy in out/prod-ports.
+Boot kit: scripts/plan_module_set.py (phone vendor_boot/vendor_dlkm/system_dlkm lists -> 7.3 .ko),
+scripts/assemble_boot_kit.py (fastboot-boot RAM kit: init_boot generic ramdisk + lib/modules/<release>/,
+modules.load limited to modules loaded on the phone + their providers, since first-stage loading is
+strict on user builds), scripts/check_boot_kit.py (static CRC/depends/vermagic of the whole set: QEMU
+tree first=131, full=497 PASS). tests/boot-kit/qemu_android_init.py boots the phone's own init_boot
+init on 7.3 in QEMU: release-specific dir selected, tls + can-dev (from modules.dep) + vcan loaded,
+first-stage mount reached. SELinux: phone policy already defines 7.3's new perms (firmware_load, nlmsg,
+io_uring allowed, ...); deny_unknown=1, missing only watch_mountns and bpf *_as (unused by Android).
+Regression: all suites pass (qcom-tee and qcom-cpucp-scmi rerun 3/3 after test fixes: minidump stub for
+ipc_logging, wait for async qcom_scmi_client probe). Not verified on the phone.

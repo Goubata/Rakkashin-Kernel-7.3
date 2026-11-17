@@ -1,0 +1,16 @@
+/data/data/com.termux/files/home/avr-kernel-7.3/tests/qemu/qmi-cooling-tests.cpio.gz 5609272 uncompressed bytes
+{
+  "log": "reports/qmi-cooling-stage94-two-peer-qemu.log",
+  "test": "qmi-cooling",
+  "passed": false,
+  "failures": [
+    "\\bnot ok\\b",
+    "expected all 22 KTAP cases"
+  ],
+  "totals": [
+    18,
+    0,
+    0,
+    18
+  ]
+}

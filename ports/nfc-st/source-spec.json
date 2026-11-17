@@ -1,0 +1,16 @@
+{
+ "name": "nfc-st",
+ "repo": "vendor-repos/vendor-st-opensource-driver",
+ "commit": "be17fa6166588f65abc5ca425fb70b7df292a17e",
+ "files": {
+  "ports/nfc-st/include/uapi/linux/nfc/st_uapi.h": "include/uapi/linux/nfc/st_uapi.h",
+  "ports/nfc-st/nfc/st21nfc.c": "nfc/st21nfc.c",
+  "ports/nfc-st/nfc/st21nfc.h": "nfc/st21nfc.h",
+  "ports/nfc-st/Makefile": ""
+ },
+ "scope": "QTI NFC driver (canoe target: CONFIG_NFC_BOB1, NFC_SECURE_PERIPHERAL_ENABLED) built out-of-tree for android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone NFC verification"
+ ]
+}

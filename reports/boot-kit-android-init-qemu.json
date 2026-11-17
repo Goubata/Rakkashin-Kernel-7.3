@@ -1,0 +1,14 @@
+{
+ "release": "7.3.0-4k",
+ "returncode": 0,
+ "elapsed": 9.0,
+ "checks": {
+  "init_ran": true,
+  "release_dir": true,
+  "loaded_with_dep": true,
+  "no_insmod_failure": true,
+  "no_kernel_warn": true,
+  "reached_mount": true
+ },
+ "passed": true
+}

@@ -1,0 +1,14 @@
+{
+ "name": "qcom-mem-hooks",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-mem-hooks/drivers/soc/qcom/mem-hooks.c": "drivers/soc/qcom/mem-hooks.c",
+  "ports/qcom-mem-hooks/Makefile": null
+ },
+ "scope": "mem-hooks on android18-7.3",
+ "reviewed_changes": [],
+ "pending": [
+  "phone"
+ ]
+}

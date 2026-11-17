@@ -24,7 +24,7 @@
    pdp_perf: protocol@13 { reg=<0x13>; #clock-cells=<1>; }; };
   cpucp_scmi { compatible="arm,scmi"; #address-cells=<1>; #size-cells=<0>;
    arm,max-rx-timeout-ms=<1000>;	/* QEMU-only: TCG can stall the fake firmware > 30 ms */
-   arm,max-msg-size=<128>;	/* ports/device-tree/avr73-fixups.dtso */
+   /* no arm,max-msg-size: like the phone DT; 7.3 core (scmi-msg-size patch) picks 128 from the 0x200 shmem */
    mboxes=<&fake_cpucp 0 &fake_cpucp 2>; mbox-names="tx","rx"; shmem=<&cpucp_tx &cpucp_rx>;
    protocol@80 { reg=<0x80>; #clock-cells=<1>; }; };
  }; };

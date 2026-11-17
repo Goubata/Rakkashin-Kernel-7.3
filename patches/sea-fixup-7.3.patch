@@ -1,0 +1,29 @@
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index 58828a095..3b9ffc94e 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -874,6 +874,12 @@ static int do_sea(unsigned long far, unsigned long esr, struct pt_regs *regs)
+ {
+ 	const struct fault_info *inf;
+ 	unsigned long siaddr;
++	bool can_fixup = false;
++
++	/* ANDROID: 6.12 parity: vendor may allow exception-table fixup of SEAs */
++	trace_android_vh_try_fixup_sea(far, esr, regs, &can_fixup);
++	if (can_fixup && fixup_exception(regs, esr))
++		return 0;
+ 
+ 	inf = esr_to_fault_info(esr);
+ 
+diff --git a/drivers/android/vendor_hooks.c b/drivers/android/vendor_hooks.c
+index cf0f01f32..054e04306 100644
+--- a/drivers/android/vendor_hooks.c
++++ b/drivers/android/vendor_hooks.c
+@@ -85,6 +85,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_cpu_cgroup_attach);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_cpu_cgroup_online);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_cpufreq_transition);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_die_kernel_fault);
++EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_try_fixup_sea);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_gic_v3_set_affinity);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_gic_v3_suspend);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(android_rvh_do_el1_bti);

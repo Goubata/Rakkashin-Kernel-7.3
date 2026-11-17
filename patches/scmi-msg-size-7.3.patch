@@ -1,0 +1,29 @@
+diff --git a/drivers/firmware/arm_scmi/driver.c b/drivers/firmware/arm_scmi/driver.c
+index a666ad39a..f29514c6a 100644
+--- a/drivers/firmware/arm_scmi/driver.c
++++ b/drivers/firmware/arm_scmi/driver.c
+@@ -31,6 +31,7 @@
+ #include <linux/list.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/processor.h>
+ #include <linux/rcupdate.h>
+@@ -3193,6 +3194,16 @@ static const struct scmi_desc *scmi_transport_setup(struct device *dev)
+ 				   &trans->desc.max_msg_size);
+ 	if (ret && ret != -EINVAL)
+ 		dev_err(dev, "Malformed arm,max-msg-size DT property.\n");
++	/* ANDROID: 6.12 parity: 128-byte payloads when the shmem area fits them */
++	if (ret == -EINVAL && trans->desc.max_msg_size < 128) {
++		struct device_node *shm = of_parse_phandle(dev->of_node, "shmem", 0);
++		struct resource r;
++
++		if (shm && !of_address_to_resource(shm, 0, &r) &&
++		    resource_size(&r) >= 128 + 24)
++			trans->desc.max_msg_size = 128;
++		of_node_put(shm);
++	}
+ 
+ 	ret = of_property_read_u32(dev->of_node, "arm,max-msg",
+ 				   &trans->desc.max_msg);

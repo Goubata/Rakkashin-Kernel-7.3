@@ -1,164 +1,214 @@
 {
-  "scope": "Phone modules that the 7.3 module set deliberately omits or renames, with reasons",
-  "omitted": {
-    "sdhci_msm": {
-      "stage": 112,
-      "reason": "AVR sdhci@8804000 (only SDHC) is status=disabled in the phone DT; the 7.3 in-tree sdhci-msm imports the upstream 7.3 qcom_ice API, which cannot coexist with the vendor ICE (ports/qcom-ice) that UFS FBE uses (same symbol names, different ABI)"
-    },
-    "cqhci": {
-      "stage": 112,
-      "reason": "only user is sdhci-msm (omitted)"
-    },
-    "debug_symbol": {
-      "stage": 113,
-      "reason": "debug_symbol_available()/debug_symbol_lookup_name() are provided by the 7.3 kernel (kernel/kallsyms.c, core commit 3684f35f1, verified by the debug-symbol suite) from the running symbol table instead of re-decoding the 6.12 debug_kinfo layout"
-    },
-    "pinctrl-canoe": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
-    },
-    "pinctrl-chora": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
-    },
-    "pinctrl-ravelin": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
-    },
-    "qnoc-canoe": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
-    },
-    "qnoc-chora": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
-    },
-    "qnoc-ravelin": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
-    },
-    "phy-qcom-ufs-qmp-v4-crow": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
-    },
-    "phy-qcom-ufs-qrbtc-sdm845": {
-      "stage": 114,
-      "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
-    },
-    "ext4_inode_test": {
-      "stage": 118,
-      "reason": "GKI KUnit test module (ext4 inode tests), not a device driver"
-    },
-    "lib_test": {
-      "stage": 118,
-      "reason": "GKI test module, not a device driver"
-    }
+ "scope": "Phone modules that the 7.3 module set deliberately omits or renames, with reasons",
+ "omitted": {
+  "sdhci_msm": {
+   "stage": 112,
+   "reason": "AVR sdhci@8804000 (only SDHC) is status=disabled in the phone DT; the 7.3 in-tree sdhci-msm imports the upstream 7.3 qcom_ice API, which cannot coexist with the vendor ICE (ports/qcom-ice) that UFS FBE uses (same symbol names, different ABI)"
   },
-  "renamed": {
-    "clk_scmi": {
-      "stage": 111,
-      "7.3_module": "scmi-clk.ko",
-      "reason": "7.3 in-tree driver replaces the stale vendor copy"
-    },
-    "rproc_qcom_common": {
-      "stage": "37",
-      "7.3_module": "ports/qcom-rproc-common/qcom_common.ko",
-      "reason": "same vendor sources (qcom_common.c + tracepoints); module name to be aligned at packaging"
-    },
-    "pwrseq_core": {
-      "stage": 118,
-      "7.3_module": "built-in (CONFIG_POWER_SEQUENCING=y)",
-      "reason": "7.3 GKI builds the power-sequencing core in"
-    }
+  "cqhci": {
+   "stage": 112,
+   "reason": "only user is sdhci-msm (omitted)"
   },
-  "first_stage_status": {
-    "date": "2026-11-17",
-    "missing_before": 51,
-    "remaining_unported": 0,
-    "note": "every phone first-stage module is ported, renamed (renamed{}), or deliberately omitted (omitted{}) with a reason"
+  "debug_symbol": {
+   "stage": 113,
+   "reason": "debug_symbol_available()/debug_symbol_lookup_name() are provided by the 7.3 kernel (kernel/kallsyms.c, core commit 3684f35f1, verified by the debug-symbol suite) from the running symbol table instead of re-decoding the 6.12 debug_kinfo layout"
   },
-  "deferred": {
-    "glink_probe": {
-      "stage": 117,
-      "reason": "phone soc:qcom,glink node has no children (edges are remoteproc glink-edge subnodes started by rproc_qcom_common); needs vendor qcom_glink_smem_start/spss APIs - revisit with SPSS"
-    },
-    "qcom_glink_spss": {
-      "stage": 117,
-      "reason": "SPSS (secure processor) edge transport needs vendor qcom_glink_native_start; ported together with qcom_spss"
-    }
+  "pinctrl-canoe": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
   },
-  "intree": {
-    "tls": {
-      "stage": 118,
-      "config": "TLS"
-    },
-    "hwmon": {
-      "stage": 118,
-      "config": "HWMON (vendor adds devm_hwmon_device_unregister export: add to core if a ported user needs it)"
-    },
-    "phy_generic": {
-      "stage": 118,
-      "config": "NOP_USB_XCEIV (vendor diff: of_property_read_bool vs present only)"
-    },
-    "ledtrig_pattern": {
-      "stage": 118,
-      "config": "LEDS_TRIGGER_PATTERN (identical)"
-    },
-    "i2c_qcom_geni": {
-      "stage": 118,
-      "config": "I2C_QCOM_GENI (identical; unbound on the phone, vendor i2c-msm-geni used)"
-    },
-    "spi_geni_qcom": {
-      "stage": 118,
-      "config": "SPI_QCOM_GENI (identical; unbound on the phone)"
-    }
+  "pinctrl-chora": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
   },
-  "parity_differences": {
-    "qcom_glink, qcom_glink_smem, smp2p": {
-      "phone_dep": "qcom_ipc_logging",
-      "reason": "7.3-native sources (Codex) without the vendor IPC log calls; logging only"
-    },
-    "qcom_sysmon": {
-      "phone_dep": "rproc_qcom_common",
-      "reason": "7.3-native sysmon; vendor one uses qcom_device_shutdown_in_progress"
-    },
-    "qcom_q6v5_pas": {
-      "phone_dep": "qcom_ramdump",
-      "extra": "qcom_pas",
-      "reason": "7.3-native PAS with Alor descriptor (Codex); vendor PAS collects ramdumps via qcom_ramdump - pending remoteproc vendor-parity review"
-    },
-    "qrng_dlkm": {
-      "extra": "rng",
-      "reason": "crypto RNG core is a module on 7.3 (CONFIG_CRYPTO_DRBG=m); built in on the phone"
-    },
-    "msm_sysstats": {
-      "phone_dep": "qcom_dma_heaps",
-      "reason": "uses the 7.3 is_dma_buf_file() instead of qcom_is_dma_buf_file() (equivalent identification)"
-    },
-    "msm_memshare": {
-      "phone_dep": "qcom_glink",
-      "reason": "native 7.3 glink never negotiates zero-copy, so qcom_glink_mem_entry_init/free are local no-ops (same as the vendor header !RPMSG_QCOM_GLINK branch)"
-    },
-    "gunyah_trace": {
-      "phone_dep": "(none; extra gunyah)",
-      "reason": "gunyah_get_info is built into the 6.12 GKI vmlinux; on 7.3 it is exported by ports/gunyah-core gunyah.ko"
-    }
+  "pinctrl-ravelin": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (pinctrl-alor)"
   },
-  "not_ported_inert": [
-    {
-      "module": "qcom_spss.ko",
-      "reason": "AVR DT has no SPSS remoteproc node; the driver binds nothing on the phone (/sys/bus/platform/drivers/qcom_spss empty)",
-      "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
-    },
-    {
-      "module": "qcom_glink_spss.ko",
-      "reason": "only used by qcom_spss/glink_probe for the SPSS edge, absent on AVR; needs vendor qcom_glink_native_start (7.3 native glink transport is used instead)",
-      "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
-    },
-    {
-      "module": "glink_probe.ko",
-      "reason": "phone /soc/qcom,glink has no edge children; all remoteproc edges are glink-edge subnodes handled by native qcom_glink_smem via rproc_qcom_common",
-      "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
-    }
-  ]
+  "qnoc-canoe": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "qnoc-chora": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "qnoc-ravelin": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (qnoc-alor)"
+  },
+  "phy-qcom-ufs-qmp-v4-crow": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
+  },
+  "phy-qcom-ufs-qrbtc-sdm845": {
+   "stage": 114,
+   "reason": "other-SoC variant loaded on the phone but bound to no device (checked /sys/bus/platform/drivers on the running AVR 6.12 ROM, 2026-11-17); the AVR binds the alor/canoe variant instead, which is ported (phy-qcom-ufs-qmp-v4-canoe)"
+  },
+  "ext4_inode_test": {
+   "stage": 118,
+   "reason": "GKI KUnit test module (ext4 inode tests), not a device driver"
+  },
+  "lib_test": {
+   "stage": 118,
+   "reason": "GKI test module, not a device driver"
+  }
+ },
+ "renamed": {
+  "clk_scmi": {
+   "stage": 111,
+   "7.3_module": "scmi-clk.ko",
+   "reason": "7.3 in-tree driver replaces the stale vendor copy"
+  },
+  "rproc_qcom_common": {
+   "stage": "37",
+   "7.3_module": "ports/qcom-rproc-common/qcom_common.ko",
+   "reason": "same vendor sources (qcom_common.c + tracepoints); module name to be aligned at packaging"
+  },
+  "pwrseq_core": {
+   "stage": 118,
+   "7.3_module": "built-in (CONFIG_POWER_SEQUENCING=y)",
+   "reason": "7.3 GKI builds the power-sequencing core in"
+  }
+ },
+ "first_stage_status": {
+  "date": "2026-11-17",
+  "missing_before": 51,
+  "remaining_unported": 0,
+  "note": "every phone first-stage module is ported, renamed (renamed{}), or deliberately omitted (omitted{}) with a reason"
+ },
+ "deferred": {
+  "glink_probe": {
+   "stage": 117,
+   "reason": "phone soc:qcom,glink node has no children (edges are remoteproc glink-edge subnodes started by rproc_qcom_common); needs vendor qcom_glink_smem_start/spss APIs - revisit with SPSS"
+  },
+  "qcom_glink_spss": {
+   "stage": 117,
+   "reason": "SPSS (secure processor) edge transport needs vendor qcom_glink_native_start; ported together with qcom_spss"
+  }
+ },
+ "intree": {
+  "tls": {
+   "stage": 118,
+   "config": "TLS"
+  },
+  "hwmon": {
+   "stage": 118,
+   "config": "HWMON (vendor adds devm_hwmon_device_unregister export: add to core if a ported user needs it)"
+  },
+  "phy_generic": {
+   "stage": 118,
+   "config": "NOP_USB_XCEIV (vendor diff: of_property_read_bool vs present only)"
+  },
+  "ledtrig_pattern": {
+   "stage": 118,
+   "config": "LEDS_TRIGGER_PATTERN (identical)"
+  },
+  "i2c_qcom_geni": {
+   "stage": 118,
+   "config": "I2C_QCOM_GENI (identical; unbound on the phone, vendor i2c-msm-geni used)"
+  },
+  "spi_geni_qcom": {
+   "stage": 118,
+   "config": "SPI_QCOM_GENI (identical; unbound on the phone)"
+  }
+ },
+ "parity_differences": {
+  "qcom_glink, qcom_glink_smem, smp2p": {
+   "phone_dep": "qcom_ipc_logging",
+   "reason": "7.3-native sources (Codex) without the vendor IPC log calls; logging only"
+  },
+  "qcom_sysmon": {
+   "phone_dep": "rproc_qcom_common",
+   "reason": "7.3-native sysmon; vendor one uses qcom_device_shutdown_in_progress"
+  },
+  "qcom_q6v5_pas": {
+   "phone_dep": "qcom_ramdump",
+   "extra": "qcom_pas",
+   "reason": "7.3-native PAS with Alor descriptor (Codex); vendor PAS collects ramdumps via qcom_ramdump - pending remoteproc vendor-parity review"
+  },
+  "qrng_dlkm": {
+   "extra": "rng",
+   "reason": "crypto RNG core is a module on 7.3 (CONFIG_CRYPTO_DRBG=m); built in on the phone"
+  },
+  "msm_sysstats": {
+   "phone_dep": "qcom_dma_heaps",
+   "reason": "uses the 7.3 is_dma_buf_file() instead of qcom_is_dma_buf_file() (equivalent identification)"
+  },
+  "msm_memshare": {
+   "phone_dep": "qcom_glink",
+   "reason": "native 7.3 glink never negotiates zero-copy, so qcom_glink_mem_entry_init/free are local no-ops (same as the vendor header !RPMSG_QCOM_GLINK branch)"
+  },
+  "gunyah_trace": {
+   "phone_dep": "(none; extra gunyah)",
+   "reason": "gunyah_get_info is built into the 6.12 GKI vmlinux; on 7.3 it is exported by ports/gunyah-core gunyah.ko"
+  }
+ },
+ "not_ported_inert": [
+  {
+   "module": "qcom_spss.ko",
+   "reason": "AVR DT has no SPSS remoteproc node; the driver binds nothing on the phone (/sys/bus/platform/drivers/qcom_spss empty)",
+   "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
+  },
+  {
+   "module": "qcom_glink_spss.ko",
+   "reason": "only used by qcom_spss/glink_probe for the SPSS edge, absent on AVR; needs vendor qcom_glink_native_start (7.3 native glink transport is used instead)",
+   "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
+  },
+  {
+   "module": "glink_probe.ko",
+   "reason": "phone /soc/qcom,glink has no edge children; all remoteproc edges are glink-edge subnodes handled by native qcom_glink_smem via rproc_qcom_common",
+   "evidence": "phone /proc/device-tree and /sys/bus/platform/drivers, 2026-11-17"
+  },
+  {
+   "module": "qbt_handler.ko",
+   "reason": "no qcom,qbt-handler node in the AVR DT; /sys/bus/platform/drivers/qbt_handler binds nothing (fingerprint is goodix_fod_mmi/anc_fps_mmi, both ported)",
+   "evidence": "phone running.dtb + sysfs, 2026-11-18"
+  },
+  {
+   "module": "slc_perfmon.ko",
+   "reason": "listed in vendor_dlkm modules.load but blocklisted (vendor_dlkm modules.blocklist); never loaded",
+   "evidence": "phone vendor_dlkm lists, 2026-11-18"
+  },
+  {
+   "module": "ipclite_test.ko",
+   "reason": "test module, blocklisted on the phone",
+   "evidence": "phone vendor_dlkm modules.blocklist"
+  },
+  {
+   "module": "watchdogtest.ko",
+   "reason": "test module, blocklisted on the phone",
+   "evidence": "phone vendor_dlkm modules.blocklist"
+  },
+  {
+   "module": "cnss2.ko",
+   "reason": "PCIe WLAN platform driver; AVR WLAN (WCN7750) uses icnss2 (ported, wlan-platform); cnss2 is not loaded on the phone",
+   "evidence": "phone /proc/modules, 2026-11-18"
+  },
+  {
+   "module": "moto_swap5.ko",
+   "reason": "hybridswap zram replacement loaded by init.mmi.overlay.rc; not loaded on the running phone (zram is built into the Rakkashin Image, which the 7.3 production config mirrors with CONFIG_ZRAM=y)",
+   "evidence": "phone /proc/modules + /proc/kallsyms, 2026-11-18"
+  },
+  {
+   "module": "exynos_hvm.ko",
+   "reason": "system_dlkm GKI module for Samsung Exynos hypervisor; no such hardware",
+   "evidence": "system_dlkm list"
+  },
+  {
+   "module": "gzvm.ko",
+   "reason": "system_dlkm GKI module for the MediaTek GenieZone hypervisor; loaded but inert on Qualcomm (no geniezone node)",
+   "evidence": "phone /proc/modules"
+  },
+  {
+   "module": "input_test.ko",
+   "reason": "system_dlkm KUnit-style test module",
+   "evidence": "system_dlkm list"
+  },
+  {
+   "module": "rust_binder.ko",
+   "reason": "7.3 port uses the C binder (Stage103, Android RT priority inheritance); rust_binder unused",
+   "evidence": "configs/avr-platform.fragment"
+  }
+ ]
 }

@@ -1,0 +1,100 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-sps/bam.c",
+      "source": "drivers/soc/qcom/sps/bam.c",
+      "original_sha256": "98b69e4e04b913279e87c2bb63b1579f5e3aa375c77df254d927a1e170897c92",
+      "sha256": "98b69e4e04b913279e87c2bb63b1579f5e3aa375c77df254d927a1e170897c92"
+    },
+    {
+      "file": "ports/qcom-sps/bam.h",
+      "source": "drivers/soc/qcom/sps/bam.h",
+      "original_sha256": "17f22caf441e0b297f4f07ac53004979ae7a4dbfbea4197dc6334dcf553beb1e",
+      "sha256": "17f22caf441e0b297f4f07ac53004979ae7a4dbfbea4197dc6334dcf553beb1e"
+    },
+    {
+      "file": "ports/qcom-sps/sps.c",
+      "source": "drivers/soc/qcom/sps/sps.c",
+      "original_sha256": "a8fec79f5e276bd7106f2346c7f34a56a752186a2ca662ad6f3b0726b625e6fb",
+      "sha256": "a8fec79f5e276bd7106f2346c7f34a56a752186a2ca662ad6f3b0726b625e6fb"
+    },
+    {
+      "file": "ports/qcom-sps/sps_bam.c",
+      "source": "drivers/soc/qcom/sps/sps_bam.c",
+      "original_sha256": "0dff0ec9a43a0e2fb2aebf76569ebdd9dbe2a3f3a1f923af2126ea9ba36cd2d7",
+      "sha256": "0dff0ec9a43a0e2fb2aebf76569ebdd9dbe2a3f3a1f923af2126ea9ba36cd2d7"
+    },
+    {
+      "file": "ports/qcom-sps/sps_bam.h",
+      "source": "drivers/soc/qcom/sps/sps_bam.h",
+      "original_sha256": "cc263c1d99f93ffe484d0e2f5aa01fc0842716366c43f21afeb2cc05cf71329c",
+      "sha256": "cc263c1d99f93ffe484d0e2f5aa01fc0842716366c43f21afeb2cc05cf71329c"
+    },
+    {
+      "file": "ports/qcom-sps/sps_core.h",
+      "source": "drivers/soc/qcom/sps/sps_core.h",
+      "original_sha256": "b2e54c769ce2a2bdccf8bf3963f4d8b736e790fbbfab9e06cd38f0c07e11a743",
+      "sha256": "b2e54c769ce2a2bdccf8bf3963f4d8b736e790fbbfab9e06cd38f0c07e11a743"
+    },
+    {
+      "file": "ports/qcom-sps/sps_dma.c",
+      "source": "drivers/soc/qcom/sps/sps_dma.c",
+      "original_sha256": "fdfa9e64a13a3def21dbc3bd4d20d71352181e7eae939af8659abc051f27731d",
+      "sha256": "fdfa9e64a13a3def21dbc3bd4d20d71352181e7eae939af8659abc051f27731d"
+    },
+    {
+      "file": "ports/qcom-sps/sps_map.c",
+      "source": "drivers/soc/qcom/sps/sps_map.c",
+      "original_sha256": "0408dfa40f1b17ba3321bde51e89a7cf980a10e07a9229c571e17ebd9e38c5c6",
+      "sha256": "0408dfa40f1b17ba3321bde51e89a7cf980a10e07a9229c571e17ebd9e38c5c6"
+    },
+    {
+      "file": "ports/qcom-sps/sps_map.h",
+      "source": "drivers/soc/qcom/sps/sps_map.h",
+      "original_sha256": "f43084dd5ed78447548a01484bb6cef3ba4105ee376f7e12c106e3108d818d8f",
+      "sha256": "f43084dd5ed78447548a01484bb6cef3ba4105ee376f7e12c106e3108d818d8f"
+    },
+    {
+      "file": "ports/qcom-sps/sps_mem.c",
+      "source": "drivers/soc/qcom/sps/sps_mem.c",
+      "original_sha256": "e56a7ebc212783a03a639253b2de96bc95e60f01a80c896e176b4d77088a881c",
+      "sha256": "e56a7ebc212783a03a639253b2de96bc95e60f01a80c896e176b4d77088a881c"
+    },
+    {
+      "file": "ports/qcom-sps/sps_rm.c",
+      "source": "drivers/soc/qcom/sps/sps_rm.c",
+      "original_sha256": "4d5ff074e8df5d4fe688d935d2c4142646eaf7f24a50587f38bc1415f572090e",
+      "sha256": "4d5ff074e8df5d4fe688d935d2c4142646eaf7f24a50587f38bc1415f572090e"
+    },
+    {
+      "file": "ports/qcom-sps/spsi.h",
+      "source": "drivers/soc/qcom/sps/spsi.h",
+      "original_sha256": "4ff8b4be0b5258932934a8ec29aa788aae8df0e02e362b38982966d2cf93646b",
+      "sha256": "4ff8b4be0b5258932934a8ec29aa788aae8df0e02e362b38982966d2cf93646b"
+    },
+    {
+      "file": "ports/qcom-sps/include/linux/msm-sps.h",
+      "source": "include/linux/msm-sps.h",
+      "original_sha256": "88643df2bb763e412c293ff85fa59c0a4c60ea0838d3a784c9da5502cd17558c",
+      "sha256": "88643df2bb763e412c293ff85fa59c0a4c60ea0838d3a784c9da5502cd17558c"
+    },
+    {
+      "file": "ports/qcom-sps/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "5c6ce093bb1670ca69b2dac61ede1c70ada9179513b31ec0d260c9a2e3723a44"
+    }
+  ],
+  "patch_sha256": "3ea6d6a0ce504d76f084f5116e4a9393dbd2148419260241ff429e621c88e8d4",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "sps_drv (BAM/SPS; canoe_perf.bzl CONFIG_SPS=m, SPS_SUPPORT_NDP_BAM=y) on android18-7.3",
+  "reviewed_changes": [
+    "unchanged source; builds as-is on 7.3"
+  ],
+  "pending": [
+    "qce50 BAM pipes on the phone"
+  ]
+}

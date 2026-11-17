@@ -1,0 +1,16 @@
+{
+ "stage": 119,
+ "image": "#41",
+ "qemu_runs": [
+  "reports/mm-stage119-r1.log",
+  "reports/mm-stage119-r2.log",
+  "reports/mm-stage119-r3.log"
+ ],
+ "negative_control": "reports/mm-stage119-negative-control.log",
+ "results": {
+  "load": "14/14",
+  "spec_sync": "ANY/ALL/default/bind errors"
+ },
+ "regression": "reports/regress-stage119-summary.txt",
+ "physical_verified": false
+}

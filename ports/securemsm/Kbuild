@@ -4,7 +4,9 @@
 LINUXINCLUDE += -I$(src)/ -I$(src)/linux/ -I$(src)/include/linux/ -I$(src)/include/uapi/ \
 		-I$(src)/include/uapi/linux/ -I$(src)/../qcom-tee/include \
 		-I$(src)/../qcom-dma-heaps/include -I$(src)/../secure-buffer/include \
-		-I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include
+		-I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include \
+		-I$(src)/../qcom-socinfo/include -I$(src)/../qcom-iommu-util/include \
+		-I$(src)/include -I$(src)/../qcom-sps/include
 # vendor code is built without W=1 by kleaf; 7.3 promotes this to -Werror
 ccflags-y += -Wno-missing-prototypes
 LINUXINCLUDE += -include $(src)/config/sec-kernel_defconfig.h
@@ -20,3 +22,19 @@ ccflags-y += -I$(src)/smcinvoke/si_core_xts
 
 KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-tee/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers \
 	$(src)/../secure-buffer/Module.symvers
+
+# Stage119: remaining canoe securemsm modules loaded by the phone
+obj-m += tz_log_dlkm.o qce50_dlkm.o qcedev-mod_dlkm.o qcrypto-msm_dlkm.o hdcp_qseecom_dlkm.o \
+	qrng_dlkm.o smmu_proxy_dlkm.o tmecom-intf_dlkm.o
+tz_log_dlkm-objs := tz_log/tz_log.o
+qce50_dlkm-objs := crypto-qti/qce50.o
+qcedev-mod_dlkm-objs := crypto-qti/qcedev.o crypto-qti/qcedev_smmu.o crypto-qti/compat_qcedev.o
+qcrypto-msm_dlkm-objs := crypto-qti/qcrypto.o
+hdcp_qseecom_dlkm-objs := hdcp/hdcp_main.o hdcp/hdcp_smcinvoke.o hdcp/hdcp_qseecom.o
+qrng_dlkm-objs := qrng/msm_rng.o
+smmu_proxy_dlkm-objs := smmu-proxy/qti-smmu-proxy-common.o smmu-proxy/qti-smmu-proxy-pvm.o
+tmecom-intf_dlkm-objs := tmecom/tmelog.o tmecom/tmecom.o
+CFLAGS_msm_rng.o += -include $(src)/config/sec-kernel_defconfig_qrng.h
+ccflags-y += -include $(src)/config/sec-kernel_defconfig_smmu_proxy.h
+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-sps/Module.symvers $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-iommu-util/Module.symvers
+ccflags-y += -DCONFIG_MSM_QMP_MODULE=1

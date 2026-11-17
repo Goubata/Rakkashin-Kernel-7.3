@@ -1,0 +1,88 @@
+{
+  "source_commit": "d6bf7932e213eafb61272802c57ededf19ec55e1",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-mmrm-driver",
+  "files": [
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr.c",
+      "source": "driver/src/mmrm_clk_rsrc_mgr.c",
+      "original_sha256": "48e6832fab3643a6a29700a2af8147bae795e5c0d8762b22fb236b1020b8075a",
+      "sha256": "48e6832fab3643a6a29700a2af8147bae795e5c0d8762b22fb236b1020b8075a"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr.h",
+      "source": "driver/src/mmrm_clk_rsrc_mgr.h",
+      "original_sha256": "c6676a371922b6c486b556e0e6b8d722edc26e8b91686f224418c6c89339e5a6",
+      "sha256": "c6676a371922b6c486b556e0e6b8d722edc26e8b91686f224418c6c89339e5a6"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr_cxipeak.c",
+      "source": "driver/src/mmrm_clk_rsrc_mgr_cxipeak.c",
+      "original_sha256": "4f95c60a2c37402cc374d483346141eaddd3f776bd28dd6a95c8f21e545660ce",
+      "sha256": "4f95c60a2c37402cc374d483346141eaddd3f776bd28dd6a95c8f21e545660ce"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr_sw.c",
+      "source": "driver/src/mmrm_clk_rsrc_mgr_sw.c",
+      "original_sha256": "fab00d5d7bbecb542fa1dcc1bc4f43d352d9f31ca3ff4e4d61032ab180788a01",
+      "sha256": "fab00d5d7bbecb542fa1dcc1bc4f43d352d9f31ca3ff4e4d61032ab180788a01"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_debug.c",
+      "source": "driver/src/mmrm_debug.c",
+      "original_sha256": "f004343296f5db54203ab7cdccba07576b6c817002fcab0f00894cd36d791544",
+      "sha256": "f004343296f5db54203ab7cdccba07576b6c817002fcab0f00894cd36d791544"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_debug.h",
+      "source": "driver/src/mmrm_debug.h",
+      "original_sha256": "e9dc0a63e148c259d2febb99964ce3f106979dfe7a77a30f62e46bf4f58aa32c",
+      "sha256": "e9dc0a63e148c259d2febb99964ce3f106979dfe7a77a30f62e46bf4f58aa32c"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_fixedpoint.h",
+      "source": "driver/src/mmrm_fixedpoint.h",
+      "original_sha256": "caa7b7ede319aa13b7dbe2bcfbc90f6d71b8da13058a86a4d421bb43f1fcb711",
+      "sha256": "caa7b7ede319aa13b7dbe2bcfbc90f6d71b8da13058a86a4d421bb43f1fcb711"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_internal.c",
+      "source": "driver/src/mmrm_internal.c",
+      "original_sha256": "ef1a3ce651b3bc29298d73c4375883aa4ba6df476ec1659c32fa6868bbd3a783",
+      "sha256": "ef1a3ce651b3bc29298d73c4375883aa4ba6df476ec1659c32fa6868bbd3a783"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_internal.h",
+      "source": "driver/src/mmrm_internal.h",
+      "original_sha256": "44b0b71fe8626ac916d1576670a7d12b15cc9b550fe0f4e1f14b817f8d52261f",
+      "sha256": "44b0b71fe8626ac916d1576670a7d12b15cc9b550fe0f4e1f14b817f8d52261f"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_res_parse.c",
+      "source": "driver/src/mmrm_res_parse.c",
+      "original_sha256": "b1fff984402f4d3bd60145816b20fc2c89ce4acab25647f6355a8446b0c51c92",
+      "sha256": "b1fff984402f4d3bd60145816b20fc2c89ce4acab25647f6355a8446b0c51c92"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/mmrm_resources.h",
+      "source": "driver/src/mmrm_resources.h",
+      "original_sha256": "8077bce096cb5a5755a9323f89a693ca7a33fac73fc911ff909014680fc7edf3",
+      "sha256": "8077bce096cb5a5755a9323f89a693ca7a33fac73fc911ff909014680fc7edf3"
+    },
+    {
+      "file": "ports/mm-drivers/mmrm/driver/src/msm_mmrm.c",
+      "source": "driver/src/msm_mmrm.c",
+      "original_sha256": "577f841452aac8e866f5bfa2ffd5873c7e05a154b791d9cd5524022a01a6e661",
+      "sha256": "577f841452aac8e866f5bfa2ffd5873c7e05a154b791d9cd5524022a01a6e661"
+    }
+  ],
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "msm-mmrm (tag MMI-W3WWL36.65-11-18 = build of the other vendor repos' firmware branch) on android18-7.3",
+  "reviewed_changes": [
+    "unchanged source; vendor <linux/clk/qcom.h> API (qcom_clk_get_voltage, qcom_clk_crm_set_rate) force-included from ports/qcom-clock-core; msm_mmrm.h and qcom,rpmh-regulator-levels.h copied from qcom-soc include"
+  ],
+  "pending": [
+    "clock throttling with camera/video/eva on the phone"
+  ]
+}

@@ -1,6 +1,6 @@
 --- a/ports/securemsm/Kbuild
 +++ b/ports/securemsm/Kbuild
-@@ -1,121 +1,22 @@
+@@ -1,121 +1,40 @@
 -LINUXINCLUDE += -I$(SSG_MODULE_ROOT)/ \
 -                -I$(SSG_MODULE_ROOT)/linux/ \
 -                -I$(SSG_MODULE_ROOT)/include/linux/ \
@@ -12,7 +12,9 @@
 +LINUXINCLUDE += -I$(src)/ -I$(src)/linux/ -I$(src)/include/linux/ -I$(src)/include/uapi/ \
 +		-I$(src)/include/uapi/linux/ -I$(src)/../qcom-tee/include \
 +		-I$(src)/../qcom-dma-heaps/include -I$(src)/../secure-buffer/include \
-+		-I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include
++		-I$(src)/../gunyah-rm/include -I$(src)/../gunyah/include \
++		-I$(src)/../qcom-socinfo/include -I$(src)/../qcom-iommu-util/include \
++		-I$(src)/include -I$(src)/../qcom-sps/include
 +# vendor code is built without W=1 by kleaf; 7.3 promotes this to -Werror
 +ccflags-y += -Wno-missing-prototypes
 +LINUXINCLUDE += -include $(src)/config/sec-kernel_defconfig.h
@@ -37,7 +39,9 @@
 -else
 -    LINUXINCLUDE += -include $(SSG_MODULE_ROOT)/config/sec-kernel_defconfig_qseecom_compat.h
 -endif
--
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-tee/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers \
++	$(src)/../secure-buffer/Module.symvers
+ 
 -ifeq ($(CONFIG_ARCH_QTI_VM), y)
 -    ifneq (, $(filter y, $(CONFIG_ARCH_LEMANS)))
 -        include $(SSG_MODULE_ROOT)/config/sec-kernel_defconfig_qrng.conf
@@ -63,23 +67,27 @@
 -endif
 -
 -obj-$(CONFIG_QTI_TZ_LOG) += tz_log_dlkm.o
--tz_log_dlkm-objs := tz_log/tz_log.o
++# Stage119: remaining canoe securemsm modules loaded by the phone
++obj-m += tz_log_dlkm.o qce50_dlkm.o qcedev-mod_dlkm.o qcrypto-msm_dlkm.o hdcp_qseecom_dlkm.o \
++	qrng_dlkm.o smmu_proxy_dlkm.o tmecom-intf_dlkm.o
+ tz_log_dlkm-objs := tz_log/tz_log.o
 -
 -obj-$(CONFIG_CRYPTO_DEV_QCEDEV) += qce50_dlkm.o
--qce50_dlkm-objs := crypto-qti/qce50.o
+ qce50_dlkm-objs := crypto-qti/qce50.o
 -
 -obj-$(CONFIG_CRYPTO_DEV_QCEDEV) += qcedev-mod_dlkm.o
 -qcedev-mod_dlkm-objs := crypto-qti/qcedev.o crypto-qti/qcedev_smmu.o
 -qcedev-mod_dlkm-$(CONFIG_COMPAT) += crypto-qti/compat_qcedev.o
 -
 -obj-$(CONFIG_CRYPTO_DEV_QCRYPTO) += qcrypto-msm_dlkm.o
--qcrypto-msm_dlkm-objs := crypto-qti/qcrypto.o
++qcedev-mod_dlkm-objs := crypto-qti/qcedev.o crypto-qti/qcedev_smmu.o crypto-qti/compat_qcedev.o
+ qcrypto-msm_dlkm-objs := crypto-qti/qcrypto.o
 -
 -obj-$(CONFIG_HDCP_QSEECOM) += hdcp_qseecom_dlkm.o
--hdcp_qseecom_dlkm-objs := hdcp/hdcp_main.o hdcp/hdcp_smcinvoke.o hdcp/hdcp_qseecom.o
+ hdcp_qseecom_dlkm-objs := hdcp/hdcp_main.o hdcp/hdcp_smcinvoke.o hdcp/hdcp_qseecom.o
 -
 -obj-$(CONFIG_HW_RANDOM_MSM_LEGACY) += qrng_dlkm.o
--qrng_dlkm-objs := qrng/msm_rng.o
+ qrng_dlkm-objs := qrng/msm_rng.o
 -
 -ifneq (, $(filter y, $(ARCH_QTI_VM) $(CONFIG_ARCH_PINEAPPLE) $(CONFIG_ARCH_SUN) $(CONFIG_ARCH_PARROT) $(CONFIG_ARCH_LAHAINA) $(CONFIG_ARCH_CANOE) $(CONFIG_ARCH_SERAPH)))
 -    include $(SSG_MODULE_ROOT)/config/sec-kernel_defconfig_smmu_proxy.conf
@@ -140,8 +148,12 @@
 -    obj-$(CONFIG_HIBERNATE_TZDATA_MGR) += hibernate_tzdata_mgr_dlkm.o
 -    hibernate_tzdata_mgr_dlkm-objs := hibernate_tzdata_mgr/hibernate_tzdata_mgr.o
 -endif
-+KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-tee/Module.symvers $(src)/../qcom-dma-heaps/Module.symvers \
-+	$(src)/../secure-buffer/Module.symvers
++smmu_proxy_dlkm-objs := smmu-proxy/qti-smmu-proxy-common.o smmu-proxy/qti-smmu-proxy-pvm.o
++tmecom-intf_dlkm-objs := tmecom/tmelog.o tmecom/tmecom.o
++CFLAGS_msm_rng.o += -include $(src)/config/sec-kernel_defconfig_qrng.h
++ccflags-y += -include $(src)/config/sec-kernel_defconfig_smmu_proxy.h
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-sps/Module.symvers $(src)/../qcom-socinfo/Module.symvers $(src)/../qcom-iommu-util/Module.symvers
++ccflags-y += -DCONFIG_MSM_QMP_MODULE=1
 --- a/ports/securemsm/Makefile
 +++ b/ports/securemsm/Makefile
 @@ -1,13 +1,2 @@
@@ -161,6 +173,37 @@
 \ No newline at end of file
 +# SPDX-License-Identifier: GPL-2.0-only
 +# Built through Kbuild (vendor build files kept as Kbuild.vendor/Makefile.vendor).
+--- a/ports/securemsm/crypto-qti/qce50.c
++++ b/ports/securemsm/crypto-qti/qce50.c
+@@ -2938,7 +2938,7 @@
+ 
+ static void qce_multireq_timeout(struct timer_list *data)
+ {
+-	struct qce_device *pce_dev = from_timer(pce_dev, data, timer);
++	struct qce_device *pce_dev = timer_container_of(pce_dev, data, timer);
+ 	int ret = 0;
+ 	int last_seq;
+ 	unsigned long flags;
+--- a/ports/securemsm/crypto-qti/qcrypto.c
++++ b/ports/securemsm/crypto-qti/qcrypto.c
+@@ -666,7 +666,7 @@
+ 
+ static void qcrypto_bw_reaper_timer_callback(struct timer_list *data)
+ {
+-	struct crypto_engine *pengine = from_timer(pengine, data,
++	struct crypto_engine *pengine = timer_container_of(pengine, data,
+ 		bw_reaper_timer);
+ 
+ 	schedule_work(&pengine->bw_reaper_ws);
+@@ -5533,7 +5533,7 @@
+ 	spin_lock_init(&pcp->lock);
+ 	mutex_init(&pcp->engine_lock);
+ 	pcp->resp_wq = alloc_workqueue("qcrypto_seq_response_wq",
+-			WQ_MEM_RECLAIM | WQ_HIGHPRI | WQ_CPU_INTENSIVE, 1);
++			WQ_MEM_RECLAIM | WQ_HIGHPRI | WQ_CPU_INTENSIVE | WQ_PERCPU, 1); /* AVR 7.3: explicit 6.12 per-cpu default */
+ 	if (!pcp->resp_wq) {
+ 		pr_err("Error allocating workqueue\n");
+ 		return -ENOMEM;
 --- a/ports/securemsm/smcinvoke/si_core_xts/trace_smci.h
 +++ b/ports/securemsm/smcinvoke/si_core_xts/trace_smci.h
 @@ -144,16 +144,22 @@
@@ -200,3 +243,191 @@
  #undef TRACE_INCLUDE_FILE
  #define TRACE_INCLUDE_FILE trace_smci
  
+--- a/ports/securemsm/linux/msm_ion.h
++++ b/ports/securemsm/linux/msm_ion.h
+@@ -0,0 +1,5 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* AVR 7.3: tz_log.c includes the legacy ION header but uses none of it. */
++#ifndef AVR_MSM_ION_STUB_H
++#define AVR_MSM_ION_STUB_H
++#endif
+--- a/ports/securemsm/include/linux/hdcp_qseecom.h
++++ b/ports/securemsm/include/linux/hdcp_qseecom.h
+@@ -0,0 +1,153 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2021-2023, Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef __HDCP_QSEECOM_H
++#define __HDCP_QSEECOM_H
++#include <linux/types.h>
++
++#define HDCP_QSEECOM_ENUM_STR(x)	#x
++
++enum hdcp2_app_cmd {
++	HDCP2_CMD_START,
++	HDCP2_CMD_START_AUTH,
++	HDCP2_CMD_STOP,
++	HDCP2_CMD_PROCESS_MSG,
++	HDCP2_CMD_TIMEOUT,
++	HDCP2_CMD_EN_ENCRYPTION,
++	HDCP2_CMD_QUERY_STREAM,
++};
++
++struct hdcp2_buffer {
++	unsigned char *data;
++	u32 length;
++};
++
++struct hdcp2_app_data {
++	u32 timeout;
++	bool repeater_flag;
++	struct hdcp2_buffer request;	// requests to TA, sent from sink
++	struct hdcp2_buffer response;	// responses from TA, sent to sink
++};
++
++struct hdcp1_topology {
++	uint32_t depth;
++	uint32_t device_count;
++	uint32_t max_devices_exceeded;
++	uint32_t max_cascade_exceeded;
++	uint32_t hdcp2LegacyDeviceDownstream;
++	uint32_t hdcp1DeviceDownstream;
++};
++
++static inline const char *hdcp2_app_cmd_str(enum hdcp2_app_cmd cmd)
++{
++	switch (cmd) {
++	case HDCP2_CMD_START:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_START);
++	case HDCP2_CMD_START_AUTH:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_START_AUTH);
++	case HDCP2_CMD_STOP:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_STOP);
++	case HDCP2_CMD_PROCESS_MSG:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_PROCESS_MSG);
++	case HDCP2_CMD_TIMEOUT:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_TIMEOUT);
++	case HDCP2_CMD_EN_ENCRYPTION:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_EN_ENCRYPTION);
++	case HDCP2_CMD_QUERY_STREAM:
++		return HDCP_QSEECOM_ENUM_STR(HDCP2_CMD_QUERY_STREAM);
++	default:			return "???";
++	}
++}
++
++#if IS_ENABLED(CONFIG_HDCP_QSEECOM)
++void *hdcp1_init(void);
++void hdcp1_deinit(void *data);
++bool hdcp1_feature_supported(void *data);
++int hdcp1_start(void *data, u32 *aksv_msb, u32 *aksv_lsb);
++int hdcp1_set_enc(void *data, bool enable);
++int hdcp1_ops_notify(void *data, void *topology, bool is_authenticated);
++void hdcp1_stop(void *data);
++
++void *hdcp2_init(u32 device_type);
++void hdcp2_deinit(void *ctx);
++bool hdcp2_feature_supported(void *ctx);
++int hdcp2_app_comm(void *ctx, enum hdcp2_app_cmd cmd,
++		struct hdcp2_app_data *app_data);
++int hdcp2_open_stream(void *ctx, uint8_t vc_payload_id,
++		uint8_t stream_number, uint32_t *stream_id);
++int hdcp2_close_stream(void *ctx, uint32_t stream_id);
++int hdcp2_force_encryption(void *ctx, uint32_t enable);
++#else
++static inline void *hdcp1_init(void)
++{
++	return NULL;
++}
++
++static inline void hdcp1_deinit(void *data)
++{
++}
++
++static inline bool hdcp1_feature_supported(void *data)
++{
++	return false;
++}
++
++static inline int hdcp1_start(void *data, u32 *aksv_msb, u32 *aksv_lsb)
++{
++	return 0;
++}
++
++static inline int hdcp1_ops_notify(void *data, void *topology, bool is_authenticated)
++{
++	return 0;
++}
++
++static inline int hdcp1_set_enc(void *data, bool enable)
++{
++	return 0;
++}
++
++static inline void hdcp1_stop(void *data)
++{
++}
++
++static inline void *hdcp2_init(u32 device_type)
++{
++	return NULL;
++}
++
++static inline void hdcp2_deinit(void *ctx)
++{
++}
++
++static inline bool hdcp2_feature_supported(void *ctx)
++{
++	return false;
++}
++
++static inline int hdcp2_app_comm(void *ctx, enum hdcp2_app_cmd cmd,
++		struct hdcp2_app_data *app_data)
++{
++	return 0;
++}
++
++static inline int hdcp2_open_stream(void *ctx, uint8_t vc_payload_id,
++		uint8_t stream_number, uint32_t *stream_id)
++{
++	return 0;
++}
++
++static inline int hdcp2_close_stream(void *ctx, uint32_t stream_id)
++{
++	return 0;
++}
++
++static inline int hdcp2_force_encryption(void *ctx, uint32_t enable)
++{
++	return 0;
++}
++#endif /* CONFIG_HDCP_QSEECOM */
++
++#endif /* __HDCP_QSEECOM_H */
+--- a/ports/securemsm/include/linux/mailbox/qmp.h
++++ b/ports/securemsm/include/linux/mailbox/qmp.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef _QMP_H_
++#define _QMP_H_
++
++#include <linux/types.h>
++
++/**
++ * struct qmp_pkt - Packet structure to be used for TX and RX with QMP
++ * @size	size of data
++ * @data	Buffer holding data of this packet
++ */
++struct qmp_pkt {
++	u32 size;
++	void *data;
++};
++
++#endif /* _QMP_H_ */

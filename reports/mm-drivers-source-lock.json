@@ -1,0 +1,223 @@
+{
+  "source_commit": "6ac06dd09262b3bbe28c6d8105f18a42f8650832",
+  "source_repo": "vendor-repos/vendor-qcom-opensource-mm-drivers",
+  "files": [
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core.h",
+      "source": "hfi_core/inc/hfi_core.h",
+      "original_sha256": "0a98311aed825ea39c8428622522447a1e03898805b92a6588528aacc10df291",
+      "sha256": "0a98311aed825ea39c8428622522447a1e03898805b92a6588528aacc10df291"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core_debug.h",
+      "source": "hfi_core/inc/hfi_core_debug.h",
+      "original_sha256": "c4bd774be5859c0d0f111ea900e643ef07b90779e2573ffb5aa2a648fa64c956",
+      "sha256": "c4bd774be5859c0d0f111ea900e643ef07b90779e2573ffb5aa2a648fa64c956"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core_firmware.h",
+      "source": "hfi_core/inc/hfi_core_firmware.h",
+      "original_sha256": "ae38fdef1f4f4c88639acdbc0521f88e588a84bc827b13c2632c47d17fb7796d",
+      "sha256": "ae38fdef1f4f4c88639acdbc0521f88e588a84bc827b13c2632c47d17fb7796d"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core_irq.h",
+      "source": "hfi_core/inc/hfi_core_irq.h",
+      "original_sha256": "9c654229b1b9aa779ba9f46e490ff302e6e5456fa6a23c5737ccc477b633da4f",
+      "sha256": "9c654229b1b9aa779ba9f46e490ff302e6e5456fa6a23c5737ccc477b633da4f"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core_probe.h",
+      "source": "hfi_core/inc/hfi_core_probe.h",
+      "original_sha256": "5a59598cf05a813528f3667a75ea1164a36bc233a4b37f78ae2c2e0f720b828f",
+      "sha256": "5a59598cf05a813528f3667a75ea1164a36bc233a4b37f78ae2c2e0f720b828f"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_core_ssr.h",
+      "source": "hfi_core/inc/hfi_core_ssr.h",
+      "original_sha256": "a21240b19fd9c8924581ca25286d148d0adad3d35160e7e70b642640ede30f76",
+      "sha256": "a21240b19fd9c8924581ca25286d148d0adad3d35160e7e70b642640ede30f76"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_dbg_packet.h",
+      "source": "hfi_core/inc/hfi_dbg_packet.h",
+      "original_sha256": "c162b2c247c465739545b4f9b369584e101508e08c0a5ed0fc4d2c144293cb99",
+      "sha256": "c162b2c247c465739545b4f9b369584e101508e08c0a5ed0fc4d2c144293cb99"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_if_abstraction.h",
+      "source": "hfi_core/inc/hfi_if_abstraction.h",
+      "original_sha256": "e3bbc98f327bdd707db5650be7b22fec88f9b7e4c449466e7698053c99d2b324",
+      "sha256": "e3bbc98f327bdd707db5650be7b22fec88f9b7e4c449466e7698053c99d2b324"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_interface.h",
+      "source": "hfi_core/inc/hfi_interface.h",
+      "original_sha256": "2b2f82dbb74ff00ae459c6aa0cb347dc24ba0b824049803000e6e3d019321d7e",
+      "sha256": "2b2f82dbb74ff00ae459c6aa0cb347dc24ba0b824049803000e6e3d019321d7e"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_ipc.h",
+      "source": "hfi_core/inc/hfi_ipc.h",
+      "original_sha256": "daac2417665080725e3ca9c3e1282b2fa81f0de3667cab656f542d67d469cadd",
+      "sha256": "daac2417665080725e3ca9c3e1282b2fa81f0de3667cab656f542d67d469cadd"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_queue.h",
+      "source": "hfi_core/inc/hfi_queue.h",
+      "original_sha256": "7fb8264a8b279720190b1d239f1db7cf2478db0b5c994dd8673d09bb0e08f9b9",
+      "sha256": "7fb8264a8b279720190b1d239f1db7cf2478db0b5c994dd8673d09bb0e08f9b9"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_queue_controller.h",
+      "source": "hfi_core/inc/hfi_queue_controller.h",
+      "original_sha256": "924d777b5db84f62f72fb92764feaec345389ab93bf201aca149143701a1e505",
+      "sha256": "924d777b5db84f62f72fb92764feaec345389ab93bf201aca149143701a1e505"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_smmu.h",
+      "source": "hfi_core/inc/hfi_smmu.h",
+      "original_sha256": "ca959d9b52876b6319a33f0d2e73fea283e130ab459e001680db6f5604711448",
+      "sha256": "ca959d9b52876b6319a33f0d2e73fea283e130ab459e001680db6f5604711448"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/inc/hfi_swi.h",
+      "source": "hfi_core/inc/hfi_swi.h",
+      "original_sha256": "39445112ad929ae46c56b978551fab4ef1f21eb97f4440918fd865eef782eed9",
+      "sha256": "39445112ad929ae46c56b978551fab4ef1f21eb97f4440918fd865eef782eed9"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core.c",
+      "source": "hfi_core/src/hfi_base/hfi_core.c",
+      "original_sha256": "635229b87f90906c28fe02bb9f4bf7b299882f3bfcfdd37182093b29d88ea6fa",
+      "sha256": "635229b87f90906c28fe02bb9f4bf7b299882f3bfcfdd37182093b29d88ea6fa"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_firmware.c",
+      "source": "hfi_core/src/hfi_base/hfi_core_firmware.c",
+      "original_sha256": "9a910f8173bbd0b52e1e5e6ba965a86736923e5d7ff01aa44efac1b989987d39",
+      "sha256": "9a910f8173bbd0b52e1e5e6ba965a86736923e5d7ff01aa44efac1b989987d39"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_irq.c",
+      "source": "hfi_core/src/hfi_base/hfi_core_irq.c",
+      "original_sha256": "b73bd286d042f0b95c92f11b8f00dfc981c9059cd0003c4693bf11256f767b6b",
+      "sha256": "b73bd286d042f0b95c92f11b8f00dfc981c9059cd0003c4693bf11256f767b6b"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_ssr.c",
+      "source": "hfi_core/src/hfi_base/hfi_core_ssr.c",
+      "original_sha256": "6f0a8a65b9172a594e3dc44cfd8ab679a4a2afb6090b850cf70524c39e6ba637",
+      "sha256": "6f0a8a65b9172a594e3dc44cfd8ab679a4a2afb6090b850cf70524c39e6ba637"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_core_debug.c",
+      "source": "hfi_core/src/hfi_core_debug.c",
+      "original_sha256": "978ef82c4fe2565fb7e0a6844955b5a4e5b0f79e88081ff740e6a5d368248453",
+      "sha256": "978ef82c4fe2565fb7e0a6844955b5a4e5b0f79e88081ff740e6a5d368248453"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_core_probe.c",
+      "source": "hfi_core/src/hfi_core_probe.c",
+      "original_sha256": "0869513a914316511857594900bf3aa34b669621a4c1398edf76a71e0233ee53",
+      "sha256": "0869513a914316511857594900bf3aa34b669621a4c1398edf76a71e0233ee53"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_dbg_packet.c",
+      "source": "hfi_core/src/hfi_dbg_packet.c",
+      "original_sha256": "edc0095baa3fa81227ec1c1d328c6d88356a999886e50c76454ca3ff874afd58",
+      "sha256": "edc0095baa3fa81227ec1c1d328c6d88356a999886e50c76454ca3ff874afd58"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_if_abstraction.c",
+      "source": "hfi_core/src/hfi_transport/hfi_if_abstraction.c",
+      "original_sha256": "399e55ee2ed11439f91e5e8d05db209823205cd126b27432ebe999306851253a",
+      "sha256": "399e55ee2ed11439f91e5e8d05db209823205cd126b27432ebe999306851253a"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_ipc.c",
+      "source": "hfi_core/src/hfi_transport/hfi_ipc.c",
+      "original_sha256": "7a0115bfa61b884e32dbbc343c20a72b2c7fe6e7ca15319bf9c56ed47c83c350",
+      "sha256": "7a0115bfa61b884e32dbbc343c20a72b2c7fe6e7ca15319bf9c56ed47c83c350"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_queue.c",
+      "source": "hfi_core/src/hfi_transport/hfi_queue.c",
+      "original_sha256": "1e41b48ee39d0ab9f56b127f5b173537d96cedb461c7df532056e984db4ea09e",
+      "sha256": "1e41b48ee39d0ab9f56b127f5b173537d96cedb461c7df532056e984db4ea09e"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_queue_controller.c",
+      "source": "hfi_core/src/hfi_transport/hfi_queue_controller.c",
+      "original_sha256": "625f6e519b2ddc6c9e5ad70ff7703f9b816f9639733364dbb75279039ae7d988",
+      "sha256": "625f6e519b2ddc6c9e5ad70ff7703f9b816f9639733364dbb75279039ae7d988"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_smmu.c",
+      "source": "hfi_core/src/hfi_transport/hfi_smmu.c",
+      "original_sha256": "20649e8b539fdaae3c49d9afe9123d4113ccaae96b6dfc2eef7c2ffc349c8e75",
+      "sha256": "20649e8b539fdaae3c49d9afe9123d4113ccaae96b6dfc2eef7c2ffc349c8e75"
+    },
+    {
+      "file": "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_swi.c",
+      "source": "hfi_core/src/hfi_transport/hfi_swi.c",
+      "original_sha256": "3fd4532b4d54f62257aa27a548117593a637ec1bfa4006d06933e094cfb0d737",
+      "sha256": "3fd4532b4d54f62257aa27a548117593a637ec1bfa4006d06933e094cfb0d737"
+    },
+    {
+      "file": "ports/mm-drivers/msm_ext_display/include/msm_ext_display.h",
+      "source": "msm_ext_display/include/msm_ext_display.h",
+      "original_sha256": "70f0ea49b062e8ae11cae8868f78ee981c0f258f5627647239c7af8748804c65",
+      "sha256": "70f0ea49b062e8ae11cae8868f78ee981c0f258f5627647239c7af8748804c65"
+    },
+    {
+      "file": "ports/mm-drivers/msm_ext_display/src/msm_ext_display.c",
+      "source": "msm_ext_display/src/msm_ext_display.c",
+      "original_sha256": "cc2a7d4006c180b5c7c239c9089fb5161412b5525ce128a7cc009d95c07edb91",
+      "sha256": "cc2a7d4006c180b5c7c239c9089fb5161412b5525ce128a7cc009d95c07edb91"
+    },
+    {
+      "file": "ports/mm-drivers/sync_fence/include/qcom_sync_file.h",
+      "source": "sync_fence/include/qcom_sync_file.h",
+      "original_sha256": "53f462425e2a69873ce4cb27b0d3862134f199d2478b968a84e0ac3df55bfd8f",
+      "sha256": "53f462425e2a69873ce4cb27b0d3862134f199d2478b968a84e0ac3df55bfd8f"
+    },
+    {
+      "file": "ports/mm-drivers/sync_fence/include/uapi/sync_fence/qcom_sync_file.h",
+      "source": "sync_fence/include/uapi/sync_fence/qcom_sync_file.h",
+      "original_sha256": "87e4bc627a35b0986a049eb86c624a3ef79dee8de97300fa19d49db0f2b2c2b1",
+      "sha256": "87e4bc627a35b0986a049eb86c624a3ef79dee8de97300fa19d49db0f2b2c2b1"
+    },
+    {
+      "file": "ports/mm-drivers/sync_fence/src/qcom_sync_file.c",
+      "source": "sync_fence/src/qcom_sync_file.c",
+      "original_sha256": "cc8cbaf6b7c8b666a4fa780a8c9f18731fbe72ff1fef8d6b12fbaabc74d2d34d",
+      "sha256": "69059e2fc185e7798541d0e9e7f4f78b18fc7c9d5991975de4ea55caf4506ee4"
+    },
+    {
+      "file": "ports/mm-drivers/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "cd933a010f4a8a00a04b46545ca7ebd43a8b0e970e49fecd4314cc002524f943"
+    },
+    {
+      "file": "ports/mm-drivers/avr-mm-compat.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "c99be525be83d0b4bddc2938591b59dc79c176b7e4599471b10a1febc193bfd4"
+    }
+  ],
+  "patch_sha256": "82579127fc150bbd7943fa0448a355d71b6f802c27002ab3f1de00f69bef7243",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "msm_ext_display, sync_fence (spec fences), msm_hfi_core (canoe defconfigs) on android18-7.3; msm-mmrm in source-spec-mmrm.json",
+  "reviewed_changes": [
+    "sync_fence: 7.3 dma_fence_array_create() lost signal_on_any; the 6.12 init only set num_pending=1 for 'any', which 7.3 callbacks still honour - set after create, before signaling is enabled (QEMU: ANY/ALL/default verified; negative control without it fails ANY)",
+    "sync_fence: fence->lock -> dma_fence_spinlock(); bind takes it irqsave (dma_fence_array signals from hardirq irq_work; the vendor plain spin_lock is a lockdep-reported deadlock, also latent on 6.12); dma_fence_enable_sw_signaling -> dma_fence_enable_signaling",
+    "msm_hfi_core: all canoe srcs incl. firmware/irq/ssr (define_hfi_core.bzl); rproc_set_state inline stub as the vendor header gives canoe (no QCOM_Q6V5_PAS_SOCCP_V1; phone module imports nothing from qcom_q6v5_pas)",
+    "function symbol sets match the phone modules (nm vs /proc/kallsyms) apart from inlining"
+  ],
+  "pending": [
+    "display bring-up with msm_drm on the phone"
+  ]
+}

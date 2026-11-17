@@ -24,7 +24,7 @@
       "file": "ports/securemsm/Kbuild",
       "source": "Kbuild",
       "original_sha256": "9ed5ae090a7ed6031c6946d2171f7a4083835aa82d630d7ac2cb6c594bdd2930",
-      "sha256": "ab53af031690aae256a0bb7f4c0b3160aef2d7657a8788b8e756d3e5fd48fb19"
+      "sha256": "78ebefc42758494609a66a136fba1c37525ea9ce42409240e56b4b3edf414375"
     },
     {
       "file": "ports/securemsm/Kbuild.vendor",
@@ -306,7 +306,7 @@
       "file": "ports/securemsm/crypto-qti/qce50.c",
       "source": "crypto-qti/qce50.c",
       "original_sha256": "d393a7b688553c6f5b0917debbe7000683c6c519a338162874a5c3d31311a4a3",
-      "sha256": "d393a7b688553c6f5b0917debbe7000683c6c519a338162874a5c3d31311a4a3"
+      "sha256": "05b4c11da6181d4e5c9f095d74b6b83974a4cf10ab9f0c6ef416322c9060f81d"
     },
     {
       "file": "ports/securemsm/crypto-qti/qce50.h",
@@ -354,7 +354,7 @@
       "file": "ports/securemsm/crypto-qti/qcrypto.c",
       "source": "crypto-qti/qcrypto.c",
       "original_sha256": "5261cee1d48e25059e81154180098328bde48deac75ecf008dd76bc4cfffdf7f",
-      "sha256": "5261cee1d48e25059e81154180098328bde48deac75ecf008dd76bc4cfffdf7f"
+      "sha256": "2f56b9688f3324da59a8f7e963b7cf47d514e171519602b3350dfead691d96f8"
     },
     {
       "file": "ports/securemsm/crypto-qti/qcrypto.h",
@@ -877,19 +877,40 @@
       "source": "tz_log/tz_log.c",
       "original_sha256": "1c655f3045b01177ab896ea86b3b6687dd23597e5c1d3b2776c2196e83b2ea24",
       "sha256": "1c655f3045b01177ab896ea86b3b6687dd23597e5c1d3b2776c2196e83b2ea24"
+    },
+    {
+      "file": "ports/securemsm/linux/msm_ion.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "1d015a4ac7578957ba5d668c41dc391f97d77f6cf12ff735675af7f9b0c11f6f"
+    },
+    {
+      "file": "ports/securemsm/include/linux/hdcp_qseecom.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "71d398d753261926142906216d1bff38469e81f6de4f22f36e3d3368cf27b3b3"
+    },
+    {
+      "file": "ports/securemsm/include/linux/mailbox/qmp.h",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e5930d839e715770a48aea7966f4cf4b2682b17b4d13852a72c57ff8503410cc"
     }
   ],
-  "patch_sha256": "bbcade0dd22f6376ad86cd7cf6d268ae58f788c8c95eb9d78a4eb8b1a43799a4",
+  "patch_sha256": "49009f8e3c88d21b20258ce22be1dcf5819517b53e17b2a506d67ee3560b4b78",
   "physical_verified": false,
   "combined_bundle_promoted": false,
-  "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3; Stage109 builds smcinvoke_dlkm (si_core_xts variant, CONFIG_QCOM_SI_CORE)",
+  "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3: smcinvoke_dlkm (Stage109), tz_log, qce50, qcedev-mod, qcrypto-msm, hdcp_qseecom, qrng, smmu_proxy (pvm), tmecom-intf (Stage119)",
   "reviewed_changes": [
     "Kbuild rewritten for out-of-tree build of the canoe smcinvoke_dlkm objects (vendor Kbuild/Makefile kept as *.vendor); canoe extra_options as -D",
     "trace_smci.h: TRACE_INCLUDE_PATH '.'; wait_for_pending_txn copies context_id/u_handle/op instead of printing through the cb_txn pointer (7.3 double-dereference check; possible use-after-free in trace output)",
-    "-Wno-missing-prototypes (vendor code is built without W=1)"
+    "-Wno-missing-prototypes (vendor code is built without W=1)",
+    "Stage119: Kbuild gains the canoe modules (vendor Kbuild.vendor objects; compat_qcedev per securemsm_modules.bzl); include paths for socinfo, iommu-util, sps; CONFIG_MSM_QMP (msm_qmp.ko is ported)",
+    "from_timer -> timer_container_of (qce50, qcrypto); qcrypto resp_wq gets explicit WQ_PERCPU (7.3 warns on implicit per-cpu)",
+    "linux/msm_ion.h: empty stub (tz_log includes it, uses nothing); include/linux/hdcp_qseecom.h and include/linux/mailbox/qmp.h copied unchanged from qcom-soc include",
+    "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)"
   ],
   "pending": [
-    "tz_log, qrng, qce50, qcedev, hdcp_qseecom, smmu_proxy, tmecom-intf modules (loaded on the phone) not built yet",
-    "real QTEE ABI only verifiable on the phone"
+    "real QTEE/TZ diag, crypto engine, PRNG, HDCP, TME only verifiable on the phone"
   ]
 }

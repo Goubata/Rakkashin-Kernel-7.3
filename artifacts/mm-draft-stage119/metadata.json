@@ -1,0 +1,27 @@
+{
+  "scope": "Unaccepted draft; QEMU load + spec_sync userspace (ANY/ALL)",
+  "core_image": "changed",
+  "image_sha256": "ba3cc6fc95542fe52958c019e2f30a3e2fe314dce28601f10e66cb7e10a832b1",
+  "modules": [
+    "msm-mmrm.ko",
+    "msm_ext_display.ko",
+    "msm_hfi_core.ko",
+    "sync_fence.ko",
+    "sps_drv.ko",
+    "hdcp_qseecom_dlkm.ko",
+    "qce50_dlkm.ko",
+    "qcedev-mod_dlkm.ko",
+    "qcrypto-msm_dlkm.ko",
+    "qrng_dlkm.ko",
+    "smcinvoke_dlkm.ko",
+    "smmu_proxy_dlkm.ko",
+    "tmecom-intf_dlkm.ko",
+    "tz_log_dlkm.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

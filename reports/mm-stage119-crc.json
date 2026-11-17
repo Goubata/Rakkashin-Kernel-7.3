@@ -1,0 +1,76 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/mm-drivers/msm-mmrm.ko",
+      "imports_checked": 45,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/mm-drivers/msm_ext_display.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/mm-drivers/msm_hfi_core.ko",
+      "imports_checked": 128,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/mm-drivers/sync_fence.ko",
+      "imports_checked": 68,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-sps/sps_drv.ko",
+      "imports_checked": 82,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/hdcp_qseecom_dlkm.ko",
+      "imports_checked": 22,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/qce50_dlkm.ko",
+      "imports_checked": 67,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/qcedev-mod_dlkm.ko",
+      "imports_checked": 94,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/qcrypto-msm_dlkm.ko",
+      "imports_checked": 92,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/qrng_dlkm.ko",
+      "imports_checked": 48,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/smcinvoke_dlkm.ko",
+      "imports_checked": 88,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/smmu_proxy_dlkm.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/tmecom-intf_dlkm.ko",
+      "imports_checked": 27,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/securemsm/tz_log_dlkm.ko",
+      "imports_checked": 53,
+      "mismatches": {}
+    }
+  ]
+}

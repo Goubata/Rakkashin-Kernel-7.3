@@ -1,0 +1,26 @@
+{
+ "name": "mm-drivers-mmrm",
+ "repo": "vendor-repos/vendor-qcom-opensource-mmrm-driver",
+ "commit": "d6bf7932e213eafb61272802c57ededf19ec55e1",
+ "files": {
+  "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr.c": "driver/src/mmrm_clk_rsrc_mgr.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr.h": "driver/src/mmrm_clk_rsrc_mgr.h",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr_cxipeak.c": "driver/src/mmrm_clk_rsrc_mgr_cxipeak.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_clk_rsrc_mgr_sw.c": "driver/src/mmrm_clk_rsrc_mgr_sw.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_debug.c": "driver/src/mmrm_debug.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_debug.h": "driver/src/mmrm_debug.h",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_fixedpoint.h": "driver/src/mmrm_fixedpoint.h",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_internal.c": "driver/src/mmrm_internal.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_internal.h": "driver/src/mmrm_internal.h",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_res_parse.c": "driver/src/mmrm_res_parse.c",
+  "ports/mm-drivers/mmrm/driver/src/mmrm_resources.h": "driver/src/mmrm_resources.h",
+  "ports/mm-drivers/mmrm/driver/src/msm_mmrm.c": "driver/src/msm_mmrm.c"
+ },
+ "scope": "msm-mmrm (tag MMI-W3WWL36.65-11-18 = build of the other vendor repos' firmware branch) on android18-7.3",
+ "reviewed_changes": [
+  "unchanged source; vendor <linux/clk/qcom.h> API (qcom_clk_get_voltage, qcom_clk_crm_set_rate) force-included from ports/qcom-clock-core; msm_mmrm.h and qcom,rpmh-regulator-levels.h copied from qcom-soc include"
+ ],
+ "pending": [
+  "clock throttling with camera/video/eva on the phone"
+ ]
+}

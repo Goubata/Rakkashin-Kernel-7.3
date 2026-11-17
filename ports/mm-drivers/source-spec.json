@@ -1,0 +1,51 @@
+{
+ "name": "mm-drivers",
+ "repo": "vendor-repos/vendor-qcom-opensource-mm-drivers",
+ "commit": "6ac06dd09262b3bbe28c6d8105f18a42f8650832",
+ "files": {
+  "ports/mm-drivers/hfi_core/inc/hfi_core.h": "hfi_core/inc/hfi_core.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_core_debug.h": "hfi_core/inc/hfi_core_debug.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_core_firmware.h": "hfi_core/inc/hfi_core_firmware.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_core_irq.h": "hfi_core/inc/hfi_core_irq.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_core_probe.h": "hfi_core/inc/hfi_core_probe.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_core_ssr.h": "hfi_core/inc/hfi_core_ssr.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_dbg_packet.h": "hfi_core/inc/hfi_dbg_packet.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_if_abstraction.h": "hfi_core/inc/hfi_if_abstraction.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_interface.h": "hfi_core/inc/hfi_interface.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_ipc.h": "hfi_core/inc/hfi_ipc.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_queue.h": "hfi_core/inc/hfi_queue.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_queue_controller.h": "hfi_core/inc/hfi_queue_controller.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_smmu.h": "hfi_core/inc/hfi_smmu.h",
+  "ports/mm-drivers/hfi_core/inc/hfi_swi.h": "hfi_core/inc/hfi_swi.h",
+  "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core.c": "hfi_core/src/hfi_base/hfi_core.c",
+  "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_firmware.c": "hfi_core/src/hfi_base/hfi_core_firmware.c",
+  "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_irq.c": "hfi_core/src/hfi_base/hfi_core_irq.c",
+  "ports/mm-drivers/hfi_core/src/hfi_base/hfi_core_ssr.c": "hfi_core/src/hfi_base/hfi_core_ssr.c",
+  "ports/mm-drivers/hfi_core/src/hfi_core_debug.c": "hfi_core/src/hfi_core_debug.c",
+  "ports/mm-drivers/hfi_core/src/hfi_core_probe.c": "hfi_core/src/hfi_core_probe.c",
+  "ports/mm-drivers/hfi_core/src/hfi_dbg_packet.c": "hfi_core/src/hfi_dbg_packet.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_if_abstraction.c": "hfi_core/src/hfi_transport/hfi_if_abstraction.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_ipc.c": "hfi_core/src/hfi_transport/hfi_ipc.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_queue.c": "hfi_core/src/hfi_transport/hfi_queue.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_queue_controller.c": "hfi_core/src/hfi_transport/hfi_queue_controller.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_smmu.c": "hfi_core/src/hfi_transport/hfi_smmu.c",
+  "ports/mm-drivers/hfi_core/src/hfi_transport/hfi_swi.c": "hfi_core/src/hfi_transport/hfi_swi.c",
+  "ports/mm-drivers/msm_ext_display/include/msm_ext_display.h": "msm_ext_display/include/msm_ext_display.h",
+  "ports/mm-drivers/msm_ext_display/src/msm_ext_display.c": "msm_ext_display/src/msm_ext_display.c",
+  "ports/mm-drivers/sync_fence/include/qcom_sync_file.h": "sync_fence/include/qcom_sync_file.h",
+  "ports/mm-drivers/sync_fence/include/uapi/sync_fence/qcom_sync_file.h": "sync_fence/include/uapi/sync_fence/qcom_sync_file.h",
+  "ports/mm-drivers/sync_fence/src/qcom_sync_file.c": "sync_fence/src/qcom_sync_file.c",
+  "ports/mm-drivers/Makefile": null,
+  "ports/mm-drivers/avr-mm-compat.h": null
+ },
+ "scope": "msm_ext_display, sync_fence (spec fences), msm_hfi_core (canoe defconfigs) on android18-7.3; msm-mmrm in source-spec-mmrm.json",
+ "reviewed_changes": [
+  "sync_fence: 7.3 dma_fence_array_create() lost signal_on_any; the 6.12 init only set num_pending=1 for 'any', which 7.3 callbacks still honour - set after create, before signaling is enabled (QEMU: ANY/ALL/default verified; negative control without it fails ANY)",
+  "sync_fence: fence->lock -> dma_fence_spinlock(); bind takes it irqsave (dma_fence_array signals from hardirq irq_work; the vendor plain spin_lock is a lockdep-reported deadlock, also latent on 6.12); dma_fence_enable_sw_signaling -> dma_fence_enable_signaling",
+  "msm_hfi_core: all canoe srcs incl. firmware/irq/ssr (define_hfi_core.bzl); rproc_set_state inline stub as the vendor header gives canoe (no QCOM_Q6V5_PAS_SOCCP_V1; phone module imports nothing from qcom_q6v5_pas)",
+  "function symbol sets match the phone modules (nm vs /proc/kallsyms) apart from inlining"
+ ],
+ "pending": [
+  "display bring-up with msm_drm on the phone"
+ ]
+}

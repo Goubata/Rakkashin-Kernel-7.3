@@ -148,16 +148,22 @@
   "ports/securemsm/tmecom/tmecom.c": "tmecom/tmecom.c",
   "ports/securemsm/tmecom/tmecom.h": "tmecom/tmecom.h",
   "ports/securemsm/tmecom/tmelog.c": "tmecom/tmelog.c",
-  "ports/securemsm/tz_log/tz_log.c": "tz_log/tz_log.c"
+  "ports/securemsm/tz_log/tz_log.c": "tz_log/tz_log.c",
+  "ports/securemsm/linux/msm_ion.h": null,
+  "ports/securemsm/include/linux/hdcp_qseecom.h": null,
+  "ports/securemsm/include/linux/mailbox/qmp.h": null
  },
- "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3; Stage109 builds smcinvoke_dlkm (si_core_xts variant, CONFIG_QCOM_SI_CORE)",
+ "scope": "vendor/qcom/opensource/securemsm-kernel (canoe module set) on android18-7.3: smcinvoke_dlkm (Stage109), tz_log, qce50, qcedev-mod, qcrypto-msm, hdcp_qseecom, qrng, smmu_proxy (pvm), tmecom-intf (Stage119)",
  "reviewed_changes": [
   "Kbuild rewritten for out-of-tree build of the canoe smcinvoke_dlkm objects (vendor Kbuild/Makefile kept as *.vendor); canoe extra_options as -D",
   "trace_smci.h: TRACE_INCLUDE_PATH '.'; wait_for_pending_txn copies context_id/u_handle/op instead of printing through the cb_txn pointer (7.3 double-dereference check; possible use-after-free in trace output)",
-  "-Wno-missing-prototypes (vendor code is built without W=1)"
+  "-Wno-missing-prototypes (vendor code is built without W=1)",
+  "Stage119: Kbuild gains the canoe modules (vendor Kbuild.vendor objects; compat_qcedev per securemsm_modules.bzl); include paths for socinfo, iommu-util, sps; CONFIG_MSM_QMP (msm_qmp.ko is ported)",
+  "from_timer -> timer_container_of (qce50, qcrypto); qcrypto resp_wq gets explicit WQ_PERCPU (7.3 warns on implicit per-cpu)",
+  "linux/msm_ion.h: empty stub (tz_log includes it, uses nothing); include/linux/hdcp_qseecom.h and include/linux/mailbox/qmp.h copied unchanged from qcom-soc include",
+  "tz_log needs the 6.12 QSEELOG SCM calls -> core patch scm-vendor-misc-7.3.patch; qrng needs crypto_register_rngs -> CONFIG_CRYPTO_DRBG=m (selects CRYPTO_RNG)"
  ],
  "pending": [
-  "tz_log, qrng, qce50, qcedev, hdcp_qseecom, smmu_proxy, tmecom-intf modules (loaded on the phone) not built yet",
-  "real QTEE ABI only verifiable on the phone"
+  "real QTEE/TZ diag, crypto engine, PRNG, HDCP, TME only verifiable on the phone"
  ]
 }

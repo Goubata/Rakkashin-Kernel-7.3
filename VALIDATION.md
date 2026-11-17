@@ -2693,3 +2693,27 @@ broke qcom-tee/reboot/debug-diag/perf-misc/pm until rebuilt). moto-sched test ra
 are now confirmed to own the lock before waiters start (rare rwsem_ux_writer_jumps_queue failure,
 seen in stage107 and once here); 6/6 after the fix; moto_sched itself unchanged.
 Regression: 31 suites + 8 extra pass; 209 CRCs.
+
+## Stage119: display dependencies (mm-drivers, mmrm), sps, remaining securemsm (Image#41)
+
+ports/mm-drivers: msm_ext_display, sync_fence, msm_hfi_core (vendor mm-drivers, canoe defconfigs/bzl)
+and msm-mmrm (mmrm-driver tag MMI-W3WWL36.65-11-18). ports/qcom-sps: sps_drv (canoe_perf CONFIG_SPS=m,
+NDP_BAM=y). ports/securemsm adds tz_log, qce50, qcedev-mod, qcrypto-msm, hdcp_qseecom, qrng,
+smmu_proxy (pvm), tmecom-intf.
+7.3 adaptations: dma_fence_array_create() lost signal_on_any -> sync_fence sets num_pending=1 after
+create (identical to the 6.12 init; 7.3 callbacks honour num_pending<=0); fence->lock ->
+dma_fence_spinlock(); bind lock taken irqsave (lockdep: dma_fence_array signals from hardirq
+irq_work; vendor plain spin_lock is a latent deadlock on 6.12 too); dma_fence_enable_sw_signaling ->
+dma_fence_enable_signaling; from_timer -> timer_container_of; qcrypto workqueue explicit WQ_PERCPU;
+rproc_set_state inline stub (canoe has no SOCCP_V1; phone msm_hfi_core imports nothing from
+qcom_q6v5_pas). Core: scm-vendor-misc-7.3.patch restores 11 6.12 SCM calls found from the phone
+modules' undefined symbols (tz_log QSEELOG x7, get_sec_dump_state, mem_protect_region_id,
+mem_protect_sd_ctrl, smmu_notify_secure_lut); CONFIG_CRYPTO_DRBG=m selects CRYPTO_RNG for qrng
+(7.3 GKI selects none). Function symbol sets of msm_hfi_core/sync_fence/msm_ext_display match the
+phone modules apart from inlining.
+QEMU mm-drivers (3/3): 14 modules load, stdrng registered, /dev/spec_sync userspace test:
+GET_VER, num_fences range, ANY signals after the first of two sw_sync fences, ALL only after both,
+flags=0 behaves as ANY, double bind refused, invalid fd bind error-signals. Negative control
+(num_pending fix disabled): ANY/default fail (reports/mm-stage119-negative-control.log).
+scripts/rebuild_all_ports.sh rebuilds every port/test incl. nested fake-scm. Regression: 32 suites +
+11 extra pass; 222 CRCs. Not verified: TZ log, crypto engine, PRNG, HDCP, TME on the phone.

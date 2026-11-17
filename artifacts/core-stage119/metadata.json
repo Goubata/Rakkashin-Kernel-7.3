@@ -1,0 +1,9 @@
+{
+  "scope": "Image#41: scm-vendor-misc core patch (qcom-scm.ko) + CONFIG_CRYPTO_DRBG=m (rng/drbg/jitterentropy modules); QEMU only",
+  "core_image": "7.3.0-4k #41",
+  "image_sha256": "ba3cc6fc95542fe52958c019e2f30a3e2fe314dce28601f10e66cb7e10a832b1",
+  "source_commit": "7eba801e44bb10c25193b9b6d9670e9617b8f5b7",
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false
+}

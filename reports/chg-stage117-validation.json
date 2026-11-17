@@ -1,0 +1,21 @@
+{
+ "stage": 117,
+ "scope": "charging clients + vendor GLINK signals",
+ "qemu_runs": [
+  "reports/chg-stage117-r2.log",
+  "reports/chg-stage117-r3.log",
+  "reports/glink-stage117-r2.log",
+  "reports/glink-stage117-r3.log"
+ ],
+ "results": {
+  "load": "14/14",
+  "glink_signals": "KUnit 12/12"
+ },
+ "regression": "reports/regress-stage117-summary.txt",
+ "crc": "reports/chg-stage117-crc.json",
+ "not_verified": [
+  "ADSP charging firmware path"
+ ],
+ "physical_verified": false,
+ "promoted": false
+}

@@ -1,0 +1,62 @@
+--- a/ports/moto-charging/mmi_glink_charger/device_glink/usb_glink.c
++++ b/ports/moto-charging/mmi_glink_charger/device_glink/usb_glink.c
+@@ -601,7 +601,7 @@
+ 
+ 			chip->num_snk_thermal_levels = len;
+ 			chip->snk_cdev = thermal_of_cooling_device_register(
+-					chip->mmi_chip->dev->of_node,
++					chip->mmi_chip->dev->of_node, 0,	/* AVR 7.3: cdev_id */
+ 					"usb_snk_therm_cooler",
+ 					chip, &usb_snk_therm_ops);
+ 			if (IS_ERR_OR_NULL(chip->snk_cdev)) {
+@@ -649,7 +649,7 @@
+ 		} else {
+ 			chip->num_src_thermal_levels = len;
+ 			chip->src_cdev = thermal_of_cooling_device_register(
+-					chip->mmi_chip->dev->of_node,
++					chip->mmi_chip->dev->of_node, 0,	/* AVR 7.3: cdev_id */
+ 					"usb_src_therm_cooler",
+ 					chip, &usb_src_therm_ops);
+ 			if (IS_ERR_OR_NULL(chip->src_cdev)) {
+--- a/ports/moto-charging/mmi_glink_charger/mmi_glink_core.c
++++ b/ports/moto-charging/mmi_glink_charger/mmi_glink_core.c
+@@ -1121,8 +1121,9 @@
+ 			      msecs_to_jiffies(hb_resch_time));
+ 	if (suspend_wakeups ||
+ 	    chip->max_charger_rate != MMI_POWER_SUPPLY_CHARGE_RATE_NONE)
+-		alarm_start_relative(&chip->heartbeat_alarm,
+-				     ns_to_ktime(HEARTBEAT_WAKEUP_INTRVAL_NS));
++		/* AVR 7.3: alarm_start_relative() -> alarm_start_timer(.., true) */
++		alarm_start_timer(&chip->heartbeat_alarm,
++				  ns_to_ktime(HEARTBEAT_WAKEUP_INTRVAL_NS), true);
+ 
+ 	if (chip->max_charger_rate == MMI_POWER_SUPPLY_CHARGE_RATE_NONE)
+ 		pm_relax(chip->dev);
+--- a/ports/moto-charging/Makefile
++++ b/ports/moto-charging/Makefile
+@@ -0,0 +1,25 @@
++# SPDX-License-Identifier: GPL-2.0-only
++# Motorola charging modules loaded on the AVR (motorola-kernel-modules):
++# mmi_glink_charger (+ MMI_PHONE_CASE_SUPPORT: it depends on hall_phone_case,
++# which the phone loads), qti_glink_charger_v2, qpnp_adaptive_charge,
++# bm_adsp_ulog, hall_phone_case.
++obj-m += mmi_glink_charger.o qti_glink_charger_v2.o qpnp_adaptive_charge.o bm_adsp_ulog.o \
++	hall_phone_case.o
++mmi_glink_charger-y := mmi_glink_charger/battery_host.o mmi_glink_charger/device_class.o \
++	mmi_glink_charger/mmi_glink_core.o mmi_glink_charger/trusted_shash_lib.o \
++	mmi_glink_charger/device_glink/balance_charge_glink.o mmi_glink_charger/device_glink/battery_glink.o \
++	mmi_glink_charger/device_glink/charge_pump_glink.o mmi_glink_charger/device_glink/switch_buck_glink.o \
++	mmi_glink_charger/device_glink/usb_glink.o mmi_glink_charger/device_glink/wireless_charge_glink.o
++qti_glink_charger_v2-y := qti_glink_charger_v2/qti_glink_charger_v2.o
++qpnp_adaptive_charge-y := qpnp_adaptive_charge/qpnp_adaptive_charge.o
++bm_adsp_ulog-y := bm_adsp_ulog/bm_adsp_ulog.o
++hall_phone_case-y := hall/hall_phone_case.o
++ccflags-y += -I$(src)/include -I$(src)/mmi_glink_charger -I$(src)/mmi_glink_charger/device_glink \
++	-I$(src)/../qcom-pmic-glink/include -I$(src)/../qcom-ipc-logging/include \
++	-I$(src)/../moto-info/include -I$(src)/../moto-info/mmi_info -I$(src)/../goodix-touch/include \
++	-I$(src)/../moto-touch-deps/include -I$(src)/../qcom-charging/include
++ccflags-y += -DCONFIG_MMI_PHONE_CASE_SUPPORT=1 -DCONFIG_QTI_PMIC_GLINK_MODULE=1
++ccflags-y += -Wno-missing-prototypes -ferror-limit=0
++KBUILD_EXTRA_SYMBOLS += $(src)/../qcom-pmic-glink/Module.symvers $(src)/../qcom-ipc-logging/Module.symvers \
++	$(src)/../moto-info/Module.symvers $(src)/../moto-touch-deps/Module.symvers \
++	$(src)/../qcom-reboot/Module.symvers

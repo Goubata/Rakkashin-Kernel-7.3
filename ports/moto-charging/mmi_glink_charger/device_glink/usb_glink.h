@@ -1,0 +1,123 @@
+/*
+ * Copyright (C) 2024 Motorola Mobility LLC
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+#ifndef __USB_GLINK_H__
+#define __USB_GLINK_H__
+
+enum {
+	NOTIFY_EVENT_USB_LPD_STATUS,
+	NOTIFY_EVENT_USB_CID_STATUS,
+	NOTIFY_EVENT_USB_VBUS_STATUS,
+	NOTIFY_EVENT_USB_LPD_FLAG,
+	NOTIFY_EVENT_USB_OTG_STATUS,
+};
+
+enum typec_reset_type
+{
+    TYPEC_RESET_ROLE_DEFAULT = 0,
+    TYPEC_RESET_ROLE_TRY_SNK = 1,
+    TYPEC_RESET_ROLE_TRY_SRC = 2,
+    TYPEC_RESET_ROLE_SNK_ONLY = 3,
+    TYPEC_RESET_ROLE_SRC_ONLY = 4,
+};
+
+enum {
+	LPD_MITIGATE_DRP,
+	LPD_MITIGATE_SNK,
+	LPD_MITIGATE_SRC,
+	LPD_MITIGATE_DISABLE,
+	LPD_MITIGATE_INVALID,
+};
+
+enum typec_partner_type {
+	TYPEC_PARTNER_NONE,
+	TYPEC_PARTNER_UNKNOWN,
+	TYPEC_PARTNER_SNK_USB_SDP,
+	TYPEC_PARTNER_SNK_USB_OCP,
+	TYPEC_PARTNER_SNK_USB_CDP,
+	TYPEC_PARTNER_SNK_USB_DCP,
+	TYPEC_PARTNER_SNK_USB_FLOAT,
+	TYPEC_PARTNER_SNK_TYPEC_DEFAULT,
+	TYPEC_PARTNER_SNK_TYPEC_RP_MEDIUM_1P5A,
+	TYPEC_PARTNER_SNK_TYPEC_RP_HIGH_3A,
+	TYPEC_PARTNER_SNK_DEBUG_ACCESS,
+	TYPEC_PARTNER_SNK_USB_QC_2P0,
+	TYPEC_PARTNER_SNK_USB_QC_3P0,
+	TYPEC_PARTNER_SNK_USB_QC_3P5,
+	TYPEC_PARTNER_SNK_UFCS,
+	TYPEC_PARTNER_SNK_PD,
+	TYPEC_PARTNER_SNK_PPS,
+	TYPEC_PARTNER_SRC_TYPEC_POWERCABLE,              // RD-RA
+	TYPEC_PARTNER_SRC_TYPEC_UNORIENTED_DEBUG_ACCESS, // RD/RD
+	TYPEC_PARTNER_SRC_TYPEC_AUDIO_ACCESS,            // RA/RA
+	TYPEC_PARTNER_WLS_SRC_BPP,
+	TYPEC_PARTNER_WLS_SNK_BPP,
+	TYPEC_PARTNER_WLS_SNK_EPP,
+	TYPEC_PARTNER_WLS_SNK_PDDE,
+	TYPEC_PARTNER_INVALID,
+};
+
+struct usb_info {
+	int cid_st;
+	unsigned int vbus_st;
+	bool otg_st;
+	bool cc_st;
+	int partner_type;
+	int pd_active;
+	int legacy_cable;
+	int lpd_st;
+	int lpd_rsbu1;
+	int lpd_rsbu2;
+	int lpd_cc1;
+	int lpd_cc2;
+	int lpd_dp;
+	int lpd_dm;
+	int lpd_flag;
+};
+
+struct usb_glink_dev {
+	char *name;
+	struct usb_info usb_info;
+	struct delayed_work usb_work;
+	struct glink_device *dev;
+	struct mmi_glink_chip *mmi_chip;
+	struct notifier_block	usb_nb;
+	struct notifier_block	usb_mmi_nb;
+
+	int otp_en_gpio;
+	unsigned long snk_therm_state;
+	u32 *snk_thermal_levels;
+	u32 num_snk_thermal_levels;
+	struct thermal_cooling_device *snk_cdev;
+
+	u32 user_pwrsrc;
+	unsigned long src_therm_state;
+	u32 *src_thermal_levels;
+	u32 num_src_thermal_levels;
+	struct thermal_cooling_device *src_cdev;
+
+	u32 lpd_mitigate_mode;
+	struct power_supply *usb_psy;
+	struct power_supply *batt_psy;
+	char *uenvp[2];
+
+	bool init_done;
+	bool init_lpd_done;
+
+	u32 otg_boost_limit_vph_mv;
+	u32 otg_boost_recover_vph_mv;
+};
+
+struct glink_device *usb_glink_device_register(struct mmi_glink_chip *chip, struct mmi_glink_dev_dts_info *dev_dts);
+void usb_glink_device_unregister(void);
+
+#endif

@@ -18,6 +18,8 @@ Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の
 
 ## 現在の成果
 
+Stage117では充電まわりを移植しました。Qualcomm側（電池・充電、Type-C altmode/UCSI、充電ログ、電池デバッグ、glink ADC、glink_pkt、pd_mapper）とMotorola側（mmi_glink_charger、qti_glink_charger_v2、適応充電、ADSPログ、カバー検知のhall）の計14モジュールです。7.3での変更点（電源クラスのfwnode化、冷却デバイス登録APIの変化、UCSIのsync_controlの形の変化、alarm APIの変化など）に合わせました。glink_pktはモデムのATコマンドやデータ制御、IMS、オーディオのaprに使われ、ベンダー版glinkのシグナル機能（DTR/CTS/RIなど）を必要とします。そこで、これまでの7.3ベースのglinkトランスポートに、6.12と同じ意味のシグナルAPIを追加しました。この新機能は、受信時の変換・コールバックと送信のバイト列を確かめる試験を加えて、既存11件とあわせて12件すべて合格しています。QEMUでは14モジュールすべての読み込みを3回確認し、glinkに依存する既存試験も合格しました。電池や充電の実際の動作はADSPのファームウェアが必要なため実機で確認します。209モジュールCRC・38試験合格。
+
 Stage116ではUSBの中核を移植しました。dwc3-msm（QualcommのUSBコントローラ制御）、SS QMP・eUSB2・HS・EMUの各PHY、eUSB2リピーター、EUD、USBリドライバーです（実機で使うM31 eUSB2 PHYとPMICリピーターは移植済み）。7.xではdwc3コアのレジスタアクセス方法が変わったため（エンドポイントのレジスタ基点の廃止など）、同じ物理オフセットになるよう書き換えました。dwc3-msmはdwc3コアの14個の関数にkprobeで割り込む作りなので、7.3でもそれらの関数がすべて存在し、引数の並びとトレースイベントの形が6.12と同一であることを確認しました。そのうえで、QEMUで実際にkretprobeを登録・解除できることを3回確認しています。QEMUにはDWC3のハードが無いため、adbなど実際のUSB通信は実機で確認します。195モジュールのCRCも合格。
 
 Stage115では省電力まわりを移植しました。qcom_lpm（実機が使っているCPUアイドル管理のガバナー`qcom-cpu-lpm`）、lpm_monitor、qcom_stats、sys_pm_vx、スリープ統計、smp2p_sleepstate、msm_show_resume_irq（復帰要因の割り込み表示）、boot_stats、msm_show_epoch、sysmon_subsystem_statsです。7.3では、6.12にあったGICの退避・復元の仕組み（deepサスペンドやハイバネーションで割り込み設定を保持する）が消えていたため、7.3本体に戻しました。実機の既定はs2idleですが、deepも選べます。QEMUでは、qcom-cpu-lpmが自動でガバナーに選ばれ、全モジュールを読み込んだ状態でs2idleサスペンドからRTCアラームで正常に復帰することを3回確認しました。PSCIのアイドル状態の実行（QEMUでは起動が止まる）とdeepサスペンド（QEMUに無い）は実機で確認します。Image#39で既存28試験群と追加8試験、185モジュールCRCが合格。証拠は `reports/pm-stage115-validation.json`。

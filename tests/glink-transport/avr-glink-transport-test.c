@@ -4,6 +4,7 @@
  */
 #include <kunit/test.h>
 #include <linux/kthread.h>
+#include <linux/unaligned.h>
 #include "../../ports/qcom-glink-transport/qcom_glink_native.c"
 #include "../../ports/qcom-glink-transport/qcom_glink_smem.c"
 struct fixture {
@@ -249,13 +250,75 @@ static void unsupported_vendor_feature_not_negotiated(struct kunit *test)
 	KUNIT_EXPECT_EQ(test, f->core->features, (unsigned long)GLINK_FEATURE_INTENT_REUSE);
 	KUNIT_EXPECT_MEMEQ(test, (u8 *)f->tx.fifo+8, ack, sizeof(ack));
 }
+
+static unsigned int sig_cb_calls;
+static u32 sig_cb_old, sig_cb_new;
+static int record_signals(struct rpmsg_device *rpdev, void *priv, u32 old, u32 new)
+{
+	sig_cb_calls++;
+	sig_cb_old = old;
+	sig_cb_new = new;
+	return 0;
+}
+/* AVR stage117: 6.12 vendor signal API (TIOCM <-> NATIVE) used by glink_pkt. */
+static void vendor_signals_roundtrip(struct kunit *test)
+{
+	struct fixture *f = test->priv;
+	struct glink_channel *ch;
+	u8 rx_sig[8], tx_expect[8];
+	u32 native = NATIVE_DSR_SIG | NATIVE_CTS_SIG | NATIVE_RI_SIG, wire;
+	unsigned long flags;
+	int id;
+
+	probe_core(test);
+	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(f->core));
+	ch = qcom_glink_alloc_channel(f->core, "AVRSIG");
+	KUNIT_ASSERT_FALSE(test, IS_ERR(ch));
+	ch->lcid = 3;
+	ch->rcid = 5;
+	spin_lock_irqsave(&f->core->idr_lock, flags);
+	id = idr_alloc(&f->core->rcids, ch, 5, 6, GFP_ATOMIC);
+	spin_unlock_irqrestore(&f->core->idr_lock, flags);
+	KUNIT_ASSERT_EQ(test, id, 5);
+	KUNIT_ASSERT_EQ(test, qcom_glink_register_signals_cb(&ch->ept, record_signals), 0);
+	KUNIT_EXPECT_FALSE(test, qcom_glink_rx_done_supported(&ch->ept));
+
+	/* remote raises DSR|CTS|RI (NATIVE bits) */
+	put_unaligned_le16(GLINK_CMD_SIGNALS, rx_sig);
+	put_unaligned_le16(5, rx_sig + 2);
+	put_unaligned_le32(native, rx_sig + 4);
+	memcpy(f->rx.fifo, rx_sig, 8);
+	f->rx_head = cpu_to_le32(8);
+	qcom_glink_native_rx(f->core);
+	flush_work(&f->core->rx_work);
+	KUNIT_EXPECT_EQ(test, le32_to_cpu(f->rx_tail), 8U);
+	KUNIT_EXPECT_EQ(test, (u32)qcom_glink_get_signals(&ch->ept),
+			(u32)(TIOCM_DSR | TIOCM_CTS | TIOCM_RI));
+	KUNIT_EXPECT_EQ(test, sig_cb_calls, 1U);
+	KUNIT_EXPECT_EQ(test, sig_cb_old, 0U);
+	KUNIT_EXPECT_EQ(test, sig_cb_new, (u32)(TIOCM_DSR | TIOCM_CTS | TIOCM_RI));
+
+	/* local DTR|RTS: wire = TIOCM bits | NATIVE_DTR | NATIVE_CTS on our lcid */
+	KUNIT_EXPECT_EQ(test, qcom_glink_set_signals(&ch->ept, TIOCM_DTR | TIOCM_RTS, 0), 0);
+	wire = TIOCM_DTR | TIOCM_RTS | NATIVE_DTR_SIG | NATIVE_CTS_SIG;
+	put_unaligned_le16(GLINK_CMD_SIGNALS, tx_expect);
+	put_unaligned_le16(3, tx_expect + 2);
+	put_unaligned_le32(wire, tx_expect + 4);
+	KUNIT_EXPECT_EQ(test, le32_to_cpu(f->tx_head), 16U);
+	KUNIT_EXPECT_MEMEQ(test, (u8 *)f->tx.fifo + 8, tx_expect, 8);
+	/* clearing RTS keeps DTR */
+	KUNIT_EXPECT_EQ(test, qcom_glink_set_signals(&ch->ept, 0, TIOCM_RTS), 0);
+	put_unaligned_le32(TIOCM_DTR | NATIVE_DTR_SIG, tx_expect + 4);
+	KUNIT_EXPECT_MEMEQ(test, (u8 *)f->tx.fifo + 16, tx_expect, 8);
+}
 static struct kunit_case cases[] = {
 	KUNIT_CASE(rx_wrap), KUNIT_CASE(tx_wrap_and_padding),
 	KUNIT_CASE(read_notification_reserve), KUNIT_CASE(invalid_ring_positions),
 	KUNIT_CASE(version_wire_and_control_driver), KUNIT_CASE(peer_version_ack),
 	KUNIT_CASE(invalid_access_does_not_touch_ram), KUNIT_CASE(oversized_core_packet_rejected),
 	KUNIT_CASE(invalid_registration_rejected), KUNIT_CASE(removal_aborts_blocked_response),
-	KUNIT_CASE(unsupported_vendor_feature_not_negotiated), {}
+	KUNIT_CASE(unsupported_vendor_feature_not_negotiated),
+	KUNIT_CASE(vendor_signals_roundtrip), {}
 };
 static struct kunit_suite suite = { .name = "avr-glink-transport",
 	.init = setup, .exit = cleanup, .test_cases = cases };

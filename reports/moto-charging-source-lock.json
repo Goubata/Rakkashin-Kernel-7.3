@@ -1,0 +1,282 @@
+{
+  "source_commit": "a24357771fe451d829a2f78f8986ecd53522085e",
+  "source_repo": "vendor-repos/motorola-kernel-modules",
+  "files": [
+    {
+      "file": "ports/moto-charging/bm_adsp_ulog/bm_adsp_ulog.c",
+      "source": "drivers/power/bm_adsp_ulog/bm_adsp_ulog.c",
+      "original_sha256": "d71a490f517f9a38da10012fc66013742280bd5385409982fba887f54894528a",
+      "sha256": "d71a490f517f9a38da10012fc66013742280bd5385409982fba887f54894528a"
+    },
+    {
+      "file": "ports/moto-charging/hall/hall_folio.c",
+      "source": "drivers/misc/hall/hall_folio.c",
+      "original_sha256": "98fa8252792704004cdf1b5ecf51833d4a02745c934756bbbb13e273d90fd351",
+      "sha256": "98fa8252792704004cdf1b5ecf51833d4a02745c934756bbbb13e273d90fd351"
+    },
+    {
+      "file": "ports/moto-charging/hall/hall_pen.c",
+      "source": "drivers/misc/hall/hall_pen.c",
+      "original_sha256": "a163be1c2dd0ad209d4d84735a61d5ee02bd12152b633a3e61fc75fd11264b30",
+      "sha256": "a163be1c2dd0ad209d4d84735a61d5ee02bd12152b633a3e61fc75fd11264b30"
+    },
+    {
+      "file": "ports/moto-charging/hall/hall_phone_case.c",
+      "source": "drivers/misc/hall/hall_phone_case.c",
+      "original_sha256": "5674e25fc11db3aa73de90ce529f69a9470549a9eb35dfb549c24c20e4c95219",
+      "sha256": "5674e25fc11db3aa73de90ce529f69a9470549a9eb35dfb549c24c20e4c95219"
+    },
+    {
+      "file": "ports/moto-charging/include/linux/phone_case_detection_notify.h",
+      "source": "include/linux/phone_case_detection_notify.h",
+      "original_sha256": "1ac8c6719827b5257e034db9120964f362f8fbab1532d8a592f717bfec26ba31",
+      "sha256": "1ac8c6719827b5257e034db9120964f362f8fbab1532d8a592f717bfec26ba31"
+    },
+    {
+      "file": "ports/moto-charging/include/linux/power/bm_adsp_ulog.h",
+      "source": "include/linux/power/bm_adsp_ulog.h",
+      "original_sha256": "25dca1ae69d975287a46e6ba798cc067326d09cb0bfa01314aa2a61d9cd59273",
+      "sha256": "25dca1ae69d975287a46e6ba798cc067326d09cb0bfa01314aa2a61d9cd59273"
+    },
+    {
+      "file": "ports/moto-charging/include/linux/power/mmi_chg_tcmd.h",
+      "source": "include/linux/power/mmi_chg_tcmd.h",
+      "original_sha256": "f8be5cfc9e1921e3b766776f5822b2481784c2e8d228f099fc87cd4d0b919abb",
+      "sha256": "f8be5cfc9e1921e3b766776f5822b2481784c2e8d228f099fc87cd4d0b919abb"
+    },
+    {
+      "file": "ports/moto-charging/include/linux/power/mmi_glink_api.h",
+      "source": "include/linux/power/mmi_glink_api.h",
+      "original_sha256": "ecd8beef010bcd4c319c5abe59a93cb3d6b0b3be59d9781a1af75f9baa99c3ec",
+      "sha256": "ecd8beef010bcd4c319c5abe59a93cb3d6b0b3be59d9781a1af75f9baa99c3ec"
+    },
+    {
+      "file": "ports/moto-charging/include/linux/power/qti_glink_charger_v2.h",
+      "source": "include/linux/power/qti_glink_charger_v2.h",
+      "original_sha256": "3e218bb8e733fc792038676dc009655e071af7ab5e5e430fd3f922bd9565a113",
+      "sha256": "3e218bb8e733fc792038676dc009655e071af7ab5e5e430fd3f922bd9565a113"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/battery_host.c",
+      "source": "drivers/power/mmi_glink_charger/battery_host.c",
+      "original_sha256": "736e019498b16303d3929f31d9a683592746aff7973ae8cff59726053e5c6ff6",
+      "sha256": "736e019498b16303d3929f31d9a683592746aff7973ae8cff59726053e5c6ff6"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/battery_host.h",
+      "source": "drivers/power/mmi_glink_charger/battery_host.h",
+      "original_sha256": "9e8bcaf56d63341c6b1222796713567d474a82fb685f21b27e03b08132ce0cab",
+      "sha256": "9e8bcaf56d63341c6b1222796713567d474a82fb685f21b27e03b08132ce0cab"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_class.c",
+      "source": "drivers/power/mmi_glink_charger/device_class.c",
+      "original_sha256": "f469d749d84f31a561b7013f08c907c81eb1ec5ca8ead663c8b54747ece42657",
+      "sha256": "f469d749d84f31a561b7013f08c907c81eb1ec5ca8ead663c8b54747ece42657"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_class.h",
+      "source": "drivers/power/mmi_glink_charger/device_class.h",
+      "original_sha256": "fecc6f66a378e4c40f3f52996a6c5f31053a6c5c845d8cd48cd09bb9bf1f2d25",
+      "sha256": "fecc6f66a378e4c40f3f52996a6c5f31053a6c5c845d8cd48cd09bb9bf1f2d25"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/balance_charge_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/balance_charge_glink.c",
+      "original_sha256": "7ab2ce99abc75a9e7fc27298a607f75357770aad7f7ef7c04efb8cb6c85e9eac",
+      "sha256": "7ab2ce99abc75a9e7fc27298a607f75357770aad7f7ef7c04efb8cb6c85e9eac"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/balance_charge_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/balance_charge_glink.h",
+      "original_sha256": "6c17859a857a341468e47077637689123a71ca87c520d5c734f6d9327f31cf29",
+      "sha256": "6c17859a857a341468e47077637689123a71ca87c520d5c734f6d9327f31cf29"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/battery_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/battery_glink.c",
+      "original_sha256": "dfd08d12476d83d7c66ab1d88915a21ef5111da87f55bbc61451335f43409665",
+      "sha256": "dfd08d12476d83d7c66ab1d88915a21ef5111da87f55bbc61451335f43409665"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/battery_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/battery_glink.h",
+      "original_sha256": "b3d87426a8e4bf1bf220c8ad82186bf930a7095079e73712e28dc04361b1813a",
+      "sha256": "b3d87426a8e4bf1bf220c8ad82186bf930a7095079e73712e28dc04361b1813a"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/charge_pump_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/charge_pump_glink.c",
+      "original_sha256": "ca7685be254a07975f0796f6c9bfa294ab92eb01d9bba3968d0cd5847e802af7",
+      "sha256": "ca7685be254a07975f0796f6c9bfa294ab92eb01d9bba3968d0cd5847e802af7"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/charge_pump_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/charge_pump_glink.h",
+      "original_sha256": "b5ab2574eabf75ca952f5a02d6f1972f3c61eaa36391435229e5722b96f87ccf",
+      "sha256": "b5ab2574eabf75ca952f5a02d6f1972f3c61eaa36391435229e5722b96f87ccf"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/switch_buck_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/switch_buck_glink.c",
+      "original_sha256": "6ada7aff994a1a74d7c9dee5e0e2bfdd4aeaea771364aad2af3599630f9e8e67",
+      "sha256": "6ada7aff994a1a74d7c9dee5e0e2bfdd4aeaea771364aad2af3599630f9e8e67"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/switch_buck_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/switch_buck_glink.h",
+      "original_sha256": "a61bdd3cf82ae6d24b2c0be89633fc5cc8d694ca4cb1b8eb6e8a7c9f6fecf8ca",
+      "sha256": "a61bdd3cf82ae6d24b2c0be89633fc5cc8d694ca4cb1b8eb6e8a7c9f6fecf8ca"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/usb_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/usb_glink.c",
+      "original_sha256": "e826bf77961b23eb16484f2f29f22233a4f2760f2cb3705af36f61e3557e3cdb",
+      "sha256": "51bf4b0e2dea96da3583c0020623323d61ece0dd89637d20afd106015d372453"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/usb_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/usb_glink.h",
+      "original_sha256": "a1283ef1d6ab3cf7b4e37a13dc8a6f9dd18df12ab31936cc0e7d1fca659c19be",
+      "sha256": "a1283ef1d6ab3cf7b4e37a13dc8a6f9dd18df12ab31936cc0e7d1fca659c19be"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/wireless_charge_glink.c",
+      "source": "drivers/power/mmi_glink_charger/device_glink/wireless_charge_glink.c",
+      "original_sha256": "03f026b4949178f650e59631b351fb3f8d2ddf1ecf63cb655f5e507e004e500a",
+      "sha256": "03f026b4949178f650e59631b351fb3f8d2ddf1ecf63cb655f5e507e004e500a"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/device_glink/wireless_charge_glink.h",
+      "source": "drivers/power/mmi_glink_charger/device_glink/wireless_charge_glink.h",
+      "original_sha256": "937ef7c3588be3fe4540391ea6b5694e7bf25fd76829d45d074f6dd4c445a174",
+      "sha256": "937ef7c3588be3fe4540391ea6b5694e7bf25fd76829d45d074f6dd4c445a174"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/mmi_glink_core.c",
+      "source": "drivers/power/mmi_glink_charger/mmi_glink_core.c",
+      "original_sha256": "d72bdba7baaa46fb960db47d57300bfcf4aa30cc43a6c31f763439a3d2dbf1d8",
+      "sha256": "3d6d381563cc0929af9ba778fcd8c15ca27453ee9642a6edca5140a60466ee24"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/mmi_glink_core.h",
+      "source": "drivers/power/mmi_glink_charger/mmi_glink_core.h",
+      "original_sha256": "509437d45a7762e278c93f2461fb37a3abb6e64c7d44628555c058bb04c11efb",
+      "sha256": "509437d45a7762e278c93f2461fb37a3abb6e64c7d44628555c058bb04c11efb"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/trusted_shash_lib.c",
+      "source": "drivers/power/mmi_glink_charger/trusted_shash_lib.c",
+      "original_sha256": "19c9f854a462bfbd145bab6a15570a87227536724730a33a8750635782c711d8",
+      "sha256": "19c9f854a462bfbd145bab6a15570a87227536724730a33a8750635782c711d8"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/trusted_shash_lib.h",
+      "source": "drivers/power/mmi_glink_charger/trusted_shash_lib.h",
+      "original_sha256": "a6e8c18e509b9257ed57ac5ea6035ff802e88ea2e96ca19676b60e23ef072cea",
+      "sha256": "a6e8c18e509b9257ed57ac5ea6035ff802e88ea2e96ca19676b60e23ef072cea"
+    },
+    {
+      "file": "ports/moto-charging/qpnp_adaptive_charge/qpnp_adaptive_charge.c",
+      "source": "drivers/power/qpnp_adaptive_charge/qpnp_adaptive_charge.c",
+      "original_sha256": "c91b857aecaa8ace55caf539963888d795a939462f8edbace36d72cb565d189b",
+      "sha256": "c91b857aecaa8ace55caf539963888d795a939462f8edbace36d72cb565d189b"
+    },
+    {
+      "file": "ports/moto-charging/qti_glink_charger_v2/qti_glink_charger_v2.c",
+      "source": "drivers/power/qti_glink_charger_v2/qti_glink_charger_v2.c",
+      "original_sha256": "95d9e0412f2792fb67bec1c75bcb4cf66320ab39bb3e5f732607483e75ef9759",
+      "sha256": "95d9e0412f2792fb67bec1c75bcb4cf66320ab39bb3e5f732607483e75ef9759"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/Kconfig",
+      "source": "drivers/power/mmi_glink_charger/Kconfig",
+      "original_sha256": "6c3d2574ba9d5992f5b588e77c661c505aed7523508757035784e7daf3c2eb32",
+      "sha256": "6c3d2574ba9d5992f5b588e77c661c505aed7523508757035784e7daf3c2eb32"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/BUILD.bazel",
+      "source": "drivers/power/mmi_glink_charger/BUILD.bazel",
+      "original_sha256": "a4b24381a95d78439ae8e0b28d692c26a8f0cc9ddb2320303a33003b471940d1",
+      "sha256": "a4b24381a95d78439ae8e0b28d692c26a8f0cc9ddb2320303a33003b471940d1"
+    },
+    {
+      "file": "ports/moto-charging/qti_glink_charger_v2/BUILD.bazel",
+      "source": "drivers/power/qti_glink_charger_v2/BUILD.bazel",
+      "original_sha256": "1ff2f2531b81510d3441c6d7aef83336c2b1d5dd115d15c6a62ee3f2da51f5db",
+      "sha256": "1ff2f2531b81510d3441c6d7aef83336c2b1d5dd115d15c6a62ee3f2da51f5db"
+    },
+    {
+      "file": "ports/moto-charging/qpnp_adaptive_charge/BUILD.bazel",
+      "source": "drivers/power/qpnp_adaptive_charge/BUILD.bazel",
+      "original_sha256": "7f0ae71962121c6bfa38a94d2917db3d364324b8f9eb7f57a38fc2e3f8c35c60",
+      "sha256": "7f0ae71962121c6bfa38a94d2917db3d364324b8f9eb7f57a38fc2e3f8c35c60"
+    },
+    {
+      "file": "ports/moto-charging/bm_adsp_ulog/BUILD.bazel",
+      "source": "drivers/power/bm_adsp_ulog/BUILD.bazel",
+      "original_sha256": "511cb60c484437220cc94642d24a0775a741c052fbba0e2f9da1c359845fd8d8",
+      "sha256": "511cb60c484437220cc94642d24a0775a741c052fbba0e2f9da1c359845fd8d8"
+    },
+    {
+      "file": "ports/moto-charging/hall/BUILD.bazel",
+      "source": "drivers/misc/hall/BUILD.bazel",
+      "original_sha256": "0c524efc1dc2a410ed65321786b0fc88740e7a7ca5d6b033698878255ff90fd3",
+      "sha256": "0c524efc1dc2a410ed65321786b0fc88740e7a7ca5d6b033698878255ff90fd3"
+    },
+    {
+      "file": "ports/moto-charging/mmi_glink_charger/Android.mk",
+      "source": "drivers/power/mmi_glink_charger/Android.mk",
+      "original_sha256": "39dee625a94f161098ec03bffacd0091676685d03d789659ffb0bce2658db077",
+      "sha256": "39dee625a94f161098ec03bffacd0091676685d03d789659ffb0bce2658db077"
+    },
+    {
+      "file": "ports/moto-charging/qti_glink_charger_v2/Android.mk",
+      "source": "drivers/power/qti_glink_charger_v2/Android.mk",
+      "original_sha256": "835f17252fec971c33408c60f53ef66039cd9e22a585b2a1a9b15bed2b32c7de",
+      "sha256": "835f17252fec971c33408c60f53ef66039cd9e22a585b2a1a9b15bed2b32c7de"
+    },
+    {
+      "file": "ports/moto-charging/qpnp_adaptive_charge/Android.mk",
+      "source": "drivers/power/qpnp_adaptive_charge/Android.mk",
+      "original_sha256": "38695c46433eb520462d01eec59e345c972c750dfe52452db7e714ca3069aab4",
+      "sha256": "38695c46433eb520462d01eec59e345c972c750dfe52452db7e714ca3069aab4"
+    },
+    {
+      "file": "ports/moto-charging/bm_adsp_ulog/Android.mk",
+      "source": "drivers/power/bm_adsp_ulog/Android.mk",
+      "original_sha256": "2a84700619bdb019273818202d8a1233b187b270ea3d8940fa149a6d13704950",
+      "sha256": "2a84700619bdb019273818202d8a1233b187b270ea3d8940fa149a6d13704950"
+    },
+    {
+      "file": "ports/moto-charging/hall/Android.mk",
+      "source": "drivers/misc/hall/Android.mk",
+      "original_sha256": "568ebc40691afd71b719e2f023ada91c6e534d63be09639de2912c613b2952db",
+      "sha256": "568ebc40691afd71b719e2f023ada91c6e534d63be09639de2912c613b2952db"
+    },
+    {
+      "file": "ports/moto-charging/bm_adsp_ulog/README",
+      "source": "drivers/power/bm_adsp_ulog/README",
+      "original_sha256": "e6707b55fb21ce689dc1db58138b7ab56ec5d7a3a3fffcbb43e478403dcd23a8",
+      "sha256": "e6707b55fb21ce689dc1db58138b7ab56ec5d7a3a3fffcbb43e478403dcd23a8"
+    },
+    {
+      "file": "ports/moto-charging/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "473851e1767371ba3a9e0acf2e1a35df46df2006ed1934a16ac41cfda4c81f59"
+    }
+  ],
+  "patch_sha256": "e85fbb851e7133ca1d72918dd6fcd074a7ffe166847f01da16c0a4ef14d773d5",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "Motorola mmi_glink_charger, qti_glink_charger_v2, qpnp_adaptive_charge, bm_adsp_ulog, hall_phone_case on android18-7.3",
+  "reviewed_changes": [
+    "alarm_start_relative -> alarm_start_timer(.., true)",
+    "thermal_of_cooling_device_register gains cdev_id 0 (7.3)",
+    "CONFIG_MMI_PHONE_CASE_SUPPORT=y (mmi_glink_charger depends on hall_phone_case, which the phone loads)"
+  ],
+  "pending": [
+    "charging behaviour on the phone"
+  ]
+}

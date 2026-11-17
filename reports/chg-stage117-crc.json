@@ -1,0 +1,81 @@
+{
+  "scope": "import CRC consistency only; not hardware runtime proof",
+  "passed": true,
+  "modules": [
+    {
+      "module": "ports/moto-charging/bm_adsp_ulog.ko",
+      "imports_checked": 59,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-charging/hall_phone_case.ko",
+      "imports_checked": 54,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-charging/mmi_glink_charger.ko",
+      "imports_checked": 123,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-charging/qpnp_adaptive_charge.ko",
+      "imports_checked": 21,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/moto-charging/qti_glink_charger_v2.ko",
+      "imports_checked": 48,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/altmode-glink.ko",
+      "imports_checked": 41,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/charger-ulog-glink.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/glink_pkt.ko",
+      "imports_checked": 103,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/pmic-glink-debug.ko",
+      "imports_checked": 28,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/qcom_pd_mapper.ko",
+      "imports_checked": 31,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/qti-glink-adc.ko",
+      "imports_checked": 23,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/qti_battery_charger.ko",
+      "imports_checked": 89,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/qti_battery_debug.ko",
+      "imports_checked": 32,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-charging/ucsi_qti_glink.ko",
+      "imports_checked": 37,
+      "mismatches": {}
+    },
+    {
+      "module": "ports/qcom-glink-transport/qcom_glink.ko",
+      "imports_checked": 91,
+      "mismatches": {}
+    }
+  ]
+}

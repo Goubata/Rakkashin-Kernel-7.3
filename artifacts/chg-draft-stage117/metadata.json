@@ -1,0 +1,28 @@
+{
+  "scope": "Unaccepted draft; QEMU load + glink vendor signal API KUnit",
+  "core_image": "changed",
+  "image_sha256": "4d74ab5309cb27229b5f5f49c18b7b1570de50d26e849ed24ed0ed74266e1efa",
+  "modules": [
+    "bm_adsp_ulog.ko",
+    "hall_phone_case.ko",
+    "mmi_glink_charger.ko",
+    "qpnp_adaptive_charge.ko",
+    "qti_glink_charger_v2.ko",
+    "altmode-glink.ko",
+    "charger-ulog-glink.ko",
+    "glink_pkt.ko",
+    "pmic-glink-debug.ko",
+    "qcom_pd_mapper.ko",
+    "qti-glink-adc.ko",
+    "qti_battery_charger.ko",
+    "qti_battery_debug.ko",
+    "ucsi_qti_glink.ko",
+    "qcom_glink.ko"
+  ],
+  "test_modules": [],
+  "physical_verified": false,
+  "flashable_boot_image": false,
+  "promoted": false,
+  "main_bundle_unchanged": "artifacts/android73-info-stage57",
+  "phone_dt_modified": false
+}

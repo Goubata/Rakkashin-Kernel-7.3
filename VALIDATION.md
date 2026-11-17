@@ -2659,3 +2659,23 @@ dwc3-msm-ops hooks the core with kretprobes on 14 symbols: all present in 7.3 vm
 6.12-identical signatures and identical dwc3 trace-event prototypes; KUnit avr_dwc3_msm_probes
 registers/unregisters a kretprobe on each (3/3). All modules load in QEMU.
 Not verified: any USB hardware path (gadget/adb, host, SS PHY, EUD) - phone only. CRC: 195 modules.
+
+## Stage117: charging (PMIC glink clients, Motorola charger) and vendor GLINK signals
+
+Phone bindings: qti_battery_charger, altmode-glink, ucsi_glink, glink_adc, pmic_glink_debug,
+qti_battery_debug, glink_pkt (modem AT/DATA/IMS, ADSP apr_apps2), Motorola qti_glink_charger and
+mmi,mmi-charger; soc:qcom,glink has no children.
+ports/qcom-charging (qcom-soc 037aa1c, 9 modules) and ports/moto-charging (motorola-kernel-modules,
+5 modules incl. hall_phone_case, MMI_PHONE_CASE_SUPPORT). 7.3 adaptations: power_supply_config fwnode,
+cooling-device cdev_id, UCSI sync_control now returns CCI/MESSAGE_IN (wrapped around the 6.12
+synchronous write), const bin_attribute, ida_alloc_max/ida_free, zap_special_vma_range,
+alarm_start_timer(relative).
+GLINK transport (ports/qcom-glink-transport, Codex's 7.3-based native GLINK): added the 6.12 vendor
+client API glink_pkt needs (include/linux/rpmsg/qcom_glink_vendor.h): signals with 6.12 semantics
+(NATIVE DSR/CTS/CD/RI <-> TIOCM, remote/local state, signals_cb), rx_done_supported() = false
+(zero-copy is not negotiated, so glink_pkt uses its copying path). New KUnit case
+vendor_signals_roundtrip: remote NATIVE DSR|CTS|RI -> TIOCM_DSR|CTS|RI + callback(old 0), set DTR|RTS
+-> wire cmd 15 / lcid 3 / TIOCM|NATIVE_DTR|NATIVE_CTS, clear RTS keeps DTR. glink-transport 12/12.
+QEMU: all 14 charging modules load (3/3); glink-transport, pmic-glink, remoteproc-services, rproc-gate,
+pmic-ipc, smp2p pass. Deferred (module-set-decisions.json): glink_probe, qcom_glink_spss (SPSS stage).
+Regression: 30 suites + 8 extra; 209 CRCs. Not verified: battery/charging with ADSP firmware.

@@ -1,0 +1,128 @@
+{
+  "source_commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+  "source_repo": "qcom-soc",
+  "files": [
+    {
+      "file": "ports/qcom-charging/qti_battery_charger_main.c",
+      "source": "drivers/power/supply/qti_battery_charger.c",
+      "original_sha256": "a3bb57ab6b07d37d37cabcf886f554b433c43d791e166f1168b04d256a8d26d5",
+      "sha256": "fbe0be1044e27af72720270fc97fbe32cc393af7b30da9d3c14f03dc2d8e23de"
+    },
+    {
+      "file": "ports/qcom-charging/qti_charger_boost_lib.c",
+      "source": "drivers/power/supply/qti_charger_boost_lib.c",
+      "original_sha256": "5ec43cb6051bb64782443f6f9fca943b2a69eac0100cfcbbea9194a07b55dd28",
+      "sha256": "5ec43cb6051bb64782443f6f9fca943b2a69eac0100cfcbbea9194a07b55dd28"
+    },
+    {
+      "file": "ports/qcom-charging/qti_charger_boost_lib.h",
+      "source": "drivers/power/supply/qti_charger_boost_lib.h",
+      "original_sha256": "720beab676f33fff290cb77e5efdb00cb1108cc092cb2d13f3d4762046fc4376",
+      "sha256": "720beab676f33fff290cb77e5efdb00cb1108cc092cb2d13f3d4762046fc4376"
+    },
+    {
+      "file": "ports/qcom-charging/qti_typec_class.c",
+      "source": "drivers/power/supply/qti_typec_class.c",
+      "original_sha256": "f70a32abe25cccdff90917feb85c22dda5094e830d8e65656f4805250380a0d8",
+      "sha256": "f70a32abe25cccdff90917feb85c22dda5094e830d8e65656f4805250380a0d8"
+    },
+    {
+      "file": "ports/qcom-charging/qti_typec_class.h",
+      "source": "drivers/power/supply/qti_typec_class.h",
+      "original_sha256": "f5b5efd75f586df66a984ff23b40bb57c87a530b0fc8c19b6f5d072594d4ebdf",
+      "sha256": "f5b5efd75f586df66a984ff23b40bb57c87a530b0fc8c19b6f5d072594d4ebdf"
+    },
+    {
+      "file": "ports/qcom-charging/altmode-glink.c",
+      "source": "drivers/soc/qcom/altmode-glink.c",
+      "original_sha256": "d267a5fc2090c420a289c771328a2f6dc5c352f0f7c8a670ff81a7a134477420",
+      "sha256": "d267a5fc2090c420a289c771328a2f6dc5c352f0f7c8a670ff81a7a134477420"
+    },
+    {
+      "file": "ports/qcom-charging/ucsi_qti_glink.c",
+      "source": "drivers/usb/typec/ucsi/ucsi_qti_glink.c",
+      "original_sha256": "c6e2e29a5b41b2ba12ad517ff4afe831a1af025146bba9e1a3aeb4a248e3be10",
+      "sha256": "5a7050cb843d80d28c39a875b43ffb1c95a2bcbf24144eaf7efa8588733ed786"
+    },
+    {
+      "file": "ports/qcom-charging/charger-ulog-glink.c",
+      "source": "drivers/soc/qcom/charger-ulog-glink.c",
+      "original_sha256": "d5e7bbd8a9634d601c4ba6f710e8895ebd4115ad38e8e07bc6c7e9dd64090cff",
+      "sha256": "d5e7bbd8a9634d601c4ba6f710e8895ebd4115ad38e8e07bc6c7e9dd64090cff"
+    },
+    {
+      "file": "ports/qcom-charging/qti_battery_debug.c",
+      "source": "drivers/soc/qcom/qti_battery_debug.c",
+      "original_sha256": "82325de62971b0c811ba8b4563ba6e8dae61bf99de735d48a23f897de001ff88",
+      "sha256": "c9bcac6b56f79ff9472c108b58f9accc4d71a953dcf5aad22ccf46cc4a7057b5"
+    },
+    {
+      "file": "ports/qcom-charging/qti-glink-adc.c",
+      "source": "drivers/iio/adc/qti-glink-adc.c",
+      "original_sha256": "5c769258b6087d6a76db5b52f9a46b675fbdfc6a16d2a383e215d5d24916a00d",
+      "sha256": "5c769258b6087d6a76db5b52f9a46b675fbdfc6a16d2a383e215d5d24916a00d"
+    },
+    {
+      "file": "ports/qcom-charging/pmic-glink-debug.c",
+      "source": "drivers/soc/qcom/pmic-glink-debug.c",
+      "original_sha256": "75b590574869ca510a3bf49b0182fc85fd9a9009bb8ac5a0cb44e62aacacd77a",
+      "sha256": "75b590574869ca510a3bf49b0182fc85fd9a9009bb8ac5a0cb44e62aacacd77a"
+    },
+    {
+      "file": "ports/qcom-charging/glink_pkt.c",
+      "source": "drivers/rpmsg/glink_pkt.c",
+      "original_sha256": "9227a0ccdda56e03f729d6f8a27fc231ca19197dd9201825910c6b5b40732434",
+      "sha256": "09244eef562dadceec4841510f141fc85ce437357473522b641e47506b969244"
+    },
+    {
+      "file": "ports/qcom-charging/qcom_pd_mapper.c",
+      "source": "drivers/soc/qcom/qcom_pd_mapper.c",
+      "original_sha256": "8c94fab0a32765e118c7bff79ebc1001f95042264bc101b1a24b696449730fa0",
+      "sha256": "8c94fab0a32765e118c7bff79ebc1001f95042264bc101b1a24b696449730fa0"
+    },
+    {
+      "file": "ports/qcom-charging/pdr_internal.h",
+      "source": "drivers/soc/qcom/pdr_internal.h",
+      "original_sha256": "5d111abefbee3bd794dc1a3fe73b961bb2a67bfbf5cec843abb08810dc0cc80f",
+      "sha256": "5d111abefbee3bd794dc1a3fe73b961bb2a67bfbf5cec843abb08810dc0cc80f"
+    },
+    {
+      "file": "ports/qcom-charging/include/linux/soc/qcom/altmode-glink.h",
+      "source": "include/linux/soc/qcom/altmode-glink.h",
+      "original_sha256": "ab30e4e4269a5284e0f9b6dad397c5a733da6354a867067f3df76c13f3e8b9c7",
+      "sha256": "ab30e4e4269a5284e0f9b6dad397c5a733da6354a867067f3df76c13f3e8b9c7"
+    },
+    {
+      "file": "ports/qcom-charging/include/linux/soc/qcom/battery_charger.h",
+      "source": "include/linux/soc/qcom/battery_charger.h",
+      "original_sha256": "a5655726741245013d896baca61cda84d7d88f3f68c88f4043b9c3aac037b5b4",
+      "sha256": "a5655726741245013d896baca61cda84d7d88f3f68c88f4043b9c3aac037b5b4"
+    },
+    {
+      "file": "ports/qcom-charging/include/trace/events/rproc_qcom.h",
+      "source": "include/trace/events/rproc_qcom.h",
+      "original_sha256": "b26383b04621e733bd9cd61c98e2fab0fd08176e2bb4100ea074231555ee0d11",
+      "sha256": "b26383b04621e733bd9cd61c98e2fab0fd08176e2bb4100ea074231555ee0d11"
+    },
+    {
+      "file": "ports/qcom-charging/Makefile",
+      "source": null,
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "656df4361f7900ff2f9327a642d58dce3ce4c50b2995bb00d8813cf1d6206021"
+    }
+  ],
+  "patch_sha256": "672e5a410d461427fc9d634c2c03f15e9e25a1c04d3c1eb5d0ea2fa296c11a8c",
+  "physical_verified": false,
+  "combined_bundle_promoted": false,
+  "scope": "PMIC glink clients (battery charger, altmode, UCSI, ulog, battery debug, glink ADC, pmic glink debug), glink_pkt, qcom_pd_mapper on android18-7.3",
+  "reviewed_changes": [
+    "power_supply_config.of_node -> fwnode; devm_thermal_of_cooling_device_register(dev, cdev_id 0, ...)",
+    "ucsi: 7.3 sync_control(cmd, cci, data, size, msg_out, size): wraps the 6.12 synchronous write and reads CCI/MESSAGE_IN (no MESSAGE_OUT, as 6.12)",
+    "bin_attribute const callbacks/arrays",
+    "glink_pkt: vendor GLINK client API from ports/qcom-glink-transport (signals; zero-copy unsupported -> copy path), ida_alloc_max/ida_free, zap_special_vma_range (exported successor of zap_vma_ptes)",
+    "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage"
+  ],
+  "pending": [
+    "ADSP battery/charging firmware conversation, UCSI/altmode, glink_pkt channels (phone)"
+  ]
+}

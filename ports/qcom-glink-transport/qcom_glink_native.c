@@ -22,6 +22,8 @@
 
 #include "rpmsg_internal.h"
 #include "qcom_glink_native.h"
+#include <linux/rpmsg/qcom_glink_vendor.h>
+#include <linux/termios.h>
 
 #define CREATE_TRACE_POINTS
 #include "qcom_glink_trace.h"
@@ -191,6 +193,11 @@ struct glink_channel {
 	int intent_req_result;
 	bool intent_received;
 	wait_queue_head_t intent_req_wq;
+
+	/* AVR: 6.12 vendor signal state (TIOCM_* encoding) and client callback */
+	u32 local_signals;
+	u32 remote_signals;
+	int (*signals_cb)(struct rpmsg_device *dev, void *priv, u32 old, u32 new);
 };
 
 #define to_glink_channel(_ept) container_of(_ept, struct glink_channel, ept)
@@ -219,6 +226,8 @@ static const struct rpmsg_endpoint_ops glink_endpoint_ops;
 #define NATIVE_DSR_SIG			BIT(31)
 #define NATIVE_RTS_SIG			NATIVE_CTS_SIG
 #define NATIVE_CTS_SIG			BIT(30)
+#define NATIVE_CD_SIG			BIT(29)
+#define NATIVE_RI_SIG			BIT(28)
 
 static void qcom_glink_rx_done_work(struct work_struct *work);
 
@@ -599,7 +608,7 @@ static void qcom_glink_rx_done_work(struct work_struct *work)
 	spin_unlock_irqrestore(&channel->intent_lock, flags);
 }
 
-static void qcom_glink_rx_done(struct qcom_glink *glink,
+static void __avr_glink_rx_done(struct qcom_glink *glink,
 			       struct glink_channel *channel,
 			       struct glink_core_rx_intent *intent)
 {
@@ -1011,7 +1020,7 @@ static int qcom_glink_rx_data(struct qcom_glink *glink, size_t avail)
 		intent->offset = 0;
 		channel->buf = NULL;
 
-		qcom_glink_rx_done(glink, channel, intent);
+		__avr_glink_rx_done(glink, channel, intent);
 	}
 
 advance_rx:
@@ -1174,7 +1183,92 @@ static void qcom_glink_handle_signals(struct qcom_glink *glink,
 
 	if (channel->ept.flow_cb)
 		channel->ept.flow_cb(channel->ept.rpdev, channel->ept.priv, enable);
+
+	/* AVR: 6.12 vendor semantics - remember NATIVE->TIOCM and notify */
+	{
+		u32 old = channel->remote_signals, tiocm = sigs;
+
+		if (tiocm & NATIVE_DTR_SIG)
+			tiocm |= TIOCM_DSR;
+		if (tiocm & NATIVE_CTS_SIG)
+			tiocm |= TIOCM_CTS;
+		if (tiocm & NATIVE_CD_SIG)
+			tiocm |= TIOCM_CD;
+		if (tiocm & NATIVE_RI_SIG)
+			tiocm |= TIOCM_RI;
+		tiocm &= 0x0fff;
+		channel->remote_signals = tiocm;
+		if (channel->signals_cb)
+			channel->signals_cb(channel->ept.rpdev, channel->ept.priv,
+					    old, tiocm);
+	}
 }
+
+/* ---- AVR: android16-6.12 vendor GLINK client API (qcom_glink_vendor.h) ---- */
+int qcom_glink_get_signals(struct rpmsg_endpoint *ept)
+{
+	if (!ept)
+		return 0;
+	return to_glink_channel(ept)->remote_signals;
+}
+EXPORT_SYMBOL_GPL(qcom_glink_get_signals);
+
+int qcom_glink_set_signals(struct rpmsg_endpoint *ept, u32 set, u32 clear)
+{
+	struct glink_channel *channel;
+	struct glink_msg msg;
+	u32 signals, wire;
+
+	if (!ept)
+		return -EINVAL;
+	channel = to_glink_channel(ept);
+	signals = channel->local_signals;
+	signals |= set & (TIOCM_DTR | TIOCM_RTS | TIOCM_CD | TIOCM_RI);
+	signals &= ~(clear & (TIOCM_DTR | TIOCM_RTS | TIOCM_CD | TIOCM_RI));
+	channel->local_signals = signals;
+
+	/* TIOCM -> NATIVE, as 6.12 qcom_glink_send_signals() */
+	wire = signals & 0x0fff;
+	if (wire & TIOCM_DTR)
+		wire |= NATIVE_DTR_SIG;
+	if (wire & TIOCM_RTS)
+		wire |= NATIVE_CTS_SIG;
+	if (wire & TIOCM_CD)
+		wire |= NATIVE_CD_SIG;
+	if (wire & TIOCM_RI)
+		wire |= NATIVE_RI_SIG;
+
+	msg.cmd = cpu_to_le16(GLINK_CMD_SIGNALS);
+	msg.param1 = cpu_to_le16(channel->lcid);
+	msg.param2 = cpu_to_le32(wire);
+	trace_qcom_glink_cmd_signal_tx(channel->glink->label, channel->name,
+				       channel->lcid, channel->rcid, wire);
+	return qcom_glink_tx(channel->glink, &msg, sizeof(msg), NULL, 0, true);
+}
+EXPORT_SYMBOL_GPL(qcom_glink_set_signals);
+
+int qcom_glink_register_signals_cb(struct rpmsg_endpoint *ept,
+				   int (*cb)(struct rpmsg_device *, void *, u32, u32))
+{
+	if (!ept || !cb)
+		return -EINVAL;
+	to_glink_channel(ept)->signals_cb = cb;
+	return 0;
+}
+EXPORT_SYMBOL_GPL(qcom_glink_register_signals_cb);
+
+/* Vendor zero-copy (feature bit 3) is not negotiated by this transport. */
+bool qcom_glink_rx_done_supported(struct rpmsg_endpoint *ept)
+{
+	return false;
+}
+EXPORT_SYMBOL_GPL(qcom_glink_rx_done_supported);
+
+int qcom_glink_rx_done(struct rpmsg_endpoint *ept, void *data)
+{
+	return -EINVAL;
+}
+EXPORT_SYMBOL_GPL(qcom_glink_rx_done);
 
 void qcom_glink_native_rx(struct qcom_glink *glink)
 {

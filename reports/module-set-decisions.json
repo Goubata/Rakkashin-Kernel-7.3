@@ -63,5 +63,15 @@
   "missing_before": 51,
   "remaining_unported": 0,
   "note": "every phone first-stage module is ported, renamed (renamed{}), or deliberately omitted (omitted{}) with a reason"
+ },
+ "deferred": {
+  "glink_probe": {
+   "stage": 117,
+   "reason": "phone soc:qcom,glink node has no children (edges are remoteproc glink-edge subnodes started by rproc_qcom_common); needs vendor qcom_glink_smem_start/spss APIs - revisit with SPSS"
+  },
+  "qcom_glink_spss": {
+   "stage": 117,
+   "reason": "SPSS (secure processor) edge transport needs vendor qcom_glink_native_start; ported together with qcom_spss"
+  }
  }
 }

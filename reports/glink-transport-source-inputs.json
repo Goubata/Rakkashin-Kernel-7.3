@@ -30,6 +30,13 @@
       "file": "ports/qcom-glink-transport/rpmsg_ctrl.c",
       "source": "drivers/rpmsg/rpmsg_ctrl.c",
       "original_sha256": "e52a81e2aed8b147afbe0e24f2d1beb2edbddcada585e1355915c86b6355eaf7"
+    },
+    {
+      "file": "ports/qcom-glink-transport/include/linux/rpmsg/qcom_glink_vendor.h",
+      "source": null
     }
+  ],
+  "reviewed_changes": [
+    "stage117: android16-6.12 vendor client API for glink_pkt (qcom_glink_vendor.h): TIOCM<->NATIVE signals (get/set/register_signals_cb, remote/local state, CD/RI), rx_done_supported()=false (zero-copy not offered), internal static qcom_glink_rx_done renamed __avr_glink_rx_done"
   ]
 }

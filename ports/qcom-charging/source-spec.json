@@ -1,0 +1,36 @@
+{
+ "name": "qcom-charging",
+ "repo": "qcom-soc",
+ "commit": "037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1",
+ "files": {
+  "ports/qcom-charging/qti_battery_charger_main.c": "drivers/power/supply/qti_battery_charger.c",
+  "ports/qcom-charging/qti_charger_boost_lib.c": "drivers/power/supply/qti_charger_boost_lib.c",
+  "ports/qcom-charging/qti_charger_boost_lib.h": "drivers/power/supply/qti_charger_boost_lib.h",
+  "ports/qcom-charging/qti_typec_class.c": "drivers/power/supply/qti_typec_class.c",
+  "ports/qcom-charging/qti_typec_class.h": "drivers/power/supply/qti_typec_class.h",
+  "ports/qcom-charging/altmode-glink.c": "drivers/soc/qcom/altmode-glink.c",
+  "ports/qcom-charging/ucsi_qti_glink.c": "drivers/usb/typec/ucsi/ucsi_qti_glink.c",
+  "ports/qcom-charging/charger-ulog-glink.c": "drivers/soc/qcom/charger-ulog-glink.c",
+  "ports/qcom-charging/qti_battery_debug.c": "drivers/soc/qcom/qti_battery_debug.c",
+  "ports/qcom-charging/qti-glink-adc.c": "drivers/iio/adc/qti-glink-adc.c",
+  "ports/qcom-charging/pmic-glink-debug.c": "drivers/soc/qcom/pmic-glink-debug.c",
+  "ports/qcom-charging/glink_pkt.c": "drivers/rpmsg/glink_pkt.c",
+  "ports/qcom-charging/qcom_pd_mapper.c": "drivers/soc/qcom/qcom_pd_mapper.c",
+  "ports/qcom-charging/pdr_internal.h": "drivers/soc/qcom/pdr_internal.h",
+  "ports/qcom-charging/include/linux/soc/qcom/altmode-glink.h": "include/linux/soc/qcom/altmode-glink.h",
+  "ports/qcom-charging/include/linux/soc/qcom/battery_charger.h": "include/linux/soc/qcom/battery_charger.h",
+  "ports/qcom-charging/include/trace/events/rproc_qcom.h": "include/trace/events/rproc_qcom.h",
+  "ports/qcom-charging/Makefile": null
+ },
+ "scope": "PMIC glink clients (battery charger, altmode, UCSI, ulog, battery debug, glink ADC, pmic glink debug), glink_pkt, qcom_pd_mapper on android18-7.3",
+ "reviewed_changes": [
+  "power_supply_config.of_node -> fwnode; devm_thermal_of_cooling_device_register(dev, cdev_id 0, ...)",
+  "ucsi: 7.3 sync_control(cmd, cci, data, size, msg_out, size): wraps the 6.12 synchronous write and reads CCI/MESSAGE_IN (no MESSAGE_OUT, as 6.12)",
+  "bin_attribute const callbacks/arrays",
+  "glink_pkt: vendor GLINK client API from ports/qcom-glink-transport (signals; zero-copy unsupported -> copy path), ida_alloc_max/ida_free, zap_special_vma_range (exported successor of zap_vma_ptes)",
+  "glink_probe and qcom_glink_spss deferred: phone qcom,glink node is empty (edges are remoteproc glink-edge subnodes); SPSS edge with the SPSS stage"
+ ],
+ "pending": [
+  "ADSP battery/charging firmware conversation, UCSI/altmode, glink_pkt channels (phone)"
+ ]
+}

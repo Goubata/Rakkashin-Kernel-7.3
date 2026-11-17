@@ -80,6 +80,9 @@ notrace int sched_clock_read_retry(unsigned int seq)
 {
 	return read_seqcount_latch_retry(&cd.seq, seq);
 }
+/* ANDROID: 6.12 parity (gh_ctrl) */
+EXPORT_SYMBOL_GPL(sched_clock_read_begin);
+EXPORT_SYMBOL_GPL(sched_clock_read_retry);
 
 static __always_inline unsigned long long __sched_clock(void)
 {

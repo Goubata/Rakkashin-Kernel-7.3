@@ -20,6 +20,7 @@
 #include <linux/string.h>
 #include <linux/of.h>
 #include <linux/suspend.h>
+#include <trace/hooks/thermal.h>
 
 #define CREATE_TRACE_POINTS
 #include "thermal_trace.h"
@@ -1361,8 +1362,14 @@ static void thermal_zone_init_complete(struct thermal_zone_device *tz)
 	 * new thermal zone needs to be marked as suspended because
 	 * thermal_pm_notify() has run already.
 	 */
-	if (thermal_pm_suspended)
-		tz->state |= TZ_STATE_FLAG_SUSPENDED;
+	if (thermal_pm_suspended) {
+		int irq_wakeable = 0;
+
+		/* ANDROID: 6.12 parity, wake-capable zones keep running */
+		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
+		if (!irq_wakeable)
+			tz->state |= TZ_STATE_FLAG_SUSPENDED;
+	}
 
 	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
 }
@@ -1740,8 +1747,16 @@ static void __thermal_pm_prepare(void)
 
 	thermal_pm_suspended = true;
 
-	list_for_each_entry(tz, &thermal_tz_list, node)
+	list_for_each_entry(tz, &thermal_tz_list, node) {
+		int irq_wakeable = 0;
+
+		/* ANDROID: 6.12 parity */
+		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
+		if (irq_wakeable)
+			continue;
+
 		thermal_zone_pm_prepare(tz);
+	}
 }
 
 void thermal_pm_prepare(void)
@@ -1784,8 +1799,16 @@ void thermal_pm_complete(void)
 
 	thermal_pm_suspended = false;
 
-	list_for_each_entry(tz, &thermal_tz_list, node)
+	list_for_each_entry(tz, &thermal_tz_list, node) {
+		int irq_wakeable = 0;
+
+		/* ANDROID: 6.12 parity */
+		trace_android_vh_thermal_pm_notify_suspend(tz, &irq_wakeable);
+		if (irq_wakeable)
+			continue;
+
 		thermal_zone_pm_complete(tz);
+	}
 }
 
 static int __init thermal_init(void)

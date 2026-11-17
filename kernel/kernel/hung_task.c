@@ -27,6 +27,7 @@
 #include <linux/sys_info.h>
 
 #include <trace/events/sched.h>
+#include <trace/hooks/hung_task.h>
 
 /*
  * The number of tasks checked:
@@ -306,6 +307,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
 	unsigned long this_round_count;
 	int need_warning = sysctl_hung_task_warnings;
 	unsigned long si_mask = hung_task_si_mask;
+	bool need_check;
 
 	/*
 	 * If the system crashed already then all bets are off,
@@ -325,7 +327,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
 			last_break = jiffies;
 		}
 
-		if (task_is_hung(t, timeout)) {
+		/* ANDROID: 6.12 parity, vendor may exclude the task from the check */
+		need_check = true;
+		trace_android_vh_check_uninterruptible_tasks(t, timeout, &need_check);
+		if (need_check && task_is_hung(t, timeout)) {
 			/*
 			 * Increment the global counter so that userspace could
 			 * start migrating tasks ASAP. But count the current
@@ -337,6 +342,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
 			hung_task_info(t, timeout, this_round_count);
 		}
 	}
+	trace_android_vh_check_uninterruptible_tasks_dn(NULL);
  unlock:
 	rcu_read_unlock();
 

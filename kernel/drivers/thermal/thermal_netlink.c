@@ -14,6 +14,7 @@
 #include <uapi/linux/thermal.h>
 
 #include "thermal_core.h"
+#include <trace/hooks/thermal.h>
 
 static const struct genl_multicast_group thermal_genl_mcgrps[] = {
 	[THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
@@ -317,6 +318,12 @@ static int thermal_genl_send_event(enum thermal_genl_event event,
 	struct sk_buff *msg;
 	int ret = -EMSGSIZE;
 	void *hdr;
+	int enable_thermal_genl = 1;
+
+	/* ANDROID: 6.12 parity */
+	trace_android_vh_enable_thermal_genl_check(event, p->tz_id, &enable_thermal_genl);
+	if (!enable_thermal_genl)
+		return 0;
 
 	if (!thermal_group_has_listeners(THERMAL_GENL_EVENT_GROUP))
 		return 0;

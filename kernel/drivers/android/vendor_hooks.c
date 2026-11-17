@@ -17,6 +17,8 @@
 #include <trace/hooks/binder.h>
 #include <trace/hooks/bug.h>
 #include <trace/hooks/cgroup.h>
+#include <trace/hooks/hung_task.h>
+#include <trace/hooks/thermal.h>
 #include <trace/hooks/cpufreq.h>
 #include <trace/hooks/cpuidle.h>
 #include <trace/hooks/cpuidle_psci.h>
@@ -162,3 +164,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_transfer_rsp_status);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_update_sysfs);
 EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_ufs_wait_for_uic_cmd);
 /* keep-sorted end */
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_enable_thermal_genl_check);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_thermal_pm_notify_suspend);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks);
+EXPORT_TRACEPOINT_SYMBOL_GPL(android_vh_check_uninterruptible_tasks_dn);

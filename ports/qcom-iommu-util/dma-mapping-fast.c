@@ -144,15 +144,23 @@ static dma_addr_t __fast_smmu_alloc_iova(struct dma_fast_smmu_mapping *mapping,
 	unsigned long align = (1 << get_order(size)) - 1;
 	struct iommu_domain *domain = mapping->domain;
 
+	/*
+	 * AVR 7.3: bitmap_find_next_zero_area() now returns exactly @size when no area
+	 * is found (6.12 returned start + nr > size). The vendor "bit > num_4k_pages"
+	 * test missed that, handed out base + size and av8l_fast_map() wrote PTEs past
+	 * the end of the vmapped pmds: phone test 38 oops at ffffffc086000000 in
+	 * av8l_fast_map_sg_public under UFS readahead. Treat anything >= size (or an
+	 * area not fitting) as failure.
+	 */
 	bit = bitmap_find_next_zero_area(mapping->clean_bitmap,
 					  mapping->num_4k_pages,
 					  mapping->next_start, nbits, align);
-	if (unlikely(bit > mapping->num_4k_pages)) {
+	if (unlikely(bit >= mapping->num_4k_pages || bit + nbits > mapping->num_4k_pages)) {
 		/* try wrapping */
 		bit = bitmap_find_next_zero_area(
 			mapping->clean_bitmap, mapping->num_4k_pages, 0, nbits,
 			align);
-		if (unlikely(bit > mapping->num_4k_pages)) {
+		if (unlikely(bit >= mapping->num_4k_pages || bit + nbits > mapping->num_4k_pages)) {
 			/*
 			 * If we just re-allocated a VA whose TLB hasn't been
 			 * invalidated since it was last used and unmapped, we
@@ -179,7 +187,8 @@ static dma_addr_t __fast_smmu_alloc_iova(struct dma_fast_smmu_mapping *mapping,
 							mapping->num_4k_pages,
 								 0, nbits,
 								 align);
-				if (unlikely(bit > mapping->num_4k_pages))
+				if (unlikely(bit >= mapping->num_4k_pages ||
+					     bit + nbits > mapping->num_4k_pages))
 					return DMA_MAPPING_ERROR;
 
 			} else {

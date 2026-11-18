@@ -2,6 +2,11 @@
 # vendor/qcom/opensource/camera-kernel (tag MMI-W3WWL36.65-11-18) camera.ko for canoe.
 # Sources/defines: Makefile.generated (scripts/gen_camera_makefile.py).
 include $(src)/Makefile.generated
+# AVR: Moto product camera config (parity with the 6.12 avr camera.ko: gc32e1 byte-wise
+# chip id read in cam_sensor_match_id, cci/i2c debug misc device). Phone test 46: front
+# camera gc32e1 read 0x03f0 as a word -> 0x3232 (no auto-increment) -> probe failed.
+ccflags-y += -DCONFIG_CAM_SENSOR_PROBE_DEBUG=1 -DCONFIG_CCI_DEBUG_INTF=1
+camera-y += drivers/cam_sensor_module/cam_cci/cci_intf.o
 ccflags-y += $(AVR_CAMERA_DEFINES) $(AVR_CAMERA_INCLUDES)
 ccflags-y += -I$(src)/include/uapi/camera -I$(src)/include/uapi/camera/media -I$(src)/drivers -I$(src)
 ccflags-y += -include $(src)/cam_generated.h -Wno-missing-prototypes -Wno-macro-redefined

@@ -132,6 +132,7 @@ static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_
 	u32 wq_ctx, smc_call_ctx;
 	struct arm_smccc_args resume;
 	struct arm_smccc_args *smc = waitq;
+	u64 fn_id = waitq->args[0];	/* ANDROID: diagnostic */
 
 	do {
 		__scm_smc_do_quirk(smc, res);
@@ -141,7 +142,7 @@ static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_
 			smc_call_ctx = res->a2;
 
 			trace_scm_waitq_sleep(wq_ctx, smc_call_ctx);
-			ret = qcom_scm_wait_for_wq_completion(dev, wq_ctx);
+			ret = qcom_scm_wait_for_wq_completion(dev, wq_ctx, fn_id);
 			if (ret)
 				return ret;
 

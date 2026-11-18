@@ -3600,7 +3600,7 @@ static struct completion *qcom_scm_get_completion(struct qcom_scm *scm, u32 wq_c
 	return wq;
 }
 
-int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx)
+int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx, u64 fn_id)
 {
 	struct qcom_scm *scm = dev_get_drvdata(dev);
 	struct completion *wq;
@@ -3613,7 +3613,10 @@ int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx)
 	/* ANDROID: uninterruptible like 6.12 vendor (TASK_IDLE hid hangs); report lost wakeups */
 	while (!wait_for_completion_timeout(wq, 10 * HZ)) {
 		waited += 10;
-		dev_warn(scm->dev, "TZ waitq ctx %u: still asleep after %us\n", wq_ctx, waited);
+		dev_warn(scm->dev, "TZ waitq ctx %u: still asleep after %us (smc 0x%llx, %s/%d)\n",
+			 wq_ctx, waited, fn_id, current->comm, task_pid_nr(current));
+		if (waited == 30)
+			dump_stack();
 	}
 
 	return 0;

@@ -80,7 +80,7 @@ struct qcom_scm_res {
 	u64 result[MAX_QCOM_SCM_RETS];
 };
 
-int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx);
+int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx, u64 fn_id);
 int qcom_scm_waitq_wake_flags(struct device *dev, u32 wq_ctx, u32 flags);
 int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
 void qcom_scm_smc_enable_multicall(unsigned int call_ctx_cnt);

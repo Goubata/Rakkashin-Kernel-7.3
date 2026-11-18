@@ -205,7 +205,8 @@ static void syncobj_timer(struct timer_list *t)
 					&fence->flags);
 			const char *str = NULL;
 
-			if (fence->ops->signaled && fence->ops->signaled(fence))
+			/* AVR 7.3: fence->ops is detached once signalled (NULL deref) */
+			if (dma_fence_is_signaled(fence))
 				retired = true;
 
 			if (!retired)

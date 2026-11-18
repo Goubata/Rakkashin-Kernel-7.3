@@ -59,6 +59,12 @@ fi
 # lost while logd keeps nothing on 7.3). Phone test 21: six netd_shared programs
 # (ingress_stats, get/setsockopt, accecn*) are missing on 7.3 and netd aborts on them.
 R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/netbpfload-trace.txt 120 netbpfload > /dev/null 2>&1 &
+# Phone tests 40-41: 4G data / VoLTE fail (OEM_DCFAILCAUSE_4); rmnet_data links are created
+# (IPA logs "register to IPA") and then gone. Trace the vendor data daemons from their start
+# (comm "qti" = /vendor/bin/qti, "adpl" = /vendor/bin/adpl); liblog payloads land in the trace
+# because this ROM's persist.log.tag=Settings ("S") drops their logcat lines.
+R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/trace-qti.txt 180 qti any > /dev/null 2>&1 &
+R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/trace-adpl.txt 180 adpl any > /dev/null 2>&1 &
 # netd1shot rescue (phone tests 13-18: the netd self-test fails and init reboots with
 # "netd1shot-fail" before adbd starts). Attach to the real netd1shot, log failing syscalls and
 # turn its failure into exit 0 so the 7.3 test boot stays up for live debugging over adb.
@@ -86,7 +92,9 @@ cat /proc/modules > $O/modules-postfs.txt
 # continuous logs: survive the reboot that netd1shot-fail etc. trigger (init syncs on reboot)
 nohup logcat -b all -v threadtime -f $O/logcat-stream.txt > /dev/null 2>&1 &
 nohup sh -c "cat /proc/kmsg > $O/kmsg-stream.txt" > /dev/null 2>&1 &
-for m in synx-driver msm_kgsl msm_drm; do
+# camera / msm-eva are deferred in the kit too (camera depends on synx-driver); without
+# them camera-provider crash-loops and media.camera reports 0 devices (phone test 40).
+for m in synx-driver msm_kgsl msm_drm camera msm-eva; do
 	[ -f $MODDIR/ko/$m.ko ] || continue
 	grep -q "^${m//-/_} " /proc/modules && { echo "$m already loaded" >> $O/insmod.txt; continue; }
 	# insmod (unlike modprobe) does not apply "<module>.<param>=" from the kernel command

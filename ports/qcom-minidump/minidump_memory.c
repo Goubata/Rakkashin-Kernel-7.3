@@ -1104,12 +1104,15 @@ static int dump_bufinfo(const struct dma_buf *buf_obj, void *private)
 				DMA_RESV_USAGE_BOOKKEEP, fence) {
 		if (!dma_fence_get_rcu(fence))
 			continue;
+		/* AVR 7.3: fence->ops is detached once signalled; RCU-guarded accessors */
+		rcu_read_lock();
 		ret = scnprintf(priv_buf->buf + priv_buf->offset,
 				priv_buf->size - priv_buf->offset,
 				"\tFence: %s %s %ssignalled\n",
-				fence->ops->get_driver_name(fence),
-				fence->ops->get_timeline_name(fence),
+				dma_fence_driver_name(fence),
+				dma_fence_timeline_name(fence),
 				dma_fence_is_signaled(fence) ? "" : "un");
+		rcu_read_unlock();
 		priv_buf->offset += ret;
 		if (priv_buf->offset == priv_buf->size - 1)
 			goto err;

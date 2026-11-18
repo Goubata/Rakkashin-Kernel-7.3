@@ -4600,9 +4600,12 @@ static struct dma_fence *_sde_plane_get_input_hw_fence(struct drm_plane *plane)
 		} else if (test_bit(SYNX_HW_FENCE_FLAG_ENABLED_BIT, &fence->flags)) {
 			input_hw_fence = fence;
 
+			/* AVR 7.3: fence->ops is detached once signalled */
+			rcu_read_lock();
 			SDE_DEBUG("input hwfence ctx:%llu seqno:%llu f:0x%lx timeline:%s\n",
 				fence->context, fence->seqno, fence->flags,
-				fence->ops->get_timeline_name(fence));
+				dma_fence_timeline_name(fence));
+			rcu_read_unlock();
 		}
 
 		SDE_EVT32_VERBOSE(DRMID(plane), fence->flags);

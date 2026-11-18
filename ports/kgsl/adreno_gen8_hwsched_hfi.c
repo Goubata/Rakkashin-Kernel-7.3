@@ -3247,9 +3247,11 @@ static int _submit_hw_fence(struct adreno_device *adreno_dev,
 			obj->ctxt_id = fence->context;
 			obj->seq_no =  fence->seqno;
 		}
+		/* AVR 7.3: fence->ops is detached once signalled; RCU-guarded accessor */
+		rcu_read_lock();
 		trace_adreno_input_hw_fence(drawobj->context->id, obj->ctxt_id,
-			obj->seq_no, obj->flags, fence->ops->get_timeline_name ?
-			fence->ops->get_timeline_name(fence) : "unknown");
+			obj->seq_no, obj->flags, dma_fence_timeline_name(fence));
+		rcu_read_unlock();
 
 		obj->header = FIELD_PREP(GENMASK(15, 0), sizeof(*obj) >> 2);
 		obj++;

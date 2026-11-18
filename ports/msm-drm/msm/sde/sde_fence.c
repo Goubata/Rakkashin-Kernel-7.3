@@ -898,23 +898,32 @@ void sde_fence_dump(struct dma_fence *fence)
 
 	avr_fence_timeline_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
 
+	/*
+	 * AVR 7.3: dma_fence_signal() now detaches fence->ops (RCU_INIT_POINTER NULL),
+	 * so fence->ops->... on a signalled fence is a NULL dereference (phone test 42
+	 * oops in sde_sync_get_name_prefix from sde_plane_wait_input_fence). Use the
+	 * RCU-guarded accessors the 7.x dma-fence core provides.
+	 */
+	rcu_read_lock();
 	SDE_ERROR(
 		"fence drv name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x status:%d flags:0x%lx\n",
-		fence->ops->get_driver_name(fence),
-		fence->ops->get_timeline_name(fence),
+		dma_fence_driver_name(fence),
+		dma_fence_timeline_name(fence),
 		fence->seqno, timeline_str,
-		fence->ops->signaled ?
-		fence->ops->signaled(fence) : 0xffffffff,
+		dma_fence_is_signaled(fence),
 		dma_fence_get_status(fence), fence->flags);
 
 	/* dump child fences for any array fence */
 	if (dma_fence_is_array(fence)) {
 		array = container_of(fence, struct dma_fence_array, base);
-		SDE_ERROR("fence drv name:%s num_fences:%d\n", fence->ops->get_driver_name(fence),
+		SDE_ERROR("fence drv name:%s num_fences:%d\n", dma_fence_driver_name(fence),
 			array->num_fences);
+		rcu_read_unlock();
 		for (i = 0; i < array->num_fences; i++)
 			sde_fence_dump(array->fences[i]);
+		return;
 	}
+	rcu_read_unlock();
 }
 
 static void sde_fence_dump_user_fds_info(struct dma_fence *base_fence)
@@ -955,7 +964,7 @@ signed long sde_sync_wait(void *fnc, long timeout_ms, int *error_status)
 			if (status == -EINVAL) {
 				SDE_INFO("spec fence bind failure status:%d\n", status);
 				rc = -EBADF;
-			} else if (fence->ops->signaled && fence->ops->signaled(fence)) {
+			} else if (dma_fence_is_signaled(fence)) {	/* AVR 7.3: ops may be detached */
 				SDE_INFO("spec fence status:%d\n", status);
 			} else {
 				sde_fence_dump(fence);
@@ -980,13 +989,13 @@ uint32_t sde_sync_get_name_prefix(void *fence)
 	if (!fence)
 		return 0;
 
-	name = f->ops->get_driver_name(f);
-	if (!name)
-		return 0;
-
+	/* AVR 7.3: ops are detached once signalled; use the RCU-guarded accessor */
+	rcu_read_lock();
+	name = dma_fence_driver_name(f);
 	prefix = 0x0;
-	for (i = 0; i < sizeof(uint32_t) && name[i]; ++i)
+	for (i = 0; name && i < sizeof(uint32_t) && name[i]; ++i)
 		prefix = (prefix << CHAR_BIT) | name[i];
+	rcu_read_unlock();
 
 	return prefix;
 }
@@ -1379,12 +1388,14 @@ void sde_fence_list_dump(struct dma_fence *fence, struct seq_file **s)
 
 	avr_fence_timeline_str(fence, timeline_str, TIMELINE_VAL_LENGTH);
 
+	/* AVR 7.3: fence->ops is detached once signalled */
+	rcu_read_lock();
 	seq_printf(*s, "fence name:%s timeline name:%s seqno:0x%llx timeline:%s signaled:0x%x\n",
-		fence->ops->get_driver_name(fence),
-		fence->ops->get_timeline_name(fence),
+		dma_fence_driver_name(fence),
+		dma_fence_timeline_name(fence),
 		fence->seqno, timeline_str,
-		fence->ops->signaled ?
-		fence->ops->signaled(fence) : 0xffffffff);
+		dma_fence_is_signaled(fence));
+	rcu_read_unlock();
 }
 
 void sde_debugfs_timeline_dump(struct sde_fence_context *ctx,

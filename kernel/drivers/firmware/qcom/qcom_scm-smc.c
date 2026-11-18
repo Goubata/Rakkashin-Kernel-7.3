@@ -72,6 +72,20 @@ static void fill_wq_resume_args(struct arm_smccc_args *resume, u32 smc_call_ctx)
 	resume->args[2] = smc_call_ctx;
 }
 
+/* ANDROID: vendor protocol: acknowledge a QCOM_SCM_WAITQ_WAKE and resume */
+static void fill_wq_wake_ack_args(struct arm_smccc_args *ack, u32 smc_call_ctx)
+{
+	memset(ack->args, 0, sizeof(ack->args[0]) * ARRAY_SIZE(ack->args));
+
+	ack->args[0] = ARM_SMCCC_CALL_VAL(ARM_SMCCC_STD_CALL,
+					ARM_SMCCC_SMC_64, ARM_SMCCC_OWNER_SIP,
+					SCM_SMC_FNID(QCOM_SCM_SVC_WAITQ, QCOM_SCM_WAITQ_ACK));
+
+	ack->args[1] = QCOM_SCM_ARGS(1);
+
+	ack->args[2] = smc_call_ctx;
+}
+
 int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending)
 {
 	int ret;
@@ -119,8 +133,19 @@ static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_
 			trace_scm_waitq_resume(smc_call_ctx);
 			fill_wq_resume_args(&resume, smc_call_ctx);
 			smc = &resume;
+		} else if (res->a0 == QCOM_SCM_WAITQ_WAKE) {
+			/* ANDROID: 6.12 vendor protocol: wake wq_ctx, ack, continue */
+			wq_ctx = res->a1;
+			smc_call_ctx = res->a2;
+
+			ret = qcom_scm_waitq_wake_flags(dev, wq_ctx, res->a3);
+			if (ret)
+				return ret;
+
+			fill_wq_wake_ack_args(&resume, smc_call_ctx);
+			smc = &resume;
 		}
-	} while (res->a0 == QCOM_SCM_WAITQ_SLEEP);
+	} while (res->a0 == QCOM_SCM_WAITQ_SLEEP || res->a0 == QCOM_SCM_WAITQ_WAKE);
 
 	return 0;
 }

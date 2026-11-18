@@ -70,6 +70,8 @@ struct qcom_scm {
 
 	struct qcom_tzmem_pool *mempool;
 	unsigned int wq_cnt;
+	/* ANDROID: vendor waitq ids are arbitrary: completions by id, made on first use */
+	struct xarray waitq_xa;
 	struct notifier_block restart_nb;	/* ANDROID: 6.12 OEM reboot */
 };
 
@@ -132,6 +134,8 @@ static const u8 qcom_scm_cpu_warm_bits[QCOM_SCM_BOOT_MAX_CPUS] = {
 };
 
 #define QCOM_SMC_WAITQ_FLAG_WAKE_ONE	BIT(0)
+#define QCOM_SMC_WAITQ_FLAG_WAKE_ALL	BIT(1)	/* ANDROID: vendor */
+#define QCOM_SMC_WAITQ_FLAG_WAKE_NONE	0x0
 
 #define QCOM_DLOAD_MASK		GENMASK(5, 4)
 #define QCOM_DLOAD_NODUMP	0
@@ -3561,38 +3565,78 @@ static int qcom_scm_get_waitq_irq(struct qcom_scm *scm)
 
 static struct completion *qcom_scm_get_completion(struct qcom_scm *scm, u32 wq_ctx)
 {
-	if (WARN_ON_ONCE(wq_ctx >= scm->wq_cnt))
-		return ERR_PTR(-EINVAL);
+	struct completion *wq, *old;
 
-	return &scm->waitq_comps[wq_ctx];
+	if (wq_ctx < scm->wq_cnt)
+		return &scm->waitq_comps[wq_ctx];
+
+	/* ANDROID: 6.12 vendor: any id, completion allocated on first use */
+	wq = xa_load(&scm->waitq_xa, wq_ctx);
+	if (wq)
+		return wq;
+	wq = devm_kzalloc(scm->dev, sizeof(*wq), GFP_ATOMIC);
+	if (!wq)
+		return ERR_PTR(-ENOMEM);
+	init_completion(wq);
+	old = xa_cmpxchg(&scm->waitq_xa, wq_ctx, NULL, wq, GFP_ATOMIC);
+	if (xa_is_err(old)) {
+		devm_kfree(scm->dev, wq);
+		return ERR_PTR(xa_err(old));
+	}
+	if (old) {
+		devm_kfree(scm->dev, wq);
+		return old;
+	}
+	return wq;
 }
 
 int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx)
 {
 	struct qcom_scm *scm = dev_get_drvdata(dev);
 	struct completion *wq;
+	unsigned int waited = 0;
 
 	wq = qcom_scm_get_completion(scm, wq_ctx);
 	if (IS_ERR(wq))
 		return PTR_ERR(wq);
 
-	wait_for_completion_state(wq, TASK_IDLE);
+	/* ANDROID: uninterruptible like 6.12 vendor (TASK_IDLE hid hangs); report lost wakeups */
+	while (!wait_for_completion_timeout(wq, 10 * HZ)) {
+		waited += 10;
+		dev_warn(scm->dev, "TZ waitq ctx %u: still asleep after %us\n", wq_ctx, waited);
+	}
 
 	return 0;
 }
 
-static int qcom_scm_waitq_wakeup(struct qcom_scm *scm, unsigned int wq_ctx)
+static void qcom_scm_waitq_apply(struct completion *wq, u32 flags)
 {
+	if (flags == QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
+		complete_all(wq);
+		reinit_completion(wq);
+	} else {
+		complete(wq);
+	}
+}
+
+int qcom_scm_waitq_wake_flags(struct device *dev, u32 wq_ctx, u32 flags)
+{
+	struct qcom_scm *scm = dev_get_drvdata(dev);
 	struct completion *wq;
 
+	if (flags == QCOM_SMC_WAITQ_FLAG_WAKE_NONE)
+		return 0;
+	if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE && flags != QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
+		dev_err(scm->dev, "invalid waitq flags %u for wq_ctx %u\n", flags, wq_ctx);
+		return 0;
+	}
 	wq = qcom_scm_get_completion(scm, wq_ctx);
 	if (IS_ERR(wq))
 		return PTR_ERR(wq);
-
-	complete(wq);
-
+	qcom_scm_waitq_apply(wq, flags);
 	return 0;
 }
+
 
 static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
 {
@@ -3607,12 +3651,17 @@ static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
 			goto out;
 		}
 
-		if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE) {
+		/* ANDROID: 6.12 vendor: two wakeups in close succession */
+		if (flags == QCOM_SMC_WAITQ_FLAG_WAKE_NONE)
+			goto out;
+
+		if (flags != QCOM_SMC_WAITQ_FLAG_WAKE_ONE &&
+		    flags != QCOM_SMC_WAITQ_FLAG_WAKE_ALL) {
 			dev_err(scm->dev, "Invalid flags received for wq_ctx: %u\n", flags);
 			goto out;
 		}
 
-		ret = qcom_scm_waitq_wakeup(scm, wq_ctx);
+		ret = qcom_scm_waitq_wake_flags(scm->dev, wq_ctx, flags);
 		if (ret)
 			goto out;
 	} while (more_pending);
@@ -3791,6 +3840,8 @@ static int qcom_scm_probe(struct platform_device *pdev)
 
 	for (i = 0; i < scm->wq_cnt; i++)
 		init_completion(&scm->waitq_comps[i]);
+	xa_init(&scm->waitq_xa);
+	dev_info(scm->dev, "waitq: %u contexts\n", scm->wq_cnt);
 
 	irq = qcom_scm_get_waitq_irq(scm);
 	if (irq < 0)

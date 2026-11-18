@@ -7,6 +7,7 @@
 #include <linux/errno.h>
 #include <linux/delay.h>
 #include <linux/mutex.h>
+#include <linux/semaphore.h>
 #include <linux/slab.h>
 #include <linux/types.h>
 #include <linux/firmware/qcom/qcom_scm.h>
@@ -29,6 +30,20 @@ struct arm_smccc_args {
 #include "qcom_scm_trace.h"
 
 static DEFINE_MUTEX(qcom_scm_lock);
+/* ANDROID: 6.12 vendor: TZ call contexts; whitelisted calls skip qcom_scm_lock */
+static struct semaphore qcom_scm_sem = __SEMAPHORE_INITIALIZER(qcom_scm_sem, 1);
+static bool qcom_scm_multicall;
+
+void qcom_scm_smc_enable_multicall(unsigned int call_ctx_cnt)
+{
+	unsigned int i;
+
+	if (call_ctx_cnt <= 1 || qcom_scm_multicall)
+		return;
+	for (i = 1; i < call_ctx_cnt; i++)
+		up(&qcom_scm_sem);
+	qcom_scm_multicall = true;
+}
 
 #define QCOM_SCM_EBUSY_WAIT_MS 30
 #define QCOM_SCM_EBUSY_MAX_RETRY 20
@@ -151,7 +166,8 @@ static int __scm_smc_do_quirk_handle_waitq(struct device *dev, struct arm_smccc_
 }
 
 static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
-			struct arm_smccc_res *res, bool atomic, bool retry_busy)
+			struct arm_smccc_res *res, bool atomic, bool retry_busy,
+			bool multicall)
 {
 	int ret, retry_count = 0;
 
@@ -161,11 +177,17 @@ static int __scm_smc_do(struct device *dev, struct arm_smccc_args *smc,
 	}
 
 	do {
-		mutex_lock(&qcom_scm_lock);
+		bool unlocked = multicall && READ_ONCE(qcom_scm_multicall);
+
+		if (!unlocked)
+			mutex_lock(&qcom_scm_lock);
+		down(&qcom_scm_sem);
 
 		ret = __scm_smc_do_quirk_handle_waitq(dev, smc, res);
 
-		mutex_unlock(&qcom_scm_lock);
+		up(&qcom_scm_sem);
+		if (!unlocked)
+			mutex_unlock(&qcom_scm_lock);
 
 		if (ret)
 			return ret;
@@ -234,7 +256,7 @@ static int scm_smc_call_impl(struct device *dev, const struct qcom_scm_desc *des
 		smc.args[SCM_SMC_LAST_REG_IDX] = qcom_tzmem_to_phys(args_virt);
 	}
 
-	ret = __scm_smc_do(dev, &smc, &smc_res, atomic, retry_busy);
+	ret = __scm_smc_do(dev, &smc, &smc_res, atomic, retry_busy, desc->multicall_allowed);
 
 	trace_scm_smc_done(ret, smc.args[0], &smc_res);
 

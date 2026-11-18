@@ -2928,7 +2928,12 @@ static int __qcom_scm_qseecom_call(const struct qcom_scm_desc *desc,
 	 */
 	lockdep_assert_held(&qcom_scm_qseecom_call_lock);
 
-	status = qcom_scm_call(__scm->dev, desc, &scm_res);
+	{	/* ANDROID: 6.12 vendor whitelist (qcom_scm_qseecom_call) */
+		struct qcom_scm_desc d = *desc;
+
+		d.multicall_allowed = true;
+		status = qcom_scm_call(__scm->dev, &d, &scm_res);
+	}
 
 	res->result = scm_res.result[0];
 	res->resp_type = scm_res.result[1];
@@ -3268,6 +3273,7 @@ int qcom_scm_invoke_smc(phys_addr_t in_buf, size_t in_buf_size,
 {
 	struct qcom_scm_desc desc = {
 		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.multicall_allowed = true,	/* ANDROID: vendor whitelist */
 		.cmd = QCOM_SCM_SMCINVOKE_INVOKE,
 		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
 		.args[0] = in_buf,
@@ -3289,6 +3295,7 @@ int qcom_scm_invoke_smc_legacy(phys_addr_t in_buf, size_t in_buf_size,
 {
 	struct qcom_scm_desc desc = {
 		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.multicall_allowed = true,	/* ANDROID: vendor whitelist */
 		.cmd = QCOM_SCM_SMCINVOKE_INVOKE_LEGACY,
 		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
 		.args[0] = in_buf,
@@ -3309,6 +3316,7 @@ int qcom_scm_invoke_callback_response(phys_addr_t out_buf, size_t out_buf_size,
 {
 	struct qcom_scm_desc desc = {
 		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.multicall_allowed = true,	/* ANDROID: vendor whitelist */
 		.cmd = QCOM_SCM_SMCINVOKE_CB_RSP,
 		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
 		.args[0] = out_buf,
@@ -3340,6 +3348,7 @@ int qcom_scm_qtee_invoke_smc(phys_addr_t inbuf, size_t inbuf_size,
 {
 	struct qcom_scm_desc desc = {
 		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.multicall_allowed = true,	/* ANDROID: vendor whitelist */
 		.cmd = QCOM_SCM_SMCINVOKE_INVOKE,
 		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
 		.args[0] = inbuf,
@@ -3382,6 +3391,7 @@ int qcom_scm_qtee_callback_response(phys_addr_t buf, size_t buf_size,
 {
 	struct qcom_scm_desc desc = {
 		.svc = QCOM_SCM_SVC_SMCINVOKE,
+		.multicall_allowed = true,	/* ANDROID: vendor whitelist */
 		.cmd = QCOM_SCM_SMCINVOKE_CB_RSP,
 		.owner = ARM_SMCCC_OWNER_TRUSTED_OS,
 		.args[0] = buf,
@@ -3856,6 +3866,9 @@ static int qcom_scm_probe(struct platform_device *pdev)
 		if (ret < 0)
 			return dev_err_probe(scm->dev, ret,
 					     "Failed to request qcom-scm irq\n");
+		/* ANDROID: 6.12 vendor: waitq IRQ + TZ queue info -> multi-SMC */
+		qcom_scm_smc_enable_multicall(scm->wq_cnt);
+		dev_info(scm->dev, "multi-SMC for QTEE calls, %u TZ call contexts\n", scm->wq_cnt);
 	}
 
 	/*

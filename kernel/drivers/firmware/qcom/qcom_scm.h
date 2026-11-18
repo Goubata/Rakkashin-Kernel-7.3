@@ -69,6 +69,7 @@ struct qcom_scm_desc {
 	u32 arginfo;
 	u64 args[MAX_QCOM_SCM_ARGS];
 	u32 owner;
+	bool multicall_allowed;	/* ANDROID: 6.12 vendor multi-SMC whitelist */
 };
 
 /**
@@ -82,6 +83,7 @@ struct qcom_scm_res {
 int qcom_scm_wait_for_wq_completion(struct device *dev, u32 wq_ctx);
 int qcom_scm_waitq_wake_flags(struct device *dev, u32 wq_ctx, u32 flags);
 int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
+void qcom_scm_smc_enable_multicall(unsigned int call_ctx_cnt);
 
 #define SCM_SMC_FNID(s, c)	((((s) & 0xFF) << 8) | ((c) & 0xFF))
 int __scm_smc_call(struct device *dev, const struct qcom_scm_desc *desc,

@@ -20,6 +20,7 @@ from assemble_boot_kit import cpio_entries, cpio_pack, modinfo  # noqa: E402
 
 ROOTFS = ROOT.parent / '.andronix/distros/ubuntu/rootfs'
 TOOLS = ROOT.parent / 'avr-upstream-audit/tools-mkbootimg'
+KOUT = 'out/native-gki'
 MODS = ['tls', 'vcan', 'can_dev']
 LOAD = ['tls', 'vcan']
 
@@ -27,14 +28,17 @@ LOAD = ['tls', 'vcan']
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--timeout', type=int, default=240)
+    ap.add_argument('--tree', choices=['qemu', 'prod'], default='qemu')
     a = ap.parse_args()
+    global KOUT
+    KOUT = {'qemu': 'out/native-gki', 'prod': 'out/prod-gki'}[a.tree]
     out = ROOT / 'tests/qemu/boot-kit-android-init'
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
-    release = (ROOT / 'out/native-gki/include/config/kernel.release').read_text().strip()
+    release = (ROOT / KOUT / 'include/config/kernel.release').read_text().strip()
     found = {}
-    for p in (ROOT / 'out/native-gki').glob('**/*.ko'):
+    for p in (ROOT / KOUT).glob('**/*.ko'):
         n, deps, al = modinfo(p)
         if n in MODS:
             found[n] = (p, deps)
@@ -61,7 +65,7 @@ def main():
     cmd = ['chroot', str(ROOTFS), '/usr/bin/env', '-i', 'PATH=/usr/sbin:/usr/bin:/sbin:/bin', 'timeout', str(a.timeout),
            'qemu-system-aarch64', '-machine', 'virt,gic-version=3', '-cpu', 'max', '-smp', '2', '-m', '2048',
            '-accel', 'tcg,thread=multi', '-nodefaults', '-serial', 'stdio', '-monitor', 'none', '-display', 'none',
-           '-no-reboot', '-kernel', '/work/avr-port/out/native-gki/arch/arm64/boot/Image',
+           '-no-reboot', '-kernel', '/work/avr-port/' + KOUT + '/arch/arm64/boot/Image',
            '-initrd', '/work/avr-port/tests/qemu/boot-kit-android-init/ramdisk.cpio',
            '-append', 'console=ttyAMA0 earlycon=pl011,0x09000000 panic=1 printk.devkmsg=on '
                       'androidboot.hardware=qcom androidboot.slot_suffix=_a']

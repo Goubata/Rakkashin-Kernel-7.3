@@ -18,3 +18,6 @@ KBUILD_EXTRA_SYMBOLS += $(src)/../gunyah-core/Module.symvers $(src)/../gunyah-rm
 
 # Motorola canoe_perf.bzl: shared AVF labels are part of the wire ABI.
 ccflags-y += -DCONFIG_QTVM_WITH_AVF=1
+# synx-kernel canoe.bzl config_options: CONFIG_EXTENSIBLE_GLCOREDATA (40-byte global entries,
+# 252 KB ipclite global region). Phone test 11: without it 4096 x 40 B overflowed the 124 KB region.
+ccflags-y += -DCONFIG_EXTENSIBLE_GLCOREDATA=1

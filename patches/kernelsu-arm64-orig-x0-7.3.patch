@@ -1,0 +1,48 @@
+From 6362a706c808a52d2c91620c0c16f27ca8a8f4a2 Mon Sep 17 00:00:00 2001
+From: Codex <codex@localhost>
+Date: Thu, 19 Nov 2026 00:39:31 +0900
+Subject: [PATCH] ANDROID: kernelsu: arm64 syscall arg0 is orig_x0 on 7.x
+
+The 7.x native arm64 syscall wrappers take the first argument from
+regs->orig_x0 (asm/syscall_wrapper.h), but KernelSU's arm64 arch.h mapped
+PT_REGS_SYSCALL_PARM1 to regs[0]. Every place that rewrites or synthesizes
+syscall arg0 was silently ignored:
+- sucompat: execveat(tmp_fd, "", AT_EMPTY_PATH) ran with the original
+  filename pointer as fd -> su (adb shell and apps) failed with -EBADF
+  (phone tests 19-46).
+- ksyscall(): ksu_close_fd() closed fd 0 of the caller, ksu_sys_setns() got
+  fd 0 (global mount namespace switch failed).
+Map __PT_SYSCALL_PARM1_REG to orig_x0 for >= 7.0 (as riscv64 already does
+with orig_a0). Reads at syscall entry are unchanged (orig_x0 == x0 there).
+
+Phone test 47: adb su -> uid=0 u:r:ksu:s0, KernelSU manager root user-confirmed.
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ drivers/kernelsu/include/arch.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/kernelsu/include/arch.h b/drivers/kernelsu/include/arch.h
+index 2851fa5cc..edfb19d7f 100644
+--- a/drivers/kernelsu/include/arch.h
++++ b/drivers/kernelsu/include/arch.h
+@@ -18,6 +18,16 @@
+ #define __PT_SP_REG sp
+ #define __PT_IP_REG pc
+ #define __PT_ORIG_SYSCALL_REG regs[8]
++/*
++ * AVR 7.3: the native arm64 syscall wrappers read the first argument from
++ * regs->orig_x0 (arch/arm64/include/asm/syscall_wrapper.h), not regs[0].
++ * Rewriting regs[0] (sucompat execveat fd, ksyscall() pt_regs) was ignored:
++ * su -> execveat(<filename ptr as fd>) = -EBADF, ksu_close_fd() closed fd 0,
++ * setns() got fd 0. Same model as riscv64 (orig_a0) below.
++ */
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 0, 0)
++#define __PT_SYSCALL_PARM1_REG orig_x0
++#endif
+ 
+ #define REBOOT_SYMBOL "__arm64_sys_reboot"
+ #define SYS_READ_SYMBOL "__arm64_sys_read"
+-- 
+2.56.1
+

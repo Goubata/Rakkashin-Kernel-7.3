@@ -41,7 +41,7 @@ dmesg > $O/dmesg-postfs.txt
 # logd keeps nothing on 7.3, so record failing syscalls instead)
 nohup sh -c "
 	i=0; while [ \"\$(getprop bpf.progs_loaded)\" != 1 ] && [ \$i -lt 120 ]; do sleep 0.2; i=\$((i+1)); done
-	$MODDIR/sctrace $O/netd-trace.txt 4 /system/bin/netd
+	SCTRACE_SOCKETS=dnsproxyd,oplus_dnsproxyd,mdns,fwmarkd $MODDIR/sctrace $O/netd-trace.txt 4 /system/bin/netd
 	sync" > /dev/null 2>&1 &
 # background logger: does not depend on the late_start (service.sh) stage being reached
 nohup sh -c '

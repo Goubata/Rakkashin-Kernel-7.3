@@ -13,6 +13,8 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <asm/ptrace.h>
 #include <linux/ptrace.h>
 
@@ -44,6 +46,24 @@ int main(int argc, char **argv)
 	if (argc < 4) return 2;
 	o = fopen(argv[1], "w");
 	end = time(NULL) + atoi(argv[2]);
+	/* init-style control sockets (ANDROID_SOCKET_<name>, bound at /dev/socket/<name>) from
+	 * the comma list in $SCTRACE_SOCKETS, so daemons like netd start as under init */
+	char *sl = getenv("SCTRACE_SOCKETS");
+	if (sl) {
+		char *dup = strdup(sl), *nm, *save;
+		for (nm = strtok_r(dup, ",", &save); nm; nm = strtok_r(NULL, ",", &save)) {
+			int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+			struct sockaddr_un a = { .sun_family = AF_UNIX };
+			char env[64], val[16];
+			snprintf(a.sun_path, sizeof(a.sun_path), "/dev/socket/%s", nm);
+			unlink(a.sun_path);
+			if (bind(fd, (void *)&a, sizeof(a)) || listen(fd, 8))
+				fprintf(o, "socket %s: %s\n", nm, strerror(errno));
+			snprintf(env, sizeof(env), "ANDROID_SOCKET_%s", nm);
+			snprintf(val, sizeof(val), "%d", fd);
+			setenv(env, val, 1);
+		}
+	}
 	c = fork();
 	if (!c) {
 		ptrace(PTRACE_TRACEME, 0, 0, 0);
@@ -93,6 +113,13 @@ int main(int argc, char **argv)
 		}
 		fflush(o);
 		ptrace(PTRACE_SYSCALL, p, 0, sig);
+	}
+	if (sl) {	/* leave /dev/socket clean for init's real netd */
+		char *dup = strdup(sl), *nm, *save, path[108];
+		for (nm = strtok_r(dup, ",", &save); nm; nm = strtok_r(NULL, ",", &save)) {
+			snprintf(path, sizeof(path), "/dev/socket/%s", nm);
+			unlink(path);
+		}
 	}
 	return 0;
 }

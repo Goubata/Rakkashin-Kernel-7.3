@@ -37,12 +37,10 @@ for m in synx-driver msm_kgsl msm_drm; do
 	echo "insmod $m rc=$?" >> $O/insmod.txt
 done
 dmesg > $O/dmesg-postfs.txt
-# traced netd run (phone tests 13-16: netd1shot self-test fails -> reboot,netd1shot-fail;
-# logd keeps nothing on 7.3, so record failing syscalls instead)
-nohup sh -c "
-	i=0; while [ \"\$(getprop bpf.progs_loaded)\" != 1 ] && [ \$i -lt 120 ]; do sleep 0.2; i=\$((i+1)); done
-	SCTRACE_SOCKETS=dnsproxyd,oplus_dnsproxyd,mdns,fwmarkd $MODDIR/sctrace $O/netd-trace.txt 4 /system/bin/netd
-	sync" > /dev/null 2>&1 &
+# netd1shot rescue (phone tests 13-18: the netd self-test fails and init reboots with
+# "netd1shot-fail" before adbd starts). Attach to the real netd1shot, log failing syscalls and
+# turn its failure into exit 0 so the 7.3 test boot stays up for live debugging over adb.
+nohup $MODDIR/rescue1shot $O/netd1shot-trace.txt 120 > /dev/null 2>&1 &
 # background logger: does not depend on the late_start (service.sh) stage being reached
 nohup sh -c '
 O='"$O"'

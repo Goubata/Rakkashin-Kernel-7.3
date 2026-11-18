@@ -1,7 +1,7 @@
 {
  "release": "7.3.0-4k",
  "returncode": 0,
- "elapsed": 5.9,
+ "elapsed": 2.7,
  "checks": {
   "init_ran": true,
   "release_dir": true,

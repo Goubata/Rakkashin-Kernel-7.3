@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "2eada52c7447ab7a4849ddae0a84687ceefd634c",
+  "source_commit": "4435305fbd8b8ae50797ea8331a75d2628f889cb",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -40,6 +40,7 @@
     "patches/moto-vendor-hooks-7.3.patch": "37f7002f7bcd5a07f9773c4bb52ab22a711185f3604b4491e9df4bee947e2049",
     "patches/sea-fixup-7.3.patch": "209b4e8cee6558f76391348eacae507c363de4e0f87535ea746ba0b8140d9ae1",
     "patches/scmi-msg-size-7.3.patch": "ec8115479b52fc75a5b37090d4518fa439468f40ee4ffd3ab64056e659cf1064",
-    "patches/kernelsu-next-7.3.patch": "c958f59eb15a57576f1f36ec4106487a0e3b4e5b4f7f6a2f8e7de43e8917334a"
+    "patches/kernelsu-next-7.3.patch": "c958f59eb15a57576f1f36ec4106487a0e3b4e5b4f7f6a2f8e7de43e8917334a",
+    "patches/scm-waitq-vendor-7.3.patch": "13f5b718842d46926a2df2b0a95d1873abab25339960f67a73f872fdd0ff44d2"
   }
 }

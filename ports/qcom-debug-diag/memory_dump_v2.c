@@ -1539,6 +1539,7 @@ static int mem_dump_alloc_with_rmem(struct platform_device *pdev,
 	}
 
 	for_each_available_child_of_node(node, child_node) {
+		dev_info(&pdev->dev, "rmem dump: node %pOFn\n", child_node);
 		if (of_property_read_bool(child_node, "qcom,dynamic-mem-dump")) {
 			ret = dynamic_mem_dump_alloc(pdev, child_node, rmem, &used_size);
 			if (ret)
@@ -1574,6 +1575,9 @@ static int mem_dump_alloc_with_rmem(struct platform_device *pdev,
 
 		of_node_put(mem_buf_node);
 	}
+	/* AVR 7.3 bring-up breadcrumbs: phone test 3 hung in this probe without a trace */
+	dev_info(&pdev->dev, "rmem dump: used %zu, shmbridge %d\n", (size_t)used_size,
+		 qtee_shmbridge_is_enabled());
 	if (qtee_shmbridge_is_enabled()) {
 		ret = qtee_shmbridge_register(phys_addr, used_size, ns_vmids,
 				ns_vm_perms, 1, PERM_READ|PERM_WRITE, &shm_bridge_handle);
@@ -1583,7 +1587,9 @@ static int mem_dump_alloc_with_rmem(struct platform_device *pdev,
 		}
 	}
 
+	dev_info(&pdev->dev, "rmem dump: assigning dump table region\n");
 	ret = qcom_scm_assign_dump_table_region(1, phys_addr, used_size);
+	dev_info(&pdev->dev, "rmem dump: assign returned %d\n", ret);
 	if (ret) {
 		ret = init_memdump_imem_area(used_size);
 		if (ret) {
@@ -1703,7 +1709,9 @@ static int mem_dump_alloc_with_cma(struct platform_device *pdev,
 		return ret;
 	}
 
+	dev_info(&pdev->dev, "cma dump: assigning dump table region\n");	/* AVR 7.3 bring-up */
 	ret = qcom_scm_assign_dump_table_region(1, phys_addr, total_size);
+	dev_info(&pdev->dev, "cma dump: assign returned %d\n", ret);
 	if (ret) {
 		ret = init_memdump_imem_area(total_size);
 		if (ret) {
@@ -1719,6 +1727,7 @@ static int mem_dump_alloc_with_cma(struct platform_device *pdev,
 	phys_addr += (sizeof(struct msm_dump_table) * 2);
 
 	mem_dump_alloc(pdev, node, phys_addr, dump_vaddr);
+	dev_info(&pdev->dev, "cma dump: entries allocated\n");	/* AVR 7.3 bring-up */
 
 	md_entry.phys_addr = mini_phys_addr;
 	md_entry.virt_addr = (u64)mini_dump_vaddr;

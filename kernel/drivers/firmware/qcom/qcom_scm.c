@@ -954,10 +954,23 @@ static int __qcom_scm_pas_init_image2(struct device *dev, u32 pas_id,
 	struct qcom_scm_res res;
 	dma_addr_t mdata_phys;
 	void *mdata_buf;
+	size_t alloc_size;
 	int ret;
 
 	if (ctx && ctx->use_tzmem)
 		return qcom_scm_pas_prep_and_init_image(dev, ctx, metadata, size);
+
+	/*
+	 * AVR: keep the metadata blob below 4 GiB. The modem PAS (vendor
+	 * dma_phys_below_32b) rejects a blob above it with -EINVAL: phone test 39
+	 * "error -22 initializing firmware modem_dtb.mdt", while test 34 booted the
+	 * modem only because the page happened to be low. With the 64-bit SCM mask
+	 * (disable_dma32=on leaves no ZONE_DMA32) a <= PAGE_SIZE request comes from
+	 * any page, since dma_alloc_contiguous() skips CMA for single pages; asking
+	 * for at least two pages makes it come from the default CMA (0xf5800000 on
+	 * Alor). ctx->size records the real size so metadata_release() matches.
+	 */
+	alloc_size = max_t(size_t, PAGE_ALIGN(size), 2 * PAGE_SIZE);
 
 	/*
 	 * During the scm call memory protection will be enabled for the meta
@@ -971,19 +984,22 @@ static int __qcom_scm_pas_init_image2(struct device *dev, u32 pas_id,
 	 * If we pass a buffer that is already part of an SHM Bridge to this
 	 * call, it will fail.
 	 */
-	mdata_buf = dma_alloc_coherent(dev, size, &mdata_phys, GFP_KERNEL);
+	mdata_buf = dma_alloc_coherent(dev, alloc_size, &mdata_phys, GFP_KERNEL);
 	if (!mdata_buf)
 		return -ENOMEM;
+	if (upper_32_bits(mdata_phys))
+		dev_warn_once(dev, "PAS metadata at %pad (above 4 GiB, CMA exhausted?)\n",
+			      &mdata_phys);
 
 	memcpy(mdata_buf, metadata, size);
 
 	ret = __qcom_scm_pas_init_image(dev, pas_id, mdata_phys, &res);
 	if (ret < 0 || !ctx) {
-		dma_free_coherent(dev, size, mdata_buf, mdata_phys);
+		dma_free_coherent(dev, alloc_size, mdata_buf, mdata_phys);
 	} else if (ctx) {
 		ctx->ptr = mdata_buf;
 		ctx->phys = mdata_phys;
-		ctx->size = size;
+		ctx->size = alloc_size;
 	}
 
 	return ret ? : res.result[0];

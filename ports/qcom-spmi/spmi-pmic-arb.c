@@ -222,6 +222,7 @@ struct spmi_pmic_arb {
 	int			max_periphs;
 	struct spmi_pmic_arb_bus *buses[PMIC_ARB_MAX_BUSES];
 	int			buses_available;
+	bool published;	/* AVR: map_address readiness (drvdata is set early, vendor order) */
 };
 
 /**
@@ -2094,7 +2095,7 @@ int spmi_pmic_arb_map_address(const struct device *dev, u32 spmi_address,
 
 	mutex_lock(&pmic_arb_publish_lock);
 	pmic_arb = platform_get_drvdata(pdev);
-	if (!pmic_arb)
+	if (!pmic_arb || !pmic_arb->published)
 		goto out_unlock;
 	ret = -ENODEV;
 	for (i = 0; i < pmic_arb->buses_available; i++) {
@@ -2420,6 +2421,12 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
 	if (!pmic_arb)
 		return -ENOMEM;
 
+	/*
+	 * Vendor order (qcom-soc 037aa1c): the v8 get_core_resources reads drvdata.
+	 * Phone test 5: NULL deref in pmic_arb_get_core_resources_v8 without this.
+	 */
+	platform_set_drvdata(pdev, pmic_arb);
+
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "core");
 	if (!res)
 		return -EINVAL;
@@ -2488,7 +2495,7 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
 	if (err)
 		return err;
 	mutex_lock(&pmic_arb_publish_lock);
-	platform_set_drvdata(pdev, pmic_arb);
+	pmic_arb->published = true;
 	mutex_unlock(&pmic_arb_publish_lock);
 	return 0;
 }

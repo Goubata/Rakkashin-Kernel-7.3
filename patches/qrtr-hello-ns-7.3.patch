@@ -1,0 +1,169 @@
+From c292bfda7dbecd8dedd0dedc1540b167e92d7c79 Mon Sep 17 00:00:00 2001
+From: Codex <codex@localhost>
+Date: Thu, 19 Nov 2026 00:14:50 +0900
+Subject: [PATCH] ANDROID: net: qrtr: do not lose NS announcements before our
+ HELLO
+
+7.x gates every non-HELLO packet to a node on node->hello_sent, and our HELLO is
+sent from the say_hello delayed work. When the modem's HELLO reaches the name
+server first, ctrl_cmd_hello() announces all local services and each send fails
+with -EAGAIN; nothing re-announces them. The modem then waits for APPS services
+and crashes ~80 s after boot with "DOG detects stalled initialization" (phone
+test 44, also test 43), the SIM goes ABSENT and the following SSR hangs the SoC.
+
+- af_qrtr: if HELLO is not out yet, kick and flush say_hello and wait briefly
+  (up to ~1 s) instead of dropping the packet.
+- ns: one local server with a full socket (-ENOSPC, seen for svc 0x3c) no longer
+  aborts the DEL_CLIENT/BYE/announce loops for every other server; failures are
+  logged (rate limited) with errno and destination.
+
+Phone test 45: no announce failures, modem stays up, SIM LOADED, LTE data and
+VoLTE user-confirmed on 7.3.
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ net/qrtr/af_qrtr.c | 33 +++++++++++++++++++++++++++++++--
+ net/qrtr/ns.c      | 40 +++++++++++++++++++++++-----------------
+ 2 files changed, 54 insertions(+), 19 deletions(-)
+
+diff --git a/net/qrtr/af_qrtr.c b/net/qrtr/af_qrtr.c
+index e7b364742..87cf5b7d4 100644
+--- a/net/qrtr/af_qrtr.c
++++ b/net/qrtr/af_qrtr.c
+@@ -3,6 +3,7 @@
+  * Copyright (c) 2015, Sony Mobile Communications Inc.
+  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
+  */
++#include <linux/delay.h>
+ #include <linux/module.h>
+ #include <linux/netlink.h>
+ #include <linux/qrtr.h>
+@@ -351,9 +352,37 @@ static int qrtr_node_enqueue(struct qrtr_node *node, struct sk_buff *skb,
+ 
+ 	mutex_lock(&node->ep_lock);
+ 	if (!node->hello_sent && type != QRTR_TYPE_HELLO) {
++		int tries;
++
+ 		mutex_unlock(&node->ep_lock);
+-		kfree_skb(skb);
+-		return -EAGAIN;
++		/*
++		 * AVR 7.3: the remote's HELLO can reach the name server before
++		 * our own HELLO went out (say_hello is a delayed work). The NS
++		 * then announces all local services to the remote right away;
++		 * failing those with -EAGAIN loses them for good (nothing
++		 * re-announces), and the modem crashes with "DOG detects stalled
++		 * initialization" ~80 s later (phone test 44). Push our HELLO out
++		 * now and wait for it briefly instead of dropping the packet.
++		 */
++		for (tries = 0; tries < 20; tries++) {
++			mod_delayed_work(system_wq, &node->say_hello, 0);
++			flush_delayed_work(&node->say_hello);
++			mutex_lock(&node->ep_lock);
++			if (node->hello_sent || !node->ep) {
++				mutex_unlock(&node->ep_lock);
++				break;
++			}
++			mutex_unlock(&node->ep_lock);
++			msleep(50);
++		}
++		mutex_lock(&node->ep_lock);
++		if (!node->hello_sent) {
++			mutex_unlock(&node->ep_lock);
++			pr_err_ratelimited("qrtr: node %d: HELLO not sent, dropping type %d\n",
++					   READ_ONCE(node->nid), type);
++			kfree_skb(skb);
++			return -EAGAIN;
++		}
+ 	}
+ 	mutex_unlock(&node->ep_lock);
+ 
+diff --git a/net/qrtr/ns.c b/net/qrtr/ns.c
+index bcb090ee7..d7f5651e5 100644
+--- a/net/qrtr/ns.c
++++ b/net/qrtr/ns.c
+@@ -209,7 +209,8 @@ static void lookup_notify(struct sockaddr_qrtr *to, struct qrtr_server *srv,
+ 
+ 	ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
+ 	if (ret < 0 && ret != -ENODEV)
+-		pr_err("failed to send lookup notification\n");
++		pr_err_ratelimited("failed to send lookup notification: %d to %u:%u\n",
++				   ret, to->sq_node, to->sq_port);
+ }
+ 
+ /* Announce the list of servers registered on the local node */
+@@ -231,8 +232,8 @@ static int announce_servers(struct sockaddr_qrtr *sq)
+ 			if (ret == -ENODEV)
+ 				continue;
+ 
+-			pr_err("failed to announce new service\n");
+-			return ret;
++			pr_err_ratelimited("failed to announce new service: %d svc 0x%x to %u:%u\n",
++					   ret, srv->service, sq->sq_node, sq->sq_port);
+ 		}
+ 	}
+ 	return 0;
+@@ -375,10 +376,9 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
+ 		msg.msg_namelen = sizeof(sq);
+ 
+ 		ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
+-		if (ret < 0 && ret != -ENODEV) {
+-			pr_err("failed to send bye cmd\n");
+-			goto delete_node;
+-		}
++		if (ret < 0 && ret != -ENODEV)
++			pr_err_ratelimited("failed to send bye cmd: %d to %u:%u svc 0x%x\n",
++					   ret, srv->node, srv->port, srv->service);
+ 	}
+ 
+ 	/* Ignore -ENODEV */
+@@ -459,10 +459,15 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
+ 		msg.msg_namelen = sizeof(sq);
+ 
+ 		ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
+-		if (ret < 0 && ret != -ENODEV) {
+-			pr_err("failed to send del client cmd\n");
+-			return ret;
+-		}
++		/*
++		 * AVR 7.3: one local server with a full or dead socket must not
++		 * stop the DEL_CLIENT broadcast to the others (phone test 44:
++		 * constant failures here, modem "stalled initialization" crash).
++		 */
++		if (ret < 0 && ret != -ENODEV)
++			pr_err_ratelimited("failed to send del client cmd: %d to %u:%u svc 0x%x (client %u:%u)\n",
++					   ret, srv->node, srv->port, srv->service,
++					   node_id, port);
+ 	}
+ 	return 0;
+ }
+@@ -488,10 +493,11 @@ static int ctrl_cmd_new_server(struct sockaddr_qrtr *from,
+ 
+ 	if (srv->node == qrtr_ns.local_node) {
+ 		ret = service_announce_new(&qrtr_ns.bcast_sq, srv);
+-		if (ret < 0) {
+-			pr_err("failed to announce new service\n");
+-			return ret;
+-		}
++		/* still tell the local lookups about it */
++		if (ret < 0)
++			pr_err_ratelimited("failed to bcast new service: %d svc 0x%x %u:%u\n",
++					   ret, service, node_id, port);
++		ret = 0;
+ 	}
+ 
+ 	/* Notify any potential lookups about the new server */
+@@ -690,8 +696,8 @@ static void qrtr_ns_worker(struct work_struct *work)
+ 		}
+ 
+ 		if (ret < 0)
+-			pr_err_ratelimited("failed while handling packet from %d:%d",
+-			       sq.sq_node, sq.sq_port);
++			pr_err_ratelimited("failed while handling packet cmd %u from %d:%d: %d\n",
++			       cmd, sq.sq_node, sq.sq_port, ret);
+ 	}
+ 
+ 	kfree(recv_buf);
+-- 
+2.56.1
+

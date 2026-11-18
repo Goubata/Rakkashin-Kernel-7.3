@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "eae3c6209b1103f699e7d8328cfd53880de31bda",
+  "source_commit": "c292bfda7dbecd8dedd0dedc1540b167e92d7c79",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -46,6 +46,8 @@
     "patches/scm-waitq-diag-7.3.patch": "a4bdc65465f534bb7d4bcf30e58a6d3a40d65d0860f3b86172c8e83cb9346397",
     "patches/selinux-load-compat-7.3.patch": "ecfd1eee0947ccb8a49635b1efc4f05680e610c94613f9b0369592faa68d304c",
     "patches/scm-dma-mask-7.3.patch": "c6b1bff6b9b8c258d33bbad0e23314ae2f2ed4feaa93cb02b62c6993c4c7b162",
-    "patches/scm-pas-metadata-cma-7.3.patch": "5988cd3fc6ab2f95eafeb756d850586a58fee5eeb6fb387a966452d8120504d2"
+    "patches/scm-pas-metadata-cma-7.3.patch": "5988cd3fc6ab2f95eafeb756d850586a58fee5eeb6fb387a966452d8120504d2",
+    "patches/selinux-netlink-xperm-7.3.patch": "3c85346daf8b55999e03c39efbaa1ad99738359548de0608e8e0ab4dbb45d4ab",
+    "patches/qrtr-hello-ns-7.3.patch": "4e934908e51b0510a46703f0b7e23051af197bbe79c37aff11da9275e8f44502"
   }
 }

@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "eec57687bfc1db8a84d94deef5ded8de31c8f6de",
+  "source_commit": "2bc4a5cfef221948c9fdb0542c2351b86256a6d4",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -43,6 +43,7 @@
     "patches/kernelsu-next-7.3.patch": "c958f59eb15a57576f1f36ec4106487a0e3b4e5b4f7f6a2f8e7de43e8917334a",
     "patches/scm-waitq-vendor-7.3.patch": "13f5b718842d46926a2df2b0a95d1873abab25339960f67a73f872fdd0ff44d2",
     "patches/scm-multicall-7.3.patch": "40c4d15a02de48e64eaa4cf59b4310331a65a775149aae0daf3d2dc0496f7060",
-    "patches/scm-waitq-diag-7.3.patch": "a4bdc65465f534bb7d4bcf30e58a6d3a40d65d0860f3b86172c8e83cb9346397"
+    "patches/scm-waitq-diag-7.3.patch": "a4bdc65465f534bb7d4bcf30e58a6d3a40d65d0860f3b86172c8e83cb9346397",
+    "patches/selinux-load-compat-7.3.patch": "ecfd1eee0947ccb8a49635b1efc4f05680e610c94613f9b0369592faa68d304c"
   }
 }

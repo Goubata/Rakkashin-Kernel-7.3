@@ -20,6 +20,15 @@
 
 static FILE *o;
 
+/* CLOCK_MONOTONIC: the wall clock jumps from 1970 to the real date during boot */
+static time_t mono(void)
+{
+	struct timespec ts;
+
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	return ts.tv_sec;
+}
+
 static void peekstr(pid_t p, unsigned long a, size_t n, char *out)
 {
 	size_t i;
@@ -45,7 +54,7 @@ int main(int argc, char **argv)
 
 	if (argc < 4) return 2;
 	o = fopen(argv[1], "w");
-	end = time(NULL) + atoi(argv[2]);
+	end = mono() + atoi(argv[2]);
 	/* init-style control sockets (ANDROID_SOCKET_<name>, bound at /dev/socket/<name>) from
 	 * the comma list in $SCTRACE_SOCKETS, so daemons like netd start as under init */
 	char *sl = getenv("SCTRACE_SOCKETS");
@@ -77,7 +86,7 @@ int main(int argc, char **argv)
 	for (;;) {
 		pid_t p = waitpid(-1, &st, __WALL);
 		if (p < 0) break;
-		if (time(NULL) > end) { fprintf(o, "timeout, killing\n"); kill(c, SIGKILL); }
+		if (mono() > end) { fprintf(o, "timeout, killing\n"); kill(c, SIGKILL); }
 		if (WIFEXITED(st) || WIFSIGNALED(st)) {
 			fprintf(o, "pid %d %s %d\n", p, WIFEXITED(st) ? "exit" : "signal", WIFEXITED(st) ? WEXITSTATUS(st) : WTERMSIG(st));
 			if (p == c) break;

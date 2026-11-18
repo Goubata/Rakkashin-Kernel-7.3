@@ -3779,6 +3779,18 @@ static int qcom_scm_probe(struct platform_device *pdev)
 
 	scm->dev = &pdev->dev;
 	platform_set_drvdata(pdev, scm);
+
+	/*
+	 * AVR: like the vendor qcom_scm_probe(). The platform device default is a 32-bit
+	 * coherent mask, and with disable_dma32=on (vendor cmdline) there is no ZONE_DMA32,
+	 * so every dma_alloc_coherent() on the SCM device (PAS init_image metadata, memory
+	 * assign) fails with -ENOMEM: phone test 33 "error -12 initializing firmware
+	 * adsp_dtb.mdt" / cdsp_dtb.mdt. The SCM/TZ buffers have no 32-bit limit on Alor.
+	 */
+	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+	if (ret)
+		return dev_err_probe(&pdev->dev, ret, "failed to set 64-bit DMA mask\n");
+
 	ret = qcom_scm_find_dload_address(&pdev->dev, &scm->dload_mode_addr);
 	if (ret < 0)
 		return dev_err_probe(&pdev->dev, ret,

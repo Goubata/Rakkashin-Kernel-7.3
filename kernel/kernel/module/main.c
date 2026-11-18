@@ -2191,6 +2191,14 @@ static int elf_validity_cache_index_mod(struct load_info *info)
 	}
 
 	if (shdr->sh_size != sizeof(struct module)) {
+		bool live;
+
+		/* ANDROID: avr boot-only 7.3: the 6.12 copy of a module already loaded from vendor_boot */
+		mutex_lock(&module_mutex);
+		live = info->name && find_module(info->name);
+		mutex_unlock(&module_mutex);
+		if (live)
+			return -EEXIST;
 		pr_err("module %s: .gnu.linkonce.this_module section size must match the kernel's built struct module size at run time\n",
 		       info->name ?: "(missing .modinfo section or name field)");
 		return -ENOEXEC;

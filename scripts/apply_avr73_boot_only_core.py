@@ -63,6 +63,18 @@ edit('kernel/module/main.c', '''	err = rewrite_section_headers(info, flags);
 
 	/* Check module struct version now, before we try to use module. */''')
 
+edit('kernel/module/main.c', '''	if (shdr->sh_size != sizeof(struct module)) {
+		pr_err("module %s: .gnu.linkonce.this_module section size must match''', '''	if (shdr->sh_size != sizeof(struct module)) {
+		bool live;
+
+		/* ANDROID: avr boot-only 7.3: the 6.12 copy of a module already loaded from vendor_boot */
+		mutex_lock(&module_mutex);
+		live = info->name && find_module(info->name);
+		mutex_unlock(&module_mutex);
+		if (live)
+			return -EEXIST;
+		pr_err("module %s: .gnu.linkonce.this_module section size must match''')
+
 edit('fs/read_write.c', '''ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 {
 	ssize_t ret;

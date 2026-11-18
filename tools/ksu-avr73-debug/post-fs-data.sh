@@ -12,7 +12,7 @@ mkdir -p $O; ln -sfn $O /data/local/tmp/avr73/latest
 echo "$(date) post-fs-data on $(uname -a)" > $O/events.txt
 cat /proc/modules > $O/modules-postfs.txt
 # logd health (phone test 14: logcat returned nothing on 7.3)
-{ ls -laZ /dev/socket/logd* ; grep -E "logd" /proc/net/unix; log -p e -t AVR73 "logger probe $(date)"; sleep 1; logcat -d -t 5 2>&1; echo "logcat rc=$?"; } > $O/logd-check.txt 2>&1
+{ $MODDIR/scmtest; echo "--- logcat -S"; logcat -S 2>&1 | head -40; ls -laZ /dev/socket/logd* ; grep -E "logd" /proc/net/unix; log -p e -t AVR73 "logger probe $(date)"; sleep 1; logcat -d -t 5 2>&1; echo "logcat rc=$?"; } > $O/logd-check.txt 2>&1
 # continuous logs: survive the reboot that netd1shot-fail etc. trigger (init syncs on reboot)
 nohup logcat -b all -v threadtime -f $O/logcat-stream.txt > /dev/null 2>&1 &
 nohup sh -c "cat /proc/kmsg > $O/kmsg-stream.txt" > /dev/null 2>&1 &

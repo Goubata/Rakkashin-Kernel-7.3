@@ -1,0 +1,1075 @@
+From 7e98221f806a3b05af8c1e4ac41c39c8dc4b791e Mon Sep 17 00:00:00 2001
+From: Codex <codex@localhost>
+Date: Thu, 19 Nov 2026 01:34:01 +0900
+Subject: [PATCH] ANDROID: Rakkashin: port the remaining Rakkashin Kernel
+ optimizations to 7.3
+
+From Goubata/Rakkashin-Kernel (android16-6.12, 7e0d0a6), features that were not
+in the 7.3 port yet (the feature modules avr_profile, launch boost, thread
+boost, Encore FAS, Boeffla, PELT multiplier, ADIOS and ntsync already were):
+
+- Sultan: rcu_gp workqueue unbound; freezer timeout 1 s; no allocation for
+  small kernfs writes (on-stack buffer) and for the SELinux inode context
+  lookup (on-stack INITCONTEXTLEN buffer).
+- LawRun: devfreq_wq high priority/unbound; page_cluster 0 (zram, no swap
+  readahead); vfs_cache_pressure 50; watermark_boost_factor 0.
+- NGK/AGNi: vmstat interval 20 s; binder debug_mask 0; dynamic fsync
+  (/sys/module/sync/parameters/fsync_enabled); no warn_alloc() for OOM victims.
+- avr: watermark_scale_factor 50; dirty writeback 15 s; tcp_notsent_lowat
+  128K; tcp_slow_start_after_idle 0; -mtune=oryon-1 (tuning only, no ISA change).
+- LZ4 1.9.x fast decompression loop (lib/lz4, as in Rakkashin), with the
+  compressors moved to LZ4_wildCopy8.
+
+The sched/idle single-state shortcut, tick dependency tracepoint check and
+ratelimited capacity-change message are already native in 7.3.
+Phone: all values verified at runtime on the 7.3 final boot.
+---
+ arch/arm64/Makefile       |   4 +
+ drivers/android/binder.c  |   4 +-
+ drivers/devfreq/devfreq.c |   5 +-
+ fs/dcache.c               |   3 +-
+ fs/kernfs/file.c          |  22 ++-
+ fs/sync.c                 |  21 ++
+ kernel/power/process.c    |   3 +-
+ kernel/rcu/tree.c         |   3 +-
+ lib/lz4/lz4_compress.c    |   4 +-
+ lib/lz4/lz4_decompress.c  | 398 +++++++++++++++++++++++++++++++-------
+ lib/lz4/lz4defs.h         |  60 +++++-
+ lib/lz4/lz4hc_compress.c  |   2 +-
+ mm/page-writeback.c       |   3 +-
+ mm/page_alloc.c           |  14 +-
+ mm/swap_state.c           |  11 +-
+ mm/vmstat.c               |   3 +-
+ net/ipv4/tcp_ipv4.c       |   6 +-
+ security/selinux/hooks.c  |  16 +-
+ 18 files changed, 475 insertions(+), 107 deletions(-)
+
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 6b005c8fe..1c2ada9fe 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -45,6 +45,10 @@ KBUILD_CFLAGS	+= $(CC_FLAGS_NO_FPU) \
+ KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
+ KBUILD_AFLAGS	+= $(compat_vdso)
+ 
++# Rakkashin: schedule for avr's Qualcomm Oryon cores (idea from Melt's per-SoC
++# -mcpu). -mtune only: the instruction set stays generic armv8, so no KMI/ISA change.
++KBUILD_CFLAGS	+= $(call cc-option,-mtune=oryon-1)
++
+ ifeq ($(call rustc-min-version, 108500),y)
+ KBUILD_RUSTFLAGS += --target=aarch64-unknown-none-softfloat
+ else
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index b12259320..68bb9692d 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -118,8 +118,8 @@ enum {
+ 	BINDER_DEBUG_PRIORITY_CAP           = 1U << 13,
+ 	BINDER_DEBUG_SPINLOCKS              = 1U << 14,
+ };
+-static uint32_t binder_debug_mask = BINDER_DEBUG_USER_ERROR |
+-	BINDER_DEBUG_FAILED_TRANSACTION | BINDER_DEBUG_DEAD_TRANSACTION;
++/* Rakkashin: no logging by default (NGK); restore via /sys/module/binder/parameters/debug_mask */
++static uint32_t binder_debug_mask;
+ module_param_named(debug_mask, binder_debug_mask, uint, 0644);
+ 
+ char *binder_devices_param = CONFIG_ANDROID_BINDER_DEVICES;
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 82dd9a43d..df73af54d 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -2041,7 +2041,10 @@ static int __init devfreq_init(void)
+ 		return PTR_ERR(devfreq_class);
+ 	}
+ 
+-	devfreq_wq = create_freezable_workqueue("devfreq_wq");
++	/* Rakkashin: high priority so bus/GPU scaling isn't delayed behind other work (LawRun) */
++	devfreq_wq = alloc_workqueue("devfreq_wq",
++				     WQ_HIGHPRI | WQ_UNBOUND | WQ_FREEZABLE |
++				     WQ_MEM_RECLAIM, 0);
+ 	if (!devfreq_wq) {
+ 		class_destroy(devfreq_class);
+ 		pr_err("%s: couldn't create workqueue\n", __FILE__);
+diff --git a/fs/dcache.c b/fs/dcache.c
+index f44c7b39c..34fe50565 100644
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@ -73,7 +73,8 @@
+  * If no ancestor relationship:
+  * arbitrary, since it's serialized on rename_lock
+  */
+-static int sysctl_vfs_cache_pressure __read_mostly = 100;
++/* Rakkashin: 50, keep dentries/inodes longer; avr has 16GB RAM (LawRun) */
++static int sysctl_vfs_cache_pressure __read_mostly = 50;
+ static int sysctl_vfs_cache_pressure_denom __read_mostly = 100;
+ 
+ unsigned long vfs_pressure_ratio(unsigned long val)
+diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+index 8e0e90c93..e3a1c26f0 100644
+--- a/fs/kernfs/file.c
++++ b/fs/kernfs/file.c
+@@ -306,6 +306,8 @@ static ssize_t kernfs_fop_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+ 	struct kernfs_open_file *of = kernfs_of(iocb->ki_filp);
+ 	ssize_t len = iov_iter_count(iter);
+ 	const struct kernfs_ops *ops;
++	/* Rakkashin (Sultan): small sysfs writes need no allocation */
++	char buf_onstack[SZ_64] __aligned(sizeof(long));
+ 	char *buf;
+ 
+ 	if (of->atomic_write_len) {
+@@ -315,13 +317,17 @@ static ssize_t kernfs_fop_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+ 		len = min_t(size_t, len, PAGE_SIZE);
+ 	}
+ 
+-	buf = of->prealloc_buf;
+-	if (buf)
+-		mutex_lock(&of->prealloc_mutex);
+-	else
+-		buf = kmalloc(len + 1, GFP_KERNEL);
+-	if (!buf)
+-		return -ENOMEM;
++	if (len < sizeof(buf_onstack)) {
++		buf = buf_onstack;
++	} else {
++		buf = of->prealloc_buf;
++		if (buf)
++			mutex_lock(&of->prealloc_mutex);
++		else
++			buf = kmalloc(len + 1, GFP_KERNEL);
++		if (!buf)
++			return -ENOMEM;
++	}
+ 
+ 	if (copy_from_iter(buf, len, iter) != len) {
+ 		len = -EFAULT;
+@@ -355,7 +361,7 @@ static ssize_t kernfs_fop_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+ out_free:
+ 	if (buf == of->prealloc_buf)
+ 		mutex_unlock(&of->prealloc_mutex);
+-	else
++	else if (buf != buf_onstack)
+ 		kfree(buf);
+ 	return len;
+ }
+diff --git a/fs/sync.c b/fs/sync.c
+index 4a84dd837..44e70c5cd 100644
+--- a/fs/sync.c
++++ b/fs/sync.c
+@@ -9,6 +9,7 @@
+ #include <linux/fs.h>
+ #include <linux/slab.h>
+ #include <linux/export.h>
++#include <linux/moduleparam.h>
+ #include <linux/namei.h>
+ #include <linux/sched.h>
+ #include <linux/writeback.h>
+@@ -19,6 +20,16 @@
+ #include <linux/backing-dev.h>
+ #include "internal.h"
+ 
++/*
++ * Rakkashin: dynamic fsync (AGNi/NGK, originally franciscofranco/flar2),
++ * reduced to the userspace entry points: in-kernel writeback and
++ * filesystem-internal syncs are untouched, so turning it off only drops apps'
++ * explicit flush requests. Off trades crash safety for I/O latency. Default on.
++ *   /sys/module/sync/parameters/fsync_enabled
++ */
++static bool fsync_enabled = true;
++module_param(fsync_enabled, bool, 0644);
++
+ #define VALID_FLAGS (SYNC_FILE_RANGE_WAIT_BEFORE|SYNC_FILE_RANGE_WRITE| \
+ 			SYNC_FILE_RANGE_WAIT_AFTER)
+ 
+@@ -151,6 +162,8 @@ SYSCALL_DEFINE1(syncfs, int, fd)
+ 	struct super_block *sb;
+ 	int ret, ret2;
+ 
++	if (!READ_ONCE(fsync_enabled))
++		return 0;
+ 	if (fd_empty(f))
+ 		return -EBADF;
+ 	sb = fd_file(f)->f_path.dentry->d_sb;
+@@ -213,11 +226,15 @@ static int do_fsync(unsigned int fd, int datasync)
+ 
+ SYSCALL_DEFINE1(fsync, unsigned int, fd)
+ {
++	if (!READ_ONCE(fsync_enabled))
++		return 0;
+ 	return do_fsync(fd, 0);
+ }
+ 
+ SYSCALL_DEFINE1(fdatasync, unsigned int, fd)
+ {
++	if (!READ_ONCE(fsync_enabled))
++		return 0;
+ 	return do_fsync(fd, 1);
+ }
+ 
+@@ -359,6 +376,8 @@ int ksys_sync_file_range(int fd, loff_t offset, loff_t nbytes,
+ SYSCALL_DEFINE4(sync_file_range, int, fd, loff_t, offset, loff_t, nbytes,
+ 				unsigned int, flags)
+ {
++	if (!READ_ONCE(fsync_enabled))
++		return 0;
+ 	return ksys_sync_file_range(fd, offset, nbytes, flags);
+ }
+ 
+@@ -376,5 +395,7 @@ COMPAT_SYSCALL_DEFINE6(sync_file_range, int, fd, compat_arg_u64_dual(offset),
+ SYSCALL_DEFINE4(sync_file_range2, int, fd, unsigned int, flags,
+ 				 loff_t, offset, loff_t, nbytes)
+ {
++	if (!READ_ONCE(fsync_enabled))
++		return 0;
+ 	return ksys_sync_file_range(fd, offset, nbytes, flags);
+ }
+diff --git a/kernel/power/process.c b/kernel/power/process.c
+index dc0dfc349..1eb5556bc 100644
+--- a/kernel/power/process.c
++++ b/kernel/power/process.c
+@@ -23,7 +23,8 @@
+ /*
+  * Timeout for stopping processes
+  */
+-unsigned int __read_mostly freeze_timeout_msecs = 20 * MSEC_PER_SEC;
++/* Rakkashin (Sultan): abort a stuck freeze after 1s instead of 20s */
++unsigned int __read_mostly freeze_timeout_msecs = MSEC_PER_SEC;
+ 
+ static int try_to_freeze_tasks(bool user_only)
+ {
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 96848fc1f..0fb75101e 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4977,7 +4977,8 @@ void __init rcu_init(void)
+ 	rcutree_online_cpu(cpu);
+ 
+ 	/* Create workqueue for Tree SRCU and for expedited GPs. */
+-	rcu_gp_wq = alloc_workqueue("rcu_gp", WQ_MEM_RECLAIM | WQ_PERCPU, 0);
++	/* Rakkashin (Sultan): unbound, so GP work doesn't wake idle CPUs */
++	rcu_gp_wq = alloc_workqueue("rcu_gp", WQ_MEM_RECLAIM | WQ_UNBOUND, 0);
+ 	WARN_ON(!rcu_gp_wq);
+ 
+ 	sync_wq = alloc_workqueue("sync_wq", WQ_MEM_RECLAIM | WQ_UNBOUND, 0);
+diff --git a/lib/lz4/lz4_compress.c b/lib/lz4/lz4_compress.c
+index 2a397bb2c..fa2813511 100644
+--- a/lib/lz4/lz4_compress.c
++++ b/lib/lz4/lz4_compress.c
+@@ -321,7 +321,7 @@ static FORCE_INLINE int LZ4_compress_generic(
+ 				*token = (BYTE)(litLength << ML_BITS);
+ 
+ 			/* Copy Literals */
+-			LZ4_wildCopy(op, anchor, op + litLength);
++			LZ4_wildCopy8(op, anchor, op + litLength);
+ 			op += litLength;
+ 		}
+ 
+@@ -627,7 +627,7 @@ static int LZ4_compress_destSize_generic(
+ 				*token = (BYTE)(litLength << ML_BITS);
+ 
+ 			/* Copy Literals */
+-			LZ4_wildCopy(op, anchor, op + litLength);
++			LZ4_wildCopy8(op, anchor, op + litLength);
+ 			op += litLength;
+ 		}
+ 
+diff --git a/lib/lz4/lz4_decompress.c b/lib/lz4/lz4_decompress.c
+index 3a2cd9aca..df6a5d83c 100644
+--- a/lib/lz4/lz4_decompress.c
++++ b/lib/lz4/lz4_decompress.c
+@@ -49,6 +49,96 @@
+ #define assert(condition) ((void)0)
+ #endif
+ 
++#ifndef LZ4_FAST_DEC_LOOP
++#if defined(__i386__) || defined(__x86_64__)
++#define LZ4_FAST_DEC_LOOP 1
++#elif defined(__aarch64__)
++     /* On aarch64, we disable this optimization for clang because on certain
++      * mobile chipsets and clang, it reduces performance. For more information
++      * refer to https://github.com/lz4/lz4/pull/707. */
++#define LZ4_FAST_DEC_LOOP 1
++#else
++#define LZ4_FAST_DEC_LOOP 0
++#endif
++#endif
++
++#if LZ4_FAST_DEC_LOOP
++#define FASTLOOP_SAFE_DISTANCE 64
++FORCE_O2_INLINE_GCC_PPC64LE void
++LZ4_memcpy_using_offset_base(BYTE * dstPtr, const BYTE * srcPtr, BYTE * dstEnd,
++			     const size_t offset)
++{
++	if (offset < 8) {
++		dstPtr[0] = srcPtr[0];
++
++		dstPtr[1] = srcPtr[1];
++		dstPtr[2] = srcPtr[2];
++		dstPtr[3] = srcPtr[3];
++		srcPtr += inc32table[offset];
++		LZ4_memcpy(dstPtr + 4, srcPtr, 4);
++		srcPtr -= dec64table[offset];
++		dstPtr += 8;
++	} else {
++		LZ4_memcpy(dstPtr, srcPtr, 8);
++		dstPtr += 8;
++		srcPtr += 8;
++	}
++
++	LZ4_wildCopy8(dstPtr, srcPtr, dstEnd);
++}
++
++/* customized variant of memcpy, which can overwrite up to 32 bytes beyond dstEnd
++ * this version copies two times 16 bytes (instead of one time 32 bytes)
++ * because it must be compatible with offsets >= 16. */
++FORCE_O2_INLINE_GCC_PPC64LE void
++LZ4_wildCopy32(void *dstPtr, const void *srcPtr, void *dstEnd)
++{
++	BYTE *d = (BYTE *) dstPtr;
++	const BYTE *s = (const BYTE *)srcPtr;
++	BYTE *const e = (BYTE *) dstEnd;
++
++	do {
++		LZ4_memcpy(d, s, 16);
++		LZ4_memcpy(d + 16, s + 16, 16);
++		d += 32;
++		s += 32;
++	} while (d < e);
++}
++
++FORCE_O2_INLINE_GCC_PPC64LE void
++LZ4_memcpy_using_offset(BYTE *dstPtr, const BYTE *srcPtr, BYTE *dstEnd,
++			const size_t offset)
++{
++	BYTE v[8];
++	switch (offset) {
++
++	case 1:
++		memset(v, *srcPtr, 8);
++		goto copy_loop;
++	case 2:
++		LZ4_memcpy(v, srcPtr, 2);
++		LZ4_memcpy(&v[2], srcPtr, 2);
++		LZ4_memcpy(&v[4], &v[0], 4);
++		goto copy_loop;
++	case 4:
++		LZ4_memcpy(v, srcPtr, 4);
++		LZ4_memcpy(&v[4], srcPtr, 4);
++		goto copy_loop;
++	default:
++		LZ4_memcpy_using_offset_base(dstPtr, srcPtr, dstEnd, offset);
++		return;
++	}
++
++      copy_loop:
++	LZ4_memcpy(dstPtr, v, 8);
++	dstPtr += 8;
++	while (dstPtr < dstEnd) {
++		LZ4_memcpy(dstPtr, v, 8);
++		dstPtr += 8;
++	}
++}
++#endif
++
+ /*
+  * LZ4_decompress_generic() :
+  * This generic decompression function covers all use cases.
+@@ -79,25 +169,28 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 	 const size_t dictSize
+ 	 )
+ {
+-	const BYTE *ip = (const BYTE *) src;
+-	const BYTE * const iend = ip + srcSize;
++	const BYTE *ip = (const BYTE *)src;
++	const BYTE *const iend = ip + srcSize;
+ 
+ 	BYTE *op = (BYTE *) dst;
+-	BYTE * const oend = op + outputSize;
++	BYTE *const oend = op + outputSize;
+ 	BYTE *cpy;
+ 
+-	const BYTE * const dictEnd = (const BYTE *)dictStart + dictSize;
+-	static const unsigned int inc32table[8] = {0, 1, 2, 1, 0, 4, 4, 4};
+-	static const int dec64table[8] = {0, 0, 0, -1, -4, 1, 2, 3};
++	const BYTE *const dictEnd = (const BYTE *)dictStart + dictSize;
+ 
+ 	const int safeDecode = (endOnInput == endOnInputSize);
+ 	const int checkOffset = ((safeDecode) && (dictSize < (int)(64 * KB)));
+ 
+ 	/* Set up the "end" pointers for the shortcut. */
+ 	const BYTE *const shortiend = iend -
+-		(endOnInput ? 14 : 8) /*maxLL*/ - 2 /*offset*/;
++	    (endOnInput ? 14 : 8) /*maxLL*/ - 2 /*offset*/;
+ 	const BYTE *const shortoend = oend -
+-		(endOnInput ? 14 : 8) /*maxLL*/ - 18 /*maxML*/;
++	    (endOnInput ? 14 : 8) /*maxLL*/ - 18 /*maxML*/;
++
++	const BYTE *match;
++	size_t offset;
++	unsigned int token;
++	size_t length;
+ 
+ 	DEBUGLOG(5, "%s (srcSize:%i, dstSize:%i)", __func__,
+ 		 srcSize, outputSize);
+@@ -116,15 +209,196 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 	if ((endOnInput) && unlikely(srcSize == 0))
+ 		return -1;
+ 
+-	/* Main Loop : decode sequences */
++#if LZ4_FAST_DEC_LOOP
++	if ((oend - op) < FASTLOOP_SAFE_DISTANCE) {
++		DEBUGLOG(6, "skip fast decode loop");
++		goto safe_decode;
++	}
++
++	/* Fast loop : decode sequences as long as output < iend-FASTLOOP_SAFE_DISTANCE */
+ 	while (1) {
+-		size_t length;
+-		const BYTE *match;
+-		size_t offset;
++		/* Main fastloop assertion: We can always wildcopy FASTLOOP_SAFE_DISTANCE */
++		assert(oend - op >= FASTLOOP_SAFE_DISTANCE);
++		if (endOnInput) {
++			assert(ip < iend);
++		}
++		token = *ip++;
++		length = token >> ML_BITS;	/* literal length */
++
++		assert(!endOnInput || ip <= iend);	/* ip < iend before the increment */
++
++		/* decode literal length */
++		if (length == RUN_MASK) {
++			variable_length_error error = ok;
++			length +=
++			    read_variable_length(&ip, iend - RUN_MASK,
++						 endOnInput, endOnInput,
++						 &error);
++			if (error == initial_error) {
++				goto _output_error;
++			}
++			if ((safeDecode)
++			    && unlikely((uptrval) (op) + length <
++					(uptrval) (op))) {
++				goto _output_error;
++			}	/* overflow detection */
++			if ((safeDecode)
++			    && unlikely((uptrval) (ip) + length <
++					(uptrval) (ip))) {
++				goto _output_error;
++			}
+ 
+-		/* get literal length */
+-		unsigned int const token = *ip++;
+-		length = token>>ML_BITS;
++			/* overflow detection */
++			/* copy literals */
++			cpy = op + length;
++			LZ4_STATIC_ASSERT(MFLIMIT >= WILDCOPYLENGTH);
++			if (endOnInput) {	/* LZ4_decompress_safe() */
++				if ((cpy > oend - 32)
++				    || (ip + length > iend - 32)) {
++					goto safe_literal_copy;
++				}
++				LZ4_wildCopy32(op, ip, cpy);
++			} else {	/* LZ4_decompress_fast() */
++				if (cpy > oend - 8) {
++					goto safe_literal_copy;
++				}
++				LZ4_wildCopy8(op, ip, cpy);
++				/* LZ4_decompress_fast() cannot copy more than 8 bytes at a time */
++				/* it doesn't know input length, and only relies on end-of-block */
++				/* properties */
++			}
++			ip += length;
++			op = cpy;
++		} else {
++			cpy = op + length;
++			if (endOnInput) {	/* LZ4_decompress_safe() */
++				DEBUGLOG(7,
++					 "copy %u bytes in a 16-bytes stripe",
++					 (unsigned)length);
++				/* We don't need to check oend */
++				/* since we check it once for each loop below */
++				if (ip > iend - (16 + 1)) {	/*max lit + offset + nextToken */
++					goto safe_literal_copy;
++				}
++				/* Literals can only be 14, but hope compilers optimize */
++				/*if we copy by a register size */
++				LZ4_memcpy(op, ip, 16);
++			} else {
++				/* LZ4_decompress_fast() cannot copy more than 8 bytes at a time */
++				/* it doesn't know input length, and relies on end-of-block */
++				/* properties */
++				LZ4_memcpy(op, ip, 8);
++				if (length > 8) {
++					LZ4_memcpy(op + 8, ip + 8, 8);
++				}
++			}
++			ip += length;
++			op = cpy;
++		}
++
++		/* get offset */
++		offset = LZ4_readLE16(ip);
++		ip += 2;	/* end-of-block condition violated */
++		match = op - offset;
++
++		/* get matchlength */
++		length = token & ML_MASK;
++
++		if ((checkOffset) && (unlikely(match + dictSize < lowPrefix))) {
++			goto _output_error;
++		}
++		/* Error : offset outside buffers */
++		if (length == ML_MASK) {
++			variable_length_error error = ok;
++			length +=
++			    read_variable_length(&ip, iend - LASTLITERALS + 1,
++						 endOnInput, 0, &error);
++			if (error != ok) {
++				goto _output_error;
++			}
++			if ((safeDecode)
++			    && unlikely((uptrval) (op) + length < (uptrval) op)) {
++				goto _output_error;
++			}	/* overflow detection */
++			length += MINMATCH;
++			if (op + length >= oend - FASTLOOP_SAFE_DISTANCE) {
++				goto safe_match_copy;
++			}
++		} else {
++			length += MINMATCH;
++			if (op + length >= oend - FASTLOOP_SAFE_DISTANCE) {
++				goto safe_match_copy;
++			}
++
++			/* Fastpath check: Avoids a branch in LZ4_wildCopy32 if true */
++			if (!(dict == usingExtDict) || (match >= lowPrefix)) {
++				if (offset >= 8) {
++					LZ4_memcpy(op, match, 8);
++					LZ4_memcpy(op + 8, match + 8, 8);
++					LZ4_memcpy(op + 16, match + 16, 2);
++					op += length;
++					continue;
++				}
++			}
++		}
++
++		/* match starting within external dictionary */
++		if ((dict == usingExtDict) && (match < lowPrefix)) {
++			if (unlikely(op + length > oend - LASTLITERALS)) {
++				if (partialDecoding) {
++					/* reach end of buffer */
++					length =
++					    min(length, (size_t) (oend - op));
++				} else {
++					/* end-of-block condition violated */
++					goto _output_error;
++				}
++			}
++
++			if (length <= (size_t) (lowPrefix - match)) {
++				/* match fits entirely within external dictionary : just copy */
++				memmove(op, dictEnd - (lowPrefix - match),
++					length);
++				op += length;
++			} else {
++				/* match stretches into both external dict and current block */
++				size_t const copySize =
++				    (size_t) (lowPrefix - match);
++				size_t const restSize = length - copySize;
++				LZ4_memcpy(op, dictEnd - copySize, copySize);
++				op += copySize;
++				if (restSize > (size_t) (op - lowPrefix)) {	/* overlap copy */
++					BYTE *const endOfMatch = op + restSize;
++					const BYTE *copyFrom = lowPrefix;
++					while (op < endOfMatch) {
++						*op++ = *copyFrom++;
++					}
++				} else {
++					LZ4_memcpy(op, lowPrefix, restSize);
++					op += restSize;
++				}
++			}
++			continue;
++		}
++
++		/* copy match within block */
++		cpy = op + length;
++
++		assert((op <= oend) && (oend - op >= 32));
++		if (unlikely(offset < 16)) {
++			LZ4_memcpy_using_offset(op, match, cpy, offset);
++		} else {
++			LZ4_wildCopy32(op, match, cpy);
++		}
++
++		op = cpy;	/* wildcopy correction */
++	}
++      safe_decode:
++#endif
++	/* Main Loop : decode sequences */
++	while (1) {
++		token = *ip++;
++		length = token >> ML_BITS;
+ 
+ 		/* ip < iend before the increment */
+ 		assert(!endOnInput || ip <= iend);
+@@ -145,26 +419,27 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 		 * some compilers can produce better parallelized runtime code
+ 		 */
+ 		if ((endOnInput ? length != RUN_MASK : length <= 8)
+-		   /*
+-		    * strictly "less than" on input, to re-enter
+-		    * the loop with at least one byte
+-		    */
+-		   && likely((endOnInput ? ip < shortiend : 1) &
+-			     (op <= shortoend))) {
++		    /*
++		     * strictly "less than" on input, to re-enter
++		     * the loop with at least one byte
++		     */
++		    && likely((endOnInput ? ip < shortiend : 1) &
++			      (op <= shortoend))) {
+ 			/* Copy the literals */
+ 			LZ4_memcpy(op, ip, endOnInput ? 16 : 8);
+-			op += length; ip += length;
++			op += length;
++			ip += length;
+ 
+ 			/*
+ 			 * The second stage:
+ 			 * prepare for match copying, decode full info.
+ 			 * If it doesn't work out, the info won't be wasted.
+ 			 */
+-			length = token & ML_MASK; /* match length */
++			length = token & ML_MASK;	/* match length */
+ 			offset = LZ4_readLE16(ip);
+ 			ip += 2;
+ 			match = op - offset;
+-			assert(match <= op); /* check overflow */
++			assert(match <= op);	/* check overflow */
+ 
+ 			/* Do not deal with overlapping matches. */
+ 			if ((length != ML_MASK) &&
+@@ -189,28 +464,24 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 
+ 		/* decode literal length */
+ 		if (length == RUN_MASK) {
+-			unsigned int s;
+ 
+-			if (unlikely(endOnInput ? ip >= iend - RUN_MASK : 0)) {
+-				/* overflow detection */
++			variable_length_error error = ok;
++			length +=
++			    read_variable_length(&ip, iend - RUN_MASK,
++						 endOnInput, endOnInput,
++						 &error);
++			if (error == initial_error)
+ 				goto _output_error;
+-			}
+-			do {
+-				s = *ip++;
+-				length += s;
+-			} while (likely(endOnInput
+-				? ip < iend - RUN_MASK
+-				: 1) & (s == 255));
+ 
+ 			if ((safeDecode)
+-			    && unlikely((uptrval)(op) +
+-					length < (uptrval)(op))) {
++			    && unlikely((uptrval) (op) +
++					length < (uptrval) (op))) {
+ 				/* overflow detection */
+ 				goto _output_error;
+ 			}
+ 			if ((safeDecode)
+-			    && unlikely((uptrval)(ip) +
+-					length < (uptrval)(ip))) {
++			    && unlikely((uptrval) (ip) +
++					length < (uptrval) (ip))) {
+ 				/* overflow detection */
+ 				goto _output_error;
+ 			}
+@@ -218,11 +489,15 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 
+ 		/* copy literals */
+ 		cpy = op + length;
++#if LZ4_FAST_DEC_LOOP
++	      safe_literal_copy:
++#endif
+ 		LZ4_STATIC_ASSERT(MFLIMIT >= WILDCOPYLENGTH);
+ 
+ 		if (((endOnInput) && ((cpy > oend - MFLIMIT)
+-			|| (ip + length > iend - (2 + 1 + LASTLITERALS))))
+-			|| ((!endOnInput) && (cpy > oend - WILDCOPYLENGTH))) {
++				      || (ip + length >
++					  iend - (2 + 1 + LASTLITERALS))))
++		    || ((!endOnInput) && (cpy > oend - WILDCOPYLENGTH))) {
+ 			if (partialDecoding) {
+ 				if (cpy > oend) {
+ 					/*
+@@ -233,7 +508,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 					length = oend - op;
+ 				}
+ 				if ((endOnInput)
+-					&& (ip + length > iend)) {
++				    && (ip + length > iend)) {
+ 					/*
+ 					 * Error :
+ 					 * read attempt beyond
+@@ -243,7 +518,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 				}
+ 			} else {
+ 				if ((!endOnInput)
+-					&& (cpy != oend)) {
++				    && (cpy != oend)) {
+ 					/*
+ 					 * Error :
+ 					 * block decoding must
+@@ -252,7 +527,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 					goto _output_error;
+ 				}
+ 				if ((endOnInput)
+-					&& ((ip + length != iend)
++				    && ((ip + length != iend)
+ 					|| (cpy > oend))) {
+ 					/*
+ 					 * Error :
+@@ -279,7 +554,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 				break;
+ 		} else {
+ 			/* may overwrite up to WILDCOPYLENGTH beyond cpy */
+-			LZ4_wildCopy(op, ip, cpy);
++			LZ4_wildCopy8(op, ip, cpy);
+ 			ip += length;
+ 			op = cpy;
+ 		}
+@@ -298,29 +573,14 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 			goto _output_error;
+ 		}
+ 
+-		/* costs ~1%; silence an msan warning when offset == 0 */
+-		/*
+-		 * note : when partialDecoding, there is no guarantee that
+-		 * at least 4 bytes remain available in output buffer
+-		 */
+-		if (!partialDecoding) {
+-			assert(oend > op);
+-			assert(oend - op >= 4);
+-
+-			LZ4_write32(op, (U32)offset);
+-		}
+-
+ 		if (length == ML_MASK) {
+-			unsigned int s;
+-
+-			do {
+-				s = *ip++;
+-
+-				if ((endOnInput) && (ip > iend - LASTLITERALS))
+-					goto _output_error;
+ 
+-				length += s;
+-			} while (s == 255);
++			variable_length_error error = ok;
++			length +=
++			    read_variable_length(&ip, iend - LASTLITERALS + 1,
++						 endOnInput, 0, &error);
++			if (error != ok)
++				goto _output_error;
+ 
+ 			if ((safeDecode)
+ 				&& unlikely(
+@@ -332,6 +592,10 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 
+ 		length += MINMATCH;
+ 
++#if LZ4_FAST_DEC_LOOP
++safe_match_copy:
++#endif
++
+ 		/* match starting within external dictionary */
+ 		if ((dict == usingExtDict) && (match < lowPrefix)) {
+ 			if (unlikely(op + length > oend - LASTLITERALS)) {
+@@ -428,7 +692,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 			}
+ 
+ 			if (op < oCopyLimit) {
+-				LZ4_wildCopy(op, match, oCopyLimit);
++				LZ4_wildCopy8(op, match, oCopyLimit);
+ 				match += oCopyLimit - op;
+ 				op = oCopyLimit;
+ 			}
+@@ -437,7 +701,7 @@ static FORCE_INLINE int LZ4_decompress_generic(
+ 		} else {
+ 			LZ4_copy8(op, match);
+ 			if (length > 16)
+-				LZ4_wildCopy(op + 8, match + 8, cpy);
++				LZ4_wildCopy8(op + 8, match + 8, cpy);
+ 		}
+ 		op = cpy; /* wildcopy correction */
+ 	}
+diff --git a/lib/lz4/lz4defs.h b/lib/lz4/lz4defs.h
+index 17277ec16..ae067ef2b 100644
+--- a/lib/lz4/lz4defs.h
++++ b/lib/lz4/lz4defs.h
+@@ -43,6 +43,28 @@
+ 
+ #define FORCE_INLINE __always_inline
+ 
++/* LZ4_FORCE_O2_GCC_PPC64LE and LZ4_FORCE_O2_INLINE_GCC_PPC64LE
++ * gcc on ppc64le generates an unrolled SIMDized loop for LZ4_wildCopy8,
++ * together with a simple 8-byte copy loop as a fall-back path.
++ * However, this optimization hurts the decompression speed by >30%,
++ * because the execution does not go to the optimized loop
++ * for typical compressible data, and all of the preamble checks
++ * before going to the fall-back path become useless overhead.
++ * This optimization happens only with the -O3 flag, and -O2 generates
++ * a simple 8-byte copy loop.
++ * With gcc on ppc64le, all of the LZ4_decompress_* and LZ4_wildCopy8
++ * functions are annotated with __attribute__((optimize("O2"))),
++ * and also LZ4_wildCopy8 is forcibly inlined, so that the O2 attribute
++ * of LZ4_wildCopy8 does not affect the compression speed.
++ */
++#if defined(__PPC64__) && defined(__LITTLE_ENDIAN__) && defined(__GNUC__) && !defined(__clang__)
++#  define FORCE_O2_GCC_PPC64LE __attribute__((optimize("O2")))
++#  define FORCE_O2_INLINE_GCC_PPC64LE (__attribute__((optimize("O2"))) FORCE_INLINE)
++#else
++#  define FORCE_O2_GCC_PPC64LE		FORCE_INLINE
++#  define FORCE_O2_INLINE_GCC_PPC64LE	FORCE_INLINE
++#endif
++
+ /*-************************************
+  *	Basic Types
+  **************************************/
+@@ -101,6 +123,9 @@ typedef uintptr_t uptrval;
+ #define RUN_BITS (8 - ML_BITS)
+ #define RUN_MASK ((1U << RUN_BITS) - 1)
+ 
++static const unsigned inc32table[8] = { 0, 1, 2, 1, 0, 4, 4, 4 };
++static const int dec64table[8] = { 0, 0, 0, -1, -4, 1, 2, 3 };
++
+ /*-************************************
+  *	Reading and writing into memory
+  **************************************/
+@@ -169,7 +194,7 @@ static FORCE_INLINE void LZ4_copy8(void *dst, const void *src)
+  * customized variant of memcpy,
+  * which can overwrite up to 7 bytes beyond dstEnd
+  */
+-static FORCE_INLINE void LZ4_wildCopy(void *dstPtr,
++static FORCE_O2_INLINE_GCC_PPC64LE void LZ4_wildCopy8(void *dstPtr,
+ 	const void *srcPtr, void *dstEnd)
+ {
+ 	BYTE *d = (BYTE *)dstPtr;
+@@ -233,6 +258,39 @@ static FORCE_INLINE unsigned int LZ4_count(
+ 	return (unsigned int)(pIn - pStart);
+ }
+ 
++/* Read the variable-length literal or match length.
++ *
++ * ip - pointer to use as input.
++ * lencheck - end ip.  Return an error if ip advances >= lencheck.
++ * loop_check - check ip >= lencheck in body of loop.  Returns loop_error if so.
++ * initial_check - check ip >= lencheck before start of loop.  Returns initial_error if so.
++ * error (output) - error code.  Should be set to 0 before call.
++ */
++typedef enum { loop_error = -2, initial_error = -1, ok = 0} variable_length_error;
++static FORCE_INLINE unsigned read_variable_length(const BYTE **ip,
++					   const BYTE *lencheck,
++					   int loop_check, int initial_check,
++					   variable_length_error *error)
++{
++	unsigned length = 0;
++	unsigned s;
++	if (initial_check && unlikely((*ip) >= lencheck)) {	/* overflow detection */
++		*error = initial_error;
++		return length;
++	}
++	do {
++		s = **ip;
++		(*ip)++;
++		length += s;
++		if (loop_check && unlikely((*ip) >= lencheck)) {	/* overflow detection */
++			*error = loop_error;
++			return length;
++		}
++	} while (s == 255);
++
++	return length;
++}
++
+ typedef enum { noLimit = 0, limitedOutput = 1 } limitedOutput_directive;
+ typedef enum { byPtr, byU32, byU16 } tableType_t;
+ 
+diff --git a/lib/lz4/lz4hc_compress.c b/lib/lz4/lz4hc_compress.c
+index 91936dc3d..9848a139a 100644
+--- a/lib/lz4/lz4hc_compress.c
++++ b/lib/lz4/lz4hc_compress.c
+@@ -292,7 +292,7 @@ static FORCE_INLINE int LZ4HC_encodeSequence(
+ 		*token = (BYTE)(length<<ML_BITS);
+ 
+ 	/* Copy Literals */
+-	LZ4_wildCopy(*op, *anchor, (*op) + length);
++	LZ4_wildCopy8(*op, *anchor, (*op) + length);
+ 	*op += length;
+ 
+ 	/* Encode Offset */
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index eeab25d6c..8a3e1f3a8 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -99,7 +99,8 @@ static unsigned long vm_dirty_bytes;
+ /*
+  * The interval between `kupdate'-style writebacks
+  */
+-unsigned int dirty_writeback_interval = 5 * 100; /* centiseconds */
++/* Rakkashin (avr): 15s instead of 5s, fewer flash wakeups; expiry (30s) is unchanged */
++unsigned int dirty_writeback_interval = 15 * 100; /* centiseconds */
+ 
+ EXPORT_SYMBOL_GPL(dirty_writeback_interval);
+ 
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e8841a622..cc4e60fcd 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -277,8 +277,13 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
+ 
+ int min_free_kbytes = 1024;
+ int user_min_free_kbytes = -1;
+-static int watermark_boost_factor __read_mostly = 15000;
+-static int watermark_scale_factor = 10;
++/* Rakkashin: 0, no boosted reclaim on fragmentation events, less kswapd churn (LawRun) */
++static int watermark_boost_factor __read_mostly;
++/*
++ * Rakkashin: 50 (0.5% of RAM, ~80MB on avr) instead of 10: kswapd starts
++ * earlier, so app launches hit direct reclaim (a major jank source) far less often.
++ */
++static int watermark_scale_factor = 50;
+ int defrag_mode;
+ 
+ /* movable_zone is the "real" zone pages in ZONE_MOVABLE are taken from */
+@@ -5038,8 +5043,11 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+ 	/* Avoid allocations with no watermarks from looping endlessly */
+ 	if (tsk_is_oom_victim(current) &&
+ 	    (alloc_flags & ALLOC_OOM ||
+-	     (gfp_mask & __GFP_NOMEMALLOC)))
++	     (gfp_mask & __GFP_NOMEMALLOC))) {
++		/* Rakkashin: it is being killed anyway; skip the warn_alloc() splat (AGNi) */
++		gfp_mask |= __GFP_NOWARN;
+ 		goto nopage;
++	}
+ 
+ 	/* Retry as long as the OOM killer is making progress */
+ 	if (did_some_progress) {
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index f3961fdd8..2645b2ff5 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -1014,13 +1014,12 @@ static const struct ctl_table swap_readahead_sysctl_table[] = {
+ 
+ static void __init swap_readahead_setup(void)
+ {
+-	unsigned long megs = PAGES_TO_MB(totalram_pages());
+ 
+-	/* Use a smaller cluster for small-memory machines */
+-	if (megs < 16)
+-		page_cluster = 2;
+-	else
+-		page_cluster = 3;
++	/*
++	 * Rakkashin: swap here is zram: reads are a decompress with no seek cost,
++	 * so swap readahead only wastes CPU and RAM. Read one page (LawRun).
++	 */
++	page_cluster = 0;
+ 	/*
+ 	 * Right now other parts of the system means that we
+ 	 * _really_ don't want to cluster much more
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index cb5771453..ac2c3e6a2 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1984,7 +1984,8 @@ static const struct seq_operations vmstat_op = {
+ 
+ #ifdef CONFIG_SMP
+ static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
+-static int sysctl_stat_interval __read_mostly = HZ;
++/* Rakkashin: 20s instead of 1s, fewer periodic wakeups to fold per-cpu counters (NGK) */
++static int sysctl_stat_interval __read_mostly = 20 * HZ;
+ static int vmstat_late_init_done;
+ 
+ #ifdef CONFIG_PROC_FS
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index bebc5a8d1..7c6a0c9b6 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -3460,7 +3460,8 @@ static int __net_init tcp_sk_init(struct net *net)
+ 	net->ipv4.sysctl_tcp_retries2 = TCP_RETR2;
+ 	net->ipv4.sysctl_tcp_orphan_retries = 0;
+ 	net->ipv4.sysctl_tcp_fin_timeout = TCP_FIN_TIMEOUT;
+-	net->ipv4.sysctl_tcp_notsent_lowat = UINT_MAX;
++	/* Rakkashin (avr): keep at most 128K unsent per socket: less bufferbloat/latency with BBR */
++	net->ipv4.sysctl_tcp_notsent_lowat = 128 * 1024;
+ 	net->ipv4.sysctl_tcp_tw_reuse = 2;
+ 	net->ipv4.sysctl_tcp_tw_reuse_delay = 1 * MSEC_PER_SEC;
+ 	net->ipv4.sysctl_tcp_no_ssthresh_metrics_save = 1;
+@@ -3473,7 +3474,8 @@ static int __net_init tcp_sk_init(struct net *net)
+ 	net->ipv4.sysctl_tcp_timestamps = 1;
+ 	net->ipv4.sysctl_tcp_early_retrans = 3;
+ 	net->ipv4.sysctl_tcp_recovery = TCP_RACK_LOSS_DETECTION;
+-	net->ipv4.sysctl_tcp_slow_start_after_idle = 1; /* By default, RFC2861 behavior.  */
++	/* Rakkashin (avr): phones idle connections constantly; don't restart from slow start */
++	net->ipv4.sysctl_tcp_slow_start_after_idle = 0;
+ 	net->ipv4.sysctl_tcp_retrans_collapse = 1;
+ 	net->ipv4.sysctl_tcp_max_reordering = 300;
+ 	net->ipv4.sysctl_tcp_dsack = 1;
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 5b9f77094..d10911d9c 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1378,20 +1378,16 @@ static int inode_doinit_use_xattr(struct inode *inode, struct dentry *dentry,
+ 				  u32 def_sid, u32 *sid)
+ {
+ #define INITCONTEXTLEN 255
+-	char *context;
++	/* Rakkashin (Sultan): no allocation for the common short context */
++	char context_onstack[INITCONTEXTLEN + 1] __aligned(sizeof(long));
++	char *context = context_onstack;
+ 	unsigned int len;
+ 	int rc;
+ 
+ 	len = INITCONTEXTLEN;
+-	context = kmalloc(len + 1, GFP_NOFS);
+-	if (!context)
+-		return -ENOMEM;
+-
+ 	context[len] = '\0';
+ 	rc = __vfs_getxattr(dentry, inode, XATTR_NAME_SELINUX, context, len);
+ 	if (rc == -ERANGE) {
+-		kfree(context);
+-
+ 		/* Need a larger buffer.  Query for the right size. */
+ 		rc = __vfs_getxattr(dentry, inode, XATTR_NAME_SELINUX, NULL, 0);
+ 		if (rc < 0)
+@@ -1407,7 +1403,8 @@ static int inode_doinit_use_xattr(struct inode *inode, struct dentry *dentry,
+ 				    context, len);
+ 	}
+ 	if (rc < 0) {
+-		kfree(context);
++		if (context != context_onstack)
++			kfree(context);
+ 		if (rc != -ENODATA) {
+ 			pr_warn("SELinux: %s:  getxattr returned %d for dev=%s ino=%llu\n",
+ 				__func__, -rc, inode->i_sb->s_id, inode->i_ino);
+@@ -1431,7 +1428,8 @@ static int inode_doinit_use_xattr(struct inode *inode, struct dentry *dentry,
+ 				__func__, context, -rc, dev, ino);
+ 		}
+ 	}
+-	kfree(context);
++	if (context != context_onstack)
++		kfree(context);
+ 	return 0;
+ }
+ 
+-- 
+2.56.1
+

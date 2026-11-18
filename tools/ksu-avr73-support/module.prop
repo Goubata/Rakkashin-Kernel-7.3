@@ -1,0 +1,6 @@
+id=avr73-support
+name=avr Kernel 7.3 support
+version=v1.0
+versionCode=1
+author=Rakkashin
+description=Boot-time support the 7.3 kernel needs on this ROM (netd BPF API level, 7.3 GPU/display/camera/fingerprint modules, boot monitor). Does nothing on 6.12.

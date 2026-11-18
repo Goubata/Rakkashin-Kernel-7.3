@@ -1,6 +1,6 @@
 {
   "scope": "Exact clean reviewed source checkpoint; avoids reversing old patches through later overlapping edits. Fresh trees still apply the patch chain.",
-  "source_commit": "6362a706c808a52d2c91620c0c16f27ca8a8f4a2",
+  "source_commit": "7e98221f806a3b05af8c1e4ac41c39c8dc4b791e",
   "patch_sha256": {
     "ports/ccf-hold-state/hold-state-7.3.patch": "071efece95ce2ff31cf203fb978af287334f589736d0cd95e19973079ae5c19f",
     "patches/irq-routing-7.3.patch": "68b9edff26dd9f738c16206da3cbd5b4c92d3b88681c212f8eb0e4af1047f274",
@@ -49,6 +49,7 @@
     "patches/scm-pas-metadata-cma-7.3.patch": "5988cd3fc6ab2f95eafeb756d850586a58fee5eeb6fb387a966452d8120504d2",
     "patches/selinux-netlink-xperm-7.3.patch": "3c85346daf8b55999e03c39efbaa1ad99738359548de0608e8e0ab4dbb45d4ab",
     "patches/qrtr-hello-ns-7.3.patch": "4e934908e51b0510a46703f0b7e23051af197bbe79c37aff11da9275e8f44502",
-    "patches/kernelsu-arm64-orig-x0-7.3.patch": "3165f7359aef51b0e7d1c0f4055eb2bfafb56f065d88a7d14712d5efd72aecd3"
+    "patches/kernelsu-arm64-orig-x0-7.3.patch": "3165f7359aef51b0e7d1c0f4055eb2bfafb56f065d88a7d14712d5efd72aecd3",
+    "patches/rakkashin-optimizations-7.3.patch": "df9db9bd5cc9ced3d1ea0ba77baf6c8b29a382735aedb39b268cd01a77d00cec"
   }
 }

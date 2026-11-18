@@ -1984,7 +1984,8 @@ static const struct seq_operations vmstat_op = {
 
 #ifdef CONFIG_SMP
 static DEFINE_PER_CPU(struct delayed_work, vmstat_work);
-static int sysctl_stat_interval __read_mostly = HZ;
+/* Rakkashin: 20s instead of 1s, fewer periodic wakeups to fold per-cpu counters (NGK) */
+static int sysctl_stat_interval __read_mostly = 20 * HZ;
 static int vmstat_late_init_done;
 
 #ifdef CONFIG_PROC_FS

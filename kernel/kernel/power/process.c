@@ -23,7 +23,8 @@
 /*
  * Timeout for stopping processes
  */
-unsigned int __read_mostly freeze_timeout_msecs = 20 * MSEC_PER_SEC;
+/* Rakkashin (Sultan): abort a stuck freeze after 1s instead of 20s */
+unsigned int __read_mostly freeze_timeout_msecs = MSEC_PER_SEC;
 
 static int try_to_freeze_tasks(bool user_only)
 {

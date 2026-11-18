@@ -1014,13 +1014,12 @@ static const struct ctl_table swap_readahead_sysctl_table[] = {
 
 static void __init swap_readahead_setup(void)
 {
-	unsigned long megs = PAGES_TO_MB(totalram_pages());
 
-	/* Use a smaller cluster for small-memory machines */
-	if (megs < 16)
-		page_cluster = 2;
-	else
-		page_cluster = 3;
+	/*
+	 * Rakkashin: swap here is zram: reads are a decompress with no seek cost,
+	 * so swap readahead only wastes CPU and RAM. Read one page (LawRun).
+	 */
+	page_cluster = 0;
 	/*
 	 * Right now other parts of the system means that we
 	 * _really_ don't want to cluster much more

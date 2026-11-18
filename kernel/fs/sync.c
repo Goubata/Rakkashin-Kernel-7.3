@@ -9,6 +9,7 @@
 #include <linux/fs.h>
 #include <linux/slab.h>
 #include <linux/export.h>
+#include <linux/moduleparam.h>
 #include <linux/namei.h>
 #include <linux/sched.h>
 #include <linux/writeback.h>
@@ -18,6 +19,16 @@
 #include <linux/quotaops.h>
 #include <linux/backing-dev.h>
 #include "internal.h"
+
+/*
+ * Rakkashin: dynamic fsync (AGNi/NGK, originally franciscofranco/flar2),
+ * reduced to the userspace entry points: in-kernel writeback and
+ * filesystem-internal syncs are untouched, so turning it off only drops apps'
+ * explicit flush requests. Off trades crash safety for I/O latency. Default on.
+ *   /sys/module/sync/parameters/fsync_enabled
+ */
+static bool fsync_enabled = true;
+module_param(fsync_enabled, bool, 0644);
 
 #define VALID_FLAGS (SYNC_FILE_RANGE_WAIT_BEFORE|SYNC_FILE_RANGE_WRITE| \
 			SYNC_FILE_RANGE_WAIT_AFTER)
@@ -151,6 +162,8 @@ SYSCALL_DEFINE1(syncfs, int, fd)
 	struct super_block *sb;
 	int ret, ret2;
 
+	if (!READ_ONCE(fsync_enabled))
+		return 0;
 	if (fd_empty(f))
 		return -EBADF;
 	sb = fd_file(f)->f_path.dentry->d_sb;
@@ -213,11 +226,15 @@ static int do_fsync(unsigned int fd, int datasync)
 
 SYSCALL_DEFINE1(fsync, unsigned int, fd)
 {
+	if (!READ_ONCE(fsync_enabled))
+		return 0;
 	return do_fsync(fd, 0);
 }
 
 SYSCALL_DEFINE1(fdatasync, unsigned int, fd)
 {
+	if (!READ_ONCE(fsync_enabled))
+		return 0;
 	return do_fsync(fd, 1);
 }
 
@@ -359,6 +376,8 @@ int ksys_sync_file_range(int fd, loff_t offset, loff_t nbytes,
 SYSCALL_DEFINE4(sync_file_range, int, fd, loff_t, offset, loff_t, nbytes,
 				unsigned int, flags)
 {
+	if (!READ_ONCE(fsync_enabled))
+		return 0;
 	return ksys_sync_file_range(fd, offset, nbytes, flags);
 }
 
@@ -376,5 +395,7 @@ COMPAT_SYSCALL_DEFINE6(sync_file_range, int, fd, compat_arg_u64_dual(offset),
 SYSCALL_DEFINE4(sync_file_range2, int, fd, unsigned int, flags,
 				 loff_t, offset, loff_t, nbytes)
 {
+	if (!READ_ONCE(fsync_enabled))
+		return 0;
 	return ksys_sync_file_range(fd, offset, nbytes, flags);
 }

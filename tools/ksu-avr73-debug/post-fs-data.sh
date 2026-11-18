@@ -11,6 +11,9 @@ O=/data/local/tmp/avr73/boot-$(date +%Y%m%d-%H%M%S)
 mkdir -p $O; ln -sfn $O /data/local/tmp/avr73/latest
 echo "$(date) post-fs-data on $(uname -a)" > $O/events.txt
 cat /proc/modules > $O/modules-postfs.txt
+# continuous logs: survive the reboot that netd1shot-fail etc. trigger (init syncs on reboot)
+nohup logcat -b all -v threadtime -f $O/logcat-stream.txt > /dev/null 2>&1 &
+nohup sh -c "cat /proc/kmsg > $O/kmsg-stream.txt" > /dev/null 2>&1 &
 for m in synx-driver msm_kgsl msm_drm; do
 	[ -f $MODDIR/ko/$m.ko ] || continue
 	grep -q "^${m//-/_} " /proc/modules && { echo "$m already loaded" >> $O/insmod.txt; continue; }

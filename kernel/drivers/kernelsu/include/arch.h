@@ -18,6 +18,16 @@
 #define __PT_SP_REG sp
 #define __PT_IP_REG pc
 #define __PT_ORIG_SYSCALL_REG regs[8]
+/*
+ * AVR 7.3: the native arm64 syscall wrappers read the first argument from
+ * regs->orig_x0 (arch/arm64/include/asm/syscall_wrapper.h), not regs[0].
+ * Rewriting regs[0] (sucompat execveat fd, ksyscall() pt_regs) was ignored:
+ * su -> execveat(<filename ptr as fd>) = -EBADF, ksu_close_fd() closed fd 0,
+ * setns() got fd 0. Same model as riscv64 (orig_a0) below.
+ */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 0, 0)
+#define __PT_SYSCALL_PARM1_REG orig_x0
+#endif
 
 #define REBOOT_SYMBOL "__arm64_sys_reboot"
 #define SYS_READ_SYMBOL "__arm64_sys_read"

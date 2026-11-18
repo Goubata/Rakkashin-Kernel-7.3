@@ -2182,6 +2182,16 @@ static void security_load_policycaps(struct selinux_policy *policy)
 		WRITE_ONCE(selinux_state.policycap[i],
 			ebitmap_get_bit(&p->policycaps, i));
 
+	/*
+	 * ANDROID AVR: 6.12 parity. The Android 17 policy declares netlink_xperm, which
+	 * android16-6.12 does not know (so it kept plain nlmsg_read/nlmsg_write checks);
+	 * the Alor vendor policy was written for that and has no per-message nlmsg xperm
+	 * rules. Enforcing it on 7.3 denies e.g. vendor_nicmd RTM_GETLINK (phone test 43:
+	 * avc denied { nlmsg } nl-msgtype=18 -> sendto -EACCES -> rmnet_data torn down ->
+	 * no 4G data / VoLTE). Keep the 6.12 semantics.
+	 */
+	WRITE_ONCE(selinux_state.policycap[POLICYDB_CAP_NETLINK_XPERM], 0);
+
 	for (i = 0; i < ARRAY_SIZE(selinux_policycap_names); i++)
 		pr_info("SELinux:  policy capability %s=%d\n",
 			selinux_policycap_names[i],

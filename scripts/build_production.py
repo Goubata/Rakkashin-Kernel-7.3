@@ -15,7 +15,8 @@ from pathlib import Path
 
 PORT = Path(__file__).resolve().parents[1]
 ROOTFS = PORT.parent / '.andronix/distros/ubuntu/rootfs'
-SOURCE = PORT.parent / 'avr-upstream-audit/android-7.3'
+# AVR_KERNEL_SRC: the repo's kernel/ snapshot (no git history of its own); skips the checkpoint check
+SOURCE = Path(os.environ['AVR_KERNEL_SRC']) if os.environ.get('AVR_KERNEL_SRC') else PORT.parent / 'avr-upstream-audit/android-7.3'
 OUT = 'out/prod-gki'
 PORTS_OUT = PORT / 'out/prod-ports'
 FRAGMENTS = ['avr-platform', 'rakkashin', 'avr-pmic-glink', 'avr-production']
@@ -55,6 +56,8 @@ def ensure_mounts():
 
 
 def check_source():
+    if os.environ.get('AVR_KERNEL_SRC'):
+        return
     cp = json.loads((PORT / 'reports/core-patch-checkpoint.json').read_text())
     head = subprocess.check_output(['git', '-C', str(SOURCE), 'rev-parse', 'HEAD'], text=True).strip()
     dirty = subprocess.check_output(['git', '-C', str(SOURCE), 'status', '--porcelain'], text=True).strip()

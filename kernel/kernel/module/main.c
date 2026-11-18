@@ -3446,6 +3446,18 @@ static int early_mod_check(struct load_info *info, int flags)
 	if (err)
 		return err;
 
+	/*
+	 * ANDROID: avr boot-only 7.3: a module of this name is already live (the 7.3
+	 * copy from vendor_boot); answer "exists" before rejecting the 6.12 file that
+	 * vendor scripts still try from vendor_dlkm, so libmodprobe counts it as loaded.
+	 */
+	mutex_lock(&module_mutex);
+	if (find_module(info->name)) {
+		mutex_unlock(&module_mutex);
+		return -EEXIST;
+	}
+	mutex_unlock(&module_mutex);
+
 	/* Check module struct version now, before we try to use module. */
 	if (!check_modstruct_version(info, info->mod))
 		return -ENOEXEC;

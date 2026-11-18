@@ -84,6 +84,9 @@ def main():
     ap.add_argument('--kind', choices=['ramtest'], default='ramtest')
     ap.add_argument('--set', choices=['first', 'full'], default='full')
     ap.add_argument('--tag', required=True)
+    ap.add_argument('--extra', default='', help='comma list of module names to add to modules.load '
+                    '(with their providers) although the phone loads them outside vendor_dlkm '
+                    '(fingerprint via init.oem.fingerprint2.sh, Rakkashin ADIOS/ntsync)')
     ap.add_argument('--defer', default='', help='comma list: keep files but do not auto-load these '
                     'modules nor anything depending on them (bring-up: load by hand over adb)')
     a = ap.parse_args()
@@ -136,6 +139,14 @@ def main():
     if a.set == 'full':
         want(plan['system_dlkm'], True)
         want(plan['vendor_dlkm'], True)
+    for x in filter(None, a.extra.split(',')):
+        x = x.replace('-', '_')
+        if x not in cands:
+            missing.append(f'--extra {x}')
+        else:
+            if x not in order:
+                order.append(x)
+            listed.add(x)
     # dependency closure (7.3 may split/rename providers)
     i = 0
     while i < len(order):

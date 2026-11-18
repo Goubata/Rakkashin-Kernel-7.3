@@ -47,6 +47,16 @@ static const char KERNEL_SU_RC[] =
     "on property:sys.boot_completed=1\n"
     "    exec u:r:" KERNEL_SU_DOMAIN ":s0 root -- " KSUD_PATH " boot-completed\n"
     "\n"
+    // ANDROID: avr boot-only 7.3 (this kernel only; 6.12 never sees these lines)
+    "on post-fs-data\n"
+    "    setprop vendor.all.modules.ready 1\n"
+    "\n"
+    "on boot\n"
+    "    chmod 0666 /dev/ntsync\n"
+    "\n"
+    "on property:init.svc.boot_monitor_service=running\n"
+    "    stop boot_monitor_service\n"
+    "\n"
     "\n";
 // clang-format on
 

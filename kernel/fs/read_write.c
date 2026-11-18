@@ -551,9 +551,35 @@ ssize_t kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
 }
 EXPORT_SYMBOL(kernel_read);
 
+/*
+ * ANDROID: avr boot-only 7.3: netd's BPF programs for kernel >= 7.3 are shipped only
+ * as 27Q2 variants; this ROM's netbpfload.rc declares 26Q2, so netbpfload loads none
+ * and netd1shot fails. Present the API line as 27Q2 to netbpfload only.
+ */
+static noinline void avr73_netbpfload_api(struct file *file, char __user *buf,
+					  ssize_t ret, loff_t start)
+{
+	static const char from[] = "# 2026 2 37 0 0", to[] = "# 2027 2 38 0 0";
+	char head[sizeof(from) - 1], pbuf[64], *p;
+
+	if (start != 0 || ret < (ssize_t)sizeof(head))
+		return;
+	if (strcmp(current->comm, "netbpfload") ||
+	    strcmp(file->f_path.dentry->d_name.name, "netbpfload.rc"))
+		return;
+	p = d_path(&file->f_path, pbuf, sizeof(pbuf));
+	if (IS_ERR(p) || strcmp(p, "/system/etc/init/netbpfload.rc"))
+		return;
+	if (copy_from_user(head, buf, sizeof(head)) || memcmp(head, from, sizeof(head)))
+		return;
+	if (!copy_to_user(buf, to, sizeof(head)))
+		pr_info_once("avr73: netbpfload.rc API 26Q2 -> 27Q2 (netd BPF variants for 7.x)\n");
+}
+
 ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 {
 	ssize_t ret;
+	loff_t start = pos ? *pos : -1;
 
 	if (!(file->f_mode & FMODE_READ))
 		return -EBADF;
@@ -577,6 +603,8 @@ ssize_t vfs_read(struct file *file, char __user *buf, size_t count, loff_t *pos)
 	if (ret > 0) {
 		fsnotify_access(file);
 		add_rchar(current, ret);
+		if (unlikely(start == 0 && current->comm[0] == 'n'))
+			avr73_netbpfload_api(file, buf, ret, start);
 	}
 	inc_syscr(current);
 	return ret;

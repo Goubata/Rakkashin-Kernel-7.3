@@ -2,6 +2,11 @@
 # AVR 7.3 bring-up: only acts on the 7.3 test kernel
 case "$(uname -r)" in 7.3.*) ;; *) exit 0 ;; esac
 MODDIR=${0%/*}
+# The 7.3 modules are loaded from vendor_boot; vendor_dlkm stays 6.12, so vendor_modprobe.sh
+# never reaches "setprop vendor.all.modules.ready 1" and init.qti.kernel.target.rc
+# (on post-fs-data: wait_for_prop vendor.all.modules.ready 1) blocks init forever (phone
+# tests 10-12: no zygote/adbd). Signal it here (test kit only; a 7.3 vendor_dlkm sets it itself).
+setprop vendor.all.modules.ready 1
 O=/data/local/tmp/avr73/boot-$(date +%Y%m%d-%H%M%S)
 mkdir -p $O; ln -sfn $O /data/local/tmp/avr73/latest
 echo "$(date) post-fs-data on $(uname -a)" > $O/events.txt

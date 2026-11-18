@@ -3,6 +3,7 @@
  * Copyright (c) 2015, Sony Mobile Communications Inc.
  * Copyright (c) 2013, The Linux Foundation. All rights reserved.
  */
+#include <linux/delay.h>
 #include <linux/module.h>
 #include <linux/netlink.h>
 #include <linux/qrtr.h>
@@ -351,9 +352,37 @@ static int qrtr_node_enqueue(struct qrtr_node *node, struct sk_buff *skb,
 
 	mutex_lock(&node->ep_lock);
 	if (!node->hello_sent && type != QRTR_TYPE_HELLO) {
+		int tries;
+
 		mutex_unlock(&node->ep_lock);
-		kfree_skb(skb);
-		return -EAGAIN;
+		/*
+		 * AVR 7.3: the remote's HELLO can reach the name server before
+		 * our own HELLO went out (say_hello is a delayed work). The NS
+		 * then announces all local services to the remote right away;
+		 * failing those with -EAGAIN loses them for good (nothing
+		 * re-announces), and the modem crashes with "DOG detects stalled
+		 * initialization" ~80 s later (phone test 44). Push our HELLO out
+		 * now and wait for it briefly instead of dropping the packet.
+		 */
+		for (tries = 0; tries < 20; tries++) {
+			mod_delayed_work(system_wq, &node->say_hello, 0);
+			flush_delayed_work(&node->say_hello);
+			mutex_lock(&node->ep_lock);
+			if (node->hello_sent || !node->ep) {
+				mutex_unlock(&node->ep_lock);
+				break;
+			}
+			mutex_unlock(&node->ep_lock);
+			msleep(50);
+		}
+		mutex_lock(&node->ep_lock);
+		if (!node->hello_sent) {
+			mutex_unlock(&node->ep_lock);
+			pr_err_ratelimited("qrtr: node %d: HELLO not sent, dropping type %d\n",
+					   READ_ONCE(node->nid), type);
+			kfree_skb(skb);
+			return -EAGAIN;
+		}
 	}
 	mutex_unlock(&node->ep_lock);
 

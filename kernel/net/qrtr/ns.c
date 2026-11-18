@@ -209,7 +209,8 @@ static void lookup_notify(struct sockaddr_qrtr *to, struct qrtr_server *srv,
 
 	ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
 	if (ret < 0 && ret != -ENODEV)
-		pr_err("failed to send lookup notification\n");
+		pr_err_ratelimited("failed to send lookup notification: %d to %u:%u\n",
+				   ret, to->sq_node, to->sq_port);
 }
 
 /* Announce the list of servers registered on the local node */
@@ -231,8 +232,8 @@ static int announce_servers(struct sockaddr_qrtr *sq)
 			if (ret == -ENODEV)
 				continue;
 
-			pr_err("failed to announce new service\n");
-			return ret;
+			pr_err_ratelimited("failed to announce new service: %d svc 0x%x to %u:%u\n",
+					   ret, srv->service, sq->sq_node, sq->sq_port);
 		}
 	}
 	return 0;
@@ -375,10 +376,9 @@ static int ctrl_cmd_bye(struct sockaddr_qrtr *from)
 		msg.msg_namelen = sizeof(sq);
 
 		ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
-		if (ret < 0 && ret != -ENODEV) {
-			pr_err("failed to send bye cmd\n");
-			goto delete_node;
-		}
+		if (ret < 0 && ret != -ENODEV)
+			pr_err_ratelimited("failed to send bye cmd: %d to %u:%u svc 0x%x\n",
+					   ret, srv->node, srv->port, srv->service);
 	}
 
 	/* Ignore -ENODEV */
@@ -459,10 +459,15 @@ static int ctrl_cmd_del_client(struct sockaddr_qrtr *from,
 		msg.msg_namelen = sizeof(sq);
 
 		ret = kernel_sendmsg(qrtr_ns.sock, &msg, &iv, 1, sizeof(pkt));
-		if (ret < 0 && ret != -ENODEV) {
-			pr_err("failed to send del client cmd\n");
-			return ret;
-		}
+		/*
+		 * AVR 7.3: one local server with a full or dead socket must not
+		 * stop the DEL_CLIENT broadcast to the others (phone test 44:
+		 * constant failures here, modem "stalled initialization" crash).
+		 */
+		if (ret < 0 && ret != -ENODEV)
+			pr_err_ratelimited("failed to send del client cmd: %d to %u:%u svc 0x%x (client %u:%u)\n",
+					   ret, srv->node, srv->port, srv->service,
+					   node_id, port);
 	}
 	return 0;
 }
@@ -488,10 +493,11 @@ static int ctrl_cmd_new_server(struct sockaddr_qrtr *from,
 
 	if (srv->node == qrtr_ns.local_node) {
 		ret = service_announce_new(&qrtr_ns.bcast_sq, srv);
-		if (ret < 0) {
-			pr_err("failed to announce new service\n");
-			return ret;
-		}
+		/* still tell the local lookups about it */
+		if (ret < 0)
+			pr_err_ratelimited("failed to bcast new service: %d svc 0x%x %u:%u\n",
+					   ret, service, node_id, port);
+		ret = 0;
 	}
 
 	/* Notify any potential lookups about the new server */
@@ -690,8 +696,8 @@ static void qrtr_ns_worker(struct work_struct *work)
 		}
 
 		if (ret < 0)
-			pr_err_ratelimited("failed while handling packet from %d:%d",
-			       sq.sq_node, sq.sq_port);
+			pr_err_ratelimited("failed while handling packet cmd %u from %d:%d: %d\n",
+			       cmd, sq.sq_node, sq.sq_port, ret);
 	}
 
 	kfree(recv_buf);

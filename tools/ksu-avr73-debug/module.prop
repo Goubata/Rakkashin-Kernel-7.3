@@ -1,0 +1,6 @@
+id=avr73-debug
+name=AVR 7.3 bring-up logger
+version=v1
+versionCode=1
+author=avr-kernel-7.3
+description=Does nothing on 6.12. On the 7.3 test kernel: logs dmesg/logcat/USB state to /data/local/tmp/avr73 and loads deferred modules by hand.

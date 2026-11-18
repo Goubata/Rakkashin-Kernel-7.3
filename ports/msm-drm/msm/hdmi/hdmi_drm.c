@@ -640,6 +640,7 @@ AVR_BRIDGE_ATOMIC(hdmi_bridge_post_disable);
 AVR_BRIDGE_ATTACH(hdmi_bridge_attach);
 static const struct drm_bridge_funcs hdmi_bridge_ops = {
 	.attach       = hdmi_bridge_attach_avr_attach,
+	AVR_BRIDGE_STATE_HELPERS,
 	.mode_fixup   = hdmi_bridge_mode_fixup,
 	.atomic_pre_enable   = hdmi_bridge_pre_enable_avr_atomic,
 	.atomic_enable       = hdmi_bridge_enable_avr_atomic,
@@ -667,7 +668,7 @@ int hdmi_drm_bridge_init(void *data, struct drm_encoder *encoder,
 
 	dev = display->drm_dev;
 	bridge->display = display;
-	bridge->base.funcs = &hdmi_bridge_ops;
+	avr_drm_bridge_init(&bridge->base, bridge, &hdmi_bridge_ops);
 	bridge->base.encoder = encoder;
 
 	priv = dev->dev_private;
@@ -693,7 +694,7 @@ int hdmi_drm_bridge_init(void *data, struct drm_encoder *encoder,
 
 	return 0;
 error_free_bridge:
-	kfree(bridge);
+	avr_drm_bridge_release(&bridge->base);
 error:
 
 	return rc;
@@ -704,6 +705,7 @@ void hdmi_drm_bridge_deinit(void *data)
 	struct hdmi_display *display = data;
 	struct hdmi_bridge *bridge = display->bridge;
 
-	kfree(bridge);
+	if (bridge)
+		avr_drm_bridge_release(&bridge->base);
 
 }

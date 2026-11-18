@@ -1172,7 +1172,7 @@ int dp_mst_drm_bridge_init(void *data, struct drm_encoder *encoder)
 
 	dev = display->drm_dev;
 	bridge->display = display;
-	bridge->base.funcs = &dp_mst_bridge_ops;
+	avr_drm_bridge_init_embedded(&bridge->base, &dp_mst_bridge_ops);
 	bridge->base.encoder = encoder;
 
 	priv = dev->dev_private;

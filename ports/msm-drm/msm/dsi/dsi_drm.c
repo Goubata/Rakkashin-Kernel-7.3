@@ -786,6 +786,7 @@ AVR_BRIDGE_ATOMIC(dsi_bridge_post_disable);
 AVR_BRIDGE_ATTACH(dsi_bridge_attach);
 static const struct drm_bridge_funcs dsi_bridge_ops = {
 	.attach       = dsi_bridge_attach_avr_attach,
+	AVR_BRIDGE_STATE_HELPERS,
 	.mode_fixup   = dsi_bridge_mode_fixup,
 	.atomic_pre_enable   = dsi_bridge_pre_enable_avr_atomic,
 	.atomic_enable       = dsi_bridge_enable_avr_atomic,
@@ -1563,7 +1564,7 @@ struct dsi_bridge *dsi_drm_bridge_init(struct dsi_display *display,
 	}
 
 	bridge->display = display;
-	bridge->base.funcs = &dsi_bridge_ops;
+	avr_drm_bridge_init(&bridge->base, bridge, &dsi_bridge_ops);
 	bridge->base.encoder = encoder;
 
 	rc = drm_bridge_attach(encoder, &bridge->base, NULL,
@@ -1575,14 +1576,15 @@ struct dsi_bridge *dsi_drm_bridge_init(struct dsi_display *display,
 
 	return bridge;
 error_free_bridge:
-	kfree(bridge);
+	avr_drm_bridge_release(&bridge->base);
 error:
 	return ERR_PTR(rc);
 }
 
 void dsi_drm_bridge_cleanup(struct dsi_bridge *bridge)
 {
-	kfree(bridge);
+	if (bridge)
+		avr_drm_bridge_release(&bridge->base);
 }
 
 static bool is_valid_poms_switch(struct dsi_display_mode *mode_a,

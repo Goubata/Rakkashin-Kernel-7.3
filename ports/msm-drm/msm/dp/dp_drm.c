@@ -365,6 +365,7 @@ AVR_BRIDGE_ATOMIC(dp_bridge_post_disable);
 AVR_BRIDGE_ATTACH(dp_bridge_attach);
 static const struct drm_bridge_funcs dp_bridge_ops = {
 	.attach       = dp_bridge_attach_avr_attach,
+	AVR_BRIDGE_STATE_HELPERS,
 	.mode_fixup   = dp_bridge_mode_fixup,
 	.atomic_pre_enable   = dp_bridge_pre_enable_avr_atomic,
 	.atomic_enable       = dp_bridge_enable_avr_atomic,
@@ -761,7 +762,7 @@ int dp_drm_bridge_init(void *data, struct drm_encoder *encoder,
 
 	dev = display->drm_dev;
 	bridge->display = display;
-	bridge->base.funcs = &dp_bridge_ops;
+	avr_drm_bridge_init(&bridge->base, bridge, &dp_bridge_ops);
 	bridge->base.encoder = encoder;
 
 	priv = dev->dev_private;
@@ -785,7 +786,7 @@ int dp_drm_bridge_init(void *data, struct drm_encoder *encoder,
 
 	return 0;
 error_free_bridge:
-	kfree(bridge);
+	avr_drm_bridge_release(&bridge->base);
 error:
 	return rc;
 }
@@ -795,7 +796,8 @@ void dp_drm_bridge_deinit(void *data)
 	struct dp_display *display = data;
 	struct dp_bridge *bridge = display->bridge;
 
-	kfree(bridge);
+	if (bridge)
+		avr_drm_bridge_release(&bridge->base);
 }
 
 enum drm_mode_status dp_connector_mode_valid(struct drm_connector *connector,

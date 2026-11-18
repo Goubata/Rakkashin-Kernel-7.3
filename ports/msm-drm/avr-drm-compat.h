@@ -56,6 +56,49 @@ static int fn##_avr_attach(struct drm_bridge *bridge,			\
 	return fn(bridge, flags);					\
 }
 
+/* 7.x bridges are refcounted: drm_bridge_attach()/drm_bridge_add() take references and
+ * the last drm_bridge_put() frees bridge->container. A kzalloc()ed 6.12-style bridge has
+ * refcount 0 and no container ("DRM bridge corrupted or not allocated by
+ * devm_drm_bridge_alloc()", then refcount_t addition on 0 and an oops in phone test 26).
+ * Give msm_drm's bridges what devm_drm_bridge_alloc() would (container, kref, list) and
+ * drop the allocation reference instead of kfree() on the error/cleanup paths. Not devm:
+ * msm_drm frees its bridges explicitly from its own unbind/cleanup code. */
+static inline void avr_drm_bridge_init(struct drm_bridge *bridge, void *container,
+				       const struct drm_bridge_funcs *funcs)
+{
+	INIT_LIST_HEAD(&bridge->list);
+	bridge->container = container;
+	bridge->funcs = funcs;
+	kref_init(&bridge->refcount);
+	drm_bridge_add(bridge);
+}
+
+/* 7.x drm_bridge_attach() always creates the bridge's atomic private state through
+ * funcs->atomic_create_state (6.12 only did so for bridges that opted in). msm_drm's
+ * bridges have none: the kCFI-checked indirect call through NULL faulted at
+ * 0xfffffffffffffffc in drm_bridge_atomic_create_priv_state (phone test 28). The plain
+ * helpers are what a bridge without its own state needs. */
+#include <drm/drm_atomic_state_helper.h>
+#define AVR_BRIDGE_STATE_HELPERS						\
+	.atomic_create_state = drm_atomic_helper_bridge_create_state,		\
+	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,	\
+	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state
+
+/* For bridges embedded in a larger driver structure (dp_mst bridge array): never let the
+ * refcount free them, so pin one extra reference. */
+static inline void avr_drm_bridge_init_embedded(struct drm_bridge *bridge,
+						const struct drm_bridge_funcs *funcs)
+{
+	avr_drm_bridge_init(bridge, bridge, funcs);
+	drm_bridge_get(bridge);
+}
+
+static inline void avr_drm_bridge_release(struct drm_bridge *bridge)
+{
+	drm_bridge_remove(bridge);
+	drm_bridge_put(bridge);
+}
+
 /* strncpy() was removed from the 7.x kernel; exact C semantics (no forced
  * NUL termination, zero padding) as the 6.12 lib/string.c version. */
 #include <linux/types.h>

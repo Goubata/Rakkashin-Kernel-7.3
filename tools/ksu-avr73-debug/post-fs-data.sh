@@ -11,6 +11,28 @@ MODDIR=${0%/*}
 O=/data/local/tmp/avr73/boot-$(date +%Y%m%d-%H%M%S)
 mkdir -p $O; chmod 777 $O; ln -sfn $O /data/local/tmp/avr73/latest
 echo "$(date) post-fs-data on $(uname -a) uptime $(cut -d' ' -f1 /proc/uptime)" > $O/events.txt
+# Live tools for adb sessions (7.3 adb su fails with EBADF, shell cannot read dmesg):
+# - kmsg-live: /dev/kmsg (non-destructive reader) into a shell-readable file, so a PC-side
+#   "adb shell tail -f" keeps the log up to a panic (phone test 25 lost its panic: empty pstore).
+# - cmd/: a root command channel. The shell user drops cmd/run.sh, this loop runs it as root
+#   and leaves cmd/out.txt. /data/local/tmp is not app-writable; only active on 7.3 test boots.
+L=/data/local/tmp/avr73/kmsg-live
+: > $L; chmod 644 $L
+nohup sh -c "cat /dev/kmsg >> $L" > /dev/null 2>&1 &
+C=/data/local/tmp/avr73/cmd
+mkdir -p $C; chmod 777 $C; rm -f $C/run.sh $C/running.sh
+nohup sh -c '
+C='"$C"'
+n=0
+while true; do
+	if [ -f $C/run.sh ]; then
+		mv $C/run.sh $C/running.sh
+		sh $C/running.sh > $C/out.txt 2>&1; echo "rc=$?" >> $C/out.txt
+		chmod 666 $C/out.txt; mv $C/running.sh $C/done.sh
+	fi
+	n=$((n+1)); [ $((n % 4)) -eq 0 ] && sync
+	sleep 0.5
+done' > /dev/null 2>&1 &
 # Phone test 23: the Connectivity mainline netd.o/netd@funcs.o pick program variants by
 # [kernel range] x [API range]. For kernel >= 7.3 the ingress_stats / get+setsockopt variants
 # need API 27Q2 (Android 18), and the 26Q2 ones stop at 7.3, so on this Android 17 (26Q2)
@@ -64,6 +86,16 @@ for m in synx-driver msm_kgsl msm_drm; do
 	# line. Phone test 24: without msm_drm.dsi_display0=<panel> msm_drm fell back to
 	# mipi_mot_video_dummy_qhd, so the real panel was never driven (splash stays on = OLED risk).
 	P=$(tr ' ' '\n' < /proc/cmdline | grep "^${m//-/_}\." | sed "s/^${m//-/_}\.//" | tr '\n' ' ')
+	# Phone tests 25-29: msm_drm with the real panel (dsi_display0) oopsed on 7.x drm_bridge
+	# refcount/atomic-state requirements (fixed in ports/msm-drm); it must load here, before
+	# surfaceflinger/composer start, or they settle on a fake 1080x1920 display.
+	# Escape hatches: drm_defer = skip (load later from the cmd channel), drm_dummy = no params.
+	if [ $m = msm_drm ]; then
+		if [ -f /data/local/tmp/avr73/drm_defer ]; then
+			echo "msm_drm deferred (drm_defer); params: $P" >> $O/insmod.txt; continue
+		fi
+		[ -f /data/local/tmp/avr73/drm_dummy ] && P=""
+	fi
 	echo "insmod $m params: $P" >> $O/insmod.txt
 	insmod $MODDIR/ko/$m.ko $P >> $O/insmod.txt 2>&1
 	echo "insmod $m rc=$?" >> $O/insmod.txt

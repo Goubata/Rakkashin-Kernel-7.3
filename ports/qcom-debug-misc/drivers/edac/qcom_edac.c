@@ -10,6 +10,16 @@
 #include <linux/platform_device.h>
 #include <linux/regmap.h>
 #include <linux/soc/qcom/llcc-qcom.h>
+/*
+ * AVR 7.3: llcc-qcom (ports/qcom-llcc) registers qcom_llcc_edac with its vendor
+ * (6.12 Qualcomm) drv_data layout, struct avr_llcc_drv_data, not the 7.3 public
+ * struct llcc_drv_data. Phone test 8: NULL deref in qcom_llcc_edac_probe reading
+ * bcast_regmap at the 7.3 offset. Use the provider's private types.
+ */
+#include "../../../qcom-llcc/llcc-vendor-private.h"
+#define llcc_drv_data avr_llcc_drv_data
+#define llcc_edac_reg_offset avr_llcc_edac_reg_offset
+#define llcc_edac_reg_data avr_llcc_edac_reg_data
 
 #include "drivers/edac/edac_mc.h"
 #include "drivers/edac/edac_device.h"

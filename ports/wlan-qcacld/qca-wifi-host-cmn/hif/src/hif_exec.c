@@ -983,6 +983,18 @@ static void hif_exec_napi_kill(struct hif_exec_context *ctx)
 	int irq_ind;
 	struct net_device *dummy_nd = qdf_napi_get_dummy_nd_ptr(n_ctx);
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+	/*
+	 * AVR 7.3: already killed (dummy netdev freed, pointer cleared below). 7.x
+	 * netif_napi_del() takes netdev_lock(napi->dev) first, so a second kill of the
+	 * same context locked the freed dummy netdev: phone test 37 oops in __mutex_lock
+	 * from hif_exec_napi_kill during hdd_psoc_idle_shutdown (6.12's netif_napi_del()
+	 * only tested NAPI_STATE_LISTED, which made the repeat harmless).
+	 */
+	if (!dummy_nd)
+		return;
+#endif
+
 	if (ctx->inited) {
 		qdf_napi_disable(&n_ctx->napi);
 		ctx->inited = 0;

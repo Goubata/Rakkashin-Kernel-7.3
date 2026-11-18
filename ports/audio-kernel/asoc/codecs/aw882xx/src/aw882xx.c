@@ -20,6 +20,7 @@
 #include <sound/pcm_params.h>
 #include <sound/soc.h>
 #include <linux/of_gpio.h>
+#include <linux/gpio/legacy.h>	/* AVR 7.3: devm_gpio_request_one / GPIOF_* */
 #include <linux/delay.h>
 #include <linux/device.h>
 #include <linux/firmware.h>
@@ -2220,10 +2221,24 @@ static int aw882xx_parse_gpio_dt(struct aw882xx *aw882xx,
 	}
 
 	aw882xx->reset_gpio = of_get_named_gpio(np, "reset-gpio", 0);
-	if (aw882xx->reset_gpio < 0)
+	if (aw882xx->reset_gpio < 0) {
 		aw_dev_info(aw882xx->dev, "no reset gpio provided, will not HW reset device");
-	else
+	} else {
+		/*
+		 * AVR 7.3: the vendor driver never requested the line and toggled it with
+		 * gpio_set_value_cansleep(); on 6.12 that still moved the pin, on 7.3 the
+		 * amp stays in reset (gpio182/183 out low) and every chip-id read NACKs
+		 * (-107), so no aw882xx component and no sound card (phone tests 34-36:
+		 * audioserver never registers, system_server watchdog). Own the line.
+		 */
+		int ret = devm_gpio_request_one(aw882xx->dev, aw882xx->reset_gpio,
+						GPIOF_OUT_INIT_LOW, "aw882xx_reset");
+
+		if (ret)
+			aw_dev_err(aw882xx->dev, "reset gpio %d request failed: %d",
+				   aw882xx->reset_gpio, ret);
 		aw_dev_info(aw882xx->dev, "reset gpio provided ok");
+	}
 
 	aw882xx->irq_gpio = of_get_named_gpio(np, "irq-gpio", 0);
 	if (aw882xx->irq_gpio < 0)
@@ -2363,9 +2378,10 @@ int aw882xx_hw_reset(struct aw882xx *aw882xx)
 	aw_dev_info(aw882xx->dev, "enter");
 
 	if (gpio_is_valid(aw882xx->reset_gpio)) {
-		gpio_set_value_cansleep(aw882xx->reset_gpio, 0);
+		/* direction_output, not set_value: the line must be an owned output (7.3) */
+		gpio_direction_output(aw882xx->reset_gpio, 0);
 		mdelay(1);
-		gpio_set_value_cansleep(aw882xx->reset_gpio, 1);
+		gpio_direction_output(aw882xx->reset_gpio, 1);
 		mdelay(2);
 	} else {
 		aw_dev_info(aw882xx->dev, "has no reset gpio");

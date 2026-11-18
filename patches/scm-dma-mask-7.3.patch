@@ -1,0 +1,44 @@
+From 83744136685b50a2da8e08b1bbd92f04a34a2346 Mon Sep 17 00:00:00 2001
+From: Codex <codex@localhost>
+Date: Wed, 18 Nov 2026 18:33:04 +0900
+Subject: [PATCH] ANDROID: firmware: qcom_scm: 64-bit DMA mask like the vendor
+ driver
+
+The vendor qcom_scm_probe() sets dma_set_mask_and_coherent(64). Upstream relies on
+the platform-device default (32-bit coherent mask), and with the vendor cmdline
+disable_dma32=on there is no ZONE_DMA32, so every dma_alloc_coherent() on the SCM
+device fails: phone test 33 "error -12 initializing firmware adsp_dtb.mdt" /
+cdsp_dtb.mdt (PAS init_image metadata). With the mask, test 34 boots modem, ADSP,
+CDSP and WPSS.
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+---
+ drivers/firmware/qcom/qcom_scm.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/firmware/qcom/qcom_scm.c b/drivers/firmware/qcom/qcom_scm.c
+index 5be132796..a3130b8e2 100644
+--- a/drivers/firmware/qcom/qcom_scm.c
++++ b/drivers/firmware/qcom/qcom_scm.c
+@@ -3779,6 +3779,18 @@ static int qcom_scm_probe(struct platform_device *pdev)
+ 
+ 	scm->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, scm);
++
++	/*
++	 * AVR: like the vendor qcom_scm_probe(). The platform device default is a 32-bit
++	 * coherent mask, and with disable_dma32=on (vendor cmdline) there is no ZONE_DMA32,
++	 * so every dma_alloc_coherent() on the SCM device (PAS init_image metadata, memory
++	 * assign) fails with -ENOMEM: phone test 33 "error -12 initializing firmware
++	 * adsp_dtb.mdt" / cdsp_dtb.mdt. The SCM/TZ buffers have no 32-bit limit on Alor.
++	 */
++	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to set 64-bit DMA mask\n");
++
+ 	ret = qcom_scm_find_dload_address(&pdev->dev, &scm->dload_mode_addr);
+ 	if (ret < 0)
+ 		return dev_err_probe(&pdev->dev, ret,
+-- 
+2.56.1
+

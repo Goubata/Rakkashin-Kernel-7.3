@@ -8,6 +8,12 @@ case "$(uname -r)" in
 	exit 0 ;;
 esac
 MODDIR=${0%/*}
+# Phone test 30: OPLUS /system_ext/bin/boot_monitor_service counted the unstable 7.3 test
+# boots and rebooted with "reboot,opex_incremental_disable"; its repair ladder continues
+# to ss_ladder_recovery = reboot to recovery. Keep it stopped on 7.3 test boots so test
+# failures never advance the ladder (it is started from init on post-fs-data, like us, so
+# it is also re-stopped from the cmd loop below).
+setprop ctl.stop boot_monitor_service
 O=/data/local/tmp/avr73/boot-$(date +%Y%m%d-%H%M%S)
 mkdir -p $O; chmod 777 $O; ln -sfn $O /data/local/tmp/avr73/latest
 echo "$(date) post-fs-data on $(uname -a) uptime $(cut -d' ' -f1 /proc/uptime)" > $O/events.txt
@@ -30,6 +36,7 @@ while true; do
 		sh $C/running.sh > $C/out.txt 2>&1; echo "rc=$?" >> $C/out.txt
 		chmod 666 $C/out.txt; mv $C/running.sh $C/done.sh
 	fi
+	[ "$(getprop init.svc.boot_monitor_service)" = stopped ] || setprop ctl.stop boot_monitor_service
 	n=$((n+1)); [ $((n % 4)) -eq 0 ] && sync
 	sleep 0.5
 done' > /dev/null 2>&1 &

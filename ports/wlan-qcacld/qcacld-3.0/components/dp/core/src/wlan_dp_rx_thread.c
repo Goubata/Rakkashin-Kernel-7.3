@@ -923,6 +923,16 @@ static void dp_rx_tm_thread_napi_deinit(struct dp_rx_thread *rx_thread)
 	struct net_device *dummy_nd;
 
 	dummy_nd = dp_rx_thread_get_dummy_netdev_ptr(rx_thread);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+	/*
+	 * AVR 7.3: init enabled this NAPI; 7.x __netif_napi_del_locked() warns on an
+	 * enabled NAPI (phone test 34 WARN dev.c:7801 from dp_rx_tm_deinit) and locks
+	 * napi->dev, so disable first and never touch it again once the dummy is freed.
+	 */
+	if (!dummy_nd)
+		return;
+	qdf_napi_disable(&rx_thread->napi);
+#endif
 	qdf_netif_napi_del(&rx_thread->napi);
 	qdf_net_if_destroy_dummy_if((struct qdf_net_if *)dummy_nd);
 	dp_rx_thread_set_dummy_netdev_ptr(rx_thread, NULL);

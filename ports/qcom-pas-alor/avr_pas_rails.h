@@ -3,7 +3,8 @@
 #define AVR_PAS_RAILS_H
 #include <linux/mutex.h>
 #include <linux/regulator/consumer.h>
-#define AVR_PAS_RAIL_COUNT 2
+/* cx, mx, plus nsp on the Alor CDSP (reg-names "cx mx nsp"); soccp/adsp/modem/wpss use 2. */
+#define AVR_PAS_RAIL_COUNT 3
 struct avr_pas_rail {
 	struct regulator *reg;
 	int level, load;
@@ -12,12 +13,13 @@ struct avr_pas_rail {
 struct avr_pas_rails {
 	struct mutex lock;
 	struct avr_pas_rail rail[AVR_PAS_RAIL_COUNT];
+	int n;	/* rails in use, 2..AVR_PAS_RAIL_COUNT, set at init */
 	int cleanup_error;
 };
 static int avr_pas_rails_release_locked(struct avr_pas_rails *rails)
 {
 	int i, ret;
-	for (i = AVR_PAS_RAIL_COUNT - 1; i >= 0; i--) {
+	for (i = rails->n - 1; i >= 0; i--) {
 		struct avr_pas_rail *r = &rails->rail[i];
 		if (r->enabled) {
 			ret = regulator_disable(r->reg);
@@ -50,7 +52,11 @@ static int avr_pas_rails_enable(struct avr_pas_rails *rails)
 {
 	int i, ret;
 	mutex_lock(&rails->lock);
-	for (i = 0; i < AVR_PAS_RAIL_COUNT; i++) {
+	if (rails->n < 2 || rails->n > AVR_PAS_RAIL_COUNT) {
+		ret = -EINVAL;
+		goto out;
+	}
+	for (i = 0; i < rails->n; i++) {
 		struct avr_pas_rail *r = &rails->rail[i];
 		if (r->enabled || r->load_set || r->voltage_set) {
 			ret = -EBUSY;
@@ -62,7 +68,7 @@ static int avr_pas_rails_enable(struct avr_pas_rails *rails)
 		}
 	}
 	rails->cleanup_error = 0;
-	for (i = 0; i < AVR_PAS_RAIL_COUNT; i++) {
+	for (i = 0; i < rails->n; i++) {
 		struct avr_pas_rail *r = &rails->rail[i];
 		ret = regulator_set_voltage(r->reg, r->level, INT_MAX);
 		if (ret) goto unwind;

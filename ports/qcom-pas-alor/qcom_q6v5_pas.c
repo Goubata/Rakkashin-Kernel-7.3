@@ -746,15 +746,18 @@ static int qcom_pas_init_clock(struct qcom_pas *pas)
 
 static int qcom_pas_init_arc_rails(struct qcom_pas *pas)
 {
-	static const char * const names[] = { "cx", "mx" };
+	/* Saved Alor order: cx, mx and, on the CDSP only, nsp. */
+	static const char * const names[AVR_PAS_RAIL_COUNT] = { "cx", "mx", "nsp" };
 	u32 request[2];
 	char property[16];
 	const char *name;
-	int i, ret;
+	int i, ret, n;
 
-	if (of_property_count_strings(pas->dev->of_node, "reg-names") != AVR_PAS_RAIL_COUNT)
+	n = of_property_count_strings(pas->dev->of_node, "reg-names");
+	if (n < 2 || n > AVR_PAS_RAIL_COUNT)
 		return -EINVAL;
-	for (i = 0; i < AVR_PAS_RAIL_COUNT; i++) {
+	pas->rails.n = n;
+	for (i = 0; i < n; i++) {
 		ret = of_property_read_string_index(pas->dev->of_node, "reg-names", i, &name);
 		if (ret || strcmp(name, names[i]))
 			return -EINVAL;
@@ -1947,6 +1950,80 @@ static const struct qcom_pas_data alor_soccp_resource = {
 	.use_platform_name = true,
 };
 
+/*
+ * Alor ADSP/CDSP/modem/WPSS (phone tests 30-32: only soccp was matched, so these never
+ * probed on 7.3 -> no sensors (system_server watchdog in SensorManager::waitForSensorService),
+ * modem, Wi-Fi). Values from the vendor qcom-soc qcom_q6v5_pas.c alor_*_resource with the
+ * AVR DTB branch (CONFIG_AVR_DTB: modem region_assign_count = 1). Power comes from the
+ * saved DT cx/mx(/nsp) rails like soccp (arc_rails); vendor-only dump extras
+ * (crash_reason_stack, both_dumps, dma_phys_below_32b) are not ported yet.
+ */
+static const struct qcom_pas_data alor_adsp_resource = {
+	.crash_reason_smem = 423,
+	.firmware_name = "adsp.mdt",
+	.dtb_firmware_name = "adsp_dtb.mdt",
+	.pas_id = 1,
+	.dtb_pas_id = 0x24,
+	.minidump_id = 5,
+	.load_state = "adsp",
+	.ssr_name = "lpass",
+	.sysmon_name = "adsp",
+	.ssctl_id = 0x14,
+	.uses_elf64 = true,
+	.smem_host_id = 2,
+	.auto_boot = true,
+	.arc_rails = true,
+};
+
+static const struct qcom_pas_data alor_cdsp_resource = {
+	.crash_reason_smem = 601,
+	.firmware_name = "cdsp.mdt",
+	.dtb_firmware_name = "cdsp_dtb.mdt",
+	.pas_id = 18,
+	.dtb_pas_id = 0x25,
+	.minidump_id = 7,
+	.load_state = "cdsp",
+	.ssr_name = "cdsp",
+	.sysmon_name = "cdsp",
+	.ssctl_id = 0x17,
+	.uses_elf64 = true,
+	.smem_host_id = 5,
+	.auto_boot = true,
+	.arc_rails = true,
+};
+
+static const struct qcom_pas_data alor_mpss_resource = {
+	.crash_reason_smem = 421,
+	.firmware_name = "modem.mdt",
+	.dtb_firmware_name = "modem_dtb.mdt",
+	.pas_id = 4,
+	.dtb_pas_id = 0x26,
+	.minidump_id = 3,
+	.decrypt_shutdown = true,
+	.load_state = "modem",
+	.ssr_name = "mpss",
+	.uses_elf64 = true,
+	.sysmon_name = "modem",
+	.ssctl_id = 0x12,
+	.region_assign_idx = 3,
+	.region_assign_count = 1,
+	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
+	.arc_rails = true,
+};
+
+static const struct qcom_pas_data alor_wpss_resource = {
+	.crash_reason_smem = 626,
+	.firmware_name = "wpss.mdt",
+	.pas_id = 6,
+	.minidump_id = 4,
+	.load_state = "wpss",
+	.uses_elf64 = true,
+	.ssr_name = "wpss",
+	.sysmon_name = "wpss",
+	.ssctl_id = 0x19,
+	.arc_rails = true,
+};
+
 static const struct qcom_pas_data kaanapali_soccp_resource = {
 	.crash_reason_smem = 656,
 	.firmware_name = "soccp.mbn",
@@ -2009,6 +2086,10 @@ static const struct qcom_pas_data eliza_cdsp_resource = {
 
 static const struct of_device_id qcom_pas_of_match[] = {
 	{ .compatible = "qcom,alor-soccp-pas", .data = &alor_soccp_resource },
+	{ .compatible = "qcom,alor-adsp-pas", .data = &alor_adsp_resource },
+	{ .compatible = "qcom,alor-cdsp-pas", .data = &alor_cdsp_resource },
+	{ .compatible = "qcom,alor-modem-pas", .data = &alor_mpss_resource },
+	{ .compatible = "qcom,alor-wpss-pas", .data = &alor_wpss_resource },
 	{ .compatible = "qcom,eliza-adsp-pas", .data = &sm8550_adsp_resource },
 	{ .compatible = "qcom,eliza-cdsp-pas", .data = &eliza_cdsp_resource },
 	{ .compatible = "qcom,glymur-soccp-pas", .data = &glymur_soccp_resource },

@@ -1,6 +1,20 @@
 #!/system/bin/sh
 # AVR 7.3 bring-up: only acts on the 7.3 test kernel
-case "$(uname -r)" in 7.3.*) ;; *) exit 0 ;; esac
+MARK=/data/local/tmp/avr73/.flowctrl-off
+case "$(uname -r)" in
+7.3.*) ;;
+*)	# back on 6.12: restore the OPLUS logd flow control we disabled for the 7.3 boot
+	[ -f $MARK ] && { setprop persist.logd.flowctrl.on 1; rm -f $MARK; }
+	exit 0 ;;
+esac
+# OPLUS logd flow control never reports ready on 7.3 and drops every entry (phone test 16:
+# logcat -S Total 5121, Now 0). Disable it for this boot and restart logd.
+if [ "$(getprop persist.logd.flowctrl.on)" = "1" ]; then
+	mkdir -p /data/local/tmp/avr73; touch $MARK
+	setprop persist.logd.flowctrl.on 0
+	setprop ctl.restart logd
+	sleep 2
+fi
 MODDIR=${0%/*}
 # The 7.3 modules are loaded from vendor_boot; vendor_dlkm stays 6.12, so vendor_modprobe.sh
 # never reaches "setprop vendor.all.modules.ready 1" and init.qti.kernel.target.rc

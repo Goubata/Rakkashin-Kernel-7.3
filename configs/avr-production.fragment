@@ -11,6 +11,8 @@
 # CONFIG_DEBUG_RWSEMS is not set
 # CONFIG_PROVE_RCU is not set
 # CONFIG_DEBUG_ATOMIC_SLEEP is not set
+# CONFIG_DEBUG_WW_MUTEX_SLOWPATH is not set
+# CONFIG_DEBUG_RT_MUTEXES is not set
 # zram built in, as in the running Rakkashin 6.12.113 Image (kallsyms: zram_add/zs_create_pool
 # without a module tag): vendor init runs "modprobe -r zram" at early-init and then loads
 # moto_swap5, so a modular zram would be removed and swap lost.

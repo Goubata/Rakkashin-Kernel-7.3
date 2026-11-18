@@ -2865,3 +2865,18 @@ first-stage mount reached. SELinux: phone policy already defines 7.3's new perms
 io_uring allowed, ...); deny_unknown=1, missing only watch_mountns and bpf *_as (unused by Android).
 Regression: all suites pass (qcom-tee and qcom-cpucp-scmi rerun 3/3 after test fixes: minidump stub for
 ipc_logging, wait for async qcom_scmi_client probe). Not verified on the phone.
+
+## Stage126: KernelSU-Next v3.4.2 built in; production build and phone RAM-boot kits
+
+The running phone kernel (Rakkashin 6.12.113) has KernelSU-Next built in (292 ksu_ symbols; manager
+com.rifsxd.ksunext v3.4.2, versionCode 33355; no susfs). KernelSU-Next tag v3.4.2 (4c706b59) gives
+KSU_VERSION 30000+3355 = 33355, equal to the manager. As an LKM it needs unexported symbols (the
+ksuinit loader resolves them), so like the phone it is built in: core patch kernelsu-next-7.3.patch
+(drivers/kernelsu, uapi headers materialised), CONFIG_KSU=y in rakkashin.fragment. QEMU (Image#45):
+welcome version 33355, syscall dispatcher installed, sys_enter tracepoint hooks, smoke pass, the
+phone's init_boot init still loads modules; no WARN/BUG. Production: lockdep also came back through
+gki_defconfig DEBUG_WW_MUTEX_SLOWPATH/DEBUG_RT_MUTEXES (now disabled); ports build in two passes
+(seed Module.symvers, modpost warnings, then strict); vendor-unused static locks only hidden by
+lockdep's self-reference need -Wno-error=unused-variable (diagnostic only). 112/112 ports, 398 .ko,
+vmlinux exports unchanged by KSU. Kits: artifacts/boot-kit-prod-first (131 modules) and
+boot-kit-prod-full (497, 496 listed) - check_boot_kit PASS. Not verified on the phone.

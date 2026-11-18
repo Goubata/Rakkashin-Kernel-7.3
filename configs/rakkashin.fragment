@@ -14,3 +14,6 @@ CONFIG_DEFAULT_FQ_CODEL=y
 CONFIG_ZRAM_BACKEND_LZ4=y
 CONFIG_ZRAM_DEF_COMP_LZ4=y
 # CONFIG_ZRAM_DEF_COMP_LZORLE is not set
+# KernelSU-Next v3.4.2 built in, as in the running Rakkashin 6.12 Image (manager v3.4.2, version 33355)
+CONFIG_KSU=y
+# CONFIG_KSU_DEBUG is not set

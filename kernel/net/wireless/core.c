@@ -1312,16 +1312,62 @@ void cfg80211_process_wiphy_works(struct cfg80211_registered_device *rdev,
 	spin_unlock_irqrestore(&rdev->wiphy_work_lock, flags);
 }
 
+/* ANDROID: avr 7.3: never hang reboot on a leaked opencount (see wiphy_unregister) */
+static bool avr_wiphy_unregister_reap(struct cfg80211_registered_device *rdev, int round)
+{
+	struct wireless_dev *wdev;
+	bool any = false;
+	int count;
+
+	rtnl_lock();
+	wiphy_lock(&rdev->wiphy);
+	count = rdev->opencount;
+	list_for_each_entry(wdev, &rdev->wiphy.wdev_list, list) {
+		any = true;
+		pr_warn("cfg80211: %s: unregister waits (opencount %d): wdev iftype %d netdev %s running %d\n",
+			wiphy_name(&rdev->wiphy), count, wdev->iftype,
+			wdev->netdev ? wdev->netdev->name : "-", wdev->is_running);
+		if (wdev->netdev || !wdev_running(wdev))
+			continue;
+		switch (wdev->iftype) {
+		case NL80211_IFTYPE_P2P_DEVICE:
+			cfg80211_stop_p2p_device(rdev, wdev);
+			break;
+		case NL80211_IFTYPE_NAN:
+			cfg80211_stop_nan(rdev, wdev);
+			break;
+		case NL80211_IFTYPE_PD:
+			cfg80211_stop_pd(rdev, wdev);
+			break;
+		default:
+			break;
+		}
+	}
+	if (!any && rdev->opencount > 0 && round >= 2) {
+		pr_err("cfg80211: %s: opencount %d leaked with no wdev left; continuing unregister\n",
+		       wiphy_name(&rdev->wiphy), rdev->opencount);
+		rdev->opencount = 0;
+	}
+	count = rdev->opencount;
+	wiphy_unlock(&rdev->wiphy);
+	rtnl_unlock();
+	return count == 0;
+}
+
 void wiphy_unregister(struct wiphy *wiphy)
 {
 	struct cfg80211_registered_device *rdev = wiphy_to_rdev(wiphy);
+	int round = 0;
 
-	wait_event(rdev->dev_wait, ({
+	while (!wait_event_timeout(rdev->dev_wait, ({
 		int __count;
 		wiphy_lock(&rdev->wiphy);
 		__count = rdev->opencount;
 		wiphy_unlock(&rdev->wiphy);
-		__count == 0; }));
+		__count == 0; }), 10 * HZ)) {
+		if (avr_wiphy_unregister_reap(rdev, round++))
+			break;
+	}
 
 	if (rdev->wiphy.rfkill)
 		rfkill_unregister(rdev->wiphy.rfkill);

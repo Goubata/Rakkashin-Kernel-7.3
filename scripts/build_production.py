@@ -45,6 +45,15 @@ def make_port(rel, extra):
                  'KCFLAGS=-Wno-error=unused-variable'] + extra + ['modules'])
 
 
+def ensure_mounts():
+    # same bind layout as build_native.py (lost after a phone reboot)
+    for origin, rel in [('/proc', 'proc'), ('/dev', 'dev'), (str(SOURCE), 'work/avr-src'), (str(PORT), 'work/avr-port')]:
+        target = ROOTFS / rel
+        target.mkdir(parents=True, exist_ok=True)
+        if root_run(['mountpoint', '-q', target]).returncode:
+            root_run(['mount', '--bind', origin, target], check=True)
+
+
 def check_source():
     cp = json.loads((PORT / 'reports/core-patch-checkpoint.json').read_text())
     head = subprocess.check_output(['git', '-C', str(SOURCE), 'rev-parse', 'HEAD'], text=True).strip()
@@ -140,6 +149,7 @@ def main():
     ap.add_argument('--only', default='')
     a = ap.parse_args()
     only = set(filter(None, a.only.split(',')))
+    ensure_mounts()
     if a.kernel:
         kernel()
     if a.ports:

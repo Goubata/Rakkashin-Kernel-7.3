@@ -1819,6 +1819,10 @@ static int32_t get_global_partition_info_v0(struct global_region_info *global_ip
 
 	IPCLITE_LOG(LOW, "base = %p, size= %u ", global_ipcmem->virt_base,
 									global_ipcmem->size);
+	/* AVR 7.3 bring-up: phone test 6 synx global mem init -EINVAL */
+	pr_info("ipclite: global partition hdr off=0x%x size=0x%x custom=%u (part %px)\n",
+		global_partition->hdr.region_offset, global_partition->hdr.region_size,
+		global_partition->hdr.custom_value, global_partition);
 	return 0;
 }
 
@@ -1958,6 +1962,7 @@ EXPORT_SYMBOL(ipclite_recover);
 int32_t get_global_partition_info(struct global_region_info *global_ipcmem)
 {
 	if (api_list_t.partition_info == NULL) {
+		pr_err("ipclite: partition_info API unassigned\n");	/* AVR bring-up */
 		IPCLITE_LOG(ERR, "Unassigned function : %s", __func__);
 		return -EINVAL;
 	}

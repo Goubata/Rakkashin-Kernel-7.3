@@ -84,6 +84,8 @@ def main():
     ap.add_argument('--kind', choices=['ramtest'], default='ramtest')
     ap.add_argument('--set', choices=['first', 'full'], default='full')
     ap.add_argument('--tag', required=True)
+    ap.add_argument('--defer', default='', help='comma list: keep files but do not auto-load these '
+                    'modules nor anything depending on them (bring-up: load by hand over adb)')
     a = ap.parse_args()
     kout, pout = TREES[a.tree]
     image = ROOT / kout / 'arch/arm64/boot/Image'
@@ -197,6 +199,17 @@ def main():
         [f'alias {al} {n}' for n in order for al in cands[n][2]]
     (md / 'modules.dep').write_text('\n'.join(dep_lines) + '\n')
     (md / 'modules.alias').write_text('\n'.join(alias_lines) + '\n')
+    deferred = {d.replace('-', '_') for d in a.defer.split(',') if d}
+    if deferred:
+        changed = True
+        while changed:
+            changed = False
+            for n in list(listed):
+                if n not in deferred and any(d in deferred for d in cands[n][1]):
+                    deferred.add(n)
+                    changed = True
+        listed -= deferred
+        print('deferred (not auto-loaded):', ' '.join(sorted(deferred)))
     # load order: providers before users (reverse post-order of the whole listed set)
     seq, seen = [], set()
 
@@ -243,7 +256,7 @@ def main():
                     '--kernel', str(image), '--ramdisk', str(rd), '--os_version', '16.0.0',
                     '--os_patch_level', '2026-06', '--output', str(boot)], check=True)
     shutil.rmtree(ib)
-    manifest = {'kind': a.kind, 'set': a.set, 'release': release, 'listed': len([n for n in seq if n in listed]),
+    manifest = {'kind': a.kind, 'set': a.set, 'deferred': sorted(deferred), 'release': release, 'listed': len([n for n in seq if n in listed]),
                 'unlisted': sorted(files[n] for n in order if n not in listed), 'tree': a.tree, 'image': str(image.relative_to(ROOT)),
                 'image_sha256': hashlib.sha256(image.read_bytes()).hexdigest(),
                 'modules': len(order), 'boot_img_bytes': boot.stat().st_size,

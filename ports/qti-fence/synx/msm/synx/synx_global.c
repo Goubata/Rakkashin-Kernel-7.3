@@ -1324,6 +1324,7 @@ int synx_global_mem_init(void)
 	rc = get_global_partition_info(&mem_info);
 	if (rc) {
 		dprintk(SYNX_ERR, "error setting up global shared memory\n");
+		pr_err("synx: get_global_partition_info rc=%d\n", rc);	/* AVR bring-up */
 		return rc;
 	}
 
@@ -1342,6 +1343,9 @@ int synx_global_mem_init(void)
 	dprintk(SYNX_DBG, "Global coredata size is %u\n", glcoredata_size);
 
 	gl_coredata = synx_fetch_global_coredata_object(SYNX_GLOBAL_MAX_OBJS);
+	pr_info("synx: gmem base %px size %u custom %u coredata %u (struct %zu) end %px\n",
+		mem_info.virt_base, mem_info.size, mem_info.custom_value, glcoredata_size,
+		sizeof(struct synx_global_coredata), gl_coredata);	/* AVR bring-up */
 	if ((uintptr_t)gl_coredata > (uintptr_t)((uint8_t *)mem_info.virt_base + mem_info.size)) {
 		dprintk(SYNX_ERR, "Global coredata outside of shared mem limits");
 		return -SYNX_INVALID;

@@ -53,6 +53,14 @@ if head -1 $RC | grep -q "^# 2026 2 37 0 0"; then
 	chmod 644 $MODDIR/netbpfload-27q2.rc
 	mount -o bind $MODDIR/netbpfload-27q2.rc $RC && echo "netbpfload.rc -> 27q2: $(head -1 $RC)" >> $O/events.txt
 fi
+# Phone test 45: /vendor/bin/init.oem.fingerprint2.sh insmods the 6.12 goodix_fod_mmi/anc_fps_mmi
+# from /vendor/lib/modules (struct module size mismatch on 7.3) -> "no fingerprint sensor found".
+# Bind the 7.3 builds (ports/moto-misc) over them for the test boot; the sensor is jiiov (anc_fps_mmi).
+for m in goodix_fod_mmi anc_fps_mmi; do
+	[ -f $MODDIR/ko/$m.ko ] && [ -f /vendor/lib/modules/$m.ko ] || continue
+	chcon u:object_r:vendor_file:s0 $MODDIR/ko/$m.ko
+	mount -o bind $MODDIR/ko/$m.ko /vendor/lib/modules/$m.ko && echo "fps: $m -> 7.3 build" >> $O/events.txt
+done
 # Watchers first: this script starts ~8 s into boot but the module loads below take ~9 s, and
 # netbpfload starts at ~17.3 s (phone test 21), so attaching after them races with it.
 # netbpfload: trace-only (failing syscalls such as bpf() errnos + liblog payloads, which are
@@ -65,6 +73,8 @@ R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/netbpfload-trace.txt 120 netbpfload 
 # because this ROM's persist.log.tag=Settings ("S") drops their logcat lines.
 R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/trace-qti.txt 180 qti any > /dev/null 2>&1 &
 R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/trace-adpl.txt 180 adpl any > /dev/null 2>&1 &
+# test 42: the rmnet_data links are created by /vendor/bin/nicmd (ipa3_wwan_ioctl caller)
+R1_TRACEONLY=1 nohup $MODDIR/rescue1shot $O/trace-nicmd.txt 240 nicmd any > /dev/null 2>&1 &
 # netd1shot rescue (phone tests 13-18: the netd self-test fails and init reboots with
 # "netd1shot-fail" before adbd starts). Attach to the real netd1shot, log failing syscalls and
 # turn its failure into exit 0 so the 7.3 test boot stays up for live debugging over adb.

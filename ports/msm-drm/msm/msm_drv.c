@@ -2713,6 +2713,15 @@ static void msm_pdev_shutdown(struct platform_device *pdev)
 
 	msm_lastclose(ddev);
 
+	/*
+	 * ANDROID: avr 7.3: on 7.x lastclose leaves the primary plane scanning out
+	 * (the 6.12 path restored the client modeset). Switch every CRTC off once,
+	 * so no display DMA is in flight when the SMMU shuts down (restart hung
+	 * on an sde_unsec_cb context fault with TTBR0 = 0).
+	 */
+	if (!priv->shutdown_in_progress && ddev->mode_config.num_crtc > 0)
+		drm_atomic_helper_shutdown(ddev);
+
 	/* set this after lastclose to allow kickoff from lastclose */
 	priv->shutdown_in_progress = true;
 }

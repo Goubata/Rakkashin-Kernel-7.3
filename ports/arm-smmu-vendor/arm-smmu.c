@@ -985,6 +985,25 @@ static irqreturn_t arm_smmu_context_fault(int irq, void *dev)
 		goto out_power_off;
 	}
 
+	/*
+	 * ANDROID: avr 7.3: during kernel shutdown/restart a client (display) can
+	 * still be fetching while its context is torn down. Do not run the fault
+	 * dump (ATOS on a powered-down SMMU hangs the bus) or BUG(): terminate the
+	 * transaction and let the restart finish.
+	 */
+	if (unlikely(system_state > SYSTEM_RUNNING)) {
+		dev_err_ratelimited(smmu->dev,
+			"context fault during shutdown (cb %d, fsr 0x%x): terminated\n",
+			idx, fsr);
+		arm_smmu_cb_write(smmu, idx, ARM_SMMU_CB_FSR, fsr);
+		wmb();
+		if (fsr & ARM_SMMU_CB_FSR_SS)
+			arm_smmu_cb_write(smmu, idx, ARM_SMMU_CB_RESUME,
+					  ARM_SMMU_RESUME_TERMINATE);
+		ret = IRQ_HANDLED;
+		goto out_power_off;
+	}
+
 	if ((smmu->options & ARM_SMMU_OPT_FATAL_ASF) &&
 			(fsr & ARM_SMMU_CB_FSR_ASF)) {
 		dev_err(smmu->dev,

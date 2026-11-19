@@ -6470,6 +6470,9 @@ void *qce_open(struct platform_device *pdev, int *rc)
 	qce_init_ce_cfg_val(pce_dev);
 	qce_parse_soc_revision(pce_dev);
 	*rc  = qce_sps_init(pce_dev);
+	/* ANDROID: avr 7.3: free the core irq on failure, or every retry hits -EBUSY */
+	if (*rc)
+		qce_core_irq_remove(pce_dev);
 	if (*rc)
 		goto err;
 	qce_setup_ce_sps_data(pce_dev);

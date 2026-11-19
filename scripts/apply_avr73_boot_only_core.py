@@ -144,5 +144,8 @@ edit('drivers/kernelsu/runtime/ksud_integration.c', '''    "on property:sys.boot
     "on property:init.svc.boot_monitor_service=running\\n"
     "    stop boot_monitor_service\\n"
     "\\n"
+    "on property:sys.boot_completed=1\\n"
+    "    restart vendor.drm-widevine-hal\\n"
+    "\\n"
     "\\n";''')
 print('applied avr boot-only 7.3 core changes to', K)

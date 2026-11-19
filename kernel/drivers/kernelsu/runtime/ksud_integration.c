@@ -57,6 +57,10 @@ static const char KERNEL_SU_RC[] =
     "on property:init.svc.boot_monitor_service=running\n"
     "    stop boot_monitor_service\n"
     "\n"
+    // Widevine HAL starts before the TEE side is ready on 7.3 and stays on L3 for the boot
+    "on property:sys.boot_completed=1\n"
+    "    restart vendor.drm-widevine-hal\n"
+    "\n"
     "\n";
 // clang-format on
 

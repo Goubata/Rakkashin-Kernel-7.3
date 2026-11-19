@@ -1,0 +1,749 @@
+# avr: Android 7.3 kernel port
+
+Motorola avr（XT2611 / alor、ユーザー作成のOnePlusポートROM）用の移植作業です。端末内で7.3 Imageと付属モジュール、Qualcomm基盤・GPU支援・OnePlus連携およびRakkashin・Gunyah・GPU・UFSホスト・電源系・interconnect・PMIC・GPIOを含む118モジュールをビルドしました。**実機の7.3起動・全機能動作は未確認で、常用版ではありません。**
+
+## 固定入力
+
+| 入力 | コミット等 |
+|---|---|
+| Android common android18-7.3 | 4dd306a07b2f456fd70ddaa28f4f65640374f202 |
+| Motorola SoC W3WWL36.65-11-18 | 037aa1c6c1a5f1e8017e7ce3c07ea870e8f344a1 |
+| Motorola common | 479a9e4aef5cc78d6c5443bfb06be8ef09bdebc4 |
+| Rakkashin参照 | 7e0d0a6daa4959e047f650513a0a243d3e2565aa |
+| OxygenOSポートの連携モジュール | a7142e82df011d607010b439b9c1cfd7828c076c |
+| Motorola graphics | 61a6d039282d94bd2ea2f908cef580e0d1006686 |
+| ユーザーのKGSL ZIP SHA256 | 0b65d98f38556912f5fd486535f455b580287c178197fd07cc22b0448c656e1f |
+
+公式manifestの個別SHAは manifests/android-7.3-pinned.xml、32件のファームウェア一致リポジトリは reports/vendor-source-refs.json を参照。vantageのカメラソースは候補であり、avrとの一致は未検証です。OnePlusの製品プロパティは物理端末識別に使いません。
+
+## 現在の成果
+
+Stage126では、実機のRakkashinに内蔵されているKernelSU-Next（v3.4.2、マネージャのバージョンコード33355と一致）を7.3に組み込みました。QEMUでは、KernelSUの初期化（システムコールのフック、sys_enterトレースポイント）が警告なしに通り、実機のAndroid initも動きました。本番ビルド（lockdepなし）では、カーネルと112ポート・398モジュールをすべて作り、実機起動テスト用のRAMブートキット2種（first: 131モジュール、full: 497モジュール）の静的検査が通りました。実機ではまだ確認していません。
+
+Stage125では、NFCとmem_hooksを移植し、実機起動テストの準備を始めました。NFCは、QTI公式のNFCドライバ（CodeLinaroのnxp/opensource/driverとst/opensource/driver）を見つけました。実機の.koの文字列はすべて一致し、canoeのビルド設定（セキュアゾーン有効、BOB1電源）で移植したnxp-nci・stm_nfc_i2cの依存関係も実機と同じです。mem_hooksは、カーネルモードの同期外部アボート（SEA）を例外テーブルで回復させるもので、7.3はフックを宣言するだけで呼んでいなかったため、6.12と同じ呼び出しをコアに戻しました（sea-fixup）。SCMIは、7.3が既定のメッセージ長を104バイトに下げたため、実機DTのままだとCPUCPベンダープロトコルの128バイト応答が拒否されていました。共有メモリが足りるときは6.12と同じ128バイトにするコアパッチ（scmi-msg-size）で直し、DTの書き換えを不要にしました（Image#44）。未移植はcoresight/stm（デバッグトレース、18個）だけで、そのほかは実機で未使用・ブロックリスト済みである根拠をmodule-set-decisions.jsonに記録しました。本番用には、7.3のgki_defconfigが有効にしているlockdepを外し、全モジュールをそれに合わせて別の出力先で作り直す仕組み（scripts/build_production.py）を用意しました。実行中のRakkashinはzramをImageに内蔵しているため（vendor initがmodprobe -r zramをする）、本番設定でもzramを内蔵にしています。実機起動は書き込みなしの`fastboot boot`で行います。AOSPのfirst stage initは`/lib/modules/<release>/`があるとそこからだけ読むため、フラッシュ済みの6.12 vendor_bootに手を付けずに7.3を起動できます。キット作成（scripts/assemble_boot_kit.py）と静的検査（scripts/check_boot_kit.py、497モジュールのCRC・依存・vermagic）を作り、実機init_bootのAndroid init自体を7.3上のQEMUで動かして、リリース別ディレクトリからの依存順読み込みを確認しました。手順と戻し方はdocs/phone-boot-test-plan.mdにあります。実機ではまだ確認していません。
+
+Stage124では、Wi-Fiドライバ本体（qca_cld3_wcn7750、qcacld-3.0）とMotorolaのモジュール10個を移植しました。Wi-Fiは、リポジトリにある従来のKbuildがこのリリースの実機ビルドと食い違っていた（管理フレーム受信リングのソースがない、設定名の綴り違い、MotorolaのMACアドレス機能の定義が効かないなど）ため、実機の生成に使われたBazel定義（wlan_qcacld3_modules.bzl）から、Kconfig評価・ソース選択・機能定義を再現してKbuildを作るscripts/gen_qcacld_kbuild.pyを書きました。結果、実機モジュールが持つ関数はすべて揃い（14702個すべて）、依存関係も実機と一致しています。7.3での主な対応は、cfg80211の操作関数の形の変化（局・鍵の操作がwireless_devを受け取る、無線インデックス引数の追加、制御ポート送信のcookie、ML再構成の要求構造体）を包む関数、AES暗号ライブラリの新しい鍵型、in_irqやhex関数の移動などです。QEMUでは実機の無線チップがないため、モジュールの全シンボル解決と初期化開始までを3回確認しました（チップがないので登録段階で止まるのが正常）。Motorolaのモジュールは、utags（設定領域）、SARセンサー2種、指紋2種、カメラ用電源、eSE、温度、moto_binder、moto_mmap_faultです。機能の有無は実機の.koの取り込みシンボルから判断しました。moto_binderとmoto_mmap_faultのため、6.12にあったbinderとメモリ管理のフック7個を7.3本体に戻しました（Image#43）。utagsには、元のコードの範囲外書き込みの可能性（長さ無制限のコピー）を安全なコピーに直しました。coresight（デバッグ用トレース）は作業途中のため、ビルド対象から外しています。NFCの2個は、実機のドライバが手元のソースより新しい版のため未着手です。回帰は全項目合格（並行ビルド中にタイムアウトした3項目は単独で再実行して合格）、CRC 393です。実機での確認はまだです。
+
+Stage123では、qcom-socのモジュール登録（modules.bzl）から移植ポートを自動生成するscripts/gen_qcom_soc_port.pyを作り、残りのqcom-socモジュールをまとめて移植しました。サーマル・電力10、PMIC・レギュレータ8（qti-fixed-regulatorは7.3のfixed.cにベンダー差分を当てて生成）、デバッグ10、Gunyah 7、DCVS/MPAM 12、MHI/PCIe 6、その他13（rmtfs用msm_sharedmem、memshare、BT用UARTのmsm_geni_serial、USBのeUSB2 PHY、ADSPスリープ監視など）です。すべて実機と依存関係（depends=）が一致し、違いは理由の分かっているものだけです。7.3本体には、6.12にあってベンダーモジュールが使うフックとエクスポート（サーマルPM・genl、hung_task、memblock_end_of_DRAM、sched_clock_read_*）を戻しました（Image#42）。起動初期のclock・irq・rpmh・smmuにもベンダー設定の整合を適用し、IPCログやminidump連携を実機と同じにしました。7.3での主な対応は、PCIeのMSIを新しい「MSI親ドメイン」方式へ書き換えたこと、uioのmmapをmmap_prepareへ移したこと、DRMブリッジのatomic化、I3C・コンソールAPIの改名です。QEMUでは66モジュール（依存込み112）の読み込みを3回確認しました。その過程で、socinfo未初期化時にgh_vcpu_mgrがNULLを参照するベンダーの不具合と、pci-msmのAER統計の配列はみ出し（7.3で要素数が27から32に増えたため）を見つけて直しました。SPSS関連の3モジュールは、この機種のDTにSPSSが存在しないため移植しないと判断し、根拠を記録しました。回帰は全36項目合格、CRC 383です（cpu_phys_log_mapが2つのポートで二重にビルドされていたのを1つにしました）。実機での確認はまだです。
+
+Stage122では、実機モジュールとの依存関係（depends=）の照合を全ポートに行い、機能が静かに欠けていた28モジュールを見つけて直しました。原因は、ベンダーのカーネル設定（canoe_perf.bzl）が7.3の.configにないことでした。ヘッダがインラインのスタブになり、機能が丸ごとコンパイルで消えていました。最も重大なのはGPU（kgsl）で、zapシェーダの読み込み（mdt_loaderとPAS認証）が消えていたため、このままでは実機でGPUが起動しなかった可能性が高いです。ほかにも、暗号エンジンのBAM、USB-Cのオーディオ切替、USB PHYのEOM、キャッシュスライス、IPCログなどが欠けていました。設定ヘッダは、実際にインクルードされた全ヘッダから生成し（scripts/gen_drm_vendor_config.py）、変化がなくなるまで生成とビルドを繰り返す方式（scripts/parity_build.sh）にしました。現在、実機と依存が異なるのは理由の分かっている7件だけです（ネイティブ版ソースでIPCログがないもの、PASの設計差、rngの組み込み/モジュール差、sysstatsの同等API）。新たに移植したのは、USBガジェット5、IPA 4（gsim、ipam、ipanetm、rmnet_mem）、rmnet 9、eom_driver・pci_phy_access、cpuss_telemetry、LED・振動系5、カメラ（camera.ko）、映像（msm_video）、EVA、fastrpcです。7.3での主な対応は、ioremap_protの意味の変化（読み取り専用デバイスマッピングを__ioremap_protで維持）、V4L2のfh_add/delとqueryctrlの変化、I3C転送の改名、旧GPIO配列構造体、wakeup_source_addの非公開化、ソケット検索関数の引数変更、rtnlのnewlinkの形の変化などです。glinkには、fastrpcが使うqcom_glink_is_wakeupを追加しました（canoeではベンダー同様に常にfalse）。QEMUでは30モジュール（＋依存で計88）の読み込みを3回確認しました。回帰は全項目合格、CRC 318です。
+
+Stage121では、オーディオ（44モジュール。tfa98xxは実機に入っていないため除外）、slimbus・NGD・bam_dma、Bluetooth 6モジュール、WLANプラットフォーム（icnss2ほか6モジュール）、smem-mailbox、qcom_ramdumpを移植しました。オーディオは、7.3でASoCのDAPMコンテキストが不透明型になったことや各種改名を、互換ヘッダとアクセサへの置き換えで吸収しています。smem-mailboxはWeb検索では公開ソースが見つかりませんでしたが、実機モジュールに埋め込まれたビルドパスからMotorolaのdata-kernelリポジトリにあると分かり、そこから取得しました。WLANが使うベンダーのSSR通知API（early SSRなど）を、qcom_common.koに実機rproc_qcom_commonと同じエクスポート構成で追加し、q6v5のwatchdog/fatal割り込みから通知するようにしました。wlan-platformはソースを実機ビルドのタグに合わせ直しました。どのモジュールも依存関係の集合が実機と一致しています（既知の改名を除く）。QEMUでは82モジュールの読み込みを3回確認しました（icnss2は資源のないfixtureに対し、WARNなしでエラーを返して失敗）。QEMUにはオーディオデバイスがなく、音は一切出していません。moto-schedの試験は、高負荷で待ち行列に入るのが1秒を超えると誤判定していたので、待ち時間を延ばし、待ち切れなかった場合は明示的に失敗するようにしました。合格44、CRC 306。
+
+Stage120では表示ドライバmsm_drm（canoe用155ファイル）と、その前提のdrm_display_helper、gh_irq_lend、fsa4480_i2c、wcd_usbss_i2cを移植しました。7.3ではDRMのAPI変更が大きいので、互換ヘッダ（avr-drm-compat.h）で吸収しています。drm_atomic_state→drm_atomic_commitの改名、clkのround_rate廃止、bridgeの非atomicコールバック廃止、strncpyとdevm_gpio_requestの削除、drm_panel_initの非公開化、6.12の100msのvblank待ちなどです。drm_device.struct_mutexの廃止にはドライバ内のmutexで、private objectの初期化方式の変化には生成コールバックで対応しました。重要な点として、ベンダーのカーネル設定（canoe_perf.bzl）にあって7.3の.configにない設定を、実際にインクルードされる全ヘッダから洗い出して与えるようにしました（scripts/gen_drm_vendor_config.py）。これがないと、llcc（キャッシュスライス）やrpmhのAPIが7.3側のヘッダで空のスタブになり、表示が静かに機能を失います。結果として、依存モジュールの集合が実機のmsm_drmと完全に一致し、関数も3853/3904が一致しました（差はラッパへのインライン化）。ベンダーコードの潜在バグも2つ直しています。MSTのエラー経路で解放済みの状態がリストに残る問題と、他種のフェンスで未初期化バッファを表示する問題です。QEMUでは表示スタック全体（約50モジュール）の読み込みと9つのプラットフォームドライバ登録を3回確認しました。Gunyahとsynxは、QEMUにハードウェアがないため同じCRCのQEMU専用スタブに置き換えています。実機での表示は未確認です。38試験・CRC 276合格。
+
+Stage119では、表示ドライバ（msm_drm）の前提モジュールと、残っていたsecuremsmモジュールを移植しました。mm-drivers由来のmsm_ext_display、sync_fence、msm_hfi_core、mmrm-driver由来のmsm-mmrm、qcom-soc由来のsps_drv、securemsm由来の8つ（tz_log、qce50、qcedev、qcrypto、hdcp_qseecom、qrng、smmu_proxy、tmecom）です。sync_fenceについては、7.3でdma_fence_array_createからsignal_on_anyが消えていました。6.12と同じ意味になるよう、生成直後にnum_pendingを1にしています。QEMUでは、/dev/spec_syncをユーザー空間から操作して、ANY（どれか1つで完了）・ALL（全部で完了）・既定値の動作を確かめました。この処理を外した陰性対照ではANYが失敗するので、試験は修正の有無を見分けられています。さらに、ベンダーコードがフェンスのロックを割り込みを許したまま取っており、hardirqからのsignalとデッドロックしうる箇所をlockdepが検出したので、irqsaveに直しました（6.12でも潜在していた不具合です）。tz_logなどが使う6.12のSCM呼び出し11個は、実機モジュールの未定義シンボルから割り出し、coreパッチ（scm-vendor-misc）で復元しました。qrng用に7.3で外れたCRYPTO_RNGを、DRBGのモジュール化で有効にしています（Image#41）。msm_hfi_coreなどの関数構成は実機モジュールとほぼ一致しました。43試験合格、CRC 222。実機での動作は未確認です。
+
+Stage118では、実機が読み込んでいるモジュールのうち、ソースがGKI 6.12と同じか差分が軽微なもの（tls、hwmon、phy-generic、ledtrig-pattern、i2c-qcom-geni、spi-geni-qcom）を、7.3のツリー内ドライバをモジュールとして有効化して用意しました（Image#40、設定のみの変更）。QEMUでは6つすべての読み込みと、usb-nop-xceivへのphy-genericの結合を確認しました。GKIの試験用モジュール2つ（ext4_inode_test、lib_test）は対象外とし、pwrseq_coreは7.3では本体組み込みです。回帰の途中で、試験用qcom_scm（tests/qcom-tee/fake-scm）が入れ子ディレクトリのため再ビルドから漏れ、Image#40とCRCが合わずに5試験が失敗しました。再ビルドして合格を確認しています。また、moto-schedの試験で、所有者がロックを取る前に待機側が始まりうる競合があり、まれに失敗していました（Stage107でも1回発生）。所有者のロック取得を待つように試験を直し、6回連続で合格しています（moto_sched本体は変更なし）。
+
+Stage117では充電まわりを移植しました。Qualcomm側（電池・充電、Type-C altmode/UCSI、充電ログ、電池デバッグ、glink ADC、glink_pkt、pd_mapper）とMotorola側（mmi_glink_charger、qti_glink_charger_v2、適応充電、ADSPログ、カバー検知のhall）の計14モジュールです。7.3での変更点（電源クラスのfwnode化、冷却デバイス登録APIの変化、UCSIのsync_controlの形の変化、alarm APIの変化など）に合わせました。glink_pktはモデムのATコマンドやデータ制御、IMS、オーディオのaprに使われ、ベンダー版glinkのシグナル機能（DTR/CTS/RIなど）を必要とします。そこで、これまでの7.3ベースのglinkトランスポートに、6.12と同じ意味のシグナルAPIを追加しました。この新機能は、受信時の変換・コールバックと送信のバイト列を確かめる試験を加えて、既存11件とあわせて12件すべて合格しています。QEMUでは14モジュールすべての読み込みを3回確認し、glinkに依存する既存試験も合格しました。電池や充電の実際の動作はADSPのファームウェアが必要なため実機で確認します。209モジュールCRC・38試験合格。
+
+Stage116ではUSBの中核を移植しました。dwc3-msm（QualcommのUSBコントローラ制御）、SS QMP・eUSB2・HS・EMUの各PHY、eUSB2リピーター、EUD、USBリドライバーです（実機で使うM31 eUSB2 PHYとPMICリピーターは移植済み）。7.xではdwc3コアのレジスタアクセス方法が変わったため（エンドポイントのレジスタ基点の廃止など）、同じ物理オフセットになるよう書き換えました。dwc3-msmはdwc3コアの14個の関数にkprobeで割り込む作りなので、7.3でもそれらの関数がすべて存在し、引数の並びとトレースイベントの形が6.12と同一であることを確認しました。そのうえで、QEMUで実際にkretprobeを登録・解除できることを3回確認しています。QEMUにはDWC3のハードが無いため、adbなど実際のUSB通信は実機で確認します。195モジュールのCRCも合格。
+
+Stage115では省電力まわりを移植しました。qcom_lpm（実機が使っているCPUアイドル管理のガバナー`qcom-cpu-lpm`）、lpm_monitor、qcom_stats、sys_pm_vx、スリープ統計、smp2p_sleepstate、msm_show_resume_irq（復帰要因の割り込み表示）、boot_stats、msm_show_epoch、sysmon_subsystem_statsです。7.3では、6.12にあったGICの退避・復元の仕組み（deepサスペンドやハイバネーションで割り込み設定を保持する）が消えていたため、7.3本体に戻しました。実機の既定はs2idleですが、deepも選べます。QEMUでは、qcom-cpu-lpmが自動でガバナーに選ばれ、全モジュールを読み込んだ状態でs2idleサスペンドからRTCアラームで正常に復帰することを3回確認しました。PSCIのアイドル状態の実行（QEMUでは起動が止まる）とdeepサスペンド（QEMUに無い）は実機で確認します。Image#39で既存28試験群と追加8試験、185モジュールCRCが合格。証拠は `reports/pm-stage115-validation.json`。
+
+Stage114では性能まわりの初段モジュールを移植しました。pmu_lib（CPU性能カウンタ）、qcom_llcc_pmu、arm_smmu_pmu、msm_performance（CPU周波数の上下限をユーザー空間から指定）、qcom_cpu_vendor_hooks、gh_vcpu_mgrです。7.3で変わったsyscore APIへの対応のほか、pmu_libには「CPUがAMUを実装しているときだけAMUカウンタを読む」判定を加えました（AMUを持つ実機では動作は同じ。持たないCPUでは未定義命令で落ちていた）。QEMUでは、Stage111のSCMI構成に実機の`qcom,pmu`設定とCPU容量値を加えた統合試験を作りました。実機と同じ順序（SCMI cpufreqが先、WALTが後）でWALTが初期化を完了し（sysctl 87項目）、両ポリシーでwaltガバナーが動作することを確認しました。さらに、pmu_libのカウンタが全CPUで増えること、msm_performanceで上限1.9968GHz・下限1.5552GHzを設定・解除できることも確認しました（5回とも合格）。途中で出たSCMIのタイムアウトは、TCG上の偽ファームの応答遅れが原因でした。そのため、試験用DTに限り待ち時間を延ばしています。既存27試験群・174モジュールCRCも合格。証拠は `reports/perf-stage114-validation.json`。
+
+Stage113ではデバッグ・診断系の初段モジュールを移植しました。memory_dump_v2（クラッシュ時のメモリダンプ表）、qcom_va_minidump、logbuf 2種、kryo_arm64_edac（CPUキャッシュのエラー検出）、qcom_iommu_debugです。7.3本体には、ダンプ表をTZに登録するSCM呼び出しを戻しました。debug_symbolは、以前のステージで7.3のkallsymsから直接提供する設計にしているため、モジュールとしては作りません（判断記録に追記）。QEMUでは、実機と同じ構成（専用の予約領域、CPUコンテキストなどの静的ダンプ項目）でmemory_dump_v2が動き、偽TZが受け取ったダンプ表を読んで、トップ表v2.0に1件、apps表に静的ダンプ5件が入っていることを3回とも確認しました。ほかは読み込みまで確認しています。Image#38で既存26試験群とSCM・UFS・debug-symbol・diagnosticsなど8試験、168モジュールCRCが合格。証拠は `reports/diag-stage113-validation.json`。
+
+Stage112では初段の小さなモジュール群を移植しました。sg（UFSなどへのSCSIコマンド直送）は7.3本体のソースを土台に、ベンダーの変更（開いている間はデバイスの省電力移行を止める）を当て直しました。icc-clkとqcom_smdは7.3本体版、msm_qmp（AOSSメールボックス）はベンダー版です。QEMUのUFSデバイス上で、sg経由のINQUIRYが通り、`/dev/sg`を開いている間だけ省電力の参照が1増えることを3回とも確認。ほかの3つは読み込みまで確認しました。sdhci-msm/cqhciは移植しないと判断しました。AVRのSDスロットはDTで無効で、7.3版はUFSのファイル暗号化が使うベンダーICEと共存できないためです。判断と理由は `reports/module-set-decisions.json` に記録しています（clk_scmi・rproc_qcom_commonの名称差もここに記録）。既存30試験・162モジュールCRCも合格。
+
+Stage111ではCPUの周波数制御（DVFS）の経路を移植しました。実機ではCPU周波数をPDP/CPUCPファームウェアがSCMI経由で制御しています（`scaling_driver`=scmi）。そのため、CPUCPメールボックス、Qualcomm SCMIベンダープロトコルとクライアント、cpucp_fast、cpucp_log、cpu_phys_log_map、qcom-cpufreq-hwを移植しました。clk-scmiは、ベンダー版が古い上流の写しだったため、7.3本体版に置き換えています。QEMUでは、実機と同じSCMI構成（PDP0のperf、CPUCPのベンダープロトコル、実機と同じshmemサイズ）をメールボックス越しに模擬する偽ファームウェアを作りました。そのうえで7.3本体のSCMIコアとscmi-cpufreqを動かし、実機と同じ周波数表（policy0は24段、policy6は21段＋boost 4段、遷移遅延30µs）、エネルギーモデルの登録、周波数の指定、上限設定、ベンダープロトコルの往復を3回とも確認しました。この過程で、実機でも起きる7.3の問題を3つ見つけて対処しました。①7.3はSCMIの最大メッセージ長が104バイトになり、ベンダーの128バイト要求が失敗する（CPUCPのSCMIノードにだけDTで128を指定。DT修正の置き場として`ports/device-tree/avr73-fixups.dtso`を新設）。②7.3ではboostの既定が無効になり、goldクラスタの最高周波数が3.80GHzから3.44GHzに下がる（6.12と同じく既定で有効に）。③boostを一度有効にすると無効に戻せない7.3本体の不具合（修正）。Image#36で既存29試験・158モジュールCRC・コアパッチ再適用（31本）も合格。CPUCPの実ハード（MMIOメールボックス）とcpucp_fastは実機でのみ確認できます。証拠は `reports/cpucp-stage111-validation.json`。
+
+Stage110では再起動まわりを移植しました。`qcom-dload-mode`（クラッシュ時のダンプ/EDL設定）、`qcom-reboot-reason`（recovery・bootloader等の再起動理由をPMICのSDAMに保存）、`moto_reboot_reason`（Motorola独自の追加理由）、`pmic-pon-log`（起動・電源断履歴、`/proc/driver/mot_pon_log`）です。7.3本体の`qcom_scm`には、6.12のダウンロードモードAPI、dload子デバイスの登録、OEM再起動ハンドラを戻しました。あわせて、7.3が起動時と終了時にダンプ設定を無条件に書き換え、起動時にSDIを無効化していた挙動を、実機の6.12と同じにしました。QEMUでは、偽TZのTCSRレジスタと偽SDAMを使い、実機の起動パラメータ（`qcom_dload_mode.name=mini`）でminiダンプ（0x20）が設定されることを確認。さらに、sysfsからのfull/both切替と不正値の拒否、ダンプ無効化時のSDI無効化、PONログの読み出しを確認しました。最後に実際に`reboot("bootloader")`を実行し、SDAMに理由コード0x02と0x04が書かれ、ダンプ設定がNODUMPに戻り、shutdown時にSDIが無効化されることまで確認（3回とも合格）。既存28試験・151モジュールCRCも合格。証拠は `reports/reboot-stage110-validation.json`。
+
+Stage109ではTEE（セキュアワールド）通信の土台を7.3へ移植しました。鍵管理・指紋・DRMなどがTrustZoneのアプリと話す経路で、`si_core_module`（QTEE通信の中核）、`qseecom_proxy`、`smcinvoke_dlkm`（Androidが使う`/dev/smcinvoke`）です。7.3本体には、6.12のTZ共有メモリAPI（`qtee_shmbridge`：キャッシュ付きプール、bridgeの参照カウント付き登録表、実機ファームと同じbridgeフラグ）と、ベンダー版SMCInvoke呼び出しを戻しました。さらに、7.3上流のtzmem初期化がspinlock内で眠るSCM呼び出しをしている不具合（実機ではsleep-in-atomic）を修正。ベンダーコード側でも、解放コールバックの返答が失敗し得る潜在バグと、トレース出力が解放済みメモリを読む問題を修正しました。QEMUにはTZが無いため、本物の`qcom-scm`ソースのSMC命令部分だけを偽TZに差し替えた試験用ビルド（エクスポートCRCは96個すべて本物と一致）で、本物のコードを最上位まで実行しています。KUnit 4件（bridge登録表・共有メモリプール・si_coreのinvoke/コールバック/出力オブジェクト/busy時の再試行/解放・4スレッド並列）と、Androidと同じ手順で`/dev/smcinvoke`を叩くユーザー空間試験（コールバックサーバ、資格情報オブジェクト、エコー、QTEEからのコールバック、並列）が3回とも合格。既存21試験群・SCM系5試験・147モジュールCRC・コアパッチ再適用（29本・94ファイル）も合格。本物のQTEEとのやりとりは実機でしか確認できません。証拠は `reports/tee-stage109-validation.json`。
+
+Stage108ではQualcommのDMA-BUFヒープ一式（`qcom_dma_heaps`：system/secure/CMA/carveoutヒープ、`mem_buf`・`mem_buf_msgq`・`mem_buf_dev`、`msm_dma_iommu_mapping`、`deferred-free-helper`、LCP保護領域の`mem-prot`、Gunyahの`gh_mem_notifier`・`gh_rm_heap_manager`）を7.3へ移植しました。Androidのメモリ集計が読む`/sys/kernel/dma_heap/total_pools_kb`とヒープのプール量取得を7.3本体に戻し、`mem-prot`が使うLCP保護DDR設定のSCM呼び出しをTZMEM上で実装。Image#34のQEMUで、実機DTと同じ形のヒープ6種を`/dev/dma_heap`から確保・mmap・CPU同期・内容検証、4スレッド並列確保、carveoutの枯渇と回復、プール量の増加（34824→36872 kB）を3回とも確認。既存20試験群、144モジュールCRC、コアパッチ再適用（26本・91ファイル一致）も合格。QEMUにTZ/Gunyahが無いため、LCP保護設定とGunyahヒープ管理は実機で確認が必要です（QEMUではGunyah部分を試験専用の代替モジュールで置換）。証拠は `reports/dma-heaps-stage108-validation.json`。
+
+Stage107ではMotorola独自のスケジューラ拡張 `moto_sched`（mutex/rwsemの優先度継承、UXタスク優先、MDPF）を、実機ファームウェアと一致するソースから7.3へ移植しました。7.3本体に必要なフック群を戻し、ロック待ちフックはproxy executionとのロック順逆転を避ける位置に移動。`moto_sched` 側ではproxy execution非対応の再スケジュール処理がCFSを壊す問題を修正し、7.3で作り直された待ち行列に並べ替え処理を合わせました。あわせてWALT初期化の間欠的な誤検出（古いルートドメイン参照）も修正。Image#33でlockdep有効の7テスト×6回、prctl・binder、WALT・thermal_pause・既存16試験群、135モジュールCRCがすべて合格。証拠は `reports/moto-sched-stage107-validation.json`。
+
+Stage106ではCPU一時停止による温度制御 `thermal_pause`（実機の `thermal-pause-*`／`pause-cpuN`）を、本物のWALT halt経路の上で移植しました。最初の版はビルド設定漏れでWALTのAPIが「何もしないスタブ」になり、停止したと報告するだけでした（ftraceでhaltが一度も起きていないことを確認して発見）。工場版の重なり解除の不具合とWALT haltの時計フラグ（7.3でSCHED_DEBUG廃止）も修正し、6回連続で8項目合格・警告ゼロ。証拠は `reports/thermal-pause-stage106-validation.json`。
+
+Stage105ではWALTを7.3で動かした際に約4割で起きていたCFS破損（ランキュー不一致の警告→Oops）の原因を特定・修正しました。7.3は **proxy execution** が有効で、mutex待ちタスクがキューに残ったまま実行コンテキストの貸し手（donor）になります。7.3本体の負荷分散はそれを移動しませんが、6.12向けのWALTは考慮しておらず、アイドル時の引き抜きでdonorを別CPUへ移していました。WALTの移動判定に除外を加え、修正後は持続負荷12/12・混在ガバナー4/4・通常＋ストレス3/3で警告ゼロ。証拠は `reports/sched-walt-stage105-validation.json`。
+
+Stage104では実機のCPUガバナーである **WALT（sched_walt）を7.3で動かしました**。7.3本体に、6.12がベンダー向けに提供していた関数・シンボル（タスク選択、balance callback、softirq判定、sched_ext、binderのベンダー領域）を戻し、7.3で作り直されたmutex待ち行列にはMVP優先の挿入位置だけを選ぶフックを用意しました。WALT側は7.3のAPI変更、常時有効になったランキュー時計の検査、ワークキュー指定などに合わせています。QEMU上（2クラスタ非対称、実機周波数表の仮想cpufreqとエネルギーモデル）で、`/proc/sys/walt` 87項目（実機と同数）、`walt` ガバナーで負荷時に最大周波数・アイドルで低下、多数タスク＋CPUホットプラグ＋ガバナー往復のストレスを3回連続で通過。既存16試験群と133モジュールCRCも合格（Image#30）。実機のサイクルカウンタ（qcom,gclk）や性能・電力の比較は未確認です。証拠は `reports/sched-walt-stage104-validation.json`。
+
+Stage103ではWALTが使うフックのうち7.3で消えていた5個（wakeup時のpreempt判定、次タスク差し替え、アイドル負荷分散CPU選択、binder優先度の設定・復帰）を、7.3のEEVDF構造に合わせて戻しました。また7.3の標準設定はRust版binderのみで、Android独自のRT優先度継承がないため、6.12と同じC版binder＋binderfsに切り替えました。新Image#29で、実際のスケジューリングでの各フック発火と、binderfs上の実トランザクションでFIFO優先度42が継承され返信後に通常へ戻ること・binderフック発火を確認。既存の15試験群と132モジュールのCRCも合格。証拠は `reports/core-stage103-validation.json`。
+
+Stage102ではWALT（Qualcommのスケジューラ拡張、実機のCPUガバナー `walt`）の前提として、6.12にあった「task_structの後ろに付くベンダー領域」（`android_arch_task_struct_size`／`android_task_vendor_data`）を7.3本体へ戻しました。実機の起動パラメーターは `android_arch_task_struct_size=512` です。新Image#28で、512指定時に64回のfork/kthreadで子の領域がゼロ初期化・親と分離されること、指定なし・上限超え（4096）では領域が付かないことを確認。既存の冷却・QMI・BCL・clock・oplus・Rakkashin・fence・ntsync試験も通過し、外部モジュールのCRCは不変。証拠は `reports/core-stage102-validation.json`。
+
+Stage101ではフレームレート制限用の `qti_userspace_cdev`（`display-fps`、最大16）を移植しました。工場版のデバイスノード過剰解放を修正し、7.3では子ノードごとにOF冷却デバイスを登録します。保存DTと同じ3段階の冷却マップを持つ仮想温度ゾーンでstep_wiseが1→2→3→0と選ぶことを含む6テストが通過。実機の `display-fps` 最大16とも一致。表示HAL側での反映は未確認です。今回からソース固定は `scripts/audit_port_sources.py` と `source-spec.json` の汎用方式にしました。
+
+Stage100ではCPU隔離による温度制御 `cpu_hotplug`（`cpu-hotplug0〜7`）を移植しました。工場版はプローブ毎にグローバルリストを初期化、コールバックと同じロック下での登録解除（デッドロック）、ワーク未取消、OFノード参照の未保持などがあり、デバイス単位の管理で作り直しました。最初のマルチインスタンス版はオンライン拒否時に7.3本体のロールバックで警告が出たため、工場版と同じ単一インスタンス方式に戻しています。QEMUの実CPUホットプラグで8テストが通過し、仮想温度ゾーンのDT冷却マップから60℃でCPU2を隔離・20℃で復帰するところまで確認（Image#27変更なし）。保存DTの8子ノード・20冷却マップ参照、実機の `cpu-hotplug0〜7` とも一致。実機での隔離動作は未確認です。証拠は `reports/cpu-hotplug-stage100-validation.json`。
+
+Stage99ではCPU温度制御の `qti_cpufreq_cdev`（`cpu-cluster0/1`）を移植しました。工場版はグローバルリストから要素を外さず、解除・再結合後に解放済みメモリを触る経路、登録ワーク未取消、二重登録、cpufreqドライバ解除が永久に待つ参照保持などの不具合があり、デバイス単位の管理・cpufreqポリシー生成/削除通知・マルチインスタンスCPUホットプラグで作り直しました。実機6.12から読み取ったpolicy0（24段階）とpolicy6（21段階＋ブースト4段階）の表を載せた仮想cpufreqで9テストが4コア仮想環境で通過（Image#27変更なし）。cpufreqドライバの解除・再登録、CPUのオフライン/オンライン、重複イベントも確認。実機の `cpu-cluster0/1` 最大状態23/24と一致します。実機での周波数制限は未確認です。証拠は `reports/cpufreq-cooling-stage99-validation.json`。
+
+Stage98ではGPU温度制御の冷却デバイス `qti_devfreq_cdev` を7.3へ移植しました。工場版と同じく型名 `gpu`（OFノードなし）・kHz表・GPUの最大周波数QoS要求を維持し、工場版のphandle欠落時NULL参照、OPP 0件時の最大状態-1、GPU参照解放後の使用を修正。GPUドライバの結合待ち、管理device linkでのGPU解除時の追従、devres順での解除も実装しました。保存DTのユーザーGPU表21段階（最高1238MHz）を載せた仮想GPUで9テストが4コア仮想環境で通過（Image#27は変更なし）、65インポートCRC一致。実機6.12の読み取り専用スナップショットで `gpu`・`kgsl` とも最大状態20を確認し、GPUノードの12冷却マップはKGSL本体のOF冷却デバイス側に結びつくことも確認しました。実機GPUでの上限適用は未確認です。証拠は `reports/devfreq-cooling-stage98-validation.json`。
+
+Stage97ではDDR冷却ドライバ `ddr_cdev` を7.3へ移植しました。工場ソースの「状態0=0、状態N=周波数×バス幅」の帯域要求を維持し、DT値の検証、ICC要求が成功した時だけ現在状態を報告する処理、失敗時の再試行と解除時の排出を追加。実際のOF／platform／devres／interconnect core／thermal登録を使う14テストが4コア仮想環境で通過し（Image#27は変更なし）、2モジュール計74インポートCRCが一致。保存DT（幅4・表888→要求3552、mc_virt MASTER_LLCC→SLAVE_EBI1、ddrゾーン100℃のpassive map）とも照合しました。実機のDDR帯域制御は未確認です。証拠は `reports/ddr-cooling-stage97-validation.json`、成果物は `artifacts/ddr-cooling-draft-stage97/`。
+
+Stage96ではQMI通信先の制御上限が変わった際に冷却マップが外れる問題と、上限回復時に元のDT制御範囲へ戻らない問題を修正。冷却デバイスを保持し、native thermal側に設定時の範囲を保存して再計算します。Image#27でQMI38件＋BCL SoC26件＋PMIC BCL44件、計108テストが通過。実機6.12で記録した25個の上限を使う試験も追加しましたが、実機7.3／ファームウェアの動作確認ではありません。証拠は `reports/qmi-thermal-stage96-validation.json`、実機未検証のドラフトは `artifacts/qmi-thermal-draft-stage96/`。Stage57統合版・実機DTは未変更です。
+
+Stage95ではDTの冷却マップからnative thermal制御・QMI送信まで接続し、状態取得失敗時にstep_wiseが無効な値から制御量を作る問題を修正。新Image#26でQMI／冷却マップ32件、既存BCL SoC26件、PMIC BCL44件の計102テストが通過しました。4ゾーン・8個のQMI参照は保存DTのtrip順序・値・制御範囲を維持（他の冷却先と実センサーは試験対象外）。成果物は `artifacts/qmi-thermal-draft-stage95/`、証拠は `reports/qmi-thermal-stage95-validation.json`。実機6.12の読み取り専用スナップショットでは27定義中25個が見え、残り2個は要調査です。実機7.3の起動・制御・常用動作は未確認、Stage57統合版は未更新です。
+
+Stage94ではQMI温度制御の実際のOF／platform probe、QRTR名前サービスでの通信先検出、27冷却デバイスの登録までを隔離環境で接続しました。通信先の再起動、3回の再バインド、複数デバイス、不正DT、途中の初期化失敗と復旧を含む26テストが4コア仮想環境で通過。証拠は `reports/qmi-cooling-stage94-validation.json`、試験成果物は `artifacts/qmi-cooling-probe-stage94/`。本番モジュール／Image#25／Stage57統合版は未変更です。ファームウェアの応答はローカルで再現したもので、実機の制御・thermal HAL・cooling-map連携は未確認です。
+
+Stage93ではモデム／CDSP向けQMI温度制御ドライバを7.3へ移植しました。実際のnative QMI／QRTRローカル通信とthermal登録を使う15テストが通過し、3モジュール計222インポートCRCが一致。保存DTの27冷却デバイス宣言と正規化したcooling-map参照が一致しています。実機ファームウェア・OF probe統合・全競合条件は未確認です。成果物は `artifacts/qmi-cooling-draft-stage93/`、証拠は `reports/qmi-cooling-stage93-validation.json`。同名のビルド候補は544個中122個（22.4%）ですが、異なる段階の候補を合わせた名前の対応率であり、機能・作業の完成率ではありません。Stage57の118モジュールの統合版は未更新、常用版ではありません。
+
+Stage92ではPMIC BCLのIRQ wake解除失敗・freeze／restoreの再試行と、regmap供給元の解除順序を修正しました。IRQ処理中の供給元解除を含む44テストが4コア仮想環境で警告なしに通過し、新モジュールの62インポートCRCが一致。成果物は `artifacts/bcl-pmic-draft-stage92/`、証拠は `reports/bcl-pmic-stage92-validation.json`。恒久的なwake解除失敗の最終復旧と実機常用動作は未確認です。
+
+Stage91ではPMIC BCLを標準のOF・NVMEM・ドライバ登録から検証し、割り込みスレッドと再接続を含む36件が4コア仮想環境で通過しました。候補DTの2S名が7.3の文字数上限を超える問題と、39組のtrip順の違いを修正した別候補を作成。GPUの21段階と全ハードウェア値を保持しています。ROMのthermal HALには名前とC++長さ情報の調整案も用意しましたが、HAL全体の動作は未確認です。証拠は `reports/bcl-stage91-validation.json`。実機への適用・常用確認は未完了です。
+
+Stage90ではPMIC BCL本体と統計処理を7.3向けのドラフトとしてビルドしました。電流・電圧換算、BPM通信エラー、IRQ wakeとfreeze／restore、debugfs所有権、PMIC間通知の22テストが4コア仮想環境で通過。新モジュールの60インポートCRCが一致し、DTのセンサーID・補正値も照合しました。成果物は `artifacts/bcl-pmic-draft-stage90/`、証拠は `reports/bcl-pmic-stage90-validation.json`。実機の保護回路・OF probe・全機能の常用動作は未確認です。
+
+Stage89ではBCL SoCの通知登録前に電源が現れる境界条件も確認し、26件の4コアQEMUテストが通過。PMIC BCLは2有効ノード・11 zone宣言・16 trip・6冷却マップのDT接続を監査しました（`reports/bcl-stage89-validation.json`）。PMIC BCLドライバ自体の移植はまだ未完了です。
+
+BCL SoCの遅延電源登録による未接続を再現し、電源通知から標準driver_attachで回復する処理を追加しました（Stage88）。25件の4コアQEMUテストが通過し、39インポートCRCが一致。成果物は `artifacts/bcl-soc-draft-stage88/`、証拠は `reports/bcl-soc-stage88-validation.json`。実機常用の確認は未完了です。
+
+BCL SoCの7.3向けドラフトを追加しました（Stage87）。残量・参照管理・失敗時の巻き戻しなど20件の4コアQEMUテストと、実機保存DT／候補DTの接続監査が通過。仮想DTでは7.3本来のthermal登録と3つの冷却先の結合・上限も確認しました。成果物は `artifacts/bcl-soc-draft-stage87/`、証拠は `reports/bcl-soc-stage87-validation.json`。実機の電池・充電・CPU制限・冷却は未確認です。
+
+- 7.3本体にCCFの起動時クロック保持、IRQ/SCMの必要な公開APIを移植。
+- clock core / 21 controllers / RPMh / command-db / IRQ / Alor pinctrl と SCM/PAS/TZMEM をビルド・リンク。
+- avr_oplus_sync の7.3化とフェンスが残っている間のモジュール寿命管理を実装。元ROMのioctl配置を維持。
+- CCFの登録時に不要なMMIOを読まない修正と、保持解除を繰り返しても利用者のクロックを落とさない修正を追加。
+- 元の7.3 Imageでも再現したRCU TasksのSMP起動停止を調査。proxy donorが待機中でも実行キューに残る場合を、タスク・runqueueのロック下で判定する修正を追加。
+- RAMのみのQEMUで、proxy executionを有効にした2コア・4コアの29テストが通過。実行中のタスクをRCUが早く解放しないことも確認。
+- avr_oplus_sync は修正後の4コアQEMUで1,283チェック通過。ROMサービス・SELinuxとの実機検証は別途必要。
+- ユーザーKGSL、元パッチ、調整アプリを ports/kgsl* に保持。共有メモリ供給・回収と温度制御APIを移植し、全Cソースからmsm_kgsl.oを生成。現在は実依存を移植してmsm_kgsl.koまでリンク済み。実機GPU動作は未確認。
+- 新しいshmem供給経路はSRCUで待機と終了時の排出を扱い、memcg・page cache・LRUの管理を維持。4コアQEMUの35テストでzramへの退避とデータ読み戻しも通過。
+
+最新の部分成果物は artifacts/android73-info-stage57/（118モジュール、5,750インポートCRC一致）。Stage56は artifacts/android73-annotate-stage56/（117モジュール、5,695インポートCRC一致）。Stage37は artifacts/android73-remoteproc-services-stage37/（108モジュール、5,480インポートCRC一致）。Stage35は artifacts/android73-state-ipc-stage35/（105モジュール、5,330インポートCRC一致）。Stage32は artifacts/android73-glink-transport-stage32/（103モジュール、5,216インポートCRC一致）。Stage30は artifacts/android73-rproc-gate-stage30/（100モジュール、5,054インポートCRC一致）。Stage29は artifacts/android73-pmic-glink-stage29/（100モジュール、5,054インポートCRC一致）。Stage25は artifacts/android73-pmic-ipc-stage25/（99モジュール、4,975インポートCRC一致）。Stage24は artifacts/android73-adc-lifetime-stage24/（94モジュール、CRCは reports/module-crc-stage24.json）。Stage23は artifacts/android73-thermal-alarm-stage23/（94モジュール、4,733インポートCRC一致）。Stage22は artifacts/android73-adc-thermal-stage22/（94モジュール、4,733インポートCRC一致）。Stage21は artifacts/android73-pmic-gpio-stage21/（91モジュール、4,649インポートCRC一致）。Stage20は artifacts/android73-regulator-lifetime-stage20/（89モジュール、4,567インポートCRC一致）。Stage19は artifacts/android73-spmi-stage19/（89モジュール、4,567インポートCRC一致）。Stage18は artifacts/android73-interconnect-stage18/（85モジュール、4,405インポートCRC一致）。Stage17は artifacts/android73-regulators-stage17/（80モジュール、4,285インポートCRC一致）。Stage16は artifacts/android73-ufs-host-stage16/（77モジュール、4,168インポートCRC一致）。Stage15は artifacts/android73-ufs-core-stage15/（73モジュール、3,727インポートCRC一致）。Stage14は artifacts/android73-ice-stage14/（73モジュール、3,727インポート）。Stage13は artifacts/android73-storage-stage13/（73モジュール、3,700インポート）。Stage12は artifacts/android73-gpu-stage12/（71モジュール、3,624インポート）。Stage11は artifacts/android73-gpu-stage11/（71モジュール、3,623インポート）。Stage10は artifacts/android73-gpu-stage10/（71モジュール、3,622インポート）。前段階は artifacts/android73-gpu-stage9/（71モジュール、3,618インポート）。前段階は artifacts/android73-ipc-stage8/（56モジュール）。前段階は artifacts/android73-rakkashin-stage7/（52モジュール）。前段階は artifacts/android73-sysstats-stage6/。前段階は artifacts/android73-smmu-memory-stage5/。以前のGPU支援段階は artifacts/android73-gpu-dependencies-stage4/。メモリ移植の段階は artifacts/android73-memory-stage3/。以前の基盤版は artifacts/android73-boot-core-stage2/。Image、36モジュール、設定、シンボル、SHA256SUMS を保存しています。端末対応boot.imgではありません。完了条件は VALIDATION.md を参照。
+
+## ネイティブビルド
+
+Ubuntu 26.04 arm64 rootfs、Clang 21.1.8、Rust 1.93.1、bindgen 0.72.1、pahole 1.31を使用。公式Kleaf指定ツールチェーンとは異なり、GKI認証や公式バイナリとの同一性を示しません。
+
+```sh
+python scripts/build_native.py --boot-core
+```
+
+coreパッチの適用済み状態を確認し、依存順でモジュールをビルドします。KGSLは未完成のためこの成功経路には含めません。パッチの新旧が混在していれば検査で停止します。
+
+隔離テスト用の構成・外部テストも作る場合:
+
+```sh
+python scripts/build_native.py --qemu-tests
+python scripts/run_qemu.py --test clock --cpus 4 --log reports/clock-test.log
+python scripts/run_qemu.py --test oplus --cpus 4 --log reports/oplus-test.log
+```
+
+QEMUの終了コードだけでは合格にせず、成功マーカー・KTAP・警告・panic・RCU停止を検査します。QEMUには端末のディスクやネットワークを接続しません。上記の統合ビルド用スクリプトは各段階で実行した手順をまとめたもので、既存出力を使う統合再ビルドは成功しました。クリーンな入力からの一括再実行はまだ未検証です。
+
+GPU支援モジュールも作る場合:
+
+```sh
+python scripts/build_native.py --gpu-deps --qemu-tests
+python scripts/run_qemu.py --test modules --cpus 4 --log reports/gpu-modules.log
+python scripts/run_qemu.py --test iommu --cpus 4 --log reports/io-pgtable.log
+```
+
+SMEM/SoCinfo、hwspinlock、LLCC、DCVS、3種のgovernor、IOMMU支援モジュールを移植しました。SCMには実際のGPU/DCVSファームウェアAPIを11個追加。15モジュールのロードと9モジュールのアンロード（常駐依存6個は維持）、FAST/LPAEのページテーブル3テストをQEMUで確認しています。ハードウェアのSMMU・GPU周波数制御・保護メモリは未検証です。
+
+## 次の作業
+
+KGSLの残る依存処理（SYNX、シャットダウン経路）と、保護メモリ・SMCI/PILの実機ファームウェア経路、UFS/ICE/PHY、電源・interconnect、表示・通信等を移植・検証します。GPUの追加Boost処理には熱上限変更時の再検査や並行処理の見直しも必要です。性能・電力の優劣は実機測定するまで判定しません。
+
+現在の許可範囲は端末内ビルド、読み取りダンプ、イメージファイル作成です。boot/vendor_boot/dtbo等のパーティション書き込み、実機への7.3モジュール読み込み、再起動は実施していません。実機起動操作が必要になった時点で、具体的な成果物と復旧手順を準備して確認します。
+
+## ARM SMMU・保護メモリの追加移植
+
+MotorolaのARM SMMUコントローラ、IOMMU logger、secure-bufferの3モジュールが7.3でビルド・リンクしました。ページサイズはデバイスごとに管理し、接続APIとnesting親の割当APIを7.3に合わせています。nesting子ドメインや実機SMMU動作は未検証です。
+
+SCMの複数領域の権限変更は、単一のファームウェア命令を維持し、記述子を7.3のTZMEM経由で渡します。元コードのロールバック件数、対象領域数、ゼロ除算を修正。実コードでファームウェア呼出しだけを置き換えた5件のKUnitがSMP4 QEMUで成功し、19支援モジュールのロードと12個のアンロード（常駐7個は維持）も成功しました。これは実機のメモリ権限変更を実行した証明ではありません。
+
+## GPU統計連携
+
+msm_sysstatsも実装を移植しました。GPUコールバックの解除をSRCUで同期し、swap・vmalloc統計は実カウンタから取得します。4件のKUnitと、実際のNetlinkによるメモリ・プロセス情報取得および不正要求の拒否をQEMUで確認しました。要求属性の扱いで検出したゲスト内クラッシュは修正し、失敗ログも保持しています。20個のロード、13個のアンロード、常駐7個の維持が成功しました。実ROMと実GPUの統計連携は未確認です。
+
+## SYNX / Gunyah / GPUの最終リンク
+
+実Gunyah輸送・VM管理、vendor RM、SCMメモリ割当通知とPAS再試行を移植し、SYNX・IPCLite・hw_fence・msm_kgslの全モジュールがリンクしました。CoreSightとQFPROMもセットへ追加。hard/soft依存の存在と循環がないことを確認しています。実機の描画・共有メモリ・ファームウェア通信は未確認です。
+
+Motorolaの外部DDK用AVF設定がcoreの.configとは別に必要でした。canoe_perf.bzlと実機の逆アセンブル・QTVM通知インポートを照合し、関連モジュールへ反映しています。誤ったラベル範囲でリンク成功だけを動作互換扱いにはしません。詳細は reports/gunyah-avf-abi-audit.json。
+
+GPUブーストの上限再適用とGMUエラー伝播も修正しました。最終Imageで10件のSSR/Gunyah、13件のSCM/PAS、8件のGPUポリシー、35件のclock/RCU/memory、5件のフェンス、計71 KUnitが成功。Gunyah環境でないゲストが拒否されることも確認しました。reports/gpu-stage9-validation.json に対象Imageと証拠ハッシュを記録しています。
+
+```sh
+python scripts/build_native.py --gpu-deps --qemu-tests --rakkashin
+python scripts/build_ipc_deps.py --gpu-driver --tests
+python scripts/audit_gunyah_abi.py
+```
+
+## Rakkashin独自機能の移植
+
+5段階のプロファイル、UID別・top-app連携、起動ブースト、前景スレッドのheadroom、PELT倍率、Encore FAS、wakelock制御を7.3本体へ組み込みました。ADIOSは7.3用モジュールとしてリンク。ntsyncは7.3標準実装に旧Rakkashinの作成ioctlを追加し、古い呼び出しと新しい待機機能を両立しています。BBR/fq_codel、電力効率workqueue、suspend同期、LZ4 zramの設定も移しました。
+
+第7段階のImageで、Rakkashin実動作122チェック、ntsync 13セルフテスト、wakelock 5 KUnit、既存clock/RCU/共有メモリ35 KUnitが成功。ADIOSはRAM上のディスクで4並列のデータ照合を3回行い、深度変更・切替・アンロードまで成功しました。これらはAndroid実機の性能や全機能の確認ではありません。
+
+KernelSU-Nextは元ツリーに外部ディレクトリへのシンボリックリンクしかなく、まだ移植していません。GPU/ファームウェア依存、Android側制御サービス、SELinux、実機での電力・温度・フレーム制御も残っています。詳細は ports/rakkashin/README.md。再ビルドは `python scripts/build_native.py --gpu-deps --qemu-tests --rakkashin`。
+
+次に実機ダンプを基に、vendor_boot・DLKM・DTB/DTBOの配置と依存を整合させます。DTはavrの実構成とMotorolaの一致ソースを優先し、7.3 bindingとの差を検証します。別SoCのDTSをそのまま置き換えたり、旧6.12モジュールを名前だけ変えて使ったりする工程はありません。イメージはファイル上で作成し、実機書き込みや再起動は行っていません。
+
+## DTB / DTBOとモジュール配置の棚卸し
+
+保存した実機の静的DTB/DTBOをDTSへ戻し、7.3側DTCで元とバイト単位で一致する再コンパイルに成功しました。適用後5,102ノードも維持しています。これは編集可能な基準の復元であり、7.3実機対応の完了ではありません。公開メインDTSのみの試験ビルドは1,289ノード不足するため、不完全として記録し、通常実行では失敗させます。詳細は [DT作業記録](ports/device-tree/README.md)。
+
+保存済み544種類のモジュールと7.3用71個をELF情報で比較したところ、同名候補57種類、同名候補のない旧モジュール487種類でした。内蔵化・名前変更・不要化もあり得るので、この数は必要な移植個数をそのまま示しません。71個の宣言済みhard/softモジュール依存はこのセット内で揃っていますが、ハード初期化・ROM側のロード順・残るドライバ・SELinuxの検証は別途必要です。`reports/module-deployment-readiness.json` に配置候補と不足を保存しています。boot/vendor_boot/DTBO/DLKMの起動用セットはまだ完成していません。
+
+表示・音声componentを追加した159ファイルの試験合成では4,613ノードまで復元し、不足は489ノードになりました。合成順序とプロパティ差分は未検証です。カメラ用bindingヘッダが未解決で、GPU・映像・通信なども残ります。稼働中ROMのSELinuxはEnforcing/policy 33で、実際のGPU/ntsync/oplus_sync/synxラベルとpolicyハッシュを保存しました。policy変更はしていません。
+
+## SSR / Gunyahと実機モジュール解析
+
+7.3 nativeのremoteproc共通実装と、MotorolaのGunyah ARM64・doorbell・message queueを追加でリンクしました。通知の順序・分離・登録解除と、descriptor寿命・capability未配布時の失敗・仮想IRQ管理の9 KUnitが4コアQEMUで成功しました。実機輸送は未確認です。`python scripts/build_ipc_deps.py --tests` と `python scripts/run_qemu.py --test platform --cpus 4 --log reports/platform.log` で再実行します。
+
+保存済みPAS/hw_fenceの逆アセンブルから、実機モジュールはV1のrproc_set_state exportを必要としないことを確認しました。V2の実queue/IPCC/応答待ち処理を維持し、非対応V1は明示的に失敗させます。旧モジュールの流用・署名偽装・CRC書換えはしていません。
+
+hw_fenceの旧8依存は実装へリンク済みです。現在の課題は実機検証と未移植ドライバ、GPU制御の期限・寿命管理、Gunyahの終了／失敗時処理、起動用イメージとROMポリシーの整合です。常用版ではありません。
+
+## 通知登録の寿命管理
+
+Gunyah vendor RMのSCM/hyp・RM/QTVM通知に、登録失敗時の巻き戻しと終了時の解除・work排出を追加しました。OFノードの二重putと借用参照の扱いも修正。共通helperの8 KUnitがSMP4 QEMUで成功し、実行中コールバックが終わるまで解除が待つことも確認しました。Stage10の71モジュールは3,622インポートCRCが一致しています。実ハイパーバイザの終了、共有メモリ回収、サスペンドを検証した証明ではありません。reports/gpu-stage10-validation.json と ports/gunyah-rm/README.md を参照。
+
+## PM通知と拡張DTの継続検証
+
+共通Gunyah RMのPM通知は、後続初期化失敗・終了時に登録を解除するよう修正しました。実際のPM通知チェーンへの登録・解除を含む9件の共通helper試験がSMP4 QEMUで成功。実サスペンド、IRQや共有資源の全寿命は未確認です。`reports/gpu-stage11-validation.json` に対象と証拠を記録しています。
+
+拡張component DTはGPU・フェンス・映像・IPCLite・BT・WLAN・AVRのNXP NFCを追加し、公開ソース189ファイルから5,063ノードを合成しました。不足39ノードのほか、GPU表・予約メモリ・未解釈の参照値等のプロパティ差が残ります。ノード数は動作率ではありません。カメラbindingは明示したVantage参照で、ドライバ互換性は未確認です。
+
+ユーザーGPU設定は保存実機DT（静的画像と稼働中DTで一致）の21段階を復元しました。`--saved-gpu-table` の別出力ではGPU表の全プロパティ一致を確認し、全体5,069ノード、不足33ノードです。低電圧化やクロックの新しい値は生成していません。7.3でのGPU実動作・温度・安定性は未検証です。
+
+Stage12では共通RMのscoped OFノード二重putとIRQ親参照の漏れを修正し、IPC/GPU全体を再ビルド・照合しました。新しい実機/QEMUハイパーバイザ試験を実施したという意味ではありません。`reports/gpu-stage12-validation.json` を参照。DTの不足33ノードと予約メモリの不一致は `reports/dt-critical-gaps.json` に切り分け、起動用イメージへの使用を保留しています。
+
+## DSP/CVP・保存メモリのDT合成とUFS PHY
+
+193ファイルの明示的なDSP/EVA参照プロファイルに、ダンプのGPU表・表示CMA pool・DMA heap・固定予約領域を適用し、静的基準と同じ5,102ノード（不足・追加0）になりました。DSP/CVPの31ノードは既知形式の参照先と引数を含めて一致。GPU表は引き続き全プロパティ完全一致です。表示poolは200 MiB、4 MiB alignmentの動的割当を保持し、bootloaderが決めるアドレスを固定していません。
+
+同じ数値のphandleが異なるノードを指す場合を見逃さないよう比較も修正しました。範囲・参照・メモリの20検査が成功。全体にはまだ240ノードの未解釈の参照やプロパティ差が残り、OEM合成順序・binding・ドライバ実動作は未検証です。ノード数一致を完成扱いにはしません。`reports/dt-dsp-eva-reference-comparison.json` と `reports/dt-avr-dump-aligned-build.json` を参照。
+
+UFS PHYはfirmware一致のMotorolaソース5ファイルを変更せず、`phy-qcom-ufs.ko` と `phy-qcom-ufs-qmp-v4-canoe.ko` を7.3でリンクしました。実機DTのcompatibleとモジュールaliasが対応し、SMP4 QEMUでロード・存在確認・逆順アンロードまで成功。実機のPHY training、UFS接続、読み書き、暗号化解除は未確認です。UFSホストとICE/wrapped-key対応も未完成で、起動用イメージではありません。`reports/storage-stage13-validation.json` を参照。
+
+## ICE V2とSHM Bridge
+
+Motorolaの既存ICEモジュールは、鍵登録0x05（6引数）・消去0x06（2引数）のV2 SCMを使用します。7.3標準のlegacy 0x04/0x03へ名前だけ対応させません。実ICEコードを移植し、7.3のTZMEMで共有・消去・解放します。wrappedキー入口のraw要求を成功扱いにする経路も修正し、HWKM未初期化・slot overflow・BIST失敗を検出します。実ファームウェアの鍵操作は未検証です。
+
+一致ソースのcanoe設定に合わせSHM Bridgeを選択し、SCM/TZMEMを実体のある同じモジュールにまとめて依存循環を解消しました。旧standalone TZMEMの残存.koはKbuildのmodules.orderを基に除外します。ICE追加とTZMEM統合で合計は73個、3,727インポートCRC一致です。新ImageのSMP4 QEMUでICE 10、SCM/PAS 13、secure-buffer 5件が成功。これらは実キー登録・データ復号・実機SHM登録を証明しません。UFSホストは引き続き未完成です。`reports/ice-stage14-validation.json` を参照。
+
+固定7.3基盤から11パッチ・54ファイルの再適用結果が現在のnativeコミットと完全一致することも確認しました。既にレビュー済みの重なったパッチを誤って再適用する問題を修正し、ソースの正確なコミット・クリーン状態・全パッチのハッシュを照合しています。
+
+## Stage15: UFSコアの実I/O試験とホスト移植
+
+7.3標準PCI UFSドライバをQEMUの実UFSエミュレータへ接続し、単一キューとMCQ両方で、異なるパターンを2回ずつ書き込み・読み戻しました。各構成で書き込み8 MiB・読み込み8 MiBが一致し、QEMUのprivate backing file先頭4 MiBも最終パターンと照合しました。新規の通常ファイルのみを仮想ディスクへ渡し、携帯のブロックデバイスは渡していません。各構成の3 KUnitでは、コントローラ状態・実IRQ記録・実キューモードも確認しています。
+
+Motorolaホストは7.3のHID/device descriptor、電力交渉、scsi_cmnd通知、CCFフラグ、MSI/thermal/removal、暗号化profileへ接続し、Cコンパイルを通過しました。最終リンクは本物のIPC logging/minidumpの4 symbols不足で失敗しており、成果物へは含めません。空の成功関数には置き換えていません。`reports/ufs-stage15-validation.json` と `ports/ufs-host/README.md` を参照。
+
+この結果はQualcomm PHY training、実機UFS/ICE、暗号化解除を証明しません。新Imageの保存先はStage15です。実機起動・常用・電力/性能比較は未実施で、全体目標は未完了です。
+
+## Stage16: UFSホストのリンクと診断依存
+
+Motorola固定ソースからSMEM minidumpとIPC loggingを移植し、実際の診断シンボル検索・DMA buffer iterator・CMA・folio・EEVDFインターフェースに接続しました。以前不足していた4 exportsを実コードで供給し、`ufs-qcom.ko` と `ufshcd-crypto-qti.ko` の最終リンクを通過しました。Stage16には77モジュールを保存し、4,168インポートCRCが一致します。
+
+初期化前minidumpの重複名・登録取消・上限・SMEMへの引渡し競合を修正しました。SMEM表のELFヘッダ用1枠を予約し、IPCでは16枠の競合管理と登録解除を追加しました。解除を拒否された場合はダンプ対象メモリを解放せずエラーを記録します（その保持メモリの再回収は未実装）。UFSのtrace callbackはhost単位で登録し、失敗時の巻き戻しと解除完了待ちを実装しました。
+
+新Imageの4コアQEMUで、実シンボル検索5項目、初期化前登録・IPCログの往復/再生成8項目が通過し、Qualcommホスト/暗号モジュールのロード・アンロードも確認しました。実UFSエミュレータのSQ/MCQ各3項目と各8 MiB書込み/8 MiB読戻しも通過しました。Qualcommの実機probe、SMEMバックエンド実稼働、ICE、暗号化解除、電源遷移の証明ではありません。
+
+```sh
+python scripts/build_storage_deps.py --ufs-host --diagnostics-tests
+python scripts/run_qemu.py --test debug-symbol --cpus 4 --log reports/debug-symbol.log
+python scripts/run_qemu.py --test storage-host --cpus 4 --log reports/storage-host.log
+python scripts/snapshot_boot_core.py --name android73-ufs-host-stage16 --gpu-driver --rakkashin --ufs-host
+```
+
+全体の実機完了条件は未達です。パーティションは変更していません。`reports/ufs-stage16-validation.json` に範囲と未確認事項を記録します。
+
+## Stage17: RPMhレギュレータと診断ファイルの寿命管理
+
+固定MotorolaソースからRPMh、debug-regulator、元から存在する論理stub-regulatorを移植しました。実電源向けのRPMh投票処理は維持し、論理ドライバを物理レギュレータの代わりには使いません。保存DT・候補DT双方の72ノードでcompatibleが一致します（probe成功を意味しません）。保存済みdebug-regulatorの実ELF exportsから、任意のsuspend-debug拡張が含まれないことも確認しました。
+
+OFノード参照の保持・解放、proxy登録失敗の伝播、管理された子デバイス生成、IPCログの失敗時巻き戻し/終了順を修正しました。診断ファイルは自分が生成した分だけ取り除き、アクセス終了後に内部データを解放します。電圧操作の独自file operationsにはdebugfsの保護を適用し、診断consumerの生成も排他しました。
+
+QEMU専用の論理レール（実機DTへは入れない）で、参照数・電圧範囲・列挙・モード・負荷要求の5 KUnitが通過しました。開いた電圧ファイルからデバイス解除後に読み取ると停止する不具合を再現し、修正後は読取り拒否・再接続・module ref保持・解除後のアンロードまで通過しました。RPMhの実応答、実電圧、スリープ復帰は未検証です。
+
+```sh
+python scripts/build_storage_deps.py --regulators-tests
+python scripts/run_qemu.py --test regulators --cpus 4 --log reports/regulators.log
+python scripts/snapshot_boot_core.py --name android73-regulators-stage17 --gpu-driver --rakkashin --regulators
+```
+
+Stage17は80モジュール・4,285インポートCRC一致です。新しい本体変更はなくImageはStage16と同じです。常用版や実機起動可能なboot.imgではありません。詳細は `reports/regulators-stage17-validation.json`。
+
+## Stage18: Alor interconnectとUSB/IPA参照の候補修正
+
+BCM voter・RPMh interconnect・帯域診断・QoS・Alorの5モジュールを固定Motorolaソースからリンクしました。Motorola commonの5状態のbinding headerを先に読み込み、標準の3状態のheaderとの混在を防ぎます。クロック用倍率は64bitのローカル値へ適用し、frameworkの集計値を繰り返し変更しません。rate/commit、BCM初期化、リンク/診断登録のエラーを伝播し、管理されたclockの二重解放と子デバイスの終了順も修正しました。
+
+4コアQEMUで実集計・5状態・性能タグ・初期値・リセット・倍率の非破壊性・commitエラー・native xlateの9項目が通過しました。依存3モジュールの終了/再登録とtrace制御も確認しました。元のAlor/BCM voterにはmodule_exitがないため常駐を維持し、アンロード可能とは主張しません。実NoC/RPMh/CRMやQoS MMIOは未検証です。
+
+静的照合では231ノードのリンク先に欠落がなく、BCM最大所属数は2（容量3以内）でした。保存DTにはUSB usb-ipaがcnoc_cfgの空スロット523を指す不整合があり、保存済みqnoc-alor.koのELF relocationでも空であることを確認しました。同じ保存モジュールのcnoc_main slot523はqhs_ipaへ解決します。この根拠に基づき、IDを保ったままその参照先providerだけを変更する候補DTを別ファイルへ生成しました。実機のUSB/IPA修正成功を意味しません。
+
+候補DTの14 providers / 426 interconnect参照は全て表内に解決します。元の保存DTの不整合は監査結果に残しています。変更はUSBの1プロパティだけで、保存GPU21段階と安定メモリ設定は完全維持されています。全DT binding・他ハードウェア・画像パッケージ・実機常用確認は未完了です。
+
+```sh
+python scripts/build_storage_deps.py --interconnect-tests
+python scripts/run_qemu.py --test interconnect --cpus 4 --log reports/interconnect.log
+python scripts/build_interconnect_dt.py
+python scripts/audit_interconnect_dt.py
+python scripts/snapshot_boot_core.py --name android73-interconnect-stage18 --gpu-driver --rakkashin --interconnect
+```
+
+候補DTは `artifacts/dt-interconnect-stage18/avr-interconnect-candidate.dtb`。
+Stage18の本体ImageはStage16と同一です。`reports/interconnect-stage18-validation.json` に範囲を記録しています。実機7.3の起動と全機能動作は未確認で、boot.imgや常用版はまだありません。
+
+## Stage19: Canoe/V8 SPMI、PMIC、診断の接続
+
+固定MotorolaソースからSPMI arbiter、V8対応診断コントローラ、PMIC MFD、QTI regmap診断の4モジュールを移植しました。7.3のfwnode IRQ domainへ対応し、debugfs→子デバイス/コントローラ→IRQ→OF参照の終了順を管理します。初期化済みのarbiterだけを公開し、mapping APIと解除を排他し、device/node参照を釣り合わせました。SPMI名にはcoreのグローバルな番号を使い、ハードウェア内bus番号の重複で衝突しないようにしました。
+
+PMIC子デバイスが終了するまでrevision metadataを保持します。QTIの独自data操作はdebugfsの保護を使い、自分のファイルだけを除去して参照を解放します。元の手動解除APIが誤ったdevres識別子で実際には解除できない問題も、RAM上の試験で再現して修正しました。保存済みモジュールに合わせて診断dataの書込みは無効のままです。
+
+4コアQEMUで5項目（RAM regmap往復/範囲、mapping引数、native SPMI引渡し、長さ/エラー伝播）が通過しました。実QTI診断からRAM値を読み、解除後の保持fd読取りを拒否し、core所有ファイルを残したまま全4モジュールを解放する試験も通過しました。記録用のSPMI test doubleとRAM backendは試験モジュールだけに存在し、成果物へは含めません。実V8トランザクション・割り込み・PMIC probeの証明ではありません。
+
+DT検査で、同じbus/SID4を持つPMICノード2つの順序が、静的な再構成DTと保存running DTで逆になっていると分かりました。実機6.12のsysfsが選択しているノードも読み取り確認し、17個のSPMI子サブツリーを保存running順へ並べ替えた候補DTを作りました。予約マップ・ヘッダ・文字列・全ノード/プロパティ値は変えず、GPU21段階と保存メモリも維持しています。bootloaderの動的ノード/値はコピーしていません。
+
+**重複SID定義自体は残っており、厳密なDT検証は未通過です。** 候補は現在のrunning DTと同じ先行選択を維持しますが、どちらかを推測で無効化していません。候補の23 PMICノード・最大SID13・28 IRQ参照は静的記述の検査であり、実機で23個がprobeしたという意味ではありません。
+
+```sh
+python scripts/build_storage_deps.py --spmi-tests
+python scripts/run_qemu.py --test spmi --cpus 4 --log reports/spmi.log
+python scripts/preserve_spmi_dt_order.py
+python scripts/audit_spmi_dt.py  # 現存する重複SIDのためexit 1、未解決事項として記録
+python scripts/snapshot_boot_core.py --name android73-spmi-stage19 --gpu-driver --rakkashin --spmi
+```
+
+候補DT: `artifacts/dt-spmi-stage19/avr-spmi-candidate.dtb`。
+本体ImageはStage16と同じです。常用・実機起動・充電/温度/IRQ・ROM全体の確認は未完了で、パーティションへの書込みはしていません。`reports/spmi-stage19-validation.json` に検証範囲を記録します。
+
+## Stage20: レギュレータの手動解除を実際に検証
+
+実コードのproxy consumerとregulator debugにも、登録時と異なるdevres識別子を使う手動解除の不具合がありました。QEMU論理レールで修正前に「解除後もenable要求が残る」「debugファイルが残る」の2件を再現し、正しい登録キーでdevresを取り外して既存のロック下で解放するように修正しました。再帰ロックは導入しません。
+
+電源要求の登録→解除を2回繰り返し、診断の解除→再登録も確認しました。既存5項目と追加2項目の全7項目、保持fd・unbind/rebind・参照保護・unloadが通過しています。モジュール数は89のままで、実機電源や故障時の復旧を証明する試験ではありません。`reports/regulator-lifetime-stage20-validation.json`。
+
+## Stage21: PMIC GPIO/MPPの接続
+
+固定Motorola GPIO/MPPソースを7.3のPIN_CONFIG_LEVEL、戻り値を持つGPIO set、remove callbackへ接続しました。ピン数と物理ピン番号/引数数を検査し、親regmapが無い間はprobeを遅延し、can_sleepは親regmapから取得します。GPIOの方向切替は固定7.3 native実装と完全一致させ、CMOS出力は入力bufferを無効化し、open-drain/sourceでは実ラインを読み取れるようにします。入力の読取りでは要求中の出力ラッチ値を書き換えません。
+
+実GPIO callbackソースを登録処理無効の試験TUへ直接取り込み、RAM regmapとgpiolib上で7項目を確認しました。ピン境界、set/get、読書きのエラー伝播、CMOS方向切替、open-drainのRAM入力サンプリング/要求値保持、無効な電源入力番号の拒否が通過しました。本番モジュール2つは別途ロード/アンロードしています。実PMICのprobeや電圧・波形・IRQの検証ではありません。試験用コード/RAM backendは本番成果物へ含めません。
+
+静的な範囲検査では、候補DTの9 GPIO provider、3 phandle参照、7 pin名が表内でした。選択DTにMPP providerは0で、MPPは追加の移植済み参考ドライバです。MPP callback/probe試験は未実施です。全DTの重複SID4、実GPIOの有効穴、pad subtype、部分書込み後の復旧、並行アクセス、実IRQは未解決/未検証です。
+
+```sh
+python scripts/build_storage_deps.py --regulators-tests --pmic-gpio-tests
+python scripts/run_qemu.py --test regulators --cpus 4 --log reports/regulators.log
+python scripts/run_qemu.py --test pmic-gpio --cpus 4 --log reports/pmic-gpio.log
+python scripts/audit_pmic_pinctrl_dt.py
+python scripts/snapshot_boot_core.py --name android73-pmic-gpio-stage21 --gpu-driver --rakkashin --pmic-pinctrl
+```
+
+本体ImageとStage19候補DTの値は変更していません。Stage21は91モジュール・4,649インポートCRC一致ですが、実機7.3起動・常用版の完成は未達です。`reports/pmic-pinctrl-stage21-validation.json`。
+
+## Stage22: ADCとPMIC温度監視の接続
+
+実ソースのADC共通換算・GEN3/GEN4 ADC・温度警報の3モジュールを追加。
+換算テーブルは固定したMotorolaソースの値を保持。ADC割り込み前のwork初期化、
+失敗時の解除順序、クライアント登録のNULL参照、7.3のworkqueue指定を修正した。
+独立したSMP4ゲストで12項目の実コードテストと実モジュールのロード・解除が通過。
+PM7の100kΩは固定テーブル上25.6°Cで、電池用の25.0°C換算とは別に検証した。
+保存DT・候補DTとも35チャンネル（GEN3:20、GEN4:15）、温度警報12ノード、
+修飾されたIIO参照6件を確認。これは実機の測定・過熱保護の証明ではない。
+
+```sh
+python scripts/build_storage_deps.py --adc-thermal-tests
+python scripts/run_qemu.py --test adc-thermal --cpus 4 --log reports/adc-thermal-qemu-stage22-final.log
+python scripts/audit_adc_thermal_dt.py
+python scripts/snapshot_boot_core.py --name android73-adc-thermal-stage22 --gpu-driver --rakkashin --adc-thermal
+```
+
+94モジュール・4,733 CRC一致。参照の寿命、温度警報のtrip/復帰処理、
+実機PMIC・温度保護・起動・常用検証は未完。`reports/adc-thermal-stage22-validation.json`。
+
+## Stage23: 過熱警報の復帰・書き込み失敗を検証
+
+実ドライバのRAM regmapとnative thermal zoneを使う8項目を追加し、計20項目が通過。
+修正前は、書き込み失敗後のしきい値キャッシュ、DACとLITEの繰り返し設定、
+警報有効化失敗後のinitializedフラグの4項目で失敗を再現した。
+trip番号を毎回ゼロから列挙し、キャッシュは書き込み成功後に更新する。
+復帰時は初期化を先に済ませ、IRQはDTのトリガ設定を引き継いで重複登録を防ぐ。
+未知のGEN2リビジョンとレジスタ範囲外は拒否する。
+94モジュールの実機過熱保護、サスペンド、常用確認は引き続き未達。
+`reports/thermal-alarm-stage23-validation.json`。
+
+## Stage24: ADC利用側と通知の寿命
+
+提供側のdevice lock下でprobe時にmanaged device linkを作り、解除時は利用側が先に
+停止する。busy/unboundの提供側はdeferする。呼出側の要求構造体は保持せずコピーし、
+通知の選択はmutex内、コールバック呼出しはmutex外で行う。
+外部からのdisableは実行中コールバックの終了を待ち、自身のコールバック内からの
+disableは自己待ちせず残りの通知とcontextをクリアする。
+実driver coreの解除順序、所有コピー、自身のdisable、別スレッドのdisable待ちを
+含む計24項目がSMP4で通過。実機の利用側ドライバが契約を守るかは今後確認する。
+inactive clientレコードの提供側解除までの保持、ハードウェア部分更新の回復も未完。
+`reports/adc-lifetime-stage24-validation.json`。
+
+## Stage25: 実QRTR/QMI/PDRと入力長の検証
+
+固定したandroid18-7.3基点は維持し、外部PDR利用を選択できるKconfig変更と
+QMI入力長の修正を追加。15パッチ・60ファイルが基点から完全に再現する。
+QRTR、QRTR-SMD、QMI、PDRメッセージ、PDR helperのnative 5モジュールを追加した。
+修正前に途中で切れたTLVの成功扱いを再現し、frame/TLV/要素/配列長/文字列長の
+読取り範囲を修正。正常wireの既知値と往復、短いframe/TLV、handle終了を6項目で検証。
+実AF_QIPCRTRローカルソケットで128回の双方向送受信を検証した。
+新ImageでADC24項目とclock/RCU35項目も通過。99モジュール・4,975 CRC一致。
+
+```sh
+python scripts/build_native.py --boot-core --gpu-deps --rakkashin --qemu-tests --pmic-glink
+python scripts/build_storage_deps.py --adc-thermal-tests --pmic-ipc-tests
+python scripts/run_qemu.py --test pmic-ipc --cpus 4 --log reports/pmic-ipc-stage25-bounds-qemu.log
+python scripts/snapshot_boot_core.py --name android73-pmic-ipc-stage25 --gpu-driver --rakkashin --pmic-ipc
+```
+
+Motorola qti_pmic_glinkの草稿はリンクしたが、RX/client解除・provider寿命・
+後始末に未修正の競合があるため、この成果物には含めない。
+リモートサービス、実充電、電池表示、物理7.3起動と常用判定は未完。
+`reports/pmic-ipc-stage25-validation.json`。
+
+## Stage26: GLINK受信・クライアント解除
+
+実MotorolaソースのクライアントにSRCUとcallback mutexを追加。IDR検索中に保護を
+取得し、公開を外した後にRX/state callbackの終了を待って解放する。
+callback呼出しはIDR mutexの外で行い、自己解除は-EDEADLKとして別workerへの
+解除依頼を必要とする。TXとunregisterは呼出側で直列化する契約を明示した。
+実ソースをdriver初期化なしでコンパイルするsoftware fixtureで6項目が通過。
+QMI6項目・QRTR128packetと合わせて警告なし。実provider/rpmsgのprobeや解除は
+このfixtureに含まない。実vendorモジュールのインポートCRCも一致するが、
+提供側の寿命と後始末はまだ未完のため、成果物はStage25の99モジュールのまま。
+
+```sh
+python scripts/build_storage_deps.py --pmic-glink-tests
+python scripts/run_qemu.py --test pmic-glink --cpus 4 --log reports/pmic-glink-stage26-final-qemu.log
+```
+
+`reports/pmic-glink-stage26-validation.json`。実充電、物理7.3起動、常用版完成は未達。
+
+## Stage27–29: GLINKの受信・提供側・クライアント寿命
+
+RPMSG coreはdriver.removeの後でdefault endpointを破棄するため、受信入口にSRCUを
+置き、関連付けの公開停止→入口待ち→init/RX work待ちの順に解除する。
+提供側はdevice参照を保持してbinding/channelを検証し、managed linkで利用側を先に
+解除。clientはprobe中だけ登録し、devresの自動解除と明示解除を同じ処理へ接続した。
+別clientをcallbackから同期解除する場合も-EDEADLKにして循環待ちを防ぐ。
+
+実ソース13項目・native QMI6項目・実QRTR送受信128回と、実モジュールの
+登録/解除が警告なしで通過。100モジュール・5,054 CRC一致の実験用成果物に追加。
+保存DTと候補DTはSOCCPの2チャネル・有効な子サービス8ノードを持つ。
+`qcom,alor-soccp-pas`はnative側に対応表がなく、実SoCCP/PAS early-boot handoverと
+SMEM通信、Motorola/QTI充電・USB子ドライバの接続が引き続き必要。
+
+```sh
+python scripts/build_storage_deps.py --pmic-glink-tests
+python scripts/run_qemu.py --test pmic-glink --cpus 4 --log reports/pmic-glink-stage29-final-qemu.log
+python scripts/audit_pmic_glink_dt.py
+python scripts/snapshot_boot_core.py --name android73-pmic-glink-stage29 --gpu-driver --rakkashin --pmic-glink
+```
+
+実機の7.3起動、実充電、常用の完成は未達。`reports/pmic-glink-stage29-validation.json`。
+
+## Stage30: 選択された通信サブデバイスには実際のedgeを要求
+
+native helperではGLINK/SMDが無効な場合のNULLを開始成功として扱える。
+全機能を接続する本プロジェクトでは、有効な通信サブデバイスのedgeがなければ
+-EOPNOTSUPPを返す方針とした。修正前の2項目失敗、修正後の2項目通過を確認。
+実GLINK/QMIの19項目・QRTR128回・実GLINKモジュール登録/解除も再通過した。
+これは通信の実装完了を示すものではなく、欠落した通信を成功に見せないための処理。
+100モジュール・5,054 CRC一致。`reports/rproc-gate-stage30-validation.json`。
+
+```sh
+python scripts/build_storage_deps.py --rproc-gate-tests --pmic-glink-tests
+python scripts/run_qemu.py --test rproc-gate --cpus 4 --log reports/rproc-gate-stage30-after.log
+python scripts/snapshot_boot_core.py --name android73-rproc-gate-stage30 --gpu-driver --rakkashin --pmic-glink
+```
+
+`reports/soccp-next-source-review.json`に次のSoCCP移植条件を記録した。
+7.3には他SoC向けのearly_boot/attach実装があり、PAS ID・firmware名は一部一致する。
+AVRのalor対応表、cx/mx電源・割り込み・SMEM/handover条件の照合と実装はまだ必要。
+他SoCのcompatibleを名目上追加する変更は行っていない。物理起動・常用は未達。
+
+## Stage31–32: 実GLINK SMEM輸送をremoteproc補助層へ接続
+
+固定nativeソースからGLINK core/SSR・SMEM輸送・RPMSG controlの3モジュールを追加。
+remoteproc commonが実register/unregister/SSRの3関数へリンクすることをELFで確認。
+リング位置・サイズ・読書き範囲を検査し、READ_NOTIFの予約領域とメモリバリアを保持。
+送信領域待ちのRX応答workerでremoveが止まるケースを再現し、TXのabort/wakeを
+RXキャンセルより先に行う修正を入れた。実ソースのRAM試験ではVERSION/ACKも確認。
+
+通信層11項目、remoteprocエラー2項目、PMIC/QMI19項目、SSR/Gunyah10項目が通過。
+103モジュール・5,216 CRC一致。保存DTと候補DTのGLINK edge 5件は、phandle番号を
+参照先へ解決して一致。SMEM item478/479/480と共通wire command15件の番号も一致。
+Vendor zero-copyはまだ未実装で、未実装機能を相手へ広告しないことを試験している。
+実SoCCP、IPCC mailbox/IRQ、SMP2P producer、全データ/SSR/zero-copyと充電等は未完。
+
+```sh
+python scripts/build_storage_deps.py --glink-transport-tests --pmic-glink-tests --rproc-gate-tests
+python scripts/run_qemu.py --test glink-transport --cpus 4 --log reports/glink-transport-stage32-final-qemu.log
+python scripts/audit_glink_transport_dt.py
+python scripts/snapshot_boot_core.py --name android73-glink-transport-stage32 --gpu-driver --rakkashin --pmic-glink
+```
+
+`reports/glink-transport-stage32-validation.json`。実機起動・常用版完成・効率の実測は未達。
+
+
+## Stage33–35: IPCC・SMP2P・SMEM状態APIの接続
+
+実IPCC IRQ/mailboxとSMP2P producerを追加。固定チャンネル記憶域・ID範囲検査、
+IRQ→mailbox→domainのdevres解除順序、共有SMEMサイズ/配列/名前の境界を修正した。
+保存DTのWPSS長名は元のstrscpy(16)短縮を維持し、SSRの履歴初期化もvendorの
+V1/V2差を保持。保存/候補DTのIPCC 2基・SMP2P 6系統・SoCCP状態4参照を照合した。
+C共有項目layoutの一致は、全プロトコル・ファームウェア互換性の証明ではない。
+
+SMEM状態APIの解除競合・orphan再取得・bit32受入れを実API/DT/並行タスクで再現
+（修正前3失敗）。ネイティブコアにSRCUによる実行中callback待機とlookup解除を追加し、
+修正後3成功。unregisterは状態callback外のsleep可能文脈で行う契約。
+16パッチ・61ファイルを基点から完全再現し、Image #22を再ビルドした。
+
+新Imageでstate3、IPCC7、SMP2P8、GLINK11、PMIC/QMI19、SSR/Gunyah10、regulator7の
+計65件が成功。QRTRローカル128packetと実ドライバ登録/解除も確認。
+DT関連ホスト24件も成功。本番ドライバの実機probe・IRQ配送・firmware動作の確認は未実施。
+
+最新の部分成果物と検証は `artifacts/android73-state-ipc-stage35/` と
+`reports/state-ipc-stage35-validation.json`。Alor SoCCPの電源/PAS/early attach、
+実サービス、全DT、画像packaging・SELinux・実機常用/効率測定は残る。書き込みはしていない。
+
+```sh
+python scripts/build_storage_deps.py --ipcc-tests --smp2p-tests --smem-state-tests
+python scripts/run_qemu.py --test smem-state --log reports/smem-state-qemu.log
+python scripts/audit_state_ipc_dt.py
+python scripts/audit_core_patch_replay.py
+python scripts/snapshot_boot_core.py --name android73-state-ipc-stage35 --gpu-driver --rakkashin --pmic-glink
+```
+
+
+Stage36の次段要件は `scripts/audit_soccp_provider_requirements.py` と
+`reports/soccp-provider-requirements-stage36.json` に固定。cx/mxはARCリソース
+`cx.lvl`/`mx.lvl`のraw level64・load0であり、物理64uVへの読み替えはしない。
+Alor descriptorはcheck_status=falseのため、別SoC用TCSR/spareプロパティを
+勝手に追加する根拠はない。Q6V5 commonと実sysmonがまだ未リンクで、
+Alor minidump24/ELF64や電源rollbackを含むPAS実装は次段の未完作業。
+
+
+## Stage37: Q6V5 common・実sysmon/QMI・AOSS QMP
+
+ネイティブ基点の実Q6V5、sysmon、QMPを3モジュールとして追加。実QMP/sysmon/QMI
+関数へのELF importとCRC一致を確認し、以前の要件表で不足していた共通関数は
+すべて実exportが存在する状態になった。これはAlor PAS完成・起動成功を意味しない。
+
+Q6 IRQ drain、QMP参照解放、SMEM文字列境界、停止要求の失敗伝播を修正。
+sysmonはIRQ callbackデータの解放順、任意IRQ未指定、RPC接続/解除の競合を修正。
+古いpriv引数を使わずSRCU区間でendpointの現在の関連付けを読み、解除時に消して待つ。
+4CPUゲスト11件成功。実QMI/subdeviceの登録/解除、RPMSG祖先検索/二重接続拒否、
+並行ingress中のprovider解除と解除後1,000回の拒否、後からconsumer解除を含む。
+実3モジュールの登録/解除も別に確認したが、物理QMPやfirmwareは動かしていない。
+
+最新部分成果物は `artifacts/android73-remoteproc-services-stage37/`。
+108モジュール、5,480 import CRC一致、全hard/soft依存が存在しグラフは非循環。
+Imageと保存DT/GPU 21段の入力は変更していない。実機probe、障害注入、全通信、
+Alor電源/PAS・ELF64 dump、起動画像と常用・効率評価は未完。
+`reports/remoteproc-services-stage37-validation.json` を参照。
+
+
+Stage38ではnative PAS・MDT loader・PIL infoの未改変基点3モジュールを実依存へ
+リンクし、CRC一致まで確認した。`ports/qcom-pas-alor/` はAlor専用電源/ELF64/
+終了経路の適応前なので、Alor compatibleはまだ登録せずStage37の108個にも含めない。
+`reports/pas-alor-stage38-baseline-validation.json` に範囲と次段を記録した。
+
+## Stage39: Alor専用PASのARC電源制御
+
+ドラフトPASにAlor固有descriptorとcompatibleを実装した。PAS51/DTB65、
+crash SMEM656、minidump24、firmware名、early boot/auto bootとELF64を保存元へ合わせ、
+他SoCのpower-domain定義へ置き換えずcx/mx ARC vote64/load0を取得する。
+成功した電圧/負荷/enable操作を数えて逆順に解除し、解除失敗は状態を保持して再試行。
+同時アクセス・二重投入も制御する。実regulator APIを使う本番処理であり、
+試験用の記録/失敗backendは別のKUnit TUだけに限定している。
+
+4CPUの8件成功。投入6段階・解除6段階、元失敗とrollback失敗の併発、正のset_load戻り値、
+繰り返し・再試行・2並行workerを含む。実PAS/MDT/PILの登録・解除と132 import CRCも成功。
+11個のdescriptor値と保存/候補DTの選択項目が一致。実regulator framework/ARC/SoCCP、
+clock/IRQ/handover・DTB認証失敗経路・firmware/resource-table/ELF64 loaderは未検証。
+
+`reports/pas-alor-stage39-validation.json`。新しいAlorドライバはまだ成果物に入れず、
+配布部分は引き続きStage37の108個。Image・保存DT・GPU設定の変更や実機への書き込みはない。
+
+## Stage40: 実機SoCCP firmwareの読み取り照合
+
+実機ではSoCCPがattachedで、firmwareは `/vendor/soccp_firmware/image/` にある。
+専用soccp_a/bはFAT12 volumeで、両slot内のsoccp.mbn/soccp_dtb.mbnとマウント済み
+2ファイルのSHA256が一致した。実イメージはいずれもELF32/EM_RISCVであり、
+vendor descriptorのuses_elf64（dump metadata）とfirmware入力classは別である。
+firmwareをELF64へ変換する根拠はない。
+
+選択したloadable segmentは保存DTの6MiB/256KiB予約領域へ収まり、全segmentがinline。
+native ELF32ヘッダ形状・末尾hash segmentなど選択した前提条件も一致した。
+これは実loader実行・署名認証・物理restartの成功ではない。
+ROMのueventdはこの専用directoryを検索し、initはforce_sysfs_fallback=1を設定する。
+実機も1、7.3設定のUSER_HELPERも有効。移植版のmount/init/要求時刻は別途検証が必要。
+
+read-only scriptと証拠は `scripts/inspect_soccp_*_readonly.py`、
+`scripts/audit_soccp_firmware_inputs.py`、`reports/soccp-firmware-stage40-validation.json`。
+volumeのmount・変更・抽出・firmware起動は行わず、filesystem/block読み取りと
+メタデータ報告だけを行った。次は実ファイルを使うnative loaderのguarded-RAM試験、
+PASのsecure/error/resource ownershipと実機起動条件の検証。
+
+## Stage41–42: 実SoCCPイメージのnative loader RAM試験
+
+監査済みの実機マウントから2ファイルをローカル試験artifactへコピーし、ハッシュ固定した。
+実qcom_mdt_get_size/read_metadata/load_no_init APIで6MiB/256KiBのRAMへ配置し、
+PT_LOADデータ・BSS・空隙を領域全体で比較、前後32byte guardとmetadataのheader/hashも一致。
+署名認証・reset・PAS起動APIは呼んでいない。これは物理firmware再起動の確認ではない。
+
+native MDTに宣言サイズを超えるmetadata headerコピーを再現（旧5件中1失敗、
+再現は余裕を持たせたbackingを使いallocation外を読まない）。コピー前にheader/tableの
+範囲を確認し、NULL・ELF class/byte order・合計サイズ・加算幅も検査/修正。
+最終loader7件とARC rail8件がSMP4で成功。符号/4GiB境界も含む。
+`reports/soccp-loader-stage42-validation.json`。実機認証/boot、PAS全failure ownership、
+ROM fallbackの実際の時刻と全driver/画像/常用評価は残る。Alor draftは引き続き配布対象外。
+
+
+## Stage43: proxy所有状態とhandover競合
+
+PDS・XO・aggre・CX/PX・ARCの取得済み状態を記録し、取得した資源だけを逆順解除する。
+handoverを認証成功前は保留し、成功後に処理する。終了処理/重複handover/失敗の競合でも
+二重disableせず、解除失敗時は所有状態を保持しstopで再試行する。
+8個の記録backend試験とARC8/loader7の回帰で計23件成功。実時計/電源/認証ではない。
+`reports/pas-proxy-stage43-validation.json`。secure側DTB/main所有権と認証失敗経路は残る。
+
+ユーザーが指定した次段目標は「全必須機能の移植・構成・起動成果物をそろえ、既知の
+実装不足をなくして、残るのは実機確認という段階」。このsoftware readinessは未達。
+実機が正常に動く保証は、それ以降の検証で別に確認する。現在の部分成果物は108個のまま。
+
+## Stage44: main/DTB認証状態と解放順序
+
+認証呼び出し前に停止確認が必要なimageを記録し、本体→DTBの停止成功後にだけ所有mappingを
+解除する。main load/start失敗後にDTBが残る経路と、early-attach後の停止所有権を接続。
+停止未確認時はmapping/metadata/proxy解放へ進まない。Alorのcritical auth/reset失敗や
+停止不能はMotorola元ソースと同様のpanic方針で、通常の成功扱いや解放には置き換えない。
+実際のpanic/TEE呼び出しを試験したわけではない。
+
+DTB firmwareは同期コピー後にsuccess/error両方で参照解放し、借用したmain参照も整理。
+image所有状態7・proxy8・rail8・実入力loader7の計30件がSMP4で成功。
+image試験のshutdown/unmapは記録callbackであり、本番primitiveは実APIへ接続している。
+`reports/pas-images-stage44-validation.json`。driver全体への障害注入、critical分岐の実行、
+IOMMU partial unmapや未受入の非Alor終端失敗、実機secure ABIと全体software readinessは未完。
+
+## Stage45: ROM向けremoteproc名の維持
+
+Motorola元ソースはpdev->nameをremoteproc名へ渡し、実機は
+`a3380000.remoteproc-soccp`。nativeのsysmon名`soccp`をそのまま渡すとname属性が変わる。
+Alor descriptorでplatform名を使い、sysmon service名はsoccpのままにした。
+再ビルド/CRC/descriptorの静的照合を通過。これは実probeやROM daemonの動作確認ではない。
+`reports/pas-name-stage45-validation.json`。全sysfs/ioctl/ROM ABI照合とsoftware readinessは残る。
+
+
+## Stage46–48: PAS実処理とremoteprocの接続
+
+DA変換の4GiB切詰め・長さ加算overflowを再現して修正。実driver関数への障害注入と、
+実remoteprocによるfirmware要求・2回の起動停止・起動済みimageへのattachを含む13件成功。
+IRQ/電源/認証等は試験内の記録primitiveで、実SoCCPが動いた証明ではない。
+別の隔離guest2台ではcritical auth/stopの本物のpanic分岐を確認し、不確かな停止後に
+資源解放へ進まないことを検査した。端末の再起動・partition変更は行っていない。
+`reports/pas-driver-stage48-validation.json`。自動fallback・全probe/子device・ROM/実機ABI・
+残りdriver・起動成果物は未完。部分成果物108個のままで、software readinessは未達。
+
+
+## Stage49: PMIC RTC（時計・アラーム）
+
+実機DTのPMK8350互換名・7レジスタ配置をMotorolaと7.3 native sourceで照合し、
+無改変のrtc-pm8xxxを追加。実regmapとRAM busで時刻/桁上がり/アラーム/エラー伝播を試験し、
+実RTC timer workerによる通知まで8件成功。実機はsysfs読み取りだけで、時計/アラームは変更していない。
+部分成果物はartifacts/android73-rtc-stage49/の109モジュールへ更新。全import CRCと
+hard/soft依存を確認。SoCCP draftは含めていない。
+`reports/rtc-stage49-validation.json`。実PMIC・wake・ROM・残りdriver/boot画像は未確認/未完。
+
+
+## Stage50: PMIC SDAM / NVMEM
+
+Motorolaのnvmem_qcom-spmi-sdamを移植。stockのNVMEM設定とmodule名を維持し、
+長さ加算overflowだけを修正した（旧7/8、修正後8/8成功）。実NVMEM/regmapとRAM busで
+データ往復・範囲/readonly・PBS単byte例外・busエラーを確認。PBSを含む書込み試験はQEMU内のみ。
+実機では12 providerの容量レジスタ1byteずつを読み、全て128byteと確認。
+保存/候補DTの12 provider・13固定cell・18参照を照合し、全cellが実容量へ収まった。
+部分成果物はartifacts/android73-sdam-stage50/の110モジュール。
+`reports/sdam-stage50-validation.json`。実SPMI probeや各consumer動作、全体software readinessは未達。
+
+
+## Stage51: 電源・音量下キーとPON親
+
+7.3 nativeのPON親・reboot-mode・PMIC keyの3モジュールを追加。
+PMK8350 power/resin descriptorと保存/候補DTのcode116/114・IRQ・HLOS/PBS領域を照合し、
+実機で両方enabledだったwake既定値を保持した。実input core/handlerとregmap RAM busで
+押下/解放・取りこぼし時の補完・重複抑制・debounce・I/O失敗・reboot理由bitを8件確認。
+実機へのキー注入・再起動はしていない。
+最新部分成果物はartifacts/android73-power-key-stage51/の113モジュール。
+`reports/power-key-stage51-validation.json`。実probe/wake/ROMは未確認で、
+nativeのsuspend IRQ-wake経路とvendorのIRQ再取得方式の差も実機受入が必要。
+全体software readinessと常用版は引き続き未達。
+
+
+## Stage52: 表示・タッチ間のpanel通知基盤
+
+Motorolaのpanel_event_notifierを移植。登録解除が進行中callbackを待たない問題を
+再現し（旧6/7）、unpublish後にSRCUで待つ処理へ修正した。解除中slotの再利用を
+EBUSYで防ぎ、終了後の再登録も確認。実export APIでrouting・全5 client・重複拒否・
+callbackから別client登録・解除競合・不正cookie/NULL通知を8件確認。
+保存stock moduleの配列160byteから5 client構成を確認し、宣言・payload・enumを照合。
+最新部分成果物はartifacts/android73-panel-event-stage52/の114モジュール。
+`reports/panel-event-stage52-validation.json`。実display/touch producer/consumer、
+全driver/boot/ROMのsoftware readinessは未完。callback内からの同期unregisterは禁止。
+
+
+## Stage53: Motorola touch依存・relay binding
+
+mmi_relayとsensors_classの実装を移植。relayを初期化完了後に公開し、削除時はSRCUで
+API/callbackを排出。通知中の全体mutexを取り除き、各native notifierのlockを使う。
+provider消失後のunregisterも進行中callbackを待つ。sensor classは20属性をgroupで
+まとめて公開し、途中失敗時のdevice core rollbackを使う。header/属性名/permissionは維持。
+実API・実platform probe/remove・実sensor device登録の9件がSMP4で成功。
+
+保存/稼働DTにはmmi,sys-relayがなく、実機もdriverにbound deviceがないことを読み取り確認。
+候補DTへ/soc/mmi-relayを1ノード追加。既存全property/順序/reservationとGPU21段階は不変。
+実OFでのpopulateとROM consumerの受入は別途必要。
+最新部分成果物はartifacts/android73-moto-touch-deps-stage53/の116モジュールとcandidate.dtb。
+これはflash可能な画像でもwhole-board受入済みDTでもない。
+`reports/moto-touch-deps-stage53-validation.json`。Goodix本体等とsoftware readinessは未完。
+
+
+## Stage54: Goodix/THP・Motorola infoの4 draftをリンク
+
+mmi_annotate/mmi_info/touchscreen_mmi/goodix_brl_thpが7.3で実依存へリンクした。
+factoryの9 build flagとheader UAPIを維持し、削除されたstrncpy・trace include path・
+prototypeを調整。固定custom-infoの長さを制限し、pen deviceのunregister後の二重freeを修正。
+SMEM取得のerror pointer/size判定と、注釈のformat長/加算overflow/NUL境界も修正した。
+注釈sourceのprivate RAM試験8件（4 writerを含む）が成功。実probe/永続map/minidumpは試験外。
+保存stockのGET_EVENTSはmov w0,wzr; retの8byteでpayloadを返さず、元の互換動作を維持した。
+
+4 draftはartifacts/goodix-touch-draft-stage54/へ分離保存。主成果物は116個のまま。
+注釈probe/remove/minidump lifetime、infoの初期化失敗処理、touch ioctl/終了/partial probeと
+実SPI/display/firmware/ROMの受入が残るため、4個を配布セットへ昇格していない。
+`reports/goodix-touch-stage54-validation.json`。software readinessは未達。
+
+
+## Stage55: relayの実OF populate/probe
+
+QEMU firmware DTのsimple-bus配下へcandidateと同じ2 propertyのrelay nodeを追加し、
+7.3のOFがplatform deviceを生成→本物のmmi_relay probeへbind→実register/fire/unregisterを
+通す試験が成功。試験コードからplatform deviceを直接生成していない。
+`reports/moto-touch-of-stage55-validation.json`。これは仮想DTによるframework確認で、
+AVR実機DT全体やROM/touchの動作確認ではない。主成果物116個・未受入draft4個のまま。
+
+
+## Stage56: 注釈providerの初期化・終了・予約RAM
+
+注釈contextを全取得成功後に公開し、bootログの復元を予約領域/ローカル容量へ制限。
+実DTの4KiB no-map領域と8KiBローカルbufferを照合し、memremap/memunmapへ変更した。
+proc/API処理の排出後、minidump解除を確認してからRAM/mapを解放する。解除不能時は
+参照先を保持し、次probe/exitで再試行する。永久失敗でのmodule終了はrebootまで意図的に
+backingを保持するため、終端失敗時にメモリ消費ゼロとする方式ではない。
+
+11 lifecycle/fault（dump primitiveは記録backend）・8 format回帰・2本番module/実pending API
+試験がSMP4で成功。本番moduleの実OF bind、procログ読み書き、解除後の登録消失も確認。
+実firmware backendはQEMUで初期化せず、実機cache/boot/firmwareは未確認。
+注釈1個を部分成果物へ追加し、artifacts/android73-annotate-stage56/は117 module、
+5,695 import CRC一致、hard/soft依存がそろい循環なし。未受入のinfo/Goodix等は3 draft。
+`reports/mmi-annotate-stage56-validation.json`。Stage54の注釈実装不足の一部を解消したが、
+低メモリ障害注入、info/touch本体、残りdriver/DT/boot/ROM等のsoftware readinessは未達。

@@ -20,7 +20,7 @@ A Linux **7.3** kernel for the Motorola **avr** (XT2611, Snapdragon 8 Gen 5 / SM
 | Wi-Fi, Bluetooth (audio) | working |
 | 4G data, VoLTE, SMS | working |
 | GPS, charging, sensors, NFC | working |
-| GPU (KGSL) | working |
+| GPU (KGSL) with the user undervolt / clock table | working (phone-verified) |
 | Hardware video codecs | exposed by the video driver (see below); playback not tested on 7.3 yet |
 | KernelSU-Next (su / manager / modules) | working |
 | **Boot-only install** (boot + vendor_boot, no helper module) | working on 7.3.0 |
@@ -112,7 +112,7 @@ Motorola **avr**（XT2611 / Snapdragon 8 Gen 5・SM8845 / ALOR）向けの **Lin
   - Wi-Fi、Bluetooth
   - 4G、VoLTE、SMS
   - GPS、充電、センサー、NFC
-  - GPU
+  - GPU（ユーザーのアンダーボルト・クロックテーブル込み）
   - KernelSU-Next
 - **boot と vendor_boot を書き込むだけで動く構成:** 7.3.0 で確認済みです（補助モジュールは不要）。
 - **7.3.5:** ビルドは済んでいますが、実機ではまだ確認していません。

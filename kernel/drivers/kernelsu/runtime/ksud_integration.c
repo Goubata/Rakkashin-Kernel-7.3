@@ -59,7 +59,7 @@ static const char KERNEL_SU_RC[] =
     "\n"
     // Widevine HAL starts before the TEE side is ready on 7.3 and stays on L3 for the boot
     "on property:sys.boot_completed=1\n"
-    "    restart vendor.drm-widevine-hal\n"
+    "    exec_background u:r:" KERNEL_SU_DOMAIN ":s0 root -- /system/bin/sh -c \"for i in 1 2 3 4 5 6 7 8; do sleep 30; dumpsys android.hardware.drm.IDrmFactory/widevine | grep -q \'default_security_level: L1\' && break; setprop ctl.restart vendor.drm-widevine-hal; done\"\n"
     "\n"
     "\n";
 // clang-format on

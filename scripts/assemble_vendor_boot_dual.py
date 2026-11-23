@@ -14,7 +14,7 @@ Outputs in artifacts/boot-kit-TAG/: vendor_boot-dual.img (AVB hash footer, algor
 NONE like stock, partition size 100663296) and boot-73.img (kernel only, header v4).
 Usage: assemble_vendor_boot_dual.py TAG     (TAG of an assembled boot kit). Run as root.
 """
-import hashlib, re, shlex, subprocess, sys
+import hashlib, os, re, shlex, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,7 +59,7 @@ def main():
     vb = kit / 'vendor_boot-dual.img'
     run(sys.executable, '-E', '-s', str(TOOLS / 'mkbootimg.py'), '--header_version', '4', '--pagesize', '0x1000',
         '--base', '0', '--kernel_offset', '0x8000', '--ramdisk_offset', '0x01000000', '--tags_offset', '0x100',
-        '--dtb_offset', '0x1f00000', '--vendor_cmdline', cmdline, '--board', '', '--dtb', str(work / 'dtb'),
+        '--dtb_offset', '0x1f00000', '--vendor_cmdline', cmdline, '--board', '', '--dtb', os.environ.get('AVR_VB_DTB', str(work / 'dtb')),
         '--vendor_bootconfig', str(work / 'bootconfig'), '--ramdisk_type', '1', '--ramdisk_name', '',
         '--vendor_ramdisk_fragment', str(work / 'dual.cpio.lz4'), '--vendor_boot', str(vb))
     run(sys.executable, '-I', str(AVB), 'add_hash_footer', '--image', str(vb), '--partition_name', 'vendor_boot',

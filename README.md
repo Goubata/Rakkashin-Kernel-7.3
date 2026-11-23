@@ -2,7 +2,7 @@
 
 A Linux **7.3** kernel for the Motorola **avr** (XT2611, Snapdragon 8 Gen 5 / SM8845 "canoe", board ALOR) running the OxygenOS 17 port ROM. It is the successor of Rakkashin Kernel 6.12. It carries the Rakkashin features and has KernelSU-Next built in.
 
-- Kernel base: Android Common Kernel **android18-7.3**, plus upstream stable updates (the tree is at **7.3.5**)
+- Kernel base: Android Common Kernel **android18-7.3**, plus upstream stable updates (the tree is at **7.3.6**)
 - KernelSU-Next **v3.4.2** built into the kernel
 - The 6.12 vendor stack (Qualcomm, Motorola and OnePlus drivers) is ported to 7.3 and built as modules
 
@@ -24,8 +24,9 @@ A Linux **7.3** kernel for the Motorola **avr** (XT2611, Snapdragon 8 Gen 5 / SM
 | Hardware video codecs | exposed by the video driver (see below); playback not tested on 7.3 yet |
 | KernelSU-Next (su / manager / modules) | working |
 | **Boot-only install** (boot + vendor_boot, no helper module) | working on 7.3.0 |
-| 7.3.5 stable update | built; not yet verified on the phone |
-| Reboot from the power menu | **known issue**: can hang in the WLAN driver removal and need a forced restart (being fixed) |
+| 7.3.5 stable | working (phone-verified) |
+| 7.3.6 stable update | built; being verified on the phone |
+| Reboot / power-off from the power menu | fix in 7.3.6 (WLAN removal no longer waits forever; kernel shutdown watchdog), being verified |
 
 Hardware video codecs (decided by the SoC SKU; formats read from the video driver on the phone): decode H.264 / HEVC / VP9 / AV1 / HEIC up to 8K30 10-bit; encode H.264 / HEVC / HEIC up to 4K60 10-bit. APV is not available on this SKU (Qualcomm's "IRIS4-1P no APV" configuration).
 
@@ -57,7 +58,7 @@ The current source needs no KernelSU helper module (see `docs/BOOT-ONLY.md`). Th
 
 | Path | Contents |
 |---|---|
-| `kernel/` | The full kernel source tree: android18-7.3 + Linux 7.3.5 stable + every avr core change (SCM/TZ wait-queue protocol, SEA fixup, vendor hooks and exports, WALT, KernelSU-Next, boot-only support, …). Build it like any kernel tree. |
+| `kernel/` | The full kernel source tree: android18-7.3 + Linux 7.3.6 stable + every avr core change (SCM/TZ wait-queue protocol, SEA fixup, vendor hooks and exports, WALT, KernelSU-Next, boot-only support, …). Build it like any kernel tree. |
 | `ports/` | 119 vendor driver ports built as out-of-tree modules: Qualcomm platform (clocks, interconnect, PMIC, Gunyah, IPC, thermal, …), GPU (KGSL), display (msm-drm), camera, EVA, video, audio/DSP, Wi-Fi (qcacld), data/IPA, NFC, Motorola and OnePlus drivers, Rakkashin modules (ADIOS, …). |
 | `configs/` | Config fragments merged on top of `gki_defconfig`: `avr-platform`, `rakkashin`, `avr-pmic-glink`, `avr-production` |
 | `patches/` | Core changes as standalone patches |
@@ -88,7 +89,7 @@ The boot image is `Image` with the cmdline `sched_proxy_exec=0` (required: WALT 
 ## Known limits
 
 - `sched_proxy_exec=0` must stay on the kernel command line.
-- Reboot hang (above): under investigation.
+- Reboot hang (above): fix in 7.3.6, being verified on the phone.
 - Harmless 7.x warnings: `iommu_set_fault_handler` on DMA domains, `msm_geni_serial` IRQF_ONESHOT.
 
 ## Credits
@@ -101,7 +102,7 @@ Rakkashin. The kernel sources are GPL-2.0, and so are the Android Common Kernel,
 
 Motorola **avr**（XT2611 / Snapdragon 8 Gen 5・SM8845 / ALOR）向けの **Linux 7.3** カーネルです。対象は OxygenOS 17 ポート ROM で、Rakkashin Kernel 6.12 の後継にあたります。Rakkashin の機能をすべて載せていて、KernelSU-Next も内蔵しています。
 
-- **ベース:** Android Common Kernel android18-7.3 に upstream の stable 更新を当てたもの（現在 **7.3.5**）。
+- **ベース:** Android Common Kernel android18-7.3 に upstream の stable 更新を当てたもの（現在 **7.3.6**）。
 - **KernelSU-Next:** v3.4.2 をカーネルに組み込んでいます。
 - **ドライバ:** 6.12 のベンダードライバ（Qualcomm、Motorola、OnePlus）を 7.3 に移植して、モジュールとしてビルドしています。
 
@@ -115,8 +116,9 @@ Motorola **avr**（XT2611 / Snapdragon 8 Gen 5・SM8845 / ALOR）向けの **Lin
   - GPU（ユーザーのアンダーボルト・クロックテーブル込み）
   - KernelSU-Next
 - **boot と vendor_boot を書き込むだけで動く構成:** 7.3.0 で確認済みです（補助モジュールは不要）。
-- **7.3.5:** ビルドは済んでいますが、実機ではまだ確認していません。
-- **既知の問題:** 電源メニューから再起動すると、WLAN ドライバの解除処理で止まることがあります。修正中です。
+- **7.3.5:** 実機で動作確認済みです。
+- **7.3.6:** ビルドは済んでいて、実機で確認しているところです。
+- **電源を切る・再起動するときに固まる問題:** 7.3.6 で修正しました。WLAN の解除処理が永久に待たないようにし、カーネル側にも安全装置を入れました。実機で確認しているところです。
 - **ハードウェア動画コーデック:** 7.3 での再生テストはまだです。ドライバが出している対応形式は次のとおりです。
   - デコード: H.264 / HEVC / VP9 / AV1 / HEIC（最大 8K30 10bit）
   - エンコード: H.264 / HEVC / HEIC（最大 4K60 10bit）
@@ -130,7 +132,7 @@ Motorola **avr**（XT2611 / Snapdragon 8 Gen 5・SM8845 / ALOR）向けの **Lin
 いまのソースコードでは、KernelSU の補助モジュールは要りません（`docs/BOOT-ONLY.md`）。古いリリース `v7.3-final-20261119` では `avr73-support.zip` が必要です。
 
 ### ソースコード
-- **`kernel/`:** カーネルのソースツリー全体です。android18-7.3 と 7.3.5 stable の上に、avr 用のコア変更をすべて入れてあります。
+- **`kernel/`:** カーネルのソースツリー全体です。android18-7.3 と 7.3.6 stable の上に、avr 用のコア変更をすべて入れてあります。
 - **`ports/`:** 119 個のベンダードライバ移植です（Qualcomm 基盤、GPU、画面、カメラ、動画、音声、Wi-Fi、データ通信、NFC、Motorola、OnePlus、Rakkashin のモジュール）。
 - **`configs/`:** 設定のフラグメントです。
 - **`patches/`:** コア変更をパッチの形にしたものです。

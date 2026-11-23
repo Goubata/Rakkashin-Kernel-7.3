@@ -38,9 +38,12 @@ static bool avr_wiphy_unregister_reap(struct cfg80211_registered_device *rdev, i
 	bool any = false;
 	int count;
 
-	rtnl_lock();
+	/* wiphy lock only: rtnl may be held elsewhere while the WLAN firmware goes down */
 	wiphy_lock(&rdev->wiphy);
 	count = rdev->opencount;
+	if (round == 0)
+		pr_warn("cfg80211: %s: unregister waits for opencount %d\\n",
+			wiphy_name(&rdev->wiphy), count);
 	list_for_each_entry(wdev, &rdev->wiphy.wdev_list, list) {
 		any = true;
 		pr_warn("cfg80211: %s: unregister waits (opencount %d): wdev iftype %d netdev %s running %d\\n",
@@ -62,14 +65,13 @@ static bool avr_wiphy_unregister_reap(struct cfg80211_registered_device *rdev, i
 			break;
 		}
 	}
-	if (!any && rdev->opencount > 0 && round >= 2) {
+	if (!any && rdev->opencount > 0 && round >= 1) {
 		pr_err("cfg80211: %s: opencount %d leaked with no wdev left; continuing unregister\\n",
 		       wiphy_name(&rdev->wiphy), rdev->opencount);
 		rdev->opencount = 0;
 	}
 	count = rdev->opencount;
 	wiphy_unlock(&rdev->wiphy);
-	rtnl_unlock();
 	return count == 0;
 }
 
@@ -83,7 +85,7 @@ void wiphy_unregister(struct wiphy *wiphy)
 		wiphy_lock(&rdev->wiphy);
 		__count = rdev->opencount;
 		wiphy_unlock(&rdev->wiphy);
-		__count == 0; }), 10 * HZ)) {
+		__count == 0; }), 5 * HZ)) {
 		if (avr_wiphy_unregister_reap(rdev, round++))
 			break;
 	}

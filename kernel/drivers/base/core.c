@@ -4874,6 +4874,9 @@ out:
 /**
  * device_shutdown - call ->shutdown() on each device to shutdown.
  */
+/* ANDROID: avr: device whose shutdown callback is running (shutdown watchdog report) */
+struct device *avr_shutdown_cur_dev;
+
 void device_shutdown(void)
 {
 	struct device *dev, *parent;
@@ -4916,6 +4919,7 @@ void device_shutdown(void)
 		pm_runtime_get_noresume(dev);
 		pm_runtime_barrier(dev);
 
+		WRITE_ONCE(avr_shutdown_cur_dev, dev);
 		if (dev->class && dev->class->shutdown_pre) {
 			if (initcall_debug)
 				dev_info(dev, "shutdown_pre\n");
@@ -4935,6 +4939,7 @@ void device_shutdown(void)
 		if (parent)
 			device_unlock(parent);
 
+		WRITE_ONCE(avr_shutdown_cur_dev, NULL);
 		put_device(dev);
 		put_device(parent);
 

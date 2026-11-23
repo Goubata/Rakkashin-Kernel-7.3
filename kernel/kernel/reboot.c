@@ -21,6 +21,10 @@
 #include <linux/syscalls.h>
 #include <linux/syscore_ops.h>
 #include <linux/uaccess.h>
+#include <linux/nmi.h>
+#include <linux/pm.h>
+#include <linux/sched/debug.h>
+#include <linux/timer.h>
 
 #include <trace/hooks/reboot.h>
 
@@ -110,8 +114,41 @@ void emergency_restart(void)
 }
 EXPORT_SYMBOL_GPL(emergency_restart);
 
+/*
+ * ANDROID: avr shutdown watchdog: never hang a restart / power-off. If the kernel
+ * shutdown sequence (reboot notifiers + device_shutdown()) takes longer than 20 s,
+ * report where it is stuck and finish the request.
+ */
+extern struct device *avr_shutdown_cur_dev;
+
+static bool avr_shutdown_wdt_poweroff;
+
+static void avr_shutdown_wdt_fn(struct timer_list *t)
+{
+	struct device *dev = READ_ONCE(avr_shutdown_cur_dev);
+
+	pr_emerg("reboot: shutdown stuck for 20 s (state %d) in %s %s, forcing it\n",
+		 system_state, dev ? dev_driver_string(dev) : "notifiers/core",
+		 dev ? dev_name(dev) : "");
+	show_state_filter(TASK_UNINTERRUPTIBLE);
+	trigger_all_cpu_backtrace();
+	pr_emerg("reboot: shutdown watchdog: completing %s\n",
+		 avr_shutdown_wdt_poweroff ? "power-off" : "restart");
+	if (avr_shutdown_wdt_poweroff && pm_power_off)
+		machine_power_off();
+	emergency_restart();
+}
+static DEFINE_TIMER(avr_shutdown_wdt, avr_shutdown_wdt_fn);
+
+static void avr_shutdown_wdt_arm(bool poweroff)
+{
+	avr_shutdown_wdt_poweroff = poweroff;
+	mod_timer(&avr_shutdown_wdt, jiffies + 20 * HZ);
+}
+
 void kernel_restart_prepare(char *cmd)
 {
+	avr_shutdown_wdt_arm(false);
 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
 	system_state = SYSTEM_RESTART;
 	usermodehelper_disable();
@@ -314,6 +351,7 @@ EXPORT_SYMBOL_GPL(kernel_restart);
 
 static void kernel_shutdown_prepare(enum system_states state)
 {
+	avr_shutdown_wdt_arm(state == SYSTEM_POWER_OFF);
 	blocking_notifier_call_chain(&reboot_notifier_list,
 		(state == SYSTEM_HALT) ? SYS_HALT : SYS_POWER_OFF, NULL);
 	system_state = state;
@@ -816,8 +854,8 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
 
 #ifdef CONFIG_HIBERNATION
 	case LINUX_REBOOT_CMD_SW_SUSPEND:
-		ret = hibernate();
-		break;
+		mutex_unlock(&system_transition_mutex);
+		return hibernate();
 #endif
 
 	default:

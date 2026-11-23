@@ -1279,6 +1279,7 @@ static void __resched_curr(struct rq *rq, int tif)
 {
 	struct task_struct *curr = rq->curr;
 	struct thread_info *cti = task_thread_info(curr);
+	bool need_ipi;
 	int cpu, need_lazy = 0;
 
 	lockdep_assert_rq_held(rq);
@@ -1299,15 +1300,17 @@ static void __resched_curr(struct rq *rq, int tif)
 
 	cpu = cpu_of(rq);
 
-	trace_sched_set_need_resched_tp(curr, cpu, tif);
 	if (cpu == smp_processor_id()) {
 		set_ti_thread_flag(cti, tif);
 		if (tif == TIF_NEED_RESCHED)
 			set_preempt_need_resched();
+		trace_sched_set_need_resched_tp(curr, cpu, tif);
 		return;
 	}
 
-	if (set_nr_and_not_polling(cti, tif)) {
+	need_ipi = set_nr_and_not_polling(cti, tif);
+	trace_sched_set_need_resched_tp(curr, cpu, tif);
+	if (need_ipi) {
 		if (tif == TIF_NEED_RESCHED)
 			smp_send_reschedule(cpu);
 	} else {
@@ -7998,7 +8001,7 @@ pick_again:
 			 * on_cpu.
 			 */
 			donor->sched_class->put_prev_task(rq, donor, donor);
-			donor->sched_class->set_next_task(rq, donor, true);
+			donor->sched_class->set_next_task(rq, donor, SNT_PICK);
 		}
 		scx_proxy_donor_start(rq);
 		scx_proxy_reenqueue_retry(rq, next);
@@ -11675,11 +11678,10 @@ static void __mm_update_max_cids(struct mm_mm_cid *mc)
 
 static inline unsigned int mm_cid_calc_pcpu_thrs(struct mm_mm_cid *mc)
 {
-	unsigned int opt_cids;
+	unsigned int nr_cpus = mc->nr_cpus_allowed;
 
-	opt_cids = min(mc->nr_cpus_allowed, mc->users);
 	/* Has to be at least 1 because 0 indicates PCPU mode off */
-	return max(min(opt_cids - opt_cids / 4, num_possible_cpus() / 2), 1);
+	return max(min(nr_cpus - nr_cpus / 4, num_possible_cpus() / 2), 1);
 }
 
 static bool mm_update_max_cids(struct mm_struct *mm)

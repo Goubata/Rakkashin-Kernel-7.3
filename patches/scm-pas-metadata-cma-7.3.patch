@@ -1,5 +1,5 @@
 From eae3c6209b1103f699e7d8328cfd53880de31bda Mon Sep 17 00:00:00 2001
-From: Codex <codex@localhost>
+From: Rakkashin <101036342+Goubata@users.noreply.github.com>
 Date: Wed, 18 Nov 2026 18:55:21 +0900
 Subject: [PATCH] ANDROID: firmware: qcom_scm: keep PAS metadata below 4 GiB
  (default CMA)
@@ -12,7 +12,6 @@ because dma_alloc_contiguous() skips CMA for single pages. Allocate at least two
 pages so the blob comes from the default CMA (0xf5800000 on Alor), record the real
 size in ctx->size for metadata_release(), and warn once if it still lands high.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
 ---
  drivers/firmware/qcom/qcom_scm.c | 22 +++++++++++++++++++---
  1 file changed, 19 insertions(+), 3 deletions(-)

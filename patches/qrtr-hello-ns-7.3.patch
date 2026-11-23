@@ -1,5 +1,5 @@
 From c292bfda7dbecd8dedd0dedc1540b167e92d7c79 Mon Sep 17 00:00:00 2001
-From: Codex <codex@localhost>
+From: Rakkashin <101036342+Goubata@users.noreply.github.com>
 Date: Thu, 19 Nov 2026 00:14:50 +0900
 Subject: [PATCH] ANDROID: net: qrtr: do not lose NS announcements before our
  HELLO
@@ -20,7 +20,6 @@ test 44, also test 43), the SIM goes ABSENT and the following SSR hangs the SoC.
 Phone test 45: no announce failures, modem stays up, SIM LOADED, LTE data and
 VoLTE user-confirmed on 7.3.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
 ---
  net/qrtr/af_qrtr.c | 33 +++++++++++++++++++++++++++++++--
  net/qrtr/ns.c      | 40 +++++++++++++++++++++++-----------------

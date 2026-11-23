@@ -116,7 +116,7 @@
  "parity_differences": {
   "qcom_glink, qcom_glink_smem, smp2p": {
    "phone_dep": "qcom_ipc_logging",
-   "reason": "7.3-native sources (Codex) without the vendor IPC log calls; logging only"
+   "reason": "7.3-native sources without the vendor IPC log calls; logging only"
   },
   "qcom_sysmon": {
    "phone_dep": "rproc_qcom_common",
@@ -125,7 +125,7 @@
   "qcom_q6v5_pas": {
    "phone_dep": "qcom_ramdump",
    "extra": "qcom_pas",
-   "reason": "7.3-native PAS with Alor descriptor (Codex); vendor PAS collects ramdumps via qcom_ramdump - pending remoteproc vendor-parity review"
+   "reason": "7.3-native PAS with Alor descriptor; vendor PAS collects ramdumps via qcom_ramdump - pending remoteproc vendor-parity review"
   },
   "qrng_dlkm": {
    "extra": "rng",

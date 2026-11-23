@@ -1,5 +1,5 @@
 From 83744136685b50a2da8e08b1bbd92f04a34a2346 Mon Sep 17 00:00:00 2001
-From: Codex <codex@localhost>
+From: Rakkashin <101036342+Goubata@users.noreply.github.com>
 Date: Wed, 18 Nov 2026 18:33:04 +0900
 Subject: [PATCH] ANDROID: firmware: qcom_scm: 64-bit DMA mask like the vendor
  driver
@@ -11,7 +11,6 @@ device fails: phone test 33 "error -12 initializing firmware adsp_dtb.mdt" /
 cdsp_dtb.mdt (PAS init_image metadata). With the mask, test 34 boots modem, ADSP,
 CDSP and WPSS.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
 ---
  drivers/firmware/qcom/qcom_scm.c | 12 ++++++++++++
  1 file changed, 12 insertions(+)

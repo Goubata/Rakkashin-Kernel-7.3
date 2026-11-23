@@ -2670,7 +2670,7 @@ ports/qcom-charging (qcom-soc 037aa1c, 9 modules) and ports/moto-charging (motor
 cooling-device cdev_id, UCSI sync_control now returns CCI/MESSAGE_IN (wrapped around the 6.12
 synchronous write), const bin_attribute, ida_alloc_max/ida_free, zap_special_vma_range,
 alarm_start_timer(relative).
-GLINK transport (ports/qcom-glink-transport, Codex's 7.3-based native GLINK): added the 6.12 vendor
+GLINK transport (ports/qcom-glink-transport, the 7.3-based native GLINK): added the 6.12 vendor
 client API glink_pkt needs (include/linux/rpmsg/qcom_glink_vendor.h): signals with 6.12 semantics
 (NATIVE DSR/CTS/CD/RI <-> TIOCM, remote/local state, signals_cb), rx_done_supported() = false
 (zero-copy is not negotiated, so glink_pkt uses its copying path). New KUnit case

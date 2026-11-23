@@ -1,5 +1,5 @@
 From 6362a706c808a52d2c91620c0c16f27ca8a8f4a2 Mon Sep 17 00:00:00 2001
-From: Codex <codex@localhost>
+From: Rakkashin <101036342+Goubata@users.noreply.github.com>
 Date: Thu, 19 Nov 2026 00:39:31 +0900
 Subject: [PATCH] ANDROID: kernelsu: arm64 syscall arg0 is orig_x0 on 7.x
 
@@ -17,7 +17,6 @@ with orig_a0). Reads at syscall entry are unchanged (orig_x0 == x0 there).
 
 Phone test 47: adb su -> uid=0 u:r:ksu:s0, KernelSU manager root user-confirmed.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
 ---
  drivers/kernelsu/include/arch.h | 10 ++++++++++
  1 file changed, 10 insertions(+)

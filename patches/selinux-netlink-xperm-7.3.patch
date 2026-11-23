@@ -1,5 +1,5 @@
 From e2d1c5e7ddecbdab89405db90b5aa3432282831f Mon Sep 17 00:00:00 2001
-From: Codex <codex@localhost>
+From: Rakkashin <101036342+Goubata@users.noreply.github.com>
 Date: Thu, 19 Nov 2026 00:14:50 +0900
 Subject: [PATCH] ANDROID: selinux: keep netlink_xperm off (android16-6.12
  parity)
@@ -12,7 +12,6 @@ which never enforced it: /vendor/bin/nicmd RTM_GETLINK/RTM_NEWLINK was denied
 OEM_DCFAILCAUSE_4). Force POLICYDB_CAP_NETLINK_XPERM to 0 after loading the
 policy capabilities, like 6.12 behaves.
 
-Co-Authored-By: Claude <noreply@anthropic.com>
 ---
  security/selinux/ss/services.c | 10 ++++++++++
  1 file changed, 10 insertions(+)
